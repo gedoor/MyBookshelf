@@ -24,6 +24,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -87,27 +88,8 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                     emitter.onComplete();
                 });
             }
-            if (url.contains("@")) {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            } else if (url.contains("?")) {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            } else {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            }
+            return getResponseO(analyzeUrl)
+                    .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
             e.printStackTrace();
             return Observable.create(emitter -> {
@@ -137,27 +119,8 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                     emitter.onComplete();
                 });
             }
-            if (bookSourceBean.getRuleSearchUrl().contains("@")) {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            } else if (bookSourceBean.getRuleSearchUrl().contains("?")) {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            } else {
-                return getRetrofitString(analyzeUrl.getSearchUrl())
-                        .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getSearchPath(),
-                                analyzeUrl.getHeaderMap())
-                        .flatMap(bookList::analyzeSearchBook);
-            }
+            return getResponseO(analyzeUrl)
+                    .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
             e.printStackTrace();
             return Observable.create(emitter -> {
@@ -223,6 +186,28 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                     .getWebContent(chapterBean.getDurChapterUrl(), headerMap)
                     .subscribeOn(scheduler)
                     .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
+        }
+    }
+
+    private Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
+        switch (analyzeUrl.getUrlMode()) {
+            case POST:
+                return getRetrofitString(analyzeUrl.getSearchUrl())
+                        .create(IHttpPostApi.class)
+                        .searchBook(analyzeUrl.getSearchPath(),
+                                analyzeUrl.getQueryMap(),
+                                analyzeUrl.getHeaderMap());
+            case GET:
+                return getRetrofitString(analyzeUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
+                        .searchBook(analyzeUrl.getSearchPath(),
+                                analyzeUrl.getQueryMap(),
+                                analyzeUrl.getHeaderMap());
+            default:
+                return getRetrofitString(analyzeUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
+                        .getWebContent(analyzeUrl.getSearchPath(),
+                                analyzeUrl.getHeaderMap());
         }
     }
 

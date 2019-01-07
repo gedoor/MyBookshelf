@@ -25,6 +25,7 @@ public class AnalyzeUrl {
     private Map<String, String> headerMap;
     private int searchPage;
     private String charCode;
+    private UrlMode urlMode = UrlMode.DEFAULT;
 
     public AnalyzeUrl(String ruleUrl, final String key, final int page, Map<String, String> headerMap) throws Exception {
         this.headerMap = headerMap;
@@ -38,19 +39,19 @@ public class AnalyzeUrl {
         }
         //设置页数
         setPage(ruleUrlS);
-
         //分离post参数
         ruleUrlS = ruleUrlS[0].split("@");
-        if (ruleUrlS.length == 1) {
+        if (ruleUrlS.length > 1) {
+            urlMode = UrlMode.POST;
+        } else {
             //分离get参数
             ruleUrlS = ruleUrlS[0].split("\\?");
+            if (ruleUrlS.length > 1) {
+                urlMode = UrlMode.GET;
+            }
         }
-        if (ruleUrlS.length == 1) {
-            String url = ruleUrlS[0].replace("searchPage-1", String.valueOf(page - 1))
-                    .replace("searchPage", String.valueOf(page));
-            generateUrlPath(url);
-        } else {
-            generateUrlPath(ruleUrlS[0]);
+        generateUrlPath(ruleUrlS[0]);
+        if (urlMode != UrlMode.DEFAULT) {
             queryMap = getQueryMap(ruleUrlS[1]);
         }
     }
@@ -134,5 +135,13 @@ public class AnalyzeUrl {
 
     public Map<String, String> getHeaderMap() {
         return headerMap;
+    }
+
+    public UrlMode getUrlMode() {
+        return urlMode;
+    }
+
+    public enum UrlMode {
+        GET, POST, DEFAULT
     }
 }
