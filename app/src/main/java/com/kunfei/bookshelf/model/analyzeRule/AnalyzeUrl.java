@@ -18,14 +18,14 @@ import static android.text.TextUtils.isEmpty;
  * 搜索URL规则解析
  */
 
-public class AnalyzeSearchUrl {
+public class AnalyzeUrl {
     private String searchUrl;
     private String searchPath;
     private Map<String, String> queryMap;
     private int searchPage;
     private String charCode;
 
-    public AnalyzeSearchUrl(String ruleUrl, final String key, final int page) throws Exception {
+    public AnalyzeUrl(String ruleUrl, final String key, final int page) throws Exception {
         searchPage = page;
         //替换关键字
         ruleUrl = ruleUrl.replace("searchKey", key);
