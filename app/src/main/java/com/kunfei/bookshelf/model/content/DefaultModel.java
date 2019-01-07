@@ -80,7 +80,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page, headerMap);
             if (analyzeUrl.getSearchUrl() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
@@ -92,20 +92,20 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                         .create(IHttpPostApi.class)
                         .searchBook(analyzeUrl.getSearchPath(),
                                 analyzeUrl.getQueryMap(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             } else if (url.contains("?")) {
                 return getRetrofitString(analyzeUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeUrl.getSearchPath(),
                                 analyzeUrl.getQueryMap(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             } else {
                 return getRetrofitString(analyzeUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .getWebContent(analyzeUrl.getSearchPath(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             }
         } catch (Exception e) {
@@ -130,7 +130,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap);
             if (analyzeUrl.getSearchUrl() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
@@ -142,20 +142,20 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                         .create(IHttpPostApi.class)
                         .searchBook(analyzeUrl.getSearchPath(),
                                 analyzeUrl.getQueryMap(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             } else if (bookSourceBean.getRuleSearchUrl().contains("?")) {
                 return getRetrofitString(analyzeUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeUrl.getSearchPath(),
                                 analyzeUrl.getQueryMap(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             } else {
                 return getRetrofitString(analyzeUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .getWebContent(analyzeUrl.getSearchPath(),
-                                headerMap)
+                                analyzeUrl.getHeaderMap())
                         .flatMap(bookList::analyzeSearchBook);
             }
         } catch (Exception e) {

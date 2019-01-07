@@ -22,10 +22,12 @@ public class AnalyzeUrl {
     private String searchUrl;
     private String searchPath;
     private Map<String, String> queryMap;
+    private Map<String, String> headerMap;
     private int searchPage;
     private String charCode;
 
-    public AnalyzeUrl(String ruleUrl, final String key, final int page) throws Exception {
+    public AnalyzeUrl(String ruleUrl, final String key, final int page, Map<String, String> headerMap) throws Exception {
+        this.headerMap = headerMap;
         searchPage = page;
         //替换关键字
         ruleUrl = ruleUrl.replace("searchKey", key);
@@ -128,5 +130,9 @@ public class AnalyzeUrl {
 
     public Map<String, String> getQueryMap() {
         return queryMap;
+    }
+
+    public Map<String, String> getHeaderMap() {
+        return headerMap;
     }
 }
