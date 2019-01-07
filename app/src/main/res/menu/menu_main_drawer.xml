@@ -24,7 +24,7 @@
     <group android:id="@+id/drawer_theme">
         <item
             android:id="@+id/action_theme"
-            android:icon="@drawable/ic_brightness"
+            android:icon="@drawable/ic_theme"
             android:title="@string/theme"
             app:actionLayout="@layout/view_night_theme"
             app:tint="@color/tv_text_default" />
