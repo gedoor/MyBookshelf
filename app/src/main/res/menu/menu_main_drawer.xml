@@ -26,7 +26,7 @@
             android:id="@+id/action_theme"
             android:icon="@drawable/ic_brightness"
             android:title="@string/theme"
-            app:actionLayout="@layout/switch_item_night_theme"
+            app:actionLayout="@layout/view_night_theme"
             app:tint="@color/tv_text_default" />
     </group>
 

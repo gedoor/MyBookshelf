@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -77,7 +76,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @BindView(R.id.card_search)
     CardView cardSearch;
 
-    private Switch swNightTheme;
+    private ImageView vwNightTheme;
     private int group;
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -298,8 +297,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         super.onPostCreate(savedInstanceState);
         // 这个必须要，没有的话进去的默认是个箭头。。正常应该是三横杠的
         mDrawerToggle.syncState();
-        if (swNightTheme != null) {
-            swNightTheme.setChecked(isNightTheme());
+        if (vwNightTheme != null) {
+            upThemeVw();
         }
     }
 
@@ -445,13 +444,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         Menu drawerMenu = navigationView.getMenu();
-        swNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.sw_night_theme);
-        swNightTheme.setChecked(isNightTheme());
-        swNightTheme.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (compoundButton.isPressed()) {
-                setNightTheme(b);
-            }
-        });
+        vwNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.iv_theme_day_night);
+        upThemeVw();
+        vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
@@ -485,6 +480,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             }
             return true;
         });
+    }
+
+    private void upThemeVw() {
+        if (isNightTheme()) {
+            vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+        } else {
+            vwNightTheme.setImageResource(R.drawable.ic_brightness);
+        }
     }
 
     //备份
