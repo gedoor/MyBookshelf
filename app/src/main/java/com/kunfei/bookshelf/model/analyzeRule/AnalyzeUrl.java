@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.net.MalformedURLException;
@@ -23,12 +24,13 @@ public class AnalyzeUrl {
     private String hostUrl;
     private String urlPath;
     private Map<String, String> queryMap;
-    private Map<String, String> headerMap;
+    private Map<String, String> headerMap = new HashMap<>();
     private String charCode;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
-    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
-        this.headerMap = headerMap;
+    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
+        //解析Header
+        ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
             ruleUrl = ruleUrl.replace("searchKey", key);
@@ -57,6 +59,25 @@ public class AnalyzeUrl {
         if (urlMode != UrlMode.DEFAULT) {
             queryMap = getQueryMap(ruleUrlS[1]);
         }
+    }
+
+    /**
+     * 解析Header
+     */
+    private String analyzeHeader(String ruleUrl, Map<String, String> headerMapF) {
+        headerMap.putAll(headerMapF);
+        Pattern pattern = Pattern.compile("(@Header:)\\{.+?\\}");
+        Matcher matcher = pattern.matcher(ruleUrl);
+        if (matcher.find()) {
+            String headerStr = matcher.group(0);
+            ruleUrl = ruleUrl.replace("@Header:" + headerStr, "");
+            try {
+                Map<String, String> map = new Gson().fromJson(headerStr, Map.class);
+                headerMap.putAll(map);
+            } catch (Exception ignored) {
+            }
+        }
+        return ruleUrl;
     }
 
     /**
