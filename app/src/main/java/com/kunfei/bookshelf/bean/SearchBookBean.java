@@ -4,6 +4,7 @@ package com.kunfei.bookshelf.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -12,10 +13,14 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
 
 @Entity
-public class SearchBookBean implements Parcelable{
+public class SearchBookBean implements Parcelable, BaseBookBean {
     @Id
     private String noteUrl;
     private String coverUrl;//封面URL
@@ -30,6 +35,7 @@ public class SearchBookBean implements Parcelable{
     private String chapterUrl;//目录URL
     private Long addTime = 0L;
     private Long upTime = 0L;
+    private String variable;
     @Transient
     private long words;
     @Transient
@@ -46,6 +52,8 @@ public class SearchBookBean implements Parcelable{
     private int searchTime = Integer.MAX_VALUE;
     @Transient
     private List<String> originUrls;
+    @Transient
+    private Map<String, String> variableMap;
 
     public SearchBookBean(){
 
@@ -70,12 +78,13 @@ public class SearchBookBean implements Parcelable{
         addTime = in.readLong();
         upTime = in.readLong();
         originUrls = in.createStringArrayList();
+        variable = in.readString();
     }
 
-    @Generated(hash = 1330499490)
+    @Generated(hash = 1344440211)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-            String tag, String kind, String origin, String desc, String lastChapter,
-            String introduce, String chapterUrl, Long addTime, Long upTime) {
+                          String tag, String kind, String origin, String desc, String lastChapter,
+                          String introduce, String chapterUrl, Long addTime, Long upTime, String variable) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -89,6 +98,7 @@ public class SearchBookBean implements Parcelable{
         this.chapterUrl = chapterUrl;
         this.addTime = addTime;
         this.upTime = upTime;
+        this.variable = variable;
     }
 
     @Override
@@ -111,6 +121,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeLong(addTime);
         dest.writeLong(upTime);
         dest.writeStringList(originUrls);
+        dest.writeString(variable);
     }
 
     @Override
@@ -130,10 +141,40 @@ public class SearchBookBean implements Parcelable{
         }
     };
 
+
+    @Override
+    public String getVariable() {
+        return this.variable;
+    }
+
+    @Override
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    @Override
+    public void putVariable(String key, String value) {
+        if (variableMap == null) {
+            variableMap = new HashMap<>();
+        }
+        variableMap.put(key, value);
+        variable = new Gson().toJson(variableMap);
+    }
+
+    @Override
+    public Map<String, String> getVariableMap() {
+        if (variableMap == null) {
+            return new Gson().fromJson(variable, MAP_STRING);
+        }
+        return variableMap;
+    }
+
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }
 
+    @Override
     public void setNoteUrl(String noteUrl) {
         this.noteUrl = noteUrl;
     }

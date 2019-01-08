@@ -48,12 +48,13 @@ class BookList {
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
                 bookUrlPattern += ".*";
             }
+            //如果是详情页面, 解析详情页面
             if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
-                //如果是详情页面, 解析详情页面
+                SearchBookBean item = new SearchBookBean();
+                analyzer.setBook(item);
                 String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
                 if (!TextUtils.isEmpty(bookName)) {
-                    SearchBookBean item = new SearchBookBean();
                     item.setNoteUrl(baseUrl);
                     item.setTag(tag);
                     item.setOrigin(name);
@@ -74,10 +75,11 @@ class BookList {
                     return;
                 }
                 while (collections.hasNext()){
+                    SearchBookBean item = new SearchBookBean();
+                    analyzer.setBook(item);
                     collections.next(analyzer);
                     String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
                     if (!TextUtils.isEmpty(bookName)) {
-                        SearchBookBean item = new SearchBookBean();
                         item.setTag(tag);
                         item.setOrigin(name);
                         item.setName(bookName);

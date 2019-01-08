@@ -22,7 +22,7 @@ import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
  */
 
 @Entity
-public class BookShelfBean implements Parcelable, Cloneable {
+public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
     @Transient
     public static final String LOCAL_TAG = "loc_book";
     @Transient
@@ -149,6 +149,32 @@ public class BookShelfBean implements Parcelable, Cloneable {
         return bookShelfBean;
     }
 
+    @Override
+    public String getVariable() {
+        return this.variable;
+    }
+
+    @Override
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    @Override
+    public void putVariable(String key, String value) {
+        if (variableMap == null) {
+            variableMap = new HashMap<>();
+        }
+        variableMap.put(key, value);
+        variable = new Gson().toJson(variableMap);
+    }
+
+    @Override
+    public Map<String, String> getVariableMap() {
+        if (variableMap == null) {
+            return new Gson().fromJson(variable, MAP_STRING);
+        }
+        return variableMap;
+    }
 
     public ChapterListBean getChapter(int index) {
         if (realChapterListEmpty() || index < 0) {
@@ -174,10 +200,12 @@ public class BookShelfBean implements Parcelable, Cloneable {
         }
     }
 
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }
 
+    @Override
     public void setNoteUrl(String noteUrl) {
         this.noteUrl = noteUrl;
     }
@@ -370,26 +398,4 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.useReplaceRule = useReplaceRule;
     }
 
-    public String getVariable() {
-        return this.variable;
-    }
-
-    public void setVariable(String variable) {
-        this.variable = variable;
-    }
-
-    public void putVariable(String key, String value) {
-        if (variableMap == null) {
-            variableMap = new HashMap<>();
-        }
-        variableMap.put(key, value);
-        variable = new Gson().toJson(variableMap);
-    }
-
-    public Map<String, String> getVariableMap() {
-        if (variableMap == null) {
-            return new Gson().fromJson(variable, MAP_STRING);
-        }
-        return variableMap;
-    }
 }

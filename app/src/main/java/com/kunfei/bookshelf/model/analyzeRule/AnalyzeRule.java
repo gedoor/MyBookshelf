@@ -3,7 +3,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BaseBookBean;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -32,7 +32,7 @@ public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
 
-    private BookShelfBean book;
+    private BaseBookBean book;
     private Object _object;
     private Boolean _isJSON;
 
@@ -44,8 +44,12 @@ public class AnalyzeRule {
     private boolean objectChangedJS = false;
     private boolean objectChangedJP = false;
 
-    public AnalyzeRule(BookShelfBean bookShelfBean) {
-        book = bookShelfBean;
+    public AnalyzeRule(BaseBookBean bookBean) {
+        book = bookBean;
+    }
+
+    public void setBook(BaseBookBean book) {
+        this.book = book;
     }
 
     public void setContent(String body) {
