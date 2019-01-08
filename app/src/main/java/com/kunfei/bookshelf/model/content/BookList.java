@@ -29,11 +29,6 @@ class BookList {
 
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
-            List<SearchBookBean> books = new ArrayList<>();
-            AnalyzeRule analyzer = new AnalyzeRule(null);
-
-            analyzer.setContent(response.body());
-
             String baseUrl;
             okhttp3.Response networkResponse = response.raw().networkResponse();
             if (networkResponse != null) {
@@ -41,6 +36,13 @@ class BookList {
             } else {
                 baseUrl = response.raw().request().url().toString();
             }
+            if (TextUtils.isEmpty(response.body())) {
+                e.onError(new Throwable("访问网站失败:" + baseUrl));
+                return;
+            }
+            List<SearchBookBean> books = new ArrayList<>();
+            AnalyzeRule analyzer = new AnalyzeRule(null);
+            analyzer.setContent(response.body());
 
             String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
