@@ -33,6 +33,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/tab_vp"
+        android:layout_below="@id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rl_bottom"
-        android:layout_below="@+id/appBar" />
+        android:layout_below="@+id/action_bar" />
 
     <View
         android:id="@+id/v_shadow"
