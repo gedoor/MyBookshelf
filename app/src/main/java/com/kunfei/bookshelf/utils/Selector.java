@@ -34,15 +34,12 @@ public class Selector {
      * created at 2017/12/11 22:26
      */
     public static final class ShapeSelector {
-
-        // 只支持长方形、圆形
-        @IntDef({GradientDrawable.RECTANGLE})
+        @IntDef({GradientDrawable.RECTANGLE, GradientDrawable.OVAL,
+                GradientDrawable.LINE, GradientDrawable.RING})
         private @interface Shape {
         }
 
         private int mShape;               //the shape of background
-        private int mCornerRadius;        //corner radius
-
         private int mDefaultBgColor;      //default background color
         private int mDisabledBgColor;     //state_enabled = false
         private int mPressedBgColor;      //state_pressed = true
@@ -54,29 +51,7 @@ public class Selector {
         private int mPressedStrokeColor;  //state_pressed = true
         private int mSelectedStrokeColor; //state_selected = true
         private int mFocusedStrokeColor;  //state_focused = true
-
-        private int mTLRadius;
-        private int mTRRadius;
-        private int mBLRadius;
-        private int mBRRadius;
-
-        // 上边框显示，前提边框的宽度不为0
-        private boolean mShowTopStroke = true;
-        // 下边框显示，前提边框的宽度不为0
-        private boolean mShowBottomStroke = true;
-        // 左边框显示，前提边框的宽度不为0
-        private boolean mShowLeftStroke = true;
-        // 右边框显示，前提边框的宽度不为0
-        private boolean mShowRightStroke = true;
-
-        // 上边框宽度
-        private int mTopStrokeWidth;
-        // 下边框宽度
-        private int mBottomStrokeWidth;
-        // 左边框宽度
-        private int mLeftStrokeWidth;
-        // 右边框宽度
-        private int mRightStrokeWidth;
+        private int mCornerRadius;        //corner radius
 
         private boolean hasSetDisabledBgColor = false;
         private boolean hasSetPressedBgColor = false;
@@ -88,7 +63,8 @@ public class Selector {
         private boolean hasSetSelectedStrokeColor = false;
         private boolean hasSetFocusedStrokeColor = false;
 
-        private ShapeSelector() {
+        public ShapeSelector() {
+            //initialize default values
             mShape = GradientDrawable.RECTANGLE;
             mDefaultBgColor = Color.TRANSPARENT;
             mDisabledBgColor = Color.TRANSPARENT;
@@ -102,24 +78,6 @@ public class Selector {
             mSelectedStrokeColor = Color.TRANSPARENT;
             mFocusedStrokeColor = Color.TRANSPARENT;
             mCornerRadius = 0;
-            mTLRadius = mCornerRadius;
-            mTRRadius = mCornerRadius;
-            mBLRadius = mCornerRadius;
-            mBRRadius = mCornerRadius;
-            // 刚开始四个边框都要显示
-            mShowTopStroke = true;
-            mShowBottomStroke = true;
-            mShowLeftStroke = true;
-            mShowRightStroke = true;
-            // 刚开始四个边框大小
-            // 上边框宽度
-            mTopStrokeWidth = mStrokeWidth;
-            // 下边框宽度
-            mBottomStrokeWidth = mStrokeWidth;
-            // 左边框宽度
-            mLeftStrokeWidth = mStrokeWidth;
-            // 右边框宽度
-            mRightStrokeWidth = mStrokeWidth;
         }
 
         public ShapeSelector setShape(@Shape int shape) {
@@ -137,19 +95,6 @@ public class Selector {
                 mSelectedBgColor = color;
             if (!hasSetFocusedBgColor)
                 mFocusedBgColor = color;
-            return this;
-        }
-
-        public ShapeSelector setDefaultStrokeColor(@ColorInt int color) {
-            mDefaultStrokeColor = color;
-            if (!hasSetDisabledStrokeColor)
-                mDisabledStrokeColor = color;
-            if (!hasSetPressedStrokeColor)
-                mPressedStrokeColor = color;
-            if (!hasSetSelectedStrokeColor)
-                mSelectedStrokeColor = color;
-            if (!hasSetFocusedStrokeColor)
-                mFocusedStrokeColor = color;
             return this;
         }
 
@@ -173,20 +118,25 @@ public class Selector {
 
         public ShapeSelector setFocusedBgColor(@ColorInt int color) {
             mFocusedBgColor = color;
-            hasSetFocusedBgColor = true;
+            hasSetPressedBgColor = true;
             return this;
         }
 
         public ShapeSelector setStrokeWidth(@Dimension int width) {
             mStrokeWidth = width;
-            mTopStrokeWidth = mStrokeWidth;
-            mBottomStrokeWidth = mStrokeWidth;
-            mLeftStrokeWidth = mStrokeWidth;
-            mRightStrokeWidth = mStrokeWidth;
-            mShowTopStroke = true;
-            mShowBottomStroke = true;
-            mShowLeftStroke = true;
-            mShowRightStroke = true;
+            return this;
+        }
+
+        public ShapeSelector setDefaultStrokeColor(@ColorInt int color) {
+            mDefaultStrokeColor = color;
+            if (!hasSetDisabledStrokeColor)
+                mDisabledStrokeColor = color;
+            if (!hasSetPressedStrokeColor)
+                mPressedStrokeColor = color;
+            if (!hasSetSelectedStrokeColor)
+                mSelectedStrokeColor = color;
+            if (!hasSetFocusedStrokeColor)
+                mFocusedStrokeColor = color;
             return this;
         }
 
@@ -216,86 +166,6 @@ public class Selector {
 
         public ShapeSelector setCornerRadius(@Dimension int radius) {
             mCornerRadius = radius;
-            mTLRadius = mCornerRadius;
-            mTRRadius = mCornerRadius;
-            mBLRadius = mCornerRadius;
-            mBRRadius = mCornerRadius;
-            return this;
-        }
-
-        public ShapeSelector setTLRadius(@Dimension int tLRadius) {
-            mTLRadius = tLRadius;
-            return this;
-        }
-
-        public ShapeSelector setTRRadius(@Dimension int tRadius) {
-            mTRRadius = tRadius;
-            return this;
-        }
-
-        public ShapeSelector setBLRadius(@Dimension int bLRadius) {
-            mBLRadius = bLRadius;
-            return this;
-        }
-
-        public ShapeSelector setBRRadius(@Dimension int bRRadius) {
-            mBRRadius = bRRadius;
-            return this;
-        }
-
-        public ShapeSelector setShowTopStroke(boolean showTopStroke) {
-            this.mShowTopStroke = showTopStroke;
-            if (!mShowTopStroke)
-                mTopStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setShowBottomStroke(boolean showBottomStroke) {
-            this.mShowBottomStroke = showBottomStroke;
-            if (!mShowBottomStroke)
-                mBottomStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setShowLeftStroke(boolean showLeftStroke) {
-            this.mShowLeftStroke = showLeftStroke;
-            if (!mShowLeftStroke)
-                mLeftStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setShowRightStroke(boolean showRightStroke) {
-            this.mShowRightStroke = showRightStroke;
-            if (!mShowRightStroke)
-                mRightStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setTopStrokeWidth(int topStrokeWidth) {
-            this.mTopStrokeWidth = topStrokeWidth;
-            if (!mShowTopStroke)
-                mTopStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setBottomStrokeWidth(int bottomStrokeWidth) {
-            this.mBottomStrokeWidth = bottomStrokeWidth;
-            if (!mShowBottomStroke)
-                mBottomStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setLeftStrokeWidth(int leftStrokeWidth) {
-            this.mLeftStrokeWidth = leftStrokeWidth;
-            if (!mShowLeftStroke)
-                mLeftStrokeWidth = 0;
-            return this;
-        }
-
-        public ShapeSelector setRightStrokeWidth(int rightStrokeWidth) {
-            this.mRightStrokeWidth = rightStrokeWidth;
-            if (!mShowRightStroke)
-                mRightStrokeWidth = 0;
             return this;
         }
 
@@ -344,14 +214,6 @@ public class Selector {
             drawable.setShape(shape);
             drawable.setStroke(strokeWidth, strokeColor);
             drawable.setCornerRadius(cornerRadius);
-            drawable.setColor(solidColor);
-            return drawable;
-        }
-
-        private GradientDrawable getDrawable(int shape, int solidColor, float[] radii) {
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(shape);
-            drawable.setCornerRadii(radii);
             drawable.setColor(solidColor);
             return drawable;
         }
