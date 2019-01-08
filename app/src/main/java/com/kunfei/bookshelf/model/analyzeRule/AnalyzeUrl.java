@@ -95,10 +95,10 @@ public class AnalyzeUrl {
             } else {
                 ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
             }
-            ruleUrlS[0] = ruleUrlS[0].replace("searchPage-1", String.valueOf(searchPage - 1))
-                    .replace("searchPage+1", String.valueOf(searchPage + 1))
-                    .replace("searchPage", String.valueOf(searchPage));
         }
+        ruleUrlS[0] = ruleUrlS[0].replace("searchPage-1", String.valueOf(searchPage - 1))
+                .replace("searchPage+1", String.valueOf(searchPage + 1))
+                .replace("searchPage", String.valueOf(searchPage));
     }
 
     /**
