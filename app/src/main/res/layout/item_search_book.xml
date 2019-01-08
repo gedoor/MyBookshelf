@@ -154,18 +154,16 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <TextView
+                    <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
                         android:id="@+id/tv_add_shelf"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/selector_tv_first_button"
                         android:gravity="center"
                         android:lines="1"
                         android:text="+书架"
-                        android:textColor="@drawable/selector_tv_first_text"
                         android:textSize="14sp"
                         android:visibility="gone" />
                 </LinearLayout>

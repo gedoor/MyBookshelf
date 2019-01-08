@@ -11,7 +11,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
+        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
             android:id="@+id/tv_sd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,8 +20,6 @@
             android:paddingEnd="5dp"
             android:layout_margin="5dp"
             android:singleLine="true"
-            android:textColor="#ffffff"
-            android:background="@drawable/selector_tv_first_button"
             android:textSize="13sp"
             android:text="@string/nb_file_path" />
 
