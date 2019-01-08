@@ -452,6 +452,9 @@ public class BookshelfHelp {
         }
     }
 
+    /**
+     * 清除书架
+     */
     public static void clearBookshelf() {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteAll();
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteAll();
