@@ -215,6 +215,9 @@ public class BookshelfHelp {
         }
     }
 
+    /**
+     * 获取所有书籍
+     */
     public static List<BookShelfBean> getAllBook() {
         List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                 .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
@@ -231,6 +234,9 @@ public class BookshelfHelp {
         return bookShelfList;
     }
 
+    /**
+     * 获取书籍按分组
+     */
     public static List<BookShelfBean> getBooksByGroup(int group) {
         List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.Group.eq(group))
@@ -249,6 +255,9 @@ public class BookshelfHelp {
         return bookShelfList;
     }
 
+    /**
+     * 获取书籍按bookUrl
+     */
     public static BookShelfBean getBook(String bookUrl) {
         BookShelfBean bookShelfBean = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl)).build().unique();
@@ -266,6 +275,9 @@ public class BookshelfHelp {
         return null;
     }
 
+    /**
+     * 移除书籍
+     */
     public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
@@ -293,6 +305,9 @@ public class BookshelfHelp {
         }
     }
 
+    /**
+     * 是否在书架
+     */
     public static boolean isInBookShelf(String bookUrl) {
         if (bookUrl == null) {
             return false;
@@ -304,6 +319,9 @@ public class BookshelfHelp {
         return count > 0;
     }
 
+    /**
+     * 移除书籍
+     */
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         removeFromBookShelf(bookShelfBean, false);
     }
@@ -314,6 +332,9 @@ public class BookshelfHelp {
         }
     }
 
+    /**
+     * 保存书籍
+     */
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
         if (bookShelfBean.getErrorMsg() == null) {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
@@ -322,6 +343,9 @@ public class BookshelfHelp {
         }
     }
 
+    /**
+     * 搜索转书籍
+     */
     public static BookShelfBean getBookFromSearchBook(SearchBookBean searchBookBean) {
         BookShelfBean bookShelfBean = new BookShelfBean();
         bookShelfBean.setTag(searchBookBean.getTag());
@@ -329,6 +353,7 @@ public class BookshelfHelp {
         bookShelfBean.setFinalDate(System.currentTimeMillis());
         bookShelfBean.setDurChapter(0);
         bookShelfBean.setDurChapterPage(0);
+        bookShelfBean.setVariable(searchBookBean.getVariable());
         BookInfoBean bookInfo = new BookInfoBean();
         bookInfo.setNoteUrl(searchBookBean.getNoteUrl());
         bookInfo.setAuthor(searchBookBean.getAuthor());
