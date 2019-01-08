@@ -34,6 +34,8 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
+import com.kunfei.bookshelf.utils.DrawableUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -111,6 +113,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+        tvChangeOrigin.setBackground(DrawableUtil.getDrawable(3, ThemeStore.accentColor(this), 0, 0));
         //弹窗
         moDialogHUD = new MoDialogHUD(this);
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());

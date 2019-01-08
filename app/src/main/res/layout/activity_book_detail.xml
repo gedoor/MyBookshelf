@@ -172,7 +172,6 @@
                                 android:id="@+id/tv_change_origin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_tv_first_button"
                                 android:includeFontPadding="false"
                                 android:paddingStart="4dp"
                                 android:paddingTop="1dp"
