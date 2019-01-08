@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
 
 /**
  * Created by GKF on 2018/1/24.
@@ -75,7 +76,7 @@ public class AnalyzeUrl {
             ruleUrl = ruleUrl.replace(find, "");
             find = find.substring(8);
             try {
-                Map<String, String> map = new Gson().fromJson(find, Map.class);
+                Map<String, String> map = new Gson().fromJson(find, MAP_STRING);
                 headerMap.putAll(map);
             } catch (Exception ignored) {
             }
