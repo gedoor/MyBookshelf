@@ -2,8 +2,8 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
@@ -36,9 +36,9 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     @BindView(R.id.file_system_cb_selected_all)
     CheckBox mCbSelectAll;
     @BindView(R.id.file_system_btn_delete)
-    Button mBtnDelete;
+    TextView mBtnDelete;
     @BindView(R.id.file_system_btn_add_book)
-    Button mBtnAddBook;
+    TextView mBtnAddBook;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 

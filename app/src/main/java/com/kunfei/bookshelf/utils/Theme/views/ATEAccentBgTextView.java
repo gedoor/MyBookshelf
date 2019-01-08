@@ -5,7 +5,8 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.ShapeSelector;
+import com.kunfei.bookshelf.utils.ScreenUtils;
+import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 import androidx.appcompat.widget.AppCompatTextView;
@@ -27,8 +28,8 @@ public class ATEAccentBgTextView extends AppCompatTextView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setBackground(ShapeSelector.newShapeSelector()
-                .setCornerRadius(5)
+        setBackground(Selector.shapeBuild()
+                .setCornerRadius(ScreenUtils.dpToPx(3))
                 .setDefaultBgColor(ThemeStore.accentColor(context))
                 .setPressedBgColor(ColorUtil.darkenColor(ThemeStore.accentColor(context)))
                 .create());

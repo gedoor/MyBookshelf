@@ -46,27 +46,25 @@
             android:text="@string/select_all"
             android:textColor="@color/tv_text_default" />
 
-        <Button
+        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentStrokeTextView
             android:id="@+id/file_system_btn_add_book"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/selector_btn_accent"
+            android:gravity="center"
             android:minWidth="110dp"
-            android:text="加入书架"
-            android:textColor="@color/selector_btn_file_add" />
+            android:text="加入书架" />
 
-        <Button
+        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentStrokeTextView
             android:id="@+id/file_system_btn_delete"
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@id/file_system_btn_add_book"
-            android:background="@drawable/selector_btn_delete"
-            android:text="删除"
-            android:textColor="@color/selector_btn_file_delete" />
+            android:text="删除" />
     </RelativeLayout>
 
     <androidx.viewpager.widget.ViewPager
