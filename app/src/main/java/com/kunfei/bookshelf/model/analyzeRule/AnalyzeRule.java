@@ -27,50 +27,23 @@ import javax.script.SimpleBindings;
  * 统一解析接口
  */
 public class AnalyzeRule {
+    private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
+
     private BookShelfBean book;
     private Object _object;
     private Boolean _isJSON;
-
 
     private AnalyzeByXPath analyzeByXPath = null;
     private AnalyzeByJSoup analyzeByJSoup = null;
     private AnalyzeByJSonPath analyzeByJSonPath = null;
 
+    private boolean objectChangedXP = false;
+    private boolean objectChangedJS = false;
+    private boolean objectChangedJP = false;
+
     public AnalyzeRule(BookShelfBean bookShelfBean) {
         book = bookShelfBean;
-    }
-
-    AnalyzeRule(Object object, boolean isJSON) {
-        _object = object;
-        _isJSON = isJSON;
-    }
-
-    private AnalyzeByXPath getAnalyzeByXPath() {
-        if (analyzeByXPath == null) {
-            analyzeByXPath = new AnalyzeByXPath();
-            analyzeByXPath.parse(((Element) _object).children());
-        }
-        return analyzeByXPath;
-    }
-
-    private AnalyzeByJSoup getAnalyzeByJSoup() {
-        if (analyzeByJSoup == null) {
-            analyzeByJSoup = new AnalyzeByJSoup();
-            analyzeByJSoup.parse((Element) _object);
-        }
-        return analyzeByJSoup;
-    }
-
-    private AnalyzeByJSonPath getAnalyzeByJSonPath() {
-        if (analyzeByJSonPath == null) {
-            analyzeByJSonPath = new AnalyzeByJSonPath();
-            if (_object instanceof String) {
-                analyzeByJSonPath.parse(String.valueOf(_object));
-            } else {
-                analyzeByJSonPath.parse(_object);
-            }
-        }
-        return analyzeByJSonPath;
     }
 
     public void setContent(String body) {
@@ -81,6 +54,48 @@ public class AnalyzeRule {
         } else {
             _object = body;
         }
+        objectChangedXP = true;
+        objectChangedJS = true;
+        objectChangedJP = true;
+    }
+
+    public void setContent(Object object, boolean isJSON) {
+        _object = object;
+        _isJSON = isJSON;
+        objectChangedXP = true;
+        objectChangedJS = true;
+        objectChangedJP = true;
+    }
+
+    private AnalyzeByXPath getAnalyzeByXPath() {
+        if (analyzeByXPath == null || objectChangedXP) {
+            analyzeByXPath = new AnalyzeByXPath();
+            analyzeByXPath.parse(((Element) _object).children());
+            objectChangedXP = false;
+        }
+        return analyzeByXPath;
+    }
+
+    private AnalyzeByJSoup getAnalyzeByJSoup() {
+        if (analyzeByJSoup == null || objectChangedJS) {
+            analyzeByJSoup = new AnalyzeByJSoup();
+            analyzeByJSoup.parse((Element) _object);
+            objectChangedJS = false;
+        }
+        return analyzeByJSoup;
+    }
+
+    private AnalyzeByJSonPath getAnalyzeByJSonPath() {
+        if (analyzeByJSonPath == null || objectChangedJP) {
+            analyzeByJSonPath = new AnalyzeByJSonPath();
+            if (_object instanceof String) {
+                analyzeByJSonPath.parse(String.valueOf(_object));
+            } else {
+                analyzeByJSonPath.parse(_object);
+            }
+            objectChangedJP = false;
+        }
+        return analyzeByJSonPath;
     }
 
     public List<String> getStringList(String rule, String baseUrl) {
@@ -144,7 +159,7 @@ public class AnalyzeRule {
             result = String.valueOf(_object);
         }
         if (!StringUtils.isTrimEmpty(source.js)) {
-            result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl);
+            result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl, getVariable());
         }
         if (!StringUtils.isTrimEmpty(_baseUrl)) {
             result = NetworkUtil.getAbsoluteURL(_baseUrl, result);
@@ -170,11 +185,18 @@ public class AnalyzeRule {
                     collection = new AnalyzeCollection(getAnalyzeByJSoup().getElements(source.rule));
             }
             if (!StringUtils.isTrimEmpty(source.js)) {
-                collection = (AnalyzeCollection) AnalyzeRule.evalJS(source.js, collection, null);
+                collection = (AnalyzeCollection) AnalyzeRule.evalJS(source.js, collection, null, getVariable());
             }
             return collection;
         } else if (!StringUtils.isTrimEmpty(source.js)) {
-            return (AnalyzeCollection) AnalyzeRule.evalJS(source.js, _object, null);
+            return (AnalyzeCollection) AnalyzeRule.evalJS(source.js, _object, null, getVariable());
+        }
+        return null;
+    }
+
+    private String getVariable() {
+        if (book != null) {
+            return book.getVariable();
         }
         return null;
     }
@@ -195,19 +217,17 @@ public class AnalyzeRule {
 
         SourceRule(String ruleStr) {
             //分离put规则
-            Pattern pattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(ruleStr);
-            if (matcher.find()) {
-                String find = matcher.group(0);
+            Matcher putMatcher = putPattern.matcher(ruleStr);
+            if (putMatcher.find()) {
+                String find = putMatcher.group(0);
                 ruleStr = ruleStr.replace(find, "");
                 find = find.substring(5);
                 putVariable = new Gson().fromJson(find, Map.class);
             }
             //替换get值
-            pattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-            matcher = pattern.matcher(ruleStr);
-            while (matcher.find()) {
-                String find = matcher.group();
+            Matcher getMatcher = getPattern.matcher(ruleStr);
+            while (getMatcher.find()) {
+                String find = getMatcher.group();
                 String value = "";
                 if (book != null) {
                     value = book.getVariableMap().get(find.substring(6, find.length() - 2));
@@ -244,10 +264,11 @@ public class AnalyzeRule {
         private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
     }
 
-    private static Object evalJS(String jsStr, Object result, String baseUrl) {
+    private static Object evalJS(String jsStr, Object result, String baseUrl, String variable) {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
+        bindings.put("json", variable);
         try {
             result = EngineHelper.INSTANCE.eval(jsStr, bindings);
         } catch (ScriptException ignored) {

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AnalyzeCollection {
     private int _pos = 0;
-    private int _size = 0;
+    private int _size;
 
     private boolean _isJSON;
     private List<Object> _Objects;
@@ -28,11 +28,12 @@ public class AnalyzeCollection {
         return _pos<_size;
     }
 
-    public AnalyzeRule next(){
-        if(_isJSON){
-            return new AnalyzeRule(_Objects.get(_pos++), _isJSON);
+    public void next(AnalyzeRule analyzeRule) {
+        if (_isJSON) {
+            analyzeRule.setContent(_Objects.get(_pos++), _isJSON);
+        } else {
+            analyzeRule.setContent(_Elements.get(_pos++), _isJSON);
         }
-        return new AnalyzeRule(_Elements.get(_pos++), _isJSON);
     }
 
     public int size(){

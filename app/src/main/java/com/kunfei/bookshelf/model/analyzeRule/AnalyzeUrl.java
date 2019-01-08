@@ -21,6 +21,9 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeUrl {
+    private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern pagePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+
     private String hostUrl;
     private String urlPath;
     private Map<String, String> queryMap;
@@ -66,8 +69,7 @@ public class AnalyzeUrl {
      */
     private String analyzeHeader(String ruleUrl, Map<String, String> headerMapF) {
         headerMap.putAll(headerMapF);
-        Pattern pattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(ruleUrl);
+        Matcher matcher = headerPattern.matcher(ruleUrl);
         if (matcher.find()) {
             String find = matcher.group(0);
             ruleUrl = ruleUrl.replace(find, "");
@@ -85,8 +87,7 @@ public class AnalyzeUrl {
      * 解析页数
      */
     private void setPage(final String[] ruleUrlS, final int searchPage) {
-        Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
-        Matcher matcher = pattern.matcher(ruleUrlS[0]);
+        Matcher matcher = pagePattern.matcher(ruleUrlS[0]);
         if (matcher.find()) {
             String[] pages = matcher.group(0).split(",");
             if (searchPage <= pages.length) {

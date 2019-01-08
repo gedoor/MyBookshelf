@@ -72,19 +72,19 @@ class BookList {
                     return;
                 }
                 while (collections.hasNext()){
-                    AnalyzeRule analyzeRule = collections.next();
-                    String bookName = analyzeRule.getString(bookSourceBean.getRuleSearchName());
+                    collections.next(analyzer);
+                    String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
                     if (!TextUtils.isEmpty(bookName)) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(tag);
                         item.setOrigin(name);
                         item.setName(bookName);
-                        item.setAuthor(FormatWebText.getAuthor(analyzeRule.getString(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(analyzeRule.getString(bookSourceBean.getRuleSearchKind()));
-                        item.setLastChapter(analyzeRule.getString(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setCoverUrl(analyzeRule.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
-                        item.setIntroduce(analyzeRule.getString(bookSourceBean.getRuleIntroduce()));
-                        String resultUrl = analyzeRule.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
+                        item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
+                        item.setKind(analyzer.getString(bookSourceBean.getRuleSearchKind()));
+                        item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
+                        item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
+                        item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+                        String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
                         item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
                         books.add(item);
                     }
