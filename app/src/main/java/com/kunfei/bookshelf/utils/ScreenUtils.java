@@ -108,16 +108,15 @@ public class ScreenUtils {
             } else if ("0".equals(navBarOverride)) {
                 hasNavigationBar = true;
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return hasNavigationBar;
     }
 
     public static DisplayMetrics getDisplayMetrics() {
-        DisplayMetrics metrics = MApplication
+        return MApplication
                 .getInstance()
                 .getResources()
                 .getDisplayMetrics();
-        return metrics;
     }
 }
