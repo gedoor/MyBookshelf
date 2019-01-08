@@ -14,7 +14,7 @@
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 
-    <PreferenceCategory android:title="白天">
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory android:title="白天">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimary"
@@ -37,9 +37,9 @@
             android:title="背景色"
             app:cpv_dialogType="preset" />
 
-    </PreferenceCategory>
+    </com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory>
 
-    <PreferenceCategory android:title="夜间">
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory android:title="夜间">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimaryNight"
@@ -62,6 +62,6 @@
             android:title="背景色"
             app:cpv_dialogType="preset" />
 
-    </PreferenceCategory>
+    </com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory>
 
 </PreferenceScreen>
