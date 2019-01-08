@@ -66,14 +66,14 @@ public class AnalyzeUrl {
      */
     private String analyzeHeader(String ruleUrl, Map<String, String> headerMapF) {
         headerMap.putAll(headerMapF);
-        Pattern pattern = Pattern.compile("@Header:\\{.+?\\}");
+        Pattern pattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(ruleUrl);
         if (matcher.find()) {
-            String headerStr = matcher.group(0);
-            ruleUrl = ruleUrl.replace(headerStr, "");
-            headerStr = headerStr.substring(8);
+            String find = matcher.group(0);
+            ruleUrl = ruleUrl.replace(find, "");
+            find = find.substring(8);
             try {
-                Map<String, String> map = new Gson().fromJson(headerStr, Map.class);
+                Map<String, String> map = new Gson().fromJson(find, Map.class);
                 headerMap.putAll(map);
             } catch (Exception ignored) {
             }
@@ -114,6 +114,9 @@ public class AnalyzeUrl {
         }
     }
 
+    /**
+     * QueryMap
+     */
     private Map<String, String> getQueryMap(String allQuery) throws Exception {
         String[] queryS = allQuery.split("&");
         Map<String, String> map = new HashMap<>();

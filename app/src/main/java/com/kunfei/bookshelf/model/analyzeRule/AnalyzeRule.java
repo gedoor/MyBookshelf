@@ -181,7 +181,9 @@ public class AnalyzeRule {
 
     private void analyzeVariable(Map<String, String> putVariable) {
         for (Map.Entry<String, String> entry : putVariable.entrySet()) {
-            book.putVariable(entry.getKey(), getString(entry.getValue()));
+            if (book != null) {
+                book.putVariable(entry.getKey(), getString(entry.getValue()));
+            }
         }
     }
 
@@ -192,13 +194,25 @@ public class AnalyzeRule {
         Map<String, String> putVariable;
 
         SourceRule(String ruleStr) {
-            Pattern pattern = Pattern.compile("@put:\\{.+?\\}");
+            //分离put规则
+            Pattern pattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(ruleStr);
             if (matcher.find()) {
                 String find = matcher.group(0);
                 ruleStr = ruleStr.replace(find, "");
                 find = find.substring(5);
                 putVariable = new Gson().fromJson(find, Map.class);
+            }
+            //替换get值
+            pattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
+            matcher = pattern.matcher(ruleStr);
+            while (matcher.find()) {
+                String find = matcher.group();
+                String value = "";
+                if (book != null) {
+                    value = book.getVariableMap().get(find.substring(6, find.length() - 2));
+                }
+                ruleStr = ruleStr.replace(find, value);
             }
             String str[] = ruleStr.split("@js:");
             if (StringUtils.startWithIgnoreCase(str[0], "@XPath:")) {
