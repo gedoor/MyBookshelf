@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+
 /**
  * 书架item Bean
  */
@@ -386,7 +388,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
 
     public Map<String, String> getVariableMap() {
         if (variableMap == null) {
-            return new Gson().fromJson(variable, Map.class);
+            return new Gson().fromJson(variable, MAP_STRING);
         }
         return variableMap;
     }

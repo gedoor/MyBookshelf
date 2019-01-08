@@ -21,6 +21,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+
 
 /**
  * Created by REFGD.
@@ -222,7 +224,7 @@ public class AnalyzeRule {
                 String find = putMatcher.group(0);
                 ruleStr = ruleStr.replace(find, "");
                 find = find.substring(5);
-                putVariable = new Gson().fromJson(find, Map.class);
+                putVariable = new Gson().fromJson(find, MAP_STRING);
             }
             //替换get值
             Matcher getMatcher = getPattern.matcher(ruleStr);
