@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,7 +11,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <CheckBox
+        <com.kunfei.bookshelf.utils.Theme.views.ATECheckBox
             android:id="@+id/cb_book_source"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,7 +26,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_edit_source"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

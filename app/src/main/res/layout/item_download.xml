@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -30,18 +29,17 @@
             android:paddingRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
                 android:layout_gravity="center_horizontal|bottom"
                 android:singleLine="true"
-                android:text="@string/tv_book_name"
+                android:text="@string/book_name"
                 android:textColor="@color/tv_text_default"
-                android:textSize="16sp"
-                app:minTextSize="10sp" />
+                android:textSize="16sp" />
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/tv_download"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -49,19 +47,18 @@
                 android:singleLine="true"
                 android:text="@string/download_offline"
                 android:textColor="@color/tv_text_default"
-                android:textSize="14sp"
-                app:minTextSize="10sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_delete"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_delete_forever_black_24dp"
+            android:src="@drawable/ic_clear_all"
             app:tint="@color/tv_text_default" />
 
 

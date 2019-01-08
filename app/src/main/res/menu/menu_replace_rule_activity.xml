@@ -5,25 +5,25 @@
 
     <item
         android:id="@+id/action_add_replace_rule"
-        android:icon="@drawable/ic_add_black_24dp_new"
+        android:icon="@drawable/ic_add"
         android:title="@string/add"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black_24dp_new"
+        android:icon="@drawable/ic_done_all_black"
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_import"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_replace_rule"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_onLine"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_replace_rule_on_line"
         app:showAsAction="never" />
 

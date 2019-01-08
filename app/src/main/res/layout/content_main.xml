@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_view"
@@ -9,16 +9,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?attr/actionBarStyle"
         tools:ignore="UnusedAttribute">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/NopaddingToolbar"
+            style="@style/NoPaddingToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -27,7 +27,7 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/card_search"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -39,24 +39,25 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="11dp"
                     android:gravity="center_vertical"
-                    android:text="@string/search_book_key" />
-            </android.support.v7.widget.CardView>
-        </android.support.v7.widget.Toolbar>
+                    android:text="@string/search_book_key"
+                    tools:ignore="RtlHardcoded" />
+            </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.Toolbar>
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            app:tabBackground="@color/colorPrimary"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/darker_gray"
+            app:tabIndicatorGravity="bottom"
+            app:tabIndicatorFullWidth="false"
             app:tabMode="fixed" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/tab_vp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

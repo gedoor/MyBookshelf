@@ -1,4 +1,6 @@
-
+ext {
+    support_library_version = '28.0.0'
+}
 buildscript {
     repositories {
         google()
@@ -9,10 +11,9 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
-        classpath 'com.google.gms:google-services:4.1.0'
+        classpath 'com.google.gms:google-services:4.2.0'
         classpath 'io.fabric.tools:gradle:1.25.4'
         classpath 'net.ricecode:string-similarity:1.0.0'
-
     }
 }
 
@@ -23,6 +24,7 @@ allprojects {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url 'https://maven.google.com/' }
+        maven { url 'https://github.com/psiegman/mvn-repo/raw/master/releases' }
     }
 }
 

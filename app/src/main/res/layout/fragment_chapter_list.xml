@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
+    <com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_chapter_base_info"
+        android:overScrollMode="never" />
+
+    <LinearLayout
+        android:id="@+id/ll_chapter_base_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_current_chapter_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/tv_text_default"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_chapter_sort"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bg_ib_pre_round"
+            android:contentDescription="@string/swap_sort"
+            android:padding="2dp"
+            android:src="@drawable/ic_swap_calls_black_24dp"
+            app:tint="@color/tv_text_default" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_shadow"
+        style="@style/Style.Shadow.Bottom"
+        android:layout_above="@id/ll_chapter_base_info" />
+</RelativeLayout>

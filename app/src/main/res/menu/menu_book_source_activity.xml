@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black_24dp_new"
+        android:icon="@drawable/ic_done_all_black"
         android:title="@string/select_all"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
@@ -28,21 +28,55 @@
     </item>
 
     <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_format_line_spacing_black_24dp"
+        android:title="@string/sort"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
+
+        <menu>
+
+            <item
+                android:id="@+id/sort_manual"
+                android:checkable="true"
+                android:title="@string/sort_manual" />
+
+            <item
+                android:id="@+id/sort_auto"
+                android:checkable="true"
+                android:title="@string/sort_auto" />
+
+            <item
+                android:id="@+id/sort_pin_yin"
+                android:checkable="true"
+                android:title="@string/sort_pin_yin" />
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/action_add_book_source"
-        android:icon="@drawable/ic_add_black_24dp_new"
+        android:icon="@drawable/ic_add"
         android:title="@string/add_book_source"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_local"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_book_source_local"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_onLine"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_book_source_on_line"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_book_source_rwm"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_by_qr_code"
         app:showAsAction="never" />
 
     <item
@@ -58,14 +92,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_reset_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="@string/refresh_default"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_check_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp"
+        android:icon="@drawable/ic_check_source"
         android:title="@string/check_book_source"
         app:showAsAction="never" />
 

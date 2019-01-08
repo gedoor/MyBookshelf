@@ -2,12 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_round_rect"
-    android:padding="7dp"
-    android:layout_marginLeft="7dp"
-    android:layout_marginRight="3dp"
-    android:layout_marginBottom="4dp"
-    android:textColor="#ffffff"
-    android:textSize="15sp"
-    android:clickable="true">
-</TextView>
+    android:layout_margin="3dp"
+    android:background="@drawable/shape_card_view"
+    android:clickable="true"
+    android:ellipsize="middle"
+    android:focusable="true"
+    android:padding="6dp"
+    android:singleLine="true"
+    android:text="@string/app_name"
+    android:textColor="@color/tv_text_default" />

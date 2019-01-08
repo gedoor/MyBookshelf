@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background">
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ib_pre"
-        android:clickable="true"
         android:paddingLeft="10dp"
-        android:id="@+id/fl_content"
-        android:focusable="true"
         tools:ignore="RtlHardcoded,RtlSymmetry">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.kunfei.bookshelf.widget.CoverImageView
                 android:id="@+id/iv_cover"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/img_cover_default"
-                android:contentDescription="@string/book" />
+                android:layout_height="90dp"
+                android:contentDescription="@string/book"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,9 +38,9 @@
                     android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="2dp"
                     android:ellipsize="end"
                     android:lines="1"
                     android:text="@string/app_name"
@@ -102,10 +102,10 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="5dp"
                                 android:background="@drawable/shape_round_rect"
-                                android:paddingBottom="0.4dp"
                                 android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
                                 android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
                                 android:text="连载"
                                 android:textColor="#ffffff"
                                 android:textSize="12sp" />
@@ -118,10 +118,10 @@
                                 android:layout_marginRight="5dp"
                                 android:background="@drawable/shape_round_rect"
                                 android:lines="1"
-                                android:paddingBottom="0.4dp"
                                 android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
                                 android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
                                 android:text="现代都市"
                                 android:textColor="#ffffff"
                                 android:textSize="12sp" />
@@ -133,10 +133,10 @@
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/shape_round_rect"
                                 android:lines="1"
-                                android:paddingBottom="0.4dp"
                                 android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
                                 android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
                                 android:text="1.2万字"
                                 android:textColor="#ffffff"
                                 android:textSize="12sp" />
@@ -166,10 +166,12 @@
                         android:lines="1"
                         android:text="+书架"
                         android:textColor="@drawable/selector_tv_first_text"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"

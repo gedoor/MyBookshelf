@@ -2,42 +2,23 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
-static def increasedVersionCode() {
-    return (int) (System.currentTimeMillis() / 1000 / 60 / 60 - 17141)
+static def releaseTime() {
+    return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
 }
 
 def name = "MONKOVEL"
-def version = "2.0." + increasedVersionCode()
+def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
-def gitTag = "git tag " + version
-
-def keystorePSW = ''
-def keystoreAlias = ''
-def keystoreAliasPSW = ''
-// default keystore file, PLZ config file path in local.properties
-def keyFile = file('s.keystore.temp')
-
-Properties properties = new Properties()
-// local.properties file in the root director
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def keystoreFilepath = properties.getProperty("keystore.path")
-
-if (keystoreFilepath) {
-    keystorePSW = properties.getProperty("keystore.password")
-    keystoreAlias = properties.getProperty("keystore.alias")
-    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
-    keyFile = file(keystoreFilepath)
-}
 
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     signingConfigs {
         myConfig {
-            storeFile keyFile
-            storePassword keystorePSW
-            keyAlias keystoreAlias
-            keyPassword keystoreAliasPSW
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_KEY_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_STORE_PASSWORD
         }
     }
 
@@ -82,25 +63,26 @@ android {
 
 }
 
-ext {
-    support_library_version = '28.0.0'
-}
 dependencies {
     api project(':basemvplib')
     testImplementation 'junit:junit:4.12'
 
     //fireBase
+    //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
-    //support
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:design:$support_library_version"
-    implementation "com.android.support:cardview-v7:$support_library_version"
-    implementation "com.android.support:support-compat:$support_library_version"
-    implementation "com.android.support:support-media-compat:$support_library_version"
-    implementation "com.android.support:support-v4:$support_library_version"
+    //androidX
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.media:media:1.1.0-alpha01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //google
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.android:flexbox:1.1.0'
 
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
@@ -109,52 +91,28 @@ dependencies {
     //codecMD5
     implementation 'commons-codec:commons-codec:1.11'
 
-    //ProgressBar
-    implementation 'com.zhangmonke:MProgressBar:1.0.1'
-
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation 'jp.wasabeef:glide-transformations:3.2.0'
-    // If you want to use the GPU Filters
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
-
-    //AutoFitTextView
-    implementation 'me.grantland:autofittextview:0.2.1'
-
-    //删除粒子效果
-    implementation 'tyrantgit:explosionfield:1.0.1'
-
-    //View简易动画
-    implementation 'com.daimajia.easing:library:2.1@aar'
-    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    //SwitchButton
-    implementation 'com.kyleduo.switchbutton:library:2.0.0'
-
     //bind view
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc3'
 
     //动画
     implementation 'com.victor:lib:1.0.4'
 
-    //简易权限获取
-    implementation 'pub.devrel:easypermissions:2.0.0'
-
     //二维码
-    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 
     //颜色选择
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.jaredrummler:colorpicker:1.0.5'
 
     //文件目录选择
-    implementation('com.github.gedoor.AndroidPicker:FilePicker:1.6.3') {
-        exclude group: 'com.android.support'
-    }
+    implementation 'com.github.gedoor.AndroidPicker:FilePicker:2.0.0'
 
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
@@ -162,11 +120,18 @@ dependencies {
     //字符串比较
     implementation 'net.ricecode:string-similarity:1.0.0'
 
+    //MarkDown
+    implementation 'ru.noties:markwon:2.0.0'
+
+    //epub
+    implementation('nl.siegmann.epublib:epublib-core:3.1') {
+        exclude group: 'xmlpull'
+    }
 }
 
 greendao {
-    schemaVersion 42
-    daoPackage 'com.monke.monkeybook.dao'
+    schemaVersion 52
+    daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="immersionStatusBar"
+        android:summary="@string/status_bar_immersion"
+        android:title="@string/immersion_status_bar" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="navigationBarColorChange"
+        android:summary="@string/navigation_bar_color_change_s"
+        android:title="@string/navigation_bar_color_change" />
+
+    <PreferenceCategory android:title="白天">
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorPrimary"
+            android:key="colorPrimary"
+            android:summary="白天，主色调"
+            android:title="主色调"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorAccent"
+            android:key="colorAccent"
+            android:summary="白天，强调色"
+            android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/background"
+            android:key="colorBackground"
+            android:summary="白天，背景色"
+            android:title="背景色"
+            app:cpv_dialogType="preset" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="夜间">
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorPrimaryNight"
+            android:key="colorPrimaryNight"
+            android:summary="夜间，主色调"
+            android:title="主色调"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorAccentNight"
+            android:key="colorAccentNight"
+            android:summary="夜间，强调色"
+            android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/backgroundNight"
+            android:key="colorBackgroundNight"
+            android:summary="夜间，背景色"
+            android:title="背景色"
+            app:cpv_dialogType="preset" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

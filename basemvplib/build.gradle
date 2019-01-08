@@ -5,7 +5,7 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 2
         versionName "1.1.0"
@@ -28,30 +28,24 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //support
-    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'androidx.core:core:1.1.0-alpha03'
+    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    api 'io.reactivex.rxjava2:rxjava:2.1.12'
-
-    //Rx_lifecycle
-    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'  // If you want to bind to Android-specific lifecycles
-    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'  // If you want pre-written Activities and Fragments you can subclass as providers
-    api 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.1'  // If you want to use Navi for providers
-    api 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.2.1' // If you want to use Kotlin syntax
+    api 'io.reactivex.rxjava2:rxjava:2.2.4'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.5.0'
 
     //RxBus
-    api ('com.hwangjr.rxbus:rxbus:2.0.0') {
-        exclude group: 'com.jakewharton.timber', module: 'timber'
-    }
+    api 'com.hwangjr.rxbus:rxbus:2.0.0'
 
     //J_SOUP
-    api 'org.jsoup:jsoup:1.10.2'
-
+    api 'org.jsoup:jsoup:1.11.3'
+    api 'cn.wanghaomiao:JsoupXpath:2.2'
+    api 'com.jayway.jsonpath:json-path:2.4.0'
+    api 'io.apisense:rhino-android:1.0'
 }

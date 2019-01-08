@@ -1,0 +1,26 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="30dp"
+    app:cardBackgroundColor="@color/background_card">
+
+
+    <ScrollView
+        android:id="@+id/md_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+        <TextView
+            android:id="@+id/tv_markdown"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:linksClickable="true"
+            android:autoLink="web"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="10dp"/>
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>

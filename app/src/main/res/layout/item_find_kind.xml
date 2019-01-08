@@ -3,7 +3,6 @@
     android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_ib_pre"
     android:orientation="vertical"
     android:padding="5dp">
 
@@ -13,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:singleLine="true"
+        android:text="@string/app_name"
+        android:textColor="@color/tv_text_secondary"
         android:textSize="16sp" />
 
 </LinearLayout>

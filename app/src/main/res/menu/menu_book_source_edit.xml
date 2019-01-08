@@ -4,9 +4,14 @@
 
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/ic_save_black_24dp_new"
+        android:icon="@drawable/ic_save"
         android:title="@string/action_save"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_login"
+        android:title="@string/login"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_it"
@@ -25,12 +30,12 @@
 
     <item
         android:id="@+id/action_qr_code_camera"
-        android:title="@string/camera_scan"
+        android:title="@string/import_by_qr_code"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_qr_code_image"
-        android:title="@string/scan_image"
+        android:id="@+id/action_debug_source"
+        android:title="@string/debug_source"
         app:showAsAction="never" />
 
     <item

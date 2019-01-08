@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/find_right"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="3dp">
+
+    <TextView
+        android:id="@+id/tv_source_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="9dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:text="@string/app_name" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/tfl_find_kind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:padding="9dp"
+        app:dividerDrawable="@drawable/shape_space_divider"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:showDivider="middle" />
+
+</LinearLayout>

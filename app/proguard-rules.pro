@@ -71,13 +71,11 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 
-# 保留support下的所有类及其内部类
--keep class android.support.** {*;}
+# 保留androidx下的所有类及其内部类
+-keep class androidx.** {*;}
 
 # 保留继承的
--keep public class * extends android.support.v4.**
--keep public class * extends android.support.v7.**
--keep public class * extends android.support.annotation.**
+-keep public class * extends androidx.**
 
 # 保留R下面的资源
 -keep class **.R$* {*;}
@@ -179,8 +177,8 @@ public static java.lang.String TABLENAME;
 -keep class okio.**{*;}
 -keep class com.hwangjr.rxbus.**{*;}
 -keep class org.conscrypt.**{*;}
--keep class com.monke.monkeybook.widget.**{*;}
--keep class com.monke.monkeybook.bean.**{*;}
+-keep class com.kunfei.bookshelf.widget.**{*;}
+-keep class com.kunfei.bookshelf.bean.**{*;}
 -keep class android.support.**{*;}
 -keep class me.grantland.widget.**{*;}
 -keep class de.hdodenhof.circleimageview.**{*;}
@@ -189,13 +187,45 @@ public static java.lang.String TABLENAME;
 -keep class freemarker.**{*;}
 -keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
--keep class org.jsoup.**{ *; }
--keep class com.monke.mprogressbar.**{ *; }
+-keep class org.jsoup.**{*;}
+-keep class com.monke.mprogressbar.**{ *;}
+
+-keep class org.slf4j.**{*;}
+-dontwarn org.slf4j.**
+
+-keep class org.codehaus.**{*;}
+-dontwarn org.codehaus.**
+-keep class com.jayway.**{*;}
+-dontwarn com.jayway.**
+-keep class com.fasterxml.**{*;}
+
+-keep class javax.swing..**{*;}
+-dontwarn javax.swing.**
+-keep class java.awt.**{*;}
+-dontwarn java.awt.**
+-keep class sun.misc.**{*;}
+-dontwarn sun.misc.**
+-keep class sun.reflect.**{*;}
+-dontwarn sun.reflect.**
+
+## Rhino
+-keep class javax.script.** { *; }
+-keep class com.sun.script.javascript.** { *; }
+-keep class org.mozilla.javascript.** { *; }
+-dontwarn org.mozilla.javascript.**
+-dontwarn sun.**
+
+###EPUB
+-dontwarn nl.siegmann.epublib.**
+-dontwarn org.xmlpull.v1.**
+-keep class nl.siegmann.epublib.**{*;}
+-keep class javax.xml.**{*;}
+-keep class org.xmlpull.**{*;}
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
 }
--keep public class com.monke.monkeybook.R$*{
+-keep public class com.kunfei.bookshelf.R$*{
     public static final int *;
 }
 -keepclassmembers enum * {

@@ -4,12 +4,6 @@
     tools:context=".view.activity.BookSourceActivity">
 
     <item
-        android:id="@+id/action_pause_resume"
-        android:icon="@drawable/ic_pause1"
-        android:title="@string/pause"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_cancel"
         android:icon="@drawable/ic_stop_black_24dp"
         android:title="@string/cancel"
