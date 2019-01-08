@@ -4,13 +4,15 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clickable="true"
-    android:gravity="center">
+    android:gravity="center"
+    android:focusable="true">
     <TextView
+        android:id="@+id/tv_error_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/get_data_error"
         android:textColor="@color/tv_text_default"
-        android:textSize="18sp"/>
+        android:textSize="16sp" />
     <TextView
         android:id="@+id/tv_refresh_again"
         android:layout_width="wrap_content"
