@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.Theme.ATH;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -57,7 +58,8 @@ public class NumberPickerDialog {
     }
 
     public void show() {
-        builder.show();
+        AlertDialog dialog = builder.show();
+        ATH.setAlertDialogTint(dialog);
     }
 
     public interface OnClickListener {

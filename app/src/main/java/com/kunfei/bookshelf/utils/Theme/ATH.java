@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.view.View;
 
 import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.Selector;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
 
@@ -98,6 +101,19 @@ public final class ATH {
 
     public static void setBackgroundTint(@NonNull View view, @ColorInt int color) {
         TintHelper.setTintAuto(view, color, true);
+    }
+
+    public static void setAlertDialogTint(@NonNull AlertDialog dialog) {
+        ColorStateList colorStateList = Selector.colorBuild()
+                .setDefaultColor(ThemeStore.accentColor(dialog.getContext()))
+                .setPressedColor(ColorUtil.darkenColor(ThemeStore.accentColor(dialog.getContext())))
+                .create();
+        if (dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE) != null) {
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(colorStateList);
+        }
+        if (dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE) != null) {
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setTextColor(colorStateList);
+        }
     }
 
     private ATH() {
