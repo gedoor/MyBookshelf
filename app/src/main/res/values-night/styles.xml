@@ -2,6 +2,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark">
         <item name="overlapAnchor">false</item>
+        <item name="colorAccent">@color/white</item>
     </style>
 
     <style name="Style.Shadow.Top" parent="android:Widget">
