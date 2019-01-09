@@ -154,7 +154,7 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
+                    <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                         android:id="@+id/tv_add_shelf"
                         android:layout_width="60dp"
                         android:layout_height="30dp"

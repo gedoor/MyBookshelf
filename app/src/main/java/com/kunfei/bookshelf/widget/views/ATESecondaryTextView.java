@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.Theme.views;
+package com.kunfei.bookshelf.widget.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -10,24 +10,24 @@ import androidx.appcompat.widget.AppCompatTextView;
 /**
  * @author Aidan Follestad (afollestad)
  */
-public class ATEPrimaryTextView extends AppCompatTextView {
+public class ATESecondaryTextView extends AppCompatTextView {
 
-    public ATEPrimaryTextView(Context context) {
+    public ATESecondaryTextView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ATEPrimaryTextView(Context context, AttributeSet attrs) {
+    public ATESecondaryTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ATEPrimaryTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ATESecondaryTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setTextColor(ThemeStore.textColorPrimary(context));
+        setTextColor(ThemeStore.textColorSecondary(context));
     }
 }

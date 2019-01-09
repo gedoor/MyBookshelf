@@ -158,7 +158,7 @@
                 android:textColor="@color/tv_text_default"
                 android:textSize="14sp" />
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
+            <com.kunfei.bookshelf.widget.views.ATESeekBar
                 android:id="@+id/hpb_read_progress"
                 android:layout_width="0dp"
                 android:layout_height="25dp"

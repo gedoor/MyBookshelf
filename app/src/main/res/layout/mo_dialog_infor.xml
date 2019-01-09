@@ -27,7 +27,7 @@
                 android:textSize="16sp"
                 tools:ignore="RtlHardcoded" />
 
-        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
+        <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                 android:id="@+id/tv_close"
                 android:layout_width="70dp"
                 android:layout_height="30dp"

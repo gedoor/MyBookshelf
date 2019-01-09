@@ -2,19 +2,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="immersionStatusBar"
         android:summary="@string/status_bar_immersion"
         android:title="@string/immersion_status_bar" />
 
-    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="navigationBarColorChange"
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 
-    <com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory android:title="白天">
+    <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="白天">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimary"
@@ -37,9 +37,9 @@
             android:title="背景色"
             app:cpv_dialogType="preset" />
 
-    </com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory>
+    </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
-    <com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory android:title="夜间">
+    <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="夜间">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimaryNight"
@@ -62,6 +62,6 @@
             android:title="背景色"
             app:cpv_dialogType="preset" />
 
-    </com.kunfei.bookshelf.utils.Theme.prefs.ATEPreferenceCategory>
+    </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
 </PreferenceScreen>

@@ -1,33 +1,34 @@
-package com.kunfei.bookshelf.utils.Theme.views;
+package com.kunfei.bookshelf.widget.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatSeekBar;
 
 /**
  * @author Aidan Follestad (afollestad)
  */
-public class ATESecondaryTextView extends AppCompatTextView {
+public class ATESeekBar extends AppCompatSeekBar {
 
-    public ATESecondaryTextView(Context context) {
+    public ATESeekBar(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ATESecondaryTextView(Context context, AttributeSet attrs) {
+    public ATESeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ATESecondaryTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ATESeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setTextColor(ThemeStore.textColorSecondary(context));
+        ATH.setTint(this, ThemeStore.accentColor(context));
     }
 }

@@ -14,7 +14,7 @@
         android:textColor="@color/tv_text_default"
         android:textSize="16sp" />
 
-    <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
+    <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
         android:id="@+id/tv_refresh_again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

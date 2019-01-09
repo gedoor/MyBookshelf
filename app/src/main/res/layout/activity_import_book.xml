@@ -37,7 +37,7 @@
         android:paddingRight="10dp"
         tools:ignore="RtlHardcoded,RtlSymmetry">
 
-        <com.kunfei.bookshelf.utils.Theme.views.ATECheckBox
+        <com.kunfei.bookshelf.widget.views.ATECheckBox
             android:id="@+id/file_system_cb_selected_all"
             android:layout_width="120dp"
             android:layout_height="40dp"
@@ -46,7 +46,7 @@
             android:text="@string/select_all"
             android:textColor="@color/tv_text_default" />
 
-        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentStrokeTextView
+        <com.kunfei.bookshelf.widget.views.ATEAccentStrokeTextView
             android:id="@+id/file_system_btn_add_book"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -56,7 +56,7 @@
             android:minWidth="110dp"
             android:text="加入书架" />
 
-        <com.kunfei.bookshelf.utils.Theme.views.ATEAccentStrokeTextView
+        <com.kunfei.bookshelf.widget.views.ATEAccentStrokeTextView
             android:id="@+id/file_system_btn_delete"
             android:layout_width="70dp"
             android:layout_height="35dp"

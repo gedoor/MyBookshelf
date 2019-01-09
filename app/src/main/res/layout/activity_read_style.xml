@@ -38,7 +38,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESwitch
+            <com.kunfei.bookshelf.widget.views.ATESwitch
                 android:id="@+id/sw_darkStatusIcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -168,7 +168,7 @@
                                 android:textSize="13sp"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-                            <com.kunfei.bookshelf.utils.Theme.views.ATEAccentBgTextView
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                                 android:id="@+id/tv_change_origin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

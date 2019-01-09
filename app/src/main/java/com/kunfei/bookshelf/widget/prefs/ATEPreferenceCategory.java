@@ -1,8 +1,7 @@
-package com.kunfei.bookshelf.utils.Theme.prefs;
+package com.kunfei.bookshelf.widget.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.preference.PreferenceCategory;
 import android.util.AttributeSet;
 import android.view.View;

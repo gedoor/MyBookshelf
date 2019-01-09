@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/replace_rule_summary">
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_replace_summary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,14 +46,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/replace_rule">
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_replace_rule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATECheckBox
+            <com.kunfei.bookshelf.widget.views.ATECheckBox
                 android:id="@+id/cb_use_regex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/replace_to">
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_replace_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/use_to">
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_use_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

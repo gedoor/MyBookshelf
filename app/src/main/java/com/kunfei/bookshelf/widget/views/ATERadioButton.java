@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.Theme.views;
+package com.kunfei.bookshelf.widget.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,24 +6,24 @@ import android.util.AttributeSet;
 import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
-import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 /**
  * @author Aidan Follestad (afollestad)
  */
-public class ATEEditText extends AppCompatEditText {
+public class ATERadioButton extends AppCompatRadioButton {
 
-    public ATEEditText(Context context) {
+    public ATERadioButton(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ATEEditText(Context context, AttributeSet attrs) {
+    public ATERadioButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ATEEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ATERadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
