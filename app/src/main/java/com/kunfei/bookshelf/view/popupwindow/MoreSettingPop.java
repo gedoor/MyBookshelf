@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.utils.Theme.ATH;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -181,6 +182,7 @@ public class MoreSettingPop extends FrameLayout {
                     })
                     .create();
             dialog.show();
+            ATH.setAlertDialogTint(dialog);
         });
         llJFConvert.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
@@ -193,6 +195,7 @@ public class MoreSettingPop extends FrameLayout {
                     })
                     .create();
             dialog.show();
+            ATH.setAlertDialogTint(dialog);
         });
         llScreenDirection.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
@@ -205,6 +208,7 @@ public class MoreSettingPop extends FrameLayout {
                     })
                     .create();
             dialog.show();
+            ATH.setAlertDialogTint(dialog);
         });
         llNavigationBarColor.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
@@ -217,6 +221,7 @@ public class MoreSettingPop extends FrameLayout {
                     })
                     .create();
             dialog.show();
+            ATH.setAlertDialogTint(dialog);
         });
     }
 

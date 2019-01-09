@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.activity.ReadStyleActivity;
 import com.kunfei.bookshelf.widget.font.FontSelector;
@@ -198,6 +199,7 @@ public class ReadInterfacePop extends FrameLayout {
                     })
                     .create();
             dialog.show();
+            ATH.setAlertDialogTint(dialog);
         });
         //加粗切换
         flTextBold.setOnClickListener(view -> {
