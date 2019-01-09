@@ -49,7 +49,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="overlapAnchor">false</item>
-        <item name="colorAccent">@color/black</item>
+        <item name="colorAccent">@color/md_grey_900</item>
     </style>
 
     <style name="NoPaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
