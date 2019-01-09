@@ -45,23 +45,27 @@ public class Selector {
         private int mPressedBgColor;      //state_pressed = true
         private int mSelectedBgColor;     //state_selected = true
         private int mFocusedBgColor;      //state_focused = true
+        private int mCheckedBgColor;      //state_checked = true
         private int mStrokeWidth;         //stroke width in pixel
         private int mDefaultStrokeColor;  //default stroke color
         private int mDisabledStrokeColor; //state_enabled = false
         private int mPressedStrokeColor;  //state_pressed = true
         private int mSelectedStrokeColor; //state_selected = true
         private int mFocusedStrokeColor;  //state_focused = true
+        private int mCheckedStrokeColor;  //state_checked = true
         private int mCornerRadius;        //corner radius
 
         private boolean hasSetDisabledBgColor = false;
         private boolean hasSetPressedBgColor = false;
         private boolean hasSetSelectedBgColor = false;
         private boolean hasSetFocusedBgColor = false;
+        private boolean hasSetCheckedBgColor = false;
 
         private boolean hasSetDisabledStrokeColor = false;
         private boolean hasSetPressedStrokeColor = false;
         private boolean hasSetSelectedStrokeColor = false;
         private boolean hasSetFocusedStrokeColor = false;
+        private boolean hasSetCheckedStrokeColor = false;
 
         public ShapeSelector() {
             //initialize default values
@@ -122,6 +126,12 @@ public class Selector {
             return this;
         }
 
+        public ShapeSelector setCheckedBgColor(@ColorInt int color) {
+            mCheckedBgColor = color;
+            hasSetCheckedBgColor = true;
+            return this;
+        }
+
         public ShapeSelector setStrokeWidth(@Dimension int width) {
             mStrokeWidth = width;
             return this;
@@ -155,6 +165,12 @@ public class Selector {
         public ShapeSelector setSelectedStrokeColor(@ColorInt int color) {
             mSelectedStrokeColor = color;
             hasSetSelectedStrokeColor = true;
+            return this;
+        }
+
+        public ShapeSelector setCheckedStrokeColor(@ColorInt int color) {
+            mCheckedStrokeColor = color;
+            hasSetCheckedStrokeColor = true;
             return this;
         }
 
@@ -198,6 +214,13 @@ public class Selector {
                 GradientDrawable focusedShape = getItemShape(mShape, mCornerRadius,
                         mFocusedBgColor, mStrokeWidth, mFocusedStrokeColor);
                 selector.addState(new int[]{android.R.attr.state_focused}, focusedShape);
+            }
+
+            //checked = true
+            if (hasSetCheckedBgColor || hasSetCheckedStrokeColor) {
+                GradientDrawable checkedShape = getItemShape(mShape, mCornerRadius,
+                        mCheckedBgColor, mStrokeWidth, mCheckedStrokeColor);
+                selector.addState(new int[]{android.R.attr.state_checked}, checkedShape);
             }
 
             //default
