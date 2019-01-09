@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="immersionStatusBar"
         android:summary="@string/status_bar_immersion"
         android:title="@string/immersion_status_bar" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="navigationBarColorChange"
         android:summary="@string/navigation_bar_color_change_s"

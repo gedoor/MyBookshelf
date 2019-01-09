@@ -9,19 +9,19 @@
         android:key="@string/pk_bookshelf_px"
         android:title="@string/bookshelf_px" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="true"
         android:key="@string/pk_auto_refresh"
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_auto_download"
         android:summary="@string/ps_auto_download"
         android:title="@string/pt_auto_download" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_default_read"
         android:summary="@string/ps_default_read"
@@ -35,7 +35,7 @@
         app:MaxValue="16"
         app:MinValue="1" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="true"
         android:key="showAllFind"
         android:summary="@string/ps_show_all_find"
@@ -45,7 +45,7 @@
         android:key="@string/pk_download_path"
         android:title="@string/download_path" />
 
-    <SwitchPreference
+    <com.kunfei.bookshelf.utils.Theme.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="upChangeSourceLastChapter"
         android:summary="@string/up_change_source_last_chapter_s"
