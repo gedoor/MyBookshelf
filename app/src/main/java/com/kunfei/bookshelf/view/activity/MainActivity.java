@@ -34,6 +34,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.utils.Theme.NavigationViewUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
@@ -495,13 +496,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
             public void onHasPermission() {
-                new AlertDialog.Builder(MainActivity.this)
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                         .setTitle(R.string.backup_confirmation)
                         .setMessage(R.string.backup_message)
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                         })
                         .show();
+                ATH.setAlertDialogTint(alertDialog);
             }
 
             @Override
@@ -521,13 +523,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
             public void onHasPermission() {
-                new AlertDialog.Builder(MainActivity.this)
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                         .setTitle(R.string.restore_confirmation)
                         .setMessage(R.string.restore_message)
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                         })
                         .show();
+                ATH.setAlertDialogTint(alertDialog);
             }
 
             @Override
