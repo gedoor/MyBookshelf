@@ -14,7 +14,12 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
+
+import java.util.Objects;
+
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -96,7 +101,27 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-
+        if (Objects.equals(preference.getKey(), "defaultTheme")) {
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle("恢复默认主题")
+                    .setMessage("是否确认恢复？")
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        settingActivity.preferences.edit()
+                                .putInt("colorPrimary", settingActivity.getResources().getColor(R.color.md_grey_100))
+                                .putInt("colorAccent", settingActivity.getResources().getColor(R.color.md_pink_600))
+                                .putInt("colorBackground", settingActivity.getResources().getColor(R.color.md_grey_100))
+                                .putInt("colorPrimaryNight", settingActivity.getResources().getColor(R.color.md_grey_800))
+                                .putInt("colorAccentNight", settingActivity.getResources().getColor(R.color.md_pink_800))
+                                .putInt("colorBackgroundNight", settingActivity.getResources().getColor(R.color.md_grey_800))
+                                .apply();
+                        MApplication.getInstance().upThemeStore();
+                        RxBus.get().post(RxBusTag.RECREATE, true);
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
+                    .show();
+            ATH.setAlertDialogTint(alertDialog);
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 

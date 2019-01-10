@@ -14,6 +14,11 @@
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 
+    <Preference
+        android:key="defaultTheme"
+        android:summary="@string/restore_default_theme"
+        android:title="@string/default_theme" />
+
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="白天">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
