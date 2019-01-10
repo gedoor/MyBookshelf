@@ -17,7 +17,7 @@
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="白天">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/colorPrimary"
+            android:defaultValue="@color/md_grey_100"
             android:key="colorPrimary"
             android:summary="白天，主色调"
             android:title="主色调"
@@ -31,7 +31,7 @@
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/background"
+            android:defaultValue="@color/md_grey_100"
             android:key="colorBackground"
             android:summary="白天，背景色"
             android:title="背景色"
@@ -42,7 +42,7 @@
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="夜间">
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/colorPrimaryNight"
+            android:defaultValue="@color/md_grey_800"
             android:key="colorPrimaryNight"
             android:summary="夜间，主色调"
             android:title="主色调"
@@ -56,7 +56,7 @@
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/backgroundNight"
+            android:defaultValue="@color/md_grey_800"
             android:key="colorBackgroundNight"
             android:summary="夜间，背景色"
             android:title="背景色"

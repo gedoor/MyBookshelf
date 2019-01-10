@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#464646</color>
+    <color name="background">@color/md_grey_800</color>
     <color name="background_card">#353535</color>
     <color name="background_menu">#282828</color>
 
-    <color name="colorPrimary">#464646</color>
-    <color name="colorPrimaryDark">#1e1e1e</color>
+    <color name="colorPrimary">@color/md_grey_800</color>
+    <color name="colorPrimaryDark">@color/md_grey_900</color>
     <color name="colorAccent">@color/md_grey_100</color>
 
     <color name="transparent30">#30ffffff</color>

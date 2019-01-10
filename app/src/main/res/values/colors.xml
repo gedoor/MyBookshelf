@@ -5,21 +5,18 @@
     <color name="success">#439b53</color>
 
 
-    <color name="background">#f4f4f4</color>
+    <color name="background">@color/md_grey_100</color>
     <color name="background_card">#dedede</color>
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
     <color name="transparent30">#30000000</color>
 
-    <color name="colorPrimary">#f4f4f4</color>
-    <color name="colorPrimaryDark">#c7c7c7</color>
+    <color name="colorPrimary">@color/md_grey_100</color>
+    <color name="colorPrimaryDark">@color/md_grey_200</color>
     <color name="colorAccent">@color/md_grey_900</color>
 
     <color name="highlight">#d3321b</color>
-
-    <color name="colorPrimaryNight">#464646</color>
-    <color name="backgroundNight">#464646</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>
