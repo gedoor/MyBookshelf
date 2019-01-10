@@ -49,6 +49,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="overlapAnchor">false</item>
+        <item name="colorAccent">@color/md_grey_900</item>
     </style>
 
     <style name="NoPaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
@@ -67,7 +68,11 @@
         <item name="android:background">@drawable/bg_shadow_bottom</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/md_grey_900</item>
+    </style>
 
-    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.AppCompat.Dark" />
+    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorAccent">@color/md_grey_100</item>
+    </style>
 </resources>
