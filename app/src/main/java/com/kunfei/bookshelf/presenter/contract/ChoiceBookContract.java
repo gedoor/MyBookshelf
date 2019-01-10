@@ -16,8 +16,6 @@ public interface ChoiceBookContract {
 
         void toSearchBooks(String key);
 
-        void addBookToShelf(final SearchBookBean searchBookBean);
-
         String getTitle();
     }
 
@@ -33,13 +31,7 @@ public interface ChoiceBookContract {
 
         void searchBookError(String msg);
 
-        void addBookShelfSuccess(List<SearchBookBean> searchBooks);
-
         void addBookShelfFailed(String massage);
-
-        ChoiceBookAdapter getSearchBookAdapter();
-
-        void updateSearchItem(int index);
 
         void startRefreshAnim();
     }

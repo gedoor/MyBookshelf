@@ -7,13 +7,13 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -45,15 +45,15 @@ public class BookInfoActivity extends MBaseActivity {
     @BindView(R.id.iv_cover)
     ImageView ivCover;
     @BindView(R.id.tie_book_name)
-    TextInputEditText tieBookName;
+    EditText tieBookName;
     @BindView(R.id.til_book_name)
     TextInputLayout tilBookName;
     @BindView(R.id.tie_book_author)
-    TextInputEditText tieBookAuthor;
+    EditText tieBookAuthor;
     @BindView(R.id.til_book_author)
     TextInputLayout tilBookAuthor;
     @BindView(R.id.tie_cover_url)
-    TextInputEditText tieCoverUrl;
+    EditText tieCoverUrl;
     @BindView(R.id.til_cover_url)
     TextInputLayout tilCoverUrl;
     @BindView(R.id.tv_select_cover)
@@ -63,7 +63,7 @@ public class BookInfoActivity extends MBaseActivity {
     @BindView(R.id.tv_refresh_cover)
     TextView tvRefreshCover;
     @BindView(R.id.tie_book_jj)
-    TextInputEditText tieBookJj;
+    EditText tieBookJj;
     @BindView(R.id.til_book_jj)
     TextInputLayout tilBookJj;
 

@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/book_name">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.kunfei.bookshelf.widget.views.ATEEditText
                             android:id="@+id/tie_book_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/author">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.kunfei.bookshelf.widget.views.ATEEditText
                             android:id="@+id/tie_book_author"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="5dp"
                 android:hint="@string/cover_path">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_cover_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -135,7 +135,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/book_intro">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.kunfei.bookshelf.widget.views.ATEEditText
                     android:id="@+id/tie_book_jj"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
