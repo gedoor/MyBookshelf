@@ -91,9 +91,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                                 settingActivity.preferences.edit().putInt("colorBackground", settingActivity.getResources().getColor(R.color.md_grey_100)).apply();
                                 upTheme(false);
                             })
-                            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                                upTheme(false);
-                            })
+                            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> upTheme(false))
                             .show();
                     ATH.setAlertDialogTint(alertDialog);
                 } else {
@@ -111,9 +109,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                                 settingActivity.preferences.edit().putInt("colorBackgroundNight", settingActivity.getResources().getColor(R.color.md_grey_800)).apply();
                                 upTheme(true);
                             })
-                            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                                upTheme(true);
-                            })
+                            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> upTheme(true))
                             .show();
                     ATH.setAlertDialogTint(alertDialog);
 
@@ -150,8 +146,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                         MApplication.getInstance().upThemeStore();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {})
                     .show();
             ATH.setAlertDialogTint(alertDialog);
         }
