@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_book_source_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/book_source_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_book_source_name"
