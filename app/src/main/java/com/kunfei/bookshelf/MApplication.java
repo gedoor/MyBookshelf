@@ -107,13 +107,13 @@ public class MApplication extends Application {
         if (configPreferences.getBoolean("nightTheme", false)) {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.colorPrimaryNight)))
-                    .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.colorAccentNight)))
+                    .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.md_pink_800)))
                     .backgroundColor(configPreferences.getInt("colorBackgroundNight", getResources().getColor(R.color.backgroundNight)))
                     .apply();
         } else {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimary", getResources().getColor(R.color.colorPrimary)))
-                    .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.colorAccent)))
+                    .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.md_pink_600)))
                     .backgroundColor(configPreferences.getInt("colorBackground", getResources().getColor(R.color.background)))
                     .apply();
         }

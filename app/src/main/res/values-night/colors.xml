@@ -5,6 +5,8 @@
     <color name="background_menu">#282828</color>
 
     <color name="colorPrimary">#464646</color>
+    <color name="colorPrimaryDark">#1e1e1e</color>
+    <color name="colorAccent">@color/md_grey_100</color>
 
     <color name="transparent30">#30ffffff</color>
 

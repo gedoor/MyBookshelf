@@ -24,7 +24,7 @@
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/colorAccent"
+            android:defaultValue="@color/md_pink_600"
             android:key="colorAccent"
             android:summary="白天，强调色"
             android:title="强调色"
@@ -49,7 +49,7 @@
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="@color/colorAccentNight"
+            android:defaultValue="@color/md_pink_800"
             android:key="colorAccentNight"
             android:summary="夜间，强调色"
             android:title="强调色"
