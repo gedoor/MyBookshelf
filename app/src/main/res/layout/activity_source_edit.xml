@@ -48,7 +48,7 @@
                     android:hint="@string/book_source_url" />
             </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_book_source_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -58,9 +58,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/book_source_name" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_bookSourceGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -70,9 +70,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/book_source_group" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_loginUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -82,9 +82,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/book_source_login_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleFindUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -94,9 +94,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_find_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -106,9 +106,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -118,9 +118,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_list" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -130,9 +130,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_name" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -142,9 +142,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_author" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchKind"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -154,9 +154,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_kind" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchLastChapter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -166,9 +166,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_last_chapter" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchCoverUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -178,9 +178,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_cover_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleSearchNoteUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -190,9 +190,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_search_note_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookUrlPattern"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -202,9 +202,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/book_url_pattern" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -214,9 +214,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_book_name" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -226,9 +226,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_book_author" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleCoverUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -238,9 +238,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_cover_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookKind"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -250,9 +250,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_book_kind" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookLastChapter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -262,9 +262,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_book_last_chapter" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleIntroduce"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -274,9 +274,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_introduce" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleChapterListUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -286,9 +286,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_chapter_list_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleChapterList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -298,9 +298,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_chapter_list" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleChapterListUrlNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -310,9 +310,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_chapter_list_url_next" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleChapterName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -322,9 +322,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_chapter_name" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleContentUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -334,9 +334,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_content_url" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleContentUrlNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -346,9 +346,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_content_url_next" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_ruleBookContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -358,9 +358,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/rule_book_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_httpUserAgent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -370,7 +370,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/source_user_agent" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
         </LinearLayout>
     </ScrollView>
 
