@@ -101,30 +101,27 @@
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp">
 
-                <TextView
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/tv_select_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_pop_font_bg"
                     android:padding="5dp"
                     android:text="选择本地图片" />
 
-                <TextView
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/tv_change_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/selector_pop_font_bg"
                     android:padding="5dp"
                     android:text="封面换源"
                     tools:ignore="RtlHardcoded" />
 
-                <TextView
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/tv_refresh_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/selector_pop_font_bg"
                     android:padding="5dp"
                     android:text="刷新封面"
                     tools:ignore="RtlHardcoded" />

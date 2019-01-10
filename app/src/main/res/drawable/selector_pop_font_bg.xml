@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/shape_pop_font_bg_select" android:state_selected="true" android:state_enabled="true" />
-    <item android:drawable="@drawable/shape_pop_font_bg_nor" android:state_pressed="false" android:state_enabled="true"/>
-    <item android:drawable="@drawable/shape_pop_font_bg_pre" android:state_pressed="true" android:state_enabled="true"/>
-    <item android:drawable="@drawable/shape_pop_font_bg_pre" android:state_enabled="false"/>
-</selector>
