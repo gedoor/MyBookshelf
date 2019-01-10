@@ -13,10 +13,4 @@
         android:scaleType="fitCenter"
         android:contentDescription="@string/welcome" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@color/welcome"
-        android:contentDescription="@string/welcome" />
-
 </FrameLayout>

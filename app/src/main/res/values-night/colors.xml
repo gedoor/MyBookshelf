@@ -26,9 +26,7 @@
     <color name="tv_chapter_color_normal">#969696</color>
 
     <color name="tv_text_button_nor">#303030</color>
-    <color name="tv_text_button_disable">#434343</color>
 
-    <color name="welcome">#67000000</color>
     <!--statusBarBackground-->
     <color name="navigation_bar_bag">#222222</color>
 </resources>
