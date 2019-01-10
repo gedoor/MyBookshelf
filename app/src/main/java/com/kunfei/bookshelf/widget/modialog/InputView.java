@@ -17,7 +17,6 @@ import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 /**
  * 输入框
  */
-
 public class InputView {
     private TextView tvTitle;
     private AutoCompleteTextView etInput;
