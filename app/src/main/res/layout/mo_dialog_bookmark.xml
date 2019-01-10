@@ -37,7 +37,7 @@
             android:padding="10dp"
             android:hint="@string/content">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.kunfei.bookshelf.widget.views.ATEEditText
                 android:id="@+id/tie_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
