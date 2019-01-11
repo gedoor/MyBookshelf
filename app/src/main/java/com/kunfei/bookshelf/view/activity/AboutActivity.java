@@ -131,7 +131,7 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
-        tvQq.setText(getString(R.string.qq_group, Arrays.toString(allQQ)));
+        tvQq.setText(getString(R.string.join_group, Arrays.toString(allQQ)));
     }
 
     @Override
@@ -185,13 +185,13 @@ public class AboutActivity extends MBaseActivity {
 
     private void joinGroup(String name) {
         String key;
-        if (name.equals(allQQ[1])) {
-            key = "9AfUskHwN3_HtMcsFkXMgquoZ2zu6o4D";
+        if (name.equals(allQQ[0])) {
+            key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }
-        } else if (name.equals(allQQ[2])) {
-            key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
+        } else if (name.equals(allQQ[1])) {
+            key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }
