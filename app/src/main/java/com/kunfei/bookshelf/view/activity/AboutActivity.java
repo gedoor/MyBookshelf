@@ -97,7 +97,7 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String allQQ[] = new String[]{"(群1)701903217", "(群2)805192012", "(公众号)开源阅读软件"};
+    private String allQQ[] = new String[]{"(QQ群)701903217", "(QQ群)805192012", "(公众号)开源阅读软件"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
@@ -188,12 +188,12 @@ public class AboutActivity extends MBaseActivity {
         if (name.equals(allQQ[1])) {
             key = "9AfUskHwN3_HtMcsFkXMgquoZ2zu6o4D";
             if (joinQQGroupError(key)) {
-                copyName(name.substring(4));
+                copyName(name.substring(5));
             }
         } else if (name.equals(allQQ[2])) {
             key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
             if (joinQQGroupError(key)) {
-                copyName(name.substring(4));
+                copyName(name.substring(5));
             }
         } else {
             copyName(name.substring(5));
