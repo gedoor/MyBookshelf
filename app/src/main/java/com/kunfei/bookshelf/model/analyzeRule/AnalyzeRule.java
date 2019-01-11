@@ -235,8 +235,8 @@ public class AnalyzeRule {
             while (getMatcher.find()) {
                 String find = getMatcher.group();
                 String value = "";
-                if (book != null) {
-                    value = book.getVariableMap().get(find.substring(6, find.length() - 2));
+                if (book != null && book.getVariableMap() != null) {
+                    value = book.getVariableMap().get(find.substring(6, find.length() - 1));
                 }
                 ruleStr = ruleStr.replace(find, value);
             }
