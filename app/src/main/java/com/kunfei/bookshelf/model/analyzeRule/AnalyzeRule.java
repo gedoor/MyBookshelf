@@ -231,6 +231,7 @@ public class AnalyzeRule {
                 String value = "";
                 if (book != null && book.getVariableMap() != null) {
                     value = book.getVariableMap().get(find.substring(6, find.length() - 1));
+                    if (value == null) value = "";
                 }
                 ruleStr = ruleStr.replace(find, value);
             }
