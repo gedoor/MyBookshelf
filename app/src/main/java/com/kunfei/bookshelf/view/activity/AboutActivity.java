@@ -22,8 +22,6 @@ import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
-import java.util.Arrays;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -97,7 +95,7 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String allQQ[] = new String[]{"(QQ群)701903217", "(QQ群)805192012", "(公众号)开源阅读软件"};
+    private String allQQ[] = new String[]{"(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(公众号)开源阅读软件"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
@@ -131,7 +129,6 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
-        tvQq.setText(getString(R.string.join_group, Arrays.toString(allQQ)));
     }
 
     @Override
@@ -192,6 +189,11 @@ public class AboutActivity extends MBaseActivity {
             }
         } else if (name.equals(allQQ[1])) {
             key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[2])) {
+            key = "5Bm5w6OgLupXnICbYvbgzpPUgf0UlsJF";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }
