@@ -250,6 +250,7 @@ public class BookSourceManager extends BaseModelImpl {
                     }.getType());
                     addBookSource(bookSourceBean);
                     bookSourceBeans.add(bookSourceBean);
+                    refreshBookSource();
                     e.onNext(bookSourceBeans);
                     e.onComplete();
                     return;
