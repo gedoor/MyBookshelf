@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.StringRes;
 
@@ -287,4 +288,35 @@ public class StringUtils {
         }
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
     }
+
+    /**
+     * delimiter 分隔符
+     * elements 需要连接的字符数组
+     */
+    public static String join(CharSequence delimiter, CharSequence... elements) {
+        // 空指针判断
+        Objects.requireNonNull(delimiter);
+        Objects.requireNonNull(elements);
+
+        // Number of elements not likely worth Arrays.stream overhead.
+        // 此处用到了StringJoiner(JDK 8引入的类）
+        // 先构造一个以参数delimiter为分隔符的StringJoiner对象
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (CharSequence cs: elements) {
+            // 拼接字符
+            joiner.add(cs);
+        }
+        return joiner.toString();
+    }
+
+    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+        Objects.requireNonNull(delimiter);
+        Objects.requireNonNull(elements);
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (CharSequence cs: elements) {
+            joiner.add(cs);
+        }
+        return joiner.toString();
+    }
+
 }

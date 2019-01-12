@@ -104,6 +104,10 @@ public class AnalyzeRule {
         return analyzeByJSonPath;
     }
 
+    public List<String> getStringList(String rule) {
+        return getStringList(rule, null);
+    }
+
     public List<String> getStringList(String rule, String baseUrl) {
         List<String> stringList;
         SourceRule source = new SourceRule(rule);
