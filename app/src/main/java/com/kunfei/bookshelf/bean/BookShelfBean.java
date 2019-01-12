@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
@@ -170,8 +171,8 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
 
     @Override
     public Map<String, String> getVariableMap() {
-        if (variableMap == null) {
-            return new Gson().fromJson(variable, MAP_STRING);
+        if (variableMap == null && !TextUtils.isEmpty(variable)) {
+            variableMap = new Gson().fromJson(variable, MAP_STRING);
         }
         return variableMap;
     }

@@ -22,8 +22,6 @@ import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
-import java.util.Arrays;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -97,7 +95,7 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String allQQ[] = new String[]{"701903217", "788025059", "805192012"};
+    private String allQQ[] = new String[]{"(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(公众号)开源阅读软件"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
@@ -131,7 +129,6 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
-        tvQq.setText(getString(R.string.qq_group, Arrays.toString(allQQ)));
     }
 
     @Override
@@ -149,7 +146,7 @@ public class AboutActivity extends MBaseActivity {
                 popupMenu.getMenu().add(qq);
             }
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                joinQQGroup(menuItem.getTitle().toString());
+                joinGroup(menuItem.getTitle().toString());
                 return true;
             });
             popupMenu.show();
@@ -183,27 +180,46 @@ public class AboutActivity extends MBaseActivity {
         });
     }
 
-    private void joinQQGroup(String qq) {
+    private void joinGroup(String name) {
         String key;
-        if (qq.equals(allQQ[1])) {
-            key = "9AfUskHwN3_HtMcsFkXMgquoZ2zu6o4D";
-        } else if (qq.equals(allQQ[2])) {
-            key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
-        } else {
+        if (name.equals(allQQ[0])) {
             key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[1])) {
+            key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[2])) {
+            key = "5Bm5w6OgLupXnICbYvbgzpPUgf0UlsJF";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else {
+            copyName(name.substring(5));
         }
+    }
+
+    private void copyName(String name) {
+        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(null, name);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clipData);
+            toast(R.string.copy_complete);
+        }
+    }
+
+    private boolean joinQQGroupError(String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
         // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try {
             startActivity(intent);
+            return false;
         } catch (Exception e) {
-            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, qq);
-            if (clipboard != null) {
-                clipboard.setPrimaryClip(clipData);
-                toast(R.string.copy_complete);
-            }
+            return true;
         }
     }
 

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -77,7 +79,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @BindView(R.id.card_search)
     CardView cardSearch;
 
-    private ImageView vwNightTheme;
+    private AppCompatImageView vwNightTheme;
     private int group;
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -486,9 +488,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void upThemeVw() {
         if (isNightTheme()) {
             vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            vwNightTheme.setContentDescription("点击可切换到白天模式");
         } else {
             vwNightTheme.setImageResource(R.drawable.ic_brightness);
+            vwNightTheme.setContentDescription("点击可切换到夜间模式");
         }
+        vwNightTheme.getDrawable().mutate().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
     }
 
     //备份

@@ -268,7 +268,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:gravity="center_vertical"
-                        android:text="@string/qqq" />
+                        android:text="@string/join_qq_group" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

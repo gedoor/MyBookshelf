@@ -107,9 +107,6 @@ public class AnalyzeRule {
     public List<String> getStringList(String rule, String baseUrl) {
         List<String> stringList;
         SourceRule source = new SourceRule(rule);
-        if (source.putVariable != null) {
-            analyzeVariable(source.putVariable);
-        }
         switch (source.mode) {
             case JSon:
                 stringList = new ArrayList<>();
@@ -143,9 +140,6 @@ public class AnalyzeRule {
         }
         String result = "";
         SourceRule source = new SourceRule(rule);
-        if (source.putVariable != null) {
-            analyzeVariable(source.putVariable);
-        }
         if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
@@ -176,9 +170,6 @@ public class AnalyzeRule {
     public AnalyzeCollection getElements(String rule) {
         AnalyzeCollection collection;
         SourceRule source = new SourceRule(rule);
-        if (source.putVariable != null) {
-            analyzeVariable(source.putVariable);
-        }
         if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
@@ -219,7 +210,6 @@ public class AnalyzeRule {
         Mode mode;
         String rule;
         String js;
-        Map<String, String> putVariable;
 
         SourceRule(String ruleStr) {
             //分离put规则
@@ -228,15 +218,20 @@ public class AnalyzeRule {
                 String find = putMatcher.group(0);
                 ruleStr = ruleStr.replace(find, "");
                 find = find.substring(5);
-                putVariable = new Gson().fromJson(find, MAP_STRING);
+                try {
+                    Map<String, String> putVariable = new Gson().fromJson(find, MAP_STRING);
+                    analyzeVariable(putVariable);
+                } catch (Exception ignored) {
+                }
             }
             //替换get值
             Matcher getMatcher = getPattern.matcher(ruleStr);
             while (getMatcher.find()) {
                 String find = getMatcher.group();
                 String value = "";
-                if (book != null) {
-                    value = book.getVariableMap().get(find.substring(6, find.length() - 2));
+                if (book != null && book.getVariableMap() != null) {
+                    value = book.getVariableMap().get(find.substring(6, find.length() - 1));
+                    if (value == null) value = "";
                 }
                 ruleStr = ruleStr.replace(find, value);
             }
