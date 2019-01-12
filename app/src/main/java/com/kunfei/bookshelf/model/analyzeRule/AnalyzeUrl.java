@@ -124,12 +124,13 @@ public class AnalyzeUrl {
         Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
+            String value = queryM.length > 1 ? queryM[1] : "";
             if (isEmpty(charCode)) {
-                map.put(queryM[0], queryM[1]);
+                map.put(queryM[0], value);
             } else if (charCode.equals("escape")) {
-                map.put(queryM[0], StringUtils.escape(queryM[1]));
+                map.put(queryM[0], StringUtils.escape(value));
             } else {
-                map.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
+                map.put(queryM[0], URLEncoder.encode(value, charCode));
             }
         }
         return map;
