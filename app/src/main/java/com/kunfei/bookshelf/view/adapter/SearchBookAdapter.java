@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
@@ -72,24 +73,32 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
             myViewHolder.tvState.setText(state);
         }
-        long words = searchBooks.get(position).getWords();
-        if (words <= 0) {
-            myViewHolder.tvWords.setVisibility(View.GONE);
-        } else {
-            String wordsS = Long.toString(words) + "字";
-            if (words > 10000) {
-                DecimalFormat df = new DecimalFormat("#.#");
-                wordsS = df.format(words * 1.0f / 10000f) + "万字";
+        for (String kind : searchBooks.get(position).getKind().split(",")) {
+            if (StringUtils.isContainNumber(kind)) {
+                if (StringUtils.isNumeric(kind)) {
+                    int words = Integer.valueOf(kind);
+                    if (words <= 0) {
+                        myViewHolder.tvWords.setVisibility(View.GONE);
+                    } else {
+                        String wordsS = Long.toString(words) + "字";
+                        if (words > 10000) {
+                            DecimalFormat df = new DecimalFormat("#.#");
+                            wordsS = df.format(words * 1.0f / 10000f) + "万字";
+                        }
+                        myViewHolder.tvWords.setText(wordsS);
+                    }
+                } else {
+                    myViewHolder.tvWords.setText(kind);
+                }
+                myViewHolder.tvWords.setVisibility(View.VISIBLE);
+            } else {
+                if ((kind == null || kind.length() <= 0) && myViewHolder.tvKind.getText().toString().length() <= 0) {
+                    myViewHolder.tvKind.setVisibility(View.GONE);
+                } else {
+                    myViewHolder.tvKind.setVisibility(View.VISIBLE);
+                    myViewHolder.tvKind.setText(kind);
+                }
             }
-            myViewHolder.tvWords.setVisibility(View.VISIBLE);
-            myViewHolder.tvWords.setText(wordsS);
-        }
-        String kind = searchBooks.get(position).getKind();
-        if (kind == null || kind.length() <= 0) {
-            myViewHolder.tvKind.setVisibility(View.GONE);
-        } else {
-            myViewHolder.tvKind.setVisibility(View.VISIBLE);
-            myViewHolder.tvKind.setText(kind);
         }
         if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0)
             myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());

@@ -84,6 +84,7 @@ public class AnalyzeByJSonPath {
             if (!rule.contains("{")) {
                 try {
                     Object object = ctx.read(rule);
+                    if (object == null) return result;
                     if (object instanceof List) {
                         for (Object o : ((List) object))
                             result.add(String.valueOf(o));
