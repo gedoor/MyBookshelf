@@ -2,6 +2,7 @@
 package com.kunfei.bookshelf.view.adapter;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.widget.CoverImageView;
@@ -57,39 +59,24 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         if (author != null && author.trim().length() > 0)
             title = String.format("%s (%s)", title, author);
         myViewHolder.tvName.setText(title);
-        String state = searchBooks.get(position).getState();
-        if (state == null || state.length() == 0) {
+        BookKindBean bookKindBean = new BookKindBean(searchBooks.get(position).getKind());
+        if (TextUtils.isEmpty(bookKindBean.getKind())) {
+            myViewHolder.tvKind.setVisibility(View.GONE);
+        } else {
+            myViewHolder.tvKind.setVisibility(View.VISIBLE);
+            myViewHolder.tvKind.setText(bookKindBean.getKind());
+        }
+        if (TextUtils.isEmpty(bookKindBean.getWordsS())) {
+            myViewHolder.tvWords.setVisibility(View.GONE);
+        } else {
+            myViewHolder.tvWords.setVisibility(View.VISIBLE);
+            myViewHolder.tvWords.setText(bookKindBean.getWordsS());
+        }
+        if (TextUtils.isEmpty(bookKindBean.getState())) {
             myViewHolder.tvState.setVisibility(View.GONE);
         } else {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
-            myViewHolder.tvState.setText(state);
-        }
-        for (String kind : searchBooks.get(position).getKind().split(",")) {
-            if (StringUtils.isContainNumber(kind)) {
-                if (StringUtils.isNumeric(kind)) {
-                    int words = Integer.valueOf(kind);
-                    if (words <= 0) {
-                        myViewHolder.tvWords.setVisibility(View.GONE);
-                    } else {
-                        String wordsS = Long.toString(words) + "字";
-                        if (words > 10000) {
-                            DecimalFormat df = new DecimalFormat("#.#");
-                            wordsS = df.format(words * 1.0f / 10000f) + "万字";
-                        }
-                        myViewHolder.tvWords.setText(wordsS);
-                    }
-                } else {
-                    myViewHolder.tvWords.setText(kind);
-                }
-                myViewHolder.tvWords.setVisibility(View.VISIBLE);
-            } else {
-                if ((kind == null || kind.length() <= 0) && myViewHolder.tvKind.getText().toString().length() <= 0) {
-                    myViewHolder.tvKind.setVisibility(View.GONE);
-                } else {
-                    myViewHolder.tvKind.setVisibility(View.VISIBLE);
-                    myViewHolder.tvKind.setText(kind);
-                }
-            }
+            myViewHolder.tvState.setText(bookKindBean.getState());
         }
 
         if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0)

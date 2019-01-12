@@ -38,8 +38,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     private String variable;
 
     @Transient
-    private String state;
-    @Transient
     private Boolean isCurrentSource = false;
     @Transient
     private int originNum = 1;
@@ -63,7 +61,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         coverUrl = in.readString();
         name = in.readString();
         author = in.readString();
-        state = in.readString();
         lastChapter = in.readString();
         isCurrentSource = in.readByte() != 0;
         tag = in.readString();
@@ -105,7 +102,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         dest.writeString(coverUrl);
         dest.writeString(name);
         dest.writeString(author);
-        dest.writeString(state);
         dest.writeString(lastChapter);
         dest.writeByte((byte)(isCurrentSource ?1:0));
         dest.writeString(tag);
@@ -198,14 +194,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
 
     public void setAuthor(String author) {
         this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getLastChapter() {
