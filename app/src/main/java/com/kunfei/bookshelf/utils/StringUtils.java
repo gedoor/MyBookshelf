@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.StringRes;
 
@@ -319,4 +321,15 @@ public class StringUtils {
         return joiner.toString();
     }
 
+    public static boolean isContainNumber(String company) {
+        Pattern p = Pattern.compile("[0-9]");
+        Matcher m = p.matcher(company);
+        return m.find();
+    }
+
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
+    }
 }
