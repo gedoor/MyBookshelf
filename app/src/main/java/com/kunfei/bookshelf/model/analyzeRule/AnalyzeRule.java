@@ -109,7 +109,7 @@ public class AnalyzeRule {
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
-                stringList = new ArrayList<>();
+                stringList = getAnalyzeByJSonPath().readStringList(source.rule);
                 break;
             case XPath:
                 stringList = getAnalyzeByXPath().getStringList(source.rule);
