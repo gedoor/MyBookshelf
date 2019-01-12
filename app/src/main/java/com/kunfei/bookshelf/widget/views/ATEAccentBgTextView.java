@@ -33,6 +33,6 @@ public class ATEAccentBgTextView extends AppCompatTextView {
                 .setDefaultBgColor(ThemeStore.accentColor(context))
                 .setPressedBgColor(ColorUtil.darkenColor(ThemeStore.accentColor(context)))
                 .create());
-        setTextColor(ColorUtil.isColorLight(ThemeStore.accentColor(context)) ? Color.BLACK : Color.WHITE);
+        setTextColor(Color.WHITE);
     }
 }
