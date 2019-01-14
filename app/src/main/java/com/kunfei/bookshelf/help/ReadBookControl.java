@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.help;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 
 import com.kunfei.bookshelf.MApplication;
@@ -205,9 +207,9 @@ public class ReadBookControl {
     }
 
     public void setTextColor(int textDrawableIndex, int textColor) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("textColor" + textDrawableIndex, textColor);
-        editor.apply();
+        readPreference.edit()
+                .putInt("textColor" + textDrawableIndex, textColor)
+                .apply();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -255,9 +257,9 @@ public class ReadBookControl {
     }
 
     public void setBgCustom(int textDrawableIndex, int bgCustom) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("bgCustom" + textDrawableIndex, bgCustom);
-        editor.apply();
+        readPreference.edit()
+                .putInt("bgCustom" + textDrawableIndex, bgCustom)
+                .apply();
     }
 
     public String getBgPath(int textDrawableIndex) {
@@ -265,9 +267,9 @@ public class ReadBookControl {
     }
 
     public void setBgPath(int textDrawableIndex, String bgUri) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putString("bgPath" + textDrawableIndex, bgUri);
-        editor.apply();
+        readPreference.edit()
+                .putString("bgPath" + textDrawableIndex, bgUri)
+                .apply();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -285,9 +287,9 @@ public class ReadBookControl {
     }
 
     public void setBgColor(int index, int bgColor) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("bgColor" + index, bgColor);
-        editor.apply();
+        readPreference.edit()
+                .putInt("bgColor" + index, bgColor)
+                .apply();
     }
 
     private boolean getIsNightTheme() {
@@ -299,9 +301,9 @@ public class ReadBookControl {
     }
 
     public void setImmersionStatusBar(boolean immersionStatusBar) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("immersionStatusBar", immersionStatusBar);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("immersionStatusBar", immersionStatusBar)
+                .apply();
     }
 
     public int getTextSize() {
@@ -310,9 +312,9 @@ public class ReadBookControl {
 
     public void setTextSize(int textSize) {
         this.textSize = textSize;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("textSize", textSize);
-        editor.apply();
+        readPreference.edit()
+                .putInt("textSize", textSize)
+                .apply();
     }
 
     public int getTextColor() {
@@ -348,28 +350,30 @@ public class ReadBookControl {
 
     public void setTextDrawableIndex(int textDrawableIndex) {
         this.textDrawableIndex = textDrawableIndex;
-        SharedPreferences.Editor editor = readPreference.edit();
         if (getIsNightTheme()) {
-            editor.putInt("textDrawableIndexNight", textDrawableIndex);
+            readPreference.edit()
+                    .putInt("textDrawableIndexNight", textDrawableIndex)
+                    .apply();
         } else {
-            editor.putInt("textDrawableIndex", textDrawableIndex);
+            readPreference.edit()
+                    .putInt("textDrawableIndex", textDrawableIndex)
+                    .apply();
         }
-        editor.apply();
         setTextDrawable();
     }
 
     public void setTextConvert(int textConvert) {
         this.textConvert = textConvert;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("textConvertInt", textConvert);
-        editor.apply();
+        readPreference.edit()
+                .putInt("textConvertInt", textConvert)
+                .apply();
     }
 
     public void setNavbarColor(int navBarColor) {
         this.navBarColor = navBarColor;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("navBarColorInt", navBarColor);
-        editor.apply();
+        readPreference.edit()
+                .putInt("navBarColorInt", navBarColor)
+                .apply();
     }
 
     public int getNavbarColor() {
@@ -379,16 +383,16 @@ public class ReadBookControl {
 
     public void setTextBold(boolean textBold) {
         this.textBold = textBold;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("textBold", textBold);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("textBold", textBold)
+                .apply();
     }
 
     public void setReadBookFont(String fontPath) {
         this.fontPath = fontPath;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putString("fontPath", fontPath);
-        editor.apply();
+        readPreference.edit()
+                .putString("fontPath", fontPath)
+                .apply();
     }
 
     public String getFontPath() {
@@ -419,9 +423,9 @@ public class ReadBookControl {
 
     public void setCanKeyTurn(Boolean canKeyTurn) {
         this.canKeyTurn = canKeyTurn;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("canKeyTurn", canKeyTurn);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("canKeyTurn", canKeyTurn)
+                .apply();
     }
 
     public Boolean getAloudCanKeyTurn() {
@@ -430,9 +434,9 @@ public class ReadBookControl {
 
     public void setAloudCanKeyTurn(Boolean canAloudKeyTurn) {
         this.readAloudCanKeyTurn = canAloudKeyTurn;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("readAloudCanKeyTurn", canAloudKeyTurn);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("readAloudCanKeyTurn", canAloudKeyTurn)
+                .apply();
     }
 
     public Boolean getCanClickTurn() {
@@ -441,9 +445,9 @@ public class ReadBookControl {
 
     public void setCanClickTurn(Boolean canClickTurn) {
         this.canClickTurn = canClickTurn;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("canClickTurn", canClickTurn);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("canClickTurn", canClickTurn)
+                .apply();
     }
 
     public float getLineMultiplier() {
@@ -452,9 +456,9 @@ public class ReadBookControl {
 
     public void setLineMultiplier(float lineMultiplier) {
         this.lineMultiplier = lineMultiplier;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putFloat("lineMultiplier", lineMultiplier);
-        editor.apply();
+        readPreference.edit()
+                .putFloat("lineMultiplier", lineMultiplier)
+                .apply();
     }
 
     public float getParagraphSize() {
@@ -463,9 +467,9 @@ public class ReadBookControl {
 
     public void setParagraphSize(float paragraphSize) {
         this.paragraphSize = paragraphSize;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putFloat("paragraphSize", paragraphSize);
-        editor.apply();
+        readPreference.edit()
+                .putFloat("paragraphSize", paragraphSize)
+                .apply();
     }
 
     public int getClickSensitivity() {
@@ -474,9 +478,9 @@ public class ReadBookControl {
 
     public void setClickSensitivity(int clickSensitivity) {
         this.clickSensitivity = clickSensitivity;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("clickSensitivity", clickSensitivity);
-        editor.apply();
+        readPreference.edit()
+                .putInt("clickSensitivity", clickSensitivity)
+                .apply();
     }
 
     public Boolean getClickAllNext() {
@@ -485,9 +489,9 @@ public class ReadBookControl {
 
     public void setClickAllNext(Boolean clickAllNext) {
         this.clickAllNext = clickAllNext;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("clickAllNext", clickAllNext);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("clickAllNext", clickAllNext)
+                .apply();
     }
 
     public int getSpeechRate() {
@@ -496,9 +500,9 @@ public class ReadBookControl {
 
     public void setSpeechRate(int speechRate) {
         this.speechRate = speechRate;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("speechRate", speechRate);
-        editor.apply();
+        readPreference.edit()
+                .putInt("speechRate", speechRate)
+                .apply();
     }
 
     public boolean isSpeechRateFollowSys() {
@@ -507,9 +511,9 @@ public class ReadBookControl {
 
     public void setSpeechRateFollowSys(boolean speechRateFollowSys) {
         this.speechRateFollowSys = speechRateFollowSys;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("speechRateFollowSys", speechRateFollowSys);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("speechRateFollowSys", speechRateFollowSys)
+                .apply();
     }
 
     public Boolean getShowTitle() {
@@ -518,9 +522,9 @@ public class ReadBookControl {
 
     public void setShowTitle(Boolean showTitle) {
         this.showTitle = showTitle;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("showTitle", showTitle);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("showTitle", showTitle)
+                .apply();
     }
 
     public Boolean getShowTimeBattery() {
@@ -529,9 +533,9 @@ public class ReadBookControl {
 
     public void setShowTimeBattery(Boolean showTimeBattery) {
         this.showTimeBattery = showTimeBattery;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("showTimeBattery", showTimeBattery);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("showTimeBattery", showTimeBattery)
+                .apply();
     }
 
     public Boolean getHideStatusBar() {
@@ -540,9 +544,9 @@ public class ReadBookControl {
 
     public void setHideStatusBar(Boolean hideStatusBar) {
         this.hideStatusBar = hideStatusBar;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("hide_status_bar", hideStatusBar);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("hide_status_bar", hideStatusBar)
+                .apply();
     }
 
     public Boolean getHideNavigationBar() {
@@ -551,9 +555,9 @@ public class ReadBookControl {
 
     public void setHideNavigationBar(Boolean hideNavigationBar) {
         this.hideNavigationBar = hideNavigationBar;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("hide_navigation_bar", hideNavigationBar);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("hide_navigation_bar", hideNavigationBar)
+                .apply();
     }
 
     public Boolean getShowLine() {
@@ -562,9 +566,9 @@ public class ReadBookControl {
 
     public void setShowLine(Boolean showLine) {
         this.showLine = showLine;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("showLine", showLine);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("showLine", showLine)
+                .apply();
     }
 
     public boolean getDarkStatusIcon() {
@@ -577,9 +581,9 @@ public class ReadBookControl {
     }
 
     public void setDarkStatusIcon(int textDrawableIndex, Boolean darkStatusIcon) {
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("darkStatusIcon" + textDrawableIndex, darkStatusIcon);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("darkStatusIcon" + textDrawableIndex, darkStatusIcon)
+                .apply();
     }
 
     public int getScreenTimeOut() {
@@ -588,9 +592,9 @@ public class ReadBookControl {
 
     public void setScreenTimeOut(int screenTimeOut) {
         this.screenTimeOut = screenTimeOut;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("screenTimeOut", screenTimeOut);
-        editor.apply();
+        readPreference.edit()
+                .putInt("screenTimeOut", screenTimeOut)
+                .apply();
     }
 
     public int getPaddingLeft() {
@@ -599,9 +603,9 @@ public class ReadBookControl {
 
     public void setPaddingLeft(int paddingLeft) {
         this.paddingLeft = paddingLeft;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("paddingLeft", paddingLeft);
-        editor.apply();
+        readPreference.edit()
+                .putInt("paddingLeft", paddingLeft)
+                .apply();
     }
 
     public int getPaddingTop() {
@@ -610,9 +614,9 @@ public class ReadBookControl {
 
     public void setPaddingTop(int paddingTop) {
         this.paddingTop = paddingTop;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("paddingTop", paddingTop);
-        editor.apply();
+        readPreference.edit()
+                .putInt("paddingTop", paddingTop)
+                .apply();
     }
 
     public int getPaddingRight() {
@@ -621,9 +625,9 @@ public class ReadBookControl {
 
     public void setPaddingRight(int paddingRight) {
         this.paddingRight = paddingRight;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("paddingRight", paddingRight);
-        editor.apply();
+        readPreference.edit()
+                .putInt("paddingRight", paddingRight)
+                .apply();
     }
 
     public int getPaddingBottom() {
@@ -632,9 +636,9 @@ public class ReadBookControl {
 
     public void setPaddingBottom(int paddingBottom) {
         this.paddingBottom = paddingBottom;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("paddingBottom", paddingBottom);
-        editor.apply();
+        readPreference.edit()
+                .putInt("paddingBottom", paddingBottom)
+                .apply();
     }
 
     public int getPageMode() {
@@ -643,9 +647,9 @@ public class ReadBookControl {
 
     public void setPageMode(int pageMode) {
         this.pageMode = pageMode;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("pageMode", pageMode);
-        editor.apply();
+        readPreference.edit()
+                .putInt("pageMode", pageMode)
+                .apply();
     }
 
     public int getScreenDirection() {
@@ -654,9 +658,9 @@ public class ReadBookControl {
 
     public void setScreenDirection(int screenDirection) {
         this.screenDirection = screenDirection;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("screenDirection", screenDirection);
-        editor.apply();
+        readPreference.edit()
+                .putInt("screenDirection", screenDirection)
+                .apply();
     }
 
     public Boolean getTipMarginChange() {
@@ -665,8 +669,39 @@ public class ReadBookControl {
 
     public void setTipMarginChange(Boolean tipMarginChange) {
         this.tipMarginChange = tipMarginChange;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("tipMarginChange", tipMarginChange);
-        editor.apply();
+        readPreference.edit()
+                .putBoolean("tipMarginChange", tipMarginChange)
+                .apply();
+    }
+
+    public int getLight() {
+        return readPreference.getInt("light", getScreenBrightness());
+    }
+
+    public void setLight(int light) {
+        readPreference.edit()
+                .putInt("light", light)
+                .apply();
+    }
+
+    public Boolean getLightFollowSys() {
+        return readPreference.getBoolean("isfollowsys", true);
+    }
+
+    public void setLightFollowSys(boolean isFollowSys) {
+        readPreference.edit()
+                .putBoolean("isfollowsys", isFollowSys)
+                .apply();
+    }
+
+    private int getScreenBrightness() {
+        int value = 0;
+        ContentResolver cr = MApplication.getInstance().getContentResolver();
+        try {
+            value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return value;
     }
 }

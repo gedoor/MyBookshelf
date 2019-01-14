@@ -980,7 +980,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
             if (readAdjustPop.getVisibility() == View.VISIBLE) {
                 readAdjustPop.startAnimation(menuBottomOut);
-                readAdjustPop.dismiss();
             }
             if (readInterfacePop.getVisibility() == View.VISIBLE) {
                 readInterfacePop.startAnimation(menuBottomOut);

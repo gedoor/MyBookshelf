@@ -3,10 +3,7 @@ package com.kunfei.bookshelf.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.widget.checkbox.SmoothCheckBox;
@@ -45,11 +41,8 @@ public class ReadAdjustPop extends FrameLayout {
     TextView tvAutoPage;
 
     private Activity context;
-    private Boolean isFollowSys;
-    private int light;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnAdjustListener adjustListener;
-    private SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
 
     public ReadAdjustPop(Context context) {
         super(context);
@@ -85,10 +78,6 @@ public class ReadAdjustPop extends FrameLayout {
         initLight();
     }
 
-    public void dismiss() {
-        saveLight();
-    }
-
     private void initData() {
         scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
         if (readBookControl.isSpeechRateFollowSys()) {
@@ -112,7 +101,7 @@ public class ReadAdjustPop extends FrameLayout {
             }
         });
         scbFollowSys.setOnCheckedChangeListener((checkBox, isChecked) -> {
-            isFollowSys = isChecked;
+            readBookControl.setLightFollowSys(isChecked);
             if (isChecked) {
                 //跟随系统
                 hpbLight.setEnabled(false);
@@ -120,15 +109,15 @@ public class ReadAdjustPop extends FrameLayout {
             } else {
                 //不跟随系统
                 hpbLight.setEnabled(true);
-                setScreenBrightness(light);
+                setScreenBrightness(readBookControl.getLight());
             }
         });
         hpbLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (!isFollowSys) {
-                    light = i;
-                    setScreenBrightness(light);
+                if (!readBookControl.getLightFollowSys()) {
+                    readBookControl.setLight(i);
+                    setScreenBrightness(i);
                 }
             }
 
@@ -214,17 +203,6 @@ public class ReadAdjustPop extends FrameLayout {
         (context).getWindow().setAttributes(params);
     }
 
-    public int getScreenBrightness() {
-        int value = 0;
-        ContentResolver cr = context.getContentResolver();
-        try {
-            value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        return value;
-    }
-
     public void setScreenBrightness(int value) {
         if (value < 1) value = 1;
         WindowManager.LayoutParams params = (context).getWindow().getAttributes();
@@ -232,28 +210,11 @@ public class ReadAdjustPop extends FrameLayout {
         (context).getWindow().setAttributes(params);
     }
 
-    private void saveLight() {
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putInt("light", light);
-        editor.putBoolean("isfollowsys", isFollowSys);
-        editor.apply();
-    }
-
-    private int getLight() {
-        return preference.getInt("light", getScreenBrightness());
-    }
-
-    private Boolean getIsFollowSys() {
-        return preference.getBoolean("isfollowsys", true);
-    }
-
     public void initLight() {
-        isFollowSys = getIsFollowSys();
-        light = getLight();
-        hpbLight.setProgress(light);
-        scbFollowSys.setChecked(isFollowSys);
-        if (!isFollowSys) {
-            setScreenBrightness(light);
+        hpbLight.setProgress(readBookControl.getLight());
+        scbFollowSys.setChecked(readBookControl.getLightFollowSys());
+        if (!readBookControl.getLightFollowSys()) {
+            setScreenBrightness(readBookControl.getLight());
         }
     }
 
