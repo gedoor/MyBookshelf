@@ -284,8 +284,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mHandler.removeCallbacks(keepScreenRunnable);
             keepScreenOn(true);
             mHandler.postDelayed(keepScreenRunnable, screenOffTime);
-        } else if (screenTimeOut != -1) {
+        } else if (screenTimeOut == 0) {
             keepScreenOn(false);
+        } else {
+            keepScreenOn(true);
         }
     }
 
