@@ -485,6 +485,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
+    /**
+     * 更新主题切换按钮
+     */
     private void upThemeVw() {
         if (isNightTheme()) {
             vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
