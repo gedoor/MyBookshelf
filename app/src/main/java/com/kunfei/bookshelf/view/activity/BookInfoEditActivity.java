@@ -37,7 +37,7 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BookInfoActivity extends MBaseActivity {
+public class BookInfoEditActivity extends MBaseActivity {
     private final int ResultSelectCover = 103;
 
     @BindView(R.id.toolbar)
@@ -73,7 +73,7 @@ public class BookInfoActivity extends MBaseActivity {
 
 
     public static void startThis(Context context, String noteUrl) {
-        Intent intent = new Intent(context, BookInfoActivity.class);
+        Intent intent = new Intent(context, BookInfoEditActivity.class);
         intent.putExtra("noteUrl", noteUrl);
         context.startActivity(intent);
     }
@@ -106,7 +106,7 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_book_info);
+        setContentView(R.layout.activity_book_info_edit);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
@@ -161,7 +161,7 @@ public class BookInfoActivity extends MBaseActivity {
     }
 
     private void selectCover() {
-        PermissionUtils.checkMorePermissions(BookInfoActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
             public void onHasPermission() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -172,12 +172,12 @@ public class BookInfoActivity extends MBaseActivity {
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookInfoActivity.this.toast("获取背景图片需存储权限");
+                BookInfoEditActivity.this.toast("获取背景图片需存储权限");
             }
 
             @Override
             public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(BookInfoActivity.this, permission, MApplication.RESULT__PERMS);
+                PermissionUtils.requestMorePermissions(BookInfoEditActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
     }
@@ -260,7 +260,7 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(BookInfoActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
             public void onHasPermission() {
                 selectCover();
@@ -268,13 +268,13 @@ public class BookInfoActivity extends MBaseActivity {
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookInfoActivity.this.toast("获取背景图片需存储权限");
+                BookInfoEditActivity.this.toast("获取背景图片需存储权限");
             }
 
             @Override
             public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                BookInfoActivity.this.toast("获取背景图片需存储权限");
-                PermissionUtils.toAppSetting(BookInfoActivity.this);
+                BookInfoEditActivity.this.toast("获取背景图片需存储权限");
+                PermissionUtils.toAppSetting(BookInfoEditActivity.this);
             }
         });
     }

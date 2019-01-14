@@ -768,7 +768,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mPresenter.disableDurBookSource();
                 break;
             case R.id.action_book_info:
-                BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
+                BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
             case R.id.action_set_charset:
                 setCharset();

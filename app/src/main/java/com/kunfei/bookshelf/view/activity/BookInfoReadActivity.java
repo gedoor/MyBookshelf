@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 
 import static com.kunfei.bookshelf.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 
-public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
+public class BookInfoReadActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
     View vwContent;
     @BindView(R.id.iv_menu)
@@ -294,7 +294,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         tvRead.setOnClickListener(v -> {
             //进入阅读
-            Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
+            Intent intent = new Intent(BookInfoReadActivity.this, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
             String key = String.valueOf(System.currentTimeMillis());
             intent.putExtra("data_key", key);
