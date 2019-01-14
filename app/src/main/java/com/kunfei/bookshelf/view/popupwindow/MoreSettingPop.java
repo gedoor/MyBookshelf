@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.Theme.ATH;
+import com.kunfei.bookshelf.widget.views.ATESwitch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -71,6 +74,10 @@ public class MoreSettingPop extends FrameLayout {
     TextView reNavbarcolorVal;
     @BindView(R.id.llNavigationBarColor)
     LinearLayout llNavigationBarColor;
+    @BindView(R.id.sbImmersionStatusBar)
+    ATESwitch sbImmersionStatusBar;
+    @BindView(R.id.llImmersionStatusBar)
+    LinearLayout llImmersionStatusBar;
 
     private Context context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -110,11 +117,17 @@ public class MoreSettingPop extends FrameLayout {
 
     private void bindEvent() {
         this.setOnClickListener(view -> this.setVisibility(GONE));
+        sbImmersionStatusBar.setOnCheckedChangeListener(((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                readBookControl.setImmersionStatusBar(b);
+                changeProListener.upBar();
+                RxBus.get().post(RxBusTag.RECREATE, true);
+            }
+        }));
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
                 changeProListener.recreate();
-                upView();
             }
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -230,6 +243,7 @@ public class MoreSettingPop extends FrameLayout {
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
         upNavbarColor(readBookControl.getNavbarColor());
+        sbImmersionStatusBar.setChecked(readBookControl.getImmersionStatusBar());
         swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
@@ -290,6 +304,8 @@ public class MoreSettingPop extends FrameLayout {
     }
 
     public interface OnChangeProListener {
+        void upBar();
+
         void keepScreenOnChange(int keepScreenOn);
 
         void recreate();

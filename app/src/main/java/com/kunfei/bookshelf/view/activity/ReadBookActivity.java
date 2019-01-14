@@ -566,6 +566,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void initMoreSettingPop() {
         moreSettingPop.setListener(new MoreSettingPop.OnChangeProListener() {
             @Override
+            public void upBar() {
+                initImmersionBar();
+            }
+
+            @Override
             public void keepScreenOnChange(int keepScreenOn) {
                 screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
                 keepScreenOn(screenTimeOut != 0);

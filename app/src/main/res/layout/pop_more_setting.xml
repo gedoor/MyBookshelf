@@ -137,6 +137,28 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llImmersionStatusBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_menu"
+                android:orientation="vertical">
+
+                <com.kunfei.bookshelf.widget.views.ATESwitch
+                    android:id="@+id/sbImmersionStatusBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:textColor="@color/menu_color_default"
+                    android:text="@string/immersion_status_bar" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_hideStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -149,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:textColor="@color/menu_color_default"
-                    android:text="@string/pt_hide_status_bar"/>
+                    android:text="@string/pt_hide_status_bar" />
 
                 <View
                     android:layout_width="match_parent"
