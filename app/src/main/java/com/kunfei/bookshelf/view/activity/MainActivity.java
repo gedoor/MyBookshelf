@@ -499,7 +499,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         vwNightTheme.getDrawable().mutate().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
     }
 
-    //备份
+    /**
+     * 备份
+     */
     private void backup() {
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
@@ -526,7 +528,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
-    //恢复
+    /**
+     * 恢复
+     */
     private void restore() {
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
@@ -553,6 +557,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
+    /**
+     * 新版本运行
+     */
     private void versionUpRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
             //保存版本号
@@ -575,8 +582,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void firstRequest() {
         if (!isRecreate) {
-            versionUpRun();
-            requestPermission();
+            handler.postDelayed(() -> {
+                versionUpRun();
+                requestPermission();
+            }, 10000);
             handler.postDelayed(this::preloadReader, 200);
         }
         handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
