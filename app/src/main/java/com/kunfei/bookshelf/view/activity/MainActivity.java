@@ -143,7 +143,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         return super.dispatchTouchEvent(ev);
     }
 
-    /**************abstract***********/
     @Override
     protected List<Fragment> createTabFragments() {
         BookListFragment bookListFragment = new BookListFragment();
@@ -242,6 +241,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         updateTabItemIcon(0, true);
     }
 
+    /**
+     * 显示发现菜单
+     */
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add(0, 0, 0, "切换显示样式");
@@ -257,6 +259,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         updateTabItemIcon(1, true);
     }
 
+    /**
+     * 更新Tab图标
+     */
     private void updateTabItemIcon(int index, boolean showMenu) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(index);
         if (tab == null) return;
@@ -270,6 +275,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
+    /**
+     * 更新Tab文字
+     */
     private void updateTabItemText(int group) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(0);
         if (tab == null) return;
