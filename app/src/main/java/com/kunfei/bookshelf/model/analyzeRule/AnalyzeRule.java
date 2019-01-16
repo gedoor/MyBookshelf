@@ -163,7 +163,7 @@ public class AnalyzeRule {
             result = String.valueOf(_object);
         }
         if (!StringUtils.isTrimEmpty(source.js)) {
-            result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl, getVariable());
+            result = (String) evalJS(source.js, result, _baseUrl, getVariable());
         }
         if (!StringUtils.isTrimEmpty(_baseUrl)) {
             result = NetworkUtil.getAbsoluteURL(_baseUrl, result);
@@ -186,11 +186,11 @@ public class AnalyzeRule {
                     collection = new AnalyzeCollection(getAnalyzeByJSoup().getElements(source.rule));
             }
             if (!StringUtils.isTrimEmpty(source.js)) {
-                collection = (AnalyzeCollection) AnalyzeRule.evalJS(source.js, collection, null, getVariable());
+                collection = (AnalyzeCollection) evalJS(source.js, collection, null, getVariable());
             }
             return collection;
         } else if (!StringUtils.isTrimEmpty(source.js)) {
-            return (AnalyzeCollection) AnalyzeRule.evalJS(source.js, _object, null, getVariable());
+            return (AnalyzeCollection) evalJS(source.js, _object, null, getVariable());
         }
         return null;
     }
@@ -269,7 +269,7 @@ public class AnalyzeRule {
         private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
     }
 
-    private static Object evalJS(String jsStr, Object result, String baseUrl, String variable) {
+    private Object evalJS(String jsStr, Object result, String baseUrl, String variable) {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
