@@ -6,7 +6,7 @@
 
 **2019/01/16**
 * 升级个Android Studio 3.3
-* js添加两个方法,java.ajax java.base64Decoder
+* js添加两个方法,java.ajax(String) java.base64Decoder(String)
 
 **2019/01/14**
 * 修复屏幕常亮无效的BUG
