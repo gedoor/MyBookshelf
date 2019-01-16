@@ -23,7 +23,6 @@
 * 支持@Header:{key:value, key:value}定义http头
 * 支持@put:{key:rule, key:rule}存储变量
 * 支持@get:{key}获取变量
-* js里的自定义变量名为json, 类型为json字符串
 * 所有自定义变量类型必须为String
 * 修复部分书源无法使用的问题
 
