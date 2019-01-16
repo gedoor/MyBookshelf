@@ -142,7 +142,7 @@
     public void *(android.webkit.webView, jav.lang.String);
 }
 
--keep com.kunfei.bookshelf.model.analyzeRule.**{*;}
+-keep class com.kunfei.bookshelf.model.analyzeRule.**{*;}
 
 # 移除Log类打印各个等级日志的代码，打正式包的时候可以做为禁log使用，这里可以作为禁止log打印的功能使用
 # 记得proguard-android.txt中一定不要加-dontoptimize才起作用
