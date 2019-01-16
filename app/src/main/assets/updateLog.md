@@ -5,6 +5,7 @@
 ## 更新日志
 
 **2019/01/16**
+* 升级个Android Studio 3.3
 * js添加两个方法,java.ajax java.base64Decoder
 
 **2019/01/14**
