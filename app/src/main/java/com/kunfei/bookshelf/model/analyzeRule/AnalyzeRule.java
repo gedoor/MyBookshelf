@@ -269,7 +269,7 @@ public class AnalyzeRule {
 
     private Object evalJS(String jsStr, Object result, String baseUrl) {
         SimpleBindings bindings = new SimpleBindings();
-        bindings.put("jsEngine", this);
+        bindings.put("java", this);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
         try {
