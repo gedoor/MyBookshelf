@@ -30,9 +30,9 @@ public class AnalyzeCollection {
 
     public void next(AnalyzeRule analyzeRule) {
         if (_isJSON) {
-            analyzeRule.setContent(_Objects.get(_pos++), _isJSON);
+            analyzeRule.setContent(_Objects.get(_pos++), true);
         } else {
-            analyzeRule.setContent(_Elements.get(_pos++), _isJSON);
+            analyzeRule.setContent(_Elements.get(_pos++), false);
         }
     }
 

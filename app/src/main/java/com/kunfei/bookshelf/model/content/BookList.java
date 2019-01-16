@@ -10,6 +10,7 @@ import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -70,7 +71,14 @@ class BookList {
                     return;
                 }
             } else {
-                AnalyzeCollection collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                AnalyzeCollection collections;
+                boolean reverse = false;
+                if (bookSourceBean.getRuleSearchList().startsWith("-")) {
+                    reverse = true;
+                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList().substring(1));
+                } else {
+                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                }
                 if (collections.size() == 0 && !e.isDisposed()) {
                     e.onError(new Throwable("搜索列表为空"));
                     return;
@@ -93,6 +101,9 @@ class BookList {
                         item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
                         books.add(item);
                     }
+                }
+                if (books.size() > 1 && reverse) {
+                    Collections.reverse(books);
                 }
             }
             if (books.isEmpty() && !e.isDisposed()) {
