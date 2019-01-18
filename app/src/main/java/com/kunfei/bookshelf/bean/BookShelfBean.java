@@ -178,12 +178,12 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
     }
 
     public ChapterListBean getChapter(int index) {
-        if (realChapterListEmpty() || index < 0) {
+        if (realChapterListEmpty()) {
             ChapterListBean chapterListBean = new ChapterListBean();
             chapterListBean.setDurChapterName("暂无");
             chapterListBean.setDurChapterUrl("暂无");
             return chapterListBean;
-        } else if (index < getChapterList().size()) {
+        } else if (0 < index && index < getChapterList().size()) {
             return getChapterList().get(index);
         } else {
             durChapter = getChapterList().size() - 1;
