@@ -48,4 +48,6 @@ dependencies {
     api 'cn.wanghaomiao:JsoupXpath:2.2'
     api 'com.jayway.jsonpath:json-path:2.4.0'
     api 'io.apisense:rhino-android:1.0'
+
+    api 'com.github.albfernandez:juniversalchardet:2.3.0'
 }
