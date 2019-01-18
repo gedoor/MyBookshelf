@@ -32,7 +32,7 @@
         android:key="@string/pk_threads_num"
         android:summary="@string/threads_num"
         android:title="@string/update_search_threads_num"
-        app:MaxValue="16"
+        app:MaxValue="99"
         app:MinValue="1" />
 
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
