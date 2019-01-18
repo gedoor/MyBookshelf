@@ -1310,8 +1310,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void onResume() {
         super.onResume();
-        batInfoReceiver = new ThisBatInfoReceiver();
-        batInfoReceiver.registerThis();
+        if (batInfoReceiver == null) {
+            batInfoReceiver = new ThisBatInfoReceiver();
+            batInfoReceiver.registerThis();
+        }
         screenOffTimerStart();
         if (mPageLoader != null) {
             if (!mPageLoader.updateBattery(BatteryUtil.getLevel(this))) {
