@@ -450,7 +450,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         ImageView imageView = headerView.findViewById(R.id.iv_navigation_header);
-        imageView.setColorFilter(ThemeStore.accentColor(this));
+        if (isNightTheme()) {
+            imageView.getDrawable().setAlpha(150);
+        } else {
+            imageView.getDrawable().setAlpha(255);
+        }
         navigationView.addHeaderView(headerView);
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
