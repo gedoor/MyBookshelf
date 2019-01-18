@@ -183,7 +183,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
             chapterListBean.setDurChapterName("暂无");
             chapterListBean.setDurChapterUrl("暂无");
             return chapterListBean;
-        } else if (0 < index && index < getChapterList().size()) {
+        } else if (0 <= index && index < getChapterList().size()) {
             return getChapterList().get(index);
         } else {
             durChapter = getChapterList().size() - 1;
