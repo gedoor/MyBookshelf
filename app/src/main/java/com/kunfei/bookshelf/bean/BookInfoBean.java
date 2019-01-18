@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -182,10 +183,9 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     public List<ChapterListBean> getChapterList() {
         if (chapterList == null) {
-            return new ArrayList<>();
-        } else {
-            return chapterList;
+            chapterList = BookshelfHelp.getChapterList(noteUrl);
         }
+        return chapterList;
     }
 
     public void setChapterList(List<ChapterListBean> chapterList) {

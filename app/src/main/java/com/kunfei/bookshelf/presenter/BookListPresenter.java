@@ -102,6 +102,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1);
                             downloadBook.setFinalDate(System.currentTimeMillis());
                             DownloadService.addDownload(mView.getContext(), downloadBook);
+                            bookShelfBean.getBookInfoBean().setChapterList(null);
                             break;
                         }
                     }

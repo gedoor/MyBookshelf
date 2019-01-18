@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -368,11 +369,15 @@ public class BookshelfHelp {
     }
 
     public static List<ChapterListBean> getChapterList(String noteUrl) {
-        return DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+        List<ChapterListBean> chapterListBeans = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
                 .build()
                 .list();
+        if (chapterListBeans == null) {
+            chapterListBeans = new ArrayList<>();
+        }
+        return chapterListBeans;
     }
 
     public static void delChapterList(String noteUrl) {
