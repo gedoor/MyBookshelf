@@ -23,7 +23,6 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -134,17 +133,15 @@ public class BookInfoBean implements Parcelable, Cloneable {
         bookInfoBean.charset = charset;
         if (chapterList != null) {
             List<ChapterListBean> newListC = new ArrayList<>();
-            Iterator<ChapterListBean> iteratorC = chapterList.iterator();
-            while (iteratorC.hasNext()) {
-                newListC.add((ChapterListBean) iteratorC.next().clone());
+            for (ChapterListBean aChapterList : chapterList) {
+                newListC.add((ChapterListBean) aChapterList.clone());
             }
             bookInfoBean.setChapterList(newListC);
         }
         if (bookmarkList != null) {
             List<BookmarkBean> newListM = new ArrayList<>();
-            Iterator<BookmarkBean> iteratorM = bookmarkList.iterator();
-            while (iteratorM.hasNext()) {
-                newListM.add((BookmarkBean) iteratorM.next().clone());
+            for (BookmarkBean aBookmarkList : bookmarkList) {
+                newListM.add((BookmarkBean) aBookmarkList.clone());
             }
             bookInfoBean.setBookmarkList(newListM);
         }
@@ -191,8 +188,8 @@ public class BookInfoBean implements Parcelable, Cloneable {
         }
     }
 
-    public void setChapterList(List<ChapterListBean> chapterlist) {
-        this.chapterList = chapterlist;
+    public void setChapterList(List<ChapterListBean> chapterList) {
+        this.chapterList = chapterList;
     }
 
     public long getFinalRefreshData() {
@@ -205,12 +202,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     public String getCoverUrl() {
         if (isEpub() && (TextUtils.isEmpty(coverUrl) || !(new File(coverUrl)).exists())) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    BookInfoBean.this.extractEpubCoverImage();
-                }
-            });
+            AsyncTask.execute(BookInfoBean.this::extractEpubCoverImage);
             return "";
         }
         return coverUrl;
