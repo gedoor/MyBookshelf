@@ -41,6 +41,7 @@ import com.kunfei.bookshelf.utils.BatteryUtil;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.BarHide;
@@ -679,11 +680,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
                         if ((ReadAloudService.running)) {
-                            if (resetReadAloud && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
+                            if (resetReadAloud) {
                                 readAloud();
                                 return;
                             }
-                            if (pageIndex == 0 && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
+                            if (pageIndex == 0) {
                                 readAloud();
                                 return;
                             }
@@ -989,7 +990,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private void readAloud() {
         aloudNextPage = false;
-        if (mPresenter.getBookShelf() != null && mPageLoader != null) {
+        if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(mPageLoader.getUnReadContent())) {
             ReadAloudService.play(ReadBookActivity.this,
                     false,
                     mPageLoader.getUnReadContent(),
