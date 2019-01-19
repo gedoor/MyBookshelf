@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.utils.Theme;
 
 import android.content.res.ColorStateList;
 
+import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.ColorInt;
@@ -36,6 +37,19 @@ public final class NavigationViewUtil {
                         selectedColor
                 });
         navigationView.setItemTextColor(textSl);
+    }
+
+    /**
+     * 去掉navigationView的滚动条
+     * @param navigationView NavigationView
+     */
+    public static void disableScrollbar(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     private NavigationViewUtil() {
