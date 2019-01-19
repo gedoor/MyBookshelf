@@ -88,7 +88,6 @@ public class ReadAloudService extends Service {
     private Runnable dsRunnable;
     private MediaManager mediaManager;
     private int readAloudNumber;
-    private Status status;
 
     /**
      * 朗读
@@ -243,14 +242,12 @@ public class ReadAloudService extends Service {
 
     public void playTTSN() {
         if (contentList.size() < 1) {
-            status = Status.NEXT;
-            RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
             return;
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
-            status = Status.PLAY;
-            RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
             updateNotification();
             initSpeechRate();
             HashMap<String, String> map = new HashMap<>();
@@ -306,8 +303,7 @@ public class ReadAloudService extends Service {
         } else {
             textToSpeech.stop();
         }
-        status = Status.PAUSE;
-        RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+        RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
     }
 
     /**
@@ -402,8 +398,7 @@ public class ReadAloudService extends Service {
         super.onDestroy();
         stopForeground(true);
         handler.removeCallbacks(dsRunnable);
-        status = Status.STOP;
-        RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+        RxBus.get().post(RxBusTag.ALOUD_STATE, Status.STOP);
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
         clearTTS();
@@ -528,11 +523,6 @@ public class ReadAloudService extends Service {
     private class ttsUtteranceListener extends UtteranceProgressListener {
 
         @Override
-        public void onStop(String utteranceId, boolean interrupted) {
-            super.onStop(utteranceId, interrupted);
-        }
-
-        @Override
         public void onStart(String s) {
             updateMediaSessionPlaybackState();
             RxBus.get().post(RxBusTag.READ_ALOUD_START, readAloudNumber + 1);
@@ -544,16 +534,14 @@ public class ReadAloudService extends Service {
             readAloudNumber = readAloudNumber + contentList.get(nowSpeak).length() + 1;
             nowSpeak = nowSpeak + 1;
             if (nowSpeak >= contentList.size()) {
-                status = Status.NEXT;
-                RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+                RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
             }
         }
 
         @Override
         public void onError(String s) {
             pauseReadAloud(true);
-            status = Status.PAUSE;
-            RxBus.get().post(RxBusTag.ALOUD_STATE, status);
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
         }
 
         @Override
