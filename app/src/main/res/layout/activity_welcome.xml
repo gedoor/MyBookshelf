@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/welcome" />
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@color/night_mask"
