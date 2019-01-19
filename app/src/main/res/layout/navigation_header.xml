@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/yue_du"
+        android:src="@drawable/image_yue_du"
         android:contentDescription="@string/app_name" />
 
     <View

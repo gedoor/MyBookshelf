@@ -34,7 +34,6 @@ public class WelcomeBookActivity extends MBaseActivity {
         }
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
-        ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {
