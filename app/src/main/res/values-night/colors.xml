@@ -4,7 +4,7 @@
     <color name="background_card">#353535</color>
     <color name="background_menu">#282828</color>
 
-    <color name="welcome">#69000000</color>
+    <color name="night_mask">#69000000</color>
 
     <color name="colorPrimary">@color/md_grey_800</color>
     <color name="colorPrimaryDark">@color/md_grey_900</color>

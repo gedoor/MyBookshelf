@@ -10,13 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:src="@drawable/image_welcome"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/welcome" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@color/welcome"
+        android:src="@color/night_mask"
         android:contentDescription="@string/welcome" />
 
 </FrameLayout>

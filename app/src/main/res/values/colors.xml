@@ -4,7 +4,7 @@
     <color name="error">#eb4333</color>
     <color name="success">#439b53</color>
 
-    <color name="welcome">#00000000</color>
+    <color name="night_mask">#00000000</color>
 
     <color name="background">@color/md_grey_100</color>
     <color name="background_card">#dedede</color>

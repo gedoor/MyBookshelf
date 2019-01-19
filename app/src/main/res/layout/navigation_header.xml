@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@color/welcome"
+        android:src="@color/night_mask"
         android:contentDescription="@string/welcome" />
 
     <View
