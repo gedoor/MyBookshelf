@@ -2,6 +2,8 @@ package com.kunfei.basemvplib;
 
 import android.text.TextUtils;
 
+import com.kunfei.basemvplib.untils.EncodingDetect;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -87,7 +89,7 @@ public class EncodeConverter extends Converter.Factory {
                 }
             }
             //根据内容判断
-            charsetStr = CharsetDetector.detectCharset(new ByteArrayInputStream(responseBytes));
+            charsetStr = EncodingDetect.getJavaEncode(responseBytes);
             return new String(responseBytes, Charset.forName(charsetStr));
         };
     }
