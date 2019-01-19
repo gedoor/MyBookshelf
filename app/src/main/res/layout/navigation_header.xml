@@ -13,11 +13,11 @@
         android:src="@drawable/image_yue_du"
         android:contentDescription="@string/app_name" />
 
-    <ImageView
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@color/night_mask"
-        android:contentDescription="@string/welcome" />
+        android:contentDescription="@string/app_name" />
 
     <View
         android:layout_width="match_parent"
