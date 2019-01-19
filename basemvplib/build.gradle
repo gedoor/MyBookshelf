@@ -49,5 +49,4 @@ dependencies {
     api 'com.jayway.jsonpath:json-path:2.4.0'
     api 'io.apisense:rhino-android:1.0'
 
-    api 'com.github.albfernandez:juniversalchardet:2.3.0'
 }
