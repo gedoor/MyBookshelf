@@ -1,13 +1,11 @@
 package com.kunfei.basemvplib.untils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
+
+import androidx.annotation.NonNull;
 
 /**
  * <Detect encoding .> Copyright (C) <2009> <Fluck,ACC http://androidos.cc/dev>
@@ -31,9 +29,10 @@ import java.net.URL;
  */
 public class EncodingDetect {
 
-    public static String getJavaEncode(byte[] bytes) {
-        byte[] cBytes = new byte[2000];
-        System.arraycopy(bytes, 0, cBytes, 0, 2000);
+    public static String getJavaEncode(@NonNull byte[] bytes) {
+        int len = bytes.length > 2000 ? 2000 : bytes.length;
+        byte[] cBytes = new byte[len];
+        System.arraycopy(bytes, 0, cBytes, 0, len);
         BytesEncodingDetect bytesEncodingDetect = new BytesEncodingDetect();
         String code = BytesEncodingDetect.javaname[bytesEncodingDetect.detectEncoding(cBytes)];
         // UTF-16LE 特殊处理
@@ -48,7 +47,7 @@ public class EncodingDetect {
     /**
      * 得到文件的编码
      */
-    public static String getJavaEncode(String filePath) {
+    public static String getJavaEncode(@NonNull String filePath) {
         BytesEncodingDetect s = new BytesEncodingDetect();
         String fileCode = BytesEncodingDetect.javaname[s
                 .detectEncoding(new File(filePath))];
@@ -67,7 +66,7 @@ public class EncodingDetect {
     /**
      * 得到文件的编码
      */
-    public static String getJavaEncode(File file) {
+    public static String getJavaEncode(@NonNull File file) {
         BytesEncodingDetect s = new BytesEncodingDetect();
         String fileCode = BytesEncodingDetect.javaname[s.detectEncoding(file)];
         // UTF-16LE 特殊处理
@@ -80,37 +79,6 @@ public class EncodingDetect {
         return fileCode;
     }
 
-    public static void readFile(String file, String code) {
-
-        BufferedReader fr;
-        try {
-            String myCode = code != null && !"".equals(code) ? code : "UTF8";
-            InputStreamReader read = new InputStreamReader(new FileInputStream(
-                    file), myCode);
-
-            fr = new BufferedReader(read);
-            String line = null;
-            int flag = 1;
-            // 读取每一行，如果结束了，line会为空
-            while ((line = fr.readLine()) != null && line.trim().length() > 0) {
-                if (flag == 1) {
-                    line = line.substring(1);// 去掉文件头
-                    flag++;
-                }
-                // 每一行创建一个Student对象，并存入数组中
-                // System.out.println(line);
-            }
-            fr.close();
-
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
 }
 
 class BytesEncodingDetect extends Encoding {
