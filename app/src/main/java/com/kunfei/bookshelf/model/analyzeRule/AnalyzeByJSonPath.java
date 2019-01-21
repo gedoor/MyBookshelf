@@ -39,9 +39,14 @@ public class AnalyzeByJSonPath {
                 try {
                     Object object = ctx.read(rule);
                     if (object instanceof List) {
-                        object = ((List) object).get(0);
+                        StringBuilder builder = new StringBuilder();
+                        for (Object o : (List) object) {
+                            builder.append(String.valueOf(o)).append("\n");
+                        }
+                        result = builder.toString();
+                    } else {
+                        result = String.valueOf(object);
                     }
-                    result = String.valueOf(object);
                 } catch (Exception ignored) {
                 }
                 return result;
