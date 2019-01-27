@@ -196,39 +196,8 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     }
 
     @Override
-    public void addBookShelfSuccess(List<SearchBookBean> datas) {
-        searchBookAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void addBookShelfFailed(String massage) {
         toast(massage, ERROR);
-    }
-
-    @Override
-    public ChoiceBookAdapter getSearchBookAdapter() {
-        return searchBookAdapter;
-    }
-
-    @Override
-    public void updateSearchItem(int index) {
-        if (index < searchBookAdapter.getICount()) {
-            try {
-                int startIndex = ((LinearLayoutManager) Objects.requireNonNull(rfRvSearchBooks.getRecyclerView().getLayoutManager())).findFirstVisibleItemPosition();
-                TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
-                if (tvAddShelf != null) {
-                    if (searchBookAdapter.getSearchBooks().get(index).getIsCurrentSource()) {
-                        tvAddShelf.setText("已添加");
-                        tvAddShelf.setEnabled(false);
-                    } else {
-                        tvAddShelf.setText("+添加");
-                        tvAddShelf.setEnabled(true);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override

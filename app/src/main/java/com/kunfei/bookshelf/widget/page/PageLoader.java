@@ -481,9 +481,7 @@ public abstract class PageLoader {
      * 更新时间
      */
     public void updateTime() {
-        hideStatusBar = readBookControl.getHideStatusBar();
-        showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
-        if (!mPageView.isRunning() && showTimeBattery) {
+        if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else {
@@ -501,9 +499,7 @@ public abstract class PageLoader {
             return true;
         }
         mBatteryLevel = level;
-        hideStatusBar = readBookControl.getHideStatusBar();
-        showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
-        if (!mPageView.isRunning() && showTimeBattery) {
+        if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else if (mCurChapter != null) {
@@ -578,7 +574,10 @@ public abstract class PageLoader {
         if (mCurChapter == null) return null;
         if (mCurChapter.getTxtPageList() == null) return null;
         StringBuilder s = new StringBuilder();
-        s.append(getContent());
+        String content = getContent();
+        if (content != null) {
+            s.append(content);
+        }
         if (mCurChapter.getPageSize() > mCurPagePos + 1) {
             for (int i = mCurPagePos + 1; i < mCurChapter.getPageSize(); i++) {
                 s.append(mCurChapter.getPage(i).getContent());

@@ -19,7 +19,7 @@ public class ScreenUtils {
 
     public static int dpToPx(int dp) {
         DisplayMetrics metrics = getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+        return (int) (dp * metrics.density + 0.5f * (dp >= 0 ? 1 : -1));
     }
 
     public static int pxToDp(int px) {
@@ -28,8 +28,8 @@ public class ScreenUtils {
     }
 
     public static int spToPx(int sp) {
-        DisplayMetrics metrics = getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics);
+        float fontScale = getDisplayMetrics().scaledDensity;
+        return (int) (sp * fontScale + 0.5f);
     }
 
     public static int pxToSp(int px) {
@@ -108,16 +108,15 @@ public class ScreenUtils {
             } else if ("0".equals(navBarOverride)) {
                 hasNavigationBar = true;
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return hasNavigationBar;
     }
 
     public static DisplayMetrics getDisplayMetrics() {
-        DisplayMetrics metrics = MApplication
+        return MApplication
                 .getInstance()
                 .getResources()
                 .getDisplayMetrics();
-        return metrics;
     }
 }

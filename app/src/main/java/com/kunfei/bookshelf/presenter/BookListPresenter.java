@@ -91,6 +91,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
+                    bookShelfBean.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl()));
                     for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
                         if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapter(start))
                                 && start < chapterNum - 1) {
@@ -102,6 +103,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1);
                             downloadBook.setFinalDate(System.currentTimeMillis());
                             DownloadService.addDownload(mView.getContext(), downloadBook);
+                            bookShelfBean.getBookInfoBean().setChapterList(null);
                             break;
                         }
                     }
@@ -189,6 +191,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
     private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             BookshelfHelp.saveBookToShelf(bookShelfBean);
+            bookShelfBean.getBookInfoBean().setChapterList(null);
             e.onNext(bookShelfBean);
             e.onComplete();
         });

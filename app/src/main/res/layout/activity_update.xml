@@ -63,14 +63,13 @@
         android:indeterminate="true"
         style="@android:style/Widget.ProgressBar.Horizontal" />
 
-    <TextView
+    <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
         android:id="@+id/tv_install_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="5dp"
         android:layout_margin="5dp"
-        android:background="@drawable/selector_pop_font_bg"
         android:gravity="center"
         android:text="安装更新"
         android:textSize="14sp" />

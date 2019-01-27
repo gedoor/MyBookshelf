@@ -4,23 +4,20 @@
     <color name="error">#eb4333</color>
     <color name="success">#439b53</color>
 
+    <color name="night_mask">#00000000</color>
 
-    <color name="background">#f4f4f4</color>
+    <color name="background">@color/md_grey_100</color>
     <color name="background_card">#dedede</color>
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
     <color name="transparent30">#30000000</color>
 
-    <color name="colorPrimary">#f4f4f4</color>
-    <color name="colorPrimaryDark">#c7c7c7</color>
-    <color name="colorAccent">@color/md_blue_800</color>
-    <color name="colorAccentDark">@color/md_blue_900</color>
-    <color name="highlight">#d3321b</color>
+    <color name="colorPrimary">@color/md_grey_100</color>
+    <color name="colorPrimaryDark">@color/md_grey_200</color>
+    <color name="colorAccent">@color/md_grey_900</color>
 
-    <color name="colorPrimaryNight">#464646</color>
-    <color name="colorAccentNight">@color/md_blue_800</color>
-    <color name="backgroundNight">#464646</color>
+    <color name="highlight">#d3321b</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>
@@ -39,11 +36,7 @@
     <color name="tv_chapter_color_normal">#737373</color>
 
     <color name="tv_text_button_nor">#efefef</color>
-    <color name="tv_text_button_pre">@color/colorAccent</color>
-    <color name="tv_text_button_deep_pre">@color/colorAccentDark</color>
-    <color name="tv_text_button_disable">#dddddd</color>
 
-    <color name="welcome">#00000000</color>
     <color name="light_translucent">#23000000</color>
     <color name="common_gray">#EEEEEE</color>
     <color name="darker_gray">#aaaaaaaa</color>

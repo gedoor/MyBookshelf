@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/tv_text_button_nor" android:state_enabled="true" android:state_pressed="false" />
-    <item android:color="@color/tv_text_button_pre" android:state_enabled="true" android:state_pressed="true" />
-    <item android:color="@color/tv_text_button_disable" android:state_enabled="false" />
-</selector>

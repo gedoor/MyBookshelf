@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookmarkBean;
@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 
 public class EditBookmarkView {
     private TextView tvChapterName;
-    private TextInputEditText tvContent;
+    private EditText tvContent;
     private View llEdit;
     private View tvOk;
 

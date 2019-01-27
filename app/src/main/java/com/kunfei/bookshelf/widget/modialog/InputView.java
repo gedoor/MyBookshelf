@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -9,12 +10,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 /**
  * 输入框
  */
-
 public class InputView {
     private TextView tvTitle;
     private AutoCompleteTextView etInput;
@@ -64,6 +66,9 @@ public class InputView {
         etInput = moDialogView.findViewById(R.id.et_input);
         tvOk = moDialogView.findViewById(R.id.tv_ok);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            etInput.setBackgroundTintList(Selector.colorBuild().setFocusedColor(ThemeStore.accentColor(context)).create());
+        }
         SoftInputUtil.resetBoxPosition((Activity) context, moDialogView, R.id.cv_root);
     }
 

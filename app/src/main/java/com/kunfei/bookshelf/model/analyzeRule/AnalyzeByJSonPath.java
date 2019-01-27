@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AnalyzeByJSonPath {
+    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
     private ReadContext ctx;
 
     public void parse(String json) {
@@ -38,16 +39,20 @@ public class AnalyzeByJSonPath {
                 try {
                     Object object = ctx.read(rule);
                     if (object instanceof List) {
-                        object = ((List) object).get(0);
+                        StringBuilder builder = new StringBuilder();
+                        for (Object o : (List) object) {
+                            builder.append(String.valueOf(o)).append("\n");
+                        }
+                        result = builder.toString();
+                    } else {
+                        result = String.valueOf(object);
                     }
-                    result = String.valueOf(object);
                 } catch (Exception ignored) {
                 }
                 return result;
             } else {
                 result = rule;
-                Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
-                Matcher matcher = pattern.matcher(rule);
+                Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
                     result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
                 }
@@ -68,11 +73,58 @@ public class AnalyzeByJSonPath {
         }
     }
 
-    List<Object> readList(String rule) {
-        if (TextUtils.isEmpty(rule)) {
-            return null;
+    List<String> readStringList(String rule) {
+        List<String> result = new ArrayList<>();
+        if (TextUtils.isEmpty(rule)) return result;
+        String rules[];
+        String elementsType;
+        if (rule.contains("&&")) {
+            rules = rule.split("&&");
+            elementsType = "&";
+        } else {
+            rules = rule.split("\\|\\|");
+            elementsType = "|";
         }
+        if (rules.length == 1) {
+            if (!rule.contains("{")) {
+                try {
+                    Object object = ctx.read(rule);
+                    if (object == null) return result;
+                    if (object instanceof List) {
+                        for (Object o : ((List) object))
+                            result.add(String.valueOf(o));
+                    }
+                    result.add(String.valueOf(object));
+                } catch (Exception ignored) {
+                }
+                return result;
+            } else {
+                Matcher matcher = jsonRulePattern.matcher(rule);
+                while (matcher.find()) {
+                    List<String> stringList = readStringList(matcher.group());
+                    for (String s : stringList) {
+                        result.add(rule.replace(String.format("{%s}", matcher.group()), s));
+                    }
+                }
+                return result;
+            }
+        } else {
+            for (String rl : rules) {
+                List<String> temp = readStringList(rl);
+                if (!temp.isEmpty()) {
+                    result.addAll(temp);
+                    if (elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+    }
+
+    List<Object> readList(String rule) {
         List<Object> result = new ArrayList<>();
+        if (TextUtils.isEmpty(rule)) return result;
         String elementsType;
         String rules[];
         if (rule.contains("&&")) {

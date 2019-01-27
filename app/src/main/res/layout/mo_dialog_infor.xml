@@ -27,18 +27,16 @@
                 android:textSize="16sp"
                 tools:ignore="RtlHardcoded" />
 
-            <TextView
+        <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                 android:id="@+id/tv_close"
                 android:layout_width="70dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/selector_tv_first_button"
                 android:gravity="center"
                 android:lines="1"
                 android:text="@string/ok"
-                android:textColor="@drawable/selector_tv_first_text"
                 android:textSize="14sp" />
 
     </LinearLayout>

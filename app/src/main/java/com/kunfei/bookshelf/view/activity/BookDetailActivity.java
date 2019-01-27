@@ -354,7 +354,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         ivCover.setOnClickListener(view -> {
             if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
-                BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
+                BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
             }
         });
 

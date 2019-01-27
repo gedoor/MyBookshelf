@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="?attr/actionBarStyle">
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"

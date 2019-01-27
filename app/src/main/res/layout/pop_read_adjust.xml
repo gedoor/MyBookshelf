@@ -59,7 +59,7 @@
                     app:duration="150" />
             </LinearLayout>
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
+            <com.kunfei.bookshelf.widget.views.ATESeekBar
                 android:id="@+id/hpb_light"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -119,7 +119,7 @@
                     app:duration="150" />
             </LinearLayout>
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
+            <com.kunfei.bookshelf.widget.views.ATESeekBar
                 android:id="@+id/hpb_tts_SpeechRate"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -171,7 +171,7 @@
 
             </LinearLayout>
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
+            <com.kunfei.bookshelf.widget.views.ATESeekBar
                 android:id="@+id/hpb_click"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

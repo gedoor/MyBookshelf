@@ -106,15 +106,15 @@ public class MApplication extends Application {
     public void upThemeStore() {
         if (configPreferences.getBoolean("nightTheme", false)) {
             ThemeStore.editTheme(this)
-                    .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.colorPrimaryNight)))
-                    .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.colorAccentNight)))
-                    .backgroundColor(configPreferences.getInt("colorBackgroundNight", getResources().getColor(R.color.backgroundNight)))
+                    .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.md_grey_800)))
+                    .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.md_pink_800)))
+                    .backgroundColor(configPreferences.getInt("colorBackgroundNight", getResources().getColor(R.color.md_grey_800)))
                     .apply();
         } else {
             ThemeStore.editTheme(this)
-                    .primaryColor(configPreferences.getInt("colorPrimary", getResources().getColor(R.color.colorPrimary)))
-                    .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.colorAccent)))
-                    .backgroundColor(configPreferences.getInt("colorBackground", getResources().getColor(R.color.background)))
+                    .primaryColor(configPreferences.getInt("colorPrimary", getResources().getColor(R.color.md_grey_100)))
+                    .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.md_pink_600)))
+                    .backgroundColor(configPreferences.getInt("colorBackground", getResources().getColor(R.color.md_grey_100)))
                     .apply();
         }
     }

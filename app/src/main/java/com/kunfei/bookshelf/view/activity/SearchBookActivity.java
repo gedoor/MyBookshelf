@@ -28,6 +28,8 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
+import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
@@ -108,6 +110,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         setSupportActionBar(toolbar);
         setupActionBar();
         fabSearchStop.hide();
+        fabSearchStop.setBackgroundTintList(Selector.colorBuild()
+                .setDefaultColor(ThemeStore.accentColor(this))
+                .setPressedColor(ColorUtil.darkenColor(ThemeStore.accentColor(this)))
+                .create());
         llSearchHistory.setOnClickListener(null);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 

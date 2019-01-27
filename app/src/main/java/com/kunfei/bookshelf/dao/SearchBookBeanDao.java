@@ -37,6 +37,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         public final static Property ChapterUrl = new Property(10, String.class, "chapterUrl", false, "CHAPTER_URL");
         public final static Property AddTime = new Property(11, Long.class, "addTime", false, "ADD_TIME");
         public final static Property UpTime = new Property(12, Long.class, "upTime", false, "UP_TIME");
+        public final static Property Variable = new Property(13, String.class, "variable", false, "VARIABLE");
     }
 
 
@@ -64,7 +65,8 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
                 "\"INTRODUCE\" TEXT," + // 9: introduce
                 "\"CHAPTER_URL\" TEXT," + // 10: chapterUrl
                 "\"ADD_TIME\" INTEGER," + // 11: addTime
-                "\"UP_TIME\" INTEGER);"); // 12: upTime
+                "\"UP_TIME\" INTEGER," + // 12: upTime
+                "\"VARIABLE\" TEXT);"); // 13: variable
     }
 
     /** Drops the underlying database table. */
@@ -141,6 +143,11 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         if (upTime != null) {
             stmt.bindLong(13, upTime);
         }
+ 
+        String variable = entity.getVariable();
+        if (variable != null) {
+            stmt.bindString(14, variable);
+        }
     }
 
     @Override
@@ -211,6 +218,11 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         if (upTime != null) {
             stmt.bindLong(13, upTime);
         }
+ 
+        String variable = entity.getVariable();
+        if (variable != null) {
+            stmt.bindString(14, variable);
+        }
     }
 
     @Override
@@ -233,7 +245,8 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // introduce
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // chapterUrl
             cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // addTime
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // upTime
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // upTime
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // variable
         );
         return entity;
     }
@@ -253,6 +266,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         entity.setChapterUrl(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setAddTime(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
         entity.setUpTime(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setVariable(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     @Override

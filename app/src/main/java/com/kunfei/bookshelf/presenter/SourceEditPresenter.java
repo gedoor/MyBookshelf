@@ -23,7 +23,6 @@ import io.reactivex.ObservableOnSubscribe;
  * Created by GKF on 2018/1/28.
  * 编辑书源
  */
-
 public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
 
     @Override

@@ -2,7 +2,7 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.CharsetDetector;
+import com.kunfei.basemvplib.untils.EncodingDetect;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
@@ -271,7 +271,7 @@ public class PageLoaderText extends PageLoader {
             mBookFile = new File(bookShelfBean.getNoteUrl());
             //获取文件编码
             if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(CharsetDetector.detectCharset(mBookFile));
+                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
             }
             mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
 
@@ -351,7 +351,7 @@ public class PageLoaderText extends PageLoader {
             BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
             //获取文件编码
             if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(CharsetDetector.detectCharset(mBookFile));
+                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
             }
             mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
             e.onSuccess(loadChapters());

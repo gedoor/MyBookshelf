@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.CharsetDetector;
+import com.kunfei.basemvplib.untils.EncodingDetect;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
@@ -112,7 +112,7 @@ public class PageLoaderEpub extends PageLoader {
                     }
                 }
             }
-            return CharsetDetector.detectCharset(resource.getInputStream());
+            return EncodingDetect.getJavaEncode(resource.getData());
         } catch (Exception e) {
             return "utf-8";
         }

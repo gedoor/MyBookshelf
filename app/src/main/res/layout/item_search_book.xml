@@ -95,50 +95,44 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
-                            <TextView
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                                 android:id="@+id/tv_state"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="5dp"
-                                android:background="@drawable/shape_round_rect"
                                 android:paddingLeft="2dp"
                                 android:paddingTop="0.4dp"
                                 android:paddingRight="2dp"
                                 android:paddingBottom="0.4dp"
                                 android:text="连载"
-                                android:textColor="#ffffff"
                                 android:textSize="12sp" />
 
-                            <TextView
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                                 android:id="@+id/tv_kind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="5dp"
-                                android:background="@drawable/shape_round_rect"
                                 android:lines="1"
                                 android:paddingLeft="2dp"
                                 android:paddingTop="0.4dp"
                                 android:paddingRight="2dp"
                                 android:paddingBottom="0.4dp"
                                 android:text="现代都市"
-                                android:textColor="#ffffff"
                                 android:textSize="12sp" />
 
-                            <TextView
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                                 android:id="@+id/tv_words"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:background="@drawable/shape_round_rect"
                                 android:lines="1"
                                 android:paddingLeft="2dp"
                                 android:paddingTop="0.4dp"
                                 android:paddingRight="2dp"
                                 android:paddingBottom="0.4dp"
                                 android:text="1.2万字"
-                                android:textColor="#ffffff"
                                 android:textSize="12sp" />
                         </LinearLayout>
 
@@ -154,18 +148,16 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <TextView
+                    <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                         android:id="@+id/tv_add_shelf"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/selector_tv_first_button"
                         android:gravity="center"
                         android:lines="1"
                         android:text="+书架"
-                        android:textColor="@drawable/selector_tv_first_text"
                         android:textSize="14sp"
                         android:visibility="gone" />
                 </LinearLayout>

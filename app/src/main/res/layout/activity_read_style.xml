@@ -38,7 +38,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <com.kunfei.bookshelf.utils.Theme.views.ATESwitch
+            <com.kunfei.bookshelf.widget.views.ATESwitch
                 android:id="@+id/sw_darkStatusIcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,14 +61,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="文字颜色"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -76,14 +75,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="背景颜色"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgImage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -91,14 +89,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="背景图片"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvDefault"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -106,7 +103,6 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="恢复默认"

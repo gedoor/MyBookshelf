@@ -185,14 +185,13 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     public List<ChapterListBean> getChapterList() {
         if (chapterList == null) {
-            return new ArrayList<>();
-        } else {
-            return chapterList;
+            chapterList = new ArrayList<>();
         }
+        return chapterList;
     }
 
-    public void setChapterList(List<ChapterListBean> chapterlist) {
-        this.chapterList = chapterlist;
+    public void setChapterList(List<ChapterListBean> chapterList) {
+        this.chapterList = chapterList;
     }
 
     public long getFinalRefreshData() {
@@ -208,7 +207,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    BookInfoBean.this.extractEpubCoverImage();
+                    extractEpubCoverImage();
                 }
             });
             return "";

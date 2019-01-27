@@ -551,6 +551,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                             .subscribe(new SimpleObserver<Boolean>() {
                                 @Override
                                 public void onNext(Boolean aBoolean) {
+                                    bookSourceBean = getBookSource();
+                                    setResult(RESULT_OK);
                                     SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource().getBookSourceUrl());
                                 }
 

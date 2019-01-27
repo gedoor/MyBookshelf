@@ -41,6 +41,7 @@ import com.kunfei.bookshelf.utils.BatteryUtil;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.BarHide;
@@ -284,8 +285,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mHandler.removeCallbacks(keepScreenRunnable);
             keepScreenOn(true);
             mHandler.postDelayed(keepScreenRunnable, screenOffTime);
-        } else if (screenTimeOut != -1) {
+        } else if (screenTimeOut == 0) {
             keepScreenOn(false);
+        } else {
+            keepScreenOn(true);
         }
     }
 
@@ -564,6 +567,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void initMoreSettingPop() {
         moreSettingPop.setListener(new MoreSettingPop.OnChangeProListener() {
             @Override
+            public void upBar() {
+                initImmersionBar();
+            }
+
+            @Override
             public void keepScreenOnChange(int keepScreenOn) {
                 screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
                 keepScreenOn(screenTimeOut != 0);
@@ -672,11 +680,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
                         if ((ReadAloudService.running)) {
-                            if (resetReadAloud && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
+                            if (resetReadAloud) {
                                 readAloud();
                                 return;
                             }
-                            if (pageIndex == 0 && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
+                            if (pageIndex == 0) {
                                 readAloud();
                                 return;
                             }
@@ -761,7 +769,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mPresenter.disableDurBookSource();
                 break;
             case R.id.action_book_info:
-                BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
+                BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
             case R.id.action_set_charset:
                 setCharset();
@@ -973,7 +981,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
             if (readAdjustPop.getVisibility() == View.VISIBLE) {
                 readAdjustPop.startAnimation(menuBottomOut);
-                readAdjustPop.dismiss();
             }
             if (readInterfacePop.getVisibility() == View.VISIBLE) {
                 readInterfacePop.startAnimation(menuBottomOut);
@@ -983,7 +990,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private void readAloud() {
         aloudNextPage = false;
-        if (mPresenter.getBookShelf() != null && mPageLoader != null) {
+        if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(mPageLoader.getUnReadContent())) {
             ReadAloudService.play(ReadBookActivity.this,
                     false,
                     mPageLoader.getUnReadContent(),
@@ -1304,8 +1311,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void onResume() {
         super.onResume();
-        batInfoReceiver = new ThisBatInfoReceiver();
-        batInfoReceiver.registerThis();
+        if (batInfoReceiver == null) {
+            batInfoReceiver = new ThisBatInfoReceiver();
+            batInfoReceiver.registerThis();
+        }
         screenOffTimerStart();
         if (mPageLoader != null) {
             if (!mPageLoader.updateBattery(BatteryUtil.getLevel(this))) {

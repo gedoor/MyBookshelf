@@ -64,7 +64,8 @@ android {
 }
 
 dependencies {
-    api project(':basemvplib')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':basemvplib')
     testImplementation 'junit:junit:4.12'
 
     //fireBase
@@ -99,8 +100,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //bind view
-    implementation 'com.jakewharton:butterknife:9.0.0-rc3'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc3'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
     //动画
     implementation 'com.victor:lib:1.0.4'
@@ -130,7 +131,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 52
+    schemaVersion 53
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }
