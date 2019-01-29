@@ -14,6 +14,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.FileHelp;
+import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
@@ -34,14 +35,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName("CONFIG");
-        addPreferencesFromResource(R.xml.pref_settings);
         settingActivity = (SettingActivity) this.getActivity();
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        boolean processTextEnabled = ProcessTextHelp.isProcessTextEnabled();
+        editor.putBoolean("process_text", processTextEnabled);
         if (Objects.equals(sharedPreferences.getString(getString(R.string.pk_download_path), ""), "")) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
-            editor.apply();
         }
+        editor.apply();
+        addPreferencesFromResource(R.xml.pref_settings);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_bookshelf_px)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_download_path)));
     }
@@ -84,6 +87,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pk_bookshelf_px))) {
             RxBus.get().post(RxBusTag.RECREATE, true);
+        } else if (key.equals("process_text")) {
+            ProcessTextHelp.setProcessTextEnable(sharedPreferences.getBoolean("process_text", true));
         }
     }
 
