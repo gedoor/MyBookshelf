@@ -595,7 +595,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             handler.postDelayed(() -> {
                 versionUpRun();
                 requestPermission();
-            }, 10000);
+            }, 1000);
             handler.postDelayed(this::preloadReader, 200);
         }
         handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
