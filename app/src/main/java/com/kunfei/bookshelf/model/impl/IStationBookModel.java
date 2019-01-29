@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 
 public interface IStationBookModel {
 
@@ -37,9 +36,8 @@ public interface IStationBookModel {
 
     /**
      * 获取章节
-     * @param scheduler       　执行进程
      */
-    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean);
+    Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean);
 
 
 }

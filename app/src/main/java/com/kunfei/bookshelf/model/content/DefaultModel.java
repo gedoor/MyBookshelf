@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
@@ -169,7 +167,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
      * 获取正文
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
@@ -179,8 +177,6 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         if (bookSourceBean.getRuleBookContent().startsWith("$")) {
             return getAjaxHtml(MApplication.getInstance(), chapterBean.getDurChapterUrl(), AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(scheduler)
                     .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
         } else {
             try {

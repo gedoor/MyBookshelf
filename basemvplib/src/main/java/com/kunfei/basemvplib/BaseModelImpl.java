@@ -2,6 +2,8 @@ package com.kunfei.basemvplib;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -71,32 +73,35 @@ public class BaseModelImpl {
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     public static Observable<String> getAjaxHtml(Context context, String url, String userAgent) {
         return Observable.create(e -> {
-            class MyJavaScriptInterface {
-                private WebView webView;
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> {
+                class MyJavaScriptInterface {
+                    private WebView webView;
 
-                private MyJavaScriptInterface(WebView webView) {
-                    this.webView = webView;
-                }
+                    private MyJavaScriptInterface(WebView webView) {
+                        this.webView = webView;
+                    }
 
-                @JavascriptInterface
-                @SuppressWarnings("unused")
-                public void processHTML(String html) {
-                    e.onNext(html);
-                    e.onComplete();
-                    webView.destroy();
+                    @JavascriptInterface
+                    @SuppressWarnings("unused")
+                    public void processHTML(String html) {
+                        e.onNext(html);
+                        e.onComplete();
+                        webView.destroy();
+                    }
                 }
-            }
-            WebView webView = new WebView(context);
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setUserAgentString(userAgent);
-            webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
-                }
+                WebView webView = new WebView(context);
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.getSettings().setUserAgentString(userAgent);
+                webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
+                webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                    }
+                });
+                webView.loadUrl(url);
             });
-            webView.loadUrl(url);
         });
     }
 
