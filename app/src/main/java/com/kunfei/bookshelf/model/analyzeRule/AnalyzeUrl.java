@@ -174,6 +174,10 @@ public class AnalyzeUrl {
         return urlMode;
     }
 
+    public String getCharCode() {
+        return charCode;
+    }
+
     public enum UrlMode {
         GET, POST, DEFAULT
     }
