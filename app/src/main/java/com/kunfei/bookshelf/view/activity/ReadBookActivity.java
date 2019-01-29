@@ -157,7 +157,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mPresenter.getBookShelf() != null) {
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
@@ -225,7 +225,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
 
         mImmersionBar.init();
-        keepScreenOn(screenTimeOut != 0);
         screenOffTimerStart();
     }
 
@@ -574,7 +573,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void keepScreenOnChange(int keepScreenOn) {
                 screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
-                keepScreenOn(screenTimeOut != 0);
+                screenOffTimerStart();
             }
 
             @Override
