@@ -592,10 +592,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void firstRequest() {
         if (!isRecreate) {
-            handler.postDelayed(() -> {
-                versionUpRun();
-                requestPermission();
-            }, 1000);
+            versionUpRun();
+            requestPermission();
             handler.postDelayed(this::preloadReader, 200);
         }
         handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
