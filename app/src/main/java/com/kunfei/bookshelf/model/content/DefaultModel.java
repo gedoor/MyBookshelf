@@ -1,7 +1,7 @@
 package com.kunfei.bookshelf.model.content;
 
-import com.kunfei.basemvplib.BaseModelImpl;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
@@ -169,7 +167,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
      * 获取正文
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
@@ -177,19 +175,17 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             });
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
-        if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-            return getAjaxHtml(MApplication.getInstance(), chapterBean.getDurChapterUrl(), AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(scheduler)
-                    .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
-        } else {
-            try {
-                AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+            if (bookSourceBean.getRuleBookContent().startsWith("$")) {
+                return getAjaxHtml(MApplication.getInstance(), analyzeUrl)
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
+            } else {
                 return getResponseO(analyzeUrl)
                         .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
-            } catch (Exception e) {
-                return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
             }
+        } catch (Exception e) {
+            return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
         }
     }
 
@@ -198,19 +194,19 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             case POST:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getUrl(),
+                        .searchBook(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getUrl(),
+                        .searchBook(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getUrl(),
+                        .getWebContent(analyzeUrl.getPath(),
                                 analyzeUrl.getHeaderMap());
         }
     }

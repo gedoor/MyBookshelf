@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.widget.page;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -13,6 +12,7 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +36,6 @@ public class PageLoaderNet extends PageLoader {
     private List<String> downloadingChapterList = new ArrayList<>();
     private ExecutorService executorService;
     private Scheduler scheduler;
-    private Handler handler = new Handler();
 
     PageLoaderNet(PageView pageView, BookShelfBean bookShelfBean) {
         super(pageView, bookShelfBean);
@@ -104,7 +103,7 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
                     .timeout(20, TimeUnit.SECONDS)
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -174,7 +173,7 @@ public class PageLoaderNet extends PageLoader {
         if (!file.exists()) return null;
 
         byte[] contentByte = DocumentHelper.getBytes(file);
-        return new String(contentByte, "UTF-8");
+        return new String(contentByte, StandardCharsets.UTF_8);
     }
 
     @SuppressLint("DefaultLocale")

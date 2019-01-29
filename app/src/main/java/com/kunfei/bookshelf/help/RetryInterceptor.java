@@ -1,4 +1,4 @@
-package com.kunfei.basemvplib;
+package com.kunfei.bookshelf.help;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ public class RetryInterceptor implements Interceptor {
     private int maxRetry;//最大重试次数
     private int retryNum = 0;//假如设置为3次重试的话，则最大可能请求4次（默认1次+3次重试）
 
-    RetryInterceptor(int maxRetry) {
+    public RetryInterceptor(int maxRetry) {
         this.maxRetry = maxRetry;
     }
 

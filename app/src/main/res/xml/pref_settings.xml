@@ -51,4 +51,10 @@
         android:summary="@string/up_change_source_last_chapter_s"
         android:title="@string/up_change_source_last_chapter_t" />
 
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="true"
+        android:key="process_text"
+        android:summary="长按文字在操作菜单中显示阅读·搜索"
+        android:title="文字操作显示搜索" />
+
 </PreferenceScreen>

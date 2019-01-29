@@ -1,4 +1,4 @@
-package com.kunfei.basemvplib;
+package com.kunfei.bookshelf.help;
 
 import android.text.TextUtils;
 
@@ -9,7 +9,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.ByteArrayInputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;

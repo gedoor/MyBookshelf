@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
@@ -262,7 +261,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
-        WebBookModel.getInstance().getBookContent(Schedulers.io(), chapterListBean, bookName)
+        WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
                 .timeout(20, TimeUnit.SECONDS)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
