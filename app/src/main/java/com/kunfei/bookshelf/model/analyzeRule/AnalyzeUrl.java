@@ -29,7 +29,7 @@ public class AnalyzeUrl {
     private String hostUrl;
     private String urlPath;
     private String queryStr;
-    private Map<String, String> queryMap;
+    private Map<String, String> queryMap = new HashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
     private String charCode;
     private UrlMode urlMode = UrlMode.DEFAULT;
@@ -44,7 +44,7 @@ public class AnalyzeUrl {
         //分离编码规则
         String[] ruleUrlS = ruleUrl.split("\\|");
         if (ruleUrlS.length > 1) {
-            analyzeQt(ruleUrlS[1]);
+            analyzeOther(ruleUrlS[1]);
         }
         //设置页数
         if (page != null) {
@@ -63,7 +63,7 @@ public class AnalyzeUrl {
         }
         generateUrlPath(ruleUrlS[0]);
         if (urlMode != UrlMode.DEFAULT) {
-            queryMap = getQueryMap(ruleUrlS[1]);
+            analyzeQuery(ruleUrlS[1]);
         }
     }
 
@@ -107,7 +107,7 @@ public class AnalyzeUrl {
     /**
      * 解析编码规则
      */
-    private void analyzeQt(final String qtRule) {
+    private void analyzeOther(final String qtRule) {
         if (TextUtils.isEmpty(qtRule)) return;
         String[] qtS = qtRule.split("&");
         for (String qt : qtS) {
@@ -119,28 +119,26 @@ public class AnalyzeUrl {
     }
 
     /**
-     * QueryMap
+     * 解析QueryMap
      */
-    private Map<String, String> getQueryMap(String allQuery) throws Exception {
+    private void analyzeQuery(String allQuery) throws Exception {
         if (isEmpty(charCode)) {
             queryStr = URLEncoder.encode(allQuery, "UTF-8");
         } else {
             queryStr = URLEncoder.encode(allQuery, charCode);
         }
         String[] queryS = allQuery.split("&");
-        Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
             String value = queryM.length > 1 ? queryM[1] : "";
             if (isEmpty(charCode)) {
-                map.put(queryM[0], value);
+                queryMap.put(queryM[0], value);
             } else if (charCode.equals("escape")) {
-                map.put(queryM[0], StringUtils.escape(value));
+                queryMap.put(queryM[0], StringUtils.escape(value));
             } else {
-                map.put(queryM[0], URLEncoder.encode(value, charCode));
+                queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
             }
         }
-        return map;
     }
 
     private void generateUrlPath(String ruleUrl) throws MalformedURLException {
