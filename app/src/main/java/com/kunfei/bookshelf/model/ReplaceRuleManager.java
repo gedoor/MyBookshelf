@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kunfei.basemvplib.BaseModelImpl;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;

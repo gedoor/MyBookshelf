@@ -10,9 +10,9 @@ import android.os.Handler;
 import android.os.IBinder;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.basemvplib.BaseModelImpl;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;

@@ -25,8 +25,10 @@ public class AnalyzeUrl {
     private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern pagePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
 
+    private String url;
     private String hostUrl;
     private String urlPath;
+    private String queryStr;
     private Map<String, String> queryMap;
     private Map<String, String> headerMap = new HashMap<>();
     private String charCode;
@@ -120,6 +122,7 @@ public class AnalyzeUrl {
      * QueryMap
      */
     private Map<String, String> getQueryMap(String allQuery) throws Exception {
+        queryStr = allQuery;
         String[] queryS = allQuery.split("&");
         Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
@@ -137,6 +140,7 @@ public class AnalyzeUrl {
     }
 
     private void generateUrlPath(String ruleUrl) throws MalformedURLException {
+        url = ruleUrl;
         URL url = new URL(ruleUrl);
         hostUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
         urlPath = ruleUrl.replace(hostUrl, "");
@@ -146,8 +150,12 @@ public class AnalyzeUrl {
         return hostUrl;
     }
 
-    public String getUrl() {
+    public String getPath() {
         return urlPath;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public Map<String, String> getQueryMap() {
@@ -156,6 +164,10 @@ public class AnalyzeUrl {
 
     public Map<String, String> getHeaderMap() {
         return headerMap;
+    }
+
+    public String getQueryStr() {
+        return queryStr;
     }
 
     public UrlMode getUrlMode() {

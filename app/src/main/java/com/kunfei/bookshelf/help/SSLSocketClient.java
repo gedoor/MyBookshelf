@@ -1,4 +1,4 @@
-package com.kunfei.basemvplib;
+package com.kunfei.bookshelf.help;
 
 import android.annotation.SuppressLint;
 
@@ -16,9 +16,9 @@ import javax.net.ssl.X509TrustManager;
  * 忽略证书
  */
 
-class SSLSocketClient {
+public class SSLSocketClient {
     //获取这个SSLSocketFactory
-    static SSLSocketFactory getSSLSocketFactory() {
+    public static SSLSocketFactory getSSLSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[]{createTrustAllManager()}, new SecureRandom());
@@ -28,7 +28,7 @@ class SSLSocketClient {
         }
     }
 
-    static X509TrustManager createTrustAllManager() {
+    public static X509TrustManager createTrustAllManager() {
         X509TrustManager tm = null;
         try {
             tm =   new X509TrustManager() {
@@ -53,7 +53,7 @@ class SSLSocketClient {
     }
 
     //获取HostnameVerifier
-    static HostnameVerifier getHostnameVerifier() {
+    public static HostnameVerifier getHostnameVerifier() {
         return (s, sslSession) -> true;
     }
 }

@@ -1,4 +1,4 @@
-package com.kunfei.basemvplib;
+package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,11 @@ import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.kunfei.bookshelf.help.EncodeConverter;
+import com.kunfei.bookshelf.help.RetryInterceptor;
+import com.kunfei.bookshelf.help.SSLSocketClient;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -71,7 +76,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    public static Observable<String> getAjaxHtml(Context context, String url, String userAgent) {
+    public static Observable<String> getAjaxHtml(Context context, AnalyzeUrl analyzeUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
@@ -92,7 +97,7 @@ public class BaseModelImpl {
                 }
                 WebView webView = new WebView(context);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.getSettings().setUserAgentString(userAgent);
+                webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
@@ -100,7 +105,16 @@ public class BaseModelImpl {
                         handler.postDelayed(() -> webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');"), 2000);
                     }
                 });
-                webView.loadUrl(url);
+                switch (analyzeUrl.getUrlMode()) {
+                    case POST:
+                        webView.postUrl(analyzeUrl.getUrl(), analyzeUrl.getQueryStr().getBytes());
+                        break;
+                    case GET:
+                        webView.loadUrl(String.format("%s?%s", analyzeUrl.getUrl(), analyzeUrl.getQueryStr()));
+                        break;
+                    default:
+                        webView.loadUrl(analyzeUrl.getUrl(), analyzeUrl.getHeaderMap());
+                }
             });
         });
     }
