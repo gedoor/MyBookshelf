@@ -122,7 +122,11 @@ public class AnalyzeUrl {
      * QueryMap
      */
     private Map<String, String> getQueryMap(String allQuery) throws Exception {
-        queryStr = allQuery;
+        if (isEmpty(charCode)) {
+            queryStr = URLEncoder.encode(allQuery, "UTF-8");
+        } else {
+            queryStr = URLEncoder.encode(allQuery, charCode);
+        }
         String[] queryS = allQuery.split("&");
         Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
@@ -172,10 +176,6 @@ public class AnalyzeUrl {
 
     public UrlMode getUrlMode() {
         return urlMode;
-    }
-
-    public String getCharCode() {
-        return charCode;
     }
 
     public enum UrlMode {
