@@ -73,8 +73,7 @@
                         android:paddingEnd="10dp"
                         android:singleLine="true"
                         android:includeFontPadding="false"
-                        android:textColor="@color/tv_text_default"
-                        android:visibility="gone" />
+                        android:textColor="@color/tv_text_default" />
 
                     <TextView
                         android:id="@+id/tv_chapter_url"
