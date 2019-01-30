@@ -105,8 +105,9 @@ public class BaseModelImpl {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             class HtmlOutJavaScriptInterface {
-                @JavascriptInterface
+
                 @SuppressWarnings("unused")
+                @JavascriptInterface
                 public void processHTML(String html) {
                     e.onNext(html);
                     e.onComplete();
