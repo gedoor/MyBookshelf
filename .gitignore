@@ -6,3 +6,7 @@
 /build
 /captures
 google-services.json
+gradle/wrapper/greendao-3.2.2.jar
+app/AntDroidKey.jsk
+AntDroidKey.jsk
+app/build.gradle

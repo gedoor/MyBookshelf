@@ -238,9 +238,9 @@ public class AnalyzeRule {
                 ruleStr = ruleStr.replace(find, value);
             }
             String str[] = ruleStr.split("@js:");
-            if (StringUtils.startWithIgnoreCase(str[0], "@XPath:")) {
+            if (StringUtils.startWithIgnoreCase(str[0], "//")) {//XPath特征很明显,无需配置单独的识别标头
                 mode = Mode.XPath;
-                rule = str[0].substring(7);
+                rule = str[0];
             } else if (StringUtils.startWithIgnoreCase(str[0], "@JSon:")) {
                 mode = Mode.JSon;
                 rule = str[0].substring(6);
