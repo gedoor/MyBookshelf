@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.model.content;
 
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
@@ -154,7 +153,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), null, null, headerMap);
             return getResponseO(analyzeUrl)
-                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean));
+                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
         }
@@ -175,7 +174,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
             if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-                return getAjaxHtml(MApplication.getInstance(), analyzeUrl)
+                return getAjaxHtml(analyzeUrl)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)

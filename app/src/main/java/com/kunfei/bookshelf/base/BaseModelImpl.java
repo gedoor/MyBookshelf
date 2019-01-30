@@ -1,13 +1,13 @@
 package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.help.EncodeConverter;
 import com.kunfei.bookshelf.help.RetryInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
@@ -101,7 +101,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    public static Observable<String> getAjaxHtml(Context context, AnalyzeUrl analyzeUrl) {
+    public static Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
@@ -120,7 +120,7 @@ public class BaseModelImpl {
                         webView.destroy();
                     }
                 }
-                WebView webView = new WebView(context);
+                WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
