@@ -279,15 +279,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 重置黑屏时间
      */
     private void screenOffTimerStart() {
+        if (screenTimeOut < 0) {
+            keepScreenOn(true);
+            return;
+        }
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
         if (screenOffTime > 0) {
             mHandler.removeCallbacks(keepScreenRunnable);
             keepScreenOn(true);
             mHandler.postDelayed(keepScreenRunnable, screenOffTime);
-        } else if (screenTimeOut == 0) {
-            keepScreenOn(false);
         } else {
-            keepScreenOn(true);
+            keepScreenOn(false);
         }
     }
 
