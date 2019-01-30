@@ -282,6 +282,7 @@ public class AnalyzeRule {
     /**
      * js实现跨域访问,不能删
      */
+    @SuppressWarnings("unused")
     public String ajax(String url) {
         try {
             Call<String> call = DefaultModel.getRetrofitString(url)
@@ -295,6 +296,7 @@ public class AnalyzeRule {
     /**
      * js实现解码,不能删
      */
+    @SuppressWarnings("unused")
     public String base64Decoder(String base64) {
         return new String(Base64.decode(base64.getBytes(), Base64.DEFAULT));
     }
