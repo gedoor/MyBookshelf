@@ -83,8 +83,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     ReadBottomMenu llMenuBottom;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.atv_url)
-    TextView atvUrl;
+    @BindView(R.id.tv_chapter_name)
+    TextView tvChapterName;
+    @BindView(R.id.tv_chapter_url)
+    TextView tvUrl;
     @BindView(R.id.atv_line)
     View atvLine;
     @BindView(R.id.ll_menu_top)
@@ -595,9 +597,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void bindEvent() {
         //打开URL
-        atvUrl.setOnClickListener(view -> {
+        tvUrl.setOnClickListener(view -> {
             try {
-                String url = atvUrl.getText().toString();
+                String url = tvUrl.getText().toString();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 startActivity(intent);
@@ -628,9 +630,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().upLastChapterName();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                            atvUrl.setText(mPresenter.getBookShelf().getChapter(pos).getDurChapterUrl());
+                            tvChapterName.setText(mPresenter.getBookShelf().getChapter(pos).getDurChapterName());
+                            tvUrl.setText(mPresenter.getBookShelf().getChapter(pos).getDurChapterUrl());
                         } else {
-                            atvUrl.setText("");
+                            tvChapterName.setText("");
+                            tvUrl.setText("");
                         }
 
                         if (mPresenter.getBookShelf().getChapterListSize() == 1) {
@@ -1180,10 +1184,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (menu == null) return;
         boolean onLine = mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG);
         if (onLine) {
-            atvUrl.setVisibility(View.VISIBLE);
+            tvUrl.setVisibility(View.VISIBLE);
             atvLine.setVisibility(View.VISIBLE);
         } else {
-            atvUrl.setVisibility(View.GONE);
+            tvUrl.setVisibility(View.GONE);
             atvLine.setVisibility(View.GONE);
         }
         for (int i = 0; i < menu.size(); i++) {
