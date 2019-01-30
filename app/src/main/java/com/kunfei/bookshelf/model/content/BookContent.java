@@ -80,7 +80,7 @@ class BookContent {
 //                            body = BaseModelImpl.getAjaxHtml(analyzeUrl).blockingFirst();
 //                        } else {
                         Response<String> response = BaseModelImpl.getResponseO(analyzeUrl).blockingFirst();
-                            body = response.body();
+                        body = response.body();
 //                        }
                         webContentBean = analyzeBookContent(body, webContentBean.nextUrl);
                         if (!TextUtils.isEmpty(webContentBean.content)) {
