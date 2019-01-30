@@ -76,13 +76,12 @@ class BookContent {
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(webContentBean.nextUrl, null, null, headerMap);
                     try {
                         String body;
-                        if (isAjax) {
-                            body = BaseModelImpl.getAjaxHtml(analyzeUrl).blockingFirst();
-                        } else {
-                            Response<String> response = BaseModelImpl.getResponseO(analyzeUrl)
-                                    .blockingFirst();
+//                        if (isAjax) {
+//                            body = BaseModelImpl.getAjaxHtml(analyzeUrl).blockingFirst();
+//                        } else {
+                        Response<String> response = BaseModelImpl.getResponseO(analyzeUrl).blockingFirst();
                             body = response.body();
-                        }
+//                        }
                         webContentBean = analyzeBookContent(body, webContentBean.nextUrl);
                         if (!TextUtils.isEmpty(webContentBean.content)) {
                             bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);

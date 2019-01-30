@@ -104,30 +104,24 @@ public class BaseModelImpl {
     public static Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                class MyJavaScriptInterface {
-                    private WebView webView;
-
-                    private MyJavaScriptInterface(WebView webView) {
-                        this.webView = webView;
-                    }
-
-                    @JavascriptInterface
-                    @SuppressWarnings("unused")
-                    public void processHTML(String html) {
-                        e.onNext(html);
-                        e.onComplete();
-                        webView.destroy();
-                    }
+            class HtmlOutJavaScriptInterface {
+                @JavascriptInterface
+                @SuppressWarnings("unused")
+                public void processHTML(String html) {
+                    e.onNext(html);
+                    e.onComplete();
                 }
+            }
+            handler.post(() -> {
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
-                webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
+                webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(), "HTML_OUT");
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
-                        handler.postDelayed(() -> webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');"), 2000);
+                        handler.postDelayed(() -> webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');"), 2000);
+                        handler.postDelayed(webView::destroy, 3000);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
@@ -138,7 +132,7 @@ public class BaseModelImpl {
                         webView.loadUrl(String.format("%s?%s", analyzeUrl.getUrl(), analyzeUrl.getQueryStr()));
                         break;
                     default:
-                        webView.loadUrl(analyzeUrl.getUrl(), analyzeUrl.getHeaderMap());
+                        webView.loadUrl(analyzeUrl.getUrl());
                 }
             });
         });
