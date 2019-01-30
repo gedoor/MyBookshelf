@@ -85,11 +85,14 @@ public class AnalyzeByXPath {
     }
 
     List<String> getStringList(String xPath) {
+        String result;
         List<String> stringList = new ArrayList<>();
         List<Object> objects = jxDocument.sel(xPath);
         for (Object object : objects) {
             if (object instanceof String) {
-                stringList.add((String) object);
+                result = (String)object;
+                if(result != null) result = result.replaceAll("^,|,$","");// 移除Xpath匹配结果首尾多余的逗号
+                stringList.add(result);
             }
         }
         return stringList;
@@ -98,14 +101,18 @@ public class AnalyzeByXPath {
     public String getString(String rule, String baseUrl) {
         String result;
         Object object = jxDocument.selOne(rule);
-        if (!TextUtils.isEmpty(baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(baseUrl, (String) object);
-        } else if (object instanceof Element) {
+        if (object instanceof Element) {
             result = ((Element) object).html()
                     .replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
-                    .replaceAll("<.*?>", "");
+                    .replaceAll("<.*?>", "")
+                    .replaceAll("&nbsp;","")            // 删除空白转义符
+                    .replaceAll("[\\n*\\s*]+","\n　　"); // 移除空行,并增加段前缩进2个汉字
         } else {
             result = (String) object;
+            if(result != null) result = result.replaceAll("^,|,$","");// 移除Xpath匹配结果首尾多余的逗号
+        }
+        if (!TextUtils.isEmpty(baseUrl)) {   // 获取绝对地址放到Xpath结果处理之后,防止Xpath匹配的多余逗号干扰Url的识别.
+            result = NetworkUtil.getAbsoluteURL(baseUrl, result);
         }
         return result;
     }
