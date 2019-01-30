@@ -11,8 +11,6 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
-import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 import com.kunfei.bookshelf.model.impl.IStationBookModel;
 
 import java.net.MalformedURLException;
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -179,35 +176,13 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
             if (bookSourceBean.getRuleBookContent().startsWith("$")) {
                 return getAjaxHtml(MApplication.getInstance(), analyzeUrl)
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
-                        .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
+                        .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean, headerMap));
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
-        }
-    }
-
-    private Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
-        switch (analyzeUrl.getUrlMode()) {
-            case POST:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap());
-            case GET:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getPath(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap());
-            default:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getPath(),
-                                analyzeUrl.getHeaderMap());
         }
     }
 

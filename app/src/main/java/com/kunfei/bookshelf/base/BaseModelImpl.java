@@ -12,6 +12,8 @@ import com.kunfei.bookshelf.help.EncodeConverter;
 import com.kunfei.bookshelf.help.RetryInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
+import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -21,11 +23,34 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
+
+    public static Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
+        switch (analyzeUrl.getUrlMode()) {
+            case POST:
+                return getRetrofitString(analyzeUrl.getHost())
+                        .create(IHttpPostApi.class)
+                        .searchBook(analyzeUrl.getPath(),
+                                analyzeUrl.getQueryMap(),
+                                analyzeUrl.getHeaderMap());
+            case GET:
+                return getRetrofitString(analyzeUrl.getHost())
+                        .create(IHttpGetApi.class)
+                        .searchBook(analyzeUrl.getPath(),
+                                analyzeUrl.getQueryMap(),
+                                analyzeUrl.getHeaderMap());
+            default:
+                return getRetrofitString(analyzeUrl.getHost())
+                        .create(IHttpGetApi.class)
+                        .getWebContent(analyzeUrl.getPath(),
+                                analyzeUrl.getHeaderMap());
+        }
+    }
 
     public static Retrofit getRetrofitString(String url) {
         return new Retrofit.Builder().baseUrl(url)
