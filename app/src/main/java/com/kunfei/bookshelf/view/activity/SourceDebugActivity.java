@@ -262,7 +262,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
         WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
-                .timeout(20, TimeUnit.SECONDS)
+                .timeout(30, TimeUnit.SECONDS)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

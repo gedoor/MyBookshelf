@@ -104,7 +104,7 @@ public class PageLoaderNet extends PageLoader {
                 e.onComplete();
             })
                     .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
-                    .timeout(20, TimeUnit.SECONDS)
+                    .timeout(30, TimeUnit.SECONDS)
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {
