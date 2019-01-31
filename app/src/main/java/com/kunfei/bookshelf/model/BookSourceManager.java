@@ -81,13 +81,7 @@ public class BookSourceManager {
 
     @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
-        try {
-            return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url))
-                    .unique();
-        } catch (Exception ignored) {
-        }
-        return null;
+        return DbHelper.getDaoSession().getBookSourceBeanDao().load(url);
     }
 
     public static void removeBookSource(BookSourceBean sourceBean) {

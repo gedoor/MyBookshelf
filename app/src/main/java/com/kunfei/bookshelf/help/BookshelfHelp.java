@@ -260,13 +260,10 @@ public class BookshelfHelp {
      * 获取书籍按bookUrl
      */
     public static BookShelfBean getBook(String bookUrl) {
-        BookShelfBean bookShelfBean = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder()
-                .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl)).build().unique();
+        BookShelfBean bookShelfBean = DbHelper.getDaoSession().getBookShelfBeanDao().load(bookUrl);
         if (bookShelfBean != null) {
-            List<BookInfoBean> temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).limit(1).build().list();
-            if (temp != null && temp.size() > 0) {
-                BookInfoBean bookInfoBean = temp.get(0);
+            BookInfoBean bookInfoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(bookUrl);
+            if (bookInfoBean != null) {
                 bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
                 bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfBean.setBookInfoBean(bookInfoBean);
