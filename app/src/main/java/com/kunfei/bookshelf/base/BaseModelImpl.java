@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -117,7 +118,10 @@ public class BaseModelImpl {
                         }
                     }
                 }
-                MApplication.getCookiePreferences().edit().putString(tag, cookieBuilder.toString());
+                String cookie = cookieBuilder.toString();
+                if (!TextUtils.isEmpty(cookie) && !Objects.equals(MApplication.getCookiePreferences().getString(tag, ""), cookieBuilder.toString())) {
+                    MApplication.getCookiePreferences().edit().putString(tag, cookieBuilder.toString()).apply();
+                }
             }
             e.onNext(response);
             e.onComplete();
