@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.text.TextUtils;
+import android.webkit.CookieSyncManager;
 
 import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.help.Constant;
@@ -80,14 +81,17 @@ public class MApplication extends Application {
         if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
         }
+        CookieSyncManager.createInstance(getInstance());
         AppFrontBackHelper.getInstance().register(this, new AppFrontBackHelper.OnAppStatusListener() {
             @Override
             public void onFront() {
+                CookieSyncManager.getInstance().sync();
                 donateHb = System.currentTimeMillis() - configPreferences.getLong("DonateHb", 0) <= TimeUnit.DAYS.toMillis(3);
             }
 
             @Override
             public void onBack() {
+                CookieSyncManager.getInstance().sync();
                 if (UpLastChapterModel.model != null) {
                     UpLastChapterModel.model.onDestroy();
                 }
