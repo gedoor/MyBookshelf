@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -124,6 +125,7 @@ public class BaseModelImpl {
                         }
                     }
                 }
+                CookieSyncManager.getInstance().sync();
             }
             e.onNext(response);
             e.onComplete();
