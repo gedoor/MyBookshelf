@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -107,25 +105,19 @@ public class BaseModelImpl {
         };
     }
 
-    protected Observable<Response<String>> setCookie(Response<String> response) {
+    protected Observable<Response<String>> setCookie(Response<String> response, String tag) {
         return Observable.create(e -> {
             if (!response.raw().headers("Set-Cookie").isEmpty()) {
-                String baseUrl;
-                okhttp3.Response networkResponse = response.raw().networkResponse();
-                if (networkResponse != null) {
-                    baseUrl = networkResponse.request().url().toString();
-                } else {
-                    baseUrl = response.raw().request().url().toString();
-                }
+                StringBuilder cookieBuilder = new StringBuilder();
                 for (String s : response.raw().headers("Set-Cookie")) {
                     String[] x = s.split(";");
                     for (String y : x) {
                         if (!TextUtils.isEmpty(y)) {
-                            CookieManager.getInstance().setCookie(baseUrl, y);
+                            cookieBuilder.append(y).append(";");
                         }
                     }
                 }
-                CookieSyncManager.getInstance().sync();
+                MApplication.getCookiePreferences().edit().putString(tag, cookieBuilder.toString());
             }
             e.onNext(response);
             e.onComplete();
