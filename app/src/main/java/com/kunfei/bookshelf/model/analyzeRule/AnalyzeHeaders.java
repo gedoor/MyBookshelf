@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -28,7 +29,7 @@ public class AnalyzeHeaders {
             headerMap.put("User-Agent", getDefaultUserAgent());
         }
         if (bookSourceBean != null) {
-            String cookie = MApplication.getCookiePreferences().getString(bookSourceBean.getBookSourceUrl(), "");
+            String cookie = CookieManager.getInstance().getCookie(bookSourceBean.getBookSourceUrl());
             if (!TextUtils.isEmpty(cookie)) {
                 assert cookie != null;
                 headerMap.put("Cookie", cookie);

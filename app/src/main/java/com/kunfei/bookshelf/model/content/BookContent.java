@@ -26,14 +26,12 @@ class BookContent {
     private String tag;
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
-    private boolean isAjax = false;
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
         ruleBookContent = bookSourceBean.getRuleBookContent();
         if (ruleBookContent.startsWith("$")) {
-            isAjax = true;
             ruleBookContent = ruleBookContent.substring(1);
         }
     }
@@ -76,12 +74,8 @@ class BookContent {
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(webContentBean.nextUrl, null, null, headerMap);
                     try {
                         String body;
-                        if (isAjax) {
-                            body = BaseModelImpl.getInstance().getAjaxHtml(analyzeUrl).blockingFirst();
-                        } else {
-                            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();
-                            body = response.body();
-                        }
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();
+                        body = response.body();
                         webContentBean = analyzeBookContent(body, webContentBean.nextUrl);
                         if (!TextUtils.isEmpty(webContentBean.content)) {
                             bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
