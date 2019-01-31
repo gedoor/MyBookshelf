@@ -178,6 +178,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
+                        .flatMap(this::setCookie)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             }
         } catch (Exception e) {
