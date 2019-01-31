@@ -690,6 +690,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             exitTime = System.currentTimeMillis();
         } else {
             DataBackup.getInstance().autoSave();
+            MApplication.getCookiePreferences().edit().apply();
             finish();
         }
     }
