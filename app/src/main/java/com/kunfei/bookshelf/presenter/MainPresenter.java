@@ -79,7 +79,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         if (TextUtils.isEmpty(bookUrl.trim())) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+            BookInfoBean temp = DbHelper.getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
             if (temp != null) {
                 e.onNext(null);

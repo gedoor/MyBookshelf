@@ -45,7 +45,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
         AsyncTask.execute(() -> {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+            DbHelper.getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
             BookSourceManager.refreshBookSource();
         });
     }
@@ -58,7 +58,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
                     bookSourceBeans.get(i - 1).setSerialNumber(i);
                 }
             }
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
+            DbHelper.getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
             BookSourceManager.refreshBookSource();
         });
     }
@@ -67,7 +67,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     public void delData(BookSourceBean bookSourceBean) {
         this.delBookSource = bookSourceBean;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
+            DbHelper.getmDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
             BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
@@ -92,7 +92,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     public void delData(List<BookSourceBean> bookSourceBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookSourceBean sourceBean : bookSourceBeans) {
-                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
+                DbHelper.getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
             }
             BookSourceManager.refreshBookSource();
             e.onNext(true);

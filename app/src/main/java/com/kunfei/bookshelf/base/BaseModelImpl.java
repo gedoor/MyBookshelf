@@ -9,6 +9,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.EncodeConverter;
 import com.kunfei.bookshelf.help.HttpInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
@@ -17,7 +19,6 @@ import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -119,8 +120,8 @@ public class BaseModelImpl {
                     }
                 }
                 String cookie = cookieBuilder.toString();
-                if (!TextUtils.isEmpty(cookie) && !Objects.equals(MApplication.getCookiePreferences().getString(tag, ""), cookieBuilder.toString())) {
-                    MApplication.getCookiePreferences().edit().putString(tag, cookieBuilder.toString()).apply();
+                if (!TextUtils.isEmpty(cookie)) {
+                    DbHelper.getmDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(tag, cookie));
                 }
             }
             e.onNext(response);
@@ -129,7 +130,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    public Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
+    protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             class HtmlOutJavaScriptInterface {

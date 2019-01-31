@@ -131,7 +131,7 @@ public class DataBackup {
     }
 
     private void backupSearchHistory(String file) {
-        List<SearchHistoryBean> searchHistoryBeans = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+        List<SearchHistoryBean> searchHistoryBeans = DbHelper.getmDaoSession().getSearchHistoryBeanDao()
                 .queryBuilder().list();
         if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
             Gson gson = new GsonBuilder()

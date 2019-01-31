@@ -54,7 +54,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public void removeData(int pos) {
-        DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBeans.get(pos));
+        DbHelper.getmDaoSession().getSearchBookBeanDao().delete(searchBookBeans.get(pos));
         getSearchBookBeans().remove(pos);
         notifyItemRemoved(pos);
     }

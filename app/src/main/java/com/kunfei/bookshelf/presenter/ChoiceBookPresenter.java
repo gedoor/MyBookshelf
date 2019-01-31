@@ -4,16 +4,11 @@ package com.kunfei.bookshelf.presenter;
 import android.content.Intent;
 
 import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
 
@@ -43,7 +38,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
         title = intent.getStringExtra("title");
         tag = intent.getStringExtra("tag");
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            List<BookShelfBean> temp = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
                 temp = new ArrayList<>();
             e.onNext(temp);

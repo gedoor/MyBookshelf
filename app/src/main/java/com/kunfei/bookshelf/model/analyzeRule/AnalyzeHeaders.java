@@ -1,11 +1,12 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.dao.DbHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,10 +29,9 @@ public class AnalyzeHeaders {
             headerMap.put("User-Agent", getDefaultUserAgent());
         }
         if (bookSourceBean != null) {
-            String cookie = MApplication.getCookiePreferences().getString(bookSourceBean.getBookSourceUrl(), "");
-            if (!TextUtils.isEmpty(cookie)) {
-                assert cookie != null;
-                headerMap.put("Cookie", cookie);
+            CookieBean cookie = DbHelper.getmDaoSession().getCookieBeanDao().load(bookSourceBean.getBookSourceUrl());
+            if (cookie != null) {
+                headerMap.put("Cookie", cookie.getCookie());
             }
         }
         return headerMap;

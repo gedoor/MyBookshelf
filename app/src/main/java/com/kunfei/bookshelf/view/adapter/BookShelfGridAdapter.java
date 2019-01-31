@@ -137,7 +137,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             bookShelfBean.setSerialNumber(index);
             new Thread() {
                 public void run() {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+                    DbHelper.getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 }
             }.start();
         }

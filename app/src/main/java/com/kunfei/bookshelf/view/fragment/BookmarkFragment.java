@@ -111,14 +111,14 @@ public class BookmarkFragment extends MBaseFragment {
         moDialogHUD.showBookmark(bookmarkBean, false, new EditBookmarkView.OnBookmarkClick() {
             @Override
             public void saveBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+                DbHelper.getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void delBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
+                DbHelper.getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                 adapter.notifyDataSetChanged();
             }

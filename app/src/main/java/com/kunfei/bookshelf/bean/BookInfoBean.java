@@ -272,7 +272,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
             out.flush();
             out.close();
             setCoverUrl(md5Path);
-            DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(this);
+            DbHelper.getmDaoSession().getBookInfoBeanDao().insertOrReplace(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

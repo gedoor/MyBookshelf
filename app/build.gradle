@@ -81,7 +81,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.android:flexbox:1.1.0'
 
@@ -131,7 +131,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 53
+    schemaVersion 55
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }
