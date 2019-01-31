@@ -28,7 +28,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //support
-    api 'androidx.core:core:1.1.0-alpha03'
+    api 'androidx.core:core:1.1.0-alpha04'
     api 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
     //RxAndroid
