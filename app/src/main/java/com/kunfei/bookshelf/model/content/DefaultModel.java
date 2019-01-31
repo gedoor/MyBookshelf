@@ -178,7 +178,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
-                        .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));

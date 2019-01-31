@@ -36,6 +36,10 @@ class BookContent {
         }
     }
 
+    Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, Map<String, String> headerMap) {
+        return analyzeBookContent(response.body(), chapterBean, headerMap);
+    }
+
     Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
