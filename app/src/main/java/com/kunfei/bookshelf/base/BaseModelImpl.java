@@ -30,7 +30,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
 
-    public static Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
+    public static BaseModelImpl getInstance() {
+        return new BaseModelImpl();
+    }
+
+    public Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
         switch (analyzeUrl.getUrlMode()) {
             case POST:
                 return getRetrofitString(analyzeUrl.getHost())
@@ -101,7 +105,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    public static Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
+    public Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             class HtmlOutJavaScriptInterface {

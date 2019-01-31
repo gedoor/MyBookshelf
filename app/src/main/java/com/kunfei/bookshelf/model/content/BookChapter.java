@@ -54,7 +54,7 @@ class BookChapter {
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), null, null, headerMap);
                     try {
                         String body;
-                        Response<String> response = BaseModelImpl.getResponseO(analyzeUrl)
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
                         webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList);
@@ -73,7 +73,7 @@ class BookChapter {
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(webChapterBean.nextUrlList.get(0), null, null, headerMap);
                     try {
                         String body;
-                        Response<String> response = BaseModelImpl.getResponseO(analyzeUrl)
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
                         webChapterBean = analyzeChapterList(body, webChapterBean.nextUrlList.get(0), ruleChapterList);
