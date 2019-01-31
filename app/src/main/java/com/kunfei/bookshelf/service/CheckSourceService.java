@@ -180,7 +180,7 @@ public class CheckSourceService extends Service {
         private void startCheck() {
                 try {
                     new URL(sourceBean.getBookSourceUrl());
-                    BaseModelImpl.getRetrofitString(sourceBean.getBookSourceUrl())
+                    BaseModelImpl.getInstance().getRetrofitString(sourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class)
                             .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(sourceBean))
                             .subscribeOn(scheduler)

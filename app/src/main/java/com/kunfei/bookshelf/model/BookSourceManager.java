@@ -35,7 +35,7 @@ import io.reactivex.disposables.Disposable;
  * 所有书源
  */
 
-public class BookSourceManager extends BaseModelImpl {
+public class BookSourceManager {
     public static List<String> groupList = new ArrayList<>();
     private static List<BookSourceBean> selectedBookSource;
     private static List<BookSourceBean> allBookSource;
@@ -202,7 +202,7 @@ public class BookSourceManager extends BaseModelImpl {
         }
         try {
             URL url = new URL(string.trim());
-            return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+            return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                     .create(IHttpGetApi.class)
                     .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importBookSourceFromJson(rsp.body()))

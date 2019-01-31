@@ -23,7 +23,7 @@ import io.reactivex.Observable;
  * 替换规则管理
  */
 
-public class ReplaceRuleManager extends BaseModelImpl {
+public class ReplaceRuleManager {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
     private static List<ReplaceRuleBean> replaceRuleBeansAll;
     private static long lastUpTime = System.currentTimeMillis();
@@ -103,7 +103,7 @@ public class ReplaceRuleManager extends BaseModelImpl {
         } else {
             try {
                 URL url = new URL(text);
-                return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+                return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                         .create(IHttpGetApi.class)
                         .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                         .flatMap(rsp -> importReplaceRuleO(rsp.body()))

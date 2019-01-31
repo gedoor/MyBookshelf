@@ -4,8 +4,8 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.model.content.DefaultModel;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -288,7 +288,7 @@ public class AnalyzeRule {
     @SuppressWarnings("unused")
     public String ajax(String url) {
         try {
-            Call<String> call = DefaultModel.getRetrofitString(url)
+            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(url)
                     .create(IHttpGetApi.class).getWebContentCall(url, null);
             return call.execute().body();
         } catch (Exception e) {

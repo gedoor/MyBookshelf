@@ -56,7 +56,7 @@ public class BaseModelImpl {
         }
     }
 
-    public static Retrofit getRetrofitString(String url) {
+    public Retrofit getRetrofitString(String url) {
         return new Retrofit.Builder().baseUrl(url)
                 //增加返回值为字符串的支持(以实体类返回)
                 .addConverterFactory(EncodeConverter.create())
@@ -66,7 +66,7 @@ public class BaseModelImpl {
                 .build();
     }
 
-    public static Retrofit getRetrofitString(String url, String encode) {
+    public Retrofit getRetrofitString(String url, String encode) {
         return new Retrofit.Builder().baseUrl(url)
                 //增加返回值为字符串的支持(以实体类返回)
                 .addConverterFactory(EncodeConverter.create(encode))

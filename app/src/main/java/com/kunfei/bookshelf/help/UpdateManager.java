@@ -42,7 +42,7 @@ public class UpdateManager {
     }
 
     public void checkUpdate(boolean showMsg) {
-        BaseModelImpl.getRetrofitString("https://api.github.com")
+        BaseModelImpl.getInstance().getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
