@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -130,7 +131,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl) {
+    protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             class HtmlOutJavaScriptInterface {
@@ -147,11 +148,15 @@ public class BaseModelImpl {
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(), "HTML_OUT");
+                CookieManager cookieManager = CookieManager.getInstance();
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
-                        handler.postDelayed(() -> webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');"), 2000);
-                        handler.postDelayed(webView::destroy, 3000);
+                        handler.postDelayed(() -> {
+                            DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
+                            webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                            handler.postDelayed(webView::destroy, 1000);
+                        }, 2000);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {

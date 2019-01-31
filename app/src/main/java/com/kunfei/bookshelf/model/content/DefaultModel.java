@@ -174,7 +174,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
             if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-                return getAjaxHtml(analyzeUrl)
+                return getAjaxHtml(analyzeUrl, tag)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
