@@ -9,7 +9,7 @@ import android.webkit.WebViewClient;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.help.EncodeConverter;
-import com.kunfei.bookshelf.help.RetryInterceptor;
+import com.kunfei.bookshelf.help.HttpInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
@@ -87,7 +87,7 @@ public class BaseModelImpl {
                     .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                     .addInterceptor(getHeaderInterceptor())
-                    .addInterceptor(new RetryInterceptor(1));
+                    .addInterceptor(new HttpInterceptor(1));
         }
         return clientBuilder;
     }
