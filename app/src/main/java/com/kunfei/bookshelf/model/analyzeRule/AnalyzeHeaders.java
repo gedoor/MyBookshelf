@@ -30,6 +30,7 @@ public class AnalyzeHeaders {
         if (bookSourceBean != null) {
             String cookie = MApplication.getCookiePreferences().getString(bookSourceBean.getBookSourceUrl(), "");
             if (!TextUtils.isEmpty(cookie)) {
+                assert cookie != null;
                 headerMap.put("Cookie", cookie);
             }
         }
