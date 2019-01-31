@@ -3,11 +3,13 @@ package com.kunfei.bookshelf.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -94,14 +97,23 @@ public class SourceLoginActivity extends MBaseActivity {
         settings.setBuiltInZoomControls(true);
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setJavaScriptEnabled(true);
+        CookieManager cookieManager = CookieManager.getInstance();
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                String cookie = cookieManager.getCookie(url);
+                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
+                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
+                editor.apply();
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                String cookie = cookieManager.getCookie(url);
+                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
+                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
+                editor.apply();
                 if (checking)
                     finish();
                 else
