@@ -205,7 +205,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void refreshBookSource() {
         if (isSearch) {
             String term = "%" + searchView.getQuery() + "%";
-            List<BookSourceBean> sourceBeanList = DbHelper.getmDaoSession().getBookSourceBeanDao().queryBuilder()
+            List<BookSourceBean> sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))

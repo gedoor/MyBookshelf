@@ -67,7 +67,7 @@ class BookContent {
             if (!TextUtils.isEmpty(webContentBean.nextUrl)) {
                 List<String> usedUrlList = new ArrayList<>();
                 usedUrlList.add(chapterBean.getDurChapterUrl());
-                ChapterListBean nextChapter = DbHelper.getmDaoSession().getChapterListBeanDao().queryBuilder()
+                ChapterListBean nextChapter = DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), ChapterListBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
                         .build().unique();
                 while (!TextUtils.isEmpty(webContentBean.nextUrl) && !usedUrlList.contains(webContentBean.nextUrl)) {

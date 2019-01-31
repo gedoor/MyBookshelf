@@ -145,7 +145,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
         if (Objects.equals(bookshelfPx, "2") && bookShelfBean.getSerialNumber() != index) {
             bookShelfBean.setSerialNumber(index);
-            AsyncTask.execute(() -> DbHelper.getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
+            AsyncTask.execute(() -> DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
         }
         if (bookShelfBean.isLoading()) {
             holder.bvUnread.setVisibility(View.INVISIBLE);

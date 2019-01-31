@@ -121,7 +121,7 @@ public class BaseModelImpl {
                 }
                 String cookie = cookieBuilder.toString();
                 if (!TextUtils.isEmpty(cookie)) {
-                    DbHelper.getmDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(tag, cookie));
+                    DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(tag, cookie));
                 }
             }
             e.onNext(response);

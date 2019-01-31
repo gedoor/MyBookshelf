@@ -38,7 +38,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
         title = intent.getStringExtra("title");
         tag = intent.getStringExtra("tag");
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> temp = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            List<BookShelfBean> temp = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
                 temp = new ArrayList<>();
             e.onNext(temp);

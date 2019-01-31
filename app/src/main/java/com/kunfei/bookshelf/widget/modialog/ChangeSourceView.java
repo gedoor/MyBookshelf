@@ -197,7 +197,7 @@ public class ChangeSourceView {
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {
         Single.create((SingleOnSubscribe<List<SearchBookBean>>) e -> {
-            List<SearchBookBean> searchBookBeans = DbHelper.getmDaoSession().getSearchBookBeanDao().queryBuilder()
+            List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
             if (searchBookBeans == null) searchBookBeans = new ArrayList<>();
             List<SearchBookBean> searchBookList = new ArrayList<>();
@@ -299,9 +299,9 @@ public class ChangeSourceView {
                         }
                     }
                     if (saveBookSource) {
-                        DbHelper.getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+                        DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
-                    DbHelper.getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                    DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                     handler.post(() -> adapter.addSourceAdapter(searchBookBean));
                     break;
                 }

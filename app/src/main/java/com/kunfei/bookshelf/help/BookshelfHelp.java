@@ -116,7 +116,7 @@ public class BookshelfHelp {
         FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
         chapterCaches.clear();
         if (clearChapterList)
-            DbHelper.getmDaoSession().getChapterListBeanDao().deleteAll();
+            DbHelper.getDaoSession().getChapterListBeanDao().deleteAll();
     }
 
     /**
@@ -220,10 +220,10 @@ public class BookshelfHelp {
      * 获取所有书籍
      */
     public static List<BookShelfBean> getAllBook() {
-        List<BookShelfBean> bookShelfList = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder()
+        List<BookShelfBean> bookShelfList = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder()
                 .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
         for (int i = 0; i < bookShelfList.size(); i++) {
-            BookInfoBean bookInfoBean = DbHelper.getmDaoSession().getBookInfoBeanDao().queryBuilder()
+            BookInfoBean bookInfoBean = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
@@ -239,16 +239,16 @@ public class BookshelfHelp {
      * 获取书籍按分组
      */
     public static List<BookShelfBean> getBooksByGroup(int group) {
-        List<BookShelfBean> bookShelfList = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder()
+        List<BookShelfBean> bookShelfList = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.Group.eq(group))
                 .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
         for (int i = 0; i < bookShelfList.size(); i++) {
-            BookInfoBean bookInfoBean = DbHelper.getmDaoSession().getBookInfoBeanDao().queryBuilder()
+            BookInfoBean bookInfoBean = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
-                DbHelper.getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
+                DbHelper.getDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
                 bookShelfList.remove(i);
                 i--;
             }
@@ -260,10 +260,10 @@ public class BookshelfHelp {
      * 获取书籍按bookUrl
      */
     public static BookShelfBean getBook(String bookUrl) {
-        BookShelfBean bookShelfBean = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder()
+        BookShelfBean bookShelfBean = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl)).build().unique();
         if (bookShelfBean != null) {
-            List<BookInfoBean> temp = DbHelper.getmDaoSession().getBookInfoBeanDao().queryBuilder()
+            List<BookInfoBean> temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).limit(1).build().list();
             if (temp != null && temp.size() > 0) {
                 BookInfoBean bookInfoBean = temp.get(0);
@@ -280,13 +280,13 @@ public class BookshelfHelp {
      * 移除书籍
      */
     public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
-        DbHelper.getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
-        DbHelper.getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
+        DbHelper.getDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
+        DbHelper.getDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         delChapterList(bookShelfBean.getNoteUrl());
         if (!keepCaches) {
             String bookName = bookShelfBean.getBookInfoBean().getName();
             // 如果书架上有其他同名书籍，只删除本书源的缓存
-            long bookNum = DbHelper.getmDaoSession().getBookInfoBeanDao().queryBuilder()
+            long bookNum = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.Name.eq(bookName)).count();
             if (bookNum > 0) {
                 FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
@@ -314,7 +314,7 @@ public class BookshelfHelp {
             return false;
         }
 
-        long count = DbHelper.getmDaoSession().getBookShelfBeanDao().queryBuilder()
+        long count = DbHelper.getDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl))
                 .count();
         return count > 0;
@@ -329,7 +329,7 @@ public class BookshelfHelp {
 
     public static void saveBookSource(BookSourceBean bookSourceBean) {
         if (bookSourceBean != null) {
-            DbHelper.getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
         }
     }
 
@@ -338,9 +338,9 @@ public class BookshelfHelp {
      */
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
         if (bookShelfBean.getErrorMsg() == null) {
-            DbHelper.getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
-            DbHelper.getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-            DbHelper.getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            DbHelper.getDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
+            DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+            DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
         }
     }
 
@@ -369,7 +369,7 @@ public class BookshelfHelp {
     }
 
     public static List<ChapterListBean> getChapterList(String noteUrl) {
-        List<ChapterListBean> chapterListBeans = DbHelper.getmDaoSession().getChapterListBeanDao().queryBuilder()
+        List<ChapterListBean> chapterListBeans = DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
                 .build()
@@ -381,21 +381,21 @@ public class BookshelfHelp {
     }
 
     public static void delChapterList(String noteUrl) {
-        DbHelper.getmDaoSession().getChapterListBeanDao().queryBuilder()
+        DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
     public static void saveBookmark(BookmarkBean bookmarkBean) {
-        DbHelper.getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+        DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
     }
 
     public static void delBookmark(BookmarkBean bookmarkBean) {
-        DbHelper.getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
+        DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
     }
 
     public static List<BookmarkBean> getBookmarkList(String bookName) {
-        return DbHelper.getmDaoSession().getBookmarkBeanDao().queryBuilder()
+        return DbHelper.getDaoSession().getBookmarkBeanDao().queryBuilder()
                 .where(BookmarkBeanDao.Properties.BookName.eq(bookName))
                 .orderAsc(BookmarkBeanDao.Properties.ChapterIndex)
                 .build()
@@ -423,7 +423,7 @@ public class BookshelfHelp {
     public static BookSourceBean getBookSourceByTag(String tag) {
         if (tag == null)
             return null;
-        return DbHelper.getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).unique();
     }
 
@@ -461,9 +461,9 @@ public class BookshelfHelp {
      * 清除书架
      */
     public static void clearBookshelf() {
-        DbHelper.getmDaoSession().getBookShelfBeanDao().deleteAll();
-        DbHelper.getmDaoSession().getBookInfoBeanDao().deleteAll();
-        DbHelper.getmDaoSession().getChapterListBeanDao().deleteAll();
+        DbHelper.getDaoSession().getBookShelfBeanDao().deleteAll();
+        DbHelper.getDaoSession().getBookInfoBeanDao().deleteAll();
+        DbHelper.getDaoSession().getChapterListBeanDao().deleteAll();
     }
 
 }

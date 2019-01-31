@@ -29,7 +29,7 @@ public class AnalyzeHeaders {
             headerMap.put("User-Agent", getDefaultUserAgent());
         }
         if (bookSourceBean != null) {
-            CookieBean cookie = DbHelper.getmDaoSession().getCookieBeanDao().load(bookSourceBean.getBookSourceUrl());
+            CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(bookSourceBean.getBookSourceUrl());
             if (cookie != null) {
                 headerMap.put("Cookie", cookie.getCookie());
             }

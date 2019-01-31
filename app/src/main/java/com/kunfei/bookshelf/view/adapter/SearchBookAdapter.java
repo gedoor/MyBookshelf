@@ -192,7 +192,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     private void saveData(List<SearchBookBean> data) {
-        AsyncTask.execute(() -> DbHelper.getmDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
+        AsyncTask.execute(() -> DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
     }
 
     private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {

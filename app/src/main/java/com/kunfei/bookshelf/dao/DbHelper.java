@@ -38,7 +38,7 @@ public class DbHelper {
         return instance;
     }
 
-    public static DaoSession getmDaoSession() {
+    public static DaoSession getDaoSession() {
         return getInstance().mDaoSession;
     }
 
@@ -66,7 +66,7 @@ public class DbHelper {
                     },
                     BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class,
                     SearchHistoryBeanDao.class, BookSourceBeanDao.class,
-                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class
+                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class, CookieBeanDao.class
             );
         }
     }

@@ -161,12 +161,12 @@ public class UpLastChapterModel {
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {
         return Observable.create(e -> {
-            List<SearchBookBean> searchBookBeans = DbHelper.getmDaoSession().getSearchBookBeanDao().queryBuilder()
+            List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookShelf.getBookInfoBean().getName())).list();
             for (SearchBookBean searchBookBean : searchBookBeans) {
                 BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(searchBookBean.getTag());
                 if (sourceBean == null) {
-                    DbHelper.getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
+                    DbHelper.getDaoSession().getSearchBookBeanDao().delete(searchBookBean);
                 } else if (System.currentTimeMillis() - searchBookBean.getUpTime() > 1000 * 60 * 60
                         && sourceBean.getEnable()) {
                     e.onNext(searchBookBean);
@@ -195,13 +195,13 @@ public class UpLastChapterModel {
 
     private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            SearchBookBean searchBookBean = DbHelper.getmDaoSession().getSearchBookBeanDao().queryBuilder()
+            SearchBookBean searchBookBean = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
                     .unique();
             if (searchBookBean != null) {
                 searchBookBean.setLastChapter(bookShelfBean.getLastChapterName());
                 searchBookBean.setAddTime(System.currentTimeMillis());
-                DbHelper.getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                 e.onNext(searchBookBean);
             }
             e.onComplete();

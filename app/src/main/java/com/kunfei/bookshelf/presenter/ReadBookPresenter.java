@@ -121,7 +121,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         try {
             if (bookSourceBean != null) {
                 bookSourceBean.addGroup("禁用");
-                DbHelper.getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+                DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                 BookSourceManager.refreshBookSource();
                 mView.toast("已禁用" + bookSourceBean.getBookSourceName());
             }

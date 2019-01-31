@@ -102,14 +102,14 @@ public class SourceLoginActivity extends MBaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 String cookie = cookieManager.getCookie(url);
-                DbHelper.getmDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
+                DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 String cookie = cookieManager.getCookie(url);
-                DbHelper.getmDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
+                DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
                 if (checking)
                     finish();
                 else

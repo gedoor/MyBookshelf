@@ -70,10 +70,10 @@ public class DataRestore {
             }.getType());
             for (BookShelfBean bookshelf : bookShelfList) {
                 if (bookshelf.getNoteUrl() != null) {
-                    DbHelper.getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+                    DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
                 }
                 if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
-                    DbHelper.getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
                 }
             }
         }
@@ -94,7 +94,7 @@ public class DataRestore {
             List<SearchHistoryBean> searchHistoryBeans = new Gson().fromJson(json, new TypeToken<List<SearchHistoryBean>>() {
             }.getType());
             if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
-                DbHelper.getmDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
             }
         }
     }

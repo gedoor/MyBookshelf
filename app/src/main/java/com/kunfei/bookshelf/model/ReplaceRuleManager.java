@@ -30,7 +30,7 @@ public class ReplaceRuleManager {
 
     public static List<ReplaceRuleBean> getEnabled() {
         if (replaceRuleBeansEnabled == null) {
-            replaceRuleBeansEnabled = DbHelper.getmDaoSession()
+            replaceRuleBeansEnabled = DbHelper.getDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                     .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
@@ -45,7 +45,7 @@ public class ReplaceRuleManager {
 
     public static List<ReplaceRuleBean> getAll() {
         if (replaceRuleBeansAll == null) {
-            replaceRuleBeansAll = DbHelper.getmDaoSession()
+            replaceRuleBeansAll = DbHelper.getDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                     .list();
@@ -57,36 +57,36 @@ public class ReplaceRuleManager {
         if (replaceRuleBean.getSerialNumber() == 0) {
             replaceRuleBean.setSerialNumber(replaceRuleBeansAll.size() + 1);
         }
-        DbHelper.getmDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
+        DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
         refreshDataS();
     }
 
     public static void delData(ReplaceRuleBean replaceRuleBean) {
-        DbHelper.getmDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
+        DbHelper.getDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
         refreshDataS();
     }
 
     public static void addDataS(List<ReplaceRuleBean> replaceRuleBeans) {
         if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
-            DbHelper.getmDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
             refreshDataS();
         }
     }
 
     public static void delDataS(List<ReplaceRuleBean> replaceRuleBeans) {
         for (ReplaceRuleBean replaceRuleBean : replaceRuleBeans) {
-            DbHelper.getmDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
         }
         refreshDataS();
     }
 
     private static void refreshDataS() {
-        replaceRuleBeansEnabled = DbHelper.getmDaoSession()
+        replaceRuleBeansEnabled = DbHelper.getDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        replaceRuleBeansAll = DbHelper.getmDaoSession()
+        replaceRuleBeansAll = DbHelper.getDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();

@@ -66,8 +66,8 @@ public class ImportBookModel extends BaseModelImpl {
                 bookInfoBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookInfoBean.setOrigin(getString(R.string.local));
 
-                DbHelper.getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
-                DbHelper.getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+                DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
             e.onNext(new LocBookShelfBean(isNew, bookShelfBean));
             e.onComplete();
