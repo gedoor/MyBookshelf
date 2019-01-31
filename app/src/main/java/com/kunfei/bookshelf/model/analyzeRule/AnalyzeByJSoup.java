@@ -60,7 +60,7 @@ public class AnalyzeByJSoup {
         for (String ruleStr : ruleStrS) {
             Elements tempS = getElementsSingle(temp, ruleStr);
             elementsList.add(tempS);
-            if (elements.size() > 0 && elementsType.equals("|")) {
+            if (tempS.size() > 0 && elementsType.equals("|")) {
                 break;
             }
         }
