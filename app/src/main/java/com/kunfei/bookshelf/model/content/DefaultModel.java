@@ -132,6 +132,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), null, null, headerMap);
             return getResponseO(analyzeUrl)
+                    .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getNoteUrl())));
@@ -153,6 +154,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), null, null, headerMap);
             return getResponseO(analyzeUrl)
+                    .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
