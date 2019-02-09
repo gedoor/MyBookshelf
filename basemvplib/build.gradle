@@ -29,7 +29,7 @@ dependencies {
 
     //support
     api 'androidx.core:core:1.1.0-alpha04'
-    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    api 'androidx.appcompat:appcompat:1.1.0-alpha02'
 
     //RxAndroid
     api 'io.reactivex.rxjava2:rxjava:2.2.6'
@@ -45,7 +45,7 @@ dependencies {
 
     //J_SOUP
     api 'org.jsoup:jsoup:1.11.3'
-    api 'cn.wanghaomiao:JsoupXpath:2.2'
+    api 'cn.wanghaomiao:JsoupXpath:2.2.1'
     api 'com.jayway.jsonpath:json-path:2.4.0'
     api 'io.apisense:rhino-android:1.0'
 

@@ -71,7 +71,7 @@ dependencies {
     //fireBase
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
