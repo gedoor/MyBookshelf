@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.modialog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +26,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.ChangeSourceAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
@@ -33,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -51,6 +54,7 @@ public class ChangeSourceView {
     public static SavedSource savedSource = new SavedSource();
     private TextView atvTitle;
     private ImageButton ibtStop;
+    private SearchView searchView;
     private RefreshRecyclerView rvSource;
     private MoDialogHUD moProgressHUD;
     private MoDialogView moProgressView;
@@ -66,11 +70,12 @@ public class ChangeSourceView {
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
 
+    @SuppressLint("InflateParams")
     private ChangeSourceView(MoDialogView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
-        adapter = new ChangeSourceAdapter(context, false);
+        adapter = new ChangeSourceAdapter(false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();
@@ -132,7 +137,7 @@ public class ChangeSourceView {
 
             @Override
             public Boolean checkIsExist(SearchBookBean searchBookBean) {
-                Boolean result = false;
+                boolean result = false;
                 for (int i = 0; i < adapter.getICount(); i++) {
                     if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
                         result = true;
@@ -302,7 +307,9 @@ public class ChangeSourceView {
                         DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
                     DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
-                    handler.post(() -> adapter.addSourceAdapter(searchBookBean));
+                    if (StringUtils.isTrimEmpty(searchView.getQuery().toString()) || searchBookBean.getOrigin().equals(searchView.getQuery().toString())) {
+                        handler.post(() -> adapter.addSourceAdapter(searchBookBean));
+                    }
                     break;
                 }
             }
@@ -315,6 +322,7 @@ public class ChangeSourceView {
 
         View llContent = moProgressView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
+        searchView = moProgressView.findViewById(R.id.searchView);
         atvTitle = moProgressView.findViewById(R.id.atv_title);
         ibtStop = moProgressView.findViewById(R.id.ibt_stop);
         rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
@@ -322,7 +330,32 @@ public class ChangeSourceView {
 
         rvSource.setBaseRefreshListener(this::reSearchBook);
         ibtStop.setOnClickListener(v -> stopChangeSource());
+        searchView.onActionViewExpanded();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (StringUtils.isTrimEmpty(newText)) {
+                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
+                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor))
+                            .build().list();
+                    adapter.reSetSourceAdapter();
+                    adapter.addAllSourceAdapter(searchBookBeans);
+                } else {
+                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
+                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor), SearchBookBeanDao.Properties.Origin.like("%" + searchView.getQuery().toString() + "%"))
+                            .build().list();
+                    adapter.reSetSourceAdapter();
+                    adapter.addAllSourceAdapter(searchBookBeans);
+                }
+                return false;
+            }
+        });
     }
 
     private int compareSearchBooks(SearchBookBean s1, SearchBookBean s2) {
