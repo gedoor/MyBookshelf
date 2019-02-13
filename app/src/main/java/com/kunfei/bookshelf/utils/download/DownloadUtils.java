@@ -58,11 +58,10 @@ public class DownloadUtils {
 
     /**
      * 将输入流写入文件
-     * @param inputString
-     * @param file
      */
     private void writeFile(InputStream inputString, File file) {
         if (file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             file.delete();
         }
 

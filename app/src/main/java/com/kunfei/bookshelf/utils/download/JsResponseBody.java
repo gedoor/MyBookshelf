@@ -1,7 +1,5 @@
 package com.kunfei.bookshelf.utils.download;
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -44,10 +42,9 @@ public class JsResponseBody extends ResponseBody {
             public long read(Buffer sink, long byteCount) throws IOException {
                 long bytesRead = super.read(sink, byteCount);
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                Log.e("download", "read: "+ (int) (totalBytesRead * 100 / responseBody.contentLength()));
                 if (null != downloadListener) {
                     if (bytesRead != -1) {
-                        downloadListener.onProgress((int) (totalBytesRead));
+                        downloadListener.onProgress((int) (totalBytesRead * 100 / responseBody.contentLength()));
                     }
                 }
                 return bytesRead;
