@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
 
 import androidx.appcompat.app.ActionBar;

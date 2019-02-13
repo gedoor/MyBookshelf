@@ -19,7 +19,7 @@ import com.kunfei.bookshelf.presenter.BookListPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookDetailActivity;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.adapter.BookShelfAdapter;

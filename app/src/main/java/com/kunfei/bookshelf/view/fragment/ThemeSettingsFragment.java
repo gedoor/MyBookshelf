@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.Theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
 import java.util.Objects;

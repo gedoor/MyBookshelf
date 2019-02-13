@@ -26,7 +26,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;

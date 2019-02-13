@@ -21,7 +21,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;

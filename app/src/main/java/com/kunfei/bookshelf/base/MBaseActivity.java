@@ -20,8 +20,8 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.Theme.MaterialValueHelper;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 
 import java.lang.reflect.Method;

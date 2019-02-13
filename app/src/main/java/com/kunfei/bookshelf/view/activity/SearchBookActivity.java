@@ -32,7 +32,7 @@ import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 import com.kunfei.bookshelf.widget.explosionfield.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;

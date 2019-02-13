@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.Selector;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import androidx.appcompat.widget.AppCompatTextView;
 

@@ -3,8 +3,8 @@ package com.kunfei.bookshelf.widget.views;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.kunfei.bookshelf.utils.Theme.ATH;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import androidx.appcompat.widget.AppCompatSeekBar;
 

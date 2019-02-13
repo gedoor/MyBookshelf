@@ -23,7 +23,7 @@ import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 

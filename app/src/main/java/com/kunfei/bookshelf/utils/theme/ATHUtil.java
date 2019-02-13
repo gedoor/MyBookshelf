@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.Theme;
+package com.kunfei.bookshelf.utils.theme;
 
 import android.content.Context;
 import android.content.res.TypedArray;

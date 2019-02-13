@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.Theme;
+package com.kunfei.bookshelf.utils.theme;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;

@@ -43,7 +43,7 @@ import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.BarHide;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;

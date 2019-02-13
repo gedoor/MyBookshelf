@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.Theme;
+package com.kunfei.bookshelf.utils.theme;
 
 /**
  * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)

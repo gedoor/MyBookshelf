@@ -17,7 +17,7 @@ import com.kunfei.bookshelf.help.Constant;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

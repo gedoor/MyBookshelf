@@ -26,7 +26,7 @@ import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
 import java.util.ArrayList;

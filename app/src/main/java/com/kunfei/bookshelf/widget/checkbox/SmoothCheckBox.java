@@ -19,7 +19,7 @@ import android.widget.Checkable;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.DensityUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 public class SmoothCheckBox extends View implements Checkable {
     private static final String KEY_INSTANCE_STATE = "InstanceState";

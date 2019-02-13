@@ -22,7 +22,7 @@ import com.kunfei.bookshelf.bean.UpdateInfoBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
 

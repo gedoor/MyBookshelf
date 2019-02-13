@@ -5,8 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Switch;
 
-import com.kunfei.bookshelf.utils.Theme.ATH;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 /**
  * @author Aidan Follestad (afollestad)
