@@ -60,7 +60,6 @@
         android:layout_height="3dp"
         android:visibility="invisible"
         android:layout_margin="5dp"
-        android:indeterminate="true"
         android:max="100"
         style="@android:style/Widget.ProgressBar.Horizontal" />
 
