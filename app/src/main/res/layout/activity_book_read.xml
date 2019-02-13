@@ -133,7 +133,7 @@
     </FrameLayout>
 
     <ProgressBar
-        android:id="@+id/hpb_next_page_progress"
+        android:id="@+id/pb_nextPage"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_gravity="bottom"
