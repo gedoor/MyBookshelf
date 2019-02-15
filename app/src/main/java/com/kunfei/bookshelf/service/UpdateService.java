@@ -162,7 +162,9 @@ public class UpdateService extends Service {
 
             @Override
             public void onFail(String errorInfo) {
-
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), errorInfo, Toast.LENGTH_SHORT).show());
+                RxBus.get().post(RxBusTag.UPDATE_APK_STATE, 0);
+                UpdateService.this.stopSelf();
             }
         });
         downloadUtils.download(apkUrl, apkFile, new Observer<InputStream>() {
@@ -178,6 +180,8 @@ public class UpdateService extends Service {
             @Override
             public void onError(Throwable e) {
                 new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                RxBus.get().post(RxBusTag.UPDATE_APK_STATE, 0);
+                UpdateService.this.stopSelf();
             }
 
             @Override
