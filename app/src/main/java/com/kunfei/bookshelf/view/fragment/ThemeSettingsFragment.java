@@ -33,7 +33,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName("CONFIG");
-        addPreferencesFromResource(R.xml.theme_settings);
+        addPreferencesFromResource(R.xml.pref_settings_theme);
         settingActivity = (ThemeSettingActivity) this.getActivity();
     }
 
