@@ -57,4 +57,9 @@
         android:summary="长按文字在操作菜单中显示阅读·搜索"
         android:title="文字操作显示搜索" />
 
+    <Preference
+        android:key="webDavSetting"
+        android:title="WabDav备份设置"
+        android:summary="WabDav备份与恢复" />
+
 </PreferenceScreen>

@@ -10,6 +10,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
+import com.kunfei.bookshelf.view.fragment.WebDavSettingsFragment;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +28,9 @@ public class SettingActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
+    private SettingsFragment settingsFragment = new SettingsFragment();
+    private WebDavSettingsFragment webDavSettingsFragment;
+
     public static void startThis(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
     }
@@ -43,7 +47,7 @@ public class SettingActivity extends MBaseActivity {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        SettingsFragment settingsFragment = new SettingsFragment();
+
         getFragmentManager().beginTransaction()
                 .replace(R.id.settingsFrameLayout, settingsFragment)
                 .commit();
@@ -77,6 +81,11 @@ public class SettingActivity extends MBaseActivity {
     }
 
     @Override
+    public void finish() {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
@@ -90,4 +99,5 @@ public class SettingActivity extends MBaseActivity {
     public void initImmersionBar() {
         super.initImmersionBar();
     }
+
 }

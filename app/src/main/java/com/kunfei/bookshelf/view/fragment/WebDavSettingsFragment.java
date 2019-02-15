@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ import cn.qqtheme.framework.picker.FilePicker;
  * Created by GKF on 2017/12/16.
  * 设置
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class WebDavSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SettingActivity settingActivity;
 
     @Override
@@ -45,9 +44,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
         }
         editor.apply();
-        addPreferencesFromResource(R.xml.pref_settings);
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_bookshelf_px)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_download_path)));
+        addPreferencesFromResource(R.xml.pref_settings_web_dav);
+        bindPreferenceSummaryToValue(findPreference("web_dav_url"));
+        bindPreferenceSummaryToValue(findPreference("web_dav_account"));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value) -> {
@@ -97,9 +96,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals(getString(R.string.pk_download_path))) {
             selectDownloadPath(preference);
-        } else if (preference.getKey().equals("webDavSetting")) {
-            WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
-            getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment).commit();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
