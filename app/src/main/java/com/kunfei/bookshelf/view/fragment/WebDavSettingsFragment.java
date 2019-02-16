@@ -8,6 +8,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -47,12 +48,31 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
         addPreferencesFromResource(R.xml.pref_settings_web_dav);
         bindPreferenceSummaryToValue(findPreference("web_dav_url"));
         bindPreferenceSummaryToValue(findPreference("web_dav_account"));
+        bindPreferenceSummaryToValue(findPreference("web_dav_password"));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value) -> {
         String stringValue = value.toString();
 
-        if (preference instanceof ListPreference) {
+        if (preference.getKey().equals("web_dav_url")) {
+            if (TextUtils.isEmpty(stringValue)) {
+                preference.setSummary("输入你的服务器地址");
+            } else {
+                preference.setSummary(stringValue);
+            }
+        } else if (preference.getKey().equals("web_dav_account")) {
+            if (TextUtils.isEmpty(stringValue)) {
+                preference.setSummary("输入你的WebDav账号");
+            } else {
+                preference.setSummary(stringValue);
+            }
+        } else if (preference.getKey().equals("web_dav_password")) {
+            if (TextUtils.isEmpty(stringValue)) {
+                preference.setSummary("输入你的WebDav授权密码");
+            } else {
+                preference.setSummary("************");
+            }
+        } else if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
             int index = listPreference.findIndexOfValue(stringValue);
             // Set the summary to reflect the new value.
