@@ -29,7 +29,6 @@ public class SettingActivity extends MBaseActivity {
     LinearLayout llContent;
 
     private SettingsFragment settingsFragment = new SettingsFragment();
-    private WebDavSettingsFragment webDavSettingsFragment;
 
     public static void startThis(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
@@ -49,7 +48,7 @@ public class SettingActivity extends MBaseActivity {
         setupActionBar();
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.settingsFrameLayout, settingsFragment)
+                .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
                 .commit();
 
     }
@@ -82,7 +81,13 @@ public class SettingActivity extends MBaseActivity {
 
     @Override
     public void finish() {
-
+        if (getFragmentManager().findFragmentByTag("webDavSettings") == null) {
+            super.finish();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
+                    .commit();
+        }
     }
 
     @Override

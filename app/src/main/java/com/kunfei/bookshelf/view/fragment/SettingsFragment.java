@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             selectDownloadPath(preference);
         } else if (preference.getKey().equals("webDavSetting")) {
             WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
-            getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment, "webDavSettings").commit();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
