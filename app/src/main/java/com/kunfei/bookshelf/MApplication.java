@@ -13,7 +13,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.help.AppFrontBackHelper;
-import com.kunfei.bookshelf.help.Constant;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
@@ -119,7 +119,7 @@ public class MApplication extends Application {
 
     public void setDownloadPath(String downloadPath) {
         MApplication.downloadPath = downloadPath;
-        Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
+        AppConstant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
         editor.putString(getString(R.string.pk_download_path), downloadPath);
         editor.apply();

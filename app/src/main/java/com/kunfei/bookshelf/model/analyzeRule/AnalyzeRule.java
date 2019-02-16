@@ -26,7 +26,7 @@ import javax.script.SimpleBindings;
 
 import retrofit2.Call;
 
-import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 
 /**

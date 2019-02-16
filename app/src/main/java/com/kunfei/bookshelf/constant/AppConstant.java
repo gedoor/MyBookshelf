@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.help;
+package com.kunfei.bookshelf.constant;
 
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.MApplication;
@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by newbiechen on 17-4-16.
  */
 
-public class Constant {
+public class AppConstant {
 
     //Book Date Convert Format
     public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";

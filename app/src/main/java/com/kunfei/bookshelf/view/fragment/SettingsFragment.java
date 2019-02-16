@@ -17,7 +17,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
 
@@ -114,7 +114,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 picker.setRootPath(preference.getSummary().toString());
                 picker.setItemHeight(30);
                 picker.setOnFilePickListener(currentPath -> {
-                    if (!currentPath.contains(FileUtil.getSdCardPath())) {
+                    if (!currentPath.contains(FileUtils.getSdCardPath())) {
                         MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
                     } else {
                         MApplication.getInstance().setDownloadPath(currentPath);

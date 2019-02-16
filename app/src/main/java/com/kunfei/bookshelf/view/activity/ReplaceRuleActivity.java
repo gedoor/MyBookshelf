@@ -21,7 +21,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
@@ -289,7 +289,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         switch (requestCode) {
             case IMPORT_SOURCE:
                 if (data != null) {
-                    mPresenter.importDataSLocal(FileUtil.getPath(this, data.getData()));
+                    mPresenter.importDataSLocal(FileUtils.getPath(this, data.getData()));
                 }
                 break;
         }

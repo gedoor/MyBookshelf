@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
  * Created by GKF on 2018/1/24.

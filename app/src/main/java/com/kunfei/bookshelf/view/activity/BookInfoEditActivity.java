@@ -23,7 +23,7 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -285,7 +285,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         switch (requestCode) {
             case ResultSelectCover:
                 if (resultCode == RESULT_OK && null != data) {
-                    tieCoverUrl.setText(FileUtil.getPath(this, data.getData()));
+                    tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
                     initCover();
                 }

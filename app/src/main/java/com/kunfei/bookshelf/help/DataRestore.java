@@ -10,7 +10,7 @@ import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
@@ -30,7 +30,7 @@ public class DataRestore {
     }
 
     public Boolean run() throws Exception {
-        String dirPath = FileUtil.getSdCardPath() + "/YueDu";
+        String dirPath = FileUtils.getSdCardPath() + "/YueDu";
         restoreConfig(dirPath);
         restoreBookSource(dirPath);
         restoreBookShelf(dirPath);
