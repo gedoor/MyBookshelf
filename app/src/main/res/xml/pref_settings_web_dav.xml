@@ -19,4 +19,9 @@
         android:summary="输入你的WebDav授权密码"
         android:singleLine="true"/>
 
+    <Preference
+        android:key="web_dav_restore"
+        android:title="恢复"
+        android:summary="从WebDav恢复"/>
+
 </PreferenceScreen>
