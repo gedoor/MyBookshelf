@@ -37,6 +37,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName("CONFIG");
         settingActivity = (SettingActivity) this.getActivity();
+        settingActivity.setupActionBar("WebDav设置");
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         boolean processTextEnabled = ProcessTextHelp.isProcessTextEnabled();

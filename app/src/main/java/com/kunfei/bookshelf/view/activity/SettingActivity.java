@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
-import com.kunfei.bookshelf.view.fragment.WebDavSettingsFragment;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -45,7 +44,7 @@ public class SettingActivity extends MBaseActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
-        setupActionBar();
+        setupActionBar(getString(R.string.setting));
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
@@ -59,11 +58,11 @@ public class SettingActivity extends MBaseActivity {
     }
 
     //设置ToolBar
-    private void setupActionBar() {
+    public void setupActionBar(String title) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.setting);
+            actionBar.setTitle(title);
         }
     }
 
