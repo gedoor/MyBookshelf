@@ -123,6 +123,7 @@ public class DataBackup {
         filePaths.add(dirPath + "/config.xml");
         String zipFilePath = FileHelp.getCachePath() + "/backup" + ".zip";
         try {
+            FileHelp.deleteFile(zipFilePath);
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
                 Sardine sardine = WebDavHelp.getSardine();
                 sardine.createDirectory(WebDavHelp.getWebDavUrl() + "YueDu");
