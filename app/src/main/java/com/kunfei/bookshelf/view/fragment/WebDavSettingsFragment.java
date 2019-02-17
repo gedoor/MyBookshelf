@@ -118,13 +118,15 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
             Sardine sardine = WebDavHelp.getSardine();
-            try {
-                List<DavResource> resourceList = sardine.list(WebDavHelp.getWebDavUrl() + "YueDu");
-                for (DavResource resource : resourceList) {
+            if (sardine != null) {
+                try {
+                    List<DavResource> resourceList = sardine.list(WebDavHelp.getWebDavUrl() + "YueDu");
+                    for (DavResource resource : resourceList) {
 
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);

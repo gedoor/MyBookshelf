@@ -126,9 +126,11 @@ public class DataBackup {
             FileHelp.deleteFile(zipFilePath);
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
                 Sardine sardine = WebDavHelp.getSardine();
-                sardine.createDirectory(WebDavHelp.getWebDavUrl() + "YueDu");
-                String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
-                sardine.put(putUrl, new File(zipFilePath), "application/x-www-form-urlencoded");
+                if (sardine != null) {
+                    sardine.createDirectory(WebDavHelp.getWebDavUrl() + "YueDu");
+                    String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
+                    sardine.put(putUrl, new File(zipFilePath), "application/x-www-form-urlencoded");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
