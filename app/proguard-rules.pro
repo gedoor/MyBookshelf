@@ -224,6 +224,9 @@ public static java.lang.String TABLENAME;
 -keep class javax.xml.**{*;}
 -keep class org.xmlpull.**{*;}
 
+-keep class org.simpleframework.xml.**{*;}
+-dontwarn org.simpleframework.xml.**
+
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
 }

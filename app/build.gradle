@@ -126,12 +126,13 @@ dependencies {
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
+        exclude group: 'org.slf4j'
         exclude group: 'xmlpull'
     }
 
     //WebDav
     implementation('com.thegrizzlylabs.sardine-android:sardine-android:0.3'){
-        exclude group: 'xmlpull'
+        exclude group: 'org.simpleframework', module:'simple-xml'
     }
 }
 
