@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import cn.qqtheme.framework.picker.FilePicker;
 
+import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
+
 /**
  * Created by GKF on 2017/12/16.
  * 设置
@@ -57,7 +59,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
 
         if (preference.getKey().equals("web_dav_url")) {
             if (TextUtils.isEmpty(stringValue)) {
-                preference.setSummary("输入你的服务器地址");
+                preference.setSummary(DEFAULT_WEB_DAV_URL);
             } else {
                 preference.setSummary(stringValue);
             }

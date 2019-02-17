@@ -20,12 +20,15 @@ import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 import com.kunfei.bookshelf.utils.ZipUtils;
+import com.thegrizzlylabs.sardineandroid.Sardine;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -118,10 +121,13 @@ public class DataBackup {
         filePaths.add(dirPath + "/myBookSearchHistory.json");
         filePaths.add(dirPath + "/myBookReplaceRule.json");
         filePaths.add(dirPath + "/config.xml");
-        String zipFilePath = FileHelp.getCachePath() + "/backup" +  TimeUtils.date2String(TimeUtils.getNowDate()) + ".zip";
+        String zipFilePath = FileHelp.getCachePath() + "/backup" + ".zip";
         try {
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
-
+                Sardine sardine = WebDavHelp.getSardine();
+                sardine.createDirectory(WebDavHelp.getWebDavUrl() + "YueDu");
+                String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
+                sardine.put(putUrl, new File(zipFilePath), "application/x-www-form-urlencoded");
             }
         } catch (IOException e) {
             e.printStackTrace();

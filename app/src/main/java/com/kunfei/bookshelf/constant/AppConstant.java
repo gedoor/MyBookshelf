@@ -23,4 +23,5 @@ public class AppConstant {
     public static Type MAP_STRING = new TypeToken<Map<String, String>>() {
     }.getType();
 
+    public static final String DEFAULT_WEB_DAV_URL = "https://dav.jianguoyun.com/dav/";
 }
