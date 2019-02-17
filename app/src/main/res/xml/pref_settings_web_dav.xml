@@ -17,7 +17,8 @@
         android:key="web_dav_password"
         android:title="WebDav 密码"
         android:summary="输入你的WebDav授权密码"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:password="true" />
 
     <Preference
         android:key="web_dav_restore"
