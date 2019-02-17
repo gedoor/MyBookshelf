@@ -19,7 +19,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;

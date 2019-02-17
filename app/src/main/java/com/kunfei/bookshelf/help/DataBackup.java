@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
@@ -17,6 +16,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 import com.kunfei.bookshelf.utils.ZipUtils;
@@ -29,9 +29,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.documentfile.provider.DocumentFile;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -47,30 +49,33 @@ public class DataBackup {
     }
 
     public void autoSave() {
-        long currentTime = System.currentTimeMillis();
-        List<String> per = PermissionUtils.checkMorePermissions(MApplication.getInstance(), MApplication.PerList);
-        if (per.isEmpty()) {
-            File file = new File(FileUtils.getSdCardPath() + File.separator + "YueDu" + File.separator + "autoSave" + File.separator + "myBookShelf.json");
-            if (file.exists()) {
-                if (currentTime - file.lastModified() < TimeUnit.DAYS.toMillis(1)) {
-                    return;
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
+            long currentTime = System.currentTimeMillis();
+            List<String> per = PermissionUtils.checkMorePermissions(MApplication.getInstance(), MApplication.PerList);
+            if (per.isEmpty()) {
+                File file = new File(FileUtils.getSdCardPath() + File.separator + "YueDu" + File.separator + "autoSave" + File.separator + "myBookShelf.json");
+                if (file.exists()) {
+                    if (currentTime - file.lastModified() < TimeUnit.DAYS.toMillis(1)) {
+                        return;
+                    }
                 }
+                DocumentHelper.createDirIfNotExist(FileUtils.getSdCardPath(), "YueDu");
+                String dirPath = FileUtils.getSdCardPath() + "/YueDu";
+                DocumentHelper.createDirIfNotExist(dirPath, "autoSave");
+                dirPath += "/autoSave";
+                backupBookShelf(dirPath);
+                backupBookSource(dirPath);
+                backupSearchHistory(dirPath);
+                backupReplaceRule(dirPath);
+                backupConfig(dirPath);
+                upload(dirPath);
             }
-            DocumentHelper.createDirIfNotExist(FileUtils.getSdCardPath(), "YueDu");
-            String dirPath = FileUtils.getSdCardPath() + "/YueDu";
-            DocumentHelper.createDirIfNotExist(dirPath, "autoSave");
-            dirPath += "/autoSave";
-            backupBookShelf(dirPath);
-            backupBookSource(dirPath);
-            backupSearchHistory(dirPath);
-            backupReplaceRule(dirPath);
-            backupConfig(dirPath);
-            upload(dirPath);
-        }
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe();
     }
 
     public void run() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
             DocumentHelper.createDirIfNotExist(FileUtils.getSdCardPath(), "YueDu");
             String dirPath = FileUtils.getSdCardPath() + "/YueDu";
             backupBookShelf(dirPath);
@@ -79,13 +84,18 @@ public class DataBackup {
             backupReplaceRule(dirPath);
             backupConfig(dirPath);
             upload(dirPath);
-            e.onNext(true);
+            e.onSuccess(true);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new SingleObserver<Boolean>() {
                     @Override
-                    public void onNext(Boolean value) {
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean value) {
                         if (value) {
                             Toast.makeText(MApplication.getInstance(), R.string.backup_success, Toast.LENGTH_LONG).show();
                         } else {

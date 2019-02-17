@@ -14,26 +14,19 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.utils.download.DownloadUtils;
 import com.kunfei.bookshelf.utils.download.JsDownloadListener;
 import com.kunfei.bookshelf.view.activity.UpdateActivity;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class UpdateService extends Service {
     public static boolean isRunning = false;

@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.kunfei.bookshelf.help;
+package com.kunfei.bookshelf.constant;
 
 public class RxBusTag {
     public final static String HAD_ADD_BOOK = "add_book";
@@ -27,4 +27,5 @@ public class RxBusTag {
     public final static String READ_ALOUD_NUMBER = "readAloudNumber";
     public final static String READ_ALOUD_START = "readAloudStart";
     public final static String UP_FIND_STYLE = "upFindStyle";
+    public final static String AUTO_BACKUP = "autoBackup";
 }

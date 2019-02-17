@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.ChapterListAdapter;
 import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;

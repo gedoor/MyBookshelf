@@ -13,13 +13,13 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 
@@ -195,4 +195,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         mView.recreate();
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUTO_BACKUP)})
+    public void autoBackup(Boolean backup) {
+        DataBackup.getInstance().autoSave();
+    }
 }

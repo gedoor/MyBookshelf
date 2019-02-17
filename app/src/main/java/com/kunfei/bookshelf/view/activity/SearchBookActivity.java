@@ -24,7 +24,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
