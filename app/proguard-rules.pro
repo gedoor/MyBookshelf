@@ -219,7 +219,7 @@ public static java.lang.String TABLENAME;
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
--dontwarn org.xmlpull.v1.**
+-dontwarn org.xmlpull.**
 -keep class nl.siegmann.epublib.**{*;}
 -keep class javax.xml.**{*;}
 -keep class org.xmlpull.**{*;}
