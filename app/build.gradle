@@ -85,6 +85,12 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.android:flexbox:1.1.0'
 
+    //J_SOUP
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'cn.wanghaomiao:JsoupXpath:2.3.0'
+    implementation 'com.jayway.jsonpath:json-path:2.4.0'
+    implementation 'io.apisense:rhino-android:1.0'
+
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
