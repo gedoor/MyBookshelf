@@ -140,6 +140,7 @@ dependencies {
     implementation('com.thegrizzlylabs.sardine-android:sardine-android:0.3'){
         exclude group: 'org.simpleframework', module:'simple-xml'
     }
+
 }
 
 greendao {
