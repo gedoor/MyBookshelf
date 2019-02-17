@@ -11,16 +11,19 @@ import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
+import com.thegrizzlylabs.sardineandroid.DavResource;
+import com.thegrizzlylabs.sardineandroid.Sardine;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import cn.qqtheme.framework.picker.FilePicker;
@@ -108,17 +111,21 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pk_bookshelf_px))) {
-            RxBus.get().post(RxBusTag.RECREATE, true);
-        } else if (key.equals("process_text")) {
-            ProcessTextHelp.setProcessTextEnable(sharedPreferences.getBoolean("process_text", true));
-        }
+
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if (preference.getKey().equals(getString(R.string.pk_download_path))) {
-            selectDownloadPath(preference);
+        if (preference.getKey().equals("web_dav_restore")) {
+            Sardine sardine = WebDavHelp.getSardine();
+            try {
+                List<DavResource> resourceList = sardine.list(WebDavHelp.getWebDavUrl() + "YueDu");
+                for (DavResource resource : resourceList) {
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
