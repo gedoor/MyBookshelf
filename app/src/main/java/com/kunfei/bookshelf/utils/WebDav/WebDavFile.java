@@ -259,11 +259,16 @@ public class WebDavFile {
      * @param localPath 本地文件路径
      * @return 是否成功成功
      */
-    public boolean upload(String localPath, String mimeType) {
+    public boolean upload(String localPath) {
+        return upload(localPath, null);
+    }
+
+    public boolean upload(String localPath, String contentType) {
         File file = new File((localPath));
         if (!file.exists()) return false;
+        MediaType mediaType = contentType == null ? null : MediaType.parse(contentType);
         // 务必注意RequestBody不要嵌套，不然上传时内容可能会被追加多余的文件信息
-        RequestBody fileBody = RequestBody.create(MediaType.parse(mimeType), file);
+        RequestBody fileBody = RequestBody.create(mediaType, file);
         Request.Builder request = new Request.Builder()
                 .url(getUrl())
                 .put(fileBody);

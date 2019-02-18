@@ -131,7 +131,7 @@ public class DataBackup {
                     new  WebDavFile(WebDavHelp.getWebDavUrl() + "YueDu").makeAsDir();
                     String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
                     WebDavFile webDavFile = new WebDavFile(putUrl);
-                    webDavFile.upload(zipFilePath, ".zip");
+                    webDavFile.upload(zipFilePath);
                 }
             }
         } catch (Exception e) {
