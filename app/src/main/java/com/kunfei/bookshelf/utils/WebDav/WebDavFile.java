@@ -118,6 +118,7 @@ public class WebDavFile {
     public List<WebDavFile> listFiles(ArrayList<String> propsList) {
         Response response = propFindResponse(propsList);
         try {
+            assert response != null;
             if (response.isSuccessful()) {
                 return parseDir(response.body().string());
             }
@@ -130,7 +131,7 @@ public class WebDavFile {
     private Response propFindResponse(ArrayList<String> propsList) {
         StringBuilder requestProps = new StringBuilder();
         for (String p : propsList) {
-            requestProps.append("<a:" + p + "/>\n");
+            requestProps.append("<a:").append(p).append("/>\n");
         }
         String requestPropsStr;
         if (requestProps.toString().isEmpty()) {
