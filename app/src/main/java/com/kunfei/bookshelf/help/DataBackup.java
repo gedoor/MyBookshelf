@@ -125,10 +125,11 @@ public class DataBackup {
         try {
             FileHelp.deleteFile(zipFilePath);
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
-                WebDavHelp.initWebDav();
-                String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
-                WebDavFile webDavFile = new WebDavFile(putUrl);
-                webDavFile.upload(zipFilePath, ".zip");
+                if (WebDavHelp.initWebDav()) {
+                    String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
+                    WebDavFile webDavFile = new WebDavFile(putUrl);
+                    webDavFile.upload(zipFilePath, ".zip");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

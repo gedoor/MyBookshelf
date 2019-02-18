@@ -17,12 +17,14 @@ public class WebDavHelp {
         return url;
     }
 
-    public static void initWebDav() {
+    public static boolean initWebDav() {
         String account = MApplication.getInstance().getConfigPreferences().getString("web_dav_account", "");
         String password = MApplication.getInstance().getConfigPreferences().getString("web_dav_password", "");
         if (!StringUtils.isTrimEmpty(account) && !StringUtils.isTrimEmpty(password)) {
             HttpAuth.setAuth(account, password);
+            return true;
         }
+        return false;
     }
 
     private WebDavHelp() {

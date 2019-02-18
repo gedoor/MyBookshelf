@@ -131,7 +131,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
-            WebDavHelp.initWebDav();
+            if (!WebDavHelp.initWebDav()) return super.onPreferenceTreeClick(preferenceScreen, preference);
             Single.create((SingleOnSubscribe<String[]>) emitter -> {
                 List<WebDavFile> webDavFiles = new WebDavFile(WebDavHelp.getWebDavUrl() + "YueDu/").listFiles();
                 Collections.reverse(webDavFiles);
