@@ -11,20 +11,35 @@ import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.WebDav.WebDavFile;
+import com.kunfei.bookshelf.utils.ZipUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import cn.qqtheme.framework.picker.FilePicker;
+import androidx.appcompat.app.AlertDialog;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 
@@ -34,6 +49,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
  */
 public class WebDavSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SettingActivity settingActivity;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,51 +131,82 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
+            WebDavHelp.initWebDav();
+            Single.create((SingleOnSubscribe<String[]>) emitter -> {
+                List<WebDavFile> webDavFiles = new WebDavFile(WebDavHelp.getWebDavUrl() + "YueDu/").listFiles();
+                Collections.reverse(webDavFiles);
+                List<String> fileNames = new ArrayList<>();
+                for (int i = 0; i < Math.min(webDavFiles.size(), 10); i++) {
+                    fileNames.add(webDavFiles.get(i).getDisplayName());
+                }
+                String[] strings = fileNames.toArray(new String[0]);
+                emitter.onSuccess(strings);
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new SingleObserver<String[]>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
+
+                        @Override
+                        public void onSuccess(String[] strings) {
+                            AlertDialog dialog = new AlertDialog.Builder(settingActivity)
+                                    .setTitle("选择恢复文件")
+                                    .setSingleChoiceItems(strings, 0, (dialogInterface, i) -> {
+                                        restore(WebDavHelp.getWebDavUrl() + "YueDu/" + strings[i]);
+                                        dialogInterface.dismiss();
+                                    })
+                                    .create();
+                            dialog.show();
+                            ATH.setAlertDialogTint(dialog);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
 
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-    private void selectDownloadPath(Preference preference) {
-        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
-                picker.setBackgroundColor(getResources().getColor(R.color.background));
-                picker.setTopBackgroundColor(getResources().getColor(R.color.background));
-                picker.setRootPath(preference.getSummary().toString());
-                picker.setItemHeight(30);
-                picker.setOnFilePickListener(currentPath -> {
-                    if (!currentPath.contains(FileUtils.getSdCardPath())) {
-                        MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
-                    } else {
-                        MApplication.getInstance().setDownloadPath(currentPath);
-                    }
-                    preference.setSummary(MApplication.downloadPath);
-                });
-                picker.show();
-                picker.getCancelButton().setText("恢复默认");
-                picker.getCancelButton().setOnClickListener(view -> {
-                    picker.dismiss();
-                    MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
-                    preference.setSummary(MApplication.downloadPath);
-                });
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(getActivity(), "自定义缓存路径需要存储权限", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(getActivity(), MApplication.PerList, MApplication.RESULT__PERMS);
-            }
-        });
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void restore(String url) {
+        Single.create(emitter -> {
+            WebDavFile webDavFile = new WebDavFile(url);
+            String zipFilePath = FileHelp.getCachePath() + "/backup" + ".zip";
+            webDavFile.download(zipFilePath, true);
+            ZipUtils.unzipFile(zipFilePath, FileUtils.getSdCardPath() + "/YueDu");
+            DataRestore.getInstance().run();
+            emitter.onSuccess(new Object());
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(Object o) {
+                        Toast.makeText(MApplication.getInstance(), "恢复完成", Toast.LENGTH_SHORT).show();
+                        RxBus.get().post(RxBusTag.RECREATE, true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MApplication.getInstance(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

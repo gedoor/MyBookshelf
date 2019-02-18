@@ -94,7 +94,7 @@ public class MApplication extends Application {
                 }
             }
         });
-        WebDavHelp.initWebDav();
+
     }
 
     @Override

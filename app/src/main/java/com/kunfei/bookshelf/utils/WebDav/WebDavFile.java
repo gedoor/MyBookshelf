@@ -1,8 +1,14 @@
 package com.kunfei.bookshelf.utils.WebDav;
 
+import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.WebDav.http.Handler;
 import com.kunfei.bookshelf.utils.WebDav.http.HttpAuth;
 import com.kunfei.bookshelf.utils.WebDav.http.OkHttp;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +43,7 @@ public class WebDavFile {
     private URL url;
     private String httpUrl;
 
-    private String canon;
+    private String displayName;
     private long createTime;
     private long lastModified;
     private long size;
@@ -154,8 +160,24 @@ public class WebDavFile {
 
     private List<WebDavFile> parseDir(String s) {
         List<WebDavFile> list = new ArrayList<>();
-
-
+        Document document = Jsoup.parse(s);
+        Elements elements = document.getElementsByTag("d:response");
+        String baseUrl = getUrl().endsWith("/") ? getUrl() : getUrl() + "/";
+        for (Element element : elements) {
+            String href = element.getElementsByTag("d:href").get(0).text();
+            if (!href.endsWith("/")) {
+                String fileName = element.getElementsByTag("d:displayname").get(0).text();
+                WebDavFile webDavFile;
+                try {
+                    webDavFile = new WebDavFile(baseUrl + fileName);
+                    webDavFile.setDisplayName(fileName);
+                    webDavFile.setSize(Long.parseLong(element.getElementsByTag("d:getcontentlength").get(0).text()));
+                    list.add(webDavFile);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return list;
     }
 
@@ -291,12 +313,12 @@ public class WebDavFile {
         return null;
     }
 
-    public String getCanon() {
-        return canon;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setCanon(String canon) {
-        this.canon = canon;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public long getCreateTime() {
@@ -325,10 +347,6 @@ public class WebDavFile {
 
     public boolean isDirectory() {
         return isDirectory;
-    }
-
-    public String getName() {
-        return getURLName();
     }
 
     public String getURLName() {
