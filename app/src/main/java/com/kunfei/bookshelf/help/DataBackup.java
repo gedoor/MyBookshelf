@@ -1,6 +1,8 @@
 package com.kunfei.bookshelf.help;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -132,8 +134,12 @@ public class DataBackup {
                     webDavFile.upload(zipFilePath, ".zip");
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            new Handler(Looper.getMainLooper())
+                    .post(() -> Toast
+                            .makeText(MApplication.getInstance(), e.getLocalizedMessage(), Toast.LENGTH_SHORT)
+                            .show());
         }
     }
 
