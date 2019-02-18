@@ -18,9 +18,9 @@ import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
+import com.kunfei.bookshelf.utils.WebDav.WebDavFile;
 import com.kunfei.bookshelf.utils.XmlUtils;
 import com.kunfei.bookshelf.utils.ZipUtils;
-import com.thegrizzlylabs.sardineandroid.Sardine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -125,12 +125,9 @@ public class DataBackup {
         try {
             FileHelp.deleteFile(zipFilePath);
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
-                Sardine sardine = WebDavHelp.getSardine();
-                if (sardine != null) {
-                    sardine.createDirectory(WebDavHelp.getWebDavUrl() + "YueDu");
-                    String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
-                    sardine.put(putUrl, new File(zipFilePath), "application/x-www-form-urlencoded");
-                }
+                String putUrl = WebDavHelp.getWebDavUrl() + "YueDu/backup" + TimeUtils.date2String(TimeUtils.getNowDate(), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) + ".zip";
+                WebDavFile webDavFile = new WebDavFile(putUrl);
+                webDavFile.upload(zipFilePath, ".zip");
             }
         } catch (IOException e) {
             e.printStackTrace();

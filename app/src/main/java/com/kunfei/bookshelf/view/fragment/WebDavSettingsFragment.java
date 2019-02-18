@@ -19,8 +19,6 @@ import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
-import com.thegrizzlylabs.sardineandroid.DavResource;
-import com.thegrizzlylabs.sardineandroid.Sardine;
 
 import java.io.IOException;
 import java.util.List;
@@ -117,17 +115,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
-            Sardine sardine = WebDavHelp.getSardine();
-            if (sardine != null) {
-                try {
-                    List<DavResource> resourceList = sardine.list(WebDavHelp.getWebDavUrl() + "YueDu");
-                    for (DavResource resource : resourceList) {
 
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

@@ -16,6 +16,7 @@ import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
+import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
@@ -93,6 +94,7 @@ public class MApplication extends Application {
                 }
             }
         });
+        WebDavHelp.initWebDav();
     }
 
     @Override
