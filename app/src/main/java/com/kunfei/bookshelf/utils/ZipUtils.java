@@ -185,8 +185,8 @@ public final class ZipUtils {
     private static boolean zipFile(final File srcFile,
                                    String rootPath,
                                    final ZipOutputStream zos,
-                                   final String comment)
-            throws IOException {
+                                   final String comment) throws IOException {
+        if (!srcFile.exists()) return true;
         rootPath = rootPath + (isSpace(rootPath) ? "" : File.separator) + srcFile.getName();
         if (srcFile.isDirectory()) {
             File[] fileList = srcFile.listFiles();
