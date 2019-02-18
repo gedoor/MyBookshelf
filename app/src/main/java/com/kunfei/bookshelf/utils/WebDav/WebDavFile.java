@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.utils.WebDav;
 
-import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.WebDav.http.Handler;
 import com.kunfei.bookshelf.utils.WebDav.http.HttpAuth;
 import com.kunfei.bookshelf.utils.WebDav.http.OkHttp;
