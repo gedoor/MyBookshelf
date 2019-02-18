@@ -262,7 +262,6 @@ public class WebDavFile {
     public boolean upload(String localPath, String mimeType) {
         File file = new File((localPath));
         if (!file.exists()) return false;
-//         String fileMime = new MimetypesFileTypeMap().getContentType(file);  // 获取文件的MIME类型
         // 务必注意RequestBody不要嵌套，不然上传时内容可能会被追加多余的文件信息
         RequestBody fileBody = RequestBody.create(MediaType.parse(mimeType), file);
         Request.Builder request = new Request.Builder()
