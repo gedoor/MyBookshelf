@@ -82,7 +82,7 @@ public class WebDavFile {
      *
      * @return 远程文件是否存在
      */
-    public boolean indexFileInfo() {
+    public boolean indexFileInfo() throws IOException {
         Response response = propFindResponse(new ArrayList<>());
         String s = "";
         try {
@@ -104,7 +104,7 @@ public class WebDavFile {
      *
      * @return 文件列表
      */
-    public List<WebDavFile> listFiles() {
+    public List<WebDavFile> listFiles() throws IOException {
         return listFiles(new ArrayList<>());
     }
 
@@ -114,7 +114,7 @@ public class WebDavFile {
      * @param propsList 指定列出文件的哪些属性
      * @return 文件列表
      */
-    public List<WebDavFile> listFiles(ArrayList<String> propsList) {
+    public List<WebDavFile> listFiles(ArrayList<String> propsList) throws IOException {
         Response response = propFindResponse(propsList);
         try {
             assert response != null;
@@ -127,11 +127,11 @@ public class WebDavFile {
         return new ArrayList<>();
     }
 
-    private Response propFindResponse(ArrayList<String> propsList) {
+    private Response propFindResponse(ArrayList<String> propsList) throws IOException {
         return propFindResponse(propsList, 1);
     }
 
-    private Response propFindResponse(ArrayList<String> propsList, int depth) {
+    private Response propFindResponse(ArrayList<String> propsList, int depth) throws IOException {
         StringBuilder requestProps = new StringBuilder();
         for (String p : propsList) {
             requestProps.append("<a:").append(p).append("/>\n");
@@ -154,13 +154,7 @@ public class WebDavFile {
         }
         request.header("Depth", depth < 0 ? "infinity" : Integer.toString(depth));
 
-        try {
-            return okHttpClient.newCall(request.build()).execute();
-        } catch (Exception e) {
-            //catch (IOException | XmlPullParserException | IllegalArgumentException e)
-            e.printStackTrace();
-        }
-        return null;
+        return okHttpClient.newCall(request.build()).execute();
     }
 
     private List<WebDavFile> parseDir(String s) {
