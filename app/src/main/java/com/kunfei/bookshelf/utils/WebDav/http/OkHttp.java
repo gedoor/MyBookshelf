@@ -13,10 +13,6 @@ public class OkHttp {
         return SingletonHelper.INSTANCE;
     }
 
-    public void setClient(OkHttpClient client) {
-        okHttpClient = client;
-    }
-
     public OkHttpClient client() {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder().build();
