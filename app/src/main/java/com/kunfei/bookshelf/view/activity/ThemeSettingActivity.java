@@ -60,7 +60,7 @@ public class ThemeSettingActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.setting);
+            actionBar.setTitle(R.string.theme_setting);
         }
     }
 
