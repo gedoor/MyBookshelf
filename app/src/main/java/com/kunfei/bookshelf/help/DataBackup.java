@@ -73,6 +73,7 @@ public class DataBackup {
                 backupReplaceRule(dirPath);
                 backupConfig(dirPath);
                 upload(dirPath);
+                e.onSuccess(true);
             }
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe();
