@@ -128,6 +128,10 @@ public class WebDavFile {
     }
 
     private Response propFindResponse(ArrayList<String> propsList) {
+        return propFindResponse(propsList, 1);
+    }
+
+    private Response propFindResponse(ArrayList<String> propsList, int depth) {
         StringBuilder requestProps = new StringBuilder();
         for (String p : propsList) {
             requestProps.append("<a:").append(p).append("/>\n");
@@ -148,6 +152,7 @@ public class WebDavFile {
         if (auth != null) {
             request.header("Authorization", Credentials.basic(auth.getUser(), auth.getPass()));
         }
+        request.header("Depth", depth < 0 ? "infinity" : Integer.toString(depth));
 
         try {
             return okHttpClient.newCall(request.build()).execute();
