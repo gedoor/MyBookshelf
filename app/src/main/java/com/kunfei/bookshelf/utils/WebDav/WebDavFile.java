@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils.WebDav;
 
+import android.text.TextUtils;
+
 import com.kunfei.bookshelf.utils.WebDav.http.Handler;
 import com.kunfei.bookshelf.utils.WebDav.http.HttpAuth;
 import com.kunfei.bookshelf.utils.WebDav.http.OkHttp;
@@ -166,11 +168,13 @@ public class WebDavFile {
             String href = element.getElementsByTag("d:href").get(0).text();
             if (!href.endsWith("/")) {
                 String fileName = element.getElementsByTag("d:displayname").get(0).text();
+                if (TextUtils.isEmpty(fileName)) {
+                    fileName = href.substring(href.lastIndexOf("/"));
+                }
                 WebDavFile webDavFile;
                 try {
                     webDavFile = new WebDavFile(baseUrl + fileName);
                     webDavFile.setDisplayName(fileName);
-                    webDavFile.setSize(Long.parseLong(element.getElementsByTag("d:getcontentlength").get(0).text()));
                     list.add(webDavFile);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
