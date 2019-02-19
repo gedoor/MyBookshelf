@@ -59,7 +59,7 @@
 
     <Preference
         android:key="webDavSetting"
-        android:title="WabDav设置"
-        android:summary="WabDav备份与恢复" />
+        android:title="WebDav设置"
+        android:summary="WebDav备份与恢复" />
 
 </PreferenceScreen>
