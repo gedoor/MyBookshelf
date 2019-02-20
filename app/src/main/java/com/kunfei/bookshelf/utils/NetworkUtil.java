@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ public class NetworkUtil {
     public static final int ERROR_CODE_NONET = 10001;
     public static final int ERROR_CODE_OUTTIME = 10002;
     public static final int ERROR_CODE_ANALY = 10003;
+    @SuppressLint("UseSparseArrays")
     private static final Map<Integer, String> errorMap = new HashMap<>();
 
     static {
