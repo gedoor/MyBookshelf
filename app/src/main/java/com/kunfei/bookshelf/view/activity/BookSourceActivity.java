@@ -21,7 +21,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
@@ -63,7 +63,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private MyItemTouchHelpCallback itemTouchHelpCallback;
+    private ItemTouchHelpCallback itemTouchHelpCallback;
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
@@ -151,7 +151,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        itemTouchHelpCallback = new MyItemTouchHelpCallback();
+        itemTouchHelpCallback = new ItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);

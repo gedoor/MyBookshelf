@@ -20,7 +20,7 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
@@ -42,7 +42,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
 
-    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+    private ItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchHelpCallback.OnItemTouchCallbackListener() {
         @Override
         public void onSwiped(int adapterPosition) {
 
@@ -59,7 +59,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     };
 
     @Override
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+    public ItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
