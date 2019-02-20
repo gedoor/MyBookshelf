@@ -210,7 +210,7 @@ public class WebDavFile {
      *
      * @return 是否创建成功
      */
-    public boolean makeAsDir() {
+    public boolean makeAsDir() throws IOException {
         Request.Builder request = new Request.Builder()
                 .url(getUrl())
                 .method("MKCOL", null);
@@ -263,11 +263,11 @@ public class WebDavFile {
      * @param localPath 本地文件路径
      * @return 是否成功成功
      */
-    public boolean upload(String localPath) {
+    public boolean upload(String localPath) throws IOException {
         return upload(localPath, null);
     }
 
-    public boolean upload(String localPath, String contentType) {
+    public boolean upload(String localPath, String contentType) throws IOException {
         File file = new File((localPath));
         if (!file.exists()) return false;
         MediaType mediaType = contentType == null ? null : MediaType.parse(contentType);
@@ -286,19 +286,14 @@ public class WebDavFile {
      * @param requestBuilder 因为还需要追加验证信息，所以此处传递Request.Builder的对象，而不是Request的对象
      * @return 请求执行的结果
      */
-    private boolean execRequest(Request.Builder requestBuilder) {
+    private boolean execRequest(Request.Builder requestBuilder) throws IOException {
         HttpAuth.Auth auth = HttpAuth.getAuth();
         if (auth != null) {
             requestBuilder.header("Authorization", Credentials.basic(auth.getUser(), auth.getPass()));
         }
 
-        try {
-            Response response = okHttpClient.newCall(requestBuilder.build()).execute();
-            return response.isSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        Response response = okHttpClient.newCall(requestBuilder.build()).execute();
+        return response.isSuccessful();
     }
 
     /**
