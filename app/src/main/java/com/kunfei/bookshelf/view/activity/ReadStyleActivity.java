@@ -27,7 +27,7 @@ import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
+import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;

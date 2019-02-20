@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.barUtil;
+package com.kunfei.bookshelf.utils.bar;
 
 import android.database.ContentObserver;
 import android.graphics.Color;

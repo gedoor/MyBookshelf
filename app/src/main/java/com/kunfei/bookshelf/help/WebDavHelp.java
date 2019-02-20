@@ -2,7 +2,7 @@ package com.kunfei.bookshelf.help;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.utils.WebDav.http.HttpAuth;
+import com.kunfei.bookshelf.utils.web_dav.http.HttpAuth;
 
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 

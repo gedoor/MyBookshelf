@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.WebDav.http;
+package com.kunfei.bookshelf.utils.web_dav.http;
 
 public class HttpAuth {
 

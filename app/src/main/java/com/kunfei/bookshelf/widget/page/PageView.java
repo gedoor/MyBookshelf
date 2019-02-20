@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
+import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.widget.page.animation.CoverPageAnim;
 import com.kunfei.bookshelf.widget.page.animation.HorizonPageAnim;

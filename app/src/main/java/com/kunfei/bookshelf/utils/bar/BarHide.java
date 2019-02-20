@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.barUtil;
+package com.kunfei.bookshelf.utils.bar;
 
 /**
  * Created by geyifeng on 2017/4/25.

@@ -1,8 +1,8 @@
-package com.kunfei.bookshelf.utils.WebDav;
+package com.kunfei.bookshelf.utils.web_dav;
 
-import com.kunfei.bookshelf.utils.WebDav.http.Handler;
-import com.kunfei.bookshelf.utils.WebDav.http.HttpAuth;
-import com.kunfei.bookshelf.utils.WebDav.http.OkHttp;
+import com.kunfei.bookshelf.utils.web_dav.http.Handler;
+import com.kunfei.bookshelf.utils.web_dav.http.HttpAuth;
+import com.kunfei.bookshelf.utils.web_dav.http.OkHttp;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
