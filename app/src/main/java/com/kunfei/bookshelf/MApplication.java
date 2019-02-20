@@ -12,11 +12,10 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.constant.AppConstant;
+import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
@@ -60,7 +59,6 @@ public class MApplication extends Application {
         super.onCreate();
         instance = this;
         CrashHandler.getInstance().init(this);
-        // default theme
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -103,6 +101,9 @@ public class MApplication extends Application {
         MultiDex.install(this);
     }
 
+    /**
+     * 初始化主题
+     */
     public void upThemeStore() {
         if (configPreferences.getBoolean("nightTheme", false)) {
             ThemeStore.editTheme(this)
@@ -119,6 +120,9 @@ public class MApplication extends Application {
         }
     }
 
+    /**
+     * 设置下载地址
+     */
     public void setDownloadPath(String downloadPath) {
         MApplication.downloadPath = downloadPath;
         AppConstant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
