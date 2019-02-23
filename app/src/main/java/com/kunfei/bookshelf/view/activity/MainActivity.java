@@ -114,6 +114,26 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         ButterKnife.bind(this);
     }
 
+    @Override
+    public void onResume(){
+       super.onResume();
+
+        SharedPreferences read = getSharedPreferences("CONFIG", MODE_MULTI_PROCESS);
+        String shared_url = read.getString("shared_url", "");
+        if(shared_url.length()>1){
+            moDialogHUD.showInputBox("打开书籍网址",
+                    shared_url,
+                    null,
+                    inputText -> mPresenter.addBookUrl(inputText));
+
+            SharedPreferences.Editor editor = getSharedPreferences("CONFIG", MODE_MULTI_PROCESS).edit();
+            editor.putString("shared_url", "");
+            editor.commit();
+
+        }
+    }
+
+
     /**
      * 沉浸状态栏
      */
