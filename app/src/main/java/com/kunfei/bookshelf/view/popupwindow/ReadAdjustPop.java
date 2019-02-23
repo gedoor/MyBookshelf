@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.widget.checkbox.SmoothCheckBox;
+import com.kunfei.bookshelf.widget.check_box.SmoothCheckBox;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

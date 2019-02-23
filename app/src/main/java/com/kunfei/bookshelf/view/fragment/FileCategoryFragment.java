@@ -9,7 +9,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.FileStack;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
 
@@ -123,7 +123,7 @@ public class FileCategoryFragment extends BaseFileFragment {
 
         tvSd.setOnClickListener(v -> {
             if (getContext() != null) {
-                List<String> list = FileUtil.getStorageData(getContext());
+                List<String> list = FileUtils.getStorageData(getContext());
                 if (list != null) {
                     String[] filePathS = list.toArray(new String[0]);
                     AlertDialog dialog = new AlertDialog.Builder(getContext())

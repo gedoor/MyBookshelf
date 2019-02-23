@@ -12,9 +12,6 @@ public class SharedPreferencesUtil {
 
     /**
      * 保存数据到文件
-     *
-     * @param key
-     * @param data
      */
     public static void saveData(String key, Object data) {
 
@@ -39,9 +36,6 @@ public class SharedPreferencesUtil {
 
     /**
      * 从文件中删除数据
-     *
-     * @param context
-     * @param key
      */
     public static void deleteData(Context context, String key) {
 
@@ -58,10 +52,6 @@ public class SharedPreferencesUtil {
 
     /**
      * 从文件中读取数据
-     *
-     * @param key
-     * @param defValue
-     * @return
      */
     public static Object getData(String key, Object defValue) {
 
@@ -84,8 +74,6 @@ public class SharedPreferencesUtil {
 
     /**
      * 清空文件
-     *
-     * @param context
      */
     public static void clearData(Context context) {
         sharedPreferences.edit().clear().apply();

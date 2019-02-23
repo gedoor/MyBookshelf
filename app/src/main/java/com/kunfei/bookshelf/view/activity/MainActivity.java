@@ -25,12 +25,11 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
@@ -689,7 +688,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             showSnackBar(toolbar, "再按一次退出程序");
             exitTime = System.currentTimeMillis();
         } else {
-            DataBackup.getInstance().autoSave();
             finish();
         }
     }

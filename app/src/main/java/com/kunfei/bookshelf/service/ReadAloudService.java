@@ -28,8 +28,8 @@ import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.MediaManager;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 
 import java.util.ArrayList;

@@ -22,12 +22,12 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.BitmapUtil;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
+import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -249,7 +249,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
      */
     public void setCustomBg(Uri uri) {
         try {
-            bgPath = FileUtil.getPath(this, uri);
+            bgPath = FileUtils.getPath(this, uri);
             Resources resources = this.getResources();
             DisplayMetrics dm = resources.getDisplayMetrics();
             int width = dm.widthPixels;

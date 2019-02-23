@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.barUtil;
+package com.kunfei.bookshelf.utils.bar;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;

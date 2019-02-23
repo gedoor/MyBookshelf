@@ -20,7 +20,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.Constant;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -883,7 +883,7 @@ public abstract class PageLoader {
         int visibleRight = (int) displayRightEnd;
         if (hideStatusBar && showTimeBattery) {
             //绘制当前时间
-            String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
+            String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConstant.FORMAT_TIME);
             float timeTipLeft = (mDisplayWidth - mTipPaint.measureText(time)) / 2;
             canvas.drawText(time, timeTipLeft, tipBottomBot, mTipPaint);
 

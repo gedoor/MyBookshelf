@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.barUtil;
+package com.kunfei.bookshelf.utils.bar;
 
 /**
  * 软键盘监听

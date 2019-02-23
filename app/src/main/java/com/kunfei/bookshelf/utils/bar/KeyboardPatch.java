@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.utils.barUtil;
+package com.kunfei.bookshelf.utils.bar;
 
 import android.app.Activity;
 import android.app.Dialog;

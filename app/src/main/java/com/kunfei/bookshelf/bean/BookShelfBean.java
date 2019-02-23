@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
  * 书架item Bean

@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.explosionfield;
+package com.kunfei.bookshelf.widget.explosion_field;
 
 import android.animation.Animator;
 import android.view.View;

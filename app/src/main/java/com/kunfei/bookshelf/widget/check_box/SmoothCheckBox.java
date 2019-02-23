@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.checkbox;
+package com.kunfei.bookshelf.widget.check_box;
 
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;

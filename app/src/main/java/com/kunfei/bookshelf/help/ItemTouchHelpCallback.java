@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.help;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -12,7 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * Created by GKF on 2018/3/16.
  */
 
-public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
+public class ItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -36,8 +37,6 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * 设置Item操作的回调，去更新UI和数据源
-     *
-     * @param onItemTouchCallbackListener
      */
     public void setOnItemTouchCallbackListener(OnItemTouchCallbackListener onItemTouchCallbackListener) {
         this.onItemTouchCallbackListener = onItemTouchCallbackListener;
@@ -45,7 +44,6 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * 设置是否可以被拖拽
-     *
      * @param canDrag 是true，否false
      */
     public void setDragEnable(boolean canDrag) {
@@ -54,7 +52,6 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * 设置是否可以被滑动
-     *
      * @param canSwipe 是true，否false
      */
     public void setSwipeEnable(boolean canSwipe) {
@@ -63,8 +60,6 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * 当Item被长按的时候是否可以被拖拽
-     *
-     * @return
      */
     @Override
     public boolean isLongPressDragEnabled() {
@@ -73,8 +68,6 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * Item是否可以被滑动(H：左右滑动，V：上下滑动)
-     *
-     * @return
      */
     @Override
     public boolean isItemViewSwipeEnabled() {
@@ -83,13 +76,9 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
      * 当用户拖拽或者滑动Item的时候需要我们告诉系统滑动或者拖拽的方向
-     *
-     * @param recyclerView
-     * @param viewHolder
-     * @return
      */
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {// GridLayoutManager
             // flag如果值是0，相当于这个功能被关闭
@@ -123,10 +112,9 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
      * @param recyclerView     recyclerView
      * @param srcViewHolder    拖拽的ViewHolder
      * @param targetViewHolder 目的地的viewHolder
-     * @return
      */
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder srcViewHolder, RecyclerView.ViewHolder targetViewHolder) {
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder srcViewHolder, @NonNull RecyclerView.ViewHolder targetViewHolder) {
         if (onItemTouchCallbackListener != null) {
             return onItemTouchCallbackListener.onMove(srcViewHolder.getAdapterPosition(), targetViewHolder.getAdapterPosition());
         }
@@ -134,7 +122,7 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (onItemTouchCallbackListener != null) {
             onItemTouchCallbackListener.onSwiped(viewHolder.getAdapterPosition());
         }
