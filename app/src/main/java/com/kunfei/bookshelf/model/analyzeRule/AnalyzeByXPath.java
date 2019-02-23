@@ -15,7 +15,7 @@ import java.util.List;
 public class AnalyzeByXPath {
     private JXDocument jxDocument;
 
-    public void parse(Document doc) {
+    public void parse(String doc) {
         jxDocument = JXDocument.create(doc);
     }
 

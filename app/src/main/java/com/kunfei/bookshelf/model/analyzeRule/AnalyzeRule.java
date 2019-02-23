@@ -11,6 +11,7 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class AnalyzeRule {
     private AnalyzeByXPath getAnalyzeByXPath() {
         if (analyzeByXPath == null || objectChangedXP) {
             analyzeByXPath = new AnalyzeByXPath();
-            analyzeByXPath.parse(((Element) _object).children());
+            analyzeByXPath.parse(_object.toString());
             objectChangedXP = false;
         }
         return analyzeByXPath;
