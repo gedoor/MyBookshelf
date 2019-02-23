@@ -76,12 +76,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void addBookUrl(String bookUrls) {
-        if (TextUtils.isEmpty(bookUrls.trim())) return;
+        bookUrls=bookUrls.trim();
+        if (TextUtils.isEmpty(bookUrls)) return;
 
         String[] urls=bookUrls.split("\\n");
 
         if(urls.length==1){
-            String bookUrl=urls[1];
+            String bookUrl=urls[0];
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 URL url = new URL(bookUrl);
                 BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
