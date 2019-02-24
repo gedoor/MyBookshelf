@@ -75,43 +75,103 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     @Override
-    public void addBookUrl(String bookUrl) {
-        if (TextUtils.isEmpty(bookUrl.trim())) return;
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
-            if (temp != null) {
-                e.onNext(null);
-            } else {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
-                bookShelfBean.setNoteUrl(url.toString());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setGroup(mView.getGroup() % 4);
-                bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                e.onNext(bookShelfBean);
-            }
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean != null) {
-                            getBook(bookShelfBean);
-                        } else {
-                            mView.toast("已在书架中");
-                        }
-                    }
+    public void addBookUrl(String bookUrls) {
+        bookUrls=bookUrls.trim();
+        if (TextUtils.isEmpty(bookUrls)) return;
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast("网址格式不对");
+        String[] urls=bookUrls.split("\\n");
+
+        if(urls.length==1){
+            String bookUrl=urls[0];
+            Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+                URL url = new URL(bookUrl);
+                BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
+                        .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+                if (temp != null) {
+                    e.onNext(null);
+                } else {
+                    BookShelfBean bookShelfBean = new BookShelfBean();
+                    bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
+                    bookShelfBean.setNoteUrl(url.toString());
+                    bookShelfBean.setDurChapter(0);
+                    bookShelfBean.setGroup(mView.getGroup() % 4);
+                    bookShelfBean.setDurChapterPage(0);
+                    bookShelfBean.setFinalDate(System.currentTimeMillis());
+                    e.onNext(bookShelfBean);
+                }
+                e.onComplete();
+            })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleObserver<BookShelfBean>() {
+                        @Override
+                        public void onNext(BookShelfBean bookShelfBean) {
+                            if (bookShelfBean != null) {
+                                getBook(bookShelfBean);
+                            } else {
+                                mView.toast("已在书架中");
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.toast("网址格式不对");
+                        }
+                    });
+        }else {
+
+
+            for(int i=0;i<urls.length;i++){
+                String bookUrl=urls[i];
+                if (TextUtils.isEmpty(bookUrl.trim())){
+                    continue;
+                }
+
+                Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+                    URL url = new URL(bookUrl);
+                    BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
+                            .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+                    if (temp != null) {
+                        e.onNext(null);
+                    } else {
+                        BookShelfBean bookShelfBean = new BookShelfBean();
+                        bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
+                        bookShelfBean.setNoteUrl(url.toString());
+                        bookShelfBean.setDurChapter(0);
+                        bookShelfBean.setGroup(mView.getGroup() % 4);
+                        bookShelfBean.setDurChapterPage(0);
+                        bookShelfBean.setFinalDate(System.currentTimeMillis());
+                        e.onNext(bookShelfBean);
                     }
-                });
+                    e.onComplete();
+                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SimpleObserver<BookShelfBean>() {
+                            @Override
+                            public void onNext(BookShelfBean bookShelfBean) {
+                                if (bookShelfBean != null) {
+                                    getBook(bookShelfBean);
+                                } else {
+                                    mView.toast("已在书架中");
+                                }
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                mView.toast("网址格式不对");
+
+                            }
+                        });
+
+            }
+
+
+        }
+
+
+
+
+
     }
 
     @Override
