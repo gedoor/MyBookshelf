@@ -1011,8 +1011,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     public boolean checkAddShelf() {
         if (isAdd || mPresenter.getBookShelf() == null
-                || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())
-                || mPresenter.getBookShelf().realChapterListEmpty()) {
+                || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
+            return true;
+        } else if (mPresenter.getBookShelf().realChapterListEmpty()) {
+            mPresenter.removeFromShelf();
             return true;
         } else {
             if (checkAddShelfPop == null) {
