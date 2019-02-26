@@ -2,10 +2,10 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.untils.EncodingDetect;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.IOUtils;
 import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.RxUtils;

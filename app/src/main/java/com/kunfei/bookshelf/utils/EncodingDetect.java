@@ -1,11 +1,19 @@
-package com.kunfei.basemvplib.untils;
+package com.kunfei.bookshelf.utils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import androidx.annotation.NonNull;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * <Detect encoding .> Copyright (C) <2009> <Fluck,ACC http://androidos.cc/dev>
@@ -28,6 +36,41 @@ import androidx.annotation.NonNull;
  * @since Create on 2010-01-27 11:19:00
  */
 public class EncodingDetect {
+
+    public static String getEncodeInHtml(@NonNull byte[] bytes) {
+        try {
+            String charsetStr;
+            Document doc = Jsoup.parse(new String(bytes, "utf-8"));
+            Elements metaTags = doc.getElementsByTag("meta");
+            for (Element metaTag : metaTags) {
+                String content = metaTag.attr("content");
+                String http_equiv = metaTag.attr("http-equiv");
+                charsetStr = metaTag.attr("charset");
+                if (!charsetStr.isEmpty()) {
+                    if (!isEmpty(charsetStr)) {
+                        return charsetStr;
+                    }
+                }
+                if (http_equiv.toLowerCase().equals("content-type")) {
+                    if (content.toLowerCase().contains("charset")) {
+                        charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
+                    } else {
+                        charsetStr = content.substring(content.toLowerCase().indexOf(";") + 1);
+                    }
+                    if (!isEmpty(charsetStr)) {
+                        try {
+                            return charsetStr;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return getJavaEncode(bytes);
+    }
 
     public static String getJavaEncode(@NonNull byte[] bytes) {
         int len = bytes.length > 2000 ? 2000 : bytes.length;
