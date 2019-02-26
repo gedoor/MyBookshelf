@@ -39,8 +39,8 @@ public class EncodingDetect {
 
     public static String getEncodeInHtml(@NonNull byte[] bytes) {
         try {
-            String charsetStr;
-            Document doc = Jsoup.parse(new String(bytes, "utf-8"));
+            String charsetStr = "UTF-8";
+            Document doc = Jsoup.parse(new String(bytes, charsetStr));
             Elements metaTags = doc.getElementsByTag("meta");
             for (Element metaTag : metaTags) {
                 String content = metaTag.attr("content");
