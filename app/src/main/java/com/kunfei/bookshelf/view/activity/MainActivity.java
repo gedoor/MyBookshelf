@@ -115,21 +115,20 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     @Override
-    public void onResume(){
-       super.onResume();
+    public void onResume() {
+        super.onResume();
 
-        SharedPreferences read = getSharedPreferences("CONFIG", MODE_MULTI_PROCESS);
-        String shared_url = read.getString("shared_url", "");
-        if(shared_url.length()>1){
+        String shared_url = preferences.getString("shared_url", "");
+        assert shared_url != null;
+        if (shared_url.length() > 1) {
             moDialogHUD.showInputBox("打开书籍网址",
                     shared_url,
                     null,
                     inputText -> mPresenter.addBookUrl(inputText));
 
-            SharedPreferences.Editor editor = getSharedPreferences("CONFIG", MODE_MULTI_PROCESS).edit();
-            editor.putString("shared_url", "");
-            editor.commit();
-
+            preferences.edit()
+                    .putString("shared_url", "")
+                    .apply();
         }
     }
 
@@ -415,7 +414,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
-                        ) {
+                ) {
                     drawer.closeDrawers();
                 } else {
                     drawer.openDrawer(GravityCompat.START);
