@@ -117,12 +117,10 @@ public abstract class PageLoader {
     private int textPara;
     private int titleInterval;
     private int titlePara;
-    private float tipMarginHeight;
     private float tipBottomTop;
     private float tipBottomBot;
     private float tipDistance;
     private float tipMarginLeft;
-    private float tipMarginRight;
     private float displayRightEnd;
     private float tipVisibleWidth;
 
@@ -286,12 +284,12 @@ public abstract class PageLoader {
 
     private void setupTipMargins() {
         Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
-        tipMarginHeight = (defaultMarginHeight + fontMetrics.top - fontMetrics.bottom) / 2;
+        float tipMarginHeight = (defaultMarginHeight + fontMetrics.top - fontMetrics.bottom) / 2;
         tipBottomTop = tipMarginHeight - fontMetrics.top;
         tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         tipMarginLeft = readBookControl.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
-        tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
+        float tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
         displayRightEnd = mDisplayWidth - tipMarginRight;
         tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
     }
