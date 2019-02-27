@@ -37,7 +37,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
         if (disposable != null) return;
         Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
-            boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
+            boolean showAllFind = MApplication.getConfigPreferences().getBoolean("showAllFind", true);
             List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {

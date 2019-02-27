@@ -48,7 +48,7 @@ public class SearchBookModel {
     public SearchBookModel(Context context, OnSearchListener searchListener) {
         this.context = context;
         this.searchListener = searchListener;
-        SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
+        SharedPreferences preference = MApplication.getConfigPreferences();
         threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);

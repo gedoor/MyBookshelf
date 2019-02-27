@@ -8,7 +8,7 @@ import com.kunfei.bookshelf.MApplication;
 
 public class SharedPreferencesUtil {
     //存储的sharedpreferences文件名
-    private final static SharedPreferences sharedPreferences = MApplication.getInstance().getConfigPreferences();
+    private final static SharedPreferences sharedPreferences = MApplication.getConfigPreferences();
 
     /**
      * 保存数据到文件

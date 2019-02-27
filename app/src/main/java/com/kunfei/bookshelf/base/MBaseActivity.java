@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     private static final String TAG = MBaseActivity.class.getSimpleName();
-    public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
+    public final SharedPreferences preferences = MApplication.getConfigPreferences();
     protected ImmersionBar mImmersionBar;
     private Snackbar snackbar;
 

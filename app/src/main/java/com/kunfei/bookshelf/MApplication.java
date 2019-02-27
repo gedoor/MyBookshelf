@@ -131,8 +131,8 @@ public class MApplication extends Application {
         editor.apply();
     }
 
-    public SharedPreferences getConfigPreferences() {
-        return configPreferences;
+    public static SharedPreferences getConfigPreferences() {
+        return getInstance().configPreferences;
     }
 
     public boolean getDonateHb() {

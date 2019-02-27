@@ -148,7 +148,7 @@ public class ReadAloudService extends Service {
     public void onCreate() {
         super.onCreate();
         running = true;
-        preference = MApplication.getInstance().getConfigPreferences();
+        preference = MApplication.getConfigPreferences();
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

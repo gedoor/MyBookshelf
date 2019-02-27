@@ -1,10 +1,10 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +19,7 @@ public class ReceivingSharedActivity extends AppCompatActivity {
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                String text= getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                String text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
                 if (openUrl(text)) {
                     SearchBookActivity.startByKey(this, text);
                 }
@@ -29,7 +29,7 @@ public class ReceivingSharedActivity extends AppCompatActivity {
         }
         if (Intent.ACTION_PROCESS_TEXT.equals(action) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && type != null) {
             if ("text/plain".equals(type)) {
-                String text= getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+                String text = getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT);
                 if (openUrl(text)) {
                     SearchBookActivity.startByKey(this, text);
                 }
@@ -40,20 +40,20 @@ public class ReceivingSharedActivity extends AppCompatActivity {
         finish();
     }
 
-    private  boolean openUrl(String text){
+    private boolean openUrl(String text) {
         if (StringUtils.isTrimEmpty(text)) {
             return false;
         }
-        String[] urls=text.split("\\s");
+        String[] urls = text.split("\\s");
         StringBuilder result = new StringBuilder();
-        for(String url:urls){
-            if(url.matches("http.+"))
+        for (String url : urls) {
+            if (url.matches("http.+"))
                 result.append("\n").append(url.trim());
         }
         if (result.length() > 1) {
-            SharedPreferences.Editor editor = getSharedPreferences("CONFIG", MODE_MULTI_PROCESS).edit();
-            editor.putString("shared_url", result.toString());
-            editor.apply();
+            MApplication.getConfigPreferences().edit()
+                    .putString("shared_url", result.toString())
+                    .apply();
 
             Intent intent = new Intent();
             intent.setClass(ReceivingSharedActivity.this, MainActivity.class);
