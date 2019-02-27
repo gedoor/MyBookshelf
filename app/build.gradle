@@ -116,7 +116,7 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 
     //颜色选择
-    implementation 'com.jaredrummler:colorpicker:1.0.5'
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     //文件目录选择
     implementation 'com.github.gedoor.AndroidPicker:FilePicker:2.0.0'
