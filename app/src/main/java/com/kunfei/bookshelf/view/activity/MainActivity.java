@@ -114,6 +114,25 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         ButterKnife.bind(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String shared_url = preferences.getString("shared_url", "");
+        assert shared_url != null;
+        if (shared_url.length() > 1) {
+            moDialogHUD.showInputBox("打开书籍网址",
+                    shared_url,
+                    null,
+                    inputText -> mPresenter.addBookUrl(inputText));
+
+            preferences.edit()
+                    .putString("shared_url", "")
+                    .apply();
+        }
+    }
+
+
     /**
      * 沉浸状态栏
      */
@@ -395,7 +414,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
-                        ) {
+                ) {
                     drawer.closeDrawers();
                 } else {
                     drawer.openDrawer(GravityCompat.START);

@@ -9,7 +9,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 public class WebDavHelp {
 
     public static String getWebDavUrl() {
-        String url = MApplication.getInstance().getConfigPreferences().getString("web_dav_url", DEFAULT_WEB_DAV_URL);
+        String url = MApplication.getConfigPreferences().getString("web_dav_url", DEFAULT_WEB_DAV_URL);
         assert url != null;
         if (!url.endsWith("/")) {
             url = url + "/";
@@ -18,8 +18,8 @@ public class WebDavHelp {
     }
 
     public static boolean initWebDav() {
-        String account = MApplication.getInstance().getConfigPreferences().getString("web_dav_account", "");
-        String password = MApplication.getInstance().getConfigPreferences().getString("web_dav_password", "");
+        String account = MApplication.getConfigPreferences().getString("web_dav_account", "");
+        String password = MApplication.getConfigPreferences().getString("web_dav_password", "");
         if (!StringUtils.isTrimEmpty(account) && !StringUtils.isTrimEmpty(password)) {
             HttpAuth.setAuth(account, password);
             return true;

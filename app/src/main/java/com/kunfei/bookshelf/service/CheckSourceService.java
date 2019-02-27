@@ -69,7 +69,7 @@ public class CheckSourceService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
+        SharedPreferences preference = MApplication.getConfigPreferences();
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);

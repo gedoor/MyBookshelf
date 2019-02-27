@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
-import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
@@ -11,7 +10,6 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
@@ -302,6 +300,6 @@ public class AnalyzeRule {
      */
     @SuppressWarnings("unused")
     public String base64Decoder(String base64) {
-        return new String(Base64.decode(base64.getBytes(), Base64.DEFAULT));
+        return StringUtils.base64Decode(base64);
     }
 }

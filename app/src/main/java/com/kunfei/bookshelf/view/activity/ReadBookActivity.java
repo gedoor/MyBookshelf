@@ -1010,7 +1010,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 检查是否加入书架
      */
     public boolean checkAddShelf() {
-        if (isAdd || mPresenter.getBookShelf() == null || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
+        if (isAdd || mPresenter.getBookShelf() == null
+                || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
+            return true;
+        } else if (mPresenter.getBookShelf().realChapterListEmpty()) {
+            mPresenter.removeFromShelf();
             return true;
         } else {
             if (checkAddShelfPop == null) {

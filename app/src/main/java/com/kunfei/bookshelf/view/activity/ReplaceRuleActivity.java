@@ -17,7 +17,7 @@ import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
@@ -101,10 +101,10 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         adapter = new ReplaceRuleAdapter(this);
         recyclerViewBookSource.setAdapter(adapter);
         adapter.resetDataS(ReplaceRuleManager.getAll());
-        ItemTouchHelpCallback itemTouchHelpCallback = new ItemTouchHelpCallback();
-        itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
-        itemTouchHelpCallback.setDragEnable(true);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+        ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
+        itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
+        itemTouchCallback.setDragEnable(true);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
 
     }

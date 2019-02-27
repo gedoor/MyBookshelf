@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.kunfei.bookshelf.MApplication;
 
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,22 +133,29 @@ public class StringUtils {
     }
 
     private static HashMap<Character, Integer> getChnMap() {
-        String cnStr = "零一二三四五六七八九十";
         HashMap<Character, Integer> map = new HashMap<>();
+        String cnStr = "零一二三四五六七八九十";
         char[] c = cnStr.toCharArray();
         for (int i = 0; i <= 10; i++) {
             map.put(c[i], i);
         }
-        map.put('〇', 0);
+        cnStr = "〇壹贰叁肆伍陆柒捌玖拾";
+        c = cnStr.toCharArray();
+        for (int i = 0; i <= 10; i++) {
+            map.put(c[i], i);
+        }
         map.put('两', 2);
         map.put('百', 100);
+        map.put('佰', 100);
         map.put('千', 1000);
+        map.put('仟', 1000);
         map.put('万', 10000);
         map.put('亿', 100000000);
         return map;
     }
 
     // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
+    @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;
         int tmp = 0;
@@ -155,7 +163,7 @@ public class StringUtils {
         char[] cn = chNum.toCharArray();
 
         // "一零二五" 形式
-        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九]$")) {
+        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九壹贰叁肆伍陆柒捌玖]$")) {
             for (int i = 0; i < cn.length; i++) {
                 cn[i] = (char) (48 + ChnMap.get(cn[i]));
             }
@@ -210,7 +218,7 @@ public class StringUtils {
     public static String base64Decode(String str) {
         byte[] bytes = Base64.decode(str, Base64.DEFAULT);
         try {
-            return new String(bytes, "UTF-8");
+            return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return new String(bytes);
         }

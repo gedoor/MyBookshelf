@@ -2,17 +2,11 @@ package com.kunfei.bookshelf.help;
 
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.untils.EncodingDetect;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.kunfei.bookshelf.utils.EncodingDetect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
@@ -59,36 +53,8 @@ public class EncodeConverter extends Converter.Factory {
                     }
                 }
             }
-            //根据meta判断
-            byte[] headerBytes = Arrays.copyOfRange(responseBytes, 0, 1024);
-            Document doc = Jsoup.parse(new String(headerBytes, "utf-8"));
-            Elements metaTags = doc.getElementsByTag("meta");
-            for (Element metaTag : metaTags) {
-                String content = metaTag.attr("content");
-                String http_equiv = metaTag.attr("http-equiv");
-                charsetStr = metaTag.attr("charset");
-                if (!charsetStr.isEmpty()) {
-                    if (!isEmpty(charsetStr)) {
-                        return new String(responseBytes, Charset.forName(charsetStr));
-                    }
-                }
-                if (http_equiv.toLowerCase().equals("content-type")) {
-                    if (content.toLowerCase().contains("charset")) {
-                        charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
-                    } else {
-                        charsetStr = content.substring(content.toLowerCase().indexOf(";") + 1);
-                    }
-                    if (!isEmpty(charsetStr)) {
-                        try {
-                            return new String(responseBytes, Charset.forName(charsetStr));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
             //根据内容判断
-            charsetStr = EncodingDetect.getJavaEncode(responseBytes);
+            charsetStr = EncodingDetect.getEncodeInHtml(responseBytes);
             return new String(responseBytes, Charset.forName(charsetStr));
         };
     }

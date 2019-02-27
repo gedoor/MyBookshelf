@@ -209,7 +209,7 @@ public class DataBackup {
     }
 
     private void backupConfig(String file) {
-        SharedPreferences pref = MApplication.getInstance().getConfigPreferences();
+        SharedPreferences pref = MApplication.getConfigPreferences();
         try (FileOutputStream out = new FileOutputStream(file + "/config.xml")) {
             XmlUtils.writeMapXml(pref.getAll(), out);
         } catch (Exception e) {

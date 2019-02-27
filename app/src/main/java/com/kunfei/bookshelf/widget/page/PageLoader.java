@@ -18,9 +18,9 @@ import android.widget.Toast;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -117,12 +117,10 @@ public abstract class PageLoader {
     private int textPara;
     private int titleInterval;
     private int titlePara;
-    private float tipMarginHeight;
     private float tipBottomTop;
     private float tipBottomBot;
     private float tipDistance;
     private float tipMarginLeft;
-    private float tipMarginRight;
     private float displayRightEnd;
     private float tipVisibleWidth;
 
@@ -193,11 +191,11 @@ public abstract class PageLoader {
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         mTextEndSize = mTextSize - ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
-        mTextInterval = (int) (mTextSize / 2 * readBookControl.getLineMultiplier());
-        mTitleInterval = (int) (mTitleSize / 2 * readBookControl.getLineMultiplier());
+        mTextInterval = (int) (mTextSize * readBookControl.getLineMultiplier() / 2);
+        mTitleInterval = (int) (mTitleSize * readBookControl.getLineMultiplier() / 2);
         // 段落间距(大小为字体的高度)
-        mTextPara = (int) (mTextSize / 2 * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize());
-        mTitlePara = (int) (mTitleSize / 2 * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize());
+        mTextPara = (int) (mTextSize * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize() / 2);
+        mTitlePara = (int) (mTitleSize * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize() / 2);
     }
 
     private void initPaint() {
@@ -286,12 +284,12 @@ public abstract class PageLoader {
 
     private void setupTipMargins() {
         Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
-        tipMarginHeight = (defaultMarginHeight + fontMetrics.top - fontMetrics.bottom) / 2;
+        float tipMarginHeight = (defaultMarginHeight + fontMetrics.top - fontMetrics.bottom) / 2;
         tipBottomTop = tipMarginHeight - fontMetrics.top;
         tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         tipMarginLeft = readBookControl.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
-        tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
+        float tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
         displayRightEnd = mDisplayWidth - tipMarginRight;
         tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
     }
@@ -1084,7 +1082,7 @@ public abstract class PageLoader {
                     str = page.lines.get(i);
                     strLength = strLength + str.length();
                     //进行绘制
-                    canvas.drawText(str, mDisplayWidth / 2, top, mTitlePaint);
+                    canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
                 }
                 top += (i == page.titleLines - 1) ? titlePara : titleInterval;
                 if (!linePosSet && chapterPos == mCurChapterPos && top > titlePara) {
@@ -1132,7 +1130,7 @@ public abstract class PageLoader {
                     str = sign + " 本章完 " + sign;
                 }
                 top += textPara;
-                canvas.drawText(str, mDisplayWidth / 2, top, mTextEndPaint);
+                canvas.drawText(str, mDisplayWidth / 2f, top, mTextEndPaint);
                 top += textPara * 2;
             }
             if (top > totalHeight) break;
@@ -1204,7 +1202,7 @@ public abstract class PageLoader {
         for (int i = 0; i < tempLayout.getLineCount(); i++) {
             linesData.add(msg.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
         }
-        float pivotY = (mDisplayHeight - textInterval * linesData.size()) / 3 - offset;
+        float pivotY = (mDisplayHeight - textInterval * linesData.size()) / 3f - offset;
         for (String str : linesData) {
             float textWidth = mTextPaint.measureText(str);
             float pivotX = (mDisplayWidth - textWidth) / 2;
@@ -1267,7 +1265,7 @@ public abstract class PageLoader {
                 mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
 
                 //进行绘制
-                canvas.drawText(str, mDisplayWidth / 2, top, mTitlePaint);
+                canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
 
                 //设置尾部间距
                 if (i == txtPage.titleLines - 1) {

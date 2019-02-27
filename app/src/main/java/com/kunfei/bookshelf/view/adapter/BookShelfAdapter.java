@@ -1,13 +1,13 @@
 package com.kunfei.bookshelf.view.adapter;
 
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 
 import java.util.List;
 
 public interface BookShelfAdapter {
-    ItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener();
+    ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener();
 
     List<BookShelfBean> getBooks();
 
