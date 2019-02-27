@@ -182,6 +182,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
                                         mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
+                                        mView.startLoadingBook();
                                     }
 
                                     @Override
