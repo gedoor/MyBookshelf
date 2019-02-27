@@ -132,16 +132,22 @@ public class StringUtils {
     }
 
     private static HashMap<Character, Integer> getChnMap() {
-        String cnStr = "零一二三四五六七八九十";
         HashMap<Character, Integer> map = new HashMap<>();
+        String cnStr = "零一二三四五六七八九十";
         char[] c = cnStr.toCharArray();
         for (int i = 0; i <= 10; i++) {
             map.put(c[i], i);
         }
-        map.put('〇', 0);
+        cnStr = "〇壹贰叁肆伍陆柒捌玖拾";
+        c = cnStr.toCharArray();
+        for (int i = 0; i <= 10; i++) {
+            map.put(c[i], i);
+        }
         map.put('两', 2);
         map.put('百', 100);
+        map.put('佰', 100);
         map.put('千', 1000);
+        map.put('仟', 1000);
         map.put('万', 10000);
         map.put('亿', 100000000);
         return map;
