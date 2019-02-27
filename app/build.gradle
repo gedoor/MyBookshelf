@@ -87,7 +87,7 @@ dependencies {
 
     //J_SOUP
     implementation 'org.jsoup:jsoup:1.11.3'
-    implementation 'cn.wanghaomiao:JsoupXpath:2.3.0'
+    implementation 'cn.wanghaomiao:JsoupXpath:2.3.1'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
     implementation 'io.apisense:rhino-android:1.0'
 
