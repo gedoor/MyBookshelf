@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.kunfei.bookshelf.MApplication;
 
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -154,6 +155,7 @@ public class StringUtils {
     }
 
     // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
+    @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;
         int tmp = 0;
@@ -216,7 +218,7 @@ public class StringUtils {
     public static String base64Decode(String str) {
         byte[] bytes = Base64.decode(str, Base64.DEFAULT);
         try {
-            return new String(bytes, "UTF-8");
+            return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return new String(bytes);
         }
