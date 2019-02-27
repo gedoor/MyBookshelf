@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.view.activity.ReplaceRuleActivity;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.MyViewHolder> {
     private List<ReplaceRuleBean> dataList;
     private ReplaceRuleActivity activity;
-    private ItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchHelpCallback.OnItemTouchCallbackListener() {
+    private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
         public void onSwiped(int adapterPosition) {
 
@@ -48,7 +48,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         dataList = new ArrayList<>();
     }
 
-    public ItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+    public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 

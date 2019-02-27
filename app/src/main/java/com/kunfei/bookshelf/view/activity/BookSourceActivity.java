@@ -21,7 +21,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
@@ -63,7 +63,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private ItemTouchHelpCallback itemTouchHelpCallback;
+    private ItemTouchCallback itemTouchCallback;
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
@@ -151,22 +151,22 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        itemTouchHelpCallback = new ItemTouchHelpCallback();
-        itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+        itemTouchCallback = new ItemTouchCallback();
+        itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
         setDragEnable(preferences.getInt("SourceSort", 0));
     }
 
     private void setDragEnable(int sort) {
-        if (itemTouchHelpCallback == null) {
+        if (itemTouchCallback == null) {
             return;
         }
         adapter.setSort(sort);
         if (sort == 0) {
-            itemTouchHelpCallback.setDragEnable(true);
+            itemTouchCallback.setDragEnable(true);
         } else {
-            itemTouchHelpCallback.setDragEnable(false);
+            itemTouchCallback.setDragEnable(false);
         }
     }
 

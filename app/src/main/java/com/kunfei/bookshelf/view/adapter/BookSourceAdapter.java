@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.ItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
@@ -34,7 +34,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     private int index;
     private int sort;
 
-    private ItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchHelpCallback.OnItemTouchCallbackListener() {
+    private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
         public void onSwiped(int adapterPosition) {
 
@@ -84,7 +84,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return selectDataS;
     }
 
-    public ItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+    public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 

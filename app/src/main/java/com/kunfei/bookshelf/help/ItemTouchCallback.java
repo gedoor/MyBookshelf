@@ -13,9 +13,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * Created by GKF on 2018/3/16.
  */
 
-public class ItemTouchHelpCallback extends ItemTouchHelper.Callback {
+public class ItemTouchCallback extends ItemTouchHelper.Callback {
 
-    SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
         this.swipeRefreshLayout = swipeRefreshLayout;
