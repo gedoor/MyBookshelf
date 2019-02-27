@@ -78,6 +78,9 @@ class BookList {
                     collections = analyzer.getElements(bookSourceBean.getRuleSearchList().substring(1));
                 } else {
                     collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                    if(collections.size() == 0){// 搜索列表为空时,尝试以当前网页为列表结果(用于处理搜索结果为书籍简介页的情况)
+                        collections = analyzer.getElements("//head/..");
+                    }
                 }
                 if (collections.size() == 0 && !e.isDisposed()) {
                     e.onError(new Throwable("搜索列表为空"));
@@ -100,6 +103,25 @@ class BookList {
                         String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
                         item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
                         books.add(item);
+                    }
+                    else
+                    {// 搜索结果为书籍简介页时,直接以书籍简介页规则获取信息
+                        bookName = analyzer.getString(bookSourceBean.getRuleBookName());
+                        if(TextUtils.isEmpty(bookName)){
+                            e.onError(new Throwable("搜索列表为空"));
+                            return;
+                        }
+                        item.setTag(tag);
+                        item.setOrigin(name);
+                        item.setName(bookName);
+                        item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
+                        item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
+                        item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
+                        item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), baseUrl));
+                        item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+                        item.setNoteUrl(baseUrl);
+                        books.add(item);
+                        break;
                     }
                 }
                 if (books.size() > 1 && reverse) {
