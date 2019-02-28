@@ -272,6 +272,8 @@
     <string name="sort_auto">智能排序</string>
     <string name="sort_manual">手动排序</string>
     <string name="sort_pin_yin">拼音排序</string>
+    <string name="go_to_top">滚动到顶部</string>
+    <string name="go_to_bottom">滚动到底部</string>
     <string name="read_y">已读: %s</string>
     <string name="pursue_more">追更</string>
     <string name="fattening">养肥</string>

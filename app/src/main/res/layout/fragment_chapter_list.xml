@@ -34,15 +34,27 @@
             android:textSize="12sp" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_chapter_sort"
+            android:id="@+id/iv_chapter_top"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/bg_ib_pre_round"
-            android:contentDescription="@string/swap_sort"
+            android:contentDescription="@string/go_to_top"
             android:padding="2dp"
-            android:src="@drawable/ic_swap_calls_black_24dp"
+            android:src="@drawable/ic_arrow_drop_up_black_24dp"
+            app:tint="@color/tv_text_default" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_chapter_bottom"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bg_ib_pre_round"
+            android:contentDescription="@string/go_to_bottom"
+            android:padding="2dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
             app:tint="@color/tv_text_default" />
     </LinearLayout>
 
