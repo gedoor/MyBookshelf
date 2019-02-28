@@ -56,12 +56,6 @@ class BookList {
                 SearchBookBean item = getItem(analyzer, baseUrl);
                 if (item != null) {
                     books.add(item);
-                    e.onNext(books);
-                    e.onComplete();
-                    return;
-                } else if (!e.isDisposed()) {
-                    e.onError(new Throwable("未获取到书名"));
-                    return;
                 }
             } else {
                 AnalyzeCollection collections;
@@ -77,23 +71,18 @@ class BookList {
                     SearchBookBean item = getItem(analyzer, baseUrl);
                     if (item != null) {
                         books.add(item);
-                        e.onNext(books);
-                        e.onComplete();
-                        return;
-                    } else if (!e.isDisposed()) {
-                        e.onError(new Throwable("未获取到书名"));
-                        return;
                     }
-                }
-                while (collections.hasNext()) {
-                    collections.next(analyzer);
-                    SearchBookBean item = getItemInList(analyzer, baseUrl);
-                    if (item != null) {
-                        books.add(item);
+                } else {
+                    while (collections.hasNext()) {
+                        collections.next(analyzer);
+                        SearchBookBean item = getItemInList(analyzer, baseUrl);
+                        if (item != null) {
+                            books.add(item);
+                        }
                     }
-                }
-                if (books.size() > 1 && reverse) {
-                    Collections.reverse(books);
+                    if (books.size() > 1 && reverse) {
+                        Collections.reverse(books);
+                    }
                 }
             }
             if (books.isEmpty() && !e.isDisposed()) {
