@@ -37,7 +37,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
-        normalColor = MApplication.getAppResources().getColor(R.color.selector_chapter_item);
         highlightColor = ThemeStore.accentColor(MApplication.getInstance());
     }
 
@@ -81,6 +80,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @NonNull
     @Override
     public ThisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        normalColor = ThemeStore.textColorSecondary(parent.getContext());
         return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false));
     }
 
