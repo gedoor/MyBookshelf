@@ -86,9 +86,9 @@ class BookList {
                     }
                 }
                 while (collections.hasNext()) {
+                    collections.next(analyzer);
                     SearchBookBean item = new SearchBookBean();
                     analyzer.setBook(item);
-                    collections.next(analyzer);
                     String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
                     if (!TextUtils.isEmpty(bookName)) {
                         item.setTag(tag);
