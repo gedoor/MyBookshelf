@@ -513,7 +513,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void speechRateFollowSys() {
                 if (ReadAloudService.running) {
                     ReadAloudService.stop(ReadBookActivity.this);
-                    toast("跟随系统需要重新开始朗读");
                 }
             }
         });
