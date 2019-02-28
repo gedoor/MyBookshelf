@@ -59,12 +59,13 @@ class BookList {
                 }
             } else {
                 AnalyzeCollection collections;
-                boolean reverse = false;
+                boolean reverse;
                 String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
                     reverse = true;
                     ruleSearchList = bookSourceBean.getRuleSearchList().substring(1);
                 } else {
+                    reverse = false;
                     ruleSearchList = bookSourceBean.getRuleSearchList();
                 }
                 //获取列表
