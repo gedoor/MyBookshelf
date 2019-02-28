@@ -87,20 +87,8 @@ class BookList {
                 }
                 while (collections.hasNext()) {
                     collections.next(analyzer);
-                    SearchBookBean item = new SearchBookBean();
-                    analyzer.setBook(item);
-                    String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
-                    if (!TextUtils.isEmpty(bookName)) {
-                        item.setTag(tag);
-                        item.setOrigin(name);
-                        item.setName(bookName);
-                        item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
-                        item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
-                        item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-                        String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
-                        item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+                    SearchBookBean item = getItemInList(analyzer, baseUrl);
+                    if (item != null) {
                         books.add(item);
                     }
                 }
@@ -131,8 +119,27 @@ class BookList {
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
             return item;
-        } else {
-            return null;
         }
+        return null;
+    }
+
+    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl) {
+        SearchBookBean item = new SearchBookBean();
+        analyzer.setBook(item);
+        String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
+        if (!TextUtils.isEmpty(bookName)) {
+            item.setTag(tag);
+            item.setOrigin(name);
+            item.setName(bookName);
+            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
+            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
+            item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
+            item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
+            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            return item;
+        }
+        return null;
     }
 }
