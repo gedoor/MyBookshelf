@@ -50,7 +50,7 @@ class BookList {
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
                 bookUrlPattern += ".*";
             }
-            //如果是详情页面, 解析详情页面
+            //如果符合详情页url规则
             if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
                 SearchBookBean item = getItem(analyzer, baseUrl);
@@ -60,12 +60,15 @@ class BookList {
             } else {
                 AnalyzeCollection collections;
                 boolean reverse = false;
+                String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
                     reverse = true;
-                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList().substring(1));
+                    ruleSearchList = bookSourceBean.getRuleSearchList().substring(1);
                 } else {
-                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                    ruleSearchList = bookSourceBean.getRuleSearchList();
                 }
+                //获取列表
+                collections = analyzer.getElements(ruleSearchList);
                 if (collections.size() == 0) {
                     // 搜索列表为空时,当做详情页处理
                     SearchBookBean item = getItem(analyzer, baseUrl);
