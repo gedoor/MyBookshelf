@@ -204,9 +204,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     protected void setNightTheme(boolean isNightTheme) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("nightTheme", isNightTheme);
-        editor.apply();
+        preferences.edit()
+                .putBoolean("nightTheme", isNightTheme)
+                .apply();
         MApplication.getInstance().upThemeStore();
         initTheme();
     }
