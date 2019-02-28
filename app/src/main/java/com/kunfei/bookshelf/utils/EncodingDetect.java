@@ -41,6 +41,13 @@ public class EncodingDetect {
         try {
             String charsetStr = "UTF-8";
             Document doc = Jsoup.parse(new String(bytes, charsetStr));
+            int a = doc.childNode(0).toString().indexOf("encoding");
+            if (a > 0) {
+                String e = doc.childNode(0).toString().substring(a);
+                int b = e.indexOf('"');
+                int c = e.indexOf('"', b + 1);
+                return e.substring(b + 1, c);
+            }
             Elements metaTags = doc.getElementsByTag("meta");
             for (Element metaTag : metaTags) {
                 String content = metaTag.attr("content");
