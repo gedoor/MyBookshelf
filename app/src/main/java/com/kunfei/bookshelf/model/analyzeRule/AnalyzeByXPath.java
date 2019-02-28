@@ -110,7 +110,6 @@ public class AnalyzeByXPath {
                     .replaceAll("[\\n*\\s*]+", "\n　　"); // 移除空行,并增加段前缩进2个汉字
         } else {
             result = (String) object;
-            if (result != null) result = result.replaceAll("^,|,$", "");// 移除Xpath匹配结果首尾多余的逗号
         }
         if (!TextUtils.isEmpty(baseUrl)) {   // 获取绝对地址放到Xpath结果处理之后,防止Xpath匹配的多余逗号干扰Url的识别.
             result = NetworkUtil.getAbsoluteURL(baseUrl, result);
