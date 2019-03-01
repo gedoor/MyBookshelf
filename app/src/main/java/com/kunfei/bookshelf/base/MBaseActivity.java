@@ -94,6 +94,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     @SuppressLint("PrivateApi")
+    @SuppressWarnings("unchecked")
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
         if (menu != null) {

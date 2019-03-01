@@ -32,6 +32,7 @@ import io.reactivex.disposables.Disposable;
 public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
     private Disposable disposable;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initData() {
         if (disposable != null) return;
