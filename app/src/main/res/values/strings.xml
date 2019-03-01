@@ -298,7 +298,7 @@
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
     <string name="behavior_main_t">书架ToolBar自动隐藏</string>
-    <string name="behavior_main_s">滚动书架书架时ToolBar自动隐藏与显示</string>
+    <string name="behavior_main_s">滚动书架时ToolBar自动隐藏与显示</string>
     <string name="login">登录</string>
     <string name="login_source">登录%s</string>
     <string name="success">成功</string>
