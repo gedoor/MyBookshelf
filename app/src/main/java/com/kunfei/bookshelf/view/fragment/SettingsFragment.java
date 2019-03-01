@@ -86,7 +86,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pk_bookshelf_px))) {
+        if (key.equals(getString(R.string.pk_bookshelf_px)) || key.equals("behaviorMain")) {
             RxBus.get().post(RxBusTag.RECREATE, true);
         } else if (key.equals("process_text")) {
             ProcessTextHelp.setProcessTextEnable(sharedPreferences.getBoolean("process_text", true));

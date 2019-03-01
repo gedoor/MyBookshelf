@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.hwangjr.rxbus.RxBus;
@@ -183,6 +184,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         initTabLayout();
         upGroup(group);
         moDialogHUD = new MoDialogHUD(this);
+        if (!preferences.getBoolean("behaviorMain", true)) {
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+            params.setScrollFlags(0);
+        }
 
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
