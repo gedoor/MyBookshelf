@@ -1,8 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.model;
 
-import com.kunfei.basemvplib.BaseModelImpl;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
@@ -66,8 +66,8 @@ public class ImportBookModel extends BaseModelImpl {
                 bookInfoBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookInfoBean.setOrigin(getString(R.string.local));
 
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+                DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
             e.onNext(new LocBookShelfBean(isNew, bookShelfBean));
             e.onComplete();

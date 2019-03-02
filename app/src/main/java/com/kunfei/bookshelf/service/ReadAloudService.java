@@ -28,8 +28,8 @@ import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.MediaManager;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 
 import java.util.ArrayList;
@@ -148,7 +148,7 @@ public class ReadAloudService extends Service {
     public void onCreate() {
         super.onCreate();
         running = true;
-        preference = MApplication.getInstance().getConfigPreferences();
+        preference = MApplication.getConfigPreferences();
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -462,8 +462,6 @@ public class ReadAloudService extends Service {
                 mediaButtonIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mediaSessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
-        mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
         mediaSessionCompat.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {

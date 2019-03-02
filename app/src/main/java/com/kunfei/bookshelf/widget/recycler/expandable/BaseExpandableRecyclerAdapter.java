@@ -12,6 +12,7 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleViewHolder.VIEW_TYPE_CHILD;
@@ -27,6 +28,7 @@ import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleView
  * VH :ViewHolder
  */
 
+@SuppressWarnings("unchecked")
 public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandAbleViewHolder> extends RecyclerView.Adapter<VH> {
 
     public static final String TAG = BaseExpandableRecyclerAdapter.class.getSimpleName();
@@ -106,8 +108,9 @@ public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandA
         }
     }
 
+    @NonNull
     @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = null;
         switch (viewType) {
             case VIEW_TYPE_PARENT:
@@ -122,7 +125,7 @@ public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandA
 
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(@NonNull final VH holder, final int position) {
         final Object item = showingDatas.get(position);
         final int gp = getGroupPosition(position);
         final int cp = getChildPosition(gp, position);

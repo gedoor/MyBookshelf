@@ -14,8 +14,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.view.View;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.BitmapUtil;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 
 /**
  * 仿真翻页
@@ -88,7 +88,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         mTouchX = 0.01f; // 不让x,y为0,否则在点计算时会有问题
         mTouchY = 0.01f;
-        blurBackImage = SharedPreferencesUtil.getBoolean("blurSimBack", false);
+        blurBackImage = MApplication.getConfigPreferences().getBoolean("blurSimBack", false);
     }
 
     @Override

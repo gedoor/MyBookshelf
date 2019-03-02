@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.Constant;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.base.ViewHolderImpl;
@@ -79,7 +79,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvName.setText(file.getName());
         mTvTag.setText(file.getName().substring(file.getName().lastIndexOf(".") + 1).toUpperCase());
         mTvSize.setText(FileHelp.getFileSize(file.length()));
-        mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
+        mTvDate.setText(StringUtils.dateConvert(file.lastModified(), AppConstant.FORMAT_FILE_DATE));
     }
 
     public void setFolder(File folder) {

@@ -142,6 +142,8 @@
     public void *(android.webkit.webView, jav.lang.String);
 }
 
+-keep class com.kunfei.bookshelf.model.analyzeRule.**{*;}
+
 # 移除Log类打印各个等级日志的代码，打正式包的时候可以做为禁log使用，这里可以作为禁止log打印的功能使用
 # 记得proguard-android.txt中一定不要加-dontoptimize才起作用
 # 另外的一种实现方案是通过BuildConfig.DEBUG的变量来控制
@@ -217,10 +219,13 @@ public static java.lang.String TABLENAME;
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
--dontwarn org.xmlpull.v1.**
+-dontwarn org.xmlpull.**
 -keep class nl.siegmann.epublib.**{*;}
 -keep class javax.xml.**{*;}
 -keep class org.xmlpull.**{*;}
+
+-keep class org.simpleframework.xml.**{*;}
+-dontwarn org.simpleframework.xml.**
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);

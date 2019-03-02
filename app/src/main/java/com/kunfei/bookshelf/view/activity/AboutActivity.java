@@ -19,7 +19,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import androidx.appcompat.app.ActionBar;
@@ -95,7 +95,7 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String allQQ[] = new String[]{"(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(公众号)开源阅读软件"};
+    private String allQQ[] = new String[]{"(公众号)开源阅读软件", "(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(QQ群)981838750"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
@@ -182,18 +182,23 @@ public class AboutActivity extends MBaseActivity {
 
     private void joinGroup(String name) {
         String key;
-        if (name.equals(allQQ[0])) {
+        if (name.equals(allQQ[1])) {
             key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }
-        } else if (name.equals(allQQ[1])) {
+        } else if (name.equals(allQQ[2])) {
             key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }
-        } else if (name.equals(allQQ[2])) {
+        } else if (name.equals(allQQ[3])) {
             key = "5Bm5w6OgLupXnICbYvbgzpPUgf0UlsJF";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[4])) {
+            key = "g_Sgmp2nQPKqcZQ5qPcKLHziwX_mpps9";
             if (joinQQGroupError(key)) {
                 copyName(name.substring(5));
             }

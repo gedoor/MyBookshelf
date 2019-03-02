@@ -8,8 +8,8 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.impl.IDownloadTask;
 
@@ -199,8 +199,8 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             }
             e.onComplete();
         })
-                .flatMap(result -> WebBookModel.getInstance().getBookContent(scheduler, chapter, chapter.getBookName()))
-                .timeout(20, TimeUnit.SECONDS)
+                .flatMap(result -> WebBookModel.getInstance().getBookContent(chapter, chapter.getBookName()))
+                .timeout(30, TimeUnit.SECONDS)
                 .subscribeOn(scheduler)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookContentBean>() {

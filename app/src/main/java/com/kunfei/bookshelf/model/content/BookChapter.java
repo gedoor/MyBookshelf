@@ -2,21 +2,22 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeCollection;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
+import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -30,7 +31,7 @@ class BookChapter {
         this.bookSourceBean = bookSourceBean;
     }
 
-    Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
+    Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("目录获取失败"));
@@ -50,36 +51,38 @@ class BookChapter {
             if (webChapterBean.nextUrlList.size() > 1) {
                 List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
                 for (int i = 0; i < chapterUrlS.size(); i++) {
-                    Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class).getWebContentCall(chapterUrlS.get(i), AnalyzeHeaders.getMap(bookSourceBean));
-                    String response = "";
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), null, null, headerMap);
                     try {
-                        response = call.execute().body();
+                        String body;
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                                .blockingFirst();
+                        body = response.body();
+                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList);
+                        chapterList.addAll(webChapterBean.data);
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
                             e.onError(exception);
                         }
                     }
-                    webChapterBean = analyzeChapterList(response, chapterUrlS.get(i), ruleChapterList);
-                    chapterList.addAll(webChapterBean.data);
                 }
             } else if (webChapterBean.nextUrlList.size() == 1) {
                 List<String> usedUrl = new ArrayList<>();
                 usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
                 while (webChapterBean.nextUrlList.size() > 0 && !usedUrl.contains(webChapterBean.nextUrlList.get(0))) {
                     usedUrl.add(webChapterBean.nextUrlList.get(0));
-                    Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class).getWebContentCall(webChapterBean.nextUrlList.get(0), AnalyzeHeaders.getMap(bookSourceBean));
-                    String response = "";
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webChapterBean.nextUrlList.get(0), null, null, headerMap);
                     try {
-                        response = call.execute().body();
+                        String body;
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                                .blockingFirst();
+                        body = response.body();
+                        webChapterBean = analyzeChapterList(body, webChapterBean.nextUrlList.get(0), ruleChapterList);
+                        chapterList.addAll(webChapterBean.data);
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
                             e.onError(exception);
                         }
                     }
-                    webChapterBean = analyzeChapterList(response, webChapterBean.nextUrlList.get(0), ruleChapterList);
-                    chapterList.addAll(webChapterBean.data);
                 }
             }
             //去除重复,保留后面的,先倒序,从后面往前判断

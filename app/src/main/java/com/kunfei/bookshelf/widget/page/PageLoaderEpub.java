@@ -5,12 +5,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.CharsetDetector;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FormatWebText;
+import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import org.jsoup.Jsoup;
@@ -97,25 +97,6 @@ public class PageLoaderEpub extends PageLoader {
             return;
         int left = (mDisplayWidth - cover.getWidth()) / 2;
         canvas.drawBitmap(cover, left, top, mTextPaint);
-    }
-
-    private String getCharset(Book book) {
-        try {
-            Resource resource = book.getCoverPage();
-            Document doc = Jsoup.parse(new String(resource.getData(), "utf-8"));
-            Elements metaTags = doc.getElementsByTag("meta");
-            for (Element metaTag : metaTags) {
-                String charsetName = metaTag.attr("charset");
-                if (!charsetName.isEmpty()) {
-                    if (!TextUtils.isEmpty(charsetName)) {
-                        return charsetName;
-                    }
-                }
-            }
-            return CharsetDetector.detectCharset(resource.getInputStream());
-        } catch (Exception e) {
-            return "utf-8";
-        }
     }
 
     private List<ChapterListBean> loadChapters() {
@@ -253,7 +234,7 @@ public class PageLoaderEpub extends PageLoader {
                 return;
             }
             if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
-                bookShelf.getBookInfoBean().setCharset(getCharset(book));
+                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(book.getCoverPage().getData()));
             }
             mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
 
@@ -301,7 +282,7 @@ public class PageLoaderEpub extends PageLoader {
             bookShelf.setChapterList(null);
             BookshelfHelp.delChapterList(bookShelf.getNoteUrl());
             if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
-                bookShelf.getBookInfoBean().setCharset(getCharset(book));
+                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(book.getCoverPage().getData()));
             }
             mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
             e.onNext(bookShelf);

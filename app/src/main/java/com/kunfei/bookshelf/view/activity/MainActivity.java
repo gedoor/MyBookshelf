@@ -19,25 +19,25 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ATH;
-import com.kunfei.bookshelf.utils.Theme.NavigationViewUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -115,6 +115,25 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         ButterKnife.bind(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String shared_url = preferences.getString("shared_url", "");
+        assert shared_url != null;
+        if (shared_url.length() > 1) {
+            moDialogHUD.showInputBox("打开书籍网址",
+                    shared_url,
+                    null,
+                    inputText -> mPresenter.addBookUrl(inputText));
+
+            preferences.edit()
+                    .putString("shared_url", "")
+                    .apply();
+        }
+    }
+
+
     /**
      * 沉浸状态栏
      */
@@ -143,7 +162,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         return super.dispatchTouchEvent(ev);
     }
 
-    /**************abstract***********/
     @Override
     protected List<Fragment> createTabFragments() {
         BookListFragment bookListFragment = new BookListFragment();
@@ -166,6 +184,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         initTabLayout();
         upGroup(group);
         moDialogHUD = new MoDialogHUD(this);
+        if (!preferences.getBoolean("behaviorMain", true)) {
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+            params.setScrollFlags(0);
+        }
 
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
@@ -242,6 +264,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         updateTabItemIcon(0, true);
     }
 
+    /**
+     * 显示发现菜单
+     */
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add(0, 0, 0, "切换显示样式");
@@ -257,6 +282,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         updateTabItemIcon(1, true);
     }
 
+    /**
+     * 更新Tab图标
+     */
     private void updateTabItemIcon(int index, boolean showMenu) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(index);
         if (tab == null) return;
@@ -270,6 +298,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
+    /**
+     * 更新Tab文字
+     */
     private void updateTabItemText(int group) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(0);
         if (tab == null) return;
@@ -388,7 +419,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
-                        ) {
+                ) {
                     drawer.closeDrawers();
                 } else {
                     drawer.openDrawer(GravityCompat.START);
@@ -440,12 +471,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 侧边栏按钮
      */
     private void setUpNavigationView() {
-        @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
-        ImageView imageView = headerView.findViewById(R.id.iv_navigation_header);
-        imageView.setColorFilter(ThemeStore.accentColor(this));
-        navigationView.addHeaderView(headerView);
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
+        NavigationViewUtil.disableScrollbar(navigationView);
+        @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         vwNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.iv_theme_day_night);
         upThemeVw();
@@ -499,7 +529,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         vwNightTheme.getDrawable().mutate().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
     }
 
-    //备份
+    /**
+     * 备份
+     */
     private void backup() {
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
@@ -526,7 +558,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
-    //恢复
+    /**
+     * 恢复
+     */
     private void restore() {
         PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
             @Override
@@ -553,6 +587,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
+    /**
+     * 新版本运行
+     */
     private void versionUpRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
             //保存版本号
@@ -564,6 +601,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
+    /**
+     * 获取权限
+     */
     private void requestPermission() {
         List<String> per = PermissionUtils.checkMorePermissions(this, MApplication.PerList);
         if (per.size() > 0) {
@@ -664,12 +704,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
+    /**
+     * 退出
+     */
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             showSnackBar(toolbar, "再按一次退出程序");
             exitTime = System.currentTimeMillis();
         } else {
-            DataBackup.getInstance().autoSave();
             finish();
         }
     }

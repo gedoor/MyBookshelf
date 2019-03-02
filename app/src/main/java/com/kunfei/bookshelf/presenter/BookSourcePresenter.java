@@ -14,9 +14,9 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.DocumentHelper;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.CheckSourceService;
@@ -45,7 +45,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
         AsyncTask.execute(() -> {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
             BookSourceManager.refreshBookSource();
         });
     }
@@ -53,12 +53,12 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
         AsyncTask.execute(() -> {
-            if (MApplication.getInstance().getConfigPreferences().getInt("SourceSort", 0) == 0) {
+            if (MApplication.getConfigPreferences().getInt("SourceSort", 0) == 0) {
                 for (int i = 1; i <= bookSourceBeans.size(); i++) {
                     bookSourceBeans.get(i - 1).setSerialNumber(i);
                 }
             }
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
             BookSourceManager.refreshBookSource();
         });
     }
@@ -67,7 +67,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     public void delData(BookSourceBean bookSourceBean) {
         this.delBookSource = bookSourceBean;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
+            DbHelper.getDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
             BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
@@ -92,7 +92,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     public void delData(List<BookSourceBean> bookSourceBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookSourceBean sourceBean : bookSourceBeans) {
-                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
+                DbHelper.getDaoSession().getBookSourceBeanDao().delete(sourceBean);
             }
             BookSourceManager.refreshBookSource();
             e.onNext(true);

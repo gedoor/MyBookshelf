@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.DocumentHelper;
-import com.kunfei.bookshelf.utils.FileUtil;
-import com.kunfei.bookshelf.utils.Theme.ATH;
+import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 
 import java.io.File;
 
@@ -30,7 +30,7 @@ public class FontSelector {
         builder.setView(view);
         builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
-        fontPath = FileUtil.getSdCardPath() + "/Fonts";
+        fontPath = FileUtils.getSdCardPath() + "/Fonts";
         adapter = new FontAdapter(context, selectPath,
                 new OnThisListener() {
                     @Override

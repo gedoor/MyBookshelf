@@ -75,9 +75,8 @@ public class ReadBookControl {
         return readBookControl;
     }
 
-
     private ReadBookControl() {
-        preferences = MApplication.getInstance().getConfigPreferences();
+        preferences = MApplication.getConfigPreferences();
         initTextDrawable();
         updateReaderSettings();
     }

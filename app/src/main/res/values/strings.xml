@@ -15,6 +15,7 @@
     <string name="book_local">添加本地</string>
     <string name="book_source_manage">书源管理</string>
     <string name="setting">设置</string>
+    <string name="theme_setting">主题设置</string>
     <string name="about">关于</string>
     <string name="donate">捐赠</string>
     <string name="exit">退出</string>
@@ -57,7 +58,7 @@
     <string name="backup_confirmation">确认备份吗？</string>
     <string name="backup_message">新备份会替换原有备份。\n备份文件夹YueDu</string>
     <string name="restore_confirmation">确认恢复吗？</string>
-    <string name="restore_message">备份书架会覆盖现有书架。</string>
+    <string name="restore_message">恢复书架会覆盖现有书架。</string>
     <string name="backup_success">备份成功</string>
     <string name="backup_fail">备份失败</string>
     <string name="on_restore">正在恢复</string>
@@ -150,7 +151,7 @@
     <string name="download_cancel">取消下载</string>
     <string name="no_download">暂无任务</string>
     <string name="import_select_book">导入选择书籍</string>
-    <string name="update_search_threads_num">更新和搜索线程数</string>
+    <string name="update_search_threads_num">更新和搜索线程数,如感觉卡顿请减小线程数,量力而行</string>
     <string name="change_icon">切换图标</string>
     <string name="remove_from_bookshelf">删除书籍</string>
     <string name="start_read">开始阅读</string>
@@ -271,6 +272,8 @@
     <string name="sort_auto">智能排序</string>
     <string name="sort_manual">手动排序</string>
     <string name="sort_pin_yin">拼音排序</string>
+    <string name="go_to_top">滚动到顶部</string>
+    <string name="go_to_bottom">滚动到底部</string>
     <string name="read_y">已读: %s</string>
     <string name="pursue_more">追更</string>
     <string name="fattening">养肥</string>
@@ -294,6 +297,8 @@
     <string name="donate_s">此书源使用了高级功能，请到捐赠里点击支付宝红包搜索码领取红包开启。</string>
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
+    <string name="behavior_main_t">书架ToolBar自动隐藏</string>
+    <string name="behavior_main_s">滚动书架时ToolBar自动隐藏与显示</string>
     <string name="login">登录</string>
     <string name="login_source">登录%s</string>
     <string name="success">成功</string>

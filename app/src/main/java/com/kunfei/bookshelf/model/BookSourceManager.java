@@ -6,12 +6,12 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.basemvplib.BaseModelImpl;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -35,7 +35,7 @@ import io.reactivex.disposables.Disposable;
  * 所有书源
  */
 
-public class BookSourceManager extends BaseModelImpl {
+public class BookSourceManager {
     public static List<String> groupList = new ArrayList<>();
     private static List<BookSourceBean> selectedBookSource;
     private static List<BookSourceBean> allBookSource;
@@ -46,7 +46,7 @@ public class BookSourceManager extends BaseModelImpl {
 
     public static List<BookSourceBean> getSelectedBookSource() {
         if (selectedBookSource == null) {
-            selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+            selectedBookSource = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .where(BookSourceBeanDao.Properties.Enable.eq(true))
                     .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
@@ -57,7 +57,7 @@ public class BookSourceManager extends BaseModelImpl {
 
     public static List<BookSourceBean> getAllBookSource() {
         if (allBookSource == null) {
-            allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+            allBookSource = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .orderRaw(getBookSourceSort())
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
@@ -67,41 +67,35 @@ public class BookSourceManager extends BaseModelImpl {
     }
 
     public static List<BookSourceBean> getSelectedBookSourceBySerialNumber() {
-        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.Enable.eq(true))
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
     }
 
     public static List<BookSourceBean> getAllBookSourceBySerialNumber() {
-        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
     }
 
     @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
-        try {
-            return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url))
-                    .unique();
-        } catch (Exception ignored) {
-        }
-        return null;
+        return DbHelper.getDaoSession().getBookSourceBeanDao().load(url);
     }
 
     public static void removeBookSource(BookSourceBean sourceBean) {
         if (sourceBean == null) return;
-        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
+        DbHelper.getDaoSession().getBookSourceBeanDao().delete(sourceBean);
         refreshBookSource();
     }
 
     public static void refreshBookSource() {
-        allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        allBookSource = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .orderRaw(getBookSourceSort())
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
-        selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        selectedBookSource = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.Enable.eq(true))
                 .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
@@ -134,7 +128,7 @@ public class BookSourceManager extends BaseModelImpl {
         if (bookSourceBean.getBookSourceUrl().endsWith("/")) {
             bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().substring(0, bookSourceBean.getBookSourceUrl().lastIndexOf("/")));
         }
-        BookSourceBean temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+        BookSourceBean temp = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).unique();
         if (temp != null) {
             bookSourceBean.setSerialNumber(temp.getSerialNumber());
@@ -145,7 +139,7 @@ public class BookSourceManager extends BaseModelImpl {
         if (bookSourceBean.getSerialNumber() < 0) {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
-        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+        DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
     }
 
     public static void toTop(BookSourceBean sourceBean) {
@@ -155,8 +149,8 @@ public class BookSourceManager extends BaseModelImpl {
                 beanList.get(i).setSerialNumber(i + 1);
             }
             sourceBean.setSerialNumber(0);
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(beanList);
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(beanList);
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
             e.onSuccess(true);
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<Boolean>() {
@@ -180,7 +174,7 @@ public class BookSourceManager extends BaseModelImpl {
     private synchronized static void upGroupList() {
         groupList.clear();
         String sql = "SELECT DISTINCT " + BookSourceBeanDao.Properties.BookSourceGroup.columnName + " FROM " + BookSourceBeanDao.TABLENAME;
-        Cursor cursor = DbHelper.getInstance().getmDaoSession().getDatabase().rawQuery(sql, null);
+        Cursor cursor = DbHelper.getDaoSession().getDatabase().rawQuery(sql, null);
         if (!cursor.moveToFirst()) return;
         do {
             String group = cursor.getString(0);
@@ -202,7 +196,7 @@ public class BookSourceManager extends BaseModelImpl {
         }
         try {
             URL url = new URL(string.trim());
-            return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+            return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                     .create(IHttpGetApi.class)
                     .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importBookSourceFromJson(rsp.body()))
@@ -222,7 +216,7 @@ public class BookSourceManager extends BaseModelImpl {
                     }.getType());
                     for (BookSourceBean bookSourceBean : bookSourceBeans) {
                         if (bookSourceBean.containsGroup("删除")) {
-                            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                            DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                                     .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
                                     .buildDelete().executeDeleteWithoutDetachingEntities();
                         } else {
@@ -231,7 +225,7 @@ public class BookSourceManager extends BaseModelImpl {
                                 bookSourceBean.setSerialNumber(0);
                                 addBookSource(bookSourceBean);
                             } catch (Exception exception) {
-                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                                DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                                         .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
                                         .buildDelete().executeDeleteWithoutDetachingEntities();
                             }

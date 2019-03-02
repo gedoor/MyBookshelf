@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.Theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.widget.views.ATESwitch;
 
 import androidx.annotation.NonNull;

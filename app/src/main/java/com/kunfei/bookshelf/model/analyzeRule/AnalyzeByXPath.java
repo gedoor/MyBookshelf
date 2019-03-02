@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.utils.NetworkUtil;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.seimicrawler.xpath.JXDocument;
@@ -15,12 +14,15 @@ import java.util.List;
 public class AnalyzeByXPath {
     private JXDocument jxDocument;
 
-    public void parse(Document doc) {
+    public void parse(String doc) {
+        // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
+        if (doc.indexOf("<td>") == 0 || doc.indexOf("<td ") == 0) {
+            doc = "<tr>" + doc + "</tr>";
+        }
+        if (doc.indexOf("<tr>") == 0 || doc.indexOf("<tr ") == 0) {
+            doc = "<table>" + doc + "</table>";
+        }
         jxDocument = JXDocument.create(doc);
-    }
-
-    public void parse(Elements doc) {
-        jxDocument = new JXDocument(doc);
     }
 
     Elements getElements(String xPath) {
@@ -85,11 +87,13 @@ public class AnalyzeByXPath {
     }
 
     List<String> getStringList(String xPath) {
+        String result;
         List<String> stringList = new ArrayList<>();
         List<Object> objects = jxDocument.sel(xPath);
         for (Object object : objects) {
             if (object instanceof String) {
-                stringList.add((String) object);
+                result = (String) object;
+                stringList.add(result);
             }
         }
         return stringList;
@@ -98,14 +102,17 @@ public class AnalyzeByXPath {
     public String getString(String rule, String baseUrl) {
         String result;
         Object object = jxDocument.selOne(rule);
-        if (!TextUtils.isEmpty(baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(baseUrl, (String) object);
-        } else if (object instanceof Element) {
+        if (object instanceof Element) {
             result = ((Element) object).html()
                     .replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
-                    .replaceAll("<.*?>", "");
+                    .replaceAll("<.*?>", "")
+                    .replaceAll("&nbsp;", "")            // 删除空白转义符
+                    .replaceAll("[\\n*\\s*]+", "\n　　"); // 移除空行,并增加段前缩进2个汉字
         } else {
             result = (String) object;
+        }
+        if (!TextUtils.isEmpty(baseUrl)) {   // 获取绝对地址放到Xpath结果处理之后,防止Xpath匹配的多余逗号干扰Url的识别.
+            result = NetworkUtil.getAbsoluteURL(baseUrl, result);
         }
         return result;
     }

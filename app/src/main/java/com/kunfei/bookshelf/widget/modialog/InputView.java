@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 /**
  * 输入框

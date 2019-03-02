@@ -12,10 +12,10 @@ import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.SearchHistoryBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
@@ -104,7 +104,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         final int type = SearchBookPresenter.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
         Observable.create((ObservableOnSubscribe<SearchHistoryBean>) e -> {
-            List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+            List<SearchHistoryBean> data = DbHelper.getDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()
                     .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.eq(content))
                     .limit(1)
@@ -113,10 +113,10 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             if (null != data && data.size() > 0) {
                 searchHistoryBean = data.get(0);
                 searchHistoryBean.setDate(System.currentTimeMillis());
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
             } else {
                 searchHistoryBean = new SearchHistoryBean(type, content, System.currentTimeMillis());
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
             }
             e.onNext(searchHistoryBean);
         }).subscribeOn(Schedulers.newThread())
@@ -162,7 +162,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void cleanSearchHistory(SearchHistoryBean searchHistoryBean) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().delete(searchHistoryBean);
+            DbHelper.getDaoSession().getSearchHistoryBeanDao().delete(searchHistoryBean);
             e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
@@ -185,7 +185,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void querySearchHistory(String content) {
         Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
-            List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+            List<SearchHistoryBean> data = DbHelper.getDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()
                     .where(SearchHistoryBeanDao.Properties.Type.eq(SearchBookPresenter.BOOK), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
                     .orderDesc(SearchHistoryBeanDao.Properties.Date)

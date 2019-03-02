@@ -4,6 +4,8 @@
     <color name="background_card">#353535</color>
     <color name="background_menu">#282828</color>
 
+    <color name="night_mask">#69000000</color>
+
     <color name="colorPrimary">@color/md_grey_800</color>
     <color name="colorPrimaryDark">@color/md_grey_900</color>
     <color name="colorAccent">@color/md_grey_100</color>
@@ -24,8 +26,6 @@
     <color name="tv_text_summary">#b3ffffff</color>
     <color name="menu_color_default">#b7b7b7</color>
 
-    <color name="tv_chapter_color_selected">#b7b7b7</color>
-    <color name="tv_chapter_color_normal">#969696</color>
 
     <color name="tv_text_button_nor">#303030</color>
 

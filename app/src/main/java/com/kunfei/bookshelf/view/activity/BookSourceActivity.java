@@ -17,17 +17,17 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -63,7 +63,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private MyItemTouchHelpCallback itemTouchHelpCallback;
+    private ItemTouchCallback itemTouchCallback;
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
@@ -151,22 +151,22 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        itemTouchHelpCallback = new MyItemTouchHelpCallback();
-        itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+        itemTouchCallback = new ItemTouchCallback();
+        itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
         setDragEnable(preferences.getInt("SourceSort", 0));
     }
 
     private void setDragEnable(int sort) {
-        if (itemTouchHelpCallback == null) {
+        if (itemTouchCallback == null) {
             return;
         }
         adapter.setSort(sort);
         if (sort == 0) {
-            itemTouchHelpCallback.setDragEnable(true);
+            itemTouchCallback.setDragEnable(true);
         } else {
-            itemTouchHelpCallback.setDragEnable(false);
+            itemTouchCallback.setDragEnable(false);
         }
     }
 
@@ -205,7 +205,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void refreshBookSource() {
         if (isSearch) {
             String term = "%" + searchView.getQuery() + "%";
-            List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+            List<BookSourceBean> sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
@@ -423,7 +423,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     break;
                 case IMPORT_SOURCE:
                     if (data != null) {
-                        mPresenter.importBookSourceLocal(FileUtil.getPath(this, data.getData()));
+                        mPresenter.importBookSourceLocal(FileUtils.getPath(this, data.getData()));
                     }
                     break;
                 case REQUEST_QR:

@@ -63,7 +63,20 @@
                         android:background="@color/btn_bg_press" />
 
                     <TextView
-                        android:id="@+id/atv_url"
+                        android:id="@+id/tv_chapter_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:singleLine="true"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/tv_text_default" />
+
+                    <TextView
+                        android:id="@+id/tv_chapter_url"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
@@ -120,7 +133,7 @@
     </FrameLayout>
 
     <ProgressBar
-        android:id="@+id/hpb_next_page_progress"
+        android:id="@+id/pb_nextPage"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_gravity="bottom"

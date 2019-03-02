@@ -20,21 +20,21 @@ import android.widget.TextView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.Selector;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
-import com.kunfei.bookshelf.widget.explosionfield.ExplosionField;
+import com.kunfei.bookshelf.widget.explosion_field.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
@@ -313,28 +313,28 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         boolean enable = param.length == 1 || !param[1].equals("false");
         switch (param[0]) {
             case "show_nav_shelves":
-                SharedPreferencesUtil.saveData("showNavShelves", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("showNavShelves", enable).apply();
                 msg = "已" + (enable ? "启" : "禁") + "用侧边栏书架！";
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 break;
             case "fade_tts":
-                SharedPreferencesUtil.saveData("fadeTTS", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("fadeTTS", enable).apply();
                 msg = "已" + (enable ? "启" : "禁") + "用朗读时淡入淡出！";
                 break;
             case "use_regex_in_new_rule":
-                SharedPreferencesUtil.saveData("useRegexInNewRule", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("useRegexInNewRule", enable).apply();
                 msg = "已" + (enable ? "启" : "禁") + "用新建替换规则时默认使用正则表达式！";
                 break;
             case "blur_sim_back":
-                SharedPreferencesUtil.saveData("blurSimBack", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("blurSimBack", enable).apply();
                 msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背景虚化！";
                 break;
             case "async_draw":
-                SharedPreferencesUtil.saveData("asyncDraw", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("asyncDraw", enable).apply();
                 msg = "已" + (enable ? "启" : "禁") + "用异步加载！";
                 break;
             case "disable_scroll_click_turn":
-                SharedPreferencesUtil.saveData("disableScrollClickTurn", enable);
+                MApplication.getConfigPreferences().edit().putBoolean("disableScrollClickTurn", enable).apply();
                 msg = "已" + (enable ? "禁" : "启") + "用滚动模式点击翻页！";
                 break;
         }
