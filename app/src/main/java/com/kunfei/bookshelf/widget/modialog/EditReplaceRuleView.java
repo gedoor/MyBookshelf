@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -56,7 +56,7 @@ public class EditReplaceRuleView {
         } else {
             this.replaceRuleBean = new ReplaceRuleBean();
             this.replaceRuleBean.setEnable(true);
-            cbUseRegex.setChecked(SharedPreferencesUtil.getBoolean("useRegexInNewRule", false));
+            cbUseRegex.setChecked(MApplication.getConfigPreferences().getBoolean("useRegexInNewRule", false));
         }
     }
 

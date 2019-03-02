@@ -10,11 +10,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ScreenUtils;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.widget.page.animation.CoverPageAnim;
@@ -189,7 +189,7 @@ public class PageView extends View {
             //设置点击点
             mPageAnim.setTouchPoint(x, y);
             //设置方向
-            Boolean hasNext = hasNextPage(0);
+            boolean hasNext = hasNextPage(0);
 
             mPageAnim.setDirection(direction);
             if (!hasNext) {
@@ -205,7 +205,7 @@ public class PageView extends View {
             mPageAnim.setTouchPoint(x, y);
             mPageAnim.setDirection(direction);
             //设置方向方向
-            Boolean hashPrev = hasPrevPage();
+            boolean hashPrev = hasPrevPage();
             if (!hashPrev) {
                 ((HorizonPageAnim) mPageAnim).setNoNext(true);
                 return;
@@ -304,7 +304,7 @@ public class PageView extends View {
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(20) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(20)) {
+                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
                     actionFromEdge = true;
                     return true;
                 }
@@ -330,8 +330,8 @@ public class PageView extends View {
                 if (!isMove) {
                     //设置中间区域范围
                     if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 3, mViewHeight / 3,
-                                mViewWidth * 2 / 3, mViewHeight * 2 / 3);
+                        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
+                                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
                     }
 
                     //是否点击了中间
@@ -346,7 +346,7 @@ public class PageView extends View {
                         return true;
                     }
 
-                    if (mPageAnim instanceof ScrollPageAnim && SharedPreferencesUtil.getBoolean("disableScrollClickTurn", false)) {
+                    if (mPageAnim instanceof ScrollPageAnim && MApplication.getConfigPreferences().getBoolean("disableScrollClickTurn", false)) {
                         return true;
                     }
                 }

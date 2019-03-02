@@ -80,12 +80,12 @@ public class SettingActivity extends MBaseActivity {
 
     @Override
     public void finish() {
-        if (getFragmentManager().findFragmentByTag("webDavSettings") == null) {
-            super.finish();
-        } else {
+        if (getFragmentManager().findFragmentByTag("settings") == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
                     .commit();
+        } else {
+            super.finish();
         }
     }
 

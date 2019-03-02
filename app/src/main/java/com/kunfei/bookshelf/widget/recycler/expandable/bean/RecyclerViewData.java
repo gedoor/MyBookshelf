@@ -9,14 +9,12 @@ import java.util.List;
  * T 为group数据对象
  * S 为child数据对象
  */
-
+@SuppressWarnings("unchecked")
 public class RecyclerViewData<T, S> {
 
     private GroupItem groupItem;
 
     /**
-     * @param groupData
-     * @param childDatas
      * @param isExpand   初始化展示数据时，该组数据是否展开
      */
     public RecyclerViewData(T groupData, List<S> childDatas, boolean isExpand) {

@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        android:key="webDavSetting"
+        android:title="WebDav设置"
+        android:summary="WebDav备份与恢复" />
+
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/bookshelf_px_title"
@@ -57,9 +62,10 @@
         android:summary="长按文字在操作菜单中显示阅读·搜索"
         android:title="文字操作显示搜索" />
 
-    <Preference
-        android:key="webDavSetting"
-        android:title="WebDav设置"
-        android:summary="WebDav备份与恢复" />
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="true"
+        android:key="behaviorMain"
+        android:summary="@string/behavior_main_s"
+        android:title="@string/behavior_main_t" />
 
 </PreferenceScreen>

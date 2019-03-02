@@ -304,7 +304,7 @@ public class SmoothCheckBox extends View implements Checkable {
                 mTickPath.lineTo(stopX, stopY);
                 canvas.drawPath(mTickPath, mTickPaint);
 
-                float step = (mWidth / 20) < 3 ? 3 : (mWidth / 20);
+                float step = (mWidth / 20f) < 3 ? 3 : (mWidth / 20f);
                 mDrewDistance += step;
             } else {
                 mTickPath.reset();
@@ -316,7 +316,7 @@ public class SmoothCheckBox extends View implements Checkable {
 
         // invalidate
         if (mDrewDistance < mLeftLineDistance + mRightLineDistance) {
-            postDelayed(() -> postInvalidate(), 10);
+            postDelayed(this::postInvalidate, 10);
         }
     }
 

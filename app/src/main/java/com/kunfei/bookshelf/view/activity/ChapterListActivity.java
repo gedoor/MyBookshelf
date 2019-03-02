@@ -162,7 +162,6 @@ public class ChapterListActivity extends BaseTabActivity {
     public void onBackPressed() {
         if (mTlIndicator.getVisibility() != VISIBLE) {
             searchViewCollapsed();
-            return;
         }
         finish();
     }

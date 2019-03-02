@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.help;
 
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.MApplication;
@@ -11,7 +13,6 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
 import java.io.FileInputStream;
@@ -46,20 +47,27 @@ public class DataRestore {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (entries == null || entries.isEmpty()) {
-            String json = DocumentHelper.readString("config.json", dirPath);
-            if (json != null) {
-                entries = new Gson().fromJson(json, new TypeToken<Map<String, ?>>() {
-                }.getType());
-            }
-        }
         if (entries == null || entries.isEmpty()) return;
+        SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
         for (Map.Entry<String, ?> entry : entries.entrySet()) {
             Object v = entry.getValue();
             String key = entry.getKey();
-            SharedPreferencesUtil.saveData(key, v);
+            String type = v.getClass().getSimpleName();
+
+            if ("Integer".equals(type)) {
+                editor.putInt(key, (Integer) v);
+            } else if ("Boolean".equals(type)) {
+                editor.putBoolean(key, (Boolean) v);
+            } else if ("String".equals(type)) {
+                editor.putString(key, (String) v);
+            } else if ("Float".equals(type)) {
+                editor.putFloat(key, (Float) v);
+            } else if ("Long".equals(type)) {
+                editor.putLong(key, (Long) v);
+            }
         }
-        SharedPreferencesUtil.saveData("versionCode", MApplication.getVersionCode());
+        editor.putInt("versionCode", MApplication.getVersionCode());
+        editor.apply();
         MApplication.getInstance().upThemeStore();
     }
 

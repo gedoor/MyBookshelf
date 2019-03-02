@@ -272,6 +272,8 @@
     <string name="sort_auto">智能排序</string>
     <string name="sort_manual">手动排序</string>
     <string name="sort_pin_yin">拼音排序</string>
+    <string name="go_to_top">滚动到顶部</string>
+    <string name="go_to_bottom">滚动到底部</string>
     <string name="read_y">已读: %s</string>
     <string name="pursue_more">追更</string>
     <string name="fattening">养肥</string>
@@ -295,6 +297,8 @@
     <string name="donate_s">此书源使用了高级功能，请到捐赠里点击支付宝红包搜索码领取红包开启。</string>
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
+    <string name="behavior_main_t">书架ToolBar自动隐藏</string>
+    <string name="behavior_main_s">滚动书架时ToolBar自动隐藏与显示</string>
     <string name="login">登录</string>
     <string name="login_source">登录%s</string>
     <string name="success">成功</string>
