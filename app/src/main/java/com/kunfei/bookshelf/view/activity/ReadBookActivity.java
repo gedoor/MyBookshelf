@@ -144,7 +144,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (savedInstanceState != null) {
             noteUrl = savedInstanceState.getString("noteUrl");
             isAdd = savedInstanceState.getBoolean("isAdd");
-            aloudStatus = ReadAloudService.Status.valueOf(savedInstanceState.getString("aloudStatus"));
+            aloudStatus = ReadAloudService.Status.valueOf(savedInstanceState.getString("aloudStatus", ReadAloudService.Status.STOP.name()));
         }
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
