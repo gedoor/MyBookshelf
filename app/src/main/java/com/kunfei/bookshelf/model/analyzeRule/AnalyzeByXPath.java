@@ -16,10 +16,10 @@ public class AnalyzeByXPath {
 
     public void parse(String doc) {
         // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
-        if (doc.indexOf("<td>") == 0 || doc.indexOf("<td ") == 0) {
+        if (doc.endsWith("</td>")) {
             doc = "<tr>" + doc + "</tr>";
         }
-        if (doc.indexOf("<tr>") == 0 || doc.indexOf("<tr ") == 0) {
+        if (doc.endsWith("</tr>")) {
             doc = "<table>" + doc + "</table>";
         }
         jxDocument = JXDocument.create(doc);
