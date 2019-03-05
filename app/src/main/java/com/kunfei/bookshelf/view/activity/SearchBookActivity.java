@@ -171,7 +171,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 DonateActivity.getZfbHb(this);
                 break;
             case android.R.id.home:
-                SoftInputUtil.hideIMM(this, getCurrentFocus());
+                SoftInputUtil.hideIMM(getCurrentFocus());
                 finish();
                 break;
         }

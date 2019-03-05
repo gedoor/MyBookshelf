@@ -568,7 +568,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 }
                 break;
             case android.R.id.home:
-                SoftInputUtil.hideIMM(this, getCurrentFocus());
+                SoftInputUtil.hideIMM(getCurrentFocus());
                 finish();
                 break;
         }

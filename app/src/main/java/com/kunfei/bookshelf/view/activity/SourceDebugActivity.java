@@ -129,7 +129,7 @@ public class SourceDebugActivity extends MBaseActivity {
                 if (TextUtils.isEmpty(query))
                     return false;
                 startDebug(query);
-                SoftInputUtil.hideIMM(SourceDebugActivity.this, searchView);
+                SoftInputUtil.hideIMM(searchView);
                 return true;
             }
 
