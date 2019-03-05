@@ -147,7 +147,7 @@ public class ReadInterfacePop extends FrameLayout {
 
         nbPaddingTop.setTitle(activity.getString(R.string.padding_top))
                 .setMinNumber(0)
-                .setMaxNumber(50)
+                .setMaxNumber(100)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingTop())
                 .setOnChangedListener(number -> {
@@ -157,7 +157,7 @@ public class ReadInterfacePop extends FrameLayout {
 
         nbPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
                 .setMinNumber(0)
-                .setMaxNumber(50)
+                .setMaxNumber(100)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingBottom())
                 .setOnChangedListener(number -> {
