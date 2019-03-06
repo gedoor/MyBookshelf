@@ -33,9 +33,6 @@ public class DocumentHelper {
     }
 
     public static DocumentFile createFileIfNotExist(String fileName, String path, String... subDirs) {
-        Logger.d("FileHelper", "fileName:" + fileName);
-        Logger.d("FileHelper", "path:" + path);
-        Logger.d("FileHelper", Uri.decode(TextUtils.join("/", subDirs)));
         if (!path.startsWith("content://"))
             path = "file://" + Uri.decode(path);
         return DocumentUtil.createFileIfNotExist(MApplication.getInstance(), fileName, path, subDirs);
