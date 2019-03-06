@@ -32,11 +32,8 @@ public class UpdateService extends Service {
     public static boolean isRunning = false;
     private static final String startDownload = "startDownload";
     private static final String stopDownload = "stopDownload";
-    private String apkFilePath;
     private UpdateInfoBean updateInfo;
-    private boolean interceptFlag = false;
     private Disposable disposableDown;
-    private int count = 0;
 
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateService.class);
@@ -94,7 +91,6 @@ public class UpdateService extends Service {
     }
 
     private void stopDownload() {
-        interceptFlag = true;
         stopSelf();
     }
 
@@ -140,7 +136,7 @@ public class UpdateService extends Service {
         if (disposableDown != null) {
             return;
         }
-        apkFilePath = UpdateManager.getSavePath(apkUrl.substring(apkUrl.lastIndexOf("/")));
+        String apkFilePath = UpdateManager.getSavePath(apkUrl.substring(apkUrl.lastIndexOf("/")));
         File apkFile = new File(apkFilePath);
         DownloadUtils downloadUtils = new DownloadUtils("https://github.com", new JsDownloadListener() {
             @Override

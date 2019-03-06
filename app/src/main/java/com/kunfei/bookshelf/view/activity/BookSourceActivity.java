@@ -20,13 +20,14 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.help.ACache;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -280,7 +282,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 revertSelection();
                 break;
             case R.id.action_del_select:
-                mPresenter.delData(adapter.getSelectDataList());
+                deleteDialog();
                 break;
             case R.id.action_check_book_source:
                 mPresenter.checkBookSource();
@@ -342,6 +344,17 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private void addBookSource() {
         Intent intent = new Intent(this, SourceEditActivity.class);
         startActivityForResult(intent, SourceEditActivity.EDIT_SOURCE);
+    }
+
+    private void deleteDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.del_msg)
+                .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.delData(adapter.getSelectDataList()))
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                })
+                .show();
+        ATH.setAlertDialogTint(alertDialog);
     }
 
     private void selectBookSourceFile() {

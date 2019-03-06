@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.kunfei.bookshelf.help;
+package com.kunfei.bookshelf.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,6 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 本地缓存
  */
+@SuppressWarnings({"unused","ResultOfMethodCallIgnored"})
 public class ACache {
     public static final int TIME_HOUR = 60 * 60;
     public static final int TIME_DAY = TIME_HOUR * 24;
@@ -758,7 +760,7 @@ public class ACache {
                 }
                 cacheSize.addAndGet(valueSize);
 
-                Long currentTime = System.currentTimeMillis();
+                long currentTime = System.currentTimeMillis();
                 file.setLastModified(currentTime);
                 lastUsageDates.put(file, currentTime);
             } catch (Exception e) {
@@ -769,7 +771,7 @@ public class ACache {
 
         private File get(String key) {
             File file = newFile(key);
-            Long currentTime = System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             file.setLastModified(currentTime);
             lastUsageDates.put(file, currentTime);
 
@@ -828,9 +830,12 @@ public class ACache {
                     }
                 }
 
-                long fileSize = calculateSize(mostLongUsedFile);
-                if (mostLongUsedFile.delete()) {
-                    lastUsageDates.remove(mostLongUsedFile);
+                long fileSize = 0;
+                if (mostLongUsedFile != null) {
+                    fileSize = calculateSize(mostLongUsedFile);
+                    if (mostLongUsedFile.delete()) {
+                        lastUsageDates.remove(mostLongUsedFile);
+                    }
                 }
                 return fileSize;
             } catch (Exception e) {

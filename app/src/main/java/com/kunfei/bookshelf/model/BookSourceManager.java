@@ -104,7 +104,7 @@ public class BookSourceManager {
     }
 
     public static String getBookSourceSort() {
-        switch (MApplication.getInstance().getConfigPreferences().getInt("SourceSort", 0)) {
+        switch (MApplication.getConfigPreferences().getInt("SourceSort", 0)) {
             case 1:
                 return BookSourceBeanDao.Properties.Weight.columnName + " DESC";
             case 2:
@@ -126,7 +126,7 @@ public class BookSourceManager {
         if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl()))
             return;
         if (bookSourceBean.getBookSourceUrl().endsWith("/")) {
-            bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().substring(0, bookSourceBean.getBookSourceUrl().lastIndexOf("/")));
+            bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().replaceAll("/+$", ""));
         }
         BookSourceBean temp = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).unique();

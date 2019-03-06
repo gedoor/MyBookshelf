@@ -225,7 +225,7 @@ public class BookInfoEditActivity extends MBaseActivity {
                 saveInfo();
                 break;
             case android.R.id.home:
-                SoftInputUtil.hideIMM(this, getCurrentFocus());
+                SoftInputUtil.hideIMM(getCurrentFocus());
                 finish();
                 break;
         }
@@ -240,7 +240,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         initCover();
         BookshelfHelp.saveBookToShelf(book);
         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
-        SoftInputUtil.hideIMM(this, getCurrentFocus());
+        SoftInputUtil.hideIMM(getCurrentFocus());
         finish();
     }
 
