@@ -19,7 +19,7 @@ public class AnalyzeByXPath {
         if (doc.endsWith("</td>")) {
             doc = "<tr>" + doc + "</tr>";
         }
-        if (doc.endsWith("</tr>")) {
+        if (doc.endsWith("</tr>") || doc.endsWith("</tbody>")) {
             doc = "<table>" + doc + "</table>";
         }
         jxDocument = JXDocument.create(doc);
