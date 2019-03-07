@@ -219,6 +219,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.kind = kind;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }
