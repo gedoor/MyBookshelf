@@ -227,6 +227,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
         return finalDate;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }

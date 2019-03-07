@@ -9,10 +9,8 @@ import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -345,10 +343,11 @@ public class AnalyzeRule {
      * js实现跨域访问,不能删
      */
     @SuppressWarnings("unused")
-    public String ajax(String url) {
+    public String ajax(String urlStr) {
         try {
-            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(url)
-                    .create(IHttpGetApi.class).getWebContentCall(url, null);
+            String baseUrl = urlStr.substring(0, urlStr.indexOf("/", 9));
+            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(baseUrl)
+                    .create(IHttpGetApi.class).getWebContentCall(urlStr, new HashMap<>());
             return call.execute().body();
         } catch (Exception e) {
             return null;
