@@ -124,17 +124,17 @@ public class AnalyzeRule {
                 case JSon:
                     result = result == null ?
                             getAnalyzeByJSonPath().readStringList(rule.rule)
-                            : new AnalyzeRule(book).setContent(ruleStr, _isJSON).getAnalyzeByJSonPath().readList(rule.rule);
+                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSonPath().readList(rule.rule);
                     break;
                 case XPath:
                     result = result == null ?
                             getAnalyzeByXPath().getStringList(rule.rule)
-                            : new AnalyzeRule(book).setContent(ruleStr, _isJSON).getAnalyzeByXPath().getStringList(rule.rule);
+                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByXPath().getStringList(rule.rule);
                     break;
                 default:
                     result = result == null ?
                             getAnalyzeByJSoup().getAllResultList(rule.rule)
-                            : new AnalyzeRule(book).setContent(ruleStr, _isJSON).getAnalyzeByJSoup().getAllResultList(rule.rule);
+                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSoup().getAllResultList(rule.rule);
             }
         }
         if (!StringUtils.isTrimEmpty(baseUrl)) {
