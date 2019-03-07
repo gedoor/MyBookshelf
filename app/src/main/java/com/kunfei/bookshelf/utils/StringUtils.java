@@ -283,19 +283,14 @@ public class StringUtils {
     }
 
     public static boolean isTrimEmpty(String text) {
-        if (text == null) {
-            return true;
-        }
-        if (text.length() == 0) {
-            return true;
-        }
+        if (text == null) return true;
+        if (text.length() == 0) return true;
         return text.trim().length() == 0;
     }
 
     public static boolean startWithIgnoreCase(String src, String obj) {
-        if (obj.length() > src.length()) {
-            return false;
-        }
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
     }
 

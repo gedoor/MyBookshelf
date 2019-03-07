@@ -14,12 +14,14 @@ public class AnalyzeByJSonPath {
     private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
     private ReadContext ctx;
 
-    public void parse(String json) {
+    public AnalyzeByJSonPath parse(String json) {
         ctx = JsonPath.parse(json);
+        return this;
     }
 
-    public void parse(Object json) {
+    public AnalyzeByJSonPath parse(Object json) {
         ctx = JsonPath.parse(json);
+        return this;
     }
 
     public String read(String rule) {

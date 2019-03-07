@@ -14,15 +14,16 @@ import java.util.List;
 public class AnalyzeByXPath {
     private JXDocument jxDocument;
 
-    public void parse(String doc) {
+    public AnalyzeByXPath parse(String doc) {
         // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
         if (doc.endsWith("</td>")) {
             doc = "<tr>" + doc + "</tr>";
         }
-        if (doc.endsWith("</tr>")) {
+        if (doc.endsWith("</tr>") || doc.endsWith("</tbody>")) {
             doc = "<table>" + doc + "</table>";
         }
         jxDocument = JXDocument.create(doc);
+        return this;
     }
 
     Elements getElements(String xPath) {

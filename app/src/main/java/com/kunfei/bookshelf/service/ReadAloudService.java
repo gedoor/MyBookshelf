@@ -498,9 +498,18 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                ttsInitSuccess = true;
-                playTTS();
+                int result = textToSpeech.setLanguage(Locale.CHINA);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_fix), Toast.LENGTH_SHORT).show());
+                    //先停止朗读服务方便用户设置好后的重试
+                    ReadAloudService.stop(ReadAloudService.this);
+                    //跳转到文字转语音设置界面
+                    toTTSSetting();
+                } else {
+                    textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                    ttsInitSuccess = true;
+                    playTTS();
+                }
             } else {
                 mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
                 ReadAloudService.this.stopSelf();
