@@ -24,8 +24,9 @@ import static android.text.TextUtils.isEmpty;
 public class AnalyzeByJSoup {
     private Element element;
 
-    public void parse(String doc) {
+    public AnalyzeByJSoup parse(String doc) {
         this.element = Jsoup.parse(doc);
+        return this;
     }
 
     Elements getElements(String rule) {

@@ -76,6 +76,13 @@ public class AnalyzeRule {
         return this;
     }
 
+    private AnalyzeByXPath getAnalyzeByXPath(Object o) {
+        if (o != null) {
+            return new AnalyzeByXPath().parse(o.toString());
+        }
+        return getAnalyzeByXPath();
+    }
+
     private AnalyzeByXPath getAnalyzeByXPath() {
         if (analyzeByXPath == null || objectChangedXP) {
             analyzeByXPath = new AnalyzeByXPath();
@@ -85,6 +92,13 @@ public class AnalyzeRule {
         return analyzeByXPath;
     }
 
+    private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
+        if (o != null) {
+            return new AnalyzeByJSoup().parse(o.toString());
+        }
+        return getAnalyzeByJSoup();
+    }
+
     private AnalyzeByJSoup getAnalyzeByJSoup() {
         if (analyzeByJSoup == null || objectChangedJS) {
             analyzeByJSoup = new AnalyzeByJSoup();
@@ -92,6 +106,16 @@ public class AnalyzeRule {
             objectChangedJS = false;
         }
         return analyzeByJSoup;
+    }
+
+    private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
+        if (o != null) {
+            if (o instanceof String) {
+                return new AnalyzeByJSonPath().parse(_object.toString());
+            }
+            return new AnalyzeByJSonPath().parse(_object);
+        }
+        return getAnalyzeByJSonPath();
     }
 
     private AnalyzeByJSonPath getAnalyzeByJSonPath() {
@@ -113,7 +137,7 @@ public class AnalyzeRule {
 
     @SuppressWarnings("unchecked")
     public List<String> getStringList(String ruleStr, String baseUrl) {
-        Object result = _object;
+        Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
@@ -122,22 +146,16 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, baseUrl);
                     break;
                 case JSon:
-                    result = result == null ?
-                            getAnalyzeByJSonPath().readStringList(rule.rule)
-                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSonPath().readList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
                     break;
                 case XPath:
-                    result = result == null ?
-                            getAnalyzeByXPath().getStringList(rule.rule)
-                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByXPath().getStringList(rule.rule);
+                    result = getAnalyzeByXPath(result).getStringList(rule.rule);
                     break;
                 default:
-                    result = result == null ?
-                            getAnalyzeByJSoup().getAllResultList(rule.rule)
-                            : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSoup().getAllResultList(rule.rule);
+                    result = getAnalyzeByJSoup(result).getAllResultList(rule.rule);
             }
         }
-        if (!StringUtils.isTrimEmpty(baseUrl)) {
+        if (result != null && !StringUtils.isTrimEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
             for (String url : (List<String>) result) {
                 url = NetworkUtil.getAbsoluteURL(baseUrl, url);
@@ -168,24 +186,16 @@ public class AnalyzeRule {
                         result = (String) evalJS(rule.rule, result, _baseUrl);
                         break;
                     case JSon:
-                        result = result == null ?
-                                getAnalyzeByJSonPath().read(rule.rule)
-                                : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSonPath().read(rule.rule);
+                        result = getAnalyzeByJSonPath(result).read(rule.rule);
                         break;
                     case XPath:
-                        result = result == null ?
-                                getAnalyzeByXPath().getString(rule.rule, _baseUrl)
-                                : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByXPath().getString(rule.rule, _baseUrl);
+                        result = getAnalyzeByXPath(result).getString(rule.rule, _baseUrl);
                         break;
                     case Default:
                         if (TextUtils.isEmpty(_baseUrl)) {
-                            result = result == null ?
-                                    getAnalyzeByJSoup().getResult(rule.rule)
-                                    : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSoup().getResult(rule.rule);
+                            result = getAnalyzeByJSoup(result).getResult(rule.rule);
                         } else {
-                            result = result == null ?
-                                    getAnalyzeByJSoup().getResultUrl(rule.rule)
-                                    : new AnalyzeRule(book).setContent(result, _isJSON).getAnalyzeByJSoup().getResultUrl(rule.rule);
+                            result = getAnalyzeByJSoup(result).getResultUrl(rule.rule);
                         }
                 }
             }
@@ -197,7 +207,7 @@ public class AnalyzeRule {
     }
 
     public AnalyzeCollection getElements(String ruleStr) {
-        Object result = _object;
+        Object result = null;
         AnalyzeCollection collection = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -206,19 +216,13 @@ public class AnalyzeRule {
                     if (result == null) result = String.valueOf(_object);
                     result = evalJS(rule.rule, result, null);
                 case JSon:
-                    collection = result == null ?
-                            new AnalyzeCollection(getAnalyzeByJSonPath().readList(rule.rule), true)
-                            : new AnalyzeCollection(new AnalyzeRule(book).setContent(result, true).getAnalyzeByJSonPath().readList(rule.rule), true);
+                    collection = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
                     break;
                 case XPath:
-                    collection = result == null ?
-                            new AnalyzeCollection(getAnalyzeByXPath().getElements(rule.rule))
-                            : new AnalyzeCollection(new AnalyzeRule(book).setContent(result, true).getAnalyzeByXPath().getElements(rule.rule));
+                    collection = new AnalyzeCollection(getAnalyzeByXPath(result).getElements(rule.rule));
                     break;
                 default:
-                    collection = result == null ?
-                            new AnalyzeCollection(getAnalyzeByJSoup().getElements(rule.rule))
-                            : new AnalyzeCollection(new AnalyzeRule(book).setContent(result, true).getAnalyzeByJSoup().getElements(rule.rule));
+                    collection = new AnalyzeCollection(getAnalyzeByJSoup(result).getElements(rule.rule));
             }
         }
         return collection;
@@ -234,6 +238,7 @@ public class AnalyzeRule {
 
     private List<SourceRule> splitSourceRule(String ruleStr) {
         List<SourceRule> ruleList = new ArrayList<>();
+        if (ruleStr == null) return ruleList;
         Mode mode;
         if (StringUtils.startWithIgnoreCase(ruleStr, "@XPath:")) {
             mode = Mode.XPath;
@@ -271,8 +276,8 @@ public class AnalyzeRule {
             }
             ruleStr = ruleStr.replace(find, value);
         }
-        Matcher jsMatcher = jsPattern.matcher(ruleStr);
         int start = 0;
+        Matcher jsMatcher = jsPattern.matcher(ruleStr);
         while (jsMatcher.find()) {
             if (jsMatcher.start() > start) {
                 ruleList.add(new SourceRule(ruleStr.substring(start, jsMatcher.start()), mode));
