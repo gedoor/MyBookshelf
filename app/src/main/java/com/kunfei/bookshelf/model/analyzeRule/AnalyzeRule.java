@@ -163,6 +163,7 @@ public class AnalyzeRule {
             }
             return urlList;
         }
+        if (result == null) return new ArrayList<>();
         return (List<String>) result;
     }
 
@@ -283,8 +284,8 @@ public class AnalyzeRule {
             ruleList.add(new SourceRule(jsMatcher.group(), Mode.Js));
             start = jsMatcher.end();
         }
-        if (ruleList.isEmpty()) {
-            ruleList.add(new SourceRule(ruleStr, mode));
+        if (ruleStr.length() > start) {
+            ruleList.add(new SourceRule(ruleStr.substring(start), mode));
         }
         return ruleList;
     }
