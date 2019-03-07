@@ -103,16 +103,14 @@ public class AnalyzeByXPath {
     public String getString(String rule, String baseUrl) {
         String result;
         Object object = jxDocument.selOne(rule);
-        if (object instanceof Element) {
-            result = ((Element) object).html()
-                    .replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
-                    .replaceAll("<.*?>", "")
-                    .replaceAll("&nbsp;", "")            // 删除空白转义符
-                    .replaceAll("[\\n*\\s*]+", "\n　　"); // 移除空行,并增加段前缩进2个汉字
-        } else {
-            result = (String) object;
+        result = object instanceof Element ? ((Element) object).html() : (String) object;
+        if (!TextUtils.isEmpty(result)){
+            result = result
+                    .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
+                    .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
+                    .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
         }
-        if (!TextUtils.isEmpty(baseUrl)) {   // 获取绝对地址放到Xpath结果处理之后,防止Xpath匹配的多余逗号干扰Url的识别.
+        if (!TextUtils.isEmpty(baseUrl)) {
             result = NetworkUtil.getAbsoluteURL(baseUrl, result);
         }
         return result;
