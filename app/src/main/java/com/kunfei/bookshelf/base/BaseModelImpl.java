@@ -146,8 +146,8 @@ public class BaseModelImpl {
                     @JavascriptInterface
                     public void processHTML(String html) {
                         e.onNext(html);
-                        e.onComplete();
                         webView.destroy();
+                        e.onComplete();
                     }
                 }
                 WebView webView = new WebView(MApplication.getInstance());
