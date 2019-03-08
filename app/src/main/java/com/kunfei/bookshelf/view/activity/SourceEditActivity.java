@@ -314,7 +314,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setBookSourceName(trim(tieBookSourceName.getText()));
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
         if (bookSourceBeanN.getBookSourceUrl().endsWith("/")) {
-            tieBookSourceUrl.setText(bookSourceBean.getBookSourceUrl().replaceAll("/+$", ""));
+            tieBookSourceUrl.setText(bookSourceBeanN.getBookSourceUrl().replaceAll("/+$", ""));
             bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
         }
         bookSourceBeanN.setLoginUrl(trim(tieLoginUrl.getText()));
