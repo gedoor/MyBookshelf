@@ -35,7 +35,7 @@ public class WelcomeActivity extends MBaseActivity {
             return;
         }
         setContentView(R.layout.activity_welcome);
-        AsyncTask.execute(() -> DbHelper.getDaoSession());
+        AsyncTask.execute(DbHelper::getDaoSession);
         ButterKnife.bind(this);
         ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
