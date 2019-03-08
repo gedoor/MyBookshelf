@@ -136,24 +136,18 @@ public class BaseModelImpl {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 class HtmlOutJavaScriptInterface {
-                    private WebView webView;
-
-                    private HtmlOutJavaScriptInterface(WebView webView) {
-                        this.webView = webView;
-                    }
 
                     @SuppressWarnings("unused")
                     @JavascriptInterface
                     public void processHTML(String html) {
                         e.onNext(html);
                         e.onComplete();
-                        webView.destroy();
                     }
                 }
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
-                webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(webView), "HTML_OUT");
+                webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(), "HTML_OUT");
                 CookieManager cookieManager = CookieManager.getInstance();
                 webView.setWebViewClient(new WebViewClient() {
                     @Override

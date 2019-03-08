@@ -33,7 +33,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-    private static final Pattern jsPattern = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:.+$)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern jsPattern = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
 
     private BaseBookBean book;
     private Object _object;
@@ -100,7 +100,7 @@ public class AnalyzeRule {
     private AnalyzeByJSoup getAnalyzeByJSoup() {
         if (analyzeByJSoup == null || objectChangedJS) {
             analyzeByJSoup = new AnalyzeByJSoup();
-            analyzeByJSoup.parse(_object.toString());
+            analyzeByJSoup.parse(_object);
             objectChangedJS = false;
         }
         return analyzeByJSoup;
@@ -346,12 +346,11 @@ public class AnalyzeRule {
     @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
-            String baseUrl = urlStr.substring(0, urlStr.indexOf("/", 9));
-            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(baseUrl)
+            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(urlStr))
                     .create(IHttpGetApi.class).getWebContentCall(urlStr, new HashMap<>());
             return call.execute().body();
         } catch (Exception e) {
-            return null;
+            return e.getLocalizedMessage();
         }
     }
 

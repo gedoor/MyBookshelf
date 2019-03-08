@@ -43,6 +43,7 @@ import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
 
@@ -51,6 +52,7 @@ import java.io.FileOutputStream;
 import java.util.Hashtable;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -232,7 +234,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("title", title);
         outState.putInt("serialNumber", serialNumber);
@@ -299,14 +301,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         if (editable == null) {
             return null;
         }
-        return trim(editable.toString());
-    }
-
-    private String trim(String string) {
-        if (string == null) {
-            return null;
-        }
-        return string.trim();
+        return StringUtils.trim(editable.toString());
     }
 
     private BookSourceBean getBookSource() {
@@ -314,7 +309,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setBookSourceName(trim(tieBookSourceName.getText()));
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
         if (bookSourceBeanN.getBookSourceUrl().endsWith("/")) {
-            tieBookSourceUrl.setText(bookSourceBean.getBookSourceUrl().replaceAll("/+$", ""));
+            tieBookSourceUrl.setText(bookSourceBeanN.getBookSourceUrl().replaceAll("/+$", ""));
             bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
         }
         bookSourceBeanN.setLoginUrl(trim(tieLoginUrl.getText()));
@@ -353,34 +348,34 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         if (bookSourceBean == null) {
             return;
         }
-        tieBookSourceName.setText(trim(bookSourceBean.getBookSourceName()));
-        tieBookSourceUrl.setText(trim(bookSourceBean.getBookSourceUrl()));
-        tieBookSourceGroup.setText(trim(bookSourceBean.getBookSourceGroup()));
-        tieLoginUrl.setText(trim(bookSourceBean.getLoginUrl()));
-        tieRuleBookAuthor.setText(trim(bookSourceBean.getRuleBookAuthor()));
-        tieRuleBookContent.setText(trim(bookSourceBean.getRuleBookContent()));
-        tieRuleBookName.setText(trim(bookSourceBean.getRuleBookName()));
-        tieRuleChapterList.setText(trim(bookSourceBean.getRuleChapterList()));
-        tieRuleChapterName.setText(trim(bookSourceBean.getRuleChapterName()));
-        tieRuleChapterListUrl.setText(trim(bookSourceBean.getRuleChapterUrl()));
-        tieRuleChapterListUrlNext.setText(trim(bookSourceBean.getRuleChapterUrlNext()));
-        tieRuleContentUrl.setText(trim(bookSourceBean.getRuleContentUrl()));
-        tieRuleCoverUrl.setText(trim(bookSourceBean.getRuleCoverUrl()));
-        tieRuleIntroduce.setText(trim(bookSourceBean.getRuleIntroduce()));
-        tieRuleSearchAuthor.setText(trim(bookSourceBean.getRuleSearchAuthor()));
-        tieRuleSearchCoverUrl.setText(trim(bookSourceBean.getRuleSearchCoverUrl()));
-        tieRuleSearchKind.setText(trim(bookSourceBean.getRuleSearchKind()));
-        tieRuleSearchLastChapter.setText(trim(bookSourceBean.getRuleSearchLastChapter()));
-        tieRuleSearchList.setText(trim(bookSourceBean.getRuleSearchList()));
-        tieRuleSearchName.setText(trim(bookSourceBean.getRuleSearchName()));
-        tieRuleSearchNoteUrl.setText(trim(bookSourceBean.getRuleSearchNoteUrl()));
-        tieRuleSearchUrl.setText(trim(bookSourceBean.getRuleSearchUrl()));
-        tieHttpUserAgent.setText(trim(bookSourceBean.getHttpUserAgent()));
-        tieRuleFindUrl.setText(trim(bookSourceBean.getRuleFindUrl()));
-        tieRuleContentUrlNext.setText(trim(bookSourceBean.getRuleContentUrlNext()));
-        tieRuleBookUrlPattern.setText(trim(bookSourceBean.getRuleBookUrlPattern()));
-        tieRuleBookKind.setText(trim(bookSourceBean.getRuleBookKind()));
-        tieRuleBookLastChapter.setText(trim(bookSourceBean.getRuleBookLastChapter()));
+        tieBookSourceName.setText(StringUtils.trim(bookSourceBean.getBookSourceName()));
+        tieBookSourceUrl.setText(StringUtils.trim(bookSourceBean.getBookSourceUrl()));
+        tieBookSourceGroup.setText(StringUtils.trim(bookSourceBean.getBookSourceGroup()));
+        tieLoginUrl.setText(StringUtils.trim(bookSourceBean.getLoginUrl()));
+        tieRuleBookAuthor.setText(StringUtils.trim(bookSourceBean.getRuleBookAuthor()));
+        tieRuleBookContent.setText(StringUtils.trim(bookSourceBean.getRuleBookContent()));
+        tieRuleBookName.setText(StringUtils.trim(bookSourceBean.getRuleBookName()));
+        tieRuleChapterList.setText(StringUtils.trim(bookSourceBean.getRuleChapterList()));
+        tieRuleChapterName.setText(StringUtils.trim(bookSourceBean.getRuleChapterName()));
+        tieRuleChapterListUrl.setText(StringUtils.trim(bookSourceBean.getRuleChapterUrl()));
+        tieRuleChapterListUrlNext.setText(StringUtils.trim(bookSourceBean.getRuleChapterUrlNext()));
+        tieRuleContentUrl.setText(StringUtils.trim(bookSourceBean.getRuleContentUrl()));
+        tieRuleCoverUrl.setText(StringUtils.trim(bookSourceBean.getRuleCoverUrl()));
+        tieRuleIntroduce.setText(StringUtils.trim(bookSourceBean.getRuleIntroduce()));
+        tieRuleSearchAuthor.setText(StringUtils.trim(bookSourceBean.getRuleSearchAuthor()));
+        tieRuleSearchCoverUrl.setText(StringUtils.trim(bookSourceBean.getRuleSearchCoverUrl()));
+        tieRuleSearchKind.setText(StringUtils.trim(bookSourceBean.getRuleSearchKind()));
+        tieRuleSearchLastChapter.setText(StringUtils.trim(bookSourceBean.getRuleSearchLastChapter()));
+        tieRuleSearchList.setText(StringUtils.trim(bookSourceBean.getRuleSearchList()));
+        tieRuleSearchName.setText(StringUtils.trim(bookSourceBean.getRuleSearchName()));
+        tieRuleSearchNoteUrl.setText(StringUtils.trim(bookSourceBean.getRuleSearchNoteUrl()));
+        tieRuleSearchUrl.setText(StringUtils.trim(bookSourceBean.getRuleSearchUrl()));
+        tieHttpUserAgent.setText(StringUtils.trim(bookSourceBean.getHttpUserAgent()));
+        tieRuleFindUrl.setText(StringUtils.trim(bookSourceBean.getRuleFindUrl()));
+        tieRuleContentUrlNext.setText(StringUtils.trim(bookSourceBean.getRuleContentUrlNext()));
+        tieRuleBookUrlPattern.setText(StringUtils.trim(bookSourceBean.getRuleBookUrlPattern()));
+        tieRuleBookKind.setText(StringUtils.trim(bookSourceBean.getRuleBookKind()));
+        tieRuleBookLastChapter.setText(StringUtils.trim(bookSourceBean.getRuleBookLastChapter()));
     }
 
     private void setHint() {
@@ -415,6 +410,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     @SuppressLint("SetWorldReadable")
+    @SuppressWarnings("unchecked")
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
             BitMatrix result;

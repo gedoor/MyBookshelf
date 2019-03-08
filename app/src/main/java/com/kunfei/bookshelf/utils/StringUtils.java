@@ -335,4 +335,20 @@ public class StringUtils {
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();
     }
+
+    public static String getBaseUrl(String url) {
+        if (url == null) return null;
+        int index = url.indexOf("/", 9);
+        if (index == -1) {
+            return url;
+        }
+        return url.substring(0, index);
+    }
+
+    public static String trim(String string) {
+        if (string == null) {
+            return null;
+        }
+        return string.trim();
+    }
 }

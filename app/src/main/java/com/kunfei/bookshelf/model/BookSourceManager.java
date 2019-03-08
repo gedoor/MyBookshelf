@@ -194,17 +194,11 @@ public class BookSourceManager {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);
         }
-        try {
-            URL url = new URL(string.trim());
-            return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+        return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(string), "utf-8")
                     .create(IHttpGetApi.class)
-                    .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
+                    .getWebContent(string, AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importBookSourceFromJson(rsp.body()))
                     .compose(RxUtils::toSimpleSingle);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private static Observable<List<BookSourceBean>> importBookSourceFromJson(String json) {
