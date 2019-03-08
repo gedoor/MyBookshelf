@@ -344,4 +344,11 @@ public class StringUtils {
         }
         return url.substring(0, index);
     }
+
+    public static String trim(String string) {
+        if (string == null) {
+            return null;
+        }
+        return string.trim();
+    }
 }
