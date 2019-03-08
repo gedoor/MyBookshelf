@@ -346,8 +346,7 @@ public class AnalyzeRule {
     @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
-            String baseUrl = urlStr.substring(0, urlStr.indexOf("/", 9));
-            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(baseUrl)
+            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(urlStr))
                     .create(IHttpGetApi.class).getWebContentCall(urlStr, new HashMap<>());
             return call.execute().body();
         } catch (Exception e) {
