@@ -100,7 +100,7 @@ public class AnalyzeRule {
     private AnalyzeByJSoup getAnalyzeByJSoup() {
         if (analyzeByJSoup == null || objectChangedJS) {
             analyzeByJSoup = new AnalyzeByJSoup();
-            analyzeByJSoup.parse(_object.toString());
+            analyzeByJSoup.parse(_object);
             objectChangedJS = false;
         }
         return analyzeByJSoup;
