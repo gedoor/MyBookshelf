@@ -290,7 +290,7 @@ public class AnalyzeRule {
         return ruleList;
     }
 
-    class SourceRule {
+    private class SourceRule {
         Mode mode;
         String rule;
 
