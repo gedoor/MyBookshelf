@@ -214,6 +214,7 @@ public class AnalyzeRule {
                 case Js:
                     if (result == null) result = String.valueOf(_object);
                     result = evalJS(rule.rule, result, null);
+                    break;
                 case JSon:
                     collection = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
                     break;
