@@ -336,7 +336,8 @@ public class AnalyzeRule {
         bindings.put("baseUrl", baseUrl);
         try {
             result = EngineHelper.INSTANCE.eval(jsStr, bindings);
-        } catch (ScriptException ignored) {
+        } catch (ScriptException e) {
+            return e.getLocalizedMessage();
         }
         return result;
     }
