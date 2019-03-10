@@ -109,9 +109,9 @@ public class AnalyzeRule {
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
         if (o != null) {
             if (o instanceof String) {
-                return new AnalyzeByJSonPath().parse(_object.toString());
+                return new AnalyzeByJSonPath().parse(o.toString());
             }
-            return new AnalyzeByJSonPath().parse(_object);
+            return new AnalyzeByJSonPath().parse(o);
         }
         return getAnalyzeByJSonPath();
     }
@@ -129,12 +129,12 @@ public class AnalyzeRule {
         return analyzeByJSonPath;
     }
 
-    public List<String> getStringList(String rule) {
+    public List<String> getStringList(String rule) throws ScriptException {
         return getStringList(rule, null);
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(String ruleStr, String baseUrl) {
+    public List<String> getStringList(String ruleStr, String baseUrl) throws ScriptException {
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -167,11 +167,11 @@ public class AnalyzeRule {
         return (List<String>) result;
     }
 
-    public String getString(String rule) {
+    public String getString(String rule) throws ScriptException {
         return getString(rule, null);
     }
 
-    public String getString(String ruleStr, String _baseUrl) {
+    public String getString(String ruleStr, String _baseUrl) throws ScriptException {
         if (StringUtils.isTrimEmpty(ruleStr)) {
             return null;
         }
@@ -205,7 +205,7 @@ public class AnalyzeRule {
         return result;
     }
 
-    public AnalyzeCollection getElements(String ruleStr) {
+    public AnalyzeCollection getElements(String ruleStr) throws ScriptException {
         Object result = null;
         AnalyzeCollection collection = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
@@ -214,6 +214,7 @@ public class AnalyzeRule {
                 case Js:
                     if (result == null) result = String.valueOf(_object);
                     result = evalJS(rule.rule, result, null);
+                    break;
                 case JSon:
                     collection = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
                     break;
@@ -227,7 +228,7 @@ public class AnalyzeRule {
         return collection;
     }
 
-    private void analyzeVariable(Map<String, String> putVariable) {
+    private void analyzeVariable(Map<String, String> putVariable) throws ScriptException {
         for (Map.Entry<String, String> entry : putVariable.entrySet()) {
             if (book != null) {
                 book.putVariable(entry.getKey(), getString(entry.getValue()));
@@ -290,7 +291,7 @@ public class AnalyzeRule {
         return ruleList;
     }
 
-    class SourceRule {
+    private class SourceRule {
         Mode mode;
         String rule;
 
@@ -328,16 +329,12 @@ public class AnalyzeRule {
         private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
     }
 
-    private Object evalJS(String jsStr, Object result, String baseUrl) {
+    private Object evalJS(String jsStr, Object result, String baseUrl) throws ScriptException {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
-        try {
-            result = EngineHelper.INSTANCE.eval(jsStr, bindings);
-        } catch (ScriptException ignored) {
-        }
-        return result;
+        return EngineHelper.INSTANCE.eval(jsStr, bindings);
     }
 
     /**
