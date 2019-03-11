@@ -150,6 +150,7 @@ public class BaseModelImpl {
                             value = StringEscapeUtils.unescapeJson(value);
                             e.onNext(value);
                             e.onComplete();
+                            webView.destroy();
                         });
                     }
                 });
