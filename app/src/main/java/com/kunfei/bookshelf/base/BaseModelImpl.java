@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,8 +18,11 @@ import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -33,6 +35,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
+    private static final Pattern zhPattern = Pattern.compile("[^\\x00-\\xFF]");
 
     public static BaseModelImpl getInstance() {
         return new BaseModelImpl();
@@ -132,28 +135,36 @@ public class BaseModelImpl {
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
+        String js = "document.documentElement.outerHTML";
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                class HtmlOutJavaScriptInterface {
-
-                    @SuppressWarnings("unused")
-                    @JavascriptInterface
-                    public void processHTML(String html) {
-                        e.onNext(html);
-                        e.onComplete();
-                    }
-                }
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
-                webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(), "HTML_OUT");
                 CookieManager cookieManager = CookieManager.getInstance();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        webView.evaluateJavascript(js, value -> {
+                            value = StringEscapeUtils.unescapeJson(value);
+                            if (isLoadFinish(value)) {
+                                e.onNext(value);
+                                e.onComplete();
+                                webView.destroy();
+                                handler.removeCallbacks(this);
+                            } else {
+                                handler.postDelayed(this, 1000);
+                            }
+                        });
+                    }
+                };
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
-                        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                        DbHelper.getDaoSession().getCookieBeanDao()
+                                .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
+                        handler.post(runnable);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
@@ -168,6 +179,10 @@ public class BaseModelImpl {
                 }
             });
         });
+    }
+
+    private boolean isLoadFinish(String value) {
+        return zhPattern.split(value).length > 500;
     }
 
 }

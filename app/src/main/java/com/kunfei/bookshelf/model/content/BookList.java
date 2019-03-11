@@ -91,8 +91,10 @@ class BookList {
                     }
                 }
             }
-            if (books.isEmpty() && !e.isDisposed()) {
-                e.onError(new Throwable("未获取到书名"));
+            if (books.isEmpty()) {
+                if (!e.isDisposed()) {
+                    e.onError(new Throwable("未获取到书名"));
+                }
                 return;
             }
             e.onNext(books);
