@@ -145,7 +145,7 @@ public class BaseModelImpl {
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
                                 .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        String js = "javascript:document.documentElement.outerHTML";
+                        String js = "document.documentElement.outerHTML";
                         webView.evaluateJavascript(js, value -> {
                             value = StringEscapeUtils.unescapeJson(value);
                             e.onNext(value);
