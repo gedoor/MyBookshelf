@@ -181,8 +181,11 @@ public class BaseModelImpl {
         });
     }
 
-    private boolean isLoadFinish(String value) {
-        return zhPattern.split(value).length > 500;
+    private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
+        value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
+        boolean result = Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
+        return result;
+        //return zhPattern.split(value).length > 500;
     }
 
 }
