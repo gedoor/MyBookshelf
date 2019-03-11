@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -152,8 +153,20 @@ public class BaseModelImpl {
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
-                        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                        DbHelper.getDaoSession().getCookieBeanDao()
+                                .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
+                        String js = "var context = \"\"; var time = 0; var interval = setInterval(() => {\n" +
+                                "    time++; context = document.body.innerHTML; if (context.match(/[^\\x00-\\xFF]/g).length > 500) {\n" +
+                                "        console.log(document.documentElement);\n" +
+                                "        clearInterval(interval);// 关闭定时器\n" +
+                                "        return '<head>' + document.getElementsByTagName('html')[0].innerHTML + '</head>'\n" +
+                                "    }\n" +
+                                "}, 1000);";
+                        webView.evaluateJavascript(js, value -> {
+                            e.onNext(value);
+                            e.onComplete();
+                        });
+                        //webView.loadUrl("javascript:window.HTML_OUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
