@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -137,19 +136,9 @@ public class BaseModelImpl {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                class HtmlOutJavaScriptInterface {
-
-                    @SuppressWarnings("unused")
-                    @JavascriptInterface
-                    public void processHTML(String html) {
-                        e.onNext(html);
-                        e.onComplete();
-                    }
-                }
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
-                webView.addJavascriptInterface(new HtmlOutJavaScriptInterface(), "HTML_OUT");
                 CookieManager cookieManager = CookieManager.getInstance();
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
