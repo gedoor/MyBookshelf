@@ -133,6 +133,7 @@ public class BaseModelImpl {
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
+        String js = "document.documentElement.outerHTML";
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
@@ -140,18 +141,18 @@ public class BaseModelImpl {
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 CookieManager cookieManager = CookieManager.getInstance();
+                Runnable runnable = () -> webView.evaluateJavascript(js, value -> {
+                    value = StringEscapeUtils.unescapeJson(value);
+                    e.onNext(value);
+                    e.onComplete();
+                    webView.destroy();
+                });
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
                                 .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        String js = "document.documentElement.outerHTML";
-                        webView.evaluateJavascript(js, value -> {
-                            value = StringEscapeUtils.unescapeJson(value);
-                            e.onNext(value);
-                            e.onComplete();
-                            webView.destroy();
-                        });
+                        handler.post(runnable);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
