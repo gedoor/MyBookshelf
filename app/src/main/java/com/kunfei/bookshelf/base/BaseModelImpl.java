@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -34,6 +35,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
+    private static final Pattern zhPattern = Pattern.compile("[^\\x00-\\xFF]");
 
     public static BaseModelImpl getInstance() {
         return new BaseModelImpl();
@@ -141,12 +143,22 @@ public class BaseModelImpl {
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 CookieManager cookieManager = CookieManager.getInstance();
-                Runnable runnable = () -> webView.evaluateJavascript(js, value -> {
-                    value = StringEscapeUtils.unescapeJson(value);
-                    e.onNext(value);
-                    e.onComplete();
-                    webView.destroy();
-                });
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        webView.evaluateJavascript(js, value -> {
+                            value = StringEscapeUtils.unescapeJson(value);
+                            if (isLoadFinish(value)) {
+                                e.onNext(value);
+                                e.onComplete();
+                                webView.destroy();
+                                handler.removeCallbacks(this);
+                            } else {
+                                handler.postDelayed(this, 1000);
+                            }
+                        });
+                    }
+                };
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
@@ -167,6 +179,10 @@ public class BaseModelImpl {
                 }
             });
         });
+    }
+
+    private boolean isLoadFinish(String value) {
+        return zhPattern.split(value).length > 500;
     }
 
 }
