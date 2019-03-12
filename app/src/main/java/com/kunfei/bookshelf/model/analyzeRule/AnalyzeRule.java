@@ -74,6 +74,9 @@ public class AnalyzeRule {
         return this;
     }
 
+    /**
+     * XPath
+     */
     private AnalyzeByXPath getAnalyzeByXPath(Object o) {
         if (o != null) {
             return new AnalyzeByXPath().parse(o.toString());
@@ -90,6 +93,9 @@ public class AnalyzeRule {
         return analyzeByXPath;
     }
 
+    /**
+     * JSOUP
+     */
     private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
         if (o != null) {
             return new AnalyzeByJSoup().parse(o.toString());
@@ -106,6 +112,9 @@ public class AnalyzeRule {
         return analyzeByJSoup;
     }
 
+    /**
+     * JSON
+     */
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
         if (o != null) {
             if (o instanceof String) {
@@ -129,6 +138,9 @@ public class AnalyzeRule {
         return analyzeByJSonPath;
     }
 
+    /**
+     * 获取文本列表
+     */
     public List<String> getStringList(String rule) throws ScriptException {
         return getStringList(rule, null);
     }
@@ -167,6 +179,9 @@ public class AnalyzeRule {
         return (List<String>) result;
     }
 
+    /**
+     * 获取文本
+     */
     public String getString(String rule) throws ScriptException {
         return getString(rule, null);
     }
@@ -205,6 +220,9 @@ public class AnalyzeRule {
         return result;
     }
 
+    /**
+     * 获取列表
+     */
     public AnalyzeCollection getElements(String ruleStr) throws ScriptException {
         Object result = null;
         AnalyzeCollection collection = null;
@@ -228,6 +246,9 @@ public class AnalyzeRule {
         return collection;
     }
 
+    /**
+     * 保存变量
+     */
     private void analyzeVariable(Map<String, String> putVariable) throws ScriptException {
         for (Map.Entry<String, String> entry : putVariable.entrySet()) {
             if (book != null) {
@@ -236,6 +257,9 @@ public class AnalyzeRule {
         }
     }
 
+    /**
+     * 分解规则生成规则列表
+     */
     private List<SourceRule> splitSourceRule(String ruleStr) {
         List<SourceRule> ruleList = new ArrayList<>();
         if (ruleStr == null) return ruleList;
@@ -291,6 +315,9 @@ public class AnalyzeRule {
         return ruleList;
     }
 
+    /**
+     * 规则类
+     */
     private class SourceRule {
         Mode mode;
         String rule;
@@ -329,6 +356,9 @@ public class AnalyzeRule {
         private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
     }
 
+    /**
+     * 执行JS
+     */
     private Object evalJS(String jsStr, Object result, String baseUrl) throws ScriptException {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
