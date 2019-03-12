@@ -136,6 +136,7 @@ public class BaseModelImpl {
     protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
         String js = "document.documentElement.outerHTML";
         return Observable.create(e -> {
+            final Html html = new Html("加载超时");
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 Runnable timeoutRunnable;
@@ -147,9 +148,9 @@ public class BaseModelImpl {
                     @Override
                     public void run() {
                         webView.evaluateJavascript(js, value -> {
-                            value = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(value)) {
-                                e.onNext(value);
+                            html.content = StringEscapeUtils.unescapeJson(value);
+                            if (isLoadFinish(html.content)) {
+                                e.onNext(html.content);
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
@@ -162,7 +163,7 @@ public class BaseModelImpl {
                 timeoutRunnable = () -> {
                     if (!e.isDisposed()) {
                         handler.removeCallbacks(retryRunnable);
-                        e.onNext("超时");
+                        e.onNext(html.content);
                         e.onComplete();
                         webView.destroy();
                     }
@@ -193,6 +194,14 @@ public class BaseModelImpl {
     private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
         value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
         return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
+    }
+
+    private class Html {
+        private String content;
+
+        Html(String content) {
+            this.content = content;
+        }
     }
 
 }
