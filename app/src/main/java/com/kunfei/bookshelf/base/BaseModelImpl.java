@@ -167,7 +167,7 @@ public class BaseModelImpl {
                         webView.destroy();
                     }
                 };
-                handler.postDelayed(timeoutRunnable, 30000);
+                handler.postDelayed(timeoutRunnable, 25000);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
