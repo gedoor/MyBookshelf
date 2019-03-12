@@ -46,10 +46,19 @@ public class NetworkUtil {
      * 获取绝对地址
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
+        String header = null;
+        if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
+            header = relativePath.substring(0, relativePath.indexOf("}") + 1);
+            relativePath = relativePath.substring(header.length());
+        }
         try {
             URL absoluteUrl = new URL(baseURL);
             URL parseUrl = new URL(absoluteUrl, relativePath);
-            return parseUrl.toString();
+            relativePath = parseUrl.toString();
+            if (header != null) {
+                relativePath = header + relativePath;
+            }
+            return relativePath;
         } catch (Exception e) {
             e.printStackTrace();
         }

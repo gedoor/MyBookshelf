@@ -7,10 +7,6 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-/**
- * Created by newbiechen on 17-4-16.
- */
-
 public class AppConstant {
 
     //Book Date Convert Format
@@ -24,4 +20,5 @@ public class AppConstant {
     }.getType();
 
     public static final String DEFAULT_WEB_DAV_URL = "https://dav.jianguoyun.com/dav/";
+
 }
