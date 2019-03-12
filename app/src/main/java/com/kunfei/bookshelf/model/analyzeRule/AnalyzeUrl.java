@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -141,11 +139,10 @@ public class AnalyzeUrl {
         }
     }
 
-    private void generateUrlPath(String ruleUrl) throws MalformedURLException {
+    private void generateUrlPath(String ruleUrl) {
         url = ruleUrl;
-        URL url = new URL(ruleUrl);
-        hostUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
-        urlPath = ruleUrl.replace(hostUrl, "");
+        hostUrl = StringUtils.getBaseUrl(ruleUrl);
+        urlPath = ruleUrl.substring(hostUrl.length());
     }
 
     public String getHost() {
