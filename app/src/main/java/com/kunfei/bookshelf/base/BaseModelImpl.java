@@ -173,7 +173,7 @@ public class BaseModelImpl {
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
                                 .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        handler.post(retryRunnable);
+                        handler.postDelayed(retryRunnable, 1000);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
