@@ -144,7 +144,7 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, baseUrl);
                     break;
                 case JSon:
-                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).readStringList(rule.rule);
                     break;
                 case XPath:
                     result = getAnalyzeByXPath(result).getStringList(rule.rule);
