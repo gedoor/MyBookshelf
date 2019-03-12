@@ -35,7 +35,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
-    private static final Pattern zhPattern = Pattern.compile("[^\\x00-\\xFF]");
 
     public static BaseModelImpl getInstance() {
         return new BaseModelImpl();
@@ -139,19 +138,12 @@ public class BaseModelImpl {
         return Observable.create(e -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
+                Runnable timeoutRunnable;
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 CookieManager cookieManager = CookieManager.getInstance();
-                Runnable timeoutRunnable = () -> {
-                    if (!e.isDisposed()) {
-                        e.onNext("超时");
-                        e.onComplete();
-                        webView.destroy();
-                    }
-                };
-                handler.postDelayed(timeoutRunnable, 30000);
-                Runnable runnable = new Runnable() {
+                Runnable retryRunnable = new Runnable() {
                     @Override
                     public void run() {
                         webView.evaluateJavascript(js, value -> {
@@ -161,19 +153,27 @@ public class BaseModelImpl {
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
-                                handler.removeCallbacks(timeoutRunnable);
                             } else {
                                 handler.postDelayed(this, 1000);
                             }
                         });
                     }
                 };
+                timeoutRunnable = () -> {
+                    if (!e.isDisposed()) {
+                        handler.removeCallbacks(retryRunnable);
+                        e.onNext("超时");
+                        e.onComplete();
+                        webView.destroy();
+                    }
+                };
+                handler.postDelayed(timeoutRunnable, 30000);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
                                 .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        handler.post(runnable);
+                        handler.post(retryRunnable);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
