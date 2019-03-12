@@ -143,6 +143,14 @@ public class BaseModelImpl {
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 CookieManager cookieManager = CookieManager.getInstance();
+                Runnable timeoutRunnable = () -> {
+                    if (!e.isDisposed()) {
+                        e.onNext("超时");
+                        e.onComplete();
+                        webView.destroy();
+                    }
+                };
+                handler.postDelayed(timeoutRunnable, 30000);
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
@@ -153,6 +161,7 @@ public class BaseModelImpl {
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
+                                handler.removeCallbacks(timeoutRunnable);
                             } else {
                                 handler.postDelayed(this, 1000);
                             }
@@ -183,9 +192,7 @@ public class BaseModelImpl {
 
     private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
         value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
-        boolean result = Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
-        return result;
-        //return zhPattern.split(value).length > 500;
+        return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
     }
 
 }
