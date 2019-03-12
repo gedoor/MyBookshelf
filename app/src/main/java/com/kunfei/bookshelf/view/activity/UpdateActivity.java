@@ -19,10 +19,10 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
 
@@ -44,8 +44,8 @@ public class UpdateActivity extends MBaseActivity {
     TextView tvDownloadProgress;
     @BindView(R.id.ll_download)
     LinearLayout llDownload;
-    @BindView(R.id.hpb_download_progress)
-    ProgressBar hpbDownloadProgress;
+    @BindView(R.id.pb_download)
+    ProgressBar progressBar;
     @BindView(R.id.tv_install_update)
     TextView tvInstallUpdate;
 
@@ -160,17 +160,17 @@ public class UpdateActivity extends MBaseActivity {
             if (UpdateService.isRunning) {
                 menuItemDownload.setTitle("取消下载");
                 llDownload.setVisibility(View.VISIBLE);
-                hpbDownloadProgress.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 tvInstallUpdate.setVisibility(View.GONE);
             } else if (apkFile.exists()) {
                 menuItemDownload.setTitle("重新下载");
                 llDownload.setVisibility(View.GONE);
-                hpbDownloadProgress.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 tvInstallUpdate.setVisibility(View.VISIBLE);
             } else {
                 menuItemDownload.setTitle("下载更新");
                 llDownload.setVisibility(View.GONE);
-                hpbDownloadProgress.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 tvInstallUpdate.setVisibility(View.GONE);
             }
         }
@@ -180,9 +180,8 @@ public class UpdateActivity extends MBaseActivity {
     public void updateState(Integer state) {
         upMenu();
         if (state > 0) {
+            progressBar.setProgress(state);
             tvDownloadProgress.setText(getString(R.string.progress_show, state, 100));
-            hpbDownloadProgress.setMax(100);
-            hpbDownloadProgress.setProgress(state);
         }
     }
 }

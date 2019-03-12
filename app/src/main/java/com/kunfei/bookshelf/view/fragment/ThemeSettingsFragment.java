@@ -13,9 +13,9 @@ import android.preference.PreferenceScreen;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.Theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
 import java.util.Objects;
@@ -33,7 +33,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName("CONFIG");
-        addPreferencesFromResource(R.xml.theme_settings);
+        addPreferencesFromResource(R.xml.pref_settings_theme);
         settingActivity = (ThemeSettingActivity) this.getActivity();
     }
 

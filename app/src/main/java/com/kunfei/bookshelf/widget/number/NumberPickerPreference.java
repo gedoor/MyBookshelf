@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.widget.number;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -12,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.SoftInputUtil;
 
 import androidx.annotation.NonNull;
 
@@ -84,6 +86,13 @@ public class NumberPickerPreference extends DialogPreference {
         numPicker.setValue(getValue());
     }
 
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        numPicker.clearFocus();
+        SoftInputUtil.hideIMM(numPicker);
+        super.onClick(dialog, which);
+    }
+
     /**
      * update summary when dialog is closed
      */
@@ -94,7 +103,6 @@ public class NumberPickerPreference extends DialogPreference {
             updateSummary(pickerValue);
             setValue(pickerValue);
             Log.d(TAG, "number picked = " + pickerValue);
-
         }
     }
 

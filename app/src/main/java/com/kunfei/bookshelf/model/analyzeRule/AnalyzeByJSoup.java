@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
@@ -23,8 +24,13 @@ import static android.text.TextUtils.isEmpty;
 public class AnalyzeByJSoup {
     private Element element;
 
-    public void parse(Element element) {
-        this.element = element;
+    public AnalyzeByJSoup parse(Object doc) {
+        if (doc instanceof String) {
+            element = Jsoup.parse(doc.toString());
+        } else {
+            element = (Element) doc;
+        }
+        return this;
     }
 
     Elements getElements(String rule) {
@@ -60,7 +66,7 @@ public class AnalyzeByJSoup {
         for (String ruleStr : ruleStrS) {
             Elements tempS = getElementsSingle(temp, ruleStr);
             elementsList.add(tempS);
-            if (elements.size() > 0 && elementsType.equals("|")) {
+            if (tempS.size() > 0 && elementsType.equals("|")) {
                 break;
             }
         }

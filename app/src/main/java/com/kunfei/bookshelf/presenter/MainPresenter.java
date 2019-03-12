@@ -13,15 +13,17 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
+import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.net.URL;
 
@@ -75,28 +77,15 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     @Override
-    public void addBookUrl(String bookUrl) {
-        if (TextUtils.isEmpty(bookUrl.trim())) return;
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
-            if (temp != null) {
-                e.onNext(null);
-            } else {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
-                bookShelfBean.setNoteUrl(url.toString());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setGroup(mView.getGroup() % 4);
-                bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                e.onNext(bookShelfBean);
-            }
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+    public void addBookUrl(String bookUrls) {
+        bookUrls=bookUrls.trim();
+        if (TextUtils.isEmpty(bookUrls)) return;
+
+        String[] urls=bookUrls.split("\\n");
+
+        Observable.fromArray(urls)
+                .flatMap(this::addBookUrlO)
+                .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
@@ -112,6 +101,31 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         mView.toast("网址格式不对");
                     }
                 });
+    }
+
+    private Observable<BookShelfBean> addBookUrlO(String bookUrl) {
+        return Observable.create(e -> {
+            if (StringUtils.isTrimEmpty(bookUrl)) {
+                e.onComplete();
+                return;
+            }
+            URL url = new URL(bookUrl);
+            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+            if (temp != null) {
+                e.onNext(null);
+            } else {
+                BookShelfBean bookShelfBean = new BookShelfBean();
+                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
+                bookShelfBean.setNoteUrl(url.toString());
+                bookShelfBean.setDurChapter(0);
+                bookShelfBean.setGroup(mView.getGroup() % 4);
+                bookShelfBean.setDurChapterPage(0);
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
+                e.onNext(bookShelfBean);
+            }
+            e.onComplete();
+        });
     }
 
     @Override
@@ -195,4 +209,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         mView.recreate();
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUTO_BACKUP)})
+    public void autoBackup(Boolean backup) {
+        DataBackup.getInstance().autoSave();
+    }
 }

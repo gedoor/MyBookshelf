@@ -21,6 +21,7 @@ import io.reactivex.Single;
  * Created by newbiechen on 17-5-11.
  */
 
+@SuppressWarnings("ALL")
 public class FileHelp {
     public static final byte BLANK = 0x0a;
     //采用自己的格式去设置文件，防止文件被系统文件查询到

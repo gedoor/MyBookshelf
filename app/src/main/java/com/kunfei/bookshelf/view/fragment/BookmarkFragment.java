@@ -9,9 +9,9 @@ import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.BookmarkAdapter;
 import com.kunfei.bookshelf.widget.modialog.EditBookmarkView;
@@ -111,14 +111,14 @@ public class BookmarkFragment extends MBaseFragment {
         moDialogHUD.showBookmark(bookmarkBean, false, new EditBookmarkView.OnBookmarkClick() {
             @Override
             public void saveBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+                DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void delBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
+                DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                 adapter.notifyDataSetChanged();
             }

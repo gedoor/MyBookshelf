@@ -13,6 +13,7 @@ import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.bean.CookieBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
@@ -22,6 +23,7 @@ import com.kunfei.bookshelf.dao.BookmarkBeanDao;
 import com.kunfei.bookshelf.dao.BookShelfBeanDao;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
+import com.kunfei.bookshelf.dao.CookieBeanDao;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
 import com.kunfei.bookshelf.dao.SearchHistoryBeanDao;
@@ -40,6 +42,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig bookShelfBeanDaoConfig;
     private final DaoConfig bookSourceBeanDaoConfig;
     private final DaoConfig chapterListBeanDaoConfig;
+    private final DaoConfig cookieBeanDaoConfig;
     private final DaoConfig replaceRuleBeanDaoConfig;
     private final DaoConfig searchBookBeanDaoConfig;
     private final DaoConfig searchHistoryBeanDaoConfig;
@@ -49,6 +52,7 @@ public class DaoSession extends AbstractDaoSession {
     private final BookShelfBeanDao bookShelfBeanDao;
     private final BookSourceBeanDao bookSourceBeanDao;
     private final ChapterListBeanDao chapterListBeanDao;
+    private final CookieBeanDao cookieBeanDao;
     private final ReplaceRuleBeanDao replaceRuleBeanDao;
     private final SearchBookBeanDao searchBookBeanDao;
     private final SearchHistoryBeanDao searchHistoryBeanDao;
@@ -72,6 +76,9 @@ public class DaoSession extends AbstractDaoSession {
         chapterListBeanDaoConfig = daoConfigMap.get(ChapterListBeanDao.class).clone();
         chapterListBeanDaoConfig.initIdentityScope(type);
 
+        cookieBeanDaoConfig = daoConfigMap.get(CookieBeanDao.class).clone();
+        cookieBeanDaoConfig.initIdentityScope(type);
+
         replaceRuleBeanDaoConfig = daoConfigMap.get(ReplaceRuleBeanDao.class).clone();
         replaceRuleBeanDaoConfig.initIdentityScope(type);
 
@@ -86,6 +93,7 @@ public class DaoSession extends AbstractDaoSession {
         bookShelfBeanDao = new BookShelfBeanDao(bookShelfBeanDaoConfig, this);
         bookSourceBeanDao = new BookSourceBeanDao(bookSourceBeanDaoConfig, this);
         chapterListBeanDao = new ChapterListBeanDao(chapterListBeanDaoConfig, this);
+        cookieBeanDao = new CookieBeanDao(cookieBeanDaoConfig, this);
         replaceRuleBeanDao = new ReplaceRuleBeanDao(replaceRuleBeanDaoConfig, this);
         searchBookBeanDao = new SearchBookBeanDao(searchBookBeanDaoConfig, this);
         searchHistoryBeanDao = new SearchHistoryBeanDao(searchHistoryBeanDaoConfig, this);
@@ -95,6 +103,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(BookShelfBean.class, bookShelfBeanDao);
         registerDao(BookSourceBean.class, bookSourceBeanDao);
         registerDao(ChapterListBean.class, chapterListBeanDao);
+        registerDao(CookieBean.class, cookieBeanDao);
         registerDao(ReplaceRuleBean.class, replaceRuleBeanDao);
         registerDao(SearchBookBean.class, searchBookBeanDao);
         registerDao(SearchHistoryBean.class, searchHistoryBeanDao);
@@ -106,6 +115,7 @@ public class DaoSession extends AbstractDaoSession {
         bookShelfBeanDaoConfig.clearIdentityScope();
         bookSourceBeanDaoConfig.clearIdentityScope();
         chapterListBeanDaoConfig.clearIdentityScope();
+        cookieBeanDaoConfig.clearIdentityScope();
         replaceRuleBeanDaoConfig.clearIdentityScope();
         searchBookBeanDaoConfig.clearIdentityScope();
         searchHistoryBeanDaoConfig.clearIdentityScope();
@@ -129,6 +139,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public ChapterListBeanDao getChapterListBeanDao() {
         return chapterListBeanDao;
+    }
+
+    public CookieBeanDao getCookieBeanDao() {
+        return cookieBeanDao;
     }
 
     public ReplaceRuleBeanDao getReplaceRuleBeanDao() {

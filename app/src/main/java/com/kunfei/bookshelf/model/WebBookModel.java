@@ -9,8 +9,8 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.content.DefaultModel;
 import com.kunfei.bookshelf.model.impl.IStationBookModel;
 
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 
 public class WebBookModel {
 
@@ -62,10 +61,10 @@ public class WebBookModel {
     /**
      * 章节缓存
      */
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, BaseChapterBean chapterBean, String bookName) {
+    public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean, String bookName) {
         IStationBookModel bookModel = getBookSourceModel(chapterBean.getTag());
         if (bookModel != null) {
-            return bookModel.getBookContent(scheduler, chapterBean)
+            return bookModel.getBookContent(chapterBean)
                     .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
         } else
             return Observable.create(e -> {

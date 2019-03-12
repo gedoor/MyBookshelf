@@ -21,12 +21,12 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
@@ -225,7 +225,7 @@ public class BookInfoEditActivity extends MBaseActivity {
                 saveInfo();
                 break;
             case android.R.id.home:
-                SoftInputUtil.hideIMM(this, getCurrentFocus());
+                SoftInputUtil.hideIMM(getCurrentFocus());
                 finish();
                 break;
         }
@@ -240,7 +240,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         initCover();
         BookshelfHelp.saveBookToShelf(book);
         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
-        SoftInputUtil.hideIMM(this, getCurrentFocus());
+        SoftInputUtil.hideIMM(getCurrentFocus());
         finish();
     }
 
@@ -285,7 +285,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         switch (requestCode) {
             case ResultSelectCover:
                 if (resultCode == RESULT_OK && null != data) {
-                    tieCoverUrl.setText(FileUtil.getPath(this, data.getData()));
+                    tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
                     initCover();
                 }

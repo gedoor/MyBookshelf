@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.script.ScriptException;
+
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -50,68 +52,91 @@ class BookList {
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
                 bookUrlPattern += ".*";
             }
-            //如果是详情页面, 解析详情页面
+            //如果符合详情页url规则
             if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
-                SearchBookBean item = new SearchBookBean();
-                analyzer.setBook(item);
-                String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
-                if (!TextUtils.isEmpty(bookName)) {
-                    item.setNoteUrl(baseUrl);
-                    item.setTag(tag);
-                    item.setOrigin(name);
-                    item.setName(bookName);
-                    item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), baseUrl));
-                    item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
-                    item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
-                    item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
+                SearchBookBean item = getItem(analyzer, baseUrl);
+                if (item != null) {
                     books.add(item);
-                } else if (!e.isDisposed()) {
-                    e.onError(new Throwable("未获取到书名"));
-                    return;
                 }
             } else {
                 AnalyzeCollection collections;
-                boolean reverse = false;
+                boolean reverse;
+                String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
                     reverse = true;
-                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList().substring(1));
+                    ruleSearchList = bookSourceBean.getRuleSearchList().substring(1);
                 } else {
-                    collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                    reverse = false;
+                    ruleSearchList = bookSourceBean.getRuleSearchList();
                 }
-                if (collections.size() == 0 && !e.isDisposed()) {
-                    e.onError(new Throwable("搜索列表为空"));
-                    return;
-                }
-                while (collections.hasNext()){
-                    SearchBookBean item = new SearchBookBean();
-                    analyzer.setBook(item);
-                    collections.next(analyzer);
-                    String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
-                    if (!TextUtils.isEmpty(bookName)) {
-                        item.setTag(tag);
-                        item.setOrigin(name);
-                        item.setName(bookName);
-                        item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
-                        item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
-                        item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-                        String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
-                        item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+                //获取列表
+                collections = analyzer.getElements(ruleSearchList);
+                if (collections.size() == 0) {
+                    // 搜索列表为空时,当做详情页处理
+                    SearchBookBean item = getItem(analyzer, baseUrl);
+                    if (item != null) {
                         books.add(item);
                     }
-                }
-                if (books.size() > 1 && reverse) {
-                    Collections.reverse(books);
+                } else {
+                    while (collections.hasNext()) {
+                        collections.next(analyzer);
+                        SearchBookBean item = getItemInList(analyzer, baseUrl);
+                        if (item != null) {
+                            books.add(item);
+                        }
+                    }
+                    if (books.size() > 1 && reverse) {
+                        Collections.reverse(books);
+                    }
                 }
             }
-            if (books.isEmpty() && !e.isDisposed()) {
-                e.onError(new Throwable("未获取到书名"));
+            if (books.isEmpty()) {
+                if (!e.isDisposed()) {
+                    e.onError(new Throwable("未获取到书名"));
+                }
                 return;
             }
             e.onNext(books);
             e.onComplete();
         });
+    }
+
+    private SearchBookBean getItem(AnalyzeRule analyzer, String baseUrl) throws ScriptException {
+        SearchBookBean item = new SearchBookBean();
+        analyzer.setBook(item);
+        String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
+        if (!TextUtils.isEmpty(bookName)) {
+            item.setNoteUrl(baseUrl);
+            item.setTag(tag);
+            item.setOrigin(name);
+            item.setName(bookName);
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), baseUrl));
+            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
+            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
+            item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
+            return item;
+        }
+        return null;
+    }
+
+    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl) throws ScriptException {
+        SearchBookBean item = new SearchBookBean();
+        analyzer.setBook(item);
+        String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
+        if (!TextUtils.isEmpty(bookName)) {
+            item.setTag(tag);
+            item.setOrigin(name);
+            item.setName(bookName);
+            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
+            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
+            item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
+            item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
+            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            return item;
+        }
+        return null;
     }
 }

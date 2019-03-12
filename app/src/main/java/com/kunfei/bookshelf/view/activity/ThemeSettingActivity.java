@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.ThemeSettingsFragment;
 
 import androidx.appcompat.app.ActionBar;
@@ -60,7 +60,7 @@ public class ThemeSettingActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.setting);
+            actionBar.setTitle(R.string.theme_setting);
         }
     }
 

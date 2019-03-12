@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.MApplication;
 
 import org.greenrobot.greendao.database.Database;
+
 import java.util.Locale;
 
 public class DbHelper {
@@ -38,8 +38,8 @@ public class DbHelper {
         return instance;
     }
 
-    public DaoSession getmDaoSession() {
-        return mDaoSession;
+    public static DaoSession getDaoSession() {
+        return getInstance().mDaoSession;
     }
 
     public SQLiteDatabase getDb() {
@@ -51,6 +51,7 @@ public class DbHelper {
             super(context, name, factory);
         }
         @Override
+        @SuppressWarnings("unchecked")
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             MigrationHelper.migrate(db,
                     new MigrationHelper.ReCreateAllTableListener() {
@@ -65,7 +66,7 @@ public class DbHelper {
                     },
                     BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class,
                     SearchHistoryBeanDao.class, BookSourceBeanDao.class,
-                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class
+                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class, CookieBeanDao.class
             );
         }
     }

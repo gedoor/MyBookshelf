@@ -15,9 +15,9 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.Theme.ATH;
-import com.kunfei.bookshelf.utils.Theme.MaterialValueHelper;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookmarkFragment;
 import com.kunfei.bookshelf.view.fragment.ChapterListFragment;
 
@@ -162,7 +162,6 @@ public class ChapterListActivity extends BaseTabActivity {
     public void onBackPressed() {
         if (mTlIndicator.getVisibility() != VISIBLE) {
             searchViewCollapsed();
-            return;
         }
         finish();
     }

@@ -55,12 +55,12 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/hpb_download_progress"
+        android:id="@+id/pb_download"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:visibility="invisible"
         android:layout_margin="5dp"
-        android:indeterminate="true"
+        android:max="100"
         style="@android:style/Widget.ProgressBar.Horizontal" />
 
     <com.kunfei.bookshelf.widget.views.ATEStrokeTextView

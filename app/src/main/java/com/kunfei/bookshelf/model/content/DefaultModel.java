@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.model.content;
 
-import com.kunfei.basemvplib.BaseModelImpl;
-import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -11,8 +10,6 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
-import com.kunfei.bookshelf.model.impl.IHttpPostApi;
 import com.kunfei.bookshelf.model.impl.IStationBookModel;
 
 import java.net.MalformedURLException;
@@ -22,9 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -138,6 +132,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), null, null, headerMap);
             return getResponseO(analyzeUrl)
+                    .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getNoteUrl())));
@@ -159,7 +154,8 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), null, null, headerMap);
             return getResponseO(analyzeUrl)
-                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean));
+                    .flatMap(response -> setCookie(response, tag))
+                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
         }
@@ -169,7 +165,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
      * 获取正文
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
@@ -177,41 +173,18 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             });
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
-        if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-            return getAjaxHtml(MApplication.getInstance(), chapterBean.getDurChapterUrl(), AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(scheduler)
-                    .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
-        } else {
-            try {
-                AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+            if (bookSourceBean.getRuleBookContent().startsWith("$")) {
+                return getAjaxHtml(analyzeUrl, tag)
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+            } else {
                 return getResponseO(analyzeUrl)
-                        .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
-            } catch (Exception e) {
-                return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
+                        .flatMap(response -> setCookie(response, tag))
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             }
-        }
-    }
-
-    private Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
-        switch (analyzeUrl.getUrlMode()) {
-            case POST:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getUrl(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap());
-            case GET:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getUrl(),
-                                analyzeUrl.getQueryMap(),
-                                analyzeUrl.getHeaderMap());
-            default:
-                return getRetrofitString(analyzeUrl.getHost())
-                        .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getUrl(),
-                                analyzeUrl.getHeaderMap());
+        } catch (Exception e) {
+            return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
         }
     }
 

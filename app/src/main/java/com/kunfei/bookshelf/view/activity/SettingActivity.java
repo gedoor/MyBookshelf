@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
 
 import androidx.appcompat.app.ActionBar;
@@ -27,6 +27,8 @@ public class SettingActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
+    private SettingsFragment settingsFragment = new SettingsFragment();
+
     public static void startThis(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));
     }
@@ -42,10 +44,10 @@ public class SettingActivity extends MBaseActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
-        setupActionBar();
-        SettingsFragment settingsFragment = new SettingsFragment();
+        setupActionBar(getString(R.string.setting));
+
         getFragmentManager().beginTransaction()
-                .replace(R.id.settingsFrameLayout, settingsFragment)
+                .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
                 .commit();
 
     }
@@ -56,11 +58,11 @@ public class SettingActivity extends MBaseActivity {
     }
 
     //设置ToolBar
-    private void setupActionBar() {
+    public void setupActionBar(String title) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.setting);
+            actionBar.setTitle(title);
         }
     }
 
@@ -77,6 +79,17 @@ public class SettingActivity extends MBaseActivity {
     }
 
     @Override
+    public void finish() {
+        if (getFragmentManager().findFragmentByTag("settings") == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.settingsFrameLayout, settingsFragment, "settings")
+                    .commit();
+        } else {
+            super.finish();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
@@ -90,4 +103,5 @@ public class SettingActivity extends MBaseActivity {
     public void initImmersionBar() {
         super.initImmersionBar();
     }
+
 }

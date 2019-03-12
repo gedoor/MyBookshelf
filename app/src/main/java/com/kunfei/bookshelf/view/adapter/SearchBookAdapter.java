@@ -18,13 +18,11 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -194,7 +192,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     private void saveData(List<SearchBookBean> data) {
-        AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
+        AsyncTask.execute(() -> DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
     }
 
     private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {

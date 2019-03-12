@@ -29,7 +29,7 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
     public Observable<Boolean> saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
         return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             if (bookSourceOld != null && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
-                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
+                DbHelper.getDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
             }
             BookSourceManager.addBookSource(bookSource);
             BookSourceManager.refreshBookSource();

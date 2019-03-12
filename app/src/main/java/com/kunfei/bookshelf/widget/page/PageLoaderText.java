@@ -2,10 +2,10 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.text.TextUtils;
 
-import com.kunfei.basemvplib.untils.EncodingDetect;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.IOUtils;
 import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -39,7 +39,8 @@ public class PageLoaderText extends PageLoader {
 
     //正则表达式章节匹配模式
     // "(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节回集卷])(.*)"
-    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节回集卷])(.{0,30})$",
+    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$",
+            "^([0-9]{1,5})([\\,\\.，-])(.{1,20})$",
             "^(\\s{0,4})([\\(【《]?(卷)?)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([\\.:： \f\t])(.{0,30})$",
             "^(\\s{0,4})([\\(（【《])(.{0,30})([\\)）】》])(\\s{0,2})$",
             "^(\\s{0,4})(正文)(.{0,20})$",

@@ -19,25 +19,25 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ATH;
-import com.kunfei.bookshelf.utils.Theme.NavigationViewUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -115,6 +115,25 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         ButterKnife.bind(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String shared_url = preferences.getString("shared_url", "");
+        assert shared_url != null;
+        if (shared_url.length() > 1) {
+            moDialogHUD.showInputBox("打开书籍网址",
+                    shared_url,
+                    null,
+                    inputText -> mPresenter.addBookUrl(inputText));
+
+            preferences.edit()
+                    .putString("shared_url", "")
+                    .apply();
+        }
+    }
+
+
     /**
      * 沉浸状态栏
      */
@@ -165,6 +184,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         initTabLayout();
         upGroup(group);
         moDialogHUD = new MoDialogHUD(this);
+        if (!preferences.getBoolean("behaviorMain", true)) {
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+            params.setScrollFlags(0);
+        }
 
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
@@ -396,7 +419,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
-                        ) {
+                ) {
                     drawer.closeDrawers();
                 } else {
                     drawer.openDrawer(GravityCompat.START);
@@ -592,10 +615,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void firstRequest() {
         if (!isRecreate) {
-            handler.postDelayed(() -> {
-                versionUpRun();
-                requestPermission();
-            }, 10000);
+            versionUpRun();
+            requestPermission();
             handler.postDelayed(this::preloadReader, 200);
         }
         handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
@@ -691,7 +712,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             showSnackBar(toolbar, "再按一次退出程序");
             exitTime = System.currentTimeMillis();
         } else {
-            DataBackup.getInstance().autoSave();
             finish();
         }
     }

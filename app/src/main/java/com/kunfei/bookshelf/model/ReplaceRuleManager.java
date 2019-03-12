@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kunfei.basemvplib.BaseModelImpl;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
@@ -23,14 +23,14 @@ import io.reactivex.Observable;
  * 替换规则管理
  */
 
-public class ReplaceRuleManager extends BaseModelImpl {
+public class ReplaceRuleManager {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
     private static List<ReplaceRuleBean> replaceRuleBeansAll;
     private static long lastUpTime = System.currentTimeMillis();
 
     public static List<ReplaceRuleBean> getEnabled() {
         if (replaceRuleBeansEnabled == null) {
-            replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
+            replaceRuleBeansEnabled = DbHelper.getDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                     .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
@@ -45,7 +45,7 @@ public class ReplaceRuleManager extends BaseModelImpl {
 
     public static List<ReplaceRuleBean> getAll() {
         if (replaceRuleBeansAll == null) {
-            replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
+            replaceRuleBeansAll = DbHelper.getDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                     .list();
@@ -57,36 +57,36 @@ public class ReplaceRuleManager extends BaseModelImpl {
         if (replaceRuleBean.getSerialNumber() == 0) {
             replaceRuleBean.setSerialNumber(replaceRuleBeansAll.size() + 1);
         }
-        DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
+        DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
         refreshDataS();
     }
 
     public static void delData(ReplaceRuleBean replaceRuleBean) {
-        DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
+        DbHelper.getDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
         refreshDataS();
     }
 
     public static void addDataS(List<ReplaceRuleBean> replaceRuleBeans) {
         if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
-            DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
             refreshDataS();
         }
     }
 
     public static void delDataS(List<ReplaceRuleBean> replaceRuleBeans) {
         for (ReplaceRuleBean replaceRuleBean : replaceRuleBeans) {
-            DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
         }
         refreshDataS();
     }
 
     private static void refreshDataS() {
-        replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
+        replaceRuleBeansEnabled = DbHelper.getDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
+        replaceRuleBeansAll = DbHelper.getDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
@@ -103,7 +103,7 @@ public class ReplaceRuleManager extends BaseModelImpl {
         } else {
             try {
                 URL url = new URL(text);
-                return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+                return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                         .create(IHttpGetApi.class)
                         .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                         .flatMap(rsp -> importReplaceRuleO(rsp.body()))

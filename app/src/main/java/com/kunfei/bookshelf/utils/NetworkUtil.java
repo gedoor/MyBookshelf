@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ public class NetworkUtil {
     public static final int ERROR_CODE_NONET = 10001;
     public static final int ERROR_CODE_OUTTIME = 10002;
     public static final int ERROR_CODE_ANALY = 10003;
+    @SuppressLint("UseSparseArrays")
     private static final Map<Integer, String> errorMap = new HashMap<>();
 
     static {
@@ -44,10 +46,19 @@ public class NetworkUtil {
      * 获取绝对地址
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
+        String header = null;
+        if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
+            header = relativePath.substring(0, relativePath.indexOf("}") + 1);
+            relativePath = relativePath.substring(header.length());
+        }
         try {
             URL absoluteUrl = new URL(baseURL);
             URL parseUrl = new URL(absoluteUrl, relativePath);
-            return parseUrl.toString();
+            relativePath = parseUrl.toString();
+            if (header != null) {
+                relativePath = header + relativePath;
+            }
+            return relativePath;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,11 +20,10 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -34,7 +33,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
@@ -131,7 +129,7 @@ public class SourceDebugActivity extends MBaseActivity {
                 if (TextUtils.isEmpty(query))
                     return false;
                 startDebug(query);
-                SoftInputUtil.hideIMM(SourceDebugActivity.this, searchView);
+                SoftInputUtil.hideIMM(searchView);
                 return true;
             }
 
@@ -262,8 +260,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
-        WebBookModel.getInstance().getBookContent(Schedulers.io(), chapterListBean, bookName)
-                .timeout(20, TimeUnit.SECONDS)
+        WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

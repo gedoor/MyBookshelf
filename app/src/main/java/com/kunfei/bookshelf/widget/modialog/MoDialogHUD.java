@@ -152,7 +152,7 @@ public class MoDialogHUD {
     public void dismiss() {
         //消失动画
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
-            SoftInputUtil.hideIMM(context, rootView);
+            SoftInputUtil.hideIMM(rootView);
             if (!isFinishing) {
                 new Handler().post(() -> {
                     outAnim.setAnimationListener(outAnimListener);

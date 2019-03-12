@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,11 +17,12 @@ import android.widget.LinearLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.BitIntentDataManager;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -102,18 +102,14 @@ public class SourceLoginActivity extends MBaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 String cookie = cookieManager.getCookie(url);
-                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
-                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
-                editor.apply();
+                DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 String cookie = cookieManager.getCookie(url);
-                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
-                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
-                editor.apply();
+                DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(new CookieBean(bookSourceBean.getBookSourceUrl(), cookie));
                 if (checking)
                     finish();
                 else

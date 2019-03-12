@@ -26,8 +26,6 @@
     <color name="tv_text_summary">#b3ffffff</color>
     <color name="menu_color_default">#b7b7b7</color>
 
-    <color name="tv_chapter_color_selected">#b7b7b7</color>
-    <color name="tv_chapter_color_normal">#969696</color>
 
     <color name="tv_text_button_nor">#303030</color>
 

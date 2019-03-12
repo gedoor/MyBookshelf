@@ -28,25 +28,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //support
-    api 'androidx.core:core:1.1.0-alpha03'
-    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    api 'androidx.core:core:1.1.0-alpha04'
+    api 'androidx.appcompat:appcompat:1.1.0-alpha02'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxjava:2.2.4'
+    api 'io.reactivex.rxjava2:rxjava:2.2.6'
     api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    //RxBus
+    api 'com.hwangjr.rxbus:rxbus:2.0.0'
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     api 'com.squareup.retrofit2:converter-scalars:2.5.0'
-
-    //RxBus
-    api 'com.hwangjr.rxbus:rxbus:2.0.0'
-
-    //J_SOUP
-    api 'org.jsoup:jsoup:1.11.3'
-    api 'cn.wanghaomiao:JsoupXpath:2.2'
-    api 'com.jayway.jsonpath:json-path:2.4.0'
-    api 'io.apisense:rhino-android:1.0'
 
 }

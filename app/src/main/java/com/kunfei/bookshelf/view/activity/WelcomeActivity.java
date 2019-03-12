@@ -12,7 +12,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +35,7 @@ public class WelcomeActivity extends MBaseActivity {
             return;
         }
         setContentView(R.layout.activity_welcome);
-        AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession());
+        AsyncTask.execute(DbHelper::getDaoSession);
         ButterKnife.bind(this);
         ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);

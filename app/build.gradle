@@ -71,7 +71,7 @@ dependencies {
     //fireBase
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -81,9 +81,15 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.android:flexbox:1.1.0'
+
+    //J_SOUP
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
+    implementation 'com.jayway.jsonpath:json-path:2.4.0'
+    implementation 'io.apisense:rhino-android:1.0'
 
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
@@ -97,7 +103,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     //CircleImageView
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     //bind view
     implementation 'com.jakewharton:butterknife:10.0.0'
@@ -110,7 +116,7 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 
     //颜色选择
-    implementation 'com.jaredrummler:colorpicker:1.0.5'
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     //文件目录选择
     implementation 'com.github.gedoor.AndroidPicker:FilePicker:2.0.0'
@@ -122,16 +128,18 @@ dependencies {
     implementation 'net.ricecode:string-similarity:1.0.0'
 
     //MarkDown
-    implementation 'ru.noties:markwon:2.0.0'
+    implementation 'ru.noties:markwon:2.0.1'
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
+        exclude group: 'org.slf4j'
         exclude group: 'xmlpull'
     }
+
 }
 
 greendao {
-    schemaVersion 53
+    schemaVersion 55
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }

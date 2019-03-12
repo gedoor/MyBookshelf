@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.utils.Selector;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import androidx.annotation.Nullable;
 

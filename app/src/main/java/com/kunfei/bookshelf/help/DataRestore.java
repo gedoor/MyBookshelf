@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.help;
 
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.MApplication;
@@ -10,8 +12,7 @@ import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
-import com.kunfei.bookshelf.utils.FileUtil;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
 import java.io.FileInputStream;
@@ -30,7 +31,7 @@ public class DataRestore {
     }
 
     public Boolean run() throws Exception {
-        String dirPath = FileUtil.getSdCardPath() + "/YueDu";
+        String dirPath = FileUtils.getSdCardPath() + "/YueDu";
         restoreConfig(dirPath);
         restoreBookSource(dirPath);
         restoreBookShelf(dirPath);
@@ -46,20 +47,27 @@ public class DataRestore {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (entries == null || entries.isEmpty()) {
-            String json = DocumentHelper.readString("config.json", dirPath);
-            if (json != null) {
-                entries = new Gson().fromJson(json, new TypeToken<Map<String, ?>>() {
-                }.getType());
-            }
-        }
         if (entries == null || entries.isEmpty()) return;
+        SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
         for (Map.Entry<String, ?> entry : entries.entrySet()) {
             Object v = entry.getValue();
             String key = entry.getKey();
-            SharedPreferencesUtil.saveData(key, v);
+            String type = v.getClass().getSimpleName();
+
+            if ("Integer".equals(type)) {
+                editor.putInt(key, (Integer) v);
+            } else if ("Boolean".equals(type)) {
+                editor.putBoolean(key, (Boolean) v);
+            } else if ("String".equals(type)) {
+                editor.putString(key, (String) v);
+            } else if ("Float".equals(type)) {
+                editor.putFloat(key, (Float) v);
+            } else if ("Long".equals(type)) {
+                editor.putLong(key, (Long) v);
+            }
         }
-        SharedPreferencesUtil.saveData("versionCode", MApplication.getVersionCode());
+        editor.putInt("versionCode", MApplication.getVersionCode());
+        editor.apply();
         MApplication.getInstance().upThemeStore();
     }
 
@@ -70,10 +78,10 @@ public class DataRestore {
             }.getType());
             for (BookShelfBean bookshelf : bookShelfList) {
                 if (bookshelf.getNoteUrl() != null) {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+                    DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
                 }
                 if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
                 }
             }
         }
@@ -94,7 +102,7 @@ public class DataRestore {
             List<SearchHistoryBean> searchHistoryBeans = new Gson().fromJson(json, new TypeToken<List<SearchHistoryBean>>() {
             }.getType());
             if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
             }
         }
     }

@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.help.Constant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
  * Created by GKF on 2018/1/24.
@@ -25,9 +23,11 @@ public class AnalyzeUrl {
     private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern pagePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
 
+    private String url;
     private String hostUrl;
     private String urlPath;
-    private Map<String, String> queryMap;
+    private String queryStr;
+    private Map<String, String> queryMap = new HashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
     private String charCode;
     private UrlMode urlMode = UrlMode.DEFAULT;
@@ -42,7 +42,7 @@ public class AnalyzeUrl {
         //分离编码规则
         String[] ruleUrlS = ruleUrl.split("\\|");
         if (ruleUrlS.length > 1) {
-            analyzeQt(ruleUrlS[1]);
+            analyzeOther(ruleUrlS[1]);
         }
         //设置页数
         if (page != null) {
@@ -61,7 +61,7 @@ public class AnalyzeUrl {
         }
         generateUrlPath(ruleUrlS[0]);
         if (urlMode != UrlMode.DEFAULT) {
-            queryMap = getQueryMap(ruleUrlS[1]);
+            analyzeQuery(ruleUrlS[1]);
         }
     }
 
@@ -105,7 +105,7 @@ public class AnalyzeUrl {
     /**
      * 解析编码规则
      */
-    private void analyzeQt(final String qtRule) {
+    private void analyzeOther(final String qtRule) {
         if (TextUtils.isEmpty(qtRule)) return;
         String[] qtS = qtRule.split("&");
         for (String qt : qtS) {
@@ -117,37 +117,44 @@ public class AnalyzeUrl {
     }
 
     /**
-     * QueryMap
+     * 解析QueryMap
      */
-    private Map<String, String> getQueryMap(String allQuery) throws Exception {
+    private void analyzeQuery(String allQuery) throws Exception {
+        if (isEmpty(charCode)) {
+            queryStr = URLEncoder.encode(allQuery, "UTF-8");
+        } else {
+            queryStr = URLEncoder.encode(allQuery, charCode);
+        }
         String[] queryS = allQuery.split("&");
-        Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
             String value = queryM.length > 1 ? queryM[1] : "";
             if (isEmpty(charCode)) {
-                map.put(queryM[0], value);
+                queryMap.put(queryM[0], value);
             } else if (charCode.equals("escape")) {
-                map.put(queryM[0], StringUtils.escape(value));
+                queryMap.put(queryM[0], StringUtils.escape(value));
             } else {
-                map.put(queryM[0], URLEncoder.encode(value, charCode));
+                queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
             }
         }
-        return map;
     }
 
-    private void generateUrlPath(String ruleUrl) throws MalformedURLException {
-        URL url = new URL(ruleUrl);
-        hostUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
-        urlPath = ruleUrl.replace(hostUrl, "");
+    private void generateUrlPath(String ruleUrl) {
+        url = ruleUrl;
+        hostUrl = StringUtils.getBaseUrl(ruleUrl);
+        urlPath = ruleUrl.substring(hostUrl.length());
     }
 
     public String getHost() {
         return hostUrl;
     }
 
-    public String getUrl() {
+    public String getPath() {
         return urlPath;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public Map<String, String> getQueryMap() {
@@ -156,6 +163,10 @@ public class AnalyzeUrl {
 
     public Map<String, String> getHeaderMap() {
         return headerMap;
+    }
+
+    public String getQueryStr() {
+        return queryStr;
     }
 
     public UrlMode getUrlMode() {

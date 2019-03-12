@@ -20,8 +20,8 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;
@@ -42,7 +42,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
 
-    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+    private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
         public void onSwiped(int adapterPosition) {
 
@@ -59,7 +59,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     };
 
     @Override
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+    public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
@@ -145,7 +145,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
         if (Objects.equals(bookshelfPx, "2") && bookShelfBean.getSerialNumber() != index) {
             bookShelfBean.setSerialNumber(index);
-            AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
+            AsyncTask.execute(() -> DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
         }
         if (bookShelfBean.isLoading()) {
             holder.bvUnread.setVisibility(View.INVISIBLE);

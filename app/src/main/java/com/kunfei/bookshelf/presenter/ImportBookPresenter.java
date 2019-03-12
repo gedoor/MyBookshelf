@@ -4,7 +4,7 @@ package com.kunfei.bookshelf.presenter;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.ImportBookModel;
 import com.kunfei.bookshelf.presenter.contract.ImportBookContract;
 import com.kunfei.bookshelf.utils.RxUtils;

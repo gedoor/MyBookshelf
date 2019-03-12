@@ -14,34 +14,26 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
+import com.kunfei.bookshelf.utils.download.DownloadUtils;
+import com.kunfei.bookshelf.utils.download.JsDownloadListener;
 import com.kunfei.bookshelf.view.activity.UpdateActivity;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class UpdateService extends Service {
     public static boolean isRunning = false;
     private static final String startDownload = "startDownload";
     private static final String stopDownload = "stopDownload";
-    private String apkFilePath;
     private UpdateInfoBean updateInfo;
-    private boolean interceptFlag = false;
     private Disposable disposableDown;
-    private int count = 0;
 
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateService.class);
@@ -99,7 +91,6 @@ public class UpdateService extends Service {
     }
 
     private void stopDownload() {
-        interceptFlag = true;
         stopSelf();
     }
 
@@ -145,72 +136,46 @@ public class UpdateService extends Service {
         if (disposableDown != null) {
             return;
         }
-        Observable.create((ObservableOnSubscribe<Integer>) e -> {
-            try {
-                URL url = new URL(apkUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.connect();
-                int length = conn.getContentLength();
-                InputStream is = conn.getInputStream();
+        String apkFilePath = UpdateManager.getSavePath(apkUrl.substring(apkUrl.lastIndexOf("/")));
+        File apkFile = new File(apkFilePath);
+        DownloadUtils downloadUtils = new DownloadUtils("https://github.com", new JsDownloadListener() {
+            @Override
+            public void onStartDownload(long length) {
 
-                apkFilePath = UpdateManager.getSavePath(apkUrl.substring(apkUrl.lastIndexOf("/")));
-                File apkFile = new File(apkFilePath);
-                FileOutputStream fos = new FileOutputStream(apkFile);
-
-                byte buf[] = new byte[1024];
-                int numread;
-                do {
-                    numread = is.read(buf);
-                    count += numread;
-                    int progress = (int) (((float) count / length) * 100);
-                    //更新进度
-                    e.onNext(progress);
-                    if (numread <= 0) {
-                        //下载完成通知安装
-                        break;
-                    }
-                    fos.write(buf, 0, numread);
-                } while (!interceptFlag);//点击取消就停止下载.
-                fos.close();
-                is.close();
-                if (numread > 0) {
-                    apkFile.delete();
-                }
-                e.onNext(-1);
-            } catch (Exception exception) {
-                e.onError(exception);
-            } finally {
-                e.onComplete();
             }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Integer>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposableDown = d;
-                    }
 
-                    @Override
-                    public void onNext(Integer integer) {
-                        if (integer < 0) {
-                            RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
-                            UpdateActivity.startThis(UpdateService.this, updateInfo);
-                        } else {
-                            updateNotification(integer);
-                        }
-                    }
+            @Override
+            public void onProgress(int progress) {
+                updateNotification(progress);
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
-                    }
+            @Override
+            public void onFail(String errorInfo) {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), errorInfo, Toast.LENGTH_SHORT).show());
+                UpdateService.this.stopSelf();
+            }
+        });
+        downloadUtils.download(apkUrl, apkFile, new Observer<InputStream>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposableDown = d;
+            }
 
-                    @Override
-                    public void onComplete() {
-                        RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
-                        UpdateService.this.stopSelf();
-                    }
-                });
+            @Override
+            public void onNext(InputStream inputStream) {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                UpdateService.this.stopSelf();
+            }
+
+            @Override
+            public void onComplete() {
+                UpdateService.this.stopSelf();
+            }
+        });
 
     }
 

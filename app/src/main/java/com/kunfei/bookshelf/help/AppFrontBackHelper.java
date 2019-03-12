@@ -17,9 +17,6 @@ public class AppFrontBackHelper {
 
     /**
      * 注册状态监听，仅在Application中使用
-     *
-     * @param application
-     * @param listener
      */
     public void register(Application application, OnAppStatusListener listener) {
         mOnAppStatusListener = listener;

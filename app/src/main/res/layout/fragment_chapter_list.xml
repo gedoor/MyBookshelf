@@ -15,34 +15,42 @@
     <LinearLayout
         android:id="@+id/ll_chapter_base_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_current_chapter_info"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:ellipsize="middle"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:singleLine="true"
+            android:gravity="center_vertical"
             android:textColor="@color/tv_text_default"
             android:textSize="12sp" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_chapter_sort"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="5dp"
+            android:id="@+id/iv_chapter_top"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
             android:background="@drawable/bg_ib_pre_round"
-            android:contentDescription="@string/swap_sort"
-            android:padding="2dp"
-            android:src="@drawable/ic_swap_calls_black_24dp"
+            android:contentDescription="@string/go_to_top"
+            android:src="@drawable/ic_arrow_drop_up_black_24dp"
+            app:tint="@color/tv_text_default" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_chapter_bottom"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_ib_pre_round"
+            android:contentDescription="@string/go_to_bottom"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
             app:tint="@color/tv_text_default" />
     </LinearLayout>
 

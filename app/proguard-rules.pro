@@ -219,10 +219,13 @@ public static java.lang.String TABLENAME;
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
--dontwarn org.xmlpull.v1.**
+-dontwarn org.xmlpull.**
 -keep class nl.siegmann.epublib.**{*;}
 -keep class javax.xml.**{*;}
 -keep class org.xmlpull.**{*;}
+
+-keep class org.simpleframework.xml.**{*;}
+-dontwarn org.simpleframework.xml.**
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);

@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.kunfei.bookshelf.MApplication;
 
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,22 +133,29 @@ public class StringUtils {
     }
 
     private static HashMap<Character, Integer> getChnMap() {
-        String cnStr = "零一二三四五六七八九十";
         HashMap<Character, Integer> map = new HashMap<>();
+        String cnStr = "零一二三四五六七八九十";
         char[] c = cnStr.toCharArray();
         for (int i = 0; i <= 10; i++) {
             map.put(c[i], i);
         }
-        map.put('〇', 0);
+        cnStr = "〇壹贰叁肆伍陆柒捌玖拾";
+        c = cnStr.toCharArray();
+        for (int i = 0; i <= 10; i++) {
+            map.put(c[i], i);
+        }
         map.put('两', 2);
         map.put('百', 100);
+        map.put('佰', 100);
         map.put('千', 1000);
+        map.put('仟', 1000);
         map.put('万', 10000);
         map.put('亿', 100000000);
         return map;
     }
 
     // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
+    @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;
         int tmp = 0;
@@ -155,7 +163,7 @@ public class StringUtils {
         char[] cn = chNum.toCharArray();
 
         // "一零二五" 形式
-        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九]$")) {
+        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九壹贰叁肆伍陆柒捌玖]$")) {
             for (int i = 0; i < cn.length; i++) {
                 cn[i] = (char) (48 + ChnMap.get(cn[i]));
             }
@@ -210,7 +218,7 @@ public class StringUtils {
     public static String base64Decode(String str) {
         byte[] bytes = Base64.decode(str, Base64.DEFAULT);
         try {
-            return new String(bytes, "UTF-8");
+            return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return new String(bytes);
         }
@@ -275,19 +283,14 @@ public class StringUtils {
     }
 
     public static boolean isTrimEmpty(String text) {
-        if (text == null) {
-            return true;
-        }
-        if (text.length() == 0) {
-            return true;
-        }
+        if (text == null) return true;
+        if (text.length() == 0) return true;
         return text.trim().length() == 0;
     }
 
     public static boolean startWithIgnoreCase(String src, String obj) {
-        if (obj.length() > src.length()) {
-            return false;
-        }
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
     }
 
@@ -331,5 +334,34 @@ public class StringUtils {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();
+    }
+
+    public static String getBaseUrl(String url) {
+        if (url == null) return null;
+        int index = url.indexOf("/", 9);
+        if (index == -1) {
+            return url;
+        }
+        return url.substring(0, index);
+    }
+
+    public static String trim(String string) {
+        if (string == null) {
+            return null;
+        }
+        return string.trim();
+    }
+
+    public static String removeUTFCharacters(String data) {
+        if (data == null) return null;
+        Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+        Matcher m = p.matcher(data);
+        StringBuffer buf = new StringBuffer(data.length());
+        while (m.find()) {
+            String ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+            m.appendReplacement(buf, Matcher.quoteReplacement(ch));
+        }
+        m.appendTail(buf);
+        return buf.toString();
     }
 }
