@@ -7,12 +7,11 @@ import com.jayway.jsonpath.ReadContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AnalyzeByJSonPath {
-    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{)$.+?(?=\\})");
     private ReadContext ctx;
 
     public AnalyzeByJSonPath parse(String json) {
@@ -27,7 +26,7 @@ public class AnalyzeByJSonPath {
 
     public String read(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
-        String result;
+        String result = "";
         String rules[];
         String elementsType;
         if (rule.contains("&&")) {
@@ -51,17 +50,13 @@ public class AnalyzeByJSonPath {
                         result = String.valueOf(object);
                     }
                 } catch (Exception ignored) {
-                    return rule;
                 }
                 return result;
             } else {
                 result = rule;
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    String tmp = read(matcher.group());
-                    if (!Objects.equals(tmp, matcher.group())) {
-                        result = result.replace(String.format("{%s}", matcher.group()), tmp);
-                    }
+                    result = result.replace(String.format("{%s}", matcher.group()), matcher.group());
                 }
                 return result;
             }
