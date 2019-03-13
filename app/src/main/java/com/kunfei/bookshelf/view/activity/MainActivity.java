@@ -195,6 +195,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     //初始化TabLayout和ViewPager
     private void initTabLayout() {
+        mTlIndicator.setBackgroundColor(ThemeStore.backgroundColor(this));
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         //TabLayout使用自定义Item
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
