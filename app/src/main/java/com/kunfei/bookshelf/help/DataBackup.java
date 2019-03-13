@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -56,10 +57,11 @@ public class DataBackup {
         Single.create((SingleOnSubscribe<Boolean>) e -> {
             long currentTime = System.currentTimeMillis();
             List<String> per = PermissionUtils.checkMorePermissions(MApplication.getInstance(), MApplication.PerList);
-            if (per.isEmpty()) {
+            if (per.isEmpty() && !BuildConfig.DEBUG) {
                 File file = new File(FileUtils.getSdCardPath() + File.separator + "YueDu" + File.separator + "autoSave" + File.separator + "myBookShelf.json");
                 if (file.exists()) {
                     if (currentTime - file.lastModified() < TimeUnit.DAYS.toMillis(1)) {
+                        e.onSuccess(false);
                         return;
                     }
                 }
@@ -75,6 +77,7 @@ public class DataBackup {
                 upload(dirPath);
                 e.onSuccess(true);
             }
+            e.onSuccess(false);
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe();
     }
