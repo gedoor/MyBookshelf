@@ -13,7 +13,6 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="?attr/actionBarStyle"
         tools:ignore="UnusedAttribute">
 
         <androidx.appcompat.widget.Toolbar
@@ -24,6 +23,7 @@
             android:background="?attr/colorPrimary"
             android:gravity="center_vertical"
             android:transitionName="sharedView"
+            android:theme="?attr/actionBarStyle"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -44,14 +44,29 @@
             </androidx.cardview.widget.CardView>
         </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_tl_indicator"
+        <LinearLayout
+            android:id="@+id/ll_bar"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            app:tabGravity="fill"
-            app:tabIndicatorGravity="bottom"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="fixed" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_tl_indicator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                app:tabGravity="fill"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorGravity="bottom"
+                app:tabMode="fixed" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
