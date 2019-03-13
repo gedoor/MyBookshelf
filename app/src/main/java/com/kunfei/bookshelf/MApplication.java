@@ -136,7 +136,7 @@ public class MApplication extends Application {
     }
 
     public boolean getDonateHb() {
-        return donateHb;
+        return donateHb || BuildConfig.DEBUG;
     }
 
     public void upDonateHb() {

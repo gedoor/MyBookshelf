@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AnalyzeByJSonPath {
-    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{)$.+?(?=\\})");
     private ReadContext ctx;
 
     public AnalyzeByJSonPath parse(String json) {
@@ -56,7 +56,7 @@ public class AnalyzeByJSonPath {
                 result = rule;
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
+                    result = result.replace(String.format("{%s}", matcher.group()), matcher.group());
                 }
                 return result;
             }

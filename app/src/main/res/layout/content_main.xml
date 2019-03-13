@@ -13,7 +13,6 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="?attr/actionBarStyle"
         tools:ignore="UnusedAttribute">
 
         <androidx.appcompat.widget.Toolbar
@@ -23,6 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:gravity="center_vertical"
+            android:theme="?attr/actionBarStyle"
             android:transitionName="sharedView"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
@@ -47,11 +47,13 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom"
             app:tabGravity="fill"
-            app:tabIndicatorGravity="bottom"
             app:tabIndicatorFullWidth="false"
+            app:tabIndicatorGravity="bottom"
             app:tabMode="fixed" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

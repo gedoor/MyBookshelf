@@ -35,6 +35,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -125,7 +126,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             moDialogHUD.showInputBox("打开书籍网址",
                     shared_url,
                     null,
-                    inputText -> mPresenter.addBookUrl(inputText));
+                    inputText -> {
+                        inputText = StringUtils.trim(inputText);
+                        mPresenter.addBookUrl(inputText);
+                    });
 
             preferences.edit()
                     .putString("shared_url", "")
@@ -188,7 +192,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
             params.setScrollFlags(0);
         }
-
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
                 toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out));
@@ -196,8 +199,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     //初始化TabLayout和ViewPager
     private void initTabLayout() {
-        mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         mTlIndicator.setBackgroundColor(ThemeStore.backgroundColor(this));
+        mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         //TabLayout使用自定义Item
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
@@ -384,7 +387,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 moDialogHUD.showInputBox("添加书籍网址",
                         null,
                         null,
-                        inputText -> mPresenter.addBookUrl(inputText));
+                        inputText -> {
+                            inputText = StringUtils.trim(inputText);
+                            mPresenter.addBookUrl(inputText);
+                        });
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())

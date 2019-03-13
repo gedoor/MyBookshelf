@@ -35,7 +35,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
-    private static final Pattern zhPattern = Pattern.compile("[^\\x00-\\xFF]");
 
     public static BaseModelImpl getInstance() {
         return new BaseModelImpl();
@@ -137,19 +136,21 @@ public class BaseModelImpl {
     protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
         String js = "document.documentElement.outerHTML";
         return Observable.create(e -> {
+            final Html html = new Html("加载超时");
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
+                Runnable timeoutRunnable;
                 WebView webView = new WebView(MApplication.getInstance());
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setUserAgentString(analyzeUrl.getHeaderMap().get("User-Agent"));
                 CookieManager cookieManager = CookieManager.getInstance();
-                Runnable runnable = new Runnable() {
+                Runnable retryRunnable = new Runnable() {
                     @Override
                     public void run() {
                         webView.evaluateJavascript(js, value -> {
-                            value = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(value)) {
-                                e.onNext(value);
+                            html.content = StringEscapeUtils.unescapeJson(value);
+                            if (isLoadFinish(html.content)) {
+                                e.onNext(html.content);
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
@@ -159,12 +160,21 @@ public class BaseModelImpl {
                         });
                     }
                 };
+                timeoutRunnable = () -> {
+                    if (!e.isDisposed()) {
+                        handler.removeCallbacks(retryRunnable);
+                        e.onNext(html.content);
+                        e.onComplete();
+                        webView.destroy();
+                    }
+                };
+                handler.postDelayed(timeoutRunnable, 25000);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
                                 .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
-                        handler.post(runnable);
+                        handler.postDelayed(retryRunnable, 1000);
                     }
                 });
                 switch (analyzeUrl.getUrlMode()) {
@@ -183,9 +193,15 @@ public class BaseModelImpl {
 
     private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
         value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
-        boolean result = Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
-        return result;
-        //return zhPattern.split(value).length > 500;
+        return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
+    }
+
+    private class Html {
+        private String content;
+
+        Html(String content) {
+            this.content = content;
+        }
     }
 
 }
