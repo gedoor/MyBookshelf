@@ -51,7 +51,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -79,8 +78,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     CoordinatorLayout mainView;
     @BindView(R.id.card_search)
     CardView cardSearch;
-    @BindView(R.id.search_view)
-    SearchView searchView;
 
     private AppCompatImageView vwNightTheme;
     private int group;
@@ -191,7 +188,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
             params.setScrollFlags(0);
         }
-        initSearchView();
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
                 toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out));
@@ -200,7 +196,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     //初始化TabLayout和ViewPager
     private void initTabLayout() {
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
-        mTlIndicator.setBackgroundColor(ThemeStore.backgroundColor(this));
         //TabLayout使用自定义Item
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
@@ -248,10 +243,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
             }
         });
-    }
-
-    private void initSearchView() {
-        searchView.setBackgroundColor(ThemeStore.backgroundColor(this));
     }
 
     /**

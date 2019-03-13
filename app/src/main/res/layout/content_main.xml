@@ -22,8 +22,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:gravity="center_vertical"
-            android:transitionName="sharedView"
             android:theme="?attr/actionBarStyle"
+            android:transitionName="sharedView"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -44,29 +44,17 @@
             </androidx.cardview.widget.CardView>
         </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
-            android:id="@+id/ll_bar"
-            android:layout_width="match_parent"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_tl_indicator"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            app:tabGravity="fill"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorGravity="bottom"
+            app:tabMode="fixed" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_tl_indicator"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"
-                app:tabGravity="fill"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicatorGravity="bottom"
-                app:tabMode="fixed" />
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
