@@ -46,10 +46,9 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_tl_indicator"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
             android:layout_gravity="bottom"
-            android:layout_weight="1"
             app:tabGravity="fill"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorGravity="bottom"
