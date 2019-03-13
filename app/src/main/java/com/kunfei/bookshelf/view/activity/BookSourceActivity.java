@@ -437,7 +437,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     refreshBookSource();
                     break;
                 case IMPORT_SOURCE:
-                    if (data != null) {
+                    if (data != null && data.getData() != null) {
                         mPresenter.importBookSourceLocal(FileUtils.getPath(this, data.getData()));
                     }
                     break;

@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.presenter;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
@@ -145,6 +146,10 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
 
     @Override
     public void importBookSourceLocal(String path) {
+        if (TextUtils.isEmpty(path)) {
+            mView.toast(R.string.read_file_error);
+            return;
+        }
         String json;
         DocumentFile file;
         try {
@@ -158,7 +163,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
             importBookSource(json);
         } else {
-            mView.toast("文件读取失败");
+            mView.toast(R.string.read_file_error);
         }
     }
 

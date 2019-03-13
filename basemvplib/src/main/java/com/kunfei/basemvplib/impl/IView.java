@@ -7,4 +7,6 @@ public interface IView {
 
     void toast(String msg);
 
+    void toast(int id);
+
 }
