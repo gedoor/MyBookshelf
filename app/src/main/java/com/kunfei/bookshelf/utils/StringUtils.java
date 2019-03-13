@@ -349,7 +349,7 @@ public class StringUtils {
         if (string == null) {
             return null;
         }
-        return string.replaceAll("(^\\s+|\\s+$)", "");
+        return string.replaceAll("(^\\s*|\\s*$)", "");
     }
 
     public static String removeUTFCharacters(String data) {
