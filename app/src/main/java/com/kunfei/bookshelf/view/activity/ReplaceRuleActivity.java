@@ -16,13 +16,14 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -194,6 +195,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                         cacheUrl,
                         new String[]{cacheUrl},
                         inputText -> {
+                            inputText = StringUtils.trim(inputText);
                             ACache.get(this).put("replaceUrl", inputText);
                             mPresenter.importDataS(inputText);
                         });
