@@ -14,7 +14,7 @@ public class CookieBean implements Parcelable {
     private String url;
     private String cookie;
 
-    protected CookieBean(Parcel in) {
+    private CookieBean(Parcel in) {
         url = in.readString();
         cookie = in.readString();
     }
@@ -49,7 +49,7 @@ public class CookieBean implements Parcelable {
     }
 
     public String getCookie() {
-        return this.cookie;
+        return cookie == null ? "" : cookie;
     }
 
     public void setCookie(String cookie) {
