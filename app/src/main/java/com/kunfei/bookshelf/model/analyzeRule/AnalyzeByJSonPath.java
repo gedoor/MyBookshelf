@@ -95,8 +95,9 @@ public class AnalyzeByJSonPath {
                     if (object instanceof List) {
                         for (Object o : ((List) object))
                             result.add(String.valueOf(o));
+                    } else {
+                        result.add(String.valueOf(object));
                     }
-                    result.add(String.valueOf(object));
                 } catch (Exception ignored) {
                 }
                 return result;
