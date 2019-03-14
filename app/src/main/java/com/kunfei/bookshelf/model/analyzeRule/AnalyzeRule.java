@@ -340,6 +340,9 @@ public class AnalyzeRule {
                 } else if (StringUtils.startWithIgnoreCase(ruleStr, "@JSon:")) {
                     mode = Mode.JSon;
                     rule = ruleStr.substring(6);
+                } else if (ruleStr.startsWith("$.")) {
+                    mode = Mode.JSon;
+                    rule = ruleStr;
                 } else {
                     rule = ruleStr;
                 }
