@@ -88,7 +88,7 @@ public class AnalyzeByJSonPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            if (!rule.contains("{")) {
+            if (!rule.contains("{$")) {
                 try {
                     Object object = ctx.read(rule);
                     if (object == null) return result;
