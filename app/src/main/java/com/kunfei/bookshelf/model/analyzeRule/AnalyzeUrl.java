@@ -120,11 +120,7 @@ public class AnalyzeUrl {
      * 解析QueryMap
      */
     private void analyzeQuery(String allQuery) throws Exception {
-        if (isEmpty(charCode)) {
-            queryStr = URLEncoder.encode(allQuery, "UTF-8");
-        } else {
-            queryStr = URLEncoder.encode(allQuery, charCode);
-        }
+        queryStr = charCode;
         String[] queryS = allQuery.split("&");
         for (String query : queryS) {
             String[] queryM = query.split("=");
