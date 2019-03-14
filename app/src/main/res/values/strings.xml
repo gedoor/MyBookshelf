@@ -100,7 +100,8 @@
     <string name="send_mail">发送邮件</string>
     <string name="can_not_open">无法打开</string>
     <string name="no_chapter">无章节</string>
-    <string name="add_book_url">添加网址</string>
+    <string name="add_url">添加网址</string>
+    <string name="add_book_url">添加书籍网址</string>
     <string name="background">背景</string>
     <string name="author">作者</string>
     <string name="analyze_error">站点暂时不支持解析，请反馈</string>
@@ -156,6 +157,7 @@
     <string name="remove_from_bookshelf">删除书籍</string>
     <string name="start_read">开始阅读</string>
     <string name="data_loading">加载数据中…</string>
+    <string name="load_error_retry">加载失败,点击重试</string>
     <string name="book_intro">内容简介</string>
     <string name="open_from_other">打开外部书籍</string>
     <string name="origin">来源</string>
@@ -343,5 +345,20 @@
     <string name="restore_default_theme">恢复主题为默认配色</string>
     <string name="join_qq_group">加入QQ群</string>
     <string name="read_file_error">文件读取失败</string>
+    <string name="bg_image_per">获取背景图片需存储权限</string>
+    <string name="input_book_source_url">输入书源网址</string>
+    <string name="del_file">删除文件</string>
+    <string name="del_file_success">删除文件成功</string>
+    <string name="sure_del_file">确定删除文件吗?</string>
+    <string name="select_all">全选</string>
+    <string name="files_tree">手机目录</string>
+    <string name="intelligent_import">智能导入</string>
+    <string name="bookshelf">书架</string>
+    <string name="find">发现</string>
+    <string name="switch_display_style">切换显示样式</string>
+    <string name="import_per">导入本地书籍需存储权限</string>
+    <string name="click_to_day">点击可切换到白天模式</string>
+    <string name="click_to_night">点击可切换到夜间模式</string>
+    <string name="get_storage_per">本软件需要存储权限来存储备份书籍信息</string>
 
 </resources>

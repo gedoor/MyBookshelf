@@ -389,7 +389,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-        moDialogHUD.showInputBox("输入书源网址",
+        moDialogHUD.showInputBox(getString(R.string.input_book_source_url),
                 cacheUrl,
                 new String[]{cacheUrl},
                 inputText -> {

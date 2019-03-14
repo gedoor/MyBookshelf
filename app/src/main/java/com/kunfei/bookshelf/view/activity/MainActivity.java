@@ -67,7 +67,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
-    private static String[] mTitles = new String[]{"书架", "发现"};
+    private String[] mTitles;
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -149,6 +149,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void initData() {
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
+        mTitles = new String[]{getString(R.string.bookshelf), getString(R.string.find)};
     }
 
     @Override
@@ -272,7 +273,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenu().add(0, 0, 0, "切换显示样式");
+        popupMenu.getMenu().add(0, 0, 0, getString(R.string.switch_display_style));
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("findTypeIsFlexBox", !preferences.getBoolean("findTypeIsFlexBox", true));
@@ -374,7 +375,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
                     @Override
                     public void onUserHasAlreadyTurnedDown(String... permission) {
-                        MainActivity.this.toast("导入本地书籍需存储权限");
+                        MainActivity.this.toast(R.string.import_per);
                     }
 
                     @Override
@@ -384,7 +385,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 });
                 break;
             case R.id.action_add_url:
-                moDialogHUD.showInputBox("添加书籍网址",
+                moDialogHUD.showInputBox(getString(R.string.add_book_url),
                         null,
                         null,
                         inputText -> {
@@ -527,10 +528,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void upThemeVw() {
         if (isNightTheme()) {
             vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
-            vwNightTheme.setContentDescription("点击可切换到白天模式");
+            vwNightTheme.setContentDescription(getString(R.string.click_to_day));
         } else {
             vwNightTheme.setImageResource(R.drawable.ic_brightness);
-            vwNightTheme.setContentDescription("点击可切换到夜间模式");
+            vwNightTheme.setContentDescription(getString(R.string.click_to_night));
         }
         vwNightTheme.getDrawable().mutate().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
     }
@@ -613,7 +614,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void requestPermission() {
         List<String> per = PermissionUtils.checkMorePermissions(this, MApplication.PerList);
         if (per.size() > 0) {
-            toast("本软件需要存储权限来存储备份书籍信息");
+            toast(R.string.get_storage_per);
             PermissionUtils.requestMorePermissions(this, per, MApplication.RESULT__PERMS);
         }
     }
