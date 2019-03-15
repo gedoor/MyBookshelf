@@ -374,5 +374,8 @@
     <string name="get_chapter_list_error">目录获取失败</string>
     <string name="get_web_content_error">访问网站失败:%s</string>
     <string name="no_book_name">未获取到书名</string>
+    <string name="input_replace_url">输入替换规则网址</string>
+    <string name="get_book_list_success">搜索列表获取成功%d</string>
+    <string name="non_null_source_name_url">书源名称和URL不能为空</string>
 
 </resources>

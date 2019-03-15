@@ -277,7 +277,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
     private boolean canSaveBookSource() {
         if (isEmpty(trim(tieBookSourceName.getText())) || isEmpty(trim(tieBookSourceUrl.getText()))) {
-            toast("书源名称和URL不能为空", ERROR);
+            toast(R.string.non_null_source_name_url, ERROR);
             return false;
         }
         return true;
