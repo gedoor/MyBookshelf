@@ -223,9 +223,8 @@ public class AnalyzeRule {
     /**
      * 获取列表
      */
-    public AnalyzeCollection getElements(String ruleStr) throws ScriptException {
+    public AnalyzeCollection getElements(String ruleStr) throws Exception {
         Object result = null;
-        AnalyzeCollection collection = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
@@ -234,16 +233,16 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    collection = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
+                    result = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
                     break;
                 case XPath:
-                    collection = new AnalyzeCollection(getAnalyzeByXPath(result).getElements(rule.rule));
+                    result = new AnalyzeCollection(getAnalyzeByXPath(result).getElements(rule.rule));
                     break;
                 default:
-                    collection = new AnalyzeCollection(getAnalyzeByJSoup(result).getElements(rule.rule));
+                    result = new AnalyzeCollection(getAnalyzeByJSoup(result).getElements(rule.rule));
             }
         }
-        return collection;
+        return (AnalyzeCollection) result;
     }
 
     /**
