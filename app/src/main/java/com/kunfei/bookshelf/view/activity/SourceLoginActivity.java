@@ -113,7 +113,7 @@ public class SourceLoginActivity extends MBaseActivity {
                 if (checking)
                     finish();
                 else
-                    showSnackBar(toolbar, "登录成功后请点击右上角图标进行首页访问测试");
+                    showSnackBar(toolbar, getString(R.string.click_check_after_success));
                 super.onPageFinished(view, url);
             }
         });
@@ -144,7 +144,7 @@ public class SourceLoginActivity extends MBaseActivity {
             case R.id.action_check:
                 if (checking) break;
                 checking = true;
-                showSnackBar(toolbar, "正在打开首页，成功自动返回主界面");
+                showSnackBar(toolbar, getString(R.string.check_host_cookie));
                 webView.loadUrl(bookSourceBean.getBookSourceUrl());
                 break;
             case android.R.id.home:
