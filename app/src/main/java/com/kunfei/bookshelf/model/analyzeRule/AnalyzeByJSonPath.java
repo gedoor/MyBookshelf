@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AnalyzeByJSonPath {
-    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{)$.+?(?=\\})");
+    private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{)\\$\\..+?(?=\\})");
     private ReadContext ctx;
 
     public AnalyzeByJSonPath parse(String json) {
@@ -37,7 +37,7 @@ public class AnalyzeByJSonPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            if (!rule.contains("{")) {
+            if (!rule.contains("{$.")) {
                 try {
                     Object object = ctx.read(rule);
                     if (object instanceof List) {
@@ -56,7 +56,7 @@ public class AnalyzeByJSonPath {
                 result = rule;
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    result = result.replace(String.format("{%s}", matcher.group()), matcher.group());
+                    result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
                 }
                 return result;
             }
@@ -88,15 +88,16 @@ public class AnalyzeByJSonPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            if (!rule.contains("{")) {
+            if (!rule.contains("{$.")) {
                 try {
                     Object object = ctx.read(rule);
                     if (object == null) return result;
                     if (object instanceof List) {
                         for (Object o : ((List) object))
                             result.add(String.valueOf(o));
+                    } else {
+                        result.add(String.valueOf(object));
                     }
-                    result.add(String.valueOf(object));
                 } catch (Exception ignored) {
                 }
                 return result;

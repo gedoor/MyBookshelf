@@ -86,7 +86,7 @@
         <item
             android:id="@+id/action_get_hb"
             android:icon="@drawable/ic_donate"
-            android:title="领取支付宝红包"
+            android:title="@string/get_ali_pay_hb"
             app:showAsAction="ifRoom" />
     </group>
 </menu>

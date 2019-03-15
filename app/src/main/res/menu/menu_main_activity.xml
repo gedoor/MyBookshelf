@@ -12,7 +12,7 @@
     <item
         android:id="@+id/action_add_url"
         android:icon="@drawable/ic_add_online"
-        android:title="@string/add_book_url"
+        android:title="@string/add_url"
         app:showAsAction="never" />
 
     <item

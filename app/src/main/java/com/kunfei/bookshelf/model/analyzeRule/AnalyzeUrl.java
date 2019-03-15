@@ -8,10 +8,10 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
@@ -29,7 +29,7 @@ public class AnalyzeUrl {
     private String queryStr;
     private Map<String, String> queryMap = new HashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
-    private String charCode;
+    private String charCode = "UTF-8";
     private UrlMode urlMode = UrlMode.DEFAULT;
 
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
@@ -120,18 +120,12 @@ public class AnalyzeUrl {
      * 解析QueryMap
      */
     private void analyzeQuery(String allQuery) throws Exception {
-        if (isEmpty(charCode)) {
-            queryStr = URLEncoder.encode(allQuery, "UTF-8");
-        } else {
-            queryStr = URLEncoder.encode(allQuery, charCode);
-        }
+        queryStr = allQuery;
         String[] queryS = allQuery.split("&");
         for (String query : queryS) {
             String[] queryM = query.split("=");
             String value = queryM.length > 1 ? queryM[1] : "";
-            if (isEmpty(charCode)) {
-                queryMap.put(queryM[0], value);
-            } else if (charCode.equals("escape")) {
+            if (charCode.equals("escape")) {
                 queryMap.put(queryM[0], StringUtils.escape(value));
             } else {
                 queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
@@ -167,6 +161,16 @@ public class AnalyzeUrl {
 
     public String getQueryStr() {
         return queryStr;
+    }
+
+    public byte[] getPostData() {
+        StringBuilder builder = new StringBuilder();
+        Set<String> keys = queryMap.keySet();
+        for (String key : keys) {
+            builder.append(String.format("%s=%s&", key, queryMap.get(key)));
+        }
+        builder.deleteCharAt(builder.lastIndexOf("&"));
+        return builder.toString().getBytes();
     }
 
     public UrlMode getUrlMode() {

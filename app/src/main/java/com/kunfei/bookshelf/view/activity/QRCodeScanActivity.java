@@ -102,7 +102,7 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(QRCodeScanActivity.this, "扫描二维码需相机权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QRCodeScanActivity.this, R.string.qr_per, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -153,7 +153,7 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(QRCodeScanActivity.this, "扫描二维码需相机权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QRCodeScanActivity.this, R.string.qr_per, Toast.LENGTH_SHORT).show();
             }
 
             @Override

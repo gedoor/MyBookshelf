@@ -179,13 +179,13 @@ public class BaseModelImpl {
                 });
                 switch (analyzeUrl.getUrlMode()) {
                     case POST:
-                        webView.postUrl(analyzeUrl.getUrl(), analyzeUrl.getQueryStr().getBytes());
+                        webView.postUrl(analyzeUrl.getUrl(), analyzeUrl.getPostData());
                         break;
                     case GET:
-                        webView.loadUrl(String.format("%s?%s", analyzeUrl.getUrl(), analyzeUrl.getQueryStr()));
+                        webView.loadUrl(String.format("%s?%s", analyzeUrl.getUrl(), analyzeUrl.getQueryStr()), analyzeUrl.getHeaderMap());
                         break;
                     default:
-                        webView.loadUrl(analyzeUrl.getUrl());
+                        webView.loadUrl(analyzeUrl.getUrl(), analyzeUrl.getHeaderMap());
                 }
             });
         });

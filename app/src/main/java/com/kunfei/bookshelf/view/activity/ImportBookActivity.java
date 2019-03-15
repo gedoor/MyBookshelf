@@ -95,7 +95,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected List<String> createTabTitles() {
-        return Arrays.asList("手机目录", "智能导入");
+        return Arrays.asList(getString(R.string.files_tree), getString(R.string.intelligent_import));
     }
 
     @Override
@@ -142,13 +142,13 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                 (v) -> {
                     //弹出，确定删除文件吗。
                     new AlertDialog.Builder(this)
-                            .setTitle("删除文件")
-                            .setMessage("确定删除文件吗?")
+                            .setTitle(getString(R.string.del_file))
+                            .setMessage(getString(R.string.sure_del_file))
                             .setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
                                 //删除选中的文件
                                 mCurFragment.deleteCheckedFiles();
                                 //提示删除文件成功
-                                toast("删除文件成功");
+                                toast(R.string.del_file_success);
                             })
                             .setNegativeButton(getResources().getString(R.string.cancel), null)
                             .show();
@@ -236,9 +236,9 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
         //重置全选的文字
         if (mCurFragment.isCheckedAll()) {
-            mCbSelectAll.setText("取消");
+            mCbSelectAll.setText(R.string.cancel);
         } else {
-            mCbSelectAll.setText("全选");
+            mCbSelectAll.setText(getString(R.string.select_all));
         }
 
     }

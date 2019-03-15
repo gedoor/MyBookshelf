@@ -2,6 +2,8 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -26,7 +28,7 @@ class BookInfo {
     Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable("书籍信息获取失败"));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_book_info_error)));
                 return;
             }
             bookShelfBean.setTag(tag);
