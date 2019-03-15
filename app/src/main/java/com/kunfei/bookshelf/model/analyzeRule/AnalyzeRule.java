@@ -75,7 +75,7 @@ public class AnalyzeRule {
     }
 
     /**
-     * XPath
+     * 获取XPath解析类
      */
     private AnalyzeByXPath getAnalyzeByXPath(Object o) {
         if (o != null) {
@@ -94,7 +94,7 @@ public class AnalyzeRule {
     }
 
     /**
-     * JSOUP
+     * 获取JSOUP解析类
      */
     private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
         if (o != null) {
@@ -113,7 +113,7 @@ public class AnalyzeRule {
     }
 
     /**
-     * JSON
+     * 获取JSON解析类
      */
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
         if (o != null) {
@@ -141,12 +141,12 @@ public class AnalyzeRule {
     /**
      * 获取文本列表
      */
-    public List<String> getStringList(String rule) throws ScriptException {
+    public List<String> getStringList(String rule) throws Exception {
         return getStringList(rule, null);
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(String ruleStr, String baseUrl) throws ScriptException {
+    public List<String> getStringList(String ruleStr, String baseUrl) throws Exception {
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -182,11 +182,11 @@ public class AnalyzeRule {
     /**
      * 获取文本
      */
-    public String getString(String rule) throws ScriptException {
+    public String getString(String rule) throws Exception {
         return getString(rule, null);
     }
 
-    public String getString(String ruleStr, String _baseUrl) throws ScriptException {
+    public String getString(String ruleStr, String _baseUrl) throws Exception {
         if (StringUtils.isTrimEmpty(ruleStr)) {
             return null;
         }
@@ -248,7 +248,7 @@ public class AnalyzeRule {
     /**
      * 保存变量
      */
-    private void analyzeVariable(Map<String, String> putVariable) throws ScriptException {
+    private void analyzeVariable(Map<String, String> putVariable) throws Exception {
         for (Map.Entry<String, String> entry : putVariable.entrySet()) {
             if (book != null) {
                 book.putVariable(entry.getKey(), getString(entry.getValue()));
