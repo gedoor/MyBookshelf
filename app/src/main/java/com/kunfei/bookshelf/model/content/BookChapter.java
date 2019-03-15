@@ -2,6 +2,8 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -34,7 +36,7 @@ class BookChapter {
     Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable("目录获取失败"));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error)));
                 return;
             }
             analyzer = new AnalyzeRule(bookShelfBean);

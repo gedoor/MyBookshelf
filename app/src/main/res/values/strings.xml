@@ -369,5 +369,10 @@
     <string name="input_charset">输入编码</string>
     <string name="text_chapter_list_rule">TXT目录规则</string>
     <string name="open_local_book_per">打开外部书籍需获取存储权限</string>
+    <string name="get_book_info_error">书籍信息获取失败</string>
+    <string name="get_content_error">内容获取失败</string>
+    <string name="get_chapter_list_error">目录获取失败</string>
+    <string name="get_web_content_error">访问网站失败:%s</string>
+    <string name="no_book_name">未获取到书名</string>
 
 </resources>

@@ -2,6 +2,8 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.help.FormatWebText;
@@ -39,7 +41,7 @@ class BookList {
                 baseUrl = response.raw().request().url().toString();
             }
             if (TextUtils.isEmpty(response.body())) {
-                e.onError(new Throwable("访问网站失败:" + baseUrl));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_web_content_error, baseUrl)));
                 return;
             }
             List<SearchBookBean> books = new ArrayList<>();
@@ -91,7 +93,7 @@ class BookList {
             }
             if (books.isEmpty()) {
                 if (!e.isDisposed()) {
-                    e.onError(new Throwable("未获取到书名"));
+                    e.onError(new Throwable(MApplication.getInstance().getString(R.string.no_book_name)));
                 }
                 return;
             }
