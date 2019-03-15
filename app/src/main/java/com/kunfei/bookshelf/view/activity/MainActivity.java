@@ -123,7 +123,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         String shared_url = preferences.getString("shared_url", "");
         assert shared_url != null;
         if (shared_url.length() > 1) {
-            moDialogHUD.showInputBox("打开书籍网址",
+            moDialogHUD.showInputBox(getString(R.string.add_book_url),
                     shared_url,
                     null,
                     inputText -> {
@@ -395,7 +395,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
-                    toast("网络连接不可用，无法下载！");
+                    toast(R.string.network_connection_unavailable);
                 else
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
@@ -407,9 +407,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             case R.id.action_clear_cache:
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.clear_content)
-                        .setMessage("是否同时删除已下载的书籍目录？")
-                        .setPositiveButton("是", (dialog, which) -> BookshelfHelp.clearCaches(true))
-                        .setNegativeButton("否", (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
+                        .setMessage(getString(R.string.sure_del_download_book))
+                        .setPositiveButton(R.string.yes, (dialog, which) -> BookshelfHelp.clearCaches(true))
+                        .setNegativeButton(R.string.no, (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
                         .show();
                 break;
             case R.id.action_clearBookshelf:
@@ -661,7 +661,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             public void onUserHasAlreadyTurnedDown(String... permission) {
                 switch (requestCode) {
                     case FILE_SELECT_RESULT:
-                        MainActivity.this.toast("导入本地书籍需存储权限");
+                        MainActivity.this.toast(R.string.import_book_per);
                         break;
                     case BACKUP_RESULT:
                         MainActivity.this.toast(R.string.backup_permission);
@@ -676,7 +676,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
                 switch (requestCode) {
                     case FILE_SELECT_RESULT:
-                        MainActivity.this.toast("导入本地书籍需存储权限");
+                        MainActivity.this.toast(R.string.import_book_per);
                         break;
                     case BACKUP_RESULT:
                         MainActivity.this.toast(R.string.backup_permission);
@@ -716,7 +716,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            showSnackBar(toolbar, "再按一次退出程序");
+            showSnackBar(toolbar, getString(R.string.double_click_exit));
             exitTime = System.currentTimeMillis();
         } else {
             finish();
