@@ -377,5 +377,7 @@
     <string name="input_replace_url">输入替换规则网址</string>
     <string name="get_book_list_success">搜索列表获取成功%d</string>
     <string name="non_null_source_name_url">书源名称和URL不能为空</string>
+    <string name="gallery">图库</string>
+    <string name="get_ali_pay_hb">领支付宝红包</string>
 
 </resources>
