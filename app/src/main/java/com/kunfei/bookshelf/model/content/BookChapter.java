@@ -16,8 +16,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.ScriptException;
-
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -99,7 +97,7 @@ class BookChapter {
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws ScriptException {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws Exception {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 

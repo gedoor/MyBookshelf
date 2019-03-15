@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.script.ScriptException;
-
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -102,7 +100,7 @@ class BookList {
         });
     }
 
-    private SearchBookBean getItem(AnalyzeRule analyzer, String baseUrl) throws ScriptException {
+    private SearchBookBean getItem(AnalyzeRule analyzer, String baseUrl) throws Exception {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
         String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
@@ -120,7 +118,7 @@ class BookList {
         return null;
     }
 
-    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl) throws ScriptException {
+    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl) throws Exception {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
         String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());

@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.ScriptException;
-
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -98,7 +96,7 @@ class BookContent {
         });
     }
 
-    private WebContentBean analyzeBookContent(final String s, final String chapterUrl) throws ScriptException {
+    private WebContentBean analyzeBookContent(final String s, final String chapterUrl) throws Exception {
         WebContentBean webContentBean = new WebContentBean();
 
         AnalyzeRule analyzer = new AnalyzeRule(null);
