@@ -10,10 +10,10 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import java.net.URL;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -100,18 +100,15 @@ public class ReplaceRuleManager {
         if (StringUtils.isJsonType(text)) {
             return importReplaceRuleO(text)
                     .compose(RxUtils::toSimpleSingle);
-        } else {
-            try {
-                URL url = new URL(text);
-                return BaseModelImpl.getInstance().getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
-                        .create(IHttpGetApi.class)
-                        .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
-                        .flatMap(rsp -> importReplaceRuleO(rsp.body()))
-                        .compose(RxUtils::toSimpleSingle);
-            } catch (Exception ignored) {
-            }
         }
-        return null;
+        if (NetworkUtil.isUrl(text)) {
+            return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(text), "utf-8")
+                    .create(IHttpGetApi.class)
+                    .getWebContent(text, AnalyzeHeaders.getMap(null))
+                    .flatMap(rsp -> importReplaceRuleO(rsp.body()))
+                    .compose(RxUtils::toSimpleSingle);
+        }
+        return Observable.error(new Exception("不是Json或Url格式"));
     }
 
     private static Observable<Boolean> importReplaceRuleO(String json) {
