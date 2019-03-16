@@ -103,7 +103,15 @@ public class AnalyzeUrl {
     private String splitCharCode(String rule) {
         String[] ruleUrlS = rule.split("\\|");
         if (ruleUrlS.length > 1) {
-            analyzeOther(ruleUrlS[1]);
+            if (!TextUtils.isEmpty(ruleUrlS[1])) {
+                String[] qtS = ruleUrlS[1].split("&");
+                for (String qt : qtS) {
+                    String[] gz = qt.split("=");
+                    if (gz[0].equals("char")) {
+                        charCode = gz[1];
+                    }
+                }
+            }
         }
         return ruleUrlS[0];
     }
@@ -124,20 +132,6 @@ public class AnalyzeUrl {
         return ruleUrl.replace("searchPage-1", String.valueOf(searchPage - 1))
                 .replace("searchPage+1", String.valueOf(searchPage + 1))
                 .replace("searchPage", String.valueOf(searchPage));
-    }
-
-    /**
-     * 解析编码规则
-     */
-    private void analyzeOther(final String qtRule) {
-        if (TextUtils.isEmpty(qtRule)) return;
-        String[] qtS = qtRule.split("&");
-        for (String qt : qtS) {
-            String[] gz = qt.split("=");
-            if (gz[0].equals("char")) {
-                charCode = gz[1];
-            }
-        }
     }
 
     /**
@@ -167,19 +161,29 @@ public class AnalyzeUrl {
         return EngineHelper.INSTANCE.eval(jsStr, bindings);
     }
 
+    /**
+     * 拆分规则
+     */
     private List<String> splitRule(String ruleStr) {
         List<String> ruleList = new ArrayList<>();
         Matcher jsMatcher = JS_PATTERN.matcher(ruleStr);
         int start = 0;
+        String tmp;
         while (jsMatcher.find()) {
             if (jsMatcher.start() > start) {
-                ruleList.add(ruleStr.substring(start, jsMatcher.start()));
+                tmp = ruleStr.substring(start, jsMatcher.start()).replaceAll("\n", "").trim();
+                if (!TextUtils.isEmpty(tmp)) {
+                    ruleList.add(tmp);
+                }
             }
             ruleList.add(jsMatcher.group());
             start = jsMatcher.end();
         }
         if (ruleStr.length() > start) {
-            ruleList.add(ruleStr.substring(start));
+            tmp = ruleStr.substring(start).replaceAll("\n", "").trim();
+            if (!TextUtils.isEmpty(tmp)) {
+                ruleList.add(tmp);
+            }
         }
         return ruleList;
     }
