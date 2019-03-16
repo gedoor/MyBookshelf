@@ -299,16 +299,23 @@ public class AnalyzeRule {
             ruleStr = ruleStr.replace(find, value);
         }
         int start = 0;
+        String tmp;
         Matcher jsMatcher = JS_PATTERN.matcher(ruleStr);
         while (jsMatcher.find()) {
             if (jsMatcher.start() > start) {
-                ruleList.add(new SourceRule(ruleStr.substring(start, jsMatcher.start()), mode));
+                tmp = ruleStr.substring(start, jsMatcher.start()).replaceAll("\n", "").trim();
+                if (!TextUtils.isEmpty(tmp)) {
+                    ruleList.add(new SourceRule(tmp, mode));
+                }
             }
             ruleList.add(new SourceRule(jsMatcher.group(), Mode.Js));
             start = jsMatcher.end();
         }
         if (ruleStr.length() > start) {
-            ruleList.add(new SourceRule(ruleStr.substring(start), mode));
+            tmp = ruleStr.substring(start).replaceAll("\n", "").trim();
+            if (!TextUtils.isEmpty(tmp)) {
+                ruleList.add(new SourceRule(tmp, mode));
+            }
         }
         return ruleList;
     }
