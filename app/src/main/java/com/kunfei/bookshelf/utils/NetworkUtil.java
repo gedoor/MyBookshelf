@@ -66,7 +66,7 @@ public class NetworkUtil {
     }
 
     public static boolean isUrl(String urlStr) {
-        String regex = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]$";//设置正则表达式
+        String regex = "^(https?)://.+$";//设置正则表达式
         return urlStr.matches(regex);
     }
 }
