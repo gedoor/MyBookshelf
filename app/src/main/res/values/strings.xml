@@ -385,5 +385,6 @@
     <string name="chapter">章</string>
     <string name="chapter_s">章节:</string>
     <string name="to">至</string>
+    <string name="use_regex">使用正则表达式</string>
 
 </resources>
