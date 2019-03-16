@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import retrofit2.Call;
@@ -363,7 +362,7 @@ public class AnalyzeRule {
     /**
      * 执行JS
      */
-    private Object evalJS(String jsStr, Object result, String baseUrl) throws ScriptException {
+    private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);

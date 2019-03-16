@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
@@ -154,7 +153,7 @@ public class AnalyzeUrl {
     /**
      * 执行JS
      */
-    private Object evalJS(String jsStr, Object result) throws ScriptException {
+    private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);
