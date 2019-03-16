@@ -6,6 +6,7 @@ import com.kunfei.bookshelf.MApplication;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class AppConstant {
 
@@ -21,4 +22,5 @@ public class AppConstant {
 
     public static final String DEFAULT_WEB_DAV_URL = "https://dav.jianguoyun.com/dav/";
 
+    public static final Pattern JS_PATTERN = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
 }
