@@ -11,6 +11,7 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,9 +164,16 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getAllResultList(rule.rule);
             }
         }
-        if (result != null && !StringUtils.isTrimEmpty(baseUrl)) {
+        if (result == null) return new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
+        if (result instanceof List) {
+            stringList.addAll((Collection<? extends String>) result);
+        } else {
+            stringList.add(String.valueOf(result));
+        }
+        if (!StringUtils.isTrimEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
-            for (String url : (List<String>) result) {
+            for (String url : stringList) {
                 url = NetworkUtil.getAbsoluteURL(baseUrl, url);
                 if (!urlList.contains(url)) {
                     urlList.add(url);
@@ -173,8 +181,7 @@ public class AnalyzeRule {
             }
             return urlList;
         }
-        if (result == null) return new ArrayList<>();
-        return (List<String>) result;
+        return stringList;
     }
 
     /**
