@@ -150,7 +150,7 @@ public class AnalyzeRule {
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = String.valueOf(_object);
+                    if (result == null) result = _object;
                     result = evalJS(rule.rule, result, baseUrl);
                     break;
                 case JSon:
@@ -188,14 +188,14 @@ public class AnalyzeRule {
         if (StringUtils.isTrimEmpty(ruleStr)) {
             return null;
         }
-        String result = null;
+        Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             if (!StringUtils.isTrimEmpty(rule.rule)) {
                 switch (rule.mode) {
                     case Js:
-                        if (result == null) result = String.valueOf(_object);
-                        result = (String) evalJS(rule.rule, result, _baseUrl);
+                        if (result == null) result = _object;
+                        result = evalJS(rule.rule, result, _baseUrl);
                         break;
                     case JSon:
                         result = getAnalyzeByJSonPath(result).read(rule.rule);
@@ -213,9 +213,9 @@ public class AnalyzeRule {
             }
         }
         if (!StringUtils.isTrimEmpty(_baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(_baseUrl, result);
+            result = NetworkUtil.getAbsoluteURL(_baseUrl, (String) result);
         }
-        return result;
+        return (String) result;
     }
 
     /**
@@ -227,7 +227,7 @@ public class AnalyzeRule {
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = String.valueOf(_object);
+                    if (result == null) result = _object;
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
