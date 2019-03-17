@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.constant.EngineHelper;
 import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.utils.UrlEncoderUtils;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -142,7 +143,13 @@ public class AnalyzeUrl {
         for (String query : queryS) {
             String[] queryM = query.split("=");
             String value = queryM.length > 1 ? queryM[1] : "";
-            if (charCode.equals("escape")) {
+            if (TextUtils.isEmpty(charCode)) {
+                if (UrlEncoderUtils.hasUrlEncoded(value)) {
+                    queryMap.put(queryM[0], value);
+                } else {
+                    queryMap.put(queryM[0], URLEncoder.encode(value, "UTF-8"));
+                }
+            } else if (charCode.equals("escape")) {
                 queryMap.put(queryM[0], StringUtils.escape(value));
             } else {
                 queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
