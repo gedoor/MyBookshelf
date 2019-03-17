@@ -165,13 +165,7 @@ public class WebDavFile {
         for (Element element : elements) {
             String href = element.getElementsByTag("d:href").get(0).text();
             if (!href.endsWith("/")) {
-                Elements elements1 = element.getElementsByTag("d:displayname");
-                String fileName;
-                if (elements1.size() > 0) {
-                    fileName = element.getElementsByTag("d:displayname").get(0).text();
-                } else {
-                    fileName = href.substring(href.lastIndexOf("/") + 1);
-                }
+                String fileName = href.substring(href.lastIndexOf("/") + 1);
                 WebDavFile webDavFile;
                 try {
                     webDavFile = new WebDavFile(baseUrl + fileName);

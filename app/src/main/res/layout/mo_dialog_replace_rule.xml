@@ -57,7 +57,7 @@
                 android:id="@+id/cb_use_regex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="使用正则表达式" />
+                android:text="@string/use_regex" />
 
             <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_replace_to"

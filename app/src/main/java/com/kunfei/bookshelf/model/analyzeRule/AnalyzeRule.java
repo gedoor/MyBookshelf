@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
+import com.kunfei.bookshelf.constant.EngineHelper;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -16,13 +17,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import retrofit2.Call;
 
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 
@@ -33,7 +32,6 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-    private static final Pattern jsPattern = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
 
     private BaseBookBean book;
     private Object _object;
@@ -300,16 +298,23 @@ public class AnalyzeRule {
             ruleStr = ruleStr.replace(find, value);
         }
         int start = 0;
-        Matcher jsMatcher = jsPattern.matcher(ruleStr);
+        String tmp;
+        Matcher jsMatcher = JS_PATTERN.matcher(ruleStr);
         while (jsMatcher.find()) {
             if (jsMatcher.start() > start) {
-                ruleList.add(new SourceRule(ruleStr.substring(start, jsMatcher.start()), mode));
+                tmp = ruleStr.substring(start, jsMatcher.start()).replaceAll("\n", "").trim();
+                if (!TextUtils.isEmpty(tmp)) {
+                    ruleList.add(new SourceRule(tmp, mode));
+                }
             }
             ruleList.add(new SourceRule(jsMatcher.group(), Mode.Js));
             start = jsMatcher.end();
         }
         if (ruleStr.length() > start) {
-            ruleList.add(new SourceRule(ruleStr.substring(start), mode));
+            tmp = ruleStr.substring(start).replaceAll("\n", "").trim();
+            if (!TextUtils.isEmpty(tmp)) {
+                ruleList.add(new SourceRule(tmp, mode));
+            }
         }
         return ruleList;
     }
@@ -324,7 +329,7 @@ public class AnalyzeRule {
         SourceRule(String ruleStr, Mode mainMode) {
             this.mode = mainMode;
             if (mode == Mode.Js) {
-                if (ruleStr.startsWith("<")) {
+                if (ruleStr.startsWith("<js>")) {
                     rule = ruleStr.substring(4, ruleStr.lastIndexOf("<"));
                 } else {
                     rule = ruleStr.substring(4);
@@ -354,14 +359,10 @@ public class AnalyzeRule {
         XPath, JSon, Default, Js
     }
 
-    private static class EngineHelper {
-        private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
-    }
-
     /**
      * 执行JS
      */
-    private Object evalJS(String jsStr, Object result, String baseUrl) throws ScriptException {
+    private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);

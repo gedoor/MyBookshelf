@@ -64,4 +64,9 @@ public class NetworkUtil {
         }
         return relativePath;
     }
+
+    public static boolean isUrl(String urlStr) {
+        String regex = "^(https?)://.+$";//设置正则表达式
+        return urlStr.matches(regex);
+    }
 }

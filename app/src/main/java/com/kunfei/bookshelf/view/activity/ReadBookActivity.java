@@ -144,7 +144,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (savedInstanceState != null) {
             noteUrl = savedInstanceState.getString("noteUrl");
             isAdd = savedInstanceState.getBoolean("isAdd");
-            aloudStatus = ReadAloudService.Status.valueOf(savedInstanceState.getString("aloudStatus", ReadAloudService.Status.STOP.name()));
         }
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
@@ -165,7 +164,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         super.onSaveInstanceState(outState);
         if (mPresenter.getBookShelf() != null) {
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
-            outState.putString("aloudStatus", aloudStatus.name());
             outState.putBoolean("isAdd", isAdd);
         }
     }

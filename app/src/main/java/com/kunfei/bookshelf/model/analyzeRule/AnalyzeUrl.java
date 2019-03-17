@@ -3,15 +3,21 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.constant.EngineHelper;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.SimpleBindings;
+
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
@@ -40,16 +46,22 @@ public class AnalyzeUrl {
             ruleUrl = ruleUrl.replace("searchKey", key);
         }
         //分离编码规则
-        String[] ruleUrlS = ruleUrl.split("\\|");
-        if (ruleUrlS.length > 1) {
-            analyzeOther(ruleUrlS[1]);
-        }
+        ruleUrl = splitCharCode(ruleUrl);
         //设置页数
         if (page != null) {
-            setPage(ruleUrlS, page);
+            ruleUrl = analyzePage(ruleUrl, page);
+        }
+        List<String> ruleList = splitRule(ruleUrl);
+        for (String rule : ruleList) {
+            if (rule.startsWith("<js>")) {
+                rule = rule.substring(4, rule.lastIndexOf("<"));
+                ruleUrl = (String) evalJS(rule, ruleUrl);
+            } else {
+                ruleUrl = rule;
+            }
         }
         //分离post参数
-        ruleUrlS = ruleUrlS[0].split("@");
+        String[] ruleUrlS = ruleUrl.split("@");
         if (ruleUrlS.length > 1) {
             urlMode = UrlMode.POST;
         } else {
@@ -85,35 +97,40 @@ public class AnalyzeUrl {
     }
 
     /**
-     * 解析页数
+     * 分离编码规则
      */
-    private void setPage(final String[] ruleUrlS, final int searchPage) {
-        Matcher matcher = pagePattern.matcher(ruleUrlS[0]);
-        if (matcher.find()) {
-            String[] pages = matcher.group(0).split(",");
-            if (searchPage <= pages.length) {
-                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
-            } else {
-                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
+    private String splitCharCode(String rule) {
+        String[] ruleUrlS = rule.split("\\|");
+        if (ruleUrlS.length > 1) {
+            if (!TextUtils.isEmpty(ruleUrlS[1])) {
+                String[] qtS = ruleUrlS[1].split("&");
+                for (String qt : qtS) {
+                    String[] gz = qt.split("=");
+                    if (gz[0].equals("char")) {
+                        charCode = gz[1];
+                    }
+                }
             }
         }
-        ruleUrlS[0] = ruleUrlS[0].replace("searchPage-1", String.valueOf(searchPage - 1))
-                .replace("searchPage+1", String.valueOf(searchPage + 1))
-                .replace("searchPage", String.valueOf(searchPage));
+        return ruleUrlS[0];
     }
 
     /**
-     * 解析编码规则
+     * 解析页数
      */
-    private void analyzeOther(final String qtRule) {
-        if (TextUtils.isEmpty(qtRule)) return;
-        String[] qtS = qtRule.split("&");
-        for (String qt : qtS) {
-            String[] gz = qt.split("=");
-            if (gz[0].equals("char")) {
-                charCode = gz[1];
+    private String analyzePage(String ruleUrl, final int searchPage) {
+        Matcher matcher = pagePattern.matcher(ruleUrl);
+        if (matcher.find()) {
+            String[] pages = matcher.group(0).split(",");
+            if (searchPage <= pages.length) {
+                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
+            } else {
+                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
             }
         }
+        return ruleUrl.replace("searchPage-1", String.valueOf(searchPage - 1))
+                .replace("searchPage+1", String.valueOf(searchPage + 1))
+                .replace("searchPage", String.valueOf(searchPage));
     }
 
     /**
@@ -131,6 +148,43 @@ public class AnalyzeUrl {
                 queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
             }
         }
+    }
+
+    /**
+     * 执行JS
+     */
+    private Object evalJS(String jsStr, Object result) throws Exception {
+        SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", this);
+        bindings.put("result", result);
+        return EngineHelper.INSTANCE.eval(jsStr, bindings);
+    }
+
+    /**
+     * 拆分规则
+     */
+    private List<String> splitRule(String ruleStr) {
+        List<String> ruleList = new ArrayList<>();
+        Matcher jsMatcher = JS_PATTERN.matcher(ruleStr);
+        int start = 0;
+        String tmp;
+        while (jsMatcher.find()) {
+            if (jsMatcher.start() > start) {
+                tmp = ruleStr.substring(start, jsMatcher.start()).replaceAll("\n", "").trim();
+                if (!TextUtils.isEmpty(tmp)) {
+                    ruleList.add(tmp);
+                }
+            }
+            ruleList.add(jsMatcher.group());
+            start = jsMatcher.end();
+        }
+        if (ruleStr.length() > start) {
+            tmp = ruleStr.substring(start).replaceAll("\n", "").trim();
+            if (!TextUtils.isEmpty(tmp)) {
+                ruleList.add(tmp);
+            }
+        }
+        return ruleList;
     }
 
     private void generateUrlPath(String ruleUrl) {
