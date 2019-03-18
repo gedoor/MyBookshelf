@@ -31,7 +31,7 @@ class BookContent {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
         ruleBookContent = bookSourceBean.getRuleBookContent();
-        if (ruleBookContent.startsWith("$")) {
+        if (ruleBookContent.startsWith("$") && !ruleBookContent.startsWith("$.")) {
             ruleBookContent = ruleBookContent.substring(1);
         }
     }
