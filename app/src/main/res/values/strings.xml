@@ -382,5 +382,9 @@
     <string name="non_update_url">没有获取到更新地址</string>
     <string name="check_host_cookie">正在打开首页，成功自动返回主界面</string>
     <string name="click_check_after_success">登录成功后请点击右上角图标进行首页访问测试</string>
+    <string name="chapter">章</string>
+    <string name="chapter_s">章节:</string>
+    <string name="to">至</string>
+    <string name="use_regex">使用正则表达式</string>
 
 </resources>

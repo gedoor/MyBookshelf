@@ -14,10 +14,10 @@ import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -194,11 +194,14 @@ public class BookSourceManager {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);
         }
-        return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(string), "utf-8")
+        if (NetworkUtil.isUrl(string)) {
+            return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(string), "utf-8")
                     .create(IHttpGetApi.class)
                     .getWebContent(string, AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importBookSourceFromJson(rsp.body()))
                     .compose(RxUtils::toSimpleSingle);
+        }
+        return Observable.error(new Exception("不是Json或Url格式"));
     }
 
     private static Observable<List<BookSourceBean>> importBookSourceFromJson(String json) {
