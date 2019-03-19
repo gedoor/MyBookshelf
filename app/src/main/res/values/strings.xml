@@ -391,5 +391,6 @@
     <string name="indent_2">两字符缩进</string>
     <string name="indent_4">四字符缩进</string>
     <string name="select_sd_file">选择SD卡</string>
+    <string name="no_find">没有发现，可以在书源里添加。</string>
 
 </resources>
