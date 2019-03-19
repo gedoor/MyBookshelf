@@ -122,7 +122,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     preference.setSummary(MApplication.downloadPath);
                 });
                 picker.show();
-                picker.getCancelButton().setText("恢复默认");
+                picker.getCancelButton().setText(R.string.restore_default);
                 picker.getCancelButton().setOnClickListener(view -> {
                     picker.dismiss();
                     MApplication.getInstance().setDownloadPath(null);
@@ -132,7 +132,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(getActivity(), "自定义缓存路径需要存储权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.set_download_per, Toast.LENGTH_SHORT).show();
             }
 
             @Override
