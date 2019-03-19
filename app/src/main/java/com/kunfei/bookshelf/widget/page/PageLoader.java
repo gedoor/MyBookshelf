@@ -79,7 +79,8 @@ public abstract class PageLoader {
     private TextPaint mTextEndPaint;
     // 阅读器的配置选项
     ReadBookControl readBookControl = ReadBookControl.getInstance();
-
+    //缩进
+    String indent;
     /*****************params**************************/
     // 判断章节列表是否加载完成
     boolean isChapterListPrepare;
@@ -168,6 +169,7 @@ public abstract class PageLoader {
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         mPageMode = PageAnimation.Mode.getPageMode(readBookControl.getPageMode());
         // 初始化参数
+        indent = StringUtils.repeat(StringUtils.halfToFull(" "), readBookControl.getIndent());
         mMarginTop = hideStatusBar ?
                 ScreenUtils.dpToPx(readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
                 : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
@@ -1506,9 +1508,8 @@ public abstract class PageLoader {
         float x = mMarginLeft;
 
         if (isFirstLineOfParagraph(line)) {
-            String blanks = StringUtils.halfToFull("  ");
-            canvas.drawText(blanks, x, top, paint);
-            float bw = StaticLayout.getDesiredWidth(blanks, paint);
+            canvas.drawText(indent, x, top, paint);
+            float bw = StaticLayout.getDesiredWidth(indent, paint);
             x += bw;
             line = line.substring(2);
         }
