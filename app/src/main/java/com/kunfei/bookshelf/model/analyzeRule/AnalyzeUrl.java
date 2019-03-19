@@ -39,6 +39,10 @@ public class AnalyzeUrl {
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
+    public AnalyzeUrl(String urlRule) throws Exception {
+        this(urlRule, null, null, null);
+    }
+
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
         //解析Header
         if (headerMapF != null) {

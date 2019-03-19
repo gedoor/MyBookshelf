@@ -381,7 +381,7 @@ public class AnalyzeRule {
     @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, null, null, null);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
             Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
             return response.body();
