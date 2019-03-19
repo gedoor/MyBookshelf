@@ -386,5 +386,9 @@
     <string name="chapter_s">章节:</string>
     <string name="to">至</string>
     <string name="use_regex">使用正则表达式</string>
+    <string name="indent">缩进</string>
+    <string name="indent_0">无缩进</string>
+    <string name="indent_2">两字符缩进</string>
+    <string name="indent_4">四字符缩进</string>
 
 </resources>

@@ -671,6 +671,16 @@ public class ReadBookControl {
                 .apply();
     }
 
+    public void setIndent(int indent) {
+        preferences.edit()
+                .putInt("indent", indent)
+                .apply();
+    }
+
+    public int getIndent() {
+        return preferences.getInt("indent", 2);
+    }
+
     public int getLight() {
         return preferences.getInt("light", getScreenBrightness());
     }

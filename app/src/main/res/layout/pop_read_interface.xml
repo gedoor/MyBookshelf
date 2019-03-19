@@ -55,6 +55,21 @@
                 android:layout_weight="1" />
 
             <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                android:id="@+id/fl_indent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="@string/indent"
+                android:textSize="14sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvPageMode"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

@@ -72,6 +72,8 @@ public class ReadInterfacePop extends FrameLayout {
     NumberButton nbLineSize;
     @BindView(R.id.nbParagraphSize)
     NumberButton nbParagraphSize;
+    @BindView(R.id.fl_indent)
+    TextView tvIndent;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -187,6 +189,21 @@ public class ReadInterfacePop extends FrameLayout {
     }
 
     private void bindEvent() {
+        //缩进
+        tvIndent.setOnClickListener(v -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
+                    .setTitle(activity.getString(R.string.indent))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.indent),
+                            readBookControl.getIndent() / 2,
+                            (dialogInterface, i) -> {
+                                readBookControl.setIndent(i * 2);
+                                changeProListener.refresh();
+                                dialogInterface.dismiss();
+                            })
+                    .create();
+            dialog.show();
+            ATH.setAlertDialogTint(dialog);
+        });
         //翻页模式
         tvPageMode.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
