@@ -41,7 +41,9 @@ public class AnalyzeUrl {
 
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
         //解析Header
-        ruleUrl = analyzeHeader(ruleUrl, headerMapF);
+        if (headerMapF != null) {
+            ruleUrl = analyzeHeader(ruleUrl, headerMapF);
+        }
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
             ruleUrl = ruleUrl.replace("searchKey", key);

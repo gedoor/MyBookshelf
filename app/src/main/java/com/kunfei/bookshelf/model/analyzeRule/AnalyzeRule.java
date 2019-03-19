@@ -6,13 +6,11 @@ import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
 import com.kunfei.bookshelf.constant.EngineHelper;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -20,7 +18,7 @@ import java.util.regex.Pattern;
 
 import javax.script.SimpleBindings;
 
-import retrofit2.Call;
+import retrofit2.Response;
 
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
@@ -383,9 +381,10 @@ public class AnalyzeRule {
     @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
-            Call<String> call = BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(urlStr))
-                    .create(IHttpGetApi.class).getWebContentCall(urlStr, new HashMap<>());
-            return call.execute().body();
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, null, null, null);
+            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                    .blockingFirst();
+            return response.body();
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
