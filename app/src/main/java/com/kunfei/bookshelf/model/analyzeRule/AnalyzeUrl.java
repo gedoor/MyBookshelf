@@ -36,7 +36,7 @@ public class AnalyzeUrl {
     private String queryStr;
     private Map<String, String> queryMap = new HashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
-    private String charCode = "UTF-8";
+    private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
