@@ -115,7 +115,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 picker.setItemHeight(30);
                 picker.setOnFilePickListener(currentPath -> {
                     if (!currentPath.contains(FileUtils.getSdCardPath())) {
-                        MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
+                        MApplication.getInstance().setDownloadPath(null);
                     } else {
                         MApplication.getInstance().setDownloadPath(currentPath);
                     }
@@ -125,7 +125,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 picker.getCancelButton().setText("恢复默认");
                 picker.getCancelButton().setOnClickListener(view -> {
                     picker.dismiss();
-                    MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
+                    MApplication.getInstance().setDownloadPath(null);
                     preference.setSummary(MApplication.downloadPath);
                 });
             }

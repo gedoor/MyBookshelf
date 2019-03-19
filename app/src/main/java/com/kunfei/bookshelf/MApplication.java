@@ -74,7 +74,7 @@ public class MApplication extends Application {
         configPreferences = getSharedPreferences("CONFIG", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
         if (TextUtils.isEmpty(downloadPath)) {
-            setDownloadPath(FileHelp.getCachePath());
+            setDownloadPath(null);
         }
         if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
@@ -124,7 +124,11 @@ public class MApplication extends Application {
      * 设置下载地址
      */
     public void setDownloadPath(String downloadPath) {
-        MApplication.downloadPath = downloadPath;
+        if (TextUtils.isEmpty(downloadPath)) {
+            MApplication.downloadPath = FileHelp.getFilesPath();
+        } else {
+            MApplication.downloadPath = downloadPath;
+        }
         AppConstant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
         editor.putString(getString(R.string.pk_download_path), downloadPath);
