@@ -1511,7 +1511,7 @@ public abstract class PageLoader {
             canvas.drawText(indent, x, top, paint);
             float bw = StaticLayout.getDesiredWidth(indent, paint);
             x += bw;
-            line = line.substring(2);
+            line = line.substring(readBookControl.getIndent());
         }
         int gapCount = line.length() - 1;
         int i = 0;
