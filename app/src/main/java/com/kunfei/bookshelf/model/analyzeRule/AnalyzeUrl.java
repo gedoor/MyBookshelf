@@ -39,7 +39,7 @@ public class AnalyzeUrl {
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
-    public AnalyzeUrl(String urlRule) throws Exception {
+    AnalyzeUrl(String urlRule) throws Exception {
         this(urlRule, null, null, null);
     }
 
