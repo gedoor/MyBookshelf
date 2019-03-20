@@ -469,12 +469,12 @@ public abstract class PageLoader {
     /**
      * 翻到下一页,无动画
      */
-    public boolean noAnimationToNextPage() {
+    private void noAnimationToNextPage() {
         if (getCurPagePos() < mCurChapter.getPageSize() - 1) {
             skipToPage(getCurPagePos() + 1);
-            return true;
+            return;
         }
-        return skipNextChapter();
+        skipNextChapter();
     }
 
     /**
@@ -815,7 +815,7 @@ public abstract class PageLoader {
      * 绘制背景
      */
     @SuppressLint("DefaultLocale")
-    private synchronized void drawBackground(Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
+    private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
 
         if (!bookShelfBean.getChapterList().isEmpty()) {
@@ -987,7 +987,7 @@ public abstract class PageLoader {
      * 绘制内容-滚动
      */
     @SuppressWarnings("ConstantConditions")
-    void drawContent(Canvas canvas, float offset) {
+    void drawContent(final Canvas canvas, float offset) {
         if (offset > MAX_SCROLL_OFFSET) {
             offset = MAX_SCROLL_OFFSET;
         } else if (offset < 0 - MAX_SCROLL_OFFSET) {
