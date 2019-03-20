@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
@@ -72,7 +73,7 @@ public class MApplication extends Application {
         }
         configPreferences = getSharedPreferences("CONFIG", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
-        if (TextUtils.isEmpty(downloadPath)) {
+        if (TextUtils.isEmpty(downloadPath) | Objects.equals(downloadPath, FileHelp.getCachePath())) {
             setDownloadPath(null);
         }
         if (!ThemeStore.isConfigured(this, versionCode)) {
@@ -122,15 +123,15 @@ public class MApplication extends Application {
     /**
      * 设置下载地址
      */
-    public void setDownloadPath(String downloadPath) {
-        if (TextUtils.isEmpty(downloadPath)) {
-            MApplication.downloadPath = FileHelp.getFilesPath();
+    public void setDownloadPath(String path) {
+        if (TextUtils.isEmpty(path)) {
+            downloadPath = FileHelp.getFilesPath();
         } else {
-            MApplication.downloadPath = downloadPath;
+            downloadPath = path;
         }
-        AppConstant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
+        AppConstant.BOOK_CACHE_PATH = downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putString(getString(R.string.pk_download_path), downloadPath);
+        editor.putString(getString(R.string.pk_download_path), path);
         editor.apply();
     }
 
