@@ -130,9 +130,9 @@ public class MApplication extends Application {
             downloadPath = path;
         }
         AppConstant.BOOK_CACHE_PATH = downloadPath + File.separator + "book_cache" + File.separator;
-        SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putString(getString(R.string.pk_download_path), path);
-        editor.apply();
+        configPreferences.edit()
+                .putString(getString(R.string.pk_download_path), path)
+                .apply();
     }
 
     public static SharedPreferences getConfigPreferences() {
@@ -144,9 +144,9 @@ public class MApplication extends Application {
     }
 
     public void upDonateHb() {
-        SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putLong("DonateHb", System.currentTimeMillis());
-        editor.apply();
+        configPreferences.edit()
+                .putLong("DonateHb", System.currentTimeMillis())
+                .apply();
         donateHb = true;
     }
 
