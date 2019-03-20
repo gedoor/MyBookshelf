@@ -2,7 +2,9 @@
 <resources>
     <string-array name="indent">
         <item>@string/indent_0</item>
+        <item>@string/indent_1</item>
         <item>@string/indent_2</item>
+        <item>@string/indent_3</item>
         <item>@string/indent_4</item>
     </string-array>
 

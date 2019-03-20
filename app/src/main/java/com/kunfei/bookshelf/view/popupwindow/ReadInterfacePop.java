@@ -194,9 +194,9 @@ public class ReadInterfacePop extends FrameLayout {
             AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
                     .setTitle(activity.getString(R.string.indent))
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.indent),
-                            readBookControl.getIndent() / 2,
+                            readBookControl.getIndent(),
                             (dialogInterface, i) -> {
-                                readBookControl.setIndent(i * 2);
+                                readBookControl.setIndent(i);
                                 changeProListener.refresh();
                                 dialogInterface.dismiss();
                             })
