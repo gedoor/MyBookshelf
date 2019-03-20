@@ -368,14 +368,14 @@ public class ReadBookControl {
                 .apply();
     }
 
-    public void setNavbarColor(int navBarColor) {
+    public void setNavBarColor(int navBarColor) {
         this.navBarColor = navBarColor;
         preferences.edit()
                 .putInt("navBarColorInt", navBarColor)
                 .apply();
     }
 
-    public int getNavbarColor() {
+    public int getNavBarColor() {
         return navBarColor;
     }
 

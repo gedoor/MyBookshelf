@@ -226,8 +226,8 @@ public class MoreSettingPop extends FrameLayout {
         llNavigationBarColor.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.re_navigation_bar_color))
-                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.NavBarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
-                        readBookControl.setNavbarColor(i);
+                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.NavBarColors), readBookControl.getNavBarColor(), (dialogInterface, i) -> {
+                        readBookControl.setNavBarColor(i);
                         upNavBarColor(i);
                         dialogInterface.dismiss();
                         changeProListener.recreate();
@@ -242,7 +242,7 @@ public class MoreSettingPop extends FrameLayout {
         upScreenDirection(readBookControl.getScreenDirection());
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
-        upNavBarColor(readBookControl.getNavbarColor());
+        upNavBarColor(readBookControl.getNavBarColor());
         sbImmersionStatusBar.setChecked(readBookControl.getImmersionStatusBar());
         swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());

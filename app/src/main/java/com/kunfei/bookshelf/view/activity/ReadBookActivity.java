@@ -239,7 +239,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         } else {
             mImmersionBar.showBarDivider();
         }
-        int barColorType = readBookControl.getNavbarColor();
+        int barColorType = readBookControl.getNavBarColor();
         if (llMenuBottom.getVisibility() == View.VISIBLE
                 || readAdjustPop.getVisibility() == View.VISIBLE
                 || readInterfacePop.getVisibility() == View.VISIBLE
