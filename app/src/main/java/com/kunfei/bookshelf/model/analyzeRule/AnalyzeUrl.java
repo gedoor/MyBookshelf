@@ -39,15 +39,13 @@ public class AnalyzeUrl {
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
-    public AnalyzeUrl(String urlRule) throws Exception {
+    AnalyzeUrl(String urlRule) throws Exception {
         this(urlRule, null, null, null);
     }
 
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
         //解析Header
-        if (headerMapF != null) {
-            ruleUrl = analyzeHeader(ruleUrl, headerMapF);
-        }
+        ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
             ruleUrl = ruleUrl.replace("searchKey", key);
@@ -88,7 +86,9 @@ public class AnalyzeUrl {
      * 解析Header
      */
     private String analyzeHeader(String ruleUrl, Map<String, String> headerMapF) {
-        headerMap.putAll(headerMapF);
+        if (headerMapF != null) {
+            headerMap.putAll(headerMapF);
+        }
         Matcher matcher = headerPattern.matcher(ruleUrl);
         if (matcher.find()) {
             String find = matcher.group(0);

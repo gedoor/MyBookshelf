@@ -218,7 +218,7 @@
                     android:paddingRight="15dp">
 
                     <TextView
-                        android:id="@+id/reNavbarcolor"
+                        android:id="@+id/reNavBarColor"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -227,12 +227,12 @@
                         android:text="@string/re_navigation_bar_color" />
 
                     <TextView
-                        android:id="@+id/reNavbarcolor_val"
+                        android:id="@+id/reNavBarColor_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/selector_menu_text"
-                        android:text="黑色" />
+                        android:text="@string/black" />
 
                 </LinearLayout>
 

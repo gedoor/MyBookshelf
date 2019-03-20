@@ -2,7 +2,9 @@
 <resources>
     <string-array name="indent">
         <item>@string/indent_0</item>
+        <item>@string/indent_1</item>
         <item>@string/indent_2</item>
+        <item>@string/indent_3</item>
         <item>@string/indent_4</item>
     </string-array>
 
@@ -26,7 +28,7 @@
         <item>@string/jf_convert_f</item>
     </string-array>
 
-    <string-array name="NavbarColors">
+    <string-array name="NavBarColors">
         <item>自动</item>
         <item>黑色</item>
         <item>白色</item>

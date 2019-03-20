@@ -20,13 +20,13 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
 
 public class MApplication extends Application {
-    public final static boolean DEBUG = BuildConfig.DEBUG;
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -73,8 +73,8 @@ public class MApplication extends Application {
         }
         configPreferences = getSharedPreferences("CONFIG", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
-        if (TextUtils.isEmpty(downloadPath)) {
-            setDownloadPath(FileHelp.getCachePath());
+        if (TextUtils.isEmpty(downloadPath) | Objects.equals(downloadPath, FileHelp.getCachePath())) {
+            setDownloadPath(null);
         }
         if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
@@ -123,12 +123,16 @@ public class MApplication extends Application {
     /**
      * 设置下载地址
      */
-    public void setDownloadPath(String downloadPath) {
-        MApplication.downloadPath = downloadPath;
-        AppConstant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
-        SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putString(getString(R.string.pk_download_path), downloadPath);
-        editor.apply();
+    public void setDownloadPath(String path) {
+        if (TextUtils.isEmpty(path)) {
+            downloadPath = FileHelp.getFilesPath();
+        } else {
+            downloadPath = path;
+        }
+        AppConstant.BOOK_CACHE_PATH = downloadPath + File.separator + "book_cache" + File.separator;
+        configPreferences.edit()
+                .putString(getString(R.string.pk_download_path), path)
+                .apply();
     }
 
     public static SharedPreferences getConfigPreferences() {
@@ -140,9 +144,9 @@ public class MApplication extends Application {
     }
 
     public void upDonateHb() {
-        SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putLong("DonateHb", System.currentTimeMillis());
-        editor.apply();
+        configPreferences.edit()
+                .putLong("DonateHb", System.currentTimeMillis())
+                .apply();
         donateHb = true;
     }
 
