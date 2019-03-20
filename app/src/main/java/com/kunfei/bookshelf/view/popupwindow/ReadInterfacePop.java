@@ -188,6 +188,9 @@ public class ReadInterfacePop extends FrameLayout {
                 });
     }
 
+    /**
+     * 控件事件
+     */
     private void bindEvent() {
         //缩进
         tvIndent.setOnClickListener(v -> {
