@@ -28,7 +28,7 @@
         <item>@string/jf_convert_f</item>
     </string-array>
 
-    <string-array name="NavbarColors">
+    <string-array name="NavBarColors">
         <item>自动</item>
         <item>黑色</item>
         <item>白色</item>
