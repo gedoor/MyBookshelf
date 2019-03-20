@@ -236,7 +236,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 PermissionUtils.requestMorePermissions(ReplaceRuleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
             }
         });
@@ -278,7 +278,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 ReplaceRuleActivity.this.toast(R.string.import_book_source);
                 PermissionUtils.toAppSetting(ReplaceRuleActivity.this);
             }

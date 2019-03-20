@@ -171,7 +171,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
                                     }
 
                                     @Override
-                                    public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                                    public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                                         PermissionUtils.requestMorePermissions(ReadStyleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
                                     }
                                 }));
