@@ -26,7 +26,6 @@ import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
 
 public class MApplication extends Application {
-    public final static boolean DEBUG = BuildConfig.DEBUG;
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
