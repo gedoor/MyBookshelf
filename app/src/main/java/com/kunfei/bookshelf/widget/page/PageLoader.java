@@ -720,7 +720,7 @@ public abstract class PageLoader {
                     mPageView.drawPage(1);
                 }
                 break;
-            case PRE:
+            case PREV:
                 if (mCurPagePos > 0) {
                     mCurPagePos = mCurPagePos - 1;
                 } else if (mCurChapterPos > 0) {

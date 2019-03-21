@@ -65,7 +65,7 @@ public class ScrollPageAnim extends PageAnimation {
                     if (isNext) {
                         startAnim(Direction.NEXT);
                     } else {
-                        startAnim(Direction.PRE);
+                        startAnim(Direction.PREV);
                     }
                 } else {
                     // 开启动画
@@ -123,7 +123,7 @@ public class ScrollPageAnim extends PageAnimation {
                 super.startAnim();
                 mScroller.startScroll(0, 0, 0, -mViewHeight + 300, animationSpeed);
                 break;
-            case PRE:
+            case PREV:
                 super.startAnim();
                 mScroller.startScroll(0, 0, 0, mViewHeight - 300, animationSpeed);
                 break;

@@ -163,9 +163,9 @@ public class PageView extends View {
 
     public void autoPrevPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PRE);
+            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PREV);
         } else {
-            startHorizonPageAnim(PageAnimation.Direction.PRE);
+            startHorizonPageAnim(PageAnimation.Direction.PREV);
         }
     }
 
@@ -221,9 +221,6 @@ public class PageView extends View {
         if (mPageLoader != null) {
             Bitmap content = (mPageAnim instanceof ScrollPageAnim) ? getBgBitmap(pageOnCur) : getContentBitmap(pageOnCur);
             mPageLoader.drawPage(getBgBitmap(pageOnCur), content, pageOnCur);
-            if (mPageAnim instanceof SimulationPageAnim) {
-                ((SimulationPageAnim) mPageAnim).onPageDrawn(pageOnCur);
-            }
         }
     }
 

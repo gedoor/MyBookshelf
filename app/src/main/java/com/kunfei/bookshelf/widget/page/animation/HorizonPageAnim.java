@@ -51,7 +51,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 mCurBitmap = null;
                 mCurBitmap = mNextBitmap.copy(Bitmap.Config.ARGB_4444, true);
                 break;
-            case PRE:
+            case PREV:
                 mNextBitmap.recycle();
                 mNextBitmap = null;
                 mNextBitmap = mCurBitmap.copy(Bitmap.Config.ARGB_4444, true);
@@ -108,7 +108,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                             //上一页的参数配置
                             isNext = false;
                             boolean hasPrev = mListener.hasPrev();
-                            setDirection(Direction.PRE);
+                            setDirection(Direction.PREV);
                             //如果上一页不存在
                             if (!hasPrev) {
                                 noNext = true;
@@ -157,7 +157,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         if (!hasPrev) {
                             return;
                         }
-                        setDirection(Direction.PRE);
+                        setDirection(Direction.PREV);
                     }
                 } else {
                     isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
@@ -187,7 +187,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     case NEXT:
                         canvas.drawBitmap(mNextBitmap, 0, 0, null);
                         break;
-                    case PRE:
+                    case PREV:
                         canvas.drawBitmap(mPreBitmap, 0, 0, null);
                         break;
                     default:
