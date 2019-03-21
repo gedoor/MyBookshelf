@@ -397,5 +397,9 @@
     <string name="restore_default">恢复默认</string>
     <string name="set_download_per">自定义缓存路径需要存储权限</string>
     <string name="black">黑色</string>
+    <string name="content_empty">文章内容为空</string>
+    <string name="on_change_source">正在换源请等待…</string>
+    <string name="chapter_list_empty">目录列表为空</string>
+    <string name="load_error_msg">加载失败\n%s</string>
 
 </resources>

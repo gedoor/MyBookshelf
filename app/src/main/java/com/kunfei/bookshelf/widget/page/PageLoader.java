@@ -1213,6 +1213,9 @@ public abstract class PageLoader {
         }
     }
 
+    /**
+     * 获取状态文本
+     */
     private String getStatusText(TxtChapter chapter) {
         String tip = "";
         switch (chapter.getStatus()) {
@@ -1220,16 +1223,16 @@ public abstract class PageLoader {
                 tip = mContext.getString(R.string.loading);
                 break;
             case ERROR:
-                tip = String.format("加载失败\n%s", mCurChapter.getMsg());
+                tip = mContext.getString(R.string.load_error_msg, mCurChapter.getMsg());
                 break;
             case EMPTY:
-                tip = "文章内容为空";
+                tip = mContext.getString(R.string.content_empty);
                 break;
             case CATEGORY_EMPTY:
-                tip = "目录列表为空";
+                tip = mContext.getString(R.string.chapter_list_empty);
                 break;
             case CHANGE_SOURCE:
-                tip = "正在换源请等待...";
+                tip = mContext.getString(R.string.on_change_source);
         }
         return tip;
     }

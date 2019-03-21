@@ -21,7 +21,7 @@ public class ScrollPageAnim extends PageAnimation {
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
         mListener.resetScroll();
-        mBgBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
+        mBgBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_4444);
     }
 
     @Override
