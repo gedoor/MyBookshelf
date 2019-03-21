@@ -239,7 +239,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         } else {
             mImmersionBar.showBarDivider();
         }
-        int barColorType = readBookControl.getNavbarColor();
+        int barColorType = readBookControl.getNavBarColor();
         if (llMenuBottom.getVisibility() == View.VISIBLE
                 || readAdjustPop.getVisibility() == View.VISIBLE
                 || readInterfacePop.getVisibility() == View.VISIBLE
@@ -1257,7 +1257,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 PermissionUtils.requestMorePermissions(ReadBookActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
@@ -1302,7 +1302,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 ReadBookActivity.this.toast(R.string.open_local_book_per);
                 PermissionUtils.toAppSetting(ReadBookActivity.this);
             }

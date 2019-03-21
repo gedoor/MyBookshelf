@@ -163,9 +163,9 @@ public class PageView extends View {
 
     public void autoPrevPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PRE);
+            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PREV);
         } else {
-            startHorizonPageAnim(PageAnimation.Direction.PRE);
+            startHorizonPageAnim(PageAnimation.Direction.PREV);
         }
     }
 
@@ -221,10 +221,8 @@ public class PageView extends View {
         if (mPageLoader != null) {
             Bitmap content = (mPageAnim instanceof ScrollPageAnim) ? getBgBitmap(pageOnCur) : getContentBitmap(pageOnCur);
             mPageLoader.drawPage(getBgBitmap(pageOnCur), content, pageOnCur);
-            if (mPageAnim instanceof SimulationPageAnim) {
-                ((SimulationPageAnim) mPageAnim).onPageDrawn(pageOnCur);
-            }
         }
+        invalidate();
     }
 
     public void drawBackground(Canvas canvas) {
@@ -232,6 +230,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.drawBackground(canvas);
         }
+        invalidate();
     }
 
     public void drawBackground(int pageOnCur) {
@@ -239,6 +238,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
         }
+        invalidate();
     }
 
     public void drawContent(Canvas canvas, float offset) {
@@ -246,6 +246,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.drawContent(canvas, offset);
         }
+        invalidate();
     }
 
     public void drawContent(int pageOnCur) {
@@ -253,6 +254,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.drawPage(null, getContentBitmap(pageOnCur), pageOnCur);
         }
+        invalidate();
     }
 
     @Override

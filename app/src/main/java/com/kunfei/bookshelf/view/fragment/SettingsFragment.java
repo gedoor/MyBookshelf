@@ -115,28 +115,28 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 picker.setItemHeight(30);
                 picker.setOnFilePickListener(currentPath -> {
                     if (!currentPath.contains(FileUtils.getSdCardPath())) {
-                        MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
+                        MApplication.getInstance().setDownloadPath(null);
                     } else {
                         MApplication.getInstance().setDownloadPath(currentPath);
                     }
                     preference.setSummary(MApplication.downloadPath);
                 });
                 picker.show();
-                picker.getCancelButton().setText("恢复默认");
+                picker.getCancelButton().setText(R.string.restore_default);
                 picker.getCancelButton().setOnClickListener(view -> {
                     picker.dismiss();
-                    MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
+                    MApplication.getInstance().setDownloadPath(null);
                     preference.setSummary(MApplication.downloadPath);
                 });
             }
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(getActivity(), "自定义缓存路径需要存储权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.set_download_per, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 PermissionUtils.requestMorePermissions(getActivity(), MApplication.PerList, MApplication.RESULT__PERMS);
             }
         });

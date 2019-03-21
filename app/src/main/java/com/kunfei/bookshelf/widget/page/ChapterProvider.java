@@ -6,7 +6,6 @@ import android.text.StaticLayout;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ class ChapterProvider {
                 paragraph = allLine[i].replaceAll("\\s", " ").trim();
                 i++;
                 if (paragraph.equals("")) continue;
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
+                paragraph = pageLoader.indent + paragraph + "\n";
             }
             addParagraphLength(txtChapter, paragraph.length());
             int wordCount;

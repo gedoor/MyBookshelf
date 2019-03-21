@@ -109,7 +109,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public synchronized void updateUI(List<RecyclerViewData> group) {
         if (rlEmptyView == null) return;
         if (group.size() == 0) {
-            tvEmpty.setText("没有发现，可以在书源里添加。");
+            tvEmpty.setText(R.string.no_find);
             rlEmptyView.setVisibility(View.VISIBLE);
         } else {
             rlEmptyView.setVisibility(View.GONE);

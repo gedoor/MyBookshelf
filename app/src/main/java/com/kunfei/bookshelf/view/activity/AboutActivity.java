@@ -152,7 +152,7 @@ public class AboutActivity extends MBaseActivity {
             popupMenu.show();
         });
         vwUpdateLog.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("updateLog.md"));
-        vwFaq.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("faq.md"));
+        vwFaq.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://mp.weixin.qq.com/s?__biz=MzU2NjU0NjM1Mg==&mid=100000032&idx=1&sn=53e52168caf1ad9e507ab56381c45f1f&chksm=7cab9bff4bdc12e925e282effc1d4993a8652c248abc6169bd31d6fac133628fad54cf516043&mpshare=1&scene=1&srcid=0321CjdEk21qy8WjDgZ0I6sW&key=08039a5457341b11b054342370cc5462829ae3b54e4b265c42e28361773a6fa0e3105d706160d75b097b3ae41148dda265e2416b88f6b6a2391c1f33ec9f0bc62ea9edc86b75344494b598842ad620ac&ascene=1&uin=NzUwMTUxNzIx&devicetype=Windows+10&version=62060739&lang=zh_CN&pass_ticket=%2FD6keuc%2Fx%2Ba8YhupUUvefch8Gm07zVHa34Df5m1waxWQuCOohBN70NNcDEJsKE%2BV"));
         vwShare.setOnClickListener(view -> {
             String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
             Single.create((SingleOnSubscribe<Bitmap>) emitter -> {

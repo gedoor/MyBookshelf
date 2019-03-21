@@ -352,6 +352,14 @@ public class StringUtils {
         return string.replaceAll("(^\\s+|\\s+$)", "");
     }
 
+    public static String repeat(String str, int n) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            stringBuilder.append(str);
+        }
+        return stringBuilder.toString();
+    }
+
     public static String removeUTFCharacters(String data) {
         if (data == null) return null;
         Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");

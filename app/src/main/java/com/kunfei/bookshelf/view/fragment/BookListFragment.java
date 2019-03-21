@@ -114,7 +114,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
             if (!NetworkUtil.isNetWorkAvailable()) {
-                Toast.makeText(getContext(), "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.network_connection_unavailable, Toast.LENGTH_SHORT).show();
             }
             refreshLayout.setRefreshing(false);
         });

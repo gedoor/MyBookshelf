@@ -106,7 +106,7 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 PermissionUtils.requestMorePermissions(QRCodeScanActivity.this, cameraPer, REQUEST_CAMERA_PER);
             }
         });
@@ -157,7 +157,7 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
             }
 
             @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
                 PermissionUtils.toAppSetting(QRCodeScanActivity.this);
             }
         });
