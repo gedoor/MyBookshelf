@@ -219,14 +219,29 @@ public class PageView extends View {
         invalidate();
     }
 
+    /**
+     * 绘制滚动背景
+     */
     public void drawBackground(Canvas canvas) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
             mPageLoader.drawBackground(canvas);
         }
-        invalidate();
     }
 
+    /**
+     * 绘制滚动内容
+     */
+    public void drawContent(Canvas canvas, float offset) {
+        if (!isPrepare) return;
+        if (mPageLoader != null) {
+            mPageLoader.drawContent(canvas, offset);
+        }
+    }
+
+    /**
+     * 绘制横翻背景
+     */
     public void drawBackground(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
@@ -235,14 +250,10 @@ public class PageView extends View {
         invalidate();
     }
 
-    public void drawContent(Canvas canvas, float offset) {
-        if (!isPrepare) return;
-        if (mPageLoader != null) {
-            mPageLoader.drawContent(canvas, offset);
-        }
-        invalidate();
-    }
-
+    /**
+     * 绘制横翻内容
+     * @param pageOnCur 相对当前页的位置
+     */
     public void drawContent(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
