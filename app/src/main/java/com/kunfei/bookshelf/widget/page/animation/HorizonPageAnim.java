@@ -32,9 +32,9 @@ public abstract class HorizonPageAnim extends PageAnimation {
     HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
         //创建图片
-        mPreBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
-        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
-        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
+        mPreBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
     }
 
     /**
@@ -46,18 +46,18 @@ public abstract class HorizonPageAnim extends PageAnimation {
             case NEXT:
                 mPreBitmap.recycle();
                 mPreBitmap = null;
-                mPreBitmap = mCurBitmap.copy(Bitmap.Config.ARGB_4444, true);
+                mPreBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
                 mCurBitmap.recycle();
                 mCurBitmap = null;
-                mCurBitmap = mNextBitmap.copy(Bitmap.Config.ARGB_4444, true);
+                mCurBitmap = mNextBitmap.copy(Bitmap.Config.RGB_565, true);
                 break;
             case PREV:
                 mNextBitmap.recycle();
                 mNextBitmap = null;
-                mNextBitmap = mCurBitmap.copy(Bitmap.Config.ARGB_4444, true);
+                mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
                 mCurBitmap.recycle();
                 mCurBitmap = null;
-                mCurBitmap = mPreBitmap.copy(Bitmap.Config.ARGB_4444, true);
+                mCurBitmap = mPreBitmap.copy(Bitmap.Config.RGB_565, true);
                 break;
         }
     }
