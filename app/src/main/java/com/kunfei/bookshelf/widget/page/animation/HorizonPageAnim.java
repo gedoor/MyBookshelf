@@ -222,16 +222,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
         return mCurBitmap;
     }
 
-    @Override
-    public Bitmap getContentBitmap(int pageOnCur) {
-        if (pageOnCur < 0) {
-            return mPreBitmap;
-        } else if (pageOnCur > 0) {
-            return mNextBitmap;
-        }
-        return mCurBitmap;
-    }
-
     public void setCancel(boolean cancel) {
         isCancel = cancel;
     }

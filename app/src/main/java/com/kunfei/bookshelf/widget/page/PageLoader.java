@@ -745,7 +745,7 @@ public abstract class PageLoader {
      * 绘制页面
      * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
-    synchronized void drawPage(Bitmap bgBitmap, Bitmap bitmap, int pageOnCur) {
+    synchronized void drawPage(Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
         TxtPage txtPage;
         if (mCurChapter == null) {
@@ -774,9 +774,8 @@ public abstract class PageLoader {
             }
         }
         if (txtChapter != null) {
-            if (bgBitmap != null)
-                drawBackground(bgBitmap, txtChapter, txtPage);
             if (bitmap != null)
+                drawBackground(bitmap, txtChapter, txtPage);
                 drawContent(bitmap, txtChapter, txtPage);
         }
     }

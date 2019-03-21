@@ -151,11 +151,6 @@ public class PageView extends View {
         return statusBarHeight;
     }
 
-    public Bitmap getContentBitmap(int pageOnCur) {
-        if (mPageAnim == null) return null;
-        return mPageAnim.getContentBitmap(pageOnCur);
-    }
-
     public Bitmap getBgBitmap(int pageOnCur) {
         if (mPageAnim == null) return null;
         return mPageAnim.getBgBitmap(pageOnCur);
@@ -219,8 +214,7 @@ public class PageView extends View {
     public void drawPage(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
-            Bitmap content = (mPageAnim instanceof ScrollPageAnim) ? getBgBitmap(pageOnCur) : getContentBitmap(pageOnCur);
-            mPageLoader.drawPage(getBgBitmap(pageOnCur), content, pageOnCur);
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), pageOnCur);
         }
         invalidate();
     }
@@ -236,7 +230,7 @@ public class PageView extends View {
     public void drawBackground(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
-            mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), pageOnCur);
         }
         invalidate();
     }
@@ -252,7 +246,7 @@ public class PageView extends View {
     public void drawContent(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
-            mPageLoader.drawPage(null, getContentBitmap(pageOnCur), pageOnCur);
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), pageOnCur);
         }
         invalidate();
     }

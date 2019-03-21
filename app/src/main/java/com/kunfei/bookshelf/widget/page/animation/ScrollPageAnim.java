@@ -147,9 +147,4 @@ public class ScrollPageAnim extends PageAnimation {
         return mBgBitmap;
     }
 
-    @Override
-    public Bitmap getContentBitmap(int pageOnCur) {
-        return null;
-    }
-
 }
