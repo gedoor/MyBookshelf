@@ -340,7 +340,7 @@ public class ReadBookControl {
     }
 
     public Bitmap getBgBitmap() {
-        return bgBitmap.copy(Bitmap.Config.RGB_565, true);
+        return bgBitmap.copy(Bitmap.Config.ARGB_8888, true);
     }
 
     public int getTextDrawableIndex() {

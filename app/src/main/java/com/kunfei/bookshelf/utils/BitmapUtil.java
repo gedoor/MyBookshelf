@@ -42,7 +42,7 @@ public class BitmapUtil {
      */
     public static Bitmap ReadBitmapById(Context context, int resId) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPreferredConfig = Config.ARGB_8888;
         opt.inPurgeable = true;
         opt.inInputShareable = true;
         InputStream is = context.getResources().openRawResource(resId);
@@ -550,7 +550,7 @@ public class BitmapUtil {
                 yi += w;
             }
         }
-        return Bitmap.createBitmap(pix, w, h, Config.RGB_565);
+        return Bitmap.createBitmap(pix, w, h, Config.ARGB_8888);
     }
 
 }
