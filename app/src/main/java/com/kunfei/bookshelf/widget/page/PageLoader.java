@@ -684,14 +684,11 @@ public abstract class PageLoader {
     private void upPage() {
         if (mPageMode != PageAnimation.Mode.SCROLL) {
             mPageView.drawPage(0);
-            mPageView.invalidate();
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
-                mPageView.invalidate();
             }
             if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < bookShelfBean.getChapterList().size() - 1) {
                 mPageView.drawPage(1);
-                mPageView.invalidate();
             }
         }
     }
@@ -1504,7 +1501,6 @@ public abstract class PageLoader {
                 mPageView.drawPage(1);
             }
         }
-        mPageView.invalidate();
     }
 
     private void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
