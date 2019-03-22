@@ -60,7 +60,7 @@ public class MApplication extends Application {
         super.onCreate();
         instance = this;
         CrashHandler.getInstance().init(this);
-        RxJavaPlugins.setErrorHandler(throwable -> {
+        RxJavaPlugins.setErrorHandler(Throwable -> {
         });
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -68,7 +68,6 @@ public class MApplication extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             versionCode = 0;
             versionName = "0.0.0";
-            e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannelIdDownload();

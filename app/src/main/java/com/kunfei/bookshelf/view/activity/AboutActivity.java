@@ -234,7 +234,6 @@ public class AboutActivity extends MBaseActivity {
             intent.setData(Uri.parse(address));
             startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
             toast(R.string.can_not_open, ERROR);
         }
     }

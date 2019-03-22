@@ -63,8 +63,7 @@ public class BookshelfHelp {
                 }
                 temp.put(bookPath, chapterIndexS);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return temp;
     }

@@ -44,8 +44,7 @@ public class DataRestore {
         Map<String, ?> entries = null;
         try (FileInputStream ins = new FileInputStream(dirPath + "/config.xml")) {
             entries = XmlUtils.readMapXml(ins);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         if (entries == null || entries.isEmpty()) return;
         SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();

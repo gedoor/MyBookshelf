@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,7 +54,6 @@ public class ACache {
             }
             mCache = new ACacheManager(cacheDir, max_size, max_count);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -76,8 +74,7 @@ public class ACache {
         try {
             File f = new File(ctx.getCacheDir(), "ACache");
             return get(f, max_zise, max_count);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         return null;
@@ -91,8 +88,7 @@ public class ACache {
                 mInstanceMap.put(cacheDir.getAbsolutePath() + myPid(), manager);
             }
             return manager;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         return null;
@@ -119,21 +115,18 @@ public class ACache {
             try {
                 out = new BufferedWriter(new FileWriter(file), 1024);
                 out.write(value);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             } finally {
                 if (out != null) {
                     try {
                         out.flush();
                         out.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ignored) {
                     }
                 }
                 mCache.put(file);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
     }
@@ -173,14 +166,12 @@ public class ACache {
                 return null;
             }
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
                 }
             }
             if (removeFile)
@@ -222,7 +213,6 @@ public class ACache {
         try {
             return new JSONObject(JSONString);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -261,7 +251,6 @@ public class ACache {
         try {
             return new JSONArray(JSONString);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -282,15 +271,13 @@ public class ACache {
         try {
             out = new FileOutputStream(file);
             out.write(value);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         } finally {
             if (out != null) {
                 try {
                     out.flush();
                     out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
                 }
             }
             mCache.put(file);

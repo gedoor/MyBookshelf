@@ -67,7 +67,6 @@ public class PageLoaderEpub extends PageLoader {
 
             return epubReader.readEpubLazy(file.getAbsolutePath(), "utf-8", Arrays.asList(lazyTypes));
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

@@ -709,8 +709,7 @@ public class ReadBookControl {
         ContentResolver cr = MApplication.getInstance().getContentResolver();
         try {
             value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
+        } catch (Settings.SettingNotFoundException ignored) {
         }
         return value;
     }

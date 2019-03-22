@@ -37,7 +37,6 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             URL url = new URL(tag);
             name = url.getHost();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             name = tag;
         }
     }
