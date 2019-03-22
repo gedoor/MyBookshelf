@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
+import io.reactivex.internal.functions.Functions;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class MApplication extends Application {
@@ -60,8 +61,7 @@ public class MApplication extends Application {
         super.onCreate();
         instance = this;
         CrashHandler.getInstance().init(this);
-        RxJavaPlugins.setErrorHandler(Throwable -> {
-        });
+        RxJavaPlugins.setErrorHandler(Functions.emptyConsumer());
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

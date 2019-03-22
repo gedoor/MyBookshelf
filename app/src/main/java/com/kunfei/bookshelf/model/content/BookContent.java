@@ -43,9 +43,7 @@ class BookContent {
     Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                if (!e.isDisposed()) {
-                    e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error)));
-                }
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error)));
                 return;
             }
 
