@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
+import io.reactivex.plugins.RxJavaPlugins;
 
 public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
@@ -59,6 +60,8 @@ public class MApplication extends Application {
         super.onCreate();
         instance = this;
         CrashHandler.getInstance().init(this);
+        RxJavaPlugins.setErrorHandler(throwable -> {
+        });
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
