@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyViewHolder> {
-    private List<RecyclerViewData> datas = new ArrayList<>();
+    private List<RecyclerViewData> data = new ArrayList<>();
     private Context context;
     private OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener;
 
@@ -32,9 +32,9 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
         this.onItemLongClickListener = onItemLongClickListener;
     }
 
-    public void setDatas(List<RecyclerViewData> datas) {
-        this.datas.clear();
-        this.datas.addAll(datas);
+    public void setData(List<RecyclerViewData> data) {
+        this.data.clear();
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -47,11 +47,11 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int pos) {
-        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(pos).getGroupData();
+        FindKindGroupBean groupBean = (FindKindGroupBean) data.get(pos).getGroupData();
         myViewHolder.sourceName.setText(groupBean.getGroupName());
         myViewHolder.flexboxLayout.removeAllViews();
         TextView tagView;
-        for (Object object : datas.get(pos).getChildList()) {
+        for (Object object : data.get(pos).getChildList()) {
             FindKindBean kindBean = (FindKindBean) object;
             tagView = (TextView) LayoutInflater.from(context).inflate(R.layout.item_search_history, myViewHolder.flexboxLayout, false);
             tagView.setText(kindBean.getKindName());
@@ -76,11 +76,11 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return data.size();
     }
 
-    public List<RecyclerViewData> getDatas() {
-        return datas;
+    public List<RecyclerViewData> getData() {
+        return data;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

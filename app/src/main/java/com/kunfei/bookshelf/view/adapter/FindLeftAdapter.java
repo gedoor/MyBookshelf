@@ -21,16 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyViewHolder> {
     private Context context;
     private int showIndex = 0;
-    private List<RecyclerViewData> datas = new ArrayList<>();
+    private List<RecyclerViewData> data = new ArrayList<>();
     private OnClickListener onClickListener;
 
     public FindLeftAdapter(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public void setDatas(List<RecyclerViewData> datas) {
-        this.datas.clear();
-        this.datas.addAll(datas);
+    public void setData(List<RecyclerViewData> data) {
+        this.data.clear();
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -52,7 +52,7 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") int i) {
-        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(i).getGroupData();
+        FindKindGroupBean groupBean = (FindKindGroupBean) data.get(i).getGroupData();
         myViewHolder.tvSourceName.setText(groupBean.getGroupName());
         if (i == showIndex) {
             myViewHolder.findLeft.setBackgroundColor(context.getResources().getColor(R.color.transparent30));
@@ -72,7 +72,7 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -41,7 +41,9 @@ class BookList {
                 baseUrl = response.raw().request().url().toString();
             }
             if (TextUtils.isEmpty(response.body())) {
-                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_web_content_error, baseUrl)));
+                if (!e.isDisposed()) {
+                    e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_web_content_error, baseUrl)));
+                }
                 return;
             }
             List<SearchBookBean> books = new ArrayList<>();
