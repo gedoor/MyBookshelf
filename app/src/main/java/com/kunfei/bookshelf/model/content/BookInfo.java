@@ -28,7 +28,9 @@ class BookInfo {
     Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_book_info_error)));
+                if (!e.isDisposed()) {
+                    e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_book_info_error)));
+                }
                 return;
             }
             bookShelfBean.setTag(tag);
