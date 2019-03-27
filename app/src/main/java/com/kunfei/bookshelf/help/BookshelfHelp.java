@@ -63,8 +63,7 @@ public class BookshelfHelp {
                 }
                 temp.put(bookPath, chapterIndexS);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return temp;
     }
@@ -363,6 +362,7 @@ public class BookshelfHelp {
         bookInfo.setIntroduce(searchBookBean.getIntroduce());
         bookInfo.setChapterUrl(searchBookBean.getChapterUrl());
         bookShelfBean.setBookInfoBean(bookInfo);
+        bookShelfBean.setVariable(searchBookBean.getVariable());
         return bookShelfBean;
     }
 

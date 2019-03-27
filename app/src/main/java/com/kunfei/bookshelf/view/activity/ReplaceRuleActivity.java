@@ -134,7 +134,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     public void upDateSelectAll() {
         selectAll = true;
-        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+        for (ReplaceRuleBean replaceRuleBean : adapter.getData()) {
             if (replaceRuleBean.getEnable() == null || !replaceRuleBean.getEnable()) {
                 selectAll = false;
                 break;
@@ -143,12 +143,12 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectAllDataS() {
-        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+        for (ReplaceRuleBean replaceRuleBean : adapter.getData()) {
             replaceRuleBean.setEnable(!selectAll);
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
-        ReplaceRuleManager.addDataS(adapter.getDataList());
+        ReplaceRuleManager.addDataS(adapter.getData());
     }
 
     public void delData(ReplaceRuleBean replaceRuleBean) {
@@ -156,7 +156,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     public void saveDataS() {
-        mPresenter.saveData(adapter.getDataList());
+        mPresenter.saveData(adapter.getData());
     }
 
     //设置ToolBar
@@ -201,7 +201,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                         });
                 break;
             case R.id.action_del_all:
-                mPresenter.delData(adapter.getDataList());
+                mPresenter.delData(adapter.getData());
                 break;
             case android.R.id.home:
                 finish();

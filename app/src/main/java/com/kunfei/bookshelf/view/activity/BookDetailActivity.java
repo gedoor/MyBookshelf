@@ -302,7 +302,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 BitIntentDataManager.getInstance().putData(key, mPresenter.getBookShelf().clone());
             } catch (CloneNotSupportedException e) {
                 BitIntentDataManager.getInstance().putData(key, mPresenter.getBookShelf());
-                e.printStackTrace();
             }
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 

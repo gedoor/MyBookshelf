@@ -64,8 +64,7 @@ public class ChapterContentHelp {
             if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n") && isUseTo(rule, bookTag, bookName)) {
                 try {
                     content = content.replaceAll(rule, replaceRule.getReplacement());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                } catch (Exception ignored) {
                 }
             }
         }

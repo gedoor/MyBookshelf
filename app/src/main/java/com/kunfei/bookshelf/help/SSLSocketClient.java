@@ -46,8 +46,7 @@ public class SSLSocketClient {
                     return new X509Certificate[0];
                 }
             };
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return tm;
     }

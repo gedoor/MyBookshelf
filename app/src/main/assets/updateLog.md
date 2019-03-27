@@ -3,8 +3,13 @@
 ### 捐赠里点击红包搜索码可开启高级功能!
 ## 更新日志
 
+**2019/03/26**
+* 添加RxJavaPlugins.setErrorHandler(Functions.emptyConsumer());防止rxJava内部错误导致崩溃
+* 去除打开软件时的权限获取提示
+* fix SourceDebug variable missing bug by mabDc was merged a day ago 
+
 **2019/03/21**
-* 改了背景色差翻页会出bug,暂时改回去
+* 同时解决了背景色差和翻页问题
 
 **2019/03/20**
 * 修复了背景色差的问题

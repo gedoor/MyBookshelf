@@ -114,8 +114,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                             }
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
             }
 

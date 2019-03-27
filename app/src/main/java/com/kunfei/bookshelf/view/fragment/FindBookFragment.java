@@ -115,8 +115,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findLeftAdapter.setDatas(group);
-            findRightAdapter.setDatas(group);
+            findLeftAdapter.setData(group);
+            findRightAdapter.setData(group);
             rlEmptyView.setVisibility(View.GONE);
             rvFindLeft.setVisibility(View.VISIBLE);
             vwDivider.setVisibility(View.VISIBLE);
@@ -189,7 +189,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (getActivity() == null) return;
         FindKindGroupBean groupBean;
         if (isFlexBox()) {
-            groupBean = (FindKindGroupBean) findRightAdapter.getDatas().get(groupPosition).getGroupData();
+            groupBean = (FindKindGroupBean) findRightAdapter.getData().get(groupPosition).getGroupData();
         } else {
             groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
         }

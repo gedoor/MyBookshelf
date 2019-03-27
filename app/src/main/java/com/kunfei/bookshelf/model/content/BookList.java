@@ -92,9 +92,7 @@ class BookList {
                 }
             }
             if (books.isEmpty()) {
-                if (!e.isDisposed()) {
-                    e.onError(new Throwable(MApplication.getInstance().getString(R.string.no_book_name)));
-                }
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.no_book_name)));
                 return;
             }
             e.onNext(books);

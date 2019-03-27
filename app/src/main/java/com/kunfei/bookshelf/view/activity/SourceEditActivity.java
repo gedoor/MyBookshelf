@@ -213,7 +213,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             BitIntentDataManager.getInstance().putData(key, sourceBean.clone());
         } catch (CloneNotSupportedException e) {
             BitIntentDataManager.getInstance().putData(key, sourceBean);
-            e.printStackTrace();
         }
         activity.startActivityForResult(intent, EDIT_SOURCE);
     }
@@ -478,7 +477,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             intent.setData(Uri.parse(getString(R.string.source_rule_url)));
             startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
             toast(R.string.can_not_open, ERROR);
         }
     }

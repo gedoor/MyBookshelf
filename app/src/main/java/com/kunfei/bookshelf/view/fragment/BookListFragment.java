@@ -146,7 +146,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
                 } catch (CloneNotSupportedException e) {
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                    e.printStackTrace();
                 }
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }

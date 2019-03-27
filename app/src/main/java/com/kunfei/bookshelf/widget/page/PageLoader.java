@@ -681,6 +681,9 @@ public abstract class PageLoader {
         }
     }
 
+    /**
+     * 更新页面
+     */
     private void upPage() {
         if (mPageMode != PageAnimation.Mode.SCROLL) {
             mPageView.drawPage(0);
@@ -796,9 +799,7 @@ public abstract class PageLoader {
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == PageAnimation.Mode.SCROLL) {
-            bitmap.eraseColor(Color.TRANSPARENT);
-        } else if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
+        if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
             canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
         } else {
