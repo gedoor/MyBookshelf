@@ -362,6 +362,7 @@ public class BookshelfHelp {
         bookInfo.setIntroduce(searchBookBean.getIntroduce());
         bookInfo.setChapterUrl(searchBookBean.getChapterUrl());
         bookShelfBean.setBookInfoBean(bookInfo);
+        bookShelfBean.setVariable(searchBookBean.getVariable());
         return bookShelfBean;
     }
 
