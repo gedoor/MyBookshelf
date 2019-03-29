@@ -290,8 +290,8 @@ public abstract class PageLoader {
         tipBottomTop = tipMarginHeight - fontMetrics.top;
         tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        tipMarginLeft = readBookControl.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
-        float tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
+        tipMarginLeft = readBookControl.getTipPaddingLeft();
+        float tipMarginRight = readBookControl.getTipPaddingRight();
         displayRightEnd = mDisplayWidth - tipMarginRight;
         tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
     }

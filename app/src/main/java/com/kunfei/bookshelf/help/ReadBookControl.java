@@ -63,7 +63,6 @@ public class ReadBookControl {
     private int tipPaddingTop;
     private int tipPaddingRight;
     private int tipPaddingBottom;
-    private Boolean tipMarginChange;
 
     private SharedPreferences preferences;
 
@@ -118,7 +117,6 @@ public class ReadBookControl {
         this.tipPaddingBottom = preferences.getInt("tipPaddingBottom", 0);
         this.pageMode = preferences.getInt("pageMode", 0);
         this.screenDirection = preferences.getInt("screenDirection", 0);
-        this.tipMarginChange = preferences.getBoolean("tipMarginChange", false);
         this.navBarColor = preferences.getInt("navBarColorInt", 0);
 
         initTextDrawableIndex();
@@ -712,17 +710,6 @@ public class ReadBookControl {
         this.screenDirection = screenDirection;
         preferences.edit()
                 .putInt("screenDirection", screenDirection)
-                .apply();
-    }
-
-    public Boolean getTipMarginChange() {
-        return tipMarginChange;
-    }
-
-    public void setTipMarginChange(Boolean tipMarginChange) {
-        this.tipMarginChange = tipMarginChange;
-        preferences.edit()
-                .putBoolean("tipMarginChange", tipMarginChange)
                 .apply();
     }
 

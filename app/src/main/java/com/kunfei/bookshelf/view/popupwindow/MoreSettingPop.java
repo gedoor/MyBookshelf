@@ -64,8 +64,6 @@ public class MoreSettingPop extends FrameLayout {
     Switch swReadAloudKey;
     @BindView(R.id.ll_read_aloud_key)
     LinearLayout llReadAloudKey;
-    @BindView(R.id.sb_tip_margin_change)
-    Switch sbTipMarginChange;
     @BindView(R.id.ll_click_all_next)
     LinearLayout llClickAllNext;
     @BindView(R.id.reNavBarColor)
@@ -178,12 +176,6 @@ public class MoreSettingPop extends FrameLayout {
                 changeProListener.refreshPage();
             }
         });
-        sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (compoundButton.isPressed()) {
-                readBookControl.setTipMarginChange(b);
-                changeProListener.refreshPage();
-            }
-        });
         llScreenTimeOut.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.keep_light))
@@ -253,7 +245,6 @@ public class MoreSettingPop extends FrameLayout {
         sbShowTitle.setChecked(readBookControl.getShowTitle());
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
-        sbTipMarginChange.setChecked(readBookControl.getTipMarginChange());
         upView();
     }
 
