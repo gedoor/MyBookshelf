@@ -158,8 +158,6 @@ public abstract class PageLoader {
         initData();
         // 初始化画笔
         initPaint();
-        //初始化边距
-        initMargins();
         // 初始化PageView
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
     }
