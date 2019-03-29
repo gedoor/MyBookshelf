@@ -144,13 +144,6 @@
             android:layout_height="0.8dp"
             android:background="@color/btn_bg_press" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:text="@string/content_padding"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -160,6 +153,12 @@
             android:paddingTop="5dp"
             android:paddingRight="15dp"
             android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="@string/content_padding"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -217,13 +216,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:text="@string/tip_padding"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -233,6 +225,12 @@
             android:paddingTop="5dp"
             android:paddingRight="15dp"
             android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="@string/tip_padding"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
