@@ -314,7 +314,7 @@ public abstract class PageLoader {
     /**
      * 设置页面样式
      */
-    public void initPageStyle() {
+    private void initPageStyle() {
         mTipPaint.setColor(readBookControl.getTextColor());
         mTitlePaint.setColor(readBookControl.getTextColor());
         mTextPaint.setColor(readBookControl.getTextColor());
