@@ -3,6 +3,10 @@
 ### 捐赠里点击红包搜索码可开启高级功能!
 ## 更新日志
 
+**2019/03/29**
+* 添加Tip边距调节
+* 更新fireBase版本
+
 **2019/03/26**
 * 添加RxJavaPlugins.setErrorHandler(Functions.emptyConsumer());防止rxJava内部错误导致崩溃
 * 去除打开软件时的权限获取提示
