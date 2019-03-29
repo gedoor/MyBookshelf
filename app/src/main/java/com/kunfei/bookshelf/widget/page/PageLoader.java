@@ -158,8 +158,6 @@ public abstract class PageLoader {
         initData();
         // 初始化画笔
         initPaint();
-        // 初始化PageView
-        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
     }
 
     private void initData() {
@@ -169,9 +167,49 @@ public abstract class PageLoader {
         mPageMode = PageAnimation.Mode.getPageMode(readBookControl.getPageMode());
         // 初始化参数
         indent = StringUtils.repeat(StringUtils.halfToFull(" "), readBookControl.getIndent());
-
         // 配置文字有关的参数
         setUpTextParams();
+    }
+
+    /**
+     * 屏幕大小变化处理
+     */
+    void prepareDisplay(int w, int h) {
+        // 获取PageView的宽高
+        mDisplayWidth = w;
+        mDisplayHeight = h;
+
+        // 设置边距
+        mMarginTop = hideStatusBar ?
+                ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
+                : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
+        mMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + readBookControl.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+        mMarginLeft = ScreenUtils.dpToPx(readBookControl.getPaddingLeft());
+        mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
+        contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
+        tipMarginTop = ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + DEFAULT_MARGIN_HEIGHT);
+        tipMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+
+        Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
+        float tipMarginTopHeight = (tipMarginTop + fontMetrics.top - fontMetrics.bottom) / 2;
+        float tipMarginBottomHeight = (tipMarginBottom + fontMetrics.top - fontMetrics.bottom) / 2;
+        tipBottomTop = tipMarginTopHeight - fontMetrics.top;
+        tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginBottomHeight;
+        tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
+        tipMarginLeft = readBookControl.getTipPaddingLeft();
+        float tipMarginRight = readBookControl.getTipPaddingRight();
+        displayRightEnd = mDisplayWidth - tipMarginRight;
+        tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
+
+        // 获取内容显示位置的大小
+        mVisibleWidth = mDisplayWidth - mMarginLeft - mMarginRight;
+        mVisibleHeight = readBookControl.getHideStatusBar()
+                ? mDisplayHeight - mMarginTop - mMarginBottom
+                : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
+
+        // 设置翻页模式
+        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -245,7 +283,7 @@ public abstract class PageLoader {
 
         setupTextInterval();
         // 初始化页面样式
-        setPageStyle();
+        initPageStyle();
     }
 
     /**
@@ -273,34 +311,10 @@ public abstract class PageLoader {
         titlePara = mTitlePara + (int) mTextPaint.getTextSize();
     }
 
-    private void initMargins() {
-        mMarginTop = hideStatusBar ?
-                ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
-                : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
-        mMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + readBookControl.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
-        mMarginLeft = ScreenUtils.dpToPx(readBookControl.getPaddingLeft());
-        mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
-        contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
-        tipMarginTop = ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + DEFAULT_MARGIN_HEIGHT);
-        tipMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
-
-        Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
-        float tipMarginTopHeight = (tipMarginTop + fontMetrics.top - fontMetrics.bottom) / 2;
-        float tipMarginBottomHeight = (tipMarginBottom + fontMetrics.top - fontMetrics.bottom) / 2;
-        tipBottomTop = tipMarginTopHeight - fontMetrics.top;
-        tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginBottomHeight;
-        tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        tipMarginLeft = readBookControl.getTipPaddingLeft();
-        float tipMarginRight = readBookControl.getTipPaddingRight();
-        displayRightEnd = mDisplayWidth - tipMarginRight;
-        tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
-    }
-
     /**
      * 设置页面样式
      */
-    public void setPageStyle() {
-
+    public void initPageStyle() {
         mTipPaint.setColor(readBookControl.getTextColor());
         mTitlePaint.setColor(readBookControl.getTextColor());
         mTextPaint.setColor(readBookControl.getTextColor());
@@ -309,8 +323,6 @@ public abstract class PageLoader {
         mTipPaint.setAlpha(TIP_ALPHA);
         mBatteryPaint.setAlpha(TIP_ALPHA);
         mTextEndPaint.setAlpha(TIP_ALPHA);
-
-        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -1298,28 +1310,6 @@ public abstract class PageLoader {
                 }
             }
         }
-    }
-
-    /**
-     * 屏幕大小变化处理
-     */
-    void prepareDisplay(int w, int h) {
-        // 获取PageView的宽高
-        mDisplayWidth = w;
-        mDisplayHeight = h;
-
-        // 重置边距
-        initMargins();
-
-        // 获取内容显示位置的大小
-        mVisibleWidth = mDisplayWidth - mMarginLeft - mMarginRight;
-        mVisibleHeight = readBookControl.getHideStatusBar()
-                ? mDisplayHeight - mMarginTop - mMarginBottom
-                : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
-
-        // 重置 PageMode
-        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
-        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
