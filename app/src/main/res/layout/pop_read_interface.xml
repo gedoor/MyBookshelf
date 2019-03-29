@@ -144,6 +144,13 @@
             android:layout_height="0.8dp"
             android:background="@color/btn_bg_press" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:text="@string/content_padding"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -153,12 +160,6 @@
             android:paddingTop="5dp"
             android:paddingRight="15dp"
             android:paddingBottom="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/padding" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -210,6 +211,79 @@
 
             <com.kunfei.bookshelf.widget.number.NumberButton
                 android:id="@+id/nbPaddingRight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:text="@string/tip_padding"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/top" />
+
+            <com.kunfei.bookshelf.widget.number.NumberButton
+                android:id="@+id/nbTipPaddingTop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="@string/bottom"
+                tools:ignore="RtlHardcoded" />
+
+            <com.kunfei.bookshelf.widget.number.NumberButton
+                android:id="@+id/nbTipPaddingBottom"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="@string/left"
+                tools:ignore="RtlHardcoded" />
+
+            <com.kunfei.bookshelf.widget.number.NumberButton
+                android:id="@+id/nbTipPaddingLeft"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="@string/right"
+                tools:ignore="RtlHardcoded" />
+
+            <com.kunfei.bookshelf.widget.number.NumberButton
+                android:id="@+id/nbTipPaddingRight"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3" />

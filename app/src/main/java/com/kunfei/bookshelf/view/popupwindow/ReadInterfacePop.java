@@ -74,6 +74,14 @@ public class ReadInterfacePop extends FrameLayout {
     NumberButton nbParagraphSize;
     @BindView(R.id.fl_indent)
     TextView tvIndent;
+    @BindView(R.id.nbTipPaddingTop)
+    NumberButton nbTipPaddingTop;
+    @BindView(R.id.nbTipPaddingBottom)
+    NumberButton nbTipPaddingBottom;
+    @BindView(R.id.nbTipPaddingLeft)
+    NumberButton nbTipPaddingLeft;
+    @BindView(R.id.nbTipPaddingRight)
+    NumberButton nbTipPaddingRight;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -184,6 +192,45 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getPaddingRight())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingRight((int) number);
+                    changeProListener.upMargin();
+                });
+        nbTipPaddingTop.setTitle(activity.getString(R.string.padding_top))
+                .setMinNumber(0)
+                .setMaxNumber(100)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getTipPaddingTop())
+                .setOnChangedListener(number -> {
+                    readBookControl.setTipPaddingTop((int) number);
+                    changeProListener.upMargin();
+                });
+
+        nbTipPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
+                .setMinNumber(0)
+                .setMaxNumber(100)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getTipPaddingBottom())
+                .setOnChangedListener(number -> {
+                    readBookControl.setTipPaddingBottom((int) number);
+                    changeProListener.upMargin();
+                });
+
+        nbTipPaddingLeft.setTitle(activity.getString(R.string.padding_left))
+                .setMinNumber(0)
+                .setMaxNumber(50)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getTipPaddingLeft())
+                .setOnChangedListener(number -> {
+                    readBookControl.setTipPaddingLeft((int) number);
+                    changeProListener.upMargin();
+                });
+
+        nbTipPaddingRight.setTitle(activity.getString(R.string.padding_right))
+                .setMinNumber(0)
+                .setMaxNumber(50)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getTipPaddingRight())
+                .setOnChangedListener(number -> {
+                    readBookControl.setTipPaddingRight((int) number);
                     changeProListener.upMargin();
                 });
     }

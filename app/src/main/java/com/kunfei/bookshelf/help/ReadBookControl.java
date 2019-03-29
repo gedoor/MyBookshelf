@@ -59,6 +59,10 @@ public class ReadBookControl {
     private int paddingTop;
     private int paddingRight;
     private int paddingBottom;
+    private int tipPaddingLeft;
+    private int tipPaddingTop;
+    private int tipPaddingRight;
+    private int tipPaddingBottom;
     private Boolean tipMarginChange;
 
     private SharedPreferences preferences;
@@ -108,6 +112,10 @@ public class ReadBookControl {
         this.paddingTop = preferences.getInt("paddingTop", 0);
         this.paddingRight = preferences.getInt("paddingRight", DEFAULT_MARGIN_WIDTH);
         this.paddingBottom = preferences.getInt("paddingBottom", 0);
+        this.tipPaddingLeft = preferences.getInt("tipPaddingLeft", DEFAULT_MARGIN_WIDTH);
+        this.tipPaddingTop = preferences.getInt("tipPaddingTop", 0);
+        this.tipPaddingRight = preferences.getInt("tipPaddingRight", DEFAULT_MARGIN_WIDTH);
+        this.tipPaddingBottom = preferences.getInt("tipPaddingBottom", 0);
         this.pageMode = preferences.getInt("pageMode", 0);
         this.screenDirection = preferences.getInt("screenDirection", 0);
         this.tipMarginChange = preferences.getBoolean("tipMarginChange", false);
@@ -637,6 +645,51 @@ public class ReadBookControl {
         this.paddingBottom = paddingBottom;
         preferences.edit()
                 .putInt("paddingBottom", paddingBottom)
+                .apply();
+    }
+
+    public int getTipPaddingLeft() {
+        return tipPaddingLeft;
+    }
+
+    public void setTipPaddingLeft(int tipPaddingLeft) {
+        this.tipPaddingLeft = tipPaddingLeft;
+        preferences.edit()
+                .putInt("tipPaddingLeft", tipPaddingLeft)
+                .apply();
+        ;
+    }
+
+    public int getTipPaddingTop() {
+        return tipPaddingTop;
+    }
+
+    public void setTipPaddingTop(int tipPaddingTop) {
+        this.tipPaddingTop = tipPaddingTop;
+        preferences.edit()
+                .putInt("tipPaddingTop", tipPaddingTop)
+                .apply();
+    }
+
+    public int getTipPaddingRight() {
+        return tipPaddingRight;
+    }
+
+    public void setTipPaddingRight(int tipPaddingRight) {
+        this.tipPaddingRight = tipPaddingRight;
+        preferences.edit()
+                .putInt("tipPaddingRight", tipPaddingRight)
+                .apply();
+    }
+
+    public int getTipPaddingBottom() {
+        return tipPaddingBottom;
+    }
+
+    public void setTipPaddingBottom(int tipPaddingBottom) {
+        this.tipPaddingBottom = tipPaddingBottom;
+        preferences.edit()
+                .putInt("tipPaddingBottom", tipPaddingBottom)
                 .apply();
     }
 
