@@ -19,5 +19,7 @@ public interface FindBookContract {
 
         void updateUI(List<RecyclerViewData> group);
 
+        boolean isFlexBox();
+
     }
 }
