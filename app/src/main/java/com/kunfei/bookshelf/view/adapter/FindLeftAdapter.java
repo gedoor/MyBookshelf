@@ -75,6 +75,10 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
         return data.size();
     }
 
+    public List<RecyclerViewData> getData() {
+        return data;
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         View findLeft;
         TextView tvSourceName;

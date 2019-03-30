@@ -138,24 +138,36 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             leftLayoutManager = new LinearLayoutManager(getContext());
             rightLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findLeftAdapter = new FindLeftAdapter(pos -> {});
+            findLeftAdapter = new FindLeftAdapter(pos -> {
+                int index = 0;
+                for (int i = 0; i < pos; i++) {
+                    index = index + 1 + findLeftAdapter.getData().get(i).getChildList().size();
+                }
+                rightLayoutManager.scrollToPosition(index);
+            });
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
             findRightAdapter = new FindRightAdapter(this, this);
             rvFindRight.setLayoutManager(rightLayoutManager);
             rvFindRight.setAdapter(findRightAdapter);
-//            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//
-//                @Override
-//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                    super.onScrolled(recyclerView, dx, dy);
-//                    int index = rightLayoutManager.findFirstVisibleItemPosition();
-//                    if (findLeftAdapter != null) {
-//                        findLeftAdapter.upShowIndex(index);
-//                        leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
-//                    }
-//                }
-//            });
+            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int index = ((FlexboxLayoutManager) rightLayoutManager).findFirstCompletelyVisibleItemPosition();
+                    for (int i = index; i >= 0; i--) {
+                        if (findRightAdapter.getData().get(index) instanceof FindKindGroupBean) {
+                            i = ((FindKindGroupBean) findRightAdapter.getData().get(index)).getIndex();
+                            if (findLeftAdapter != null) {
+                                findLeftAdapter.upShowIndex(i);
+                                leftLayoutManager.scrollToPositionWithOffset(i, rvFindLeft.getHeight() / 2);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
         } else {
             leftLayoutManager = null;
             rightLayoutManager = new LinearLayoutManager(getContext());
