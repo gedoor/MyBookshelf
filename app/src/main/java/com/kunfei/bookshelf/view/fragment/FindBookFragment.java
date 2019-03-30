@@ -141,7 +141,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             findLeftAdapter = new FindLeftAdapter(pos -> {});
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
-            findRightAdapter = new FindRightAdapter(this);
+            findRightAdapter = new FindRightAdapter(this, this);
             rvFindRight.setLayoutManager(rightLayoutManager);
             rvFindRight.setAdapter(findRightAdapter);
 //            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {

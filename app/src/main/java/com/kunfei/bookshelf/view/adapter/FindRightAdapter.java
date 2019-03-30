@@ -22,11 +22,13 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
     private List<Object> data = new ArrayList<>();
     private Context context;
     private OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener;
+    private OnRecyclerViewListener.OnItemClickListener onItemClickListener;
     private final static int TYPE_GROUP = 0;
     private final static int TYPE_ITEM = 1;
 
-    public FindRightAdapter(OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener) {
+    public FindRightAdapter(OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener, OnRecyclerViewListener.OnItemClickListener onItemClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void setData(List<RecyclerViewData> data) {
@@ -72,8 +74,8 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
             FindKindBean kindBean = (FindKindBean) data.get(pos);
             myViewHolder.sourceName.setText(kindBean.getKindName());
             myViewHolder.sourceName.setOnClickListener(v -> {
-                if (onItemLongClickListener != null) {
-                    onItemLongClickListener.onChildItemLongClick(pos, pos, pos, v);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onChildItemClick(pos, pos, pos, v);
                 }
             });
             myViewHolder.sourceName.setOnLongClickListener(null);
