@@ -234,13 +234,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 .setGradientType(GradientDrawable.LINEAR_GRADIENT);
     }
 
-    /**
-     * 是否能够拖动过去
-     */
-    public boolean canDragOver() {
-        return mTouchToCornerDis > mScreenWidth / 10;
-    }
-
     public boolean right() {
         return mCornerX <= -4;
     }
