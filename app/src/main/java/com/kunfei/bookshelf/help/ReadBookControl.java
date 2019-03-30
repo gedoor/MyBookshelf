@@ -59,7 +59,10 @@ public class ReadBookControl {
     private int paddingTop;
     private int paddingRight;
     private int paddingBottom;
-    private Boolean tipMarginChange;
+    private int tipPaddingLeft;
+    private int tipPaddingTop;
+    private int tipPaddingRight;
+    private int tipPaddingBottom;
 
     private SharedPreferences preferences;
 
@@ -108,9 +111,12 @@ public class ReadBookControl {
         this.paddingTop = preferences.getInt("paddingTop", 0);
         this.paddingRight = preferences.getInt("paddingRight", DEFAULT_MARGIN_WIDTH);
         this.paddingBottom = preferences.getInt("paddingBottom", 0);
+        this.tipPaddingLeft = preferences.getInt("tipPaddingLeft", DEFAULT_MARGIN_WIDTH);
+        this.tipPaddingTop = preferences.getInt("tipPaddingTop", 0);
+        this.tipPaddingRight = preferences.getInt("tipPaddingRight", DEFAULT_MARGIN_WIDTH);
+        this.tipPaddingBottom = preferences.getInt("tipPaddingBottom", 0);
         this.pageMode = preferences.getInt("pageMode", 0);
         this.screenDirection = preferences.getInt("screenDirection", 0);
-        this.tipMarginChange = preferences.getBoolean("tipMarginChange", false);
         this.navBarColor = preferences.getInt("navBarColorInt", 0);
 
         initTextDrawableIndex();
@@ -640,6 +646,51 @@ public class ReadBookControl {
                 .apply();
     }
 
+    public int getTipPaddingLeft() {
+        return tipPaddingLeft;
+    }
+
+    public void setTipPaddingLeft(int tipPaddingLeft) {
+        this.tipPaddingLeft = tipPaddingLeft;
+        preferences.edit()
+                .putInt("tipPaddingLeft", tipPaddingLeft)
+                .apply();
+        ;
+    }
+
+    public int getTipPaddingTop() {
+        return tipPaddingTop;
+    }
+
+    public void setTipPaddingTop(int tipPaddingTop) {
+        this.tipPaddingTop = tipPaddingTop;
+        preferences.edit()
+                .putInt("tipPaddingTop", tipPaddingTop)
+                .apply();
+    }
+
+    public int getTipPaddingRight() {
+        return tipPaddingRight;
+    }
+
+    public void setTipPaddingRight(int tipPaddingRight) {
+        this.tipPaddingRight = tipPaddingRight;
+        preferences.edit()
+                .putInt("tipPaddingRight", tipPaddingRight)
+                .apply();
+    }
+
+    public int getTipPaddingBottom() {
+        return tipPaddingBottom;
+    }
+
+    public void setTipPaddingBottom(int tipPaddingBottom) {
+        this.tipPaddingBottom = tipPaddingBottom;
+        preferences.edit()
+                .putInt("tipPaddingBottom", tipPaddingBottom)
+                .apply();
+    }
+
     public int getPageMode() {
         return pageMode;
     }
@@ -659,17 +710,6 @@ public class ReadBookControl {
         this.screenDirection = screenDirection;
         preferences.edit()
                 .putInt("screenDirection", screenDirection)
-                .apply();
-    }
-
-    public Boolean getTipMarginChange() {
-        return tipMarginChange;
-    }
-
-    public void setTipMarginChange(Boolean tipMarginChange) {
-        this.tipMarginChange = tipMarginChange;
-        preferences.edit()
-                .putBoolean("tipMarginChange", tipMarginChange)
                 .apply();
     }
 
