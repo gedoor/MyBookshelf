@@ -345,6 +345,7 @@ public class BitmapUtil {
         if (!image.isRecycled()) {
             image.recycle();
         }
+        assert bitmap != null;
         return compressImage(bitmap);// 压缩好比例大小后再进行质量压缩
     }
 
@@ -359,6 +360,7 @@ public class BitmapUtil {
         options.inPurgeable = true;
         InputStream stream = context.getResources().openRawResource(drawableId);
         Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
+        assert bitmap != null;
         return getBitmap(bitmap, screenWidth, screenHight);
     }
 
