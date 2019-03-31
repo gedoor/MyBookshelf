@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
-import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +30,9 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(List<RecyclerViewData> data) {
+    public void setData(List<Object> data) {
         this.data.clear();
-        for (RecyclerViewData recyclerViewData : data) {
-            this.data.add(recyclerViewData.getGroupData());
-            this.data.addAll(recyclerViewData.getChildList());
-        }
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 

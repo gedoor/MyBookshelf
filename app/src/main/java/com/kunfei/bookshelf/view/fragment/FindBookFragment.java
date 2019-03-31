@@ -105,7 +105,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public synchronized void updateUI(List<RecyclerViewData> group) {
+    public synchronized void updateUI(List<RecyclerViewData> group, List<Object> dataAll) {
         if (rlEmptyView == null) return;
         if (group.size() == 0) {
             tvEmpty.setText(R.string.no_find);
@@ -115,7 +115,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         }
         if (isFlexBox()) {
             findLeftAdapter.setData(group);
-            findRightAdapter.setData(group);
+            findRightAdapter.setData(dataAll);
             rlEmptyView.setVisibility(View.GONE);
             rvFindLeft.setVisibility(View.VISIBLE);
             vwDivider.setVisibility(View.VISIBLE);
@@ -138,13 +138,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             leftLayoutManager = new LinearLayoutManager(getContext());
             rightLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findLeftAdapter = new FindLeftAdapter(pos -> {
-                int index = 0;
-                for (int i = 0; i < pos; i++) {
-                    index = index + 1 + findLeftAdapter.getData().get(i).getChildList().size();
-                }
-                rightLayoutManager.scrollToPosition(index);
-            });
+            findLeftAdapter = new FindLeftAdapter(pos ->
+                    rightLayoutManager.scrollToPosition(((FindKindGroupBean)findLeftAdapter.getData().get(pos).getGroupData()).getIndexAll()));
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
             findRightAdapter = new FindRightAdapter(this, this);

@@ -4,6 +4,7 @@ public class FindKindGroupBean {
     private String groupName;
     private String groupTag;
     private int index;
+    private int indexAll;
 
     public String getGroupName() {
         return groupName;
@@ -27,5 +28,13 @@ public class FindKindGroupBean {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public int getIndexAll() {
+        return indexAll;
+    }
+
+    public void setIndexAll(int indexAll) {
+        this.indexAll = indexAll;
     }
 }
