@@ -642,7 +642,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             updateKeyboardTopPopupWindow(x, y); //可能是输入法切换了输入模式，高度会变化（比如切换为语音输入）
             return;
         }
-        if (mSoftKeyboardTool != null) {
+        if (mSoftKeyboardTool != null & !this.isFinishing()) {
             mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, x, y);
         }
     }

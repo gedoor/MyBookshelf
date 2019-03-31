@@ -24,7 +24,6 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.view.adapter.FindKindAdapter;
-import com.kunfei.bookshelf.view.adapter.FindLeftAdapter;
 import com.kunfei.bookshelf.view.adapter.FindRightAdapter;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
@@ -49,19 +48,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     TextView tvEmpty;
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
-    @BindView(R.id.rv_find_left)
-    RecyclerView rvFindLeft;
     @BindView(R.id.rv_find_right)
     RecyclerView rvFindRight;
-    @BindView(R.id.vw_divider)
-    View vwDivider;
+
 
     private Unbinder unbinder;
-    private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
     private FindKindAdapter findKindAdapter;
-    private LinearLayoutManager leftLayoutManager;
-    private RecyclerView.LayoutManager rightLayoutManager;
+    private RecyclerView.LayoutManager findLayoutManager;
 
     @Override
     public int createLayoutId() {
@@ -114,15 +108,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findLeftAdapter.setData(group);
             findRightAdapter.setData(dataAll);
             rlEmptyView.setVisibility(View.GONE);
-            rvFindLeft.setVisibility(View.VISIBLE);
-            vwDivider.setVisibility(View.VISIBLE);
-            if (group.size() <= 1) {
-                rvFindLeft.setVisibility(View.GONE);
-                vwDivider.setVisibility(View.GONE);
-            }
         } else {
             findKindAdapter.setAllDatas(group);
         }
@@ -135,47 +122,19 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     private void initRecyclerView() {
         if (isFlexBox()) {
-            leftLayoutManager = new LinearLayoutManager(getContext());
-            rightLayoutManager = new FlexboxLayoutManager(getContext());
+            findLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findLeftAdapter = new FindLeftAdapter(pos ->{
-                findLeftAdapter.upShowIndex(pos);
-                leftLayoutManager.scrollToPositionWithOffset(pos, rvFindLeft.getHeight() / 2);
-                rvFindRight.scrollToPosition(((FindKindGroupBean) findLeftAdapter.getData().get(pos).getGroupData()).getIndexAll());
-            });
-            rvFindLeft.setLayoutManager(leftLayoutManager);
-            rvFindLeft.setAdapter(findLeftAdapter);
             findRightAdapter = new FindRightAdapter(this, this);
-            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setLayoutManager(findLayoutManager);
             rvFindRight.setAdapter(findRightAdapter);
-            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    int index = ((FlexboxLayoutManager) rightLayoutManager).findFirstCompletelyVisibleItemPosition();
-                    int i = 0;
-                    if (findRightAdapter.getData().get(index) instanceof FindKindGroupBean) {
-                        i = ((FindKindGroupBean) findRightAdapter.getData().get(index)).getIndex();
-                    } else if (findRightAdapter.getData().get(index) instanceof FindKindBean){
-                        i = ((FindKindBean) findRightAdapter.getData().get(index)).getIndexGroup();
-                    }
-                    findLeftAdapter.upShowIndex(i);
-                    leftLayoutManager.scrollToPositionWithOffset(i, rvFindLeft.getHeight() / 2);
-                }
-            });
         } else {
-            leftLayoutManager = null;
-            rightLayoutManager = new LinearLayoutManager(getContext());
-            rvFindLeft.setVisibility(View.GONE);
-            vwDivider.setVisibility(View.GONE);
-            findLeftAdapter = null;
+            findLayoutManager = new LinearLayoutManager(getContext());
             findRightAdapter = null;
             findKindAdapter = new FindKindAdapter(getContext(), new ArrayList<>());
             findKindAdapter.setOnItemClickListener(this);
             findKindAdapter.setOnItemLongClickListener(this);
             findKindAdapter.setCanExpandAll(false);
-            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setLayoutManager(findLayoutManager);
             rvFindRight.setAdapter(findKindAdapter);
         }
     }
