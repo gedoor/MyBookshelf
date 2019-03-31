@@ -138,8 +138,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             leftLayoutManager = new LinearLayoutManager(getContext());
             rightLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findLeftAdapter = new FindLeftAdapter(pos ->
-                    rightLayoutManager.scrollToPosition(((FindKindGroupBean)findLeftAdapter.getData().get(pos).getGroupData()).getIndexAll()));
+            findLeftAdapter = new FindLeftAdapter(pos ->{
+                findLeftAdapter.upShowIndex(pos);
+                leftLayoutManager.scrollToPositionWithOffset(pos, rvFindLeft.getHeight() / 2);
+                rvFindRight.scrollToPosition(((FindKindGroupBean) findLeftAdapter.getData().get(pos).getGroupData()).getIndexAll());
+            });
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
             findRightAdapter = new FindRightAdapter(this, this);
@@ -151,16 +154,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     int index = ((FlexboxLayoutManager) rightLayoutManager).findFirstCompletelyVisibleItemPosition();
-                    for (int i = index; i >= 0; i--) {
-                        if (findRightAdapter.getData().get(index) instanceof FindKindGroupBean) {
-                            i = ((FindKindGroupBean) findRightAdapter.getData().get(index)).getIndex();
-                            if (findLeftAdapter != null) {
-                                findLeftAdapter.upShowIndex(i);
-                                leftLayoutManager.scrollToPositionWithOffset(i, rvFindLeft.getHeight() / 2);
-                                break;
-                            }
-                        }
+                    int i = 0;
+                    if (findRightAdapter.getData().get(index) instanceof FindKindGroupBean) {
+                        i = ((FindKindGroupBean) findRightAdapter.getData().get(index)).getIndex();
+                    } else if (findRightAdapter.getData().get(index) instanceof FindKindBean){
+                        i = ((FindKindBean) findRightAdapter.getData().get(index)).getIndexGroup();
                     }
+                    findLeftAdapter.upShowIndex(i);
+                    leftLayoutManager.scrollToPositionWithOffset(i, rvFindLeft.getHeight() / 2);
                 }
             });
         } else {
@@ -196,7 +197,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         intent.putExtra("url", kindBean.getKindUrl());
         intent.putExtra("title", kindBean.getKindName());
         intent.putExtra("tag", kindBean.getTag());
-        startActivityByAnim(intent, view, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(intent);
     }
 
     @Override

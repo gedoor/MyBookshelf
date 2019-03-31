@@ -60,6 +60,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                             findKindBean.setTag(sourceBean.getBookSourceUrl());
                             findKindBean.setKindName(kind[0]);
                             findKindBean.setKindUrl(kind[1]);
+                            findKindBean.setIndexGroup(groupBean.getIndex());
                             children.add(findKindBean);
                         }
                         if (mView.isFlexBox()) {
