@@ -5,7 +5,6 @@ public class FindKindBean {
     private String tag;
     private String kindName;
     private String kindUrl;
-    private int indexGroup;
 
     public FindKindBean() {
 
@@ -43,11 +42,4 @@ public class FindKindBean {
         this.group = group;
     }
 
-    public int getIndexGroup() {
-        return indexGroup;
-    }
-
-    public void setIndexGroup(int indexGroup) {
-        this.indexGroup = indexGroup;
-    }
 }

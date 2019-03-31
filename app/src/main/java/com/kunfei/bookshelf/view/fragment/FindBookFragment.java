@@ -55,7 +55,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     private Unbinder unbinder;
     private FindRightAdapter findRightAdapter;
     private FindKindAdapter findKindAdapter;
-    private RecyclerView.LayoutManager findLayoutManager;
 
     @Override
     public int createLayoutId() {
@@ -101,15 +100,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public synchronized void updateUI(List<RecyclerViewData> group, List<Object> dataAll) {
         if (rlEmptyView == null) return;
-        if (group.size() == 0) {
+        if (group.isEmpty() && dataAll.isEmpty()) {
             tvEmpty.setText(R.string.no_find);
             rlEmptyView.setVisibility(View.VISIBLE);
-        } else {
-            rlEmptyView.setVisibility(View.GONE);
+            return;
         }
+        rlEmptyView.setVisibility(View.GONE);
         if (isFlexBox()) {
             findRightAdapter.setData(dataAll);
-            rlEmptyView.setVisibility(View.GONE);
         } else {
             findKindAdapter.setAllDatas(group);
         }
@@ -121,6 +119,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     private void initRecyclerView() {
+        RecyclerView.LayoutManager findLayoutManager;
         if (isFlexBox()) {
             findLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;

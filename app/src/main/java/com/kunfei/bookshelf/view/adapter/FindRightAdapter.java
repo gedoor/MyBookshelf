@@ -31,8 +31,7 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
     }
 
     public void setData(List<Object> data) {
-        this.data.clear();
-        this.data.addAll(data);
+        this.data = data;
         notifyDataSetChanged();
     }
 
