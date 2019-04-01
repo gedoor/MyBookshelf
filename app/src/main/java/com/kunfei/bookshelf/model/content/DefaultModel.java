@@ -74,7 +74,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page, headerMap);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page, headerMap, tag);
             if (analyzeUrl.getHost() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
@@ -101,7 +101,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap, tag);
             if (analyzeUrl.getHost() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
@@ -129,7 +129,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), null, null, headerMap);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), headerMap, tag);
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
@@ -151,7 +151,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), null, null, headerMap);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, tag);
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
@@ -173,7 +173,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, tag);
             if (bookSourceBean.getRuleBookContent().startsWith("$") && !bookSourceBean.getRuleBookContent().startsWith("$.")) {
                 return getAjaxHtml(analyzeUrl, tag)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
