@@ -403,5 +403,6 @@
     <string name="load_error_msg">加载失败\n%s</string>
     <string name="content_padding">正文边距</string>
     <string name="tip_padding">Tip边距</string>
+    <string name="text_letter_spacing">字距</string>
 
 </resources>
