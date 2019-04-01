@@ -207,7 +207,7 @@ public class AnalyzeUrl {
 
     private void generateUrlPath(String ruleUrl) {
         String baseUrl = StringUtils.getBaseUrl(ruleUrl);
-        if (baseUrl == null) {
+        if (baseUrl == null && hostUrl != null) {
             url = hostUrl + ruleUrl;
             urlPath = ruleUrl;
         } else {
