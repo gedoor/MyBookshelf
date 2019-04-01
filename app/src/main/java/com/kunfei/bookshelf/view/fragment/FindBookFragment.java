@@ -53,7 +53,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
 
     private Unbinder unbinder;
-    private FindRightAdapter findRightAdapter;
+    private FindRightAdapter findFlexBoxAdapter;
     private FindKindAdapter findKindAdapter;
 
     @Override
@@ -100,17 +100,17 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public synchronized void updateUI(List<RecyclerViewData> group, List<Object> dataAll) {
         if (rlEmptyView == null) return;
+        if (isFlexBox()) {
+            findFlexBoxAdapter.setData(dataAll);
+        } else {
+            findKindAdapter.setAllDatas(group);
+        }
         if (group.isEmpty() && dataAll.isEmpty()) {
             tvEmpty.setText(R.string.no_find);
             rlEmptyView.setVisibility(View.VISIBLE);
             return;
         }
         rlEmptyView.setVisibility(View.GONE);
-        if (isFlexBox()) {
-            findRightAdapter.setData(dataAll);
-        } else {
-            findKindAdapter.setAllDatas(group);
-        }
     }
 
     @Override
@@ -123,12 +123,12 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (isFlexBox()) {
             findLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findRightAdapter = new FindRightAdapter(this, this);
+            findFlexBoxAdapter = new FindRightAdapter(this, this);
             rvFindRight.setLayoutManager(findLayoutManager);
-            rvFindRight.setAdapter(findRightAdapter);
+            rvFindRight.setAdapter(findFlexBoxAdapter);
         } else {
             findLayoutManager = new LinearLayoutManager(getContext());
-            findRightAdapter = null;
+            findFlexBoxAdapter = null;
             findKindAdapter = new FindKindAdapter(getContext(), new ArrayList<>());
             findKindAdapter.setOnItemClickListener(this);
             findKindAdapter.setOnItemLongClickListener(this);
@@ -147,7 +147,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public void onChildItemClick(int position, int groupPosition, int childPosition, View view) {
         FindKindBean kindBean;
         if (isFlexBox()) {
-            kindBean = (FindKindBean) findRightAdapter.getData().get(position);
+            kindBean = (FindKindBean) findFlexBoxAdapter.getData().get(position);
         } else {
             kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(childPosition);
         }
@@ -163,7 +163,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (getActivity() == null) return;
         FindKindGroupBean groupBean;
         if (isFlexBox()) {
-            groupBean = (FindKindGroupBean) findRightAdapter.getData().get(groupPosition);
+            groupBean = (FindKindGroupBean) findFlexBoxAdapter.getData().get(groupPosition);
         } else {
             groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
         }
@@ -179,8 +179,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             if (item.getTitle().equals(getString(R.string.edit))) {
                 SourceEditActivity.startThis(getActivity(), sourceBean);
             } else if (item.getTitle().equals(getString(R.string.to_top))) {
+                if (isFlexBox()) {
+                    findFlexBoxAdapter.setData(new ArrayList<>());
+                } else {
+                    findKindAdapter.setAllDatas(new ArrayList<>());
+                }
                 BookSourceManager.toTop(sourceBean);
             } else if (item.getTitle().equals(getString(R.string.delete))) {
+                if (isFlexBox()) {
+                    findFlexBoxAdapter.setData(new ArrayList<>());
+                } else {
+                    findKindAdapter.setAllDatas(new ArrayList<>());
+                }
                 BookSourceManager.removeBookSource(sourceBean);
             }
             return true;
