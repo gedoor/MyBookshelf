@@ -461,6 +461,11 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         mView.readAloudLength(start);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
+    public void recreate(Boolean recreate) {
+        mView.recreate();
+    }
+
     public interface OnAddListener {
         void addSuccess();
     }

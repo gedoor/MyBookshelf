@@ -19,4 +19,5 @@ public class FindKindGroupBean {
     public void setGroupTag(String groupTag) {
         this.groupTag = groupTag;
     }
+
 }

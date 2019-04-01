@@ -46,6 +46,7 @@ public interface ReadBookContract {
 
         void finish();
 
+        void recreate();
     }
 
     interface Presenter extends IPresenter {

@@ -3,9 +3,19 @@
 ### 捐赠里点击红包搜索码可开启高级功能!
 ## 更新日志
 
-**2019/03/22**
-* 修复一个引起崩溃的BUG
+**2019/03/30**
+* 仿真翻页背面加回
+* 修复在有些手机上切换夜间模式,书架不跟着切换的bug
+* 重写发现界面,尝试解决发现界面卡顿的问题
+
+**2019/03/29**
+* 添加Tip边距调节
+* 更新fireBase版本
+
+**2019/03/26**
+* 添加RxJavaPlugins.setErrorHandler(Functions.emptyConsumer());防止rxJava内部错误导致崩溃
 * 去除打开软件时的权限获取提示
+* fix SourceDebug variable missing bug by mabDc was merged a day ago 
 
 **2019/03/21**
 * 同时解决了背景色差和翻页问题

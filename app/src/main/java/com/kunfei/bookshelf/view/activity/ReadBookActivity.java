@@ -549,7 +549,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 pageView.setBackground(readBookControl.getTextBackground(ReadBookActivity.this));
                 initImmersionBar();
                 if (mPageLoader != null) {
-                    mPageLoader.setPageStyle();
+                    mPageLoader.refreshUi();
                 }
             }
 

@@ -205,7 +205,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
-    public void updatePx(Boolean px) {
+    public void recreate(Boolean recreate) {
         mView.recreate();
     }
 
