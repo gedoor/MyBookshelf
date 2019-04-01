@@ -1,15 +1,12 @@
 package com.kunfei.bookshelf.service;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
-import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
@@ -21,10 +18,8 @@ import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
     public static final String TAG = MediaButtonIntentReceiver.class.getSimpleName();
-    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     public static boolean handleIntent(final Context context, final Intent intent) {
-        if (DEBUG) Log.d(TAG, "Received intent: " + intent);
         final String intentAction = intent.getAction();
         if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             final KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
@@ -62,6 +57,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
             intent.putExtra("readAloud", true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 context.startActivity(intent);
             } catch (Exception e) {
