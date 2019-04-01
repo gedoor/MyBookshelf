@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
@@ -26,9 +27,7 @@ import androidx.annotation.NonNull;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
     private Disposable disposable;
@@ -37,17 +36,13 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
     @Override
     public void initData() {
         if (disposable != null) return;
-        List<Object> allData = new ArrayList<>();
-        List<RecyclerViewData> group = new ArrayList<>();
-        Single.create((SingleOnSubscribe<Boolean>) e -> {
+        Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
+            List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getConfigPreferences().getBoolean("showAllFind", true);
             List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                        FindKindGroupBean groupBean = new FindKindGroupBean();
-                        groupBean.setGroupName(sourceBean.getBookSourceName());
-                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
                         String kindA[] = sourceBean.getRuleFindUrl().split("(&&|\n)+");
                         List<FindKindBean> children = new ArrayList<>();
                         for (String kindB : kindA) {
@@ -60,31 +55,28 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                             findKindBean.setKindUrl(kind[1]);
                             children.add(findKindBean);
                         }
-                        if (mView.isFlexBox()) {
-                            allData.add(groupBean);
-                            allData.addAll(children);
-                        } else {
-                            group.add(new RecyclerViewData(groupBean, children, false));
-                        }
+                        FindKindGroupBean groupBean = new FindKindGroupBean();
+                        groupBean.setGroupName(sourceBean.getBookSourceName());
+                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
+                        group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {
                     sourceBean.addGroup("发现规则语法错误");
                     BookSourceManager.addBookSource(sourceBean);
                 }
             }
-            e.onSuccess(true);
+            e.onSuccess(group);
         })
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Boolean>() {
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<RecyclerViewData>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable = d;
                     }
 
                     @Override
-                    public void onSuccess(Boolean value) {
-                        mView.updateUI(group, allData);
+                    public void onSuccess(List<RecyclerViewData> recyclerViewData) {
+                        mView.updateUI(recyclerViewData);
                         disposable.dispose();
                         disposable = null;
                     }
@@ -110,7 +102,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_BOOK_SOURCE)})
-    public void upBookSource(Object object) {
+    public void hadAddOrRemoveBook(Object object) {
         initData();
     }
 
