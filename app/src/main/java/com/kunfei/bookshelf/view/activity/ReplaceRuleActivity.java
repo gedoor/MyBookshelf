@@ -106,15 +106,14 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
-        moDialogHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
-            ReplaceRuleManager.saveData(replaceRuleBean)
-                    .subscribe(new MySingleObserver<Boolean>() {
-                        @Override
-                        public void onSuccess(Boolean aBoolean) {
-                            refresh();
-                        }
-                    });
-        });
+        moDialogHUD.showPutReplaceRule(replaceRuleBean, ruleBean ->
+                ReplaceRuleManager.saveData(ruleBean)
+                        .subscribe(new MySingleObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                refresh();
+                            }
+                        }));
     }
 
     public void upDateSelectAll() {
@@ -204,9 +203,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
                 filePicker.setItemHeight(30);
                 filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-                filePicker.setOnFilePickListener(s -> {
-                    mPresenter.importDataSLocal(s);
-                });
+                filePicker.setOnFilePickListener(s -> mPresenter.importDataSLocal(s));
                 filePicker.show();
                 filePicker.getSubmitButton().setText(R.string.sys_file_picker);
                 filePicker.getSubmitButton().setOnClickListener(view -> {
