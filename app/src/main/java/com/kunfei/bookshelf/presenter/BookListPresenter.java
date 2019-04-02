@@ -12,7 +12,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -63,7 +63,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         if (null != value) {

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -53,7 +53,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
                 emitter.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean aBoolean) {
                             isSearch = true;

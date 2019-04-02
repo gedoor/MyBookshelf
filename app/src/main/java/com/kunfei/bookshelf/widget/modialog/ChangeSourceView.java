@@ -93,7 +93,6 @@ public class ChangeSourceView {
                         case 1:
                             sourceBean.setEnable(false);
                             BookSourceManager.addBookSource(sourceBean);
-                            BookSourceManager.refreshBookSource();
                             adapter.removeData(pos);
                             break;
                         case 2:

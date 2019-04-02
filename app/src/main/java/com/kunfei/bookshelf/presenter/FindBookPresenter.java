@@ -101,11 +101,6 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_BOOK_SOURCE)})
-    public void hadAddOrRemoveBook(Object object) {
-        initData();
-    }
-
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UP_FIND_STYLE)})
     public void upFindStyle(Object object) {
         mView.upStyle();

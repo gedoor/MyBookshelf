@@ -191,7 +191,6 @@ public class CheckSourceService extends Service {
                 } catch (Exception e) {
                     sourceBean.addGroup("失效");
                     BookSourceManager.addBookSource(sourceBean);
-                    BookSourceManager.refreshBookSource();
                     nextCheck();
                 }
         }
@@ -208,7 +207,6 @@ public class CheckSourceService extends Service {
                     if (sourceBean.containsGroup("失效")) {
                         sourceBean.removeGroup("失效");
                         BookSourceManager.addBookSource(sourceBean);
-                        BookSourceManager.refreshBookSource();
                     }
                     nextCheck();
                 }
@@ -218,7 +216,6 @@ public class CheckSourceService extends Service {
                     sourceBean.addGroup("失效");
                     sourceBean.setSerialNumber(10000 + checkIndex);
                     BookSourceManager.addBookSource(sourceBean);
-                    BookSourceManager.refreshBookSource();
                     nextCheck();
                 }
 

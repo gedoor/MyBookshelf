@@ -10,7 +10,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -53,7 +53,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
                         mView.dismissHUD();
@@ -86,7 +86,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         Observable.fromArray(urls)
                 .flatMap(this::addBookUrlO)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         if (bookShelfBean != null) {
@@ -136,7 +136,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
                         RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
@@ -156,7 +156,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .flatMap(this::saveBookToShelfO)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
                         if (value.getBookInfoBean().getChapterUrl() == null) {

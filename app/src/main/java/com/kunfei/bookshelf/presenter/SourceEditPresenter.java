@@ -32,7 +32,6 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
                 DbHelper.getDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
             }
             BookSourceManager.addBookSource(bookSource);
-            BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).compose(RxUtils::toSimpleSingle);
     }

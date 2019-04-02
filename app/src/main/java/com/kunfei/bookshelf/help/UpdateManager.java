@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
@@ -48,7 +48,7 @@ public class UpdateManager {
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<UpdateInfoBean>() {
+                .subscribe(new MyObserver<UpdateInfoBean>() {
                     @Override
                     public void onNext(UpdateInfoBean updateInfo) {
                         if (updateInfo.getUpDate()) {

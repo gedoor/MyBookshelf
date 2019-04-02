@@ -35,7 +35,7 @@ import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.SourceEditPresenter;
@@ -505,7 +505,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             case R.id.action_save:
                 if (canSaveBookSource()) {
                     mPresenter.saveSource(getBookSource(), bookSourceBean)
-                            .subscribe(new SimpleObserver<Boolean>() {
+                            .subscribe(new MyObserver<Boolean>() {
                                 @Override
                                 public void onNext(Boolean aBoolean) {
                                     bookSourceBean = getBookSource();
@@ -546,7 +546,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             case R.id.action_debug_source:
                 if (canSaveBookSource()) {
                     mPresenter.saveSource(getBookSource(), bookSourceBean)
-                            .subscribe(new SimpleObserver<Boolean>() {
+                            .subscribe(new MyObserver<Boolean>() {
                                 @Override
                                 public void onNext(Boolean aBoolean) {
                                     bookSourceBean = getBookSource();
@@ -576,7 +576,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             String result = data.getStringExtra("result");
             Observable<List<BookSourceBean>> observable = BookSourceManager.importSource(result);
             if (observable != null) {
-                observable.subscribe(new SimpleObserver<List<BookSourceBean>>() {
+                observable.subscribe(new MyObserver<List<BookSourceBean>>() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void onNext(List<BookSourceBean> bookSourceBeans) {

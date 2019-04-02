@@ -1,6 +1,6 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
@@ -76,8 +77,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Context context) {
-        context.startActivity(new Intent(context, BookSourceActivity.class));
+    public static void startThis(Activity activity) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), AppConstant.BookSourceActivity);
     }
 
     @Override
@@ -227,10 +228,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void saveDate(BookSourceBean date) {
         mPresenter.saveData(date);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(List<BookSourceBean> date) {
         mPresenter.saveData(date);
+        setResult(RESULT_OK);
     }
 
     //设置ToolBar
@@ -310,11 +313,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void upGroupMenu() {
         if (groupMenu == null) return;
         groupMenu.removeGroup(R.id.source_group);
-        if (BookSourceManager.groupList.size() == 0) {
+        List<String> groupList = BookSourceManager.getGroupList();
+        if (groupList.size() == 0) {
             groupItem.setVisible(false);
         } else {
             groupItem.setVisible(true);
-            for (String groupName : new ArrayList<>(BookSourceManager.groupList)) {
+            for (String groupName : new ArrayList<>(groupList)) {
                 groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
             }
         }
@@ -333,7 +337,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         editor.apply();
         upSortMenu();
         setDragEnable(sort);
-        BookSourceManager.refreshBookSource();
         refreshBookSource();
     }
 
@@ -435,6 +438,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             switch (requestCode) {
                 case SourceEditActivity.EDIT_SOURCE:
                     refreshBookSource();
+                    setResult(RESULT_OK);
                     break;
                 case IMPORT_SOURCE:
                     if (data != null && data.getData() != null) {

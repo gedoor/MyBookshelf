@@ -3,7 +3,7 @@ package com.kunfei.bookshelf.model.task;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
@@ -68,7 +68,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             emitter.onNext(downloadBook);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<DownloadBookBean>() {
+                .subscribe(new MyObserver<DownloadBookBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposables.add(d);
@@ -149,7 +149,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
 
         if (!isLocked) {
             getDownloadingChapter()
-                    .subscribe(new SimpleObserver<DownloadChapterBean>() {
+                    .subscribe(new MyObserver<DownloadChapterBean>() {
                         @Override
                         public void onNext(DownloadChapterBean chapterBean) {
                             if (chapterBean != null) {
@@ -203,7 +203,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
                 .timeout(30, TimeUnit.SECONDS)
                 .subscribeOn(scheduler)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookContentBean>() {
+                .subscribe(new MyObserver<BookContentBean>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {

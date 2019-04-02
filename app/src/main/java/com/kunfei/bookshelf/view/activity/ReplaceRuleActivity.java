@@ -13,7 +13,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -118,7 +118,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+                    .subscribe(new MyObserver<List<ReplaceRuleBean>>() {
                         @Override
                         public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
                             adapter.resetDataS(replaceRuleBeans);
