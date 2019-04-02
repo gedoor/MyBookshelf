@@ -12,6 +12,11 @@ public abstract class MyObserver<T> implements Observer<T> {
     }
 
     @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
     public void onComplete() {
 
     }

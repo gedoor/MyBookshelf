@@ -13,7 +13,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -39,10 +39,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.FilePicker;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -84,49 +80,38 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     @Override
+    protected void initData() {
+
+    }
+
+    @Override
     protected void bindView() {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initRecyclerView();
         moDialogHUD = new MoDialogHUD(this);
-    }
-
-    @Override
-    protected void initData() {
-
+        refresh();
     }
 
     private void initRecyclerView() {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReplaceRuleAdapter(this);
         recyclerViewBookSource.setAdapter(adapter);
-        adapter.resetDataS(ReplaceRuleManager.getAll());
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
-
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
         moDialogHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
-            Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-                ReplaceRuleManager.saveData(ruleBean);
-                e.onNext(ReplaceRuleManager.getAll());
-                e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new MyObserver<List<ReplaceRuleBean>>() {
+            ReplaceRuleManager.saveData(replaceRuleBean)
+                    .subscribe(new MySingleObserver<Boolean>() {
                         @Override
-                        public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
-                            adapter.resetDataS(replaceRuleBeans);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
+                        public void onSuccess(Boolean aBoolean) {
+                            refresh();
                         }
                     });
         });
@@ -299,7 +284,13 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     public void refresh() {
-        adapter.resetDataS(ReplaceRuleManager.getAll());
+        ReplaceRuleManager.getAll()
+                .subscribe(new MySingleObserver<List<ReplaceRuleBean>>() {
+                    @Override
+                    public void onSuccess(List<ReplaceRuleBean> replaceRuleBeans) {
+                        adapter.resetDataS(replaceRuleBeans);
+                    }
+                });
     }
 
     @Override

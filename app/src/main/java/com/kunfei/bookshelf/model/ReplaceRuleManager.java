@@ -17,6 +17,8 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 /**
  * Created by GKF on 2018/2/12.
@@ -37,19 +39,22 @@ public class ReplaceRuleManager {
         return replaceRuleBeansEnabled;
     }
 
-    public static List<ReplaceRuleBean> getAll() {
-        return DbHelper.getDaoSession()
-                    .getReplaceRuleBeanDao().queryBuilder()
-                    .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
-                    .list();
+    public static Single<List<ReplaceRuleBean>> getAll() {
+        return Single.create((SingleOnSubscribe<List<ReplaceRuleBean>>) emitter -> emitter.onSuccess(DbHelper.getDaoSession()
+                .getReplaceRuleBeanDao().queryBuilder()
+                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
+                .list())).compose(RxUtils::toSimpleSingle);
     }
 
-    public static void saveData(ReplaceRuleBean replaceRuleBean) {
-        if (replaceRuleBean.getSerialNumber() == 0) {
-            replaceRuleBean.setSerialNumber((int) (DbHelper.getDaoSession().getReplaceRuleBeanDao().queryBuilder().count() + 1));
-        }
-        DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
-        refreshDataS();
+    public static Single<Boolean> saveData(ReplaceRuleBean replaceRuleBean) {
+        return Single.create((SingleOnSubscribe<Boolean>) emitter -> {
+            if (replaceRuleBean.getSerialNumber() == 0) {
+                replaceRuleBean.setSerialNumber((int) (DbHelper.getDaoSession().getReplaceRuleBeanDao().queryBuilder().count() + 1));
+            }
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
+            refreshDataS();
+            emitter.onSuccess(true);
+        }).compose(RxUtils::toSimpleSingle);
     }
 
     public static void delData(ReplaceRuleBean replaceRuleBean) {
