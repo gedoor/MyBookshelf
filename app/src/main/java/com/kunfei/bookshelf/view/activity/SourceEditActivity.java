@@ -58,6 +58,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -205,16 +206,24 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private PopupWindow mSoftKeyboardTool;
     private boolean mIsSoftKeyBoardShowing = false;
 
-    public static void startThis(Activity activity, BookSourceBean sourceBean) {
-        Intent intent = new Intent(activity, SourceEditActivity.class);
+    public static void startThis(Object object, BookSourceBean sourceBean) {
         String key = String.valueOf(System.currentTimeMillis());
-        intent.putExtra("data_key", key);
         try {
             BitIntentDataManager.getInstance().putData(key, sourceBean.clone());
         } catch (CloneNotSupportedException e) {
             BitIntentDataManager.getInstance().putData(key, sourceBean);
         }
-        activity.startActivityForResult(intent, EDIT_SOURCE);
+        if (object instanceof Activity) {
+            Activity activity = (Activity) object;
+            Intent intent = new Intent(activity, SourceEditActivity.class);
+            intent.putExtra("data_key", key);
+            activity.startActivityForResult(intent, EDIT_SOURCE);
+        } else if (object instanceof Fragment) {
+            Fragment fragment = (Fragment) object;
+            Intent intent = new Intent(fragment.getContext(), SourceEditActivity.class);
+            intent.putExtra("data_key", key);
+            fragment.startActivityForResult(intent, EDIT_SOURCE);
+        }
     }
 
     @Override

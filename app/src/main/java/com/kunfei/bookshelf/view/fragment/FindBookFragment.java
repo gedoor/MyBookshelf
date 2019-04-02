@@ -208,7 +208,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         popupMenu.getMenu().add(R.string.delete);
         popupMenu.setOnMenuItemClickListener(item -> {
             if (item.getTitle().equals(getString(R.string.edit))) {
-                SourceEditActivity.startThis(getActivity(), sourceBean);
+                SourceEditActivity.startThis(this, sourceBean);
             } else if (item.getTitle().equals(getString(R.string.to_top))) {
                 BookSourceManager.toTop(sourceBean)
                         .subscribe(new MySingleObserver<Boolean>() {
