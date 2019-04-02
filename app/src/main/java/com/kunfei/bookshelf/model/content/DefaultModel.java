@@ -74,7 +74,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page, headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, null, page, headerMap, tag);
             if (analyzeUrl.getHost() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
