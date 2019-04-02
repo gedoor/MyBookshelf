@@ -25,8 +25,6 @@ import io.reactivex.Observable;
 
 public class ReplaceRuleManager {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
-    private static List<ReplaceRuleBean> replaceRuleBeansAll;
-    private static long lastUpTime = System.currentTimeMillis();
 
     public static List<ReplaceRuleBean> getEnabled() {
         if (replaceRuleBeansEnabled == null) {
@@ -39,23 +37,16 @@ public class ReplaceRuleManager {
         return replaceRuleBeansEnabled;
     }
 
-    public static long getLastUpTime() {
-        return lastUpTime;
-    }
-
     public static List<ReplaceRuleBean> getAll() {
-        if (replaceRuleBeansAll == null) {
-            replaceRuleBeansAll = DbHelper.getDaoSession()
+        return DbHelper.getDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                     .list();
-        }
-        return replaceRuleBeansAll;
     }
 
     public static void saveData(ReplaceRuleBean replaceRuleBean) {
         if (replaceRuleBean.getSerialNumber() == 0) {
-            replaceRuleBean.setSerialNumber(replaceRuleBeansAll.size() + 1);
+            replaceRuleBean.setSerialNumber((int) (DbHelper.getDaoSession().getReplaceRuleBeanDao().queryBuilder().count() + 1));
         }
         DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
         refreshDataS();
@@ -86,11 +77,6 @@ public class ReplaceRuleManager {
                 .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        replaceRuleBeansAll = DbHelper.getDaoSession()
-                .getReplaceRuleBeanDao().queryBuilder()
-                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
-                .list();
-        lastUpTime = System.currentTimeMillis();
     }
 
     public static Observable<Boolean> importReplaceRule(String text) {
