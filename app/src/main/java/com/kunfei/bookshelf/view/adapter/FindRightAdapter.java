@@ -1,15 +1,21 @@
 package com.kunfei.bookshelf.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
+import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +24,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyViewHolder> {
-    private List<Object> data = new ArrayList<>();
+    private List<RecyclerViewData> data = new ArrayList<>();
     private Context context;
     private OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener;
-    private OnRecyclerViewListener.OnItemClickListener onItemClickListener;
-    private final static int TYPE_GROUP = 0;
-    private final static int TYPE_ITEM = 1;
 
-    public FindRightAdapter(OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener, OnRecyclerViewListener.OnItemClickListener onItemClickListener) {
+    public FindRightAdapter(OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
-        this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(List<Object> data) {
-        this.data = data;
+    public void setData(List<RecyclerViewData> data) {
+        this.data.clear();
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -39,42 +42,36 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
-        if (i == TYPE_GROUP) {
-            return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_right, viewGroup, false));
-        }
-        return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_right_child, viewGroup, false));
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (data.get(position) instanceof FindKindGroupBean) {
-            return TYPE_GROUP;
-        }
-        return TYPE_ITEM;
+        return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_right, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int pos) {
-        if (data.get(pos) instanceof FindKindGroupBean) {
-            FindKindGroupBean groupBean = (FindKindGroupBean) data.get(pos);
-            myViewHolder.sourceName.setText(groupBean.getGroupName());
-            myViewHolder.sourceName.setOnClickListener(null);
-            myViewHolder.sourceName.setOnLongClickListener(v -> {
-                if (onItemLongClickListener != null) {
-                    onItemLongClickListener.onGroupItemLongClick(pos, pos, v);
-                }
-                return true;
+        FindKindGroupBean groupBean = (FindKindGroupBean) data.get(pos).getGroupData();
+        myViewHolder.sourceName.setText(groupBean.getGroupName());
+        myViewHolder.flexboxLayout.removeAllViews();
+        TextView tagView;
+        for (Object object : data.get(pos).getChildList()) {
+            FindKindBean kindBean = (FindKindBean) object;
+            tagView = (TextView) LayoutInflater.from(context).inflate(R.layout.item_search_history, myViewHolder.flexboxLayout, false);
+            tagView.setText(kindBean.getKindName());
+            tagView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ChoiceBookActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("url", kindBean.getKindUrl());
+                intent.putExtra("title", kindBean.getKindName());
+                intent.putExtra("tag", kindBean.getTag());
+                context.startActivity(intent);
             });
-        } else {
-            FindKindBean kindBean = (FindKindBean) data.get(pos);
-            myViewHolder.sourceName.setText(kindBean.getKindName());
-            myViewHolder.sourceName.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onChildItemClick(pos, pos, pos, v);
-                }
-            });
-            myViewHolder.sourceName.setOnLongClickListener(null);
+            myViewHolder.flexboxLayout.addView(tagView);
         }
+        myViewHolder.sourceName.setOnLongClickListener(v -> {
+            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
+            if (sourceBean != null && onItemLongClickListener != null) {
+                onItemLongClickListener.onGroupItemLongClick(pos, pos, v);
+            }
+            return true;
+        });
     }
 
     @Override
@@ -82,16 +79,20 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
         return data.size();
     }
 
-    public List<Object> getData() {
+    public List<RecyclerViewData> getData() {
         return data;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        View findRight;
         TextView sourceName;
+        FlexboxLayout flexboxLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            findRight = itemView.findViewById(R.id.find_right);
             sourceName = itemView.findViewById(R.id.tv_source_name);
+            flexboxLayout = itemView.findViewById(R.id.tfl_find_kind);
         }
     }
 }

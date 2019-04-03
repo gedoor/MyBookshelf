@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
@@ -132,7 +131,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             } else if (sort == 1) {
                 int maxWeight = allDataList.get(0).getWeight();
                 moveData.setWeight(maxWeight + 1);
-                BookshelfHelp.saveBookSource(moveData);
+                activity.saveDate(moveData);
             }
             dataList.remove(position);
             notifyItemRemoved(position);

@@ -114,6 +114,20 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:gravity="center_vertical"
+                android:text="@string/text_letter_spacing"
+                tools:ignore="RtlHardcoded" />
+
+            <com.kunfei.bookshelf.widget.number.NumberButton
+                android:id="@+id/nbLetterSpacing"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center_vertical"
                 android:text="@string/line_size"
                 tools:ignore="RtlHardcoded" />
 

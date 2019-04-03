@@ -10,13 +10,14 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.flexbox.FlexboxLayoutManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -24,6 +25,7 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.view.adapter.FindKindAdapter;
+import com.kunfei.bookshelf.view.adapter.FindLeftAdapter;
 import com.kunfei.bookshelf.view.adapter.FindRightAdapter;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
@@ -32,12 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener, OnRecyclerViewListener.OnItemLongClickListener {
     @BindView(R.id.ll_content)
@@ -48,13 +53,19 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     TextView tvEmpty;
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
+    @BindView(R.id.rv_find_left)
+    RecyclerView rvFindLeft;
     @BindView(R.id.rv_find_right)
     RecyclerView rvFindRight;
-
+    @BindView(R.id.vw_divider)
+    View vwDivider;
 
     private Unbinder unbinder;
-    private FindRightAdapter findFlexBoxAdapter;
+    private FindLeftAdapter findLeftAdapter;
+    private FindRightAdapter findRightAdapter;
     private FindKindAdapter findKindAdapter;
+    private LinearLayoutManager leftLayoutManager;
+    private LinearLayoutManager rightLayoutManager;
 
     @Override
     public int createLayoutId() {
@@ -80,6 +91,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             mPresenter.initData();
             refreshLayout.setRefreshing(false);
         });
+        leftLayoutManager = new LinearLayoutManager(getContext());
+        rightLayoutManager = new LinearLayoutManager(getContext());
         initRecyclerView();
     }
 
@@ -98,42 +111,64 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public synchronized void updateUI(List<RecyclerViewData> group, List<Object> dataAll) {
+    public synchronized void updateUI(List<RecyclerViewData> group) {
         if (rlEmptyView == null) return;
+        if (group.size() == 0) {
+            tvEmpty.setText(R.string.no_find);
+            rlEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            rlEmptyView.setVisibility(View.GONE);
+        }
         if (isFlexBox()) {
-            findFlexBoxAdapter.setData(dataAll);
+            findLeftAdapter.setData(group);
+            findRightAdapter.setData(group);
+            rlEmptyView.setVisibility(View.GONE);
+            rvFindLeft.setVisibility(View.VISIBLE);
+            vwDivider.setVisibility(View.VISIBLE);
+            if (group.size() <= 1) {
+                rvFindLeft.setVisibility(View.GONE);
+                vwDivider.setVisibility(View.GONE);
+            }
         } else {
             findKindAdapter.setAllDatas(group);
         }
-        if (group.isEmpty() && dataAll.isEmpty()) {
-            tvEmpty.setText(R.string.no_find);
-            rlEmptyView.setVisibility(View.VISIBLE);
-            return;
-        }
-        rlEmptyView.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean isFlexBox() {
+    private boolean isFlexBox() {
         return preferences.getBoolean("findTypeIsFlexBox", true);
     }
 
     private void initRecyclerView() {
-        RecyclerView.LayoutManager findLayoutManager;
         if (isFlexBox()) {
-            findLayoutManager = new FlexboxLayoutManager(getContext());
             findKindAdapter = null;
-            findFlexBoxAdapter = new FindRightAdapter(this, this);
-            rvFindRight.setLayoutManager(findLayoutManager);
-            rvFindRight.setAdapter(findFlexBoxAdapter);
+            findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
+            rvFindLeft.setLayoutManager(leftLayoutManager);
+            rvFindLeft.setAdapter(findLeftAdapter);
+            findRightAdapter = new FindRightAdapter(this);
+            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setAdapter(findRightAdapter);
+            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int index = rightLayoutManager.findFirstVisibleItemPosition();
+                    if (findLeftAdapter != null) {
+                        findLeftAdapter.upShowIndex(index);
+                        leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
+                    }
+                }
+            });
         } else {
-            findLayoutManager = new LinearLayoutManager(getContext());
-            findFlexBoxAdapter = null;
+            rvFindLeft.setVisibility(View.GONE);
+            vwDivider.setVisibility(View.GONE);
+            findLeftAdapter = null;
+            findRightAdapter = null;
             findKindAdapter = new FindKindAdapter(getContext(), new ArrayList<>());
             findKindAdapter.setOnItemClickListener(this);
             findKindAdapter.setOnItemLongClickListener(this);
             findKindAdapter.setCanExpandAll(false);
-            rvFindRight.setLayoutManager(findLayoutManager);
+            rvFindRight.setLayoutManager(rightLayoutManager);
             rvFindRight.setAdapter(findKindAdapter);
         }
     }
@@ -145,17 +180,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     public void onChildItemClick(int position, int groupPosition, int childPosition, View view) {
-        FindKindBean kindBean;
-        if (isFlexBox()) {
-            kindBean = (FindKindBean) findFlexBoxAdapter.getData().get(position);
-        } else {
-            kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(childPosition);
-        }
+        FindKindBean kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(childPosition);
+
         Intent intent = new Intent(getContext(), ChoiceBookActivity.class);
         intent.putExtra("url", kindBean.getKindUrl());
         intent.putExtra("title", kindBean.getKindName());
         intent.putExtra("tag", kindBean.getTag());
-        startActivity(intent);
+        startActivityByAnim(intent, view, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -163,7 +194,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (getActivity() == null) return;
         FindKindGroupBean groupBean;
         if (isFlexBox()) {
-            groupBean = (FindKindGroupBean) findFlexBoxAdapter.getData().get(groupPosition);
+            groupBean = (FindKindGroupBean) findRightAdapter.getData().get(groupPosition).getGroupData();
         } else {
             groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
         }
@@ -177,21 +208,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         popupMenu.getMenu().add(R.string.delete);
         popupMenu.setOnMenuItemClickListener(item -> {
             if (item.getTitle().equals(getString(R.string.edit))) {
-                SourceEditActivity.startThis(getActivity(), sourceBean);
+                SourceEditActivity.startThis(this, sourceBean);
             } else if (item.getTitle().equals(getString(R.string.to_top))) {
-                if (isFlexBox()) {
-                    findFlexBoxAdapter.setData(new ArrayList<>());
-                } else {
-                    findKindAdapter.setAllDatas(new ArrayList<>());
-                }
-                BookSourceManager.toTop(sourceBean);
+                BookSourceManager.toTop(sourceBean)
+                        .subscribe(new MySingleObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                mPresenter.initData();
+                            }
+                        });
             } else if (item.getTitle().equals(getString(R.string.delete))) {
-                if (isFlexBox()) {
-                    findFlexBoxAdapter.setData(new ArrayList<>());
-                } else {
-                    findKindAdapter.setAllDatas(new ArrayList<>());
-                }
                 BookSourceManager.removeBookSource(sourceBean);
+                mPresenter.initData();
             }
             return true;
         });
@@ -210,4 +238,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         unbinder.unbind();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case SourceEditActivity.EDIT_SOURCE:
+                    mPresenter.initData();
+                    break;
+                case AppConstant.BookSourceActivity:
+                    mPresenter.initData();
+                    break;
+            }
+        }
+    }
 }

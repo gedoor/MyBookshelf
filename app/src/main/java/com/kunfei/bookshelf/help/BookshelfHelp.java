@@ -324,12 +324,6 @@ public class BookshelfHelp {
         removeFromBookShelf(bookShelfBean, false);
     }
 
-    public static void saveBookSource(BookSourceBean bookSourceBean) {
-        if (bookSourceBean != null) {
-            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
-        }
-    }
-
     /**
      * 保存书籍
      */

@@ -57,7 +57,7 @@ public class UpLastChapterModel {
     }
 
     public void startUpdate() {
-        if (!MApplication.getInstance().getConfigPreferences().getBoolean("upChangeSourceLastChapter", false))
+        if (!MApplication.getConfigPreferences().getBoolean("upChangeSourceLastChapter", false))
             return;
         if (compositeDisposable.size() > 0) return;
         List<SearchBookBean> beanList = new ArrayList<>();

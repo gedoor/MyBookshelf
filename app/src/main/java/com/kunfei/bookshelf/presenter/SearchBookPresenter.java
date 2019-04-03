@@ -8,7 +8,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
@@ -46,7 +46,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         bookShelfS.addAll(value);
@@ -121,7 +121,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(searchHistoryBean);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<SearchHistoryBean>() {
+                .subscribe(new MyObserver<SearchHistoryBean>() {
                     @Override
                     public void onNext(SearchHistoryBean value) {
                         mView.insertSearchHistorySuccess(value);
@@ -144,7 +144,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(a);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Integer>() {
+                .subscribe(new MyObserver<Integer>() {
                     @Override
                     public void onNext(Integer value) {
                         if (value > 0) {
@@ -167,7 +167,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
@@ -194,7 +194,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(data);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<SearchHistoryBean>>() {
+                .subscribe(new MyObserver<List<SearchHistoryBean>>() {
                     @Override
                     public void onNext(List<SearchHistoryBean> value) {
                         if (null != value)

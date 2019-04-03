@@ -3,7 +3,8 @@ package com.kunfei.bookshelf.presenter;
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BasePresenterImpl;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
@@ -34,14 +35,14 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
 
     @Override
     public void saveData(List<ReplaceRuleBean> replaceRuleBeans) {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             int i = 0;
             for (ReplaceRuleBean replaceRuleBean : replaceRuleBeans) {
                 i++;
                 replaceRuleBean.setSerialNumber(i + 1);
             }
             ReplaceRuleManager.addDataS(replaceRuleBeans);
-            e.onNext(ReplaceRuleManager.getAll());
+            e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,15 +51,15 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
 
     @Override
     public void delData(ReplaceRuleBean replaceRuleBean) {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             ReplaceRuleManager.delData(replaceRuleBean);
-            e.onNext(ReplaceRuleManager.getAll());
+            e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
-                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
+                    public void onNext(Boolean replaceRuleBeans) {
                         mView.refresh();
                         mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> restoreData(replaceRuleBean))
@@ -79,7 +80,7 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         mView.toast("删除成功");
@@ -94,21 +95,11 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
     }
 
     private void restoreData(ReplaceRuleBean replaceRuleBean) {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManager.saveData(replaceRuleBean);
-            e.onNext(ReplaceRuleManager.getAll());
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+        ReplaceRuleManager.saveData(replaceRuleBean)
+                .subscribe(new MySingleObserver<Boolean>() {
                     @Override
-                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
+                    public void onSuccess(Boolean aBoolean) {
                         mView.refresh();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
                     }
                 });
     }
@@ -129,7 +120,7 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
     public void importDataS(String text) {
         Observable<Boolean> observable = ReplaceRuleManager.importReplaceRule(text);
         if (observable != null) {
-            observable.subscribe(new SimpleObserver<Boolean>() {
+            observable.subscribe(new MyObserver<Boolean>() {
                 @Override
                 public void onNext(Boolean aBoolean) {
                     mView.refresh();

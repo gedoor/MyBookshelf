@@ -40,10 +40,15 @@ public class AnalyzeUrl {
     private UrlMode urlMode = UrlMode.DEFAULT;
 
     AnalyzeUrl(String urlRule) throws Exception {
-        this(urlRule, null, null, null);
+        this(urlRule, null, null, null, null);
     }
 
-    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
+    public AnalyzeUrl(String urlRule, Map<String, String> headerMapF, String baseUrl) throws Exception {
+        this(urlRule, null, null, headerMapF, baseUrl);
+    }
+
+    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
+        this.hostUrl = baseUrl;
         //解析Header
         ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
@@ -201,9 +206,15 @@ public class AnalyzeUrl {
     }
 
     private void generateUrlPath(String ruleUrl) {
-        url = ruleUrl;
-        hostUrl = StringUtils.getBaseUrl(ruleUrl);
-        urlPath = ruleUrl.substring(hostUrl.length());
+        String baseUrl = StringUtils.getBaseUrl(ruleUrl);
+        if (baseUrl == null && hostUrl != null) {
+            url = hostUrl + ruleUrl;
+            urlPath = ruleUrl;
+        } else {
+            url = ruleUrl;
+            hostUrl = StringUtils.getBaseUrl(ruleUrl);
+            urlPath = ruleUrl.substring(hostUrl.length());
+        }
     }
 
     public String getHost() {

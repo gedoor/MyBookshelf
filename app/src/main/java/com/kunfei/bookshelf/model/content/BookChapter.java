@@ -53,7 +53,7 @@ class BookChapter {
             if (webChapterBean.nextUrlList.size() > 1) {
                 List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
                 for (int i = 0; i < chapterUrlS.size(); i++) {
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), null, null, headerMap);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
@@ -72,7 +72,7 @@ class BookChapter {
                 usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
                 while (webChapterBean.nextUrlList.size() > 0 && !usedUrl.contains(webChapterBean.nextUrlList.get(0))) {
                     usedUrl.add(webChapterBean.nextUrlList.get(0));
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webChapterBean.nextUrlList.get(0), null, null, headerMap);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webChapterBean.nextUrlList.get(0), headerMap, tag);
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
