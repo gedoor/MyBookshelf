@@ -36,7 +36,9 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
         detachView();
     }
 
-
+    /**
+     * @return LayoutId
+     */
     public abstract int createLayoutId();
 
     /**
