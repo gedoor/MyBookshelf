@@ -48,6 +48,7 @@ public class DataRestore {
         }
         if (entries == null || entries.isEmpty()) return;
         SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
+        editor.clear();
         for (Map.Entry<String, ?> entry : entries.entrySet()) {
             Object v = entry.getValue();
             String key = entry.getKey();
