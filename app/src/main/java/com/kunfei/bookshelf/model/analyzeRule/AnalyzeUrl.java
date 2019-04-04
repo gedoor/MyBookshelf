@@ -28,7 +28,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 public class AnalyzeUrl {
     private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-    private static final Pattern pagePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+    private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
 
     private String url;
     private String hostUrl;
@@ -133,11 +133,11 @@ public class AnalyzeUrl {
     private String analyzePage(String ruleUrl, final int searchPage) {
         Matcher matcher = pagePattern.matcher(ruleUrl);
         if (matcher.find()) {
-            String[] pages = matcher.group(0).split(",");
+            String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
             if (searchPage <= pages.length) {
-                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
+                ruleUrl = matcher.replaceAll(pages[searchPage - 1].trim());
             } else {
-                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
+                ruleUrl = matcher.replaceAll(pages[pages.length - 1].trim());
             }
         }
         return ruleUrl.replace("searchPage-1", String.valueOf(searchPage - 1))
