@@ -73,8 +73,7 @@ public class UpdateManager {
             try {
                 UpdateInfoBean updateInfo = new UpdateInfoBean();
                 JsonObject version = new JsonParser().parse(jsonStr).getAsJsonObject();
-                boolean prerelease = version.get("prerelease").getAsBoolean();
-                if (prerelease)
+                if (version.get("prerelease").getAsBoolean())
                     return;
                 JsonArray assets = version.get("assets").getAsJsonArray();
                 if (assets.size() > 0) {
