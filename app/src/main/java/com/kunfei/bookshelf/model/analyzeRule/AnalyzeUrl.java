@@ -132,12 +132,12 @@ public class AnalyzeUrl {
      */
     private String analyzePage(String ruleUrl, final int searchPage) {
         Matcher matcher = pagePattern.matcher(ruleUrl);
-        if (matcher.find()) {
+        while (matcher.find()) {
             String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
             if (searchPage <= pages.length) {
-                ruleUrl = matcher.replaceAll(pages[searchPage - 1].trim());
+                ruleUrl = ruleUrl.replace(matcher.group(), pages[searchPage - 1].trim());
             } else {
-                ruleUrl = matcher.replaceAll(pages[pages.length - 1].trim());
+                ruleUrl = ruleUrl.replace(matcher.group(), pages[pages.length - 1].trim());
             }
         }
         return ruleUrl.replace("searchPage-1", String.valueOf(searchPage - 1))
