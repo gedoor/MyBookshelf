@@ -13,9 +13,11 @@ import android.widget.TextView;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -32,12 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener, OnRecyclerViewListener.OnItemLongClickListener {
     @BindView(R.id.ll_content)
@@ -203,11 +208,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         popupMenu.getMenu().add(R.string.delete);
         popupMenu.setOnMenuItemClickListener(item -> {
             if (item.getTitle().equals(getString(R.string.edit))) {
-                SourceEditActivity.startThis(getActivity(), sourceBean);
+                SourceEditActivity.startThis(this, sourceBean);
             } else if (item.getTitle().equals(getString(R.string.to_top))) {
-                BookSourceManager.toTop(sourceBean);
+                BookSourceManager.toTop(sourceBean)
+                        .subscribe(new MySingleObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                mPresenter.initData();
+                            }
+                        });
             } else if (item.getTitle().equals(getString(R.string.delete))) {
                 BookSourceManager.removeBookSource(sourceBean);
+                mPresenter.initData();
             }
             return true;
         });
@@ -226,4 +238,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         unbinder.unbind();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case SourceEditActivity.EDIT_SOURCE:
+                    mPresenter.initData();
+                    break;
+                case AppConstant.BookSourceActivity:
+                    mPresenter.initData();
+                    break;
+            }
+        }
+    }
 }

@@ -197,7 +197,7 @@ public class DataBackup {
     }
 
     private void backupReplaceRule(String file) {
-        List<ReplaceRuleBean> replaceRuleBeans = ReplaceRuleManager.getAll();
+        List<ReplaceRuleBean> replaceRuleBeans = ReplaceRuleManager.getAll().blockingGet();
         if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
             Gson gson = new GsonBuilder()
                     .disableHtmlEscaping()

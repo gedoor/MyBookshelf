@@ -18,8 +18,9 @@ public class ChapterContentHelp {
     /**
      * 转繁体
      */
-    private String toTraditional(int convert, String content) {
-        switch (convert) {
+    private String toTraditional(String content) {
+        int convertCTS = ReadBookControl.getInstance().getTextConvert();
+        switch (convertCTS) {
             case 0:
                 break;
             case 1:
@@ -36,39 +37,17 @@ public class ChapterContentHelp {
      * 替换净化
      */
     public String replaceContent(String bookName, String bookTag, String content) {
-        int convertCTS = ReadBookControl.getInstance().getTextConvert();
-        if (ReplaceRuleManager.getEnabled().size() == 0)
-            return toTraditional(convertCTS, content);
-        String allLine[] = content.split("\n");
-        StringBuilder contentBuilder = new StringBuilder();
+        if (ReplaceRuleManager.getEnabled().size() == 0) return toTraditional(content);
         //替换
-        for (String line : allLine) {
-            line = line.replaceAll("^[\\s\u3000]+", "").trim();
-            if (line.length() == 0) continue;
-            for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
-                try {
-                    if (isUseTo(replaceRule.getUseTo(), bookTag, bookName)) {
-                        line = line.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement()).trim();
-                    }
-                    if (line.length() == 0) break;
-                } catch (Exception ignored) {
-                }
-            }
-            if (line.length() == 0) continue;
-            contentBuilder.append(line).append("\n");
-        }
-
-        content = contentBuilder.toString();
         for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
-            String rule = replaceRule.getFixedRegex();
-            if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n") && isUseTo(rule, bookTag, bookName)) {
+            if (isUseTo(replaceRule.getUseTo(), bookTag, bookName)) {
                 try {
-                    content = content.replaceAll(rule, replaceRule.getReplacement());
+                    content = content.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement()).trim();
                 } catch (Exception ignored) {
                 }
             }
         }
-        return toTraditional(convertCTS, content);
+        return toTraditional(content);
     }
 
     private boolean isUseTo(String useTo, String bookTag, String bookName) {

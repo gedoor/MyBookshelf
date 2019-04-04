@@ -47,7 +47,10 @@ public class DataRestore {
         } catch (Exception ignored) {
         }
         if (entries == null || entries.isEmpty()) return;
+        long donateHb = MApplication.getConfigPreferences().getLong("DonateHb", 0);
+        donateHb = donateHb > System.currentTimeMillis() ? 0 : donateHb;
         SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
+        editor.clear();
         for (Map.Entry<String, ?> entry : entries.entrySet()) {
             Object v = entry.getValue();
             String key = entry.getKey();
@@ -65,6 +68,7 @@ public class DataRestore {
                 editor.putLong(key, (Long) v);
             }
         }
+        editor.putLong("DonateHb", donateHb);
         editor.putInt("versionCode", MApplication.getVersionCode());
         editor.apply();
         MApplication.getInstance().upThemeStore();

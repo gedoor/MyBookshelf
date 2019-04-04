@@ -28,7 +28,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 public class AnalyzeUrl {
     private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-    private static final Pattern pagePattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+    private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
 
     private String url;
     private String hostUrl;
@@ -40,10 +40,15 @@ public class AnalyzeUrl {
     private UrlMode urlMode = UrlMode.DEFAULT;
 
     AnalyzeUrl(String urlRule) throws Exception {
-        this(urlRule, null, null, null);
+        this(urlRule, null, null, null, null);
     }
 
-    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF) throws Exception {
+    public AnalyzeUrl(String urlRule, Map<String, String> headerMapF, String baseUrl) throws Exception {
+        this(urlRule, null, null, headerMapF, baseUrl);
+    }
+
+    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
+        this.hostUrl = baseUrl;
         //解析Header
         ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
@@ -127,12 +132,12 @@ public class AnalyzeUrl {
      */
     private String analyzePage(String ruleUrl, final int searchPage) {
         Matcher matcher = pagePattern.matcher(ruleUrl);
-        if (matcher.find()) {
-            String[] pages = matcher.group(0).split(",");
+        while (matcher.find()) {
+            String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
             if (searchPage <= pages.length) {
-                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
+                ruleUrl = ruleUrl.replace(matcher.group(), pages[searchPage - 1].trim());
             } else {
-                ruleUrl = ruleUrl.replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
+                ruleUrl = ruleUrl.replace(matcher.group(), pages[pages.length - 1].trim());
             }
         }
         return ruleUrl.replace("searchPage-1", String.valueOf(searchPage - 1))
@@ -201,9 +206,15 @@ public class AnalyzeUrl {
     }
 
     private void generateUrlPath(String ruleUrl) {
-        url = ruleUrl;
-        hostUrl = StringUtils.getBaseUrl(ruleUrl);
-        urlPath = ruleUrl.substring(hostUrl.length());
+        String baseUrl = StringUtils.getBaseUrl(ruleUrl);
+        if (baseUrl == null && hostUrl != null) {
+            url = hostUrl + ruleUrl;
+            urlPath = ruleUrl;
+        } else {
+            url = ruleUrl;
+            hostUrl = StringUtils.getBaseUrl(ruleUrl);
+            urlPath = ruleUrl.substring(hostUrl.length());
+        }
     }
 
     public String getHost() {

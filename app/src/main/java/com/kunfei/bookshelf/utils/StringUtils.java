@@ -337,7 +337,7 @@ public class StringUtils {
     }
 
     public static String getBaseUrl(String url) {
-        if (url == null) return null;
+        if (url == null || !url.startsWith("http")) return null;
         int index = url.indexOf("/", 9);
         if (index == -1) {
             return url;

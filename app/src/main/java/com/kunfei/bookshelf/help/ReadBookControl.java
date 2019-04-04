@@ -63,6 +63,7 @@ public class ReadBookControl {
     private int tipPaddingTop;
     private int tipPaddingRight;
     private int tipPaddingBottom;
+    private float textLetterSpacing;
 
     private SharedPreferences preferences;
 
@@ -118,6 +119,7 @@ public class ReadBookControl {
         this.pageMode = preferences.getInt("pageMode", 0);
         this.screenDirection = preferences.getInt("screenDirection", 0);
         this.navBarColor = preferences.getInt("navBarColorInt", 0);
+        this.textLetterSpacing = preferences.getFloat("textLetterSpacing", 0);
 
         initTextDrawableIndex();
     }
@@ -455,6 +457,17 @@ public class ReadBookControl {
                 .apply();
     }
 
+    public float getTextLetterSpacing() {
+        return textLetterSpacing;
+    }
+
+    public void setTextLetterSpacing(float textLetterSpacing) {
+        this.textLetterSpacing = textLetterSpacing;
+        preferences.edit()
+                .putFloat("textLetterSpacing", textLetterSpacing)
+                .apply();
+    }
+
     public float getLineMultiplier() {
         return lineMultiplier;
     }
@@ -655,7 +668,6 @@ public class ReadBookControl {
         preferences.edit()
                 .putInt("tipPaddingLeft", tipPaddingLeft)
                 .apply();
-        ;
     }
 
     public int getTipPaddingTop() {
@@ -735,12 +747,12 @@ public class ReadBookControl {
     }
 
     public Boolean getLightFollowSys() {
-        return preferences.getBoolean("isfollowsys", true);
+        return preferences.getBoolean("lightFollowSys", true);
     }
 
     public void setLightFollowSys(boolean isFollowSys) {
         preferences.edit()
-                .putBoolean("isfollowsys", isFollowSys)
+                .putBoolean("lightFollowSys", isFollowSys)
                 .apply();
     }
 

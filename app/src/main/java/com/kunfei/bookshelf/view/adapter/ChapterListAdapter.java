@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -62,7 +62,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 emitter.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean aBoolean) {
                             isSearch = true;

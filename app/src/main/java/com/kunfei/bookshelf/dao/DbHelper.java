@@ -13,17 +13,15 @@ import java.util.Locale;
 
 public class DbHelper {
     private static DbHelper instance;
-    private DaoOpenHelper mHelper;
     private SQLiteDatabase db;
-    private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
 
     private DbHelper(){
-        mHelper = new DaoOpenHelper(MApplication.getInstance(), "monkebook_db", null);
+        DaoOpenHelper mHelper = new DaoOpenHelper(MApplication.getInstance(), "monkebook_db", null);
         db = mHelper.getWritableDatabase();
         db.setLocale(Locale.CHINESE);
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
-        mDaoMaster = new DaoMaster(db);
+        DaoMaster mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
     }
 

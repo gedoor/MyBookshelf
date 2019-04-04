@@ -281,8 +281,8 @@ public class AnalyzeRule {
         }
         //分离put规则
         Matcher putMatcher = putPattern.matcher(ruleStr);
-        if (putMatcher.find()) {
-            String find = putMatcher.group(0);
+        while (putMatcher.find()) {
+            String find = putMatcher.group();
             ruleStr = ruleStr.replace(find, "");
             find = find.substring(5);
             try {

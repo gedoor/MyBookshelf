@@ -127,7 +127,7 @@ dependencies {
     implementation 'net.ricecode:string-similarity:1.0.0'
 
     //MarkDown
-    implementation 'ru.noties:markwon:2.0.1'
+    implementation 'ru.noties.markwon:core:3.0.0'
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {

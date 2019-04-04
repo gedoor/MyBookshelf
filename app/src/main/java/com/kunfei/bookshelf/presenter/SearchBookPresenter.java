@@ -8,7 +8,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
@@ -34,9 +34,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     private long startThisSearchTime;
     private String durSearchKey;
-
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
-
     private SearchBookModel searchBookModel;
 
     public SearchBookPresenter(Context context) {
@@ -46,7 +44,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         bookShelfS.addAll(value);
@@ -100,6 +98,9 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel = new SearchBookModel(context, onSearchListener);
     }
 
+    /**
+     * 插入搜索历史
+     */
     public void insertSearchHistory() {
         final int type = SearchBookPresenter.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
@@ -121,7 +122,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(searchHistoryBean);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<SearchHistoryBean>() {
+                .subscribe(new MyObserver<SearchHistoryBean>() {
                     @Override
                     public void onNext(SearchHistoryBean value) {
                         mView.insertSearchHistorySuccess(value);
@@ -144,7 +145,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(a);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Integer>() {
+                .subscribe(new MyObserver<Integer>() {
                     @Override
                     public void onNext(Integer value) {
                         if (value > 0) {
@@ -167,7 +168,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
@@ -194,7 +195,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(data);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<SearchHistoryBean>>() {
+                .subscribe(new MyObserver<List<SearchHistoryBean>>() {
                     @Override
                     public void onNext(List<SearchHistoryBean> value) {
                         if (null != value)
@@ -218,6 +219,9 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.setPage(0);
     }
 
+    /**
+     * 搜索
+     */
     @Override
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
@@ -229,14 +233,13 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * 停止搜索
+     */
     @Override
     public void stopSearch() {
         searchBookModel.stopSearch();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void attachView(@NonNull IView iView) {

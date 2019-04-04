@@ -19,7 +19,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.BitIntentDataManager;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
@@ -96,7 +96,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
@@ -122,7 +122,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             if (bookSourceBean != null) {
                 bookSourceBean.addGroup("禁用");
                 DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
-                BookSourceManager.refreshBookSource();
                 mView.toast("已禁用" + bookSourceBean.getBookSourceName());
             }
         } catch (Exception e) {
@@ -146,7 +145,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 e.onNext(bookShelf);
                 e.onComplete();
             }).subscribeOn(Schedulers.newThread())
-                    .subscribe(new SimpleObserver<BookShelfBean>() {
+                    .subscribe(new MyObserver<BookShelfBean>() {
                         @Override
                         public void onNext(BookShelfBean value) {
                             RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
@@ -169,13 +168,13 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         getRealFilePath(activity, uri)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SimpleObserver<String>() {
+                .subscribe(new MyObserver<String>() {
                     @Override
                     public void onNext(String value) {
                         ImportBookModel.getInstance().importBook(new File(value))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
-                                .subscribe(new SimpleObserver<LocBookShelfBean>() {
+                                .subscribe(new MyObserver<LocBookShelfBean>() {
                                     @Override
                                     public void onNext(LocBookShelfBean value) {
                                         if (value.getNew())
@@ -233,7 +232,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         saveChangedBook(bookShelfBean);
@@ -290,7 +289,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
@@ -304,12 +303,12 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                             BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
                             if (ChangeSourceView.savedSource.getBookSource() != null && currentTime - ChangeSourceView.savedSource.getSaveTime() < 60000 && ChangeSourceView.savedSource.getBookName().equals(bookName))
                                 ChangeSourceView.savedSource.getBookSource().increaseWeight(-450);
-                            BookshelfHelp.saveBookSource(ChangeSourceView.savedSource.getBookSource());
+                            BookSourceManager.saveBookSource(ChangeSourceView.savedSource.getBookSource());
                             ChangeSourceView.savedSource.setBookName(bookName);
                             ChangeSourceView.savedSource.setSaveTime(currentTime);
                             ChangeSourceView.savedSource.setBookSource(bookSourceBean);
                             bookSourceBean.increaseWeightBySelection();
-                            BookshelfHelp.saveBookSource(bookSourceBean);
+                            BookSourceManager.saveBookSource(bookSourceBean);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -357,7 +356,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean aBoolean) {
                             RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);

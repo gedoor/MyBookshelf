@@ -17,6 +17,8 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 /**
  * Created by GKF on 2018/2/12.
@@ -25,8 +27,6 @@ import io.reactivex.Observable;
 
 public class ReplaceRuleManager {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
-    private static List<ReplaceRuleBean> replaceRuleBeansAll;
-    private static long lastUpTime = System.currentTimeMillis();
 
     public static List<ReplaceRuleBean> getEnabled() {
         if (replaceRuleBeansEnabled == null) {
@@ -39,26 +39,22 @@ public class ReplaceRuleManager {
         return replaceRuleBeansEnabled;
     }
 
-    public static long getLastUpTime() {
-        return lastUpTime;
+    public static Single<List<ReplaceRuleBean>> getAll() {
+        return Single.create((SingleOnSubscribe<List<ReplaceRuleBean>>) emitter -> emitter.onSuccess(DbHelper.getDaoSession()
+                .getReplaceRuleBeanDao().queryBuilder()
+                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
+                .list())).compose(RxUtils::toSimpleSingle);
     }
 
-    public static List<ReplaceRuleBean> getAll() {
-        if (replaceRuleBeansAll == null) {
-            replaceRuleBeansAll = DbHelper.getDaoSession()
-                    .getReplaceRuleBeanDao().queryBuilder()
-                    .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
-                    .list();
-        }
-        return replaceRuleBeansAll;
-    }
-
-    public static void saveData(ReplaceRuleBean replaceRuleBean) {
-        if (replaceRuleBean.getSerialNumber() == 0) {
-            replaceRuleBean.setSerialNumber(replaceRuleBeansAll.size() + 1);
-        }
-        DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
-        refreshDataS();
+    public static Single<Boolean> saveData(ReplaceRuleBean replaceRuleBean) {
+        return Single.create((SingleOnSubscribe<Boolean>) emitter -> {
+            if (replaceRuleBean.getSerialNumber() == 0) {
+                replaceRuleBean.setSerialNumber((int) (DbHelper.getDaoSession().getReplaceRuleBeanDao().queryBuilder().count() + 1));
+            }
+            DbHelper.getDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
+            refreshDataS();
+            emitter.onSuccess(true);
+        }).compose(RxUtils::toSimpleSingle);
     }
 
     public static void delData(ReplaceRuleBean replaceRuleBean) {
@@ -86,11 +82,6 @@ public class ReplaceRuleManager {
                 .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        replaceRuleBeansAll = DbHelper.getDaoSession()
-                .getReplaceRuleBeanDao().queryBuilder()
-                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
-                .list();
-        lastUpTime = System.currentTimeMillis();
     }
 
     public static Observable<Boolean> importReplaceRule(String text) {
