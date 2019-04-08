@@ -61,13 +61,14 @@ public class AnalyzeUrl {
         if (page != null) {
             ruleUrl = analyzePage(ruleUrl, page);
         }
+        //执行js
         List<String> ruleList = splitRule(ruleUrl);
         for (String rule : ruleList) {
             if (rule.startsWith("<js>")) {
                 rule = rule.substring(4, rule.lastIndexOf("<"));
                 ruleUrl = (String) evalJS(rule, ruleUrl);
             } else {
-                ruleUrl = rule;
+                ruleUrl = rule.replace("@result", ruleUrl);
             }
         }
         //分离post参数
