@@ -136,7 +136,7 @@ public class SearchBookModel {
             final SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
             if (searchEngine.getHasMore()) {
                 WebBookModel.getInstance()
-                        .searchOtherBook(content, page, searchEngine.getTag())
+                        .searchBook(content, page, searchEngine.getTag())
                         .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<List<SearchBookBean>>() {
