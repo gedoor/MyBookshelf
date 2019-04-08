@@ -167,6 +167,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         }
     }
 
+    /**
+     * @return 章节下载信息
+     */
     private Observable<DownloadChapterBean> getDownloadingChapter() {
         return Observable.create(emitter -> {
             DownloadChapterBean next = null;
@@ -186,6 +189,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         });
     }
 
+    /**
+     * 下载
+     */
     private synchronized void downloading(DownloadChapterBean chapter, Scheduler scheduler) {
         whenProgress(chapter);
         Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
@@ -229,6 +235,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
                 });
     }
 
+    /**
+     * 从下载列表移除
+     */
     private synchronized void removeFromDownloadList(DownloadChapterBean chapterBean) {
         downloadChapters.remove(chapterBean);
     }

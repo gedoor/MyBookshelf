@@ -65,6 +65,9 @@ public class WebBookModel {
         return WebBook.getInstance(tag).findBook(url, page);
     }
 
+    /**
+     * 更新目录
+     */
     private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
@@ -91,6 +94,9 @@ public class WebBookModel {
         });
     }
 
+    /**
+     * 保存章节
+     */
     @SuppressLint("DefaultLocale")
     private Observable<BookContentBean> saveContent(String bookName, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
