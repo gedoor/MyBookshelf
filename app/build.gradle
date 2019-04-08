@@ -6,7 +6,7 @@ static def releaseTime() {
     return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
 }
 
-def name = "MONKOVEL"
+def name = "YueDu"
 def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
@@ -74,9 +74,9 @@ dependencies {
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.media:media:1.1.0-alpha03'
+    implementation 'androidx.media:media:1.1.0-alpha04'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
