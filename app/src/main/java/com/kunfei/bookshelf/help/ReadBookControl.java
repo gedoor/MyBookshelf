@@ -668,7 +668,6 @@ public class ReadBookControl {
         preferences.edit()
                 .putInt("tipPaddingLeft", tipPaddingLeft)
                 .apply();
-        ;
     }
 
     public int getTipPaddingTop() {
@@ -748,12 +747,12 @@ public class ReadBookControl {
     }
 
     public Boolean getLightFollowSys() {
-        return preferences.getBoolean("isfollowsys", true);
+        return preferences.getBoolean("lightFollowSys", true);
     }
 
     public void setLightFollowSys(boolean isFollowSys) {
         preferences.edit()
-                .putBoolean("isfollowsys", isFollowSys)
+                .putBoolean("lightFollowSys", isFollowSys)
                 .apply();
     }
 

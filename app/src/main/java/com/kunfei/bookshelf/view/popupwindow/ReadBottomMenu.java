@@ -84,12 +84,8 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     private void bindEvent() {
-        llReadAloudTimer.setOnClickListener(view -> {
-            menuListener.dismiss();
-        });
-        llFloatingButton.setOnClickListener(view -> {
-            menuListener.dismiss();
-        });
+        llReadAloudTimer.setOnClickListener(view -> menuListener.dismiss());
+        llFloatingButton.setOnClickListener(view -> menuListener.dismiss());
 
         //阅读进度
         hpbReadProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

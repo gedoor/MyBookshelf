@@ -45,8 +45,8 @@ public class BlurTransformation extends BitmapTransformation {
         //设置模糊半径
         script.setRadius(radius);
 
-        // Start the ScriptIntrinisicBlur
-        //启动ScriptIntrinisicBlur,
+        // Start the ScriptIntrinsicBlur
+        //启动 ScriptIntrinsicBlur,
         script.forEach(output);
 
         // Copy the output to the blurred bitmap
