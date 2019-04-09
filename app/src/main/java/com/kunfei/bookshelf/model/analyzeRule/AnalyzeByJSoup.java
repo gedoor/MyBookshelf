@@ -236,52 +236,22 @@ public class AnalyzeByJSoup {
         if (isEmpty(ruleStr)) {
             return null;
         }
-        String result = "";
-        //分离正则表达式
-        SourceRule sourceRule = new SourceRule(ruleStr.trim());
-        if (isEmpty(sourceRule.elementsRule)) {
-            result = element.data();
-        } else {
-            List<String> textS = getAllResultList(sourceRule.elementsRule);
-            if (textS.size() == 0) {
-                return null;
-            }
-            StringBuilder content = new StringBuilder();
-            for (String text : textS) {
-                text = FormatWebText.getContent(text);
-                if (textS.size() > 1) {
-                    if (text.length() > 0) {
-                        if (content.length() > 0) {
-                            content.append("\n");
-                        }
-                        content.append("\u3000\u3000").append(text);
-                    }
-                } else {
-                    content.append(text);
-                }
-                result = content.toString();
-            }
+        List<String> textS = getAllResultList(ruleStr);
+        if (textS.size() == 0) {
+            return null;
         }
-        if (!isEmpty(sourceRule.replaceRegex)) {
-            result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
-        }
-        return result.trim();
+        return StringUtils.join("\n", textS).trim();
     }
 
     /**
      * 获取一个字符串
      **/
     String getResultUrl(String ruleStr) {
-        String result = "";
-        SourceRule sourceRule = new SourceRule(ruleStr);
-        List<String> urlList = getAllResultList(sourceRule.elementsRule);
+        List<String> urlList = getAllResultList(ruleStr);
         if (urlList.size() > 0) {
-            result = urlList.get(0);
+            return urlList.get(0);
         }
-        if (!TextUtils.isEmpty(sourceRule.replaceRegex)) {
-            result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
-        }
-        return result;
+        return "";
     }
 
     /**
@@ -449,7 +419,7 @@ public class AnalyzeByJSoup {
         SourceRule(String ruleStr) {
             if (StringUtils.startWithIgnoreCase(ruleStr, "@CSS:")) {
                 isCss = true;
-                elementsRule = ruleStr.substring(5);
+                elementsRule = ruleStr.substring(5).trim();
                 return;
             }
             String[] ruleStrS;
