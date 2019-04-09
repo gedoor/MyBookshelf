@@ -15,6 +15,10 @@ import io.reactivex.Observable;
 public class ChangeSourceHelp {
     private SearchBookModel searchBookModel;
 
+    public static ChangeSourceHelp getInstance() {
+        return new ChangeSourceHelp();
+    }
+
     public void autoChange(BookShelfBean bookShelfBean, ChangeSourceListener changeSourceListener) {
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
