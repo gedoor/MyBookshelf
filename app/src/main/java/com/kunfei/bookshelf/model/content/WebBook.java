@@ -53,21 +53,12 @@ public class WebBook extends BaseModelImpl {
      * 发现
      */
     public Observable<List<SearchBookBean>> findBook(String url, int page) {
-        if (bookSourceBean == null || isEmpty(bookSourceBean.getRuleSearchUrl())) {
-            return Observable.create(emitter -> {
-                emitter.onNext(new ArrayList<>());
-                emitter.onComplete();
-            });
+        if (bookSourceBean == null) {
+            return Observable.error(new NoSourceThrowable(tag));
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, null, page, headerMap, tag);
-            if (analyzeUrl.getHost() == null) {
-                return Observable.create(emitter -> {
-                    emitter.onNext(new ArrayList<>());
-                    emitter.onComplete();
-                });
-            }
             return getResponseO(analyzeUrl)
                     .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
@@ -88,20 +79,10 @@ public class WebBook extends BaseModelImpl {
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap, tag);
-            if (analyzeUrl.getHost() == null) {
-                return Observable.create(emitter -> {
-                    emitter.onNext(new ArrayList<>());
-                    emitter.onComplete();
-                });
-            }
             return getResponseO(analyzeUrl)
                     .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Observable.create(emitter -> {
-                emitter.onNext(new ArrayList<>());
-                emitter.onComplete();
-            });
+            return Observable.error(e);
         }
     }
 
@@ -110,7 +91,7 @@ public class WebBook extends BaseModelImpl {
      */
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         if (bookSourceBean == null) {
-            return Observable.error(new Throwable(String.format("无法找到源%s", tag)));
+            return Observable.error(new NoSourceThrowable(tag));
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
         try {
@@ -128,10 +109,7 @@ public class WebBook extends BaseModelImpl {
      */
     public Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean) {
         if (bookSourceBean == null) {
-            return Observable.create(emitter -> {
-                emitter.onError(new Throwable(String.format("%s没有找到书源配置", bookShelfBean.getBookInfoBean().getName())));
-                emitter.onComplete();
-            });
+            return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
         BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
         try {
@@ -149,10 +127,7 @@ public class WebBook extends BaseModelImpl {
      */
     public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
         if (bookSourceBean == null) {
-            return Observable.create(emitter -> {
-                emitter.onNext(new BookContentBean());
-                emitter.onComplete();
-            });
+            return Observable.error(new NoSourceThrowable(chapterBean.getTag()));
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         try {
@@ -167,6 +142,13 @@ public class WebBook extends BaseModelImpl {
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
+        }
+    }
+
+    public class NoSourceThrowable extends Throwable {
+
+        NoSourceThrowable(String tag) {
+            super(String.format("%s没有找到书源配置", tag));
         }
     }
 

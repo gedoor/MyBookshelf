@@ -30,9 +30,9 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.help.ChangeSourceHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ImportBookModel;
-import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
@@ -222,73 +222,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
      */
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
-        BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBook);
-        bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
-        bookShelfBean.setLastChapterName(bookShelf.getLastChapterName());
-        bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
-        bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-        bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
-        WebBookModel.getInstance().getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        saveChangedBook(bookShelfBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast("换源失败！" + e.getMessage());
-                        mView.changeSourceFinish(null);
-                    }
-                });
-    }
-
-    @Override
-    public void saveBookmark(BookmarkBean bookmarkBean) {
-        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
-            BookshelfHelp.saveBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
-            e.onNext(bookmarkBean);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-    }
-
-    @Override
-    public void delBookmark(BookmarkBean bookmarkBean) {
-        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
-            BookshelfHelp.delBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
-            e.onNext(bookmarkBean);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-    }
-
-    /**
-     * 保存换源后book
-     */
-    private void saveChangedBook(BookShelfBean bookShelfBean) {
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            bookShelfBean.setHasUpdate(false);
-            bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
-            bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
-            bookShelfBean.setDurChapterName(bookShelfBean.getChapter(bookShelfBean.getDurChapter()).getDurChapterName());
-            bookShelfBean.setGroup(bookShelf.getGroup());
-            BookshelfHelp.removeFromBookShelf(bookShelf, true);
-            BookshelfHelp.saveBookToShelf(bookShelfBean);
-            e.onNext(bookShelfBean);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        ChangeSourceHelp.changeBookSource(searchBook, bookShelf)
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
@@ -321,6 +255,32 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         mView.changeSourceFinish(null);
                     }
                 });
+    }
+
+    @Override
+    public void saveBookmark(BookmarkBean bookmarkBean) {
+        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
+            BookshelfHelp.saveBookmark(bookmarkBean);
+            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
+            e.onNext(bookmarkBean);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    @Override
+    public void delBookmark(BookmarkBean bookmarkBean) {
+        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
+            BookshelfHelp.delBookmark(bookmarkBean);
+            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
+            e.onNext(bookmarkBean);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     @Override

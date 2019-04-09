@@ -95,7 +95,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(context, onSearchListener);
+        searchBookModel = new SearchBookModel(onSearchListener);
     }
 
     /**

@@ -209,19 +209,17 @@ public class AnalyzeByJSoup {
                 }
                 if (rulePcx.length > 1) {
                     String[] rulePcs = rulePcx[1].split(":");
-                    if (rulePcs.length < elements.size() - 1) {
-                        for (String pc : rulePcs) {
-                            int pcInt = Integer.parseInt(pc);
-                            if (pcInt < 0 && elements.size() + pcInt >= 0) {
-                                elements.set(elements.size() + pcInt, null);
-                            } else if (Integer.parseInt(pc) < elements.size()) {
-                                elements.set(Integer.parseInt(pc), null);
-                            }
+                    for (String pc : rulePcs) {
+                        int pcInt = Integer.parseInt(pc);
+                        if (pcInt < 0 && elements.size() + pcInt >= 0) {
+                            elements.set(elements.size() + pcInt, null);
+                        } else if (Integer.parseInt(pc) < elements.size()) {
+                            elements.set(Integer.parseInt(pc), null);
                         }
-                        Elements es = new Elements();
-                        es.add(null);
-                        elements.removeAll(es);
                     }
+                    Elements es = new Elements();
+                    es.add(null);
+                    elements.removeAll(es);
                 }
             }
         } catch (Exception ignore) {
@@ -248,7 +246,7 @@ public class AnalyzeByJSoup {
      **/
     String getResultUrl(String ruleStr) {
         List<String> urlList = getAllResultList(ruleStr);
-        if (urlList.size() > 0) {
+        if (!urlList.isEmpty()) {
             return urlList.get(0);
         }
         return "";

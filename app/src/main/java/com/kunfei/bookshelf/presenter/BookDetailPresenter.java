@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.help.ChangeSourceHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
@@ -25,10 +26,8 @@ import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
@@ -218,46 +217,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
      */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
-        BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
-        bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
-        bookShelfBean.setLastChapterName(bookShelf.getLastChapterName());
-        bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
-        bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-        bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
-        WebBookModel.getInstance().getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        saveChangedBook(bookShelfBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.updateView();
-                        mView.toast("换源失败！" + e.getMessage());
-                    }
-                });
-    }
-
-    private void saveChangedBook(BookShelfBean bookShelfBean) {
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
-                bookShelfBean.setHasUpdate(false);
-            }
-            bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
-            bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
-            bookShelfBean.setDurChapterName(bookShelfBean.getChapter(bookShelfBean.getDurChapter()).getDurChapterName());
-            bookShelfBean.setGroup(bookShelf.getGroup());
-            BookshelfHelp.removeFromBookShelf(bookShelf);
-            BookshelfHelp.saveBookToShelf(bookShelfBean);
-            e.onNext(bookShelfBean);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        ChangeSourceHelp.changeBookSource(searchBookBean, bookShelf)
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {

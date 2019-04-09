@@ -162,7 +162,7 @@ public class ChangeSourceView {
                 return 0;
             }
         };
-        searchBookModel = new SearchBookModel(context, searchListener);
+        searchBookModel = new SearchBookModel(searchListener);
     }
 
     public static ChangeSourceView getInstance(MoDialogView moProgressView) {

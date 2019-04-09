@@ -1,7 +1,5 @@
 package com.kunfei.bookshelf.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -32,7 +30,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SearchBookModel {
-    private Context context;
     private Handler handler = new Handler(Looper.getMainLooper());
     private ExecutorService executorService;
     private Scheduler scheduler;
@@ -45,11 +42,9 @@ public class SearchBookModel {
     private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
 
-    public SearchBookModel(Context context, OnSearchListener searchListener) {
-        this.context = context;
+    public SearchBookModel(OnSearchListener searchListener) {
         this.searchListener = searchListener;
-        SharedPreferences preference = MApplication.getConfigPreferences();
-        threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
+        threadsNum = MApplication.getConfigPreferences().getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
@@ -113,7 +108,7 @@ public class SearchBookModel {
         }
         if (searchEngineS.size() == 0) {
             handler.post(() -> {
-                Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MApplication.getInstance(), "没有选中任何书源", Toast.LENGTH_SHORT).show();
                 searchListener.refreshFinish(true);
                 searchListener.loadMoreFinish(true);
             });
