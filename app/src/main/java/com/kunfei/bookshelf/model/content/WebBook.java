@@ -49,15 +49,11 @@ public class WebBook extends BaseModelImpl {
         }
     }
 
-    public boolean canUse() {
-        return bookSourceBean != null;
-    }
-
     /**
      * 发现
      */
     public Observable<List<SearchBookBean>> findBook(String url, int page) {
-        if (!canUse() || isEmpty(bookSourceBean.getRuleSearchUrl())) {
+        if (bookSourceBean == null || isEmpty(bookSourceBean.getRuleSearchUrl())) {
             return Observable.create(emitter -> {
                 emitter.onNext(new ArrayList<>());
                 emitter.onComplete();
@@ -83,7 +79,7 @@ public class WebBook extends BaseModelImpl {
      * 搜索
      */
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        if (!canUse() || isEmpty(bookSourceBean.getRuleSearchUrl())) {
+        if (bookSourceBean == null || isEmpty(bookSourceBean.getRuleSearchUrl())) {
             return Observable.create(emitter -> {
                 emitter.onNext(new ArrayList<>());
                 emitter.onComplete();
@@ -113,7 +109,7 @@ public class WebBook extends BaseModelImpl {
      * 获取书籍信息
      */
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        if (!canUse()) {
+        if (bookSourceBean == null) {
             return Observable.error(new Throwable(String.format("无法找到源%s", tag)));
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
@@ -131,7 +127,7 @@ public class WebBook extends BaseModelImpl {
      * 获取目录
      */
     public Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean) {
-        if (!canUse()) {
+        if (bookSourceBean == null) {
             return Observable.create(emitter -> {
                 emitter.onError(new Throwable(String.format("%s没有找到书源配置", bookShelfBean.getBookInfoBean().getName())));
                 emitter.onComplete();
@@ -152,7 +148,7 @@ public class WebBook extends BaseModelImpl {
      * 获取正文
      */
     public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
-        if (!canUse()) {
+        if (bookSourceBean == null) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
                 emitter.onComplete();

@@ -28,8 +28,8 @@ public class WebBookModel {
      * return BookShelfBean
      */
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
-        WebBook webBook = WebBook.getInstance(bookShelfBean.getTag());
-        return webBook.getBookInfo(bookShelfBean);
+        return WebBook.getInstance(bookShelfBean.getTag())
+                .getBookInfo(bookShelfBean);
     }
 
     /**
@@ -37,8 +37,8 @@ public class WebBookModel {
      * return BookShelfBean
      */
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
-        WebBook webBook = WebBook.getInstance(bookShelfBean.getTag());
-        return webBook.getChapterList(bookShelfBean)
+        return WebBook.getInstance(bookShelfBean.getTag())
+                .getChapterList(bookShelfBean)
                 .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
     }
 
@@ -46,8 +46,8 @@ public class WebBookModel {
      * 章节缓存
      */
     public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean, String bookName) {
-        WebBook webBook = WebBook.getInstance(chapterBean.getTag());
-        return webBook.getBookContent(chapterBean)
+        return WebBook.getInstance(chapterBean.getTag())
+                .getBookContent(chapterBean)
                 .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
     }
 
