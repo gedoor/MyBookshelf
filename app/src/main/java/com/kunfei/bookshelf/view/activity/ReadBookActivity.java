@@ -858,6 +858,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    public void autoChangeSource() {
+        mPresenter.autoChangeSource();
+    }
+
     /**
      * 换源
      */

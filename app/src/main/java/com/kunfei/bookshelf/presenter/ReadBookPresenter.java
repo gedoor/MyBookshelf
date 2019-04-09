@@ -54,6 +54,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     private int open_from;
     private BookShelfBean bookShelf;
     private BookSourceBean bookSourceBean;
+    private ChangeSourceHelp changeSourceHelp;
 
     @Override
     public void initData(Activity activity) {
@@ -250,11 +251,33 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
                         mView.toast(e.getMessage());
                         mView.changeSourceFinish(null);
                     }
                 });
+    }
+
+    @Override
+    public void autoChangeSource() {
+        if (changeSourceHelp == null) {
+            changeSourceHelp = new ChangeSourceHelp();
+        }
+        changeSourceHelp.autoChange(bookShelf,
+                bookShelfBeanO -> bookShelfBeanO.subscribe(new MyObserver<BookShelfBean>() {
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
+                        bookShelf = bookShelfBean;
+                        mView.changeSourceFinish(bookShelf);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.toast(e.getMessage());
+                        mView.changeSourceFinish(null);
+                    }
+                }));
     }
 
     @Override
@@ -373,6 +396,9 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
 
     @Override
     public void detachView() {
+        if (changeSourceHelp != null) {
+            changeSourceHelp.stopSearch();
+        }
         RxBus.get().unregister(this);
     }
 
