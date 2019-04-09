@@ -95,6 +95,16 @@ public class PageLoaderNet extends PageLoader {
         }
     }
 
+    @Override
+    public void changeSourceFinish(BookShelfBean book) {
+        if (book == null) {
+            super.changeSourceFinish(null);
+        } else {
+            bookShelfBean = book;
+            refreshChapterList();
+        }
+    }
+
     @SuppressLint("DefaultLocale")
     private synchronized void loadContent(final int chapterIndex) {
         if (downloadingChapterList.size() >= 20) return;

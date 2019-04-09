@@ -216,7 +216,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
     }
 
     public List<ChapterListBean> getChapterList() {
-        return getBookInfoBean().getChapterList();
+        return bookInfoBean.getChapterList();
     }
 
     public int getDurChapterPage() {
@@ -384,7 +384,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
         return getBookmarkList().isEmpty();
     }
 
-    public List<BookmarkBean> getBookmarkList() {
+     public List<BookmarkBean> getBookmarkList() {
         return this.bookInfoBean.getBookmarkList();
     }
 
