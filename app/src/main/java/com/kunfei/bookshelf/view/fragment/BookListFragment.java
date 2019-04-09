@@ -157,9 +157,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, bookShelfAdapter.getBooks().get(index));
-
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-
             }
         };
     }
