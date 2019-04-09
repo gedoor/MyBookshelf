@@ -14,12 +14,11 @@ import io.reactivex.Observable;
 
 public class ChangeSourceHelp {
     private SearchBookModel searchBookModel;
+    private BookShelfBean bookShelfBean;
+    private ChangeSourceListener changeSourceListener;
+    private boolean finish;
 
-    public static ChangeSourceHelp getInstance() {
-        return new ChangeSourceHelp();
-    }
-
-    public void autoChange(BookShelfBean bookShelfBean, ChangeSourceListener changeSourceListener) {
+    public ChangeSourceHelp() {
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
@@ -38,23 +37,12 @@ public class ChangeSourceHelp {
 
             @Override
             public Boolean checkIsExist(SearchBookBean searchBookBean) {
-                return true;
+                return false;
             }
 
             @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
-                for (SearchBookBean searchBookBean : value) {
-                    if (Objects.equals(searchBookBean.getName(), bookShelfBean.getBookInfoBean().getName())) {
-                        if (Objects.equals(searchBookBean.getAuthor(), bookShelfBean.getBookInfoBean().getAuthor())) {
-                            if (changeSourceListener != null) {
-                                changeSourceListener.finish(changeBookSource(searchBookBean, bookShelfBean));
-                            }
-                            searchBookModel.onDestroy();
-                        }
-                    } else {
-                        break;
-                    }
-                }
+                selectBook(value);
             }
 
             @Override
@@ -67,7 +55,39 @@ public class ChangeSourceHelp {
             }
         };
         searchBookModel = new SearchBookModel(searchListener);
-        searchBookModel.search(bookShelfBean.getBookInfoBean().getName(), System.currentTimeMillis(), new ArrayList<>(), false);
+    }
+
+    public void autoChange(BookShelfBean bookShelfBean, ChangeSourceListener changeSourceListener) {
+        this.bookShelfBean = bookShelfBean;
+        this.changeSourceListener = changeSourceListener;
+        long searchTime = System.currentTimeMillis();
+        finish = false;
+        searchBookModel.setSearchTime(searchTime);
+        searchBookModel.search(bookShelfBean.getBookInfoBean().getName(), searchTime, new ArrayList<>(), false);
+    }
+
+    private synchronized void selectBook(List<SearchBookBean> value) {
+        if (finish) return;
+        for (SearchBookBean searchBookBean : value) {
+            if (Objects.equals(searchBookBean.getName(), bookShelfBean.getBookInfoBean().getName())) {
+                if (Objects.equals(searchBookBean.getAuthor(), bookShelfBean.getBookInfoBean().getAuthor())) {
+                    if (changeSourceListener != null) {
+                        finish = true;
+                        changeSourceListener.finish(changeBookSource(searchBookBean, bookShelfBean));
+                    }
+                    searchBookModel.onDestroy();
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    public void stopSearch() {
+        if (searchBookModel != null) {
+            searchBookModel.onDestroy();
+        }
     }
 
     public static Observable<BookShelfBean> changeBookSource(SearchBookBean searchBook, BookShelfBean oldBook) {

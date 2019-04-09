@@ -41,6 +41,7 @@ public class PageLoaderNet extends PageLoader {
     private List<String> downloadingChapterList = new ArrayList<>();
     private ExecutorService executorService;
     private Scheduler scheduler;
+    private ChangeSourceHelp changeSourceHelp;
 
     PageLoaderNet(PageView pageView, BookShelfBean bookShelfBean) {
         super(pageView, bookShelfBean);
@@ -101,7 +102,10 @@ public class PageLoaderNet extends PageLoader {
 
     private void autoChangeSource() {
         setStatus(TxtChapter.Status.CHANGE_SOURCE);
-        ChangeSourceHelp.getInstance().autoChange(bookShelfBean,
+        if (changeSourceHelp == null) {
+            changeSourceHelp = new ChangeSourceHelp();
+        }
+        changeSourceHelp.autoChange(bookShelfBean,
                 bookShelfBeanO -> bookShelfBeanO.subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
@@ -291,6 +295,9 @@ public class PageLoaderNet extends PageLoader {
     public void closeBook() {
         super.closeBook();
         executorService.shutdown();
+        if (changeSourceHelp != null) {
+            changeSourceHelp.stopSearch();
+        }
     }
 
     public enum listHandle {
