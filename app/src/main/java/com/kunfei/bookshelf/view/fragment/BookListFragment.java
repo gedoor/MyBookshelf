@@ -138,25 +138,30 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             @Override
             public void onClick(View view, int index) {
                 BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
-                Intent intent = new Intent(getActivity(), ReadBookActivity.class);
-                intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
                 try {
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
                 } catch (CloneNotSupportedException e) {
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean);
                 }
+                Intent intent = new Intent(getActivity(), ReadBookActivity.class);
+                intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
+                intent.putExtra("data_key", key);
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
 
             @Override
             public void onLongClick(View view, int index) {
+                BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
+                String key = String.valueOf(System.currentTimeMillis());
+                try {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
+                } catch (CloneNotSupportedException e) {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
+                }
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra("openFrom", BookDetailPresenter.FROM_BOOKSHELF);
-                String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, bookShelfAdapter.getBooks().get(index));
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
         };
