@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -35,6 +36,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
     private Disposable disposable;
+    private EngineHelper engineHelper;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -106,8 +108,16 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
      */
     private Object evalJS(String jsStr, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", getEngineHelper());
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
+    }
+
+    private EngineHelper getEngineHelper() {
+        if (engineHelper == null) {
+            engineHelper = new EngineHelper();
+        }
+        return engineHelper;
     }
 
     @Override

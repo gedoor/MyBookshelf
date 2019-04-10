@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.bean.BaseBookBean;
+import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -29,6 +30,7 @@ public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
 
+    private EngineHelper engineHelper;
     private BaseBookBean book;
     private Object _object;
     private Boolean _isJSON;
@@ -366,9 +368,17 @@ public class AnalyzeRule {
      */
     private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", getEngineHelper());
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
+    }
+
+    private EngineHelper getEngineHelper() {
+        if (engineHelper == null) {
+            engineHelper = new EngineHelper();
+        }
+        return engineHelper;
     }
 
 }

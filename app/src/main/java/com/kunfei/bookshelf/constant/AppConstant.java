@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.constant;
 
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.help.EngineHelper;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -15,7 +14,6 @@ import javax.script.ScriptEngineManager;
 public class AppConstant {
 
     //Book Date Convert Format
-    public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String FORMAT_TIME = "HH:mm";
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
@@ -30,11 +28,6 @@ public class AppConstant {
 
     public static final int BookSourceActivity = 4512;
 
-    public static final ScriptEngine SCRIPT_ENGINE = initEngine();
+    public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
 
-    private static ScriptEngine initEngine() {
-        ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("rhino");
-        scriptEngine.put("java", new EngineHelper());
-        return scriptEngine;
-    }
 }
