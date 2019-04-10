@@ -262,8 +262,10 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         if (changeSourceHelp == null) {
             changeSourceHelp = new ChangeSourceHelp();
         }
-        changeSourceHelp.autoChange(bookShelf,
-                bookShelfBeanO -> bookShelfBeanO.subscribe(new MyObserver<BookShelfBean>() {
+        changeSourceHelp.autoChange(bookShelf, new ChangeSourceHelp.ChangeSourceListener() {
+            @Override
+            public void finish(Observable<BookShelfBean> bookShelfBeanO) {
+                bookShelfBeanO.subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
@@ -277,7 +279,15 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         mView.toast(e.getMessage());
                         mView.changeSourceFinish(null);
                     }
-                }));
+                });
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+                mView.toast(throwable.getMessage());
+                mView.changeSourceFinish(null);
+            }
+        });
     }
 
     @Override

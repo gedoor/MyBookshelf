@@ -46,7 +46,11 @@ public class ChangeSourceHelp {
             }
 
             @Override
-            public void searchBookError(Boolean value) {
+            public void searchBookError(Throwable throwable) {
+                if (!finish && changeSourceListener != null) {
+                    changeSourceListener.error(throwable);
+                    searchBookModel.onDestroy();
+                }
             }
 
             @Override
@@ -121,5 +125,7 @@ public class ChangeSourceHelp {
 
     public interface ChangeSourceListener {
         void finish(Observable<BookShelfBean> bookShelfBeanO);
+
+        void error(Throwable throwable);
     }
 }

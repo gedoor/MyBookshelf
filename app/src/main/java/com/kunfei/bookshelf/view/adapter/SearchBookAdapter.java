@@ -124,7 +124,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             } else {
                 //存在
                 for (SearchBookBean temp : newDataS) {
-                    Boolean hasSame = false;
+                    boolean hasSame = false;
                     for (int i = 0, size = copyDataS.size(); i < size; i++) {
                         SearchBookBean searchBook = copyDataS.get(i);
                         if (TextUtils.equals(temp.getName(), searchBook.getName())

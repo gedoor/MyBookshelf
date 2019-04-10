@@ -67,7 +67,7 @@ public interface SearchBookContract {
         /**
          * 搜索失败
          */
-        void searchBookError(Boolean isRefresh);
+        void searchBookError(Throwable throwable);
 
         /**
          * 获取搜索内容EditText

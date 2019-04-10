@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.model;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -108,7 +107,7 @@ public class SearchBookModel {
         }
         if (searchEngineS.size() == 0) {
             handler.post(() -> {
-                Toast.makeText(MApplication.getInstance(), "没有选中任何书源", Toast.LENGTH_SHORT).show();
+                searchListener.searchBookError(new Throwable("没有选中任何书源"));
                 searchListener.refreshFinish(true);
                 searchListener.loadMoreFinish(true);
             });
@@ -186,9 +185,9 @@ public class SearchBookModel {
             if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
                 if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
                     if (page == 1) {
-                        handler.post(() -> searchListener.searchBookError(true));
+                        handler.post(() -> searchListener.searchBookError(new Throwable("未搜索到内容")));
                     } else {
-                        handler.post(() -> searchListener.searchBookError(false));
+                        handler.post(() -> searchListener.searchBookError(new Throwable("未搜索到更多内容")));
                     }
                 } else {
                     if (page == 1) {
@@ -225,7 +224,7 @@ public class SearchBookModel {
 
         void loadMoreSearchBook(List<SearchBookBean> searchBookBeanList);
 
-        void searchBookError(Boolean isRefresh);
+        void searchBookError(Throwable throwable);
 
         int getItemCount();
     }

@@ -152,7 +152,7 @@ public class ChangeSourceView {
             }
 
             @Override
-            public void searchBookError(Boolean value) {
+            public void searchBookError(Throwable throwable) {
                 ibtStop.setVisibility(View.INVISIBLE);
                 rvSource.finishRefresh(true);
             }
