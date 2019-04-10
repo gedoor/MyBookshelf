@@ -240,26 +240,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         mPresenter.getBookShelfInfo();
     }
 
-    @Override
-    protected void firstRequest() {
-        super.firstRequest();
-        if (mPresenter.getOpenFrom() == BookDetailPresenter.FROM_SEARCH) {
-            //网络请求
-            mPresenter.getBookShelfInfo();
-        }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void upChapterSizeTv() {
-        String chapterSize = "";
-        if (mPresenter.getOpenFrom() == FROM_BOOKSHELF && bookShelfBean.getChapterListSize() > 0) {
-            int newChapterNum = bookShelfBean.getChapterListSize() - 1 - bookShelfBean.getDurChapter();
-            if (newChapterNum > 0)
-                chapterSize = String.format("(+%d)", newChapterNum);
-        }
-        tvChapterSize.setText(chapterSize);
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bindEvent() {
@@ -378,7 +358,26 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 mPresenter.addToBookShelf();
             }
         });
+    }
 
+    @Override
+    protected void firstRequest() {
+        super.firstRequest();
+        if (mPresenter.getOpenFrom() == BookDetailPresenter.FROM_SEARCH) {
+            //网络请求
+            mPresenter.getBookShelfInfo();
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void upChapterSizeTv() {
+        String chapterSize = "";
+        if (mPresenter.getOpenFrom() == FROM_BOOKSHELF && bookShelfBean.getChapterListSize() > 0) {
+            int newChapterNum = bookShelfBean.getChapterListSize() - 1 - bookShelfBean.getDurChapter();
+            if (newChapterNum > 0)
+                chapterSize = String.format("(+%d)", newChapterNum);
+        }
+        tvChapterSize.setText(chapterSize);
     }
 
     @Override
