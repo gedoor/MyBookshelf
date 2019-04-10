@@ -20,7 +20,6 @@ import com.kunfei.bookshelf.utils.DensityUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 public class SmoothCheckBox extends View implements Checkable {
-    private static final String KEY_INSTANCE_STATE = "InstanceState";
 
     private static final int DEF_DRAW_SIZE = 25;
     private static final int DEF_ANIM_DURATION = 300;
