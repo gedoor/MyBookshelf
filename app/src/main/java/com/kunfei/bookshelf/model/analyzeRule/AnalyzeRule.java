@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -367,7 +366,6 @@ public class AnalyzeRule {
      */
     private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", new EngineHelper());
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);

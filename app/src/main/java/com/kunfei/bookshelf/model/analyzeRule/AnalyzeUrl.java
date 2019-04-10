@@ -174,7 +174,6 @@ public class AnalyzeUrl {
      */
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", this);
         bindings.put("result", result);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }

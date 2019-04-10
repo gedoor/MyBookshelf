@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.constant;
 
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.help.EngineHelper;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -29,5 +30,11 @@ public class AppConstant {
 
     public static final int BookSourceActivity = 4512;
 
-    public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
+    public static final ScriptEngine SCRIPT_ENGINE = initEngine();
+
+    private static ScriptEngine initEngine() {
+        ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("rhino");
+        scriptEngine.put("java", new EngineHelper());
+        return scriptEngine;
+    }
 }
