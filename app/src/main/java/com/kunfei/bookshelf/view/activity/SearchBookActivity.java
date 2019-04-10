@@ -470,6 +470,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void finish() {
-
+        super.finish();
     }
 }
