@@ -216,19 +216,19 @@ public class RefreshRecyclerView extends FrameLayout {
         }
     }
 
-    public void finishRefresh(Boolean needNoti) {
-        finishRefresh(((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getICount() == 0, needNoti);
+    public void finishRefresh(Boolean needNotify) {
+        finishRefresh(((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getICount() == 0, needNotify);
     }
 
-    public void finishRefresh(Boolean isAll, Boolean needNoti) {
+    public void finishRefresh(Boolean isAll, Boolean needNotify) {
         rpb.setDurProgress(0);
         if (isAll) {
             ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, false);
             rpb.setIsAutoLoading(false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(isAll, needNoti);
+            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(true, needNotify);
         } else {
             rpb.setIsAutoLoading(false);
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, needNoti);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, needNotify);
         }
 
         if (isAll) {
