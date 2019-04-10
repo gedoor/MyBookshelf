@@ -236,7 +236,9 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                             long currentTime = System.currentTimeMillis();
                             String bookName = bookShelf.getBookInfoBean().getName();
                             BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                            if (ChangeSourceView.savedSource.getBookSource() != null && currentTime - ChangeSourceView.savedSource.getSaveTime() < 60000 && ChangeSourceView.savedSource.getBookName().equals(bookName))
+                            if (ChangeSourceView.savedSource.getBookSource() != null
+                                    && currentTime - ChangeSourceView.savedSource.getSaveTime() < 60000
+                                    && ChangeSourceView.savedSource.getBookName().equals(bookName))
                                 ChangeSourceView.savedSource.getBookSource().increaseWeight(-450);
                             BookSourceManager.saveBookSource(ChangeSourceView.savedSource.getBookSource());
                             ChangeSourceView.savedSource.setBookName(bookName);
