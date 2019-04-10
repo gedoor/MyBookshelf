@@ -8,6 +8,9 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 public class AppConstant {
 
     //Book Date Convert Format
@@ -25,4 +28,6 @@ public class AppConstant {
     public static final Pattern JS_PATTERN = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
 
     public static final int BookSourceActivity = 4512;
+
+    public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
 }
