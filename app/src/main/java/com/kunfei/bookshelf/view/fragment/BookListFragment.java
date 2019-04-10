@@ -162,6 +162,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra("openFrom", BookDetailPresenter.FROM_BOOKSHELF);
                 intent.putExtra("data_key", key);
+                intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
         };

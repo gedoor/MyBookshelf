@@ -384,7 +384,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
         return getBookmarkList().isEmpty();
     }
 
-     public List<BookmarkBean> getBookmarkList() {
+    public List<BookmarkBean> getBookmarkList() {
         return this.bookInfoBean.getBookmarkList();
     }
 

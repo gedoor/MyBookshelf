@@ -88,7 +88,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

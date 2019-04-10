@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -47,8 +48,13 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             BitIntentDataManager.getInstance().cleanData(key);
             if (bookShelf == null) {
-                mView.finish();
-                return;
+                String noteUrl = intent.getStringExtra("noteUrl");
+                if (!TextUtils.isEmpty(noteUrl)) {
+                    bookShelf = BookshelfHelp.getBook(noteUrl);
+                } else {
+                    mView.finish();
+                    return;
+                }
             }
             inBookShelf = true;
             searchBook = new SearchBookBean();
