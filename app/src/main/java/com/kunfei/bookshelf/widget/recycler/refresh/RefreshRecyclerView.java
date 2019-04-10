@@ -298,7 +298,6 @@ public class RefreshRecyclerView extends FrameLayout {
             noDataView = noData;
             noDataView.setVisibility(GONE);
             addView(noDataView, getChildCount() - 1);
-
         }
         if (refreshError != null) {
             refreshErrorView = refreshError;
