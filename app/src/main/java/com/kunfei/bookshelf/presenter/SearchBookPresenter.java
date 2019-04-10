@@ -83,7 +83,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
             @Override
             public void searchBookError(Throwable throwable) {
-                searchBookModel.stopSearch();
                 mView.searchBookError(throwable);
             }
 

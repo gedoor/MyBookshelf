@@ -83,6 +83,16 @@ public class SearchBookModel {
         });
     }
 
+    private void searchBookError(Throwable throwable) {
+        compositeDisposable.dispose();
+        compositeDisposable = new CompositeDisposable();
+        handler.post(() -> {
+            searchListener.refreshFinish(true);
+            searchListener.loadMoreFinish(true);
+            searchListener.searchBookError(throwable);
+        });
+    }
+
     public void onDestroy() {
         stopSearch();
         executorService.shutdown();
@@ -106,11 +116,7 @@ public class SearchBookModel {
             handler.post(() -> searchListener.refreshSearchBook());
         }
         if (searchEngineS.size() == 0) {
-            handler.post(() -> {
-                searchListener.refreshFinish(true);
-                searchListener.loadMoreFinish(true);
-                searchListener.searchBookError(new Throwable("没有选中任何书源"));
-            });
+            searchBookError(new Throwable("没有选中任何书源"));
             return;
         }
         searchSuccessNum = 0;
@@ -185,9 +191,9 @@ public class SearchBookModel {
             if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
                 if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
                     if (page == 1) {
-                        handler.post(() -> searchListener.searchBookError(new Throwable("未搜索到内容")));
+                        searchBookError(new Throwable("未搜索到内容"));
                     } else {
-                        handler.post(() -> searchListener.searchBookError(new Throwable("未搜索到更多内容")));
+                        searchBookError(new Throwable("未搜索到更多内容"));
                     }
                 } else {
                     if (page == 1) {
