@@ -467,4 +467,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+    @Override
+    public void finish() {
+
+    }
 }
