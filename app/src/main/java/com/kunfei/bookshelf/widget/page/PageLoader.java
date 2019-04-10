@@ -551,6 +551,13 @@ public abstract class PageLoader {
     }
 
     /**
+     * @return 当前章节所有内容
+     */
+    public String getAllContent() {
+        return getContentStartPage(0);
+    }
+
+    /**
      * @return 本页未读内容
      */
     public String getContent() {
@@ -577,15 +584,30 @@ public abstract class PageLoader {
         if (content != null) {
             s.append(content);
         }
-        if (mCurChapter.getPageSize() > mCurPagePos + 1) {
-            for (int i = mCurPagePos + 1; i < mCurChapter.getPageSize(); i++) {
-                s.append(mCurChapter.getPage(i).getContent());
-            }
+        content = getContentStartPage(mCurPagePos + 1);
+        if (content != null) {
+            s.append(content);
         }
         readTextLength = mCurPagePos > 0 ? mCurChapter.getPageLength(mCurPagePos - 1) : 0;
         if (mPageMode == PageAnimation.Mode.SCROLL) {
             for (int i = 0; i < Math.min(Math.max(0, linePos), mCurChapter.getPage(mCurPagePos).lines.size() - 1); i++) {
                 readTextLength += mCurChapter.getPage(mCurPagePos).lines.get(i).length();
+            }
+        }
+        return s.toString();
+    }
+
+    /**
+     * @param page 开始页数
+     * @return 从page页开始的的所有内容
+     */
+    private String getContentStartPage(int page) {
+        if (mCurChapter == null) return null;
+        if (mCurChapter.getTxtPageList() == null) return null;
+        StringBuilder s = new StringBuilder();
+        if (mCurChapter.getPageSize() > page) {
+            for (int i = page; i < mCurChapter.getPageSize(); i++) {
+                s.append(mCurChapter.getPage(i).getContent());
             }
         }
         return s.toString();

@@ -765,7 +765,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_copy_text:
                 popMenuOut();
                 if (mPageLoader != null) {
-                    moDialogHUD.showText(mPageLoader.getContent());
+                    moDialogHUD.showText(mPageLoader.getAllContent());
                 }
                 break;
             case R.id.disable_book_source:
@@ -995,14 +995,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    /**
+     * 朗读
+     */
     private void readAloud() {
         aloudNextPage = false;
-        if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(mPageLoader.getUnReadContent())) {
-            ReadAloudService.play(ReadBookActivity.this,
-                    false,
-                    mPageLoader.getUnReadContent(),
+        String unReadContent = mPageLoader.getUnReadContent();
+        if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(unReadContent)) {
+            ReadAloudService.play(ReadBookActivity.this, false, unReadContent,
                     mPresenter.getBookShelf().getBookInfoBean().getName(),
-                    ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getBookShelf().getDurChapterName()));
+                    ChapterContentHelp.getInstance()
+                            .replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
+                                    mPresenter.getBookShelf().getTag(),
+                                    mPresenter.getBookShelf().getDurChapterName()));
         }
     }
 
