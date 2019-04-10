@@ -214,7 +214,7 @@ public abstract class PageLoader {
     }
 
     /**
-     * 作用：设置与文字相关的参数
+     * 设置与文字相关的参数
      */
     private void setUpTextParams() {
         // 文字大小
@@ -229,6 +229,9 @@ public abstract class PageLoader {
         mTitlePara = (int) (mTitleSize * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize() / 2);
     }
 
+    /**
+     * 初始化画笔
+     */
     private void initPaint() {
         Typeface typeface;
         try {
@@ -599,7 +602,7 @@ public abstract class PageLoader {
 
     /**
      * @param page 开始页数
-     * @return 从page页开始的的所有内容
+     * @return 从page页开始的的当前章节所有内容
      */
     private String getContentStartPage(int page) {
         if (mCurChapter == null) return null;
@@ -613,6 +616,9 @@ public abstract class PageLoader {
         return s.toString();
     }
 
+    /**
+     * @param start 开始朗读字数
+     */
     public void readAloudStart(int start) {
         start = readTextLength + start;
         int x = mCurChapter.getParagraphIndex(start);
@@ -626,6 +632,9 @@ public abstract class PageLoader {
         }
     }
 
+    /**
+     * @param readAloudLength 已朗读字数
+     */
     public void readAloudLength(int readAloudLength) {
         if (mCurChapter == null) return;
         if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) return;
@@ -693,6 +702,9 @@ public abstract class PageLoader {
         resetPageOffset();
     }
 
+    /**
+     * 重置页面
+     */
     private void reSetPage() {
         if (mPageMode == PageAnimation.Mode.SCROLL) {
             resetPageOffset();
