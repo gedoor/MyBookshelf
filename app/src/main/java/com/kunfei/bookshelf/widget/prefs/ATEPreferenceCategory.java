@@ -16,18 +16,6 @@ public class ATEPreferenceCategory extends PreferenceCategory {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public ATEPreferenceCategory(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    public ATEPreferenceCategory(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ATEPreferenceCategory(Context context) {
-        super(context);
-    }
-
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);

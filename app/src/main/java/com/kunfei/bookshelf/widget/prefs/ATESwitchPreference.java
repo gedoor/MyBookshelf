@@ -19,18 +19,6 @@ public class ATESwitchPreference extends SwitchPreference {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public ATESwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    public ATESwitchPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ATESwitchPreference(Context context) {
-        super(context);
-    }
-
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
