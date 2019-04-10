@@ -36,7 +36,6 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 import com.kunfei.bookshelf.widget.explosion_field.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
-import com.kunfei.bookshelf.widget.recycler.refresh.RefreshErrorView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
@@ -68,7 +67,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
-    private RefreshErrorView refreshErrorView;
+    private View refreshErrorView;
     private ExplosionField mExplosionField;
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
@@ -118,14 +117,14 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 .create());
         llSearchHistory.setOnClickListener(null);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
-        refreshErrorView = new RefreshErrorView(this);
-        refreshErrorView.setRefreshListener(v -> {
+        refreshErrorView = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
+        refreshErrorView.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             mPresenter.initPage();
             rfRvSearchBooks.startRefresh();
             mPresenter.toSearchBooks(null, true);
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
+        rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 refreshErrorView);
 
         searchBookAdapter.setItemClickListener((view, position) -> {
@@ -434,7 +433,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void searchBookError(Throwable throwable) {
         if (searchBookAdapter.getICount() == 0) {
-            refreshErrorView.setErrorMsg(throwable.getMessage());
+            ((TextView) refreshErrorView.findViewById(R.id.tv_error_msg)).setText(throwable.getMessage());
             rfRvSearchBooks.refreshError();
         } else {
             rfRvSearchBooks.loadMoreError();

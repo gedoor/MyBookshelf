@@ -288,7 +288,7 @@ public class RefreshRecyclerView extends FrameLayout {
         ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setLoadMoreError(true, true);
     }
 
-    public void setNoDataAndrRefreshErrorView(View noData, View refreshError) {
+    public void setNoDataAndRefreshErrorView(View noData, View refreshError) {
         if (noData != null) {
             noDataView = noData;
             noDataView.setVisibility(GONE);

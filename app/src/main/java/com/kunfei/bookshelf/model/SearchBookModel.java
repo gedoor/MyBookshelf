@@ -107,9 +107,9 @@ public class SearchBookModel {
         }
         if (searchEngineS.size() == 0) {
             handler.post(() -> {
-                searchListener.searchBookError(new Throwable("没有选中任何书源"));
                 searchListener.refreshFinish(true);
                 searchListener.loadMoreFinish(true);
+                searchListener.searchBookError(new Throwable("没有选中任何书源"));
             });
             return;
         }

@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.view.popupwindow;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -71,8 +70,7 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     private void init(Context context) {
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, this);
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);

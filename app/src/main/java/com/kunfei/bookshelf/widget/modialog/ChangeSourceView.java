@@ -106,13 +106,13 @@ public class ChangeSourceView {
             popupMenu.show();
             return true;
         });
-        View viewRefreshError = LayoutInflater.from(context).inflate(R.layout.view_searchbook_refresh_error, null);
+        View viewRefreshError = LayoutInflater.from(context).inflate(R.layout.view_refresh_error, null);
         viewRefreshError.setBackgroundResource(R.color.background_card);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             reSearchBook();
         });
-        rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
+        rvSource.setNoDataAndRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_refresh_no_data, null),
                 viewRefreshError);
 
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
