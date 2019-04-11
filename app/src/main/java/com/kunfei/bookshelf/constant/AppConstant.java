@@ -8,10 +8,12 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 public class AppConstant {
 
     //Book Date Convert Format
-    public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String FORMAT_TIME = "HH:mm";
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
@@ -25,4 +27,7 @@ public class AppConstant {
     public static final Pattern JS_PATTERN = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
 
     public static final int BookSourceActivity = 4512;
+
+    public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
+
 }

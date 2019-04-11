@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.popupwindow;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -100,9 +99,7 @@ public class MoreSettingPop extends FrameLayout {
     }
 
     private void init(Context context) {
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, this);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
     }

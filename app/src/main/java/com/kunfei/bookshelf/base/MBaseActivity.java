@@ -214,15 +214,15 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     protected void initTheme() {
-        if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
-            setTheme(R.style.CAppTheme);
-        } else {
-            setTheme(R.style.CAppThemeBarDark);
-        }
         if (isNightTheme()) {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+            setTheme(R.style.CAppTheme);
+        } else {
+            setTheme(R.style.CAppThemeBarDark);
         }
     }
 

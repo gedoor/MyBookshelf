@@ -147,7 +147,7 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
+        WebBookModel.getInstance().searchBook(key, 1, sourceUrl)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
                     @Override

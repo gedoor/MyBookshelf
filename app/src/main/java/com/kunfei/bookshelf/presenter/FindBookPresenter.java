@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -23,14 +24,19 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.SimpleBindings;
+
 import androidx.annotation.NonNull;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+
 public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
     private Disposable disposable;
+    private EngineHelper engineHelper;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -42,8 +48,15 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
             List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
+                    String kindA[];
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                        String kindA[] = sourceBean.getRuleFindUrl().split("(&&|\n)+");
+                        if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
+                            String jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
+                            Object object = evalJS(jsStr, sourceBean.getBookSourceUrl());
+                            kindA = object.toString().split("(&&|\n)+");
+                        } else {
+                            kindA = sourceBean.getRuleFindUrl().split("(&&|\n)+");
+                        }
                         List<FindKindBean> children = new ArrayList<>();
                         for (String kindB : kindA) {
                             if (kindB.trim().isEmpty()) continue;
@@ -88,6 +101,23 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                         disposable = null;
                     }
                 });
+    }
+
+    /**
+     * 执行JS
+     */
+    private Object evalJS(String jsStr, String baseUrl) throws Exception {
+        SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", getEngineHelper());
+        bindings.put("baseUrl", baseUrl);
+        return SCRIPT_ENGINE.eval(jsStr, bindings);
+    }
+
+    private EngineHelper getEngineHelper() {
+        if (engineHelper == null) {
+            engineHelper = new EngineHelper();
+        }
+        return engineHelper;
     }
 
     @Override

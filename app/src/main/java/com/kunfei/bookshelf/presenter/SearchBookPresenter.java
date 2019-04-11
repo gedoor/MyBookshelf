@@ -1,7 +1,5 @@
 package com.kunfei.bookshelf.presenter;
 
-import android.content.Context;
-
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -37,7 +35,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenter(Context context) {
+    public SearchBookPresenter() {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
@@ -84,9 +82,8 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
 
             @Override
-            public void searchBookError(Boolean value) {
-                mView.searchBookError(value);
-                searchBookModel.stopSearch();
+            public void searchBookError(Throwable throwable) {
+                mView.searchBookError(throwable);
             }
 
             @Override
@@ -95,7 +92,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(context, onSearchListener);
+        searchBookModel = new SearchBookModel(onSearchListener);
     }
 
     /**

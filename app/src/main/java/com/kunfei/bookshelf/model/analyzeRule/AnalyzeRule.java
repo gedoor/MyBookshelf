@@ -3,9 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.constant.EngineHelper;
+import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -18,10 +17,9 @@ import java.util.regex.Pattern;
 
 import javax.script.SimpleBindings;
 
-import retrofit2.Response;
-
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 
 /**
@@ -32,6 +30,7 @@ public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
 
+    private EngineHelper engineHelper;
     private BaseBookBean book;
     private Object _object;
     private Boolean _isJSON;
@@ -369,32 +368,17 @@ public class AnalyzeRule {
      */
     private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", this);
+        bindings.put("java", getEngineHelper());
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
-        return EngineHelper.INSTANCE.eval(jsStr, bindings);
+        return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
-    /**
-     * js实现跨域访问,不能删
-     */
-    @SuppressWarnings("unused")
-    public String ajax(String urlStr) {
-        try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
-            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
-                    .blockingFirst();
-            return response.body();
-        } catch (Exception e) {
-            return e.getLocalizedMessage();
+    private EngineHelper getEngineHelper() {
+        if (engineHelper == null) {
+            engineHelper = new EngineHelper();
         }
+        return engineHelper;
     }
 
-    /**
-     * js实现解码,不能删
-     */
-    @SuppressWarnings("unused")
-    public String base64Decoder(String base64) {
-        return StringUtils.base64Decode(base64);
-    }
 }

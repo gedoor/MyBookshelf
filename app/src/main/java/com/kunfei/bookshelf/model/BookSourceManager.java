@@ -33,10 +33,6 @@ import io.reactivex.SingleOnSubscribe;
 
 public class BookSourceManager {
 
-    public static BookSourceManager getInstance() {
-        return new BookSourceManager();
-    }
-
     public static List<BookSourceBean> getSelectedBookSource() {
         return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .where(BookSourceBeanDao.Properties.Enable.eq(true))
