@@ -24,10 +24,16 @@ public class AnalyzeCollection {
         _isJSON = false;
     }
 
+    /**
+     * 是否有下一个
+     */
     public boolean hasNext(){
         return _pos<_size;
     }
 
+    /**
+     * 设置下一个解析内容
+     */
     public void next(AnalyzeRule analyzeRule) {
         if (_isJSON) {
             analyzeRule.setContent(_Objects.get(_pos++), true);
@@ -36,6 +42,9 @@ public class AnalyzeCollection {
         }
     }
 
+    /**
+     * 列表数量
+     */
     public int size(){
         return _size;
     }
