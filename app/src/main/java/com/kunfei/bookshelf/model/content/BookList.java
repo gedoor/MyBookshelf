@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.help.FormatWebText;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeCollection;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -60,7 +59,7 @@ class BookList {
                     books.add(item);
                 }
             } else {
-                AnalyzeCollection collections;
+                List<Object> collections;
                 boolean reverse;
                 String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
@@ -79,8 +78,8 @@ class BookList {
                         books.add(item);
                     }
                 } else {
-                    while (collections.hasNext()) {
-                        collections.next(analyzer);
+                    for (Object object : collections) {
+                        analyzer.setContent(object);
                         SearchBookBean item = getItemInList(analyzer, baseUrl);
                         if (item != null) {
                             books.add(item);

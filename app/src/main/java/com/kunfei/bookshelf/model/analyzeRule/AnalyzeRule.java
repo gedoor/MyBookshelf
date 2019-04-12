@@ -52,19 +52,10 @@ public class AnalyzeRule {
         this.book = book;
     }
 
-    public AnalyzeRule setContent(String body) {
+    public AnalyzeRule setContent(Object body) {
         if (body == null) throw new AssertionError("Content cannot be null");
-        _isJSON = StringUtils.isJsonType(body);
+        _isJSON = StringUtils.isJsonType(String.valueOf(body));
         _object = body;
-        objectChangedXP = true;
-        objectChangedJS = true;
-        objectChangedJP = true;
-        return this;
-    }
-
-    public AnalyzeRule setContent(Object object, boolean isJSON) {
-        _object = object;
-        _isJSON = isJSON;
         objectChangedXP = true;
         objectChangedJS = true;
         objectChangedJP = true;
@@ -226,7 +217,8 @@ public class AnalyzeRule {
     /**
      * 获取列表
      */
-    public AnalyzeCollection getElements(String ruleStr) throws Exception {
+    @SuppressWarnings("unchecked")
+    public List<Object> getElements(String ruleStr) throws Exception {
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -236,16 +228,16 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    result = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
+                    result = new ArrayList<>(getAnalyzeByJSonPath(result).readList(rule.rule));
                     break;
                 case XPath:
-                    result = new AnalyzeCollection(getAnalyzeByXPath(result).getElements(rule.rule));
+                    result = new ArrayList<>(getAnalyzeByXPath(result).getElements(rule.rule));
                     break;
                 default:
-                    result = new AnalyzeCollection(getAnalyzeByJSoup(result).getElements(rule.rule));
+                    result = new ArrayList<>(getAnalyzeByJSoup(result).getElements(rule.rule));
             }
         }
-        return (AnalyzeCollection) result;
+        return (List<Object>) result;
     }
 
     /**

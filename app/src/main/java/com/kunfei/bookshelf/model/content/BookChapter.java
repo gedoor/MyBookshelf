@@ -8,7 +8,6 @@ import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeCollection;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 
@@ -114,9 +113,9 @@ class BookChapter {
             }
         }
 
-        AnalyzeCollection collections = analyzer.getElements(ruleChapterList);
-        while (collections.hasNext()) {
-            collections.next(analyzer);
+        List<Object> collections = analyzer.getElements(ruleChapterList);
+        for (Object object : collections) {
+            analyzer.setContent(object);
             String name = analyzer.getString(bookSourceBean.getRuleChapterName());
             String url = analyzer.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
             if (!isEmpty(name) && !isEmpty(url)) {
@@ -127,7 +126,6 @@ class BookChapter {
                 chapterBeans.add(temp);
             }
         }
-
         return new WebChapterBean<>(chapterBeans, nextUrlList);
     }
 
