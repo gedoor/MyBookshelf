@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -78,6 +79,7 @@ public class MApplication extends Application {
         if (TextUtils.isEmpty(downloadPath) | Objects.equals(downloadPath, FileHelp.getCachePath())) {
             setDownloadPath(null);
         }
+        initNightTheme();
         if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
         }
@@ -103,11 +105,19 @@ public class MApplication extends Application {
         MultiDex.install(this);
     }
 
+    public void initNightTheme() {
+        if (isNightTheme()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
     /**
      * 初始化主题
      */
     public void upThemeStore() {
-        if (configPreferences.getBoolean("nightTheme", false)) {
+        if (isNightTheme()) {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.md_grey_800)))
                     .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.md_pink_800)))
@@ -120,6 +130,10 @@ public class MApplication extends Application {
                     .backgroundColor(configPreferences.getInt("colorBackground", getResources().getColor(R.color.md_grey_100)))
                     .apply();
         }
+    }
+
+    public boolean isNightTheme() {
+        return configPreferences.getBoolean("nightTheme", false);
     }
 
     /**
