@@ -23,7 +23,7 @@ java.getString(rule)
 java.getElements(ruleStr)
 ```
 
-**2019/04/09**
+**2019/04/10**
 * 发现规则支持js生成规则文本, \<js>\</js>
 
 **2019/04/09**
