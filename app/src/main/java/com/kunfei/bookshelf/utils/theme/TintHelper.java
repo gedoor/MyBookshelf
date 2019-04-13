@@ -225,22 +225,11 @@ public final class TintHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setThumbTintList(s1);
             seekBar.setProgressTintList(s1);
-        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+        } else {
             Drawable progressDrawable = createTintedDrawable(seekBar.getProgressDrawable(), s1);
             seekBar.setProgressDrawable(progressDrawable);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                Drawable thumbDrawable = createTintedDrawable(seekBar.getThumb(), s1);
-                seekBar.setThumb(thumbDrawable);
-            }
-        } else {
-            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-                mode = PorterDuff.Mode.MULTIPLY;
-            }
-            if (seekBar.getIndeterminateDrawable() != null)
-                seekBar.getIndeterminateDrawable().setColorFilter(color, mode);
-            if (seekBar.getProgressDrawable() != null)
-                seekBar.getProgressDrawable().setColorFilter(color, mode);
+            Drawable thumbDrawable = createTintedDrawable(seekBar.getThumb(), s1);
+            seekBar.setThumb(thumbDrawable);
         }
     }
 
@@ -257,9 +246,6 @@ public final class TintHelper {
                 progressBar.setIndeterminateTintList(sl);
         } else {
             PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-                mode = PorterDuff.Mode.MULTIPLY;
-            }
             if (!skipIndeterminate && progressBar.getIndeterminateDrawable() != null)
                 progressBar.getIndeterminateDrawable().setColorFilter(color, mode);
             if (progressBar.getProgressDrawable() != null)
@@ -403,8 +389,7 @@ public final class TintHelper {
             drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
             drawables[1] = createTintedDrawable(drawables[1], color);
             fCursorDrawable.set(editor, drawables);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 }

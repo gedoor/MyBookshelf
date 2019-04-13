@@ -154,7 +154,7 @@
 }
 
 # 保存js引擎调用的java类
--keep class **.EngineHelper{*;}
+-keep class **.analyzeRule.**{*;}
 
 ### greenDAO 3
 -keep class org.greenrobot.greendao.**{ *; }

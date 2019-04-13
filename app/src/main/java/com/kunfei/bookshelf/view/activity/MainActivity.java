@@ -207,11 +207,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab == null) return;
-            if (i == 0) { //设置第一个Item的点击事件(当下标为0时触发)
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            } else {
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            }
+            tab.setCustomView(tab_icon(mTitles[i]));
             View customView = tab.getCustomView();
             if (customView == null) return;
             TextView tv = customView.findViewById(R.id.tabtext);
@@ -316,18 +312,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tab.setContentDescription(String.format("%s,%s", tv.getText(), getString(R.string.click_on_selected_show_menu)));
     }
 
-    private View tab_icon(String name, Integer iconID) {
+    private View tab_icon(String name) {
         @SuppressLint("InflateParams")
         View tabView = LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right, null);
         TextView tv = tabView.findViewById(R.id.tabtext);
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
-        if (iconID != null) {
-            im.setVisibility(View.VISIBLE);
-            im.setImageResource(iconID);
-        } else {
-            im.setVisibility(View.GONE);
-        }
+        im.setVisibility(View.VISIBLE);
+        im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
         return tabView;
     }
 

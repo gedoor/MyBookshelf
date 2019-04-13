@@ -3,8 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.help.EngineHelper;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -16,6 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.SimpleBindings;
+
+import retrofit2.Response;
 
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
@@ -30,7 +32,6 @@ public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
 
-    private EngineHelper engineHelper;
     private BaseBookBean book;
     private Object _object;
     private Boolean _isJSON;
@@ -51,19 +52,10 @@ public class AnalyzeRule {
         this.book = book;
     }
 
-    public AnalyzeRule setContent(String body) {
+    public AnalyzeRule setContent(Object body) {
         if (body == null) throw new AssertionError("Content cannot be null");
-        _isJSON = StringUtils.isJsonType(body);
+        _isJSON = StringUtils.isJsonType(String.valueOf(body));
         _object = body;
-        objectChangedXP = true;
-        objectChangedJS = true;
-        objectChangedJP = true;
-        return this;
-    }
-
-    public AnalyzeRule setContent(Object object, boolean isJSON) {
-        _object = object;
-        _isJSON = isJSON;
         objectChangedXP = true;
         objectChangedJS = true;
         objectChangedJP = true;
@@ -225,7 +217,8 @@ public class AnalyzeRule {
     /**
      * 获取列表
      */
-    public AnalyzeCollection getElements(String ruleStr) throws Exception {
+    @SuppressWarnings("unchecked")
+    public List<Object> getElements(String ruleStr) throws Exception {
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -235,16 +228,16 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    result = new AnalyzeCollection(getAnalyzeByJSonPath(result).readList(rule.rule), true);
+                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
                     break;
                 case XPath:
-                    result = new AnalyzeCollection(getAnalyzeByXPath(result).getElements(rule.rule));
+                    result = getAnalyzeByXPath(result).getElements(rule.rule);
                     break;
                 default:
-                    result = new AnalyzeCollection(getAnalyzeByJSoup(result).getElements(rule.rule));
+                    result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
         }
-        return (AnalyzeCollection) result;
+        return (List<Object>) result;
     }
 
     /**
@@ -368,17 +361,33 @@ public class AnalyzeRule {
      */
     private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", getEngineHelper());
+        bindings.put("java", this);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
-    private EngineHelper getEngineHelper() {
-        if (engineHelper == null) {
-            engineHelper = new EngineHelper();
+    /**
+     * js实现跨域访问,不能删
+     */
+    @SuppressWarnings("unused")
+    public String ajax(String urlStr) {
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
+            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                    .blockingFirst();
+            return response.body();
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
         }
-        return engineHelper;
+    }
+
+    /**
+     * js实现解码,不能删
+     */
+    @SuppressWarnings("unused")
+    public String base64Decoder(String base64) {
+        return StringUtils.base64Decode(base64);
     }
 
 }

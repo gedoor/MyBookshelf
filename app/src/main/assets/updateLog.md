@@ -4,7 +4,24 @@
 ## 更新日志
 
 **2019/04/12**
+* 修复设置夜间模式会多次Recreate的问题
 * WebDav恢复时添加存储权限检查
+* 书源调试添加时间戳
+* 自定义js方法
+```renderscript
+//获取网页内容,url支持搜索url规则
+java.ajax(url)
+//base64解码
+java.base64Decoder(string)
+//设置需解析的内容Object
+java.setContent(html)
+//输入规则String获取文本列表List<String>
+java.getStringList(rule)
+//输入规则String获取文本String
+java.getString(rule)
+//输入规则String获取节点列表List<Object>
+java.getElements(ruleStr)
+```
 
 **2019/04/09**
 * 发现规则支持js生成规则文本, \<js>\</js>
