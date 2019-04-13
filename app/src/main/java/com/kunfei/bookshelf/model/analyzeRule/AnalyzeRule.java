@@ -228,13 +228,13 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    result = new ArrayList<>(getAnalyzeByJSonPath(result).readList(rule.rule));
+                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
                     break;
                 case XPath:
-                    result = new ArrayList<>(getAnalyzeByXPath(result).getElements(rule.rule));
+                    result = getAnalyzeByXPath(result).getElements(rule.rule);
                     break;
                 default:
-                    result = new ArrayList<>(getAnalyzeByJSoup(result).getElements(rule.rule));
+                    result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
         }
         return (List<Object>) result;
