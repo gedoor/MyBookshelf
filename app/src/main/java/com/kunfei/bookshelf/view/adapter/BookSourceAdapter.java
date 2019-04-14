@@ -63,7 +63,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         activity.upGroupMenu();
     }
 
-    private void allDataList(List<BookSourceBean> bookSourceBeanList) {
+    private void setAllDataList(List<BookSourceBean> bookSourceBeanList) {
         this.allDataList = bookSourceBeanList;
         notifyDataSetChanged();
         activity.upDateSelectAll();
@@ -124,7 +124,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             notifyDataSetChanged();
         });
         holder.topView.setOnClickListener(view -> {
-            allDataList(BookSourceManager.getAllBookSource());
+            setAllDataList(BookSourceManager.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
             dataList.remove(position);
             notifyItemRemoved(position);
