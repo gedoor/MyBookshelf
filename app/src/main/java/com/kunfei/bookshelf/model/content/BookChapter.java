@@ -102,10 +102,10 @@ class BookChapter {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 
-        analyzer.setContent(s);
+        analyzer.setContent(s, chapterUrl);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), chapterUrl);
+            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
 
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
@@ -115,9 +115,9 @@ class BookChapter {
 
         List<Object> collections = analyzer.getElements(ruleChapterList);
         for (Object object : collections) {
-            analyzer.setContent(object);
+            analyzer.setContent(object, chapterUrl);
             String name = analyzer.getString(bookSourceBean.getRuleChapterName());
-            String url = analyzer.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
+            String url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
             if (!isEmpty(name) && !isEmpty(url)) {
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);

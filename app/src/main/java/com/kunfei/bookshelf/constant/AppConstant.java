@@ -25,6 +25,7 @@ public class AppConstant {
     public static final String DEFAULT_WEB_DAV_URL = "https://dav.jianguoyun.com/dav/";
 
     public static final Pattern JS_PATTERN = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
+    public static final Pattern EXP_PATTERN = Pattern.compile("\\{\\{([\\w\\W]*?)\\}\\}");
 
     public static final int BookSourceActivity = 4512;
 
