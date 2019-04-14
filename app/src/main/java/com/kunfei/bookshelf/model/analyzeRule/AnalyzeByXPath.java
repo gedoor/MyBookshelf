@@ -2,8 +2,6 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.utils.NetworkUtil;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.seimicrawler.xpath.JXDocument;
@@ -100,7 +98,7 @@ public class AnalyzeByXPath {
         return stringList;
     }
 
-    public String getString(String rule, String baseUrl) {
+    public String getString(String rule) {
         String result;
         Object object = jxDocument.selOne(rule);
         result = object instanceof Element ? ((Element) object).html() : (String) object;
@@ -109,9 +107,6 @@ public class AnalyzeByXPath {
                     .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
                     .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
                     .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
-        }
-        if (!TextUtils.isEmpty(baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(baseUrl, result);
         }
         return result;
     }

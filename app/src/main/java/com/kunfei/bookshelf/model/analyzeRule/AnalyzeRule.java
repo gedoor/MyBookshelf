@@ -206,7 +206,7 @@ public class AnalyzeRule {
                         result = getAnalyzeByJSonPath(result).read(rule.rule);
                         break;
                     case XPath:
-                        result = getAnalyzeByXPath(result).getString(rule.rule, baseUrl);
+                        result = getAnalyzeByXPath(result).getString(rule.rule);
                         break;
                     case Default:
                         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
