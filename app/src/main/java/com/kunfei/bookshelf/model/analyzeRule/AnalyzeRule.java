@@ -209,10 +209,10 @@ public class AnalyzeRule {
                         result = getAnalyzeByXPath(result).getString(rule.rule, baseUrl);
                         break;
                     case Default:
-                        if (isUrl && TextUtils.isEmpty(baseUrl)) {
-                            result = getAnalyzeByJSoup(result).getResult(rule.rule);
-                        } else {
+                        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
                             result = getAnalyzeByJSoup(result).getResultUrl(rule.rule);
+                        } else {
+                            result = getAnalyzeByJSoup(result).getResult(rule.rule);
                         }
                 }
             }
