@@ -150,7 +150,7 @@ public class AnalyzeByXPath {
             rules = rule.split("\\|\\|");
             elementsType = "|";
         }
-        if (rule.length() == 1) {
+        if (rules.length == 1) {
             Object object = jxDocument.selOne(rule);
             result = object instanceof Element ? ((Element) object).html() : (String) object;
             if (!TextUtils.isEmpty(result)) {
