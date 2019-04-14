@@ -244,7 +244,7 @@ public class AnalyzeByJSoup {
     /**
      * 获取一个字符串
      **/
-    String getResultUrl(String ruleStr) {
+    String getResult0(String ruleStr) {
         List<String> urlList = getAllResultList(ruleStr);
         if (!urlList.isEmpty()) {
             return urlList.get(0);

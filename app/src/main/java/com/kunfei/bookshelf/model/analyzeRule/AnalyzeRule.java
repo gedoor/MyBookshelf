@@ -210,7 +210,7 @@ public class AnalyzeRule {
                         break;
                     case Default:
                         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
-                            result = getAnalyzeByJSoup(result).getResultUrl(rule.rule);
+                            result = getAnalyzeByJSoup(result).getResult0(rule.rule);
                         } else {
                             result = getAnalyzeByJSoup(result).getResult(rule.rule);
                         }
