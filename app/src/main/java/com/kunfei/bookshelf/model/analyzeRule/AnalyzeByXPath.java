@@ -86,28 +86,92 @@ public class AnalyzeByXPath {
     }
 
     List<String> getStringList(String xPath) {
-        String result;
-        List<String> stringList = new ArrayList<>();
-        List<Object> objects = jxDocument.sel(xPath);
-        for (Object object : objects) {
-            if (object instanceof String) {
-                result = (String) object;
-                stringList.add(result);
+        List<String> result = new ArrayList<>();
+        String elementsType;
+        String rules[];
+        if (xPath.contains("&&")) {
+            rules = xPath.split("&&");
+            elementsType = "&";
+        } else if (xPath.contains("%%")) {
+            rules = xPath.split("%%");
+            elementsType = "%";
+        } else {
+            rules = xPath.split("\\|\\|");
+            elementsType = "|";
+        }
+        if (rules.length == 1) {
+            List<Object> objects = jxDocument.sel(xPath);
+            for (Object object : objects) {
+                if (object instanceof String) {
+                    result.add((String) object);
+                }
+            }
+            return result;
+        } else {
+            List<List<String>> results = new ArrayList<>();
+            for (String rl : rules) {
+                List<String> temp = getStringList(rl);
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (temp.size() > 0 && elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            if (results.size() > 0) {
+                switch (elementsType) {
+                    case "%":
+                        for (int i = 0; i < results.get(0).size(); i++) {
+                            for (List<String> temp : results) {
+                                if (i < temp.size()) {
+                                    result.add(temp.get(i));
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        for (List<String> temp : results) {
+                            result.addAll(temp);
+                        }
+                }
             }
         }
-        return stringList;
+        return result;
     }
 
     public String getString(String rule) {
         String result;
-        Object object = jxDocument.selOne(rule);
-        result = object instanceof Element ? ((Element) object).html() : (String) object;
-        if (!TextUtils.isEmpty(result)){
-            result = result
-                    .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
-                    .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
-                    .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
+        String rules[];
+        String elementsType;
+        if (rule.contains("&&")) {
+            rules = rule.split("&&");
+            elementsType = "&";
+        } else {
+            rules = rule.split("\\|\\|");
+            elementsType = "|";
         }
-        return result;
+        if (rule.length() == 1) {
+            Object object = jxDocument.selOne(rule);
+            result = object instanceof Element ? ((Element) object).html() : (String) object;
+            if (!TextUtils.isEmpty(result)) {
+                result = result
+                        .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
+                        .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
+                        .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
+            }
+            return result;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (String rl : rules) {
+                String temp = getString(rl);
+                if (!TextUtils.isEmpty(temp)) {
+                    sb.append(temp);
+                    if (elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            return sb.toString();
+        }
     }
 }

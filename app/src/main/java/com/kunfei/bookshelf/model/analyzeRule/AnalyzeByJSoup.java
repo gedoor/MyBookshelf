@@ -33,8 +33,112 @@ public class AnalyzeByJSoup {
         return this;
     }
 
+    /**
+     * 获取列表
+     */
     Elements getElements(String rule) {
         return getElements(element, rule);
+    }
+
+    /**
+     * 合并内容列表,得到内容
+     */
+    String getString(String ruleStr) {
+        if (isEmpty(ruleStr)) {
+            return null;
+        }
+        List<String> textS = getStringList(ruleStr);
+        if (textS.size() == 0) {
+            return null;
+        }
+        return StringUtils.join("\n", textS).trim();
+    }
+
+    /**
+     * 获取一个字符串
+     **/
+    String getString0(String ruleStr) {
+        List<String> urlList = getStringList(ruleStr);
+        if (!urlList.isEmpty()) {
+            return urlList.get(0);
+        }
+        return "";
+    }
+
+    /**
+     * 获取所有内容列表
+     */
+    List<String> getStringList(String ruleStr) {
+        List<String> textS = new ArrayList<>();
+        if (isEmpty(ruleStr)) {
+            return textS;
+        }
+        //拆分规则
+        SourceRule sourceRule = new SourceRule(ruleStr);
+        if (isEmpty(sourceRule.elementsRule)) {
+            textS.add(element.data());
+        } else {
+            String elementsType;
+            String ruleStrS[];
+            if (sourceRule.elementsRule.contains("&")) {
+                elementsType = "&";
+                ruleStrS = sourceRule.elementsRule.split("&+");
+            } else if (sourceRule.elementsRule.contains("%%")) {
+                elementsType = "%";
+                ruleStrS = sourceRule.elementsRule.split("%%");
+            } else {
+                elementsType = "|";
+                if (sourceRule.isCss) {
+                    ruleStrS = sourceRule.elementsRule.split("\\|\\|");
+                } else {
+                    ruleStrS = sourceRule.elementsRule.split("\\|+");
+                }
+            }
+            List<List<String>> results = new ArrayList<>();
+            for (String ruleStrX : ruleStrS) {
+                List<String> temp;
+                if (sourceRule.isCss) {
+                    int lastIndex = ruleStrX.lastIndexOf('@');
+                    temp = getResultLast(element.select(ruleStrX.substring(0, lastIndex)), ruleStrX.substring(lastIndex + 1));
+                } else {
+                    temp = getResultList(ruleStrX);
+                }
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (!results.isEmpty() && elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            if (results.size() > 0) {
+                switch (elementsType) {
+                    case "%":
+                        for (int i = 0; i < results.get(0).size(); i++) {
+                            for (List<String> temp : results) {
+                                if (i < temp.size()) {
+                                    textS.add(temp.get(i));
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        for (List<String> temp : results) {
+                            textS.addAll(temp);
+                        }
+                }
+            }
+        }
+        if (!isEmpty(sourceRule.replaceRegex)) {
+            List<String> tempList = new ArrayList<>(textS);
+            textS.clear();
+            for (String text : tempList) {
+                text = text.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
+                if (text.length() > 0) {
+                    textS.add(text);
+                }
+            }
+        }
+        return textS;
     }
 
     /**
@@ -63,7 +167,7 @@ public class AnalyzeByJSoup {
             }
         }
         List<Elements> elementsList = new ArrayList<>();
-        if(sourceRule.isCss){
+        if (sourceRule.isCss) {
             for (String ruleStr : ruleStrS) {
                 Elements tempS = temp.select(ruleStr);
                 elementsList.add(tempS);
@@ -225,93 +329,6 @@ public class AnalyzeByJSoup {
         } catch (Exception ignore) {
         }
         return elements;
-    }
-
-    /**
-     * 合并内容列表,得到内容
-     */
-    String getResult(String ruleStr) {
-        if (isEmpty(ruleStr)) {
-            return null;
-        }
-        List<String> textS = getAllResultList(ruleStr);
-        if (textS.size() == 0) {
-            return null;
-        }
-        return StringUtils.join("\n", textS).trim();
-    }
-
-    /**
-     * 获取一个字符串
-     **/
-    String getResult0(String ruleStr) {
-        List<String> urlList = getAllResultList(ruleStr);
-        if (!urlList.isEmpty()) {
-            return urlList.get(0);
-        }
-        return "";
-    }
-
-    /**
-     * 获取所有内容列表
-     */
-    List<String> getAllResultList(String ruleStr) {
-        List<String> textS = new ArrayList<>();
-        if (isEmpty(ruleStr)) {
-            return textS;
-        }
-        //拆分规则
-        SourceRule sourceRule = new SourceRule(ruleStr);
-        if (isEmpty(sourceRule.elementsRule)) {
-            textS.add(element.data());
-        } else {
-            boolean isAnd;
-            String ruleStrS[];
-            if (sourceRule.elementsRule.contains("&")) {
-                isAnd = true;
-                ruleStrS = sourceRule.elementsRule.split("&+");
-            } else {
-                isAnd = false;
-                if (sourceRule.isCss) {
-                    ruleStrS = sourceRule.elementsRule.split("\\|\\|");
-                } else {
-                    ruleStrS = sourceRule.elementsRule.split("\\|+");
-                }
-            }
-            if(sourceRule.isCss){
-                    for (String ruleStrX : ruleStrS) {
-                    int lastIndex = ruleStrX.lastIndexOf('@');
-                    List<String> temp = getResultLast(element.select(ruleStrX.substring(0, lastIndex)), ruleStrX.substring(lastIndex + 1));
-                    if (temp != null) {
-                        textS.addAll(temp);
-                    }
-                    if (textS.size() > 0 && !isAnd) {
-                        break;
-                    }
-                }
-            } else {
-                for (String ruleStrX : ruleStrS) {
-                    List<String> temp = getResultList(ruleStrX);
-                    if (temp != null) {
-                        textS.addAll(temp);
-                    }
-                    if (textS.size() > 0 && !isAnd) {
-                        break;
-                    }
-                }
-            }
-        }
-        if (!isEmpty(sourceRule.replaceRegex)) {
-            List<String> tempList = new ArrayList<>(textS);
-            textS.clear();
-            for (String text : tempList) {
-                text = text.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
-                if (text.length() > 0) {
-                    textS.add(text);
-                }
-            }
-        }
-        return textS;
     }
 
     /**

@@ -24,7 +24,7 @@ public class AnalyzeByJSonPath {
         return this;
     }
 
-    public String read(String rule) {
+    public String getString(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
         String result = "";
         String rules[];
@@ -56,14 +56,14 @@ public class AnalyzeByJSonPath {
                 result = rule;
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
+                    result = result.replace(String.format("{%s}", matcher.group()), getString(matcher.group()));
                 }
                 return result;
             }
         } else {
             StringBuilder sb = new StringBuilder();
             for (String rl : rules) {
-                String temp = read(rl);
+                String temp = getString(rl);
                 if (!TextUtils.isEmpty(temp)) {
                     sb.append(temp);
                     if (elementsType.equals("|")) {
@@ -75,7 +75,7 @@ public class AnalyzeByJSonPath {
         }
     }
 
-    List<String> readStringList(String rule) {
+    List<String> getStringList(String rule) {
         List<String> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
         String rules[];
@@ -83,6 +83,9 @@ public class AnalyzeByJSonPath {
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
+        } else if (rule.contains("%%")) {
+            rules = rule.split("%%");
+            elementsType = "%";
         } else {
             rules = rule.split("\\|\\|");
             elementsType = "|";
@@ -104,7 +107,7 @@ public class AnalyzeByJSonPath {
             } else {
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    List<String> stringList = readStringList(matcher.group());
+                    List<String> stringList = getStringList(matcher.group());
                     for (String s : stringList) {
                         result.add(rule.replace(String.format("{%s}", matcher.group()), s));
                     }
@@ -112,20 +115,38 @@ public class AnalyzeByJSonPath {
                 return result;
             }
         } else {
+            List<List<String>> results = new ArrayList<>();
             for (String rl : rules) {
-                List<String> temp = readStringList(rl);
-                if (!temp.isEmpty()) {
-                    result.addAll(temp);
-                    if (elementsType.equals("|")) {
+                List<String> temp = getStringList(rl);
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (temp.size() > 0 && elementsType.equals("|")) {
                         break;
                     }
+                }
+            }
+            if (results.size() > 0) {
+                switch (elementsType) {
+                    case "%":
+                        for (int i = 0; i < results.get(0).size(); i++) {
+                            for (List<String> temp : results) {
+                                if (i < temp.size()) {
+                                    result.add(temp.get(i));
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        for (List<String> temp : results) {
+                            result.addAll(temp);
+                        }
                 }
             }
             return result;
         }
     }
 
-    List<Object> readList(String rule) {
+    List<Object> getList(String rule) {
         List<Object> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
         String elementsType;
@@ -149,7 +170,7 @@ public class AnalyzeByJSonPath {
         } else {
             List<List> results = new ArrayList<>();
             for (String rl : rules) {
-                List temp = readList(rl);
+                List temp = getList(rl);
                 if (temp != null && !temp.isEmpty()) {
                     results.add(temp);
                     if (temp.size() > 0 && elementsType.equals("|")) {

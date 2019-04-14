@@ -153,13 +153,13 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, baseUrl);
                     break;
                 case JSon:
-                    result = getAnalyzeByJSonPath(result).readStringList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
                     break;
                 case XPath:
                     result = getAnalyzeByXPath(result).getStringList(rule.rule);
                     break;
                 default:
-                    result = getAnalyzeByJSoup(result).getAllResultList(rule.rule);
+                    result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
         }
         if (result == null) return new ArrayList<>();
@@ -203,16 +203,16 @@ public class AnalyzeRule {
                         result = evalJS(rule.rule, result, baseUrl);
                         break;
                     case JSon:
-                        result = getAnalyzeByJSonPath(result).read(rule.rule);
+                        result = getAnalyzeByJSonPath(result).getString(rule.rule);
                         break;
                     case XPath:
                         result = getAnalyzeByXPath(result).getString(rule.rule);
                         break;
                     case Default:
                         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
-                            result = getAnalyzeByJSoup(result).getResult0(rule.rule);
+                            result = getAnalyzeByJSoup(result).getString0(rule.rule);
                         } else {
-                            result = getAnalyzeByJSoup(result).getResult(rule.rule);
+                            result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
             }
@@ -237,7 +237,7 @@ public class AnalyzeRule {
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).getList(rule.rule);
                     break;
                 case XPath:
                     result = getAnalyzeByXPath(result).getElements(rule.rule);
