@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class Debug {
     @SuppressLint("ConstantLocale")
-    public static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("mm:ss.SSS", Locale.getDefault());
+    public static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
 
     static void printLog(String tag, String msg) {
         if (Objects.equals(SourceDebugActivity.DEBUG_TAG, tag)) {
