@@ -104,6 +104,7 @@ class BookList {
         analyzer.setBook(item);
         String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
         if (!TextUtils.isEmpty(bookName)) {
+            item.setSearchUrl(baseUrl);
             item.setNoteUrl(baseUrl);
             item.setTag(tag);
             item.setOrigin(name);
@@ -122,6 +123,7 @@ class BookList {
         analyzer.setBook(item);
         String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
         if (!TextUtils.isEmpty(bookName)) {
+            item.setSearchUrl(baseUrl);
             item.setTag(tag);
             item.setOrigin(name);
             item.setName(bookName);

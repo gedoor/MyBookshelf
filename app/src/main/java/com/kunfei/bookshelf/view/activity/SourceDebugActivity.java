@@ -165,6 +165,7 @@ public class SourceDebugActivity extends MBaseActivity {
                     public void onNext(List<SearchBookBean> searchBookBeans) {
                         tvContent.setText(getString(R.string.get_book_list_success, searchBookBeans.size()));
                         SearchBookBean searchBookBean = searchBookBeans.get(0);
+                        tvContent.setText(String.format("%s\n%s 搜索地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getSearchUrl()));
                         tvContent.setText(String.format("%s\n%s 书名:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getName()));
                         tvContent.setText(String.format("%s\n%s 作者:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getAuthor()));
                         tvContent.setText(String.format("%s\n%s 分类:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getKind()));

@@ -38,6 +38,8 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     private String variable;
 
     @Transient
+    private String searchUrl;
+    @Transient
     private Boolean isCurrentSource = false;
     @Transient
     private int originNum = 1;
@@ -74,6 +76,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         upTime = in.readLong();
         originUrls = in.createStringArrayList();
         variable = in.readString();
+        searchUrl = in.readString();
     }
 
     @Generated(hash = 1344440211)
@@ -115,6 +118,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         dest.writeLong(upTime);
         dest.writeStringList(originUrls);
         dest.writeString(variable);
+        dest.writeString(searchUrl);
     }
 
     @Override
@@ -328,5 +332,13 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
 
     public void setUpTime(Long upTime) {
         this.upTime = upTime;
+    }
+
+    public String getSearchUrl() {
+        return searchUrl;
+    }
+
+    public void setSearchUrl(String searchUrl) {
+        this.searchUrl = searchUrl;
     }
 }
