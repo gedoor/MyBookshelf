@@ -14,12 +14,12 @@ import java.util.Objects;
 
 public class Debug {
     @SuppressLint("ConstantLocale")
-    private static final DateFormat dateFormat = new SimpleDateFormat("mm:ss.SSS", Locale.getDefault());
+    public static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("mm:ss.SSS", Locale.getDefault());
 
-    public static void printLog(String tag, String msg) {
+    static void printLog(String tag, String msg) {
         if (Objects.equals(SourceDebugActivity.DEBUG_TAG, tag)) {
             if (!Objects.equals(msg, "\n")) {
-                msg = String.format("%s %s", TimeUtils.getNowString(dateFormat), msg);
+                msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
             }
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }

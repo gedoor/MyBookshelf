@@ -43,7 +43,7 @@ class BookContent {
     Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error)));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error) + chapterBean.getDurChapterUrl()));
                 return;
             }
 
@@ -52,7 +52,8 @@ class BookContent {
                 e.onComplete();
                 return;
             }
-
+            Debug.printLog(tag, "获取内容网页成功");
+            Debug.printLog(tag, "网址:" + chapterBean.getDurChapterUrl());
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
@@ -101,9 +102,9 @@ class BookContent {
 
         AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s, chapterUrl);
-
+        Debug.printLog(tag, "开始解析正文");
         webContentBean.content = analyzer.getString(ruleBookContent);
-
+        Debug.printLog(tag, "正文:" + webContentBean.content);
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {
             webContentBean.nextUrl = analyzer.getString(nextUrlRule, true);
