@@ -9,6 +9,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
@@ -16,6 +20,7 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -74,15 +79,17 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RxBus.get().register(this);
     }
 
     @Override
     protected void onDestroy() {
         DEBUG_TAG = null;
-        super.onDestroy();
+        RxBus.get().unregister(this);
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
+        super.onDestroy();
     }
 
     /**
@@ -165,16 +172,7 @@ public class SourceDebugActivity extends MBaseActivity {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void onNext(List<SearchBookBean> searchBookBeans) {
-                        tvContent.setText(getString(R.string.get_book_list_success, searchBookBeans.size()));
                         SearchBookBean searchBookBean = searchBookBeans.get(0);
-                        tvContent.setText(String.format("%s\n%s 搜索地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getSearchUrl()));
-                        tvContent.setText(String.format("%s\n%s 书名:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getName()));
-                        tvContent.setText(String.format("%s\n%s 作者:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getAuthor()));
-                        tvContent.setText(String.format("%s\n%s 分类:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getKind()));
-                        tvContent.setText(String.format("%s\n%s 简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getIntroduce()));
-                        tvContent.setText(String.format("%s\n%s 封面地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getCoverUrl()));
-                        tvContent.setText(String.format("%s\n%s 最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getLastChapter()));
-                        tvContent.setText(String.format("%s\n%s 书籍地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getNoteUrl()));
                         if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
                             bookInfoDebug(BookshelfHelp.getBookFromSearchBook(searchBookBean));
                         } else {
@@ -296,6 +294,11 @@ public class SourceDebugActivity extends MBaseActivity {
                         loading.stop();
                     }
                 });
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
+    public void printDebugLog(String msg) {
+        tvContent.setText(String.format("%s\n%s", tvContent.getText(), msg));
     }
 
 }

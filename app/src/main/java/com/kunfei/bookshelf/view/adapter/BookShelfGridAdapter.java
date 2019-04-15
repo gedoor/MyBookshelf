@@ -27,7 +27,6 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +48,9 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
 
         @Override
         public boolean onMove(int srcPosition, int targetPosition) {
-            Collections.swap(books, srcPosition, targetPosition);
+            BookShelfBean shelfBean = books.get(srcPosition);
+            books.remove(srcPosition);
+            books.add(targetPosition, shelfBean);
             notifyItemMoved(srcPosition, targetPosition);
             int start = srcPosition;
             int end = targetPosition;
@@ -98,6 +99,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         BookShelfBean bookShelfBean = books.get(index);
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         holder.tvName.setText(bookInfoBean.getName());
+        holder.tvName.setBackgroundColor(ThemeStore.backgroundColor(activity));
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 Glide.with(activity).load(bookInfoBean.getCoverUrl())

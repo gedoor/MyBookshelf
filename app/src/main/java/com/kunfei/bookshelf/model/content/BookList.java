@@ -42,6 +42,8 @@ class BookList {
             if (TextUtils.isEmpty(response.body())) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_web_content_error, baseUrl)));
                 return;
+            } else {
+                Debug.printLog(tag, "搜索网站获取成功");
             }
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
@@ -54,6 +56,7 @@ class BookList {
             //如果符合详情页url规则
             if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
+                Debug.printLog(tag, "搜索结果为详情页");
                 SearchBookBean item = getItem(analyzer, baseUrl);
                 if (item != null) {
                     books.add(item);
@@ -72,12 +75,13 @@ class BookList {
                 //获取列表
                 collections = analyzer.getElements(ruleSearchList);
                 if (collections.size() == 0) {
-                    // 搜索列表为空时,当做详情页处理
+                    Debug.printLog(tag, "搜索列表为空,当做详情页处理");
                     SearchBookBean item = getItem(analyzer, baseUrl);
                     if (item != null) {
                         books.add(item);
                     }
                 } else {
+                    Debug.printLog(tag, "搜索列表数量为" + collections.size());
                     for (Object object : collections) {
                         analyzer.setContent(object, baseUrl);
                         SearchBookBean item = getItemInList(analyzer, baseUrl);
@@ -105,9 +109,9 @@ class BookList {
         String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
         if (!TextUtils.isEmpty(bookName)) {
             item.setSearchUrl(baseUrl);
-            item.setNoteUrl(baseUrl);
             item.setTag(tag);
             item.setOrigin(name);
+            item.setNoteUrl(baseUrl);
             item.setName(bookName);
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
             item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
