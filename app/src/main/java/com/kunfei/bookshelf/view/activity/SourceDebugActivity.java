@@ -39,6 +39,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class SourceDebugActivity extends MBaseActivity {
+    public static String DEBUG_TAG;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.searchView)
@@ -50,7 +52,6 @@ public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.tv_content)
     TextView tvContent;
 
-    private String sourceUrl;
     private CompositeDisposable compositeDisposable;
     private DateFormat dateFormat = new SimpleDateFormat("mm:ss.SSS", Locale.getDefault());
 
@@ -77,6 +78,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     @Override
     protected void onDestroy() {
+        DEBUG_TAG = null;
         super.onDestroy();
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
@@ -120,7 +122,7 @@ public class SourceDebugActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
-        sourceUrl = getIntent().getStringExtra("sourceUrl");
+        DEBUG_TAG = getIntent().getStringExtra("sourceUrl");
         initSearchView();
     }
 
@@ -146,13 +148,13 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
-        if (TextUtils.isEmpty(sourceUrl)) return;
+        if (TextUtils.isEmpty(DEBUG_TAG)) return;
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        WebBookModel.getInstance().searchBook(key, 1, sourceUrl)
+        WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
                     @Override
@@ -295,4 +297,5 @@ public class SourceDebugActivity extends MBaseActivity {
                     }
                 });
     }
+
 }
