@@ -271,8 +271,9 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
+        bookShelf = bookShelfBean;
         mView.updateView();
     }
 }
