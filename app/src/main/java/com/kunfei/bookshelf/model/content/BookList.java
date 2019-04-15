@@ -134,7 +134,7 @@ class BookList {
             Debug.printLog(tag, "分类:" + item.getKind());
             Debug.printLog(tag, "开始获取最新章节");
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
-            Debug.printLog(tag, "最新章节" + item.getLastChapter());
+            Debug.printLog(tag, "最新章节:" + item.getLastChapter());
             Debug.printLog(tag, "开始获取简介");
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
             Debug.printLog(tag, "简介:" + item.getIntroduce());
@@ -161,17 +161,17 @@ class BookList {
             Debug.printLog(tag, "分类:" + item.getKind());
             Debug.printLog(tag, "开始获取最新章节");
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-            Debug.printLog(tag, "最新章节" + item.getLastChapter());
+            Debug.printLog(tag, "最新章节:" + item.getLastChapter());
             Debug.printLog(tag, "开始获取封面");
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), true));
             Debug.printLog(tag, "封面:" + item.getCoverUrl());
             Debug.printLog(tag, "开始获取简介");
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
             Debug.printLog(tag, "简介:" + item.getIntroduce());
-            Debug.printLog(tag, "开始获取书箱网址");
+            Debug.printLog(tag, "开始获取书籍网址");
             String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), true);
             item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
-            Debug.printLog(tag, "书箱网址:" + item.getNoteUrl());
+            Debug.printLog(tag, "书籍网址:" + item.getNoteUrl());
             return item;
         }
         return null;

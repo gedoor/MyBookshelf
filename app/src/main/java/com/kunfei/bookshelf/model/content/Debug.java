@@ -18,9 +18,7 @@ public class Debug {
 
     static void printLog(String tag, String msg) {
         if (Objects.equals(SourceDebugActivity.DEBUG_TAG, tag)) {
-            if (!Objects.equals(msg, "\n")) {
-                msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
-            }
+            msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }
     }
