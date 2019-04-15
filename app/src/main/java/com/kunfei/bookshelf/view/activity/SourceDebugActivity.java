@@ -20,10 +20,14 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -48,6 +52,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private String sourceUrl;
     private CompositeDisposable compositeDisposable;
+    private DateFormat dateFormat = new SimpleDateFormat("mm:ss.SSS", Locale.getDefault());
 
     public static void startThis(Context context, String sourceUrl) {
         if (TextUtils.isEmpty(sourceUrl)) return;
@@ -147,7 +152,7 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
+        WebBookModel.getInstance().searchBook(key, 1, sourceUrl)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
                     @Override
@@ -160,13 +165,13 @@ public class SourceDebugActivity extends MBaseActivity {
                     public void onNext(List<SearchBookBean> searchBookBeans) {
                         tvContent.setText(getString(R.string.get_book_list_success, searchBookBeans.size()));
                         SearchBookBean searchBookBean = searchBookBeans.get(0);
-                        tvContent.setText(String.format("%s\n书名:%s", tvContent.getText(), searchBookBean.getName()));
-                        tvContent.setText(String.format("%s\n作者:%s", tvContent.getText(), searchBookBean.getAuthor()));
-                        tvContent.setText(String.format("%s\n分类:%s", tvContent.getText(), searchBookBean.getKind()));
-                        tvContent.setText(String.format("%s\n简介:%s", tvContent.getText(), searchBookBean.getOrigin()));
-                        tvContent.setText(String.format("%s\n封面地址:%s", tvContent.getText(), searchBookBean.getCoverUrl()));
-                        tvContent.setText(String.format("%s\n最新章节:%s", tvContent.getText(), searchBookBean.getLastChapter()));
-                        tvContent.setText(String.format("%s\n书籍地址:%s", tvContent.getText(), searchBookBean.getNoteUrl()));
+                        tvContent.setText(String.format("%s\n%s 书名:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getName()));
+                        tvContent.setText(String.format("%s\n%s 作者:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getAuthor()));
+                        tvContent.setText(String.format("%s\n%s 分类:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getKind()));
+                        tvContent.setText(String.format("%s\n%s 简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getOrigin()));
+                        tvContent.setText(String.format("%s\n%s 封面地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getCoverUrl()));
+                        tvContent.setText(String.format("%s\n%s 最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getLastChapter()));
+                        tvContent.setText(String.format("%s\n%s 书籍地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getNoteUrl()));
                         if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
                             bookInfoDebug(BookshelfHelp.getBookFromSearchBook(searchBookBean));
                         } else {
@@ -199,16 +204,16 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        tvContent.setText(String.format("%s\n最新章节:%s", tvContent.getText(), bookShelfBean.getLastChapterName()));
-                        tvContent.setText(String.format("%s\n封面:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getCoverUrl()));
-                        tvContent.setText(String.format("%s\n简介:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getIntroduce()));
-                        tvContent.setText(String.format("%s\n目录地址:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getChapterUrl()));
+                        tvContent.setText(String.format("%s\n%s最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getLastChapterName()));
+                        tvContent.setText(String.format("%s\n%s封面:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getCoverUrl()));
+                        tvContent.setText(String.format("%s\n%s简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getIntroduce()));
+                        tvContent.setText(String.format("%s\n%s目录地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getChapterUrl()));
                         bookChapterListDebug(bookShelfBean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载书籍信息错误:%s", tvContent.getText(), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s加载书籍信息错误:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), e.getMessage()));
                         loading.stop();
                     }
 
@@ -231,11 +236,11 @@ public class SourceDebugActivity extends MBaseActivity {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        tvContent.setText(String.format("%s\n获取目录数量:%d", tvContent.getText(), bookShelfBean.getChapterList().size()));
+                        tvContent.setText(String.format("%s\n%s 获取目录数量:%d", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getChapterList().size()));
                         if (bookShelfBean.getChapterList().size() > 0) {
                             ChapterListBean chapterListBean = bookShelfBean.getChapter(0);
-                            tvContent.setText(String.format("%s\n章节名称:%s", tvContent.getText(), chapterListBean.getDurChapterName()));
-                            tvContent.setText(String.format("%s\n章节地址:%s", tvContent.getText(), chapterListBean.getDurChapterUrl()));
+                            tvContent.setText(String.format("%s\n%s 章节名称:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), chapterListBean.getDurChapterName()));
+                            tvContent.setText(String.format("%s\n%s 章节地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), chapterListBean.getDurChapterUrl()));
                             if (!TextUtils.isEmpty(chapterListBean.getDurChapterUrl())) {
                                 bookContentDebug(chapterListBean, bookShelfBean.getBookInfoBean().getName());
                             } else {
@@ -248,7 +253,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载目录错误:%s", tvContent.getText(), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s 加载目录错误:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), e.getMessage()));
                         loading.stop();
                     }
 
@@ -270,12 +275,12 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onNext(BookContentBean bookContentBean) {
-                        tvContent.setText(String.format("%s\n正文:%s", tvContent.getText(), bookContentBean.getDurChapterContent()));
+                        tvContent.setText(String.format("%s\n%s 正文:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookContentBean.getDurChapterContent()));
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载正文错误:%s", tvContent.getText(), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s 加载正文错误:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), e.getMessage()));
                         loading.stop();
                     }
 

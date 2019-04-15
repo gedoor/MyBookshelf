@@ -1,9 +1,9 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.kunfei.bookshelf.constant.EngineHelper;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
 
@@ -16,10 +16,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 /**
  * Created by GKF on 2018/1/24.
@@ -39,7 +42,7 @@ public class AnalyzeUrl {
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
-    AnalyzeUrl(String urlRule) throws Exception {
+    public AnalyzeUrl(String urlRule) throws Exception {
         this(urlRule, null, null, null, null);
     }
 
@@ -47,6 +50,7 @@ public class AnalyzeUrl {
         this(urlRule, null, null, headerMapF, baseUrl);
     }
 
+    @SuppressLint("DefaultLocale")
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
         this.hostUrl = baseUrl;
         //解析Header
@@ -61,13 +65,16 @@ public class AnalyzeUrl {
         if (page != null) {
             ruleUrl = analyzePage(ruleUrl, page);
         }
+        //替换js
+        ruleUrl = replaceJs(ruleUrl, baseUrl);
+        //执行规则列表
         List<String> ruleList = splitRule(ruleUrl);
         for (String rule : ruleList) {
             if (rule.startsWith("<js>")) {
                 rule = rule.substring(4, rule.lastIndexOf("<"));
                 ruleUrl = (String) evalJS(rule, ruleUrl);
             } else {
-                ruleUrl = rule;
+                ruleUrl = rule.replace("@result", ruleUrl);
             }
         }
         //分离post参数
@@ -146,6 +153,35 @@ public class AnalyzeUrl {
     }
 
     /**
+     * 替换js
+     */
+    private String replaceJs(String ruleUrl, String baseUrl) throws ScriptException {
+        if(ruleUrl.contains("{{") && ruleUrl.contains("}}")){
+            Object jsEval;
+            StringBuffer sb = new StringBuffer(ruleUrl.length());
+            SimpleBindings simpleBindings = new SimpleBindings(){{
+                this.put("baseUrl", baseUrl);
+            }};
+            Matcher expMatcher = EXP_PATTERN.matcher(ruleUrl);
+            while (expMatcher.find()){
+                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1),simpleBindings);
+                if(jsEval instanceof String){
+                    expMatcher.appendReplacement(sb,(String) jsEval);
+                }
+                else if(jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0){
+                    expMatcher.appendReplacement(sb,String.format("%.0f",(Double) jsEval));
+                }
+                else {
+                    expMatcher.appendReplacement(sb,String.valueOf(jsEval));
+                }
+            }
+            expMatcher.appendTail(sb);
+            ruleUrl = sb.toString();
+        }
+        return ruleUrl;
+    }
+
+    /**
      * 解析QueryMap
      */
     private void analyzeQuery(String allQuery) throws Exception {
@@ -166,16 +202,6 @@ public class AnalyzeUrl {
                 queryMap.put(queryM[0], URLEncoder.encode(value, charCode));
             }
         }
-    }
-
-    /**
-     * 执行JS
-     */
-    private Object evalJS(String jsStr, Object result) throws Exception {
-        SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", this);
-        bindings.put("result", result);
-        return EngineHelper.INSTANCE.eval(jsStr, bindings);
     }
 
     /**
@@ -205,6 +231,9 @@ public class AnalyzeUrl {
         return ruleList;
     }
 
+    /**
+     * 分解URL
+     */
     private void generateUrlPath(String ruleUrl) {
         String baseUrl = StringUtils.getBaseUrl(ruleUrl);
         if (baseUrl == null && hostUrl != null) {
@@ -215,6 +244,15 @@ public class AnalyzeUrl {
             hostUrl = StringUtils.getBaseUrl(ruleUrl);
             urlPath = ruleUrl.substring(hostUrl.length());
         }
+    }
+
+    /**
+     * 执行JS
+     */
+    private Object evalJS(String jsStr, Object result) throws Exception {
+        SimpleBindings bindings = new SimpleBindings();
+        bindings.put("result", result);
+        return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
     public String getHost() {

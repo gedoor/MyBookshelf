@@ -41,7 +41,7 @@ class BookInfo {
             bookInfoBean.setTag(tag);
 
             AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
-            analyzer.setContent(s);
+            analyzer.setContent(s, bookShelfBean.getNoteUrl());
 
             if (isEmpty(bookInfoBean.getName())) {
                 result = analyzer.getString(bookSourceBean.getRuleBookName());
@@ -53,7 +53,7 @@ class BookInfo {
                 bookInfoBean.setAuthor(FormatWebText.getAuthor(result));
             }
 
-            result = analyzer.getString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
+            result = analyzer.getString(bookSourceBean.getRuleCoverUrl(), true);
             if (!isEmpty(result)) {
                 bookInfoBean.setCoverUrl(result);
             }
@@ -68,7 +68,7 @@ class BookInfo {
                 bookShelfBean.setLastChapterName(result);
             }
 
-            result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), bookShelfBean.getNoteUrl());
+            result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), true);
             if (!isEmpty(result)) {
                 bookInfoBean.setChapterUrl(result);
             }else{

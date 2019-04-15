@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.help.FormatWebText;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeCollection;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -46,7 +45,7 @@ class BookList {
             }
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
-            analyzer.setContent(response.body());
+            analyzer.setContent(response.body(), baseUrl);
 
             String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
@@ -60,7 +59,7 @@ class BookList {
                     books.add(item);
                 }
             } else {
-                AnalyzeCollection collections;
+                List<Object> collections;
                 boolean reverse;
                 String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
@@ -79,8 +78,8 @@ class BookList {
                         books.add(item);
                     }
                 } else {
-                    while (collections.hasNext()) {
-                        collections.next(analyzer);
+                    for (Object object : collections) {
+                        analyzer.setContent(object, baseUrl);
                         SearchBookBean item = getItemInList(analyzer, baseUrl);
                         if (item != null) {
                             books.add(item);
@@ -109,7 +108,7 @@ class BookList {
             item.setTag(tag);
             item.setOrigin(name);
             item.setName(bookName);
-            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), baseUrl));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
             item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
@@ -129,9 +128,9 @@ class BookList {
             item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), true));
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
+            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), true);
             item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
             return item;
         }

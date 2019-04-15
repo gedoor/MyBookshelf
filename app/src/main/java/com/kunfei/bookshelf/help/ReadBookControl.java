@@ -300,7 +300,7 @@ public class ReadBookControl {
     }
 
     private boolean getIsNightTheme() {
-        return preferences.getBoolean("nightTheme", false);
+        return MApplication.getInstance().isNightTheme();
     }
 
     public boolean getImmersionStatusBar() {

@@ -1,22 +1,29 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- 亮色主题 -->
     <style name="CAppTheme" parent="Base.AppTheme">
         <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Light</item>
     </style>
 
+    <!-- 暗色主题 -->
     <style name="CAppThemeBarDark" parent="Base.AppTheme">
         <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Dark</item>
     </style>
 
-    <style name="CAppTransparentTheme" parent="CAppTheme">
-        <!-- Customize your theme here. -->
+    <!-- 透明主题 -->
+    <style name="CAppTransparentTheme" parent="Base.AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- Welcome主题 -->
+    <style name="CAppWelcomeTheme" parent="Base.AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- Base application theme. -->
     <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

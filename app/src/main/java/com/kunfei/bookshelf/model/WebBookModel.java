@@ -11,10 +11,8 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.model.content.DefaultModel;
-import com.kunfei.bookshelf.model.impl.IStationBookModel;
+import com.kunfei.bookshelf.model.content.WebBook;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -25,95 +23,51 @@ public class WebBookModel {
         return new WebBookModel();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * 网络请求并解析书籍信息
      * return BookShelfBean
      */
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
-        IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
-        if (bookModel != null) {
-            return bookModel.getBookInfo(bookShelfBean);
-        } else {
-            return null;
-        }
+        return WebBook.getInstance(bookShelfBean.getTag())
+                .getBookInfo(bookShelfBean);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 网络解析图书目录
      * return BookShelfBean
      */
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
-        IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
-        if (bookModel != null) {
-            return bookModel.getChapterList(bookShelfBean)
-                    .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
-        } else {
-            return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName() + "没有书源"));
-        }
+        return WebBook.getInstance(bookShelfBean.getTag())
+                .getChapterList(bookShelfBean)
+                .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 章节缓存
      */
     public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean, String bookName) {
-        IStationBookModel bookModel = getBookSourceModel(chapterBean.getTag());
-        if (bookModel != null) {
-            return bookModel.getBookContent(chapterBean)
-                    .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
-        } else
-            return Observable.create(e -> {
-                e.onError(new Throwable("没有找到书源"));
-                e.onComplete();
-            });
+        return WebBook.getInstance(chapterBean.getTag())
+                .getBookContent(chapterBean)
+                .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
     }
 
     /**
-     * 其他站点集合搜索
+     * 搜索
      */
-    public Observable<List<SearchBookBean>> searchOtherBook(String content, int page, String tag) {
-        //获取所有书源类
-        IStationBookModel bookModel = getBookSourceModel(tag);
-        if (bookModel != null) {
-            return bookModel.searchBook(content, page);
-        } else {
-            return Observable.create(e -> {
-                e.onNext(new ArrayList<>());
-                e.onComplete();
-            });
-        }
+    public Observable<List<SearchBookBean>> searchBook(String content, int page, String tag) {
+        return WebBook.getInstance(tag).searchBook(content, page);
     }
 
     /**
      * 发现页
      */
     public Observable<List<SearchBookBean>> findBook(String url, int page, String tag) {
-        IStationBookModel bookModel = getBookSourceModel(tag);
-        if (bookModel != null) {
-            return bookModel.findBook(url, page);
-        } else {
-            return Observable.create(e -> {
-                e.onNext(new ArrayList<>());
-                e.onComplete();
-            });
-        }
+        return WebBook.getInstance(tag).findBook(url, page);
     }
 
-    //获取book source class
-    private IStationBookModel getBookSourceModel(String tag) {
-        switch (tag) {
-            case BookShelfBean.LOCAL_TAG:
-                return null;
-            default:
-                return DefaultModel.getInstance(tag);
-        }
-    }
-
+    /**
+     * 更新目录
+     */
     private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
@@ -140,6 +94,9 @@ public class WebBookModel {
         });
     }
 
+    /**
+     * 保存章节
+     */
     @SuppressLint("DefaultLocale")
     private Observable<BookContentBean> saveContent(String bookName, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {

@@ -449,6 +449,11 @@ public class PageView extends View {
         return mPageLoader;
     }
 
+    public void autoChangeSource() {
+        mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+        activity.autoChangeSource();
+    }
+
     public void showSnackBar(String msg) {
         activity.showSnackBar(this, msg);
     }

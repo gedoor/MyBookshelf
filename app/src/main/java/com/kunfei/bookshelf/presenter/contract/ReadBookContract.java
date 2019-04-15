@@ -69,6 +69,8 @@ public interface ReadBookContract {
 
         void changeBookSource(SearchBookBean searchBookBean);
 
+        void autoChangeSource();
+
         void saveBookmark(BookmarkBean bookmarkBean);
 
         void delBookmark(BookmarkBean bookmarkBean);

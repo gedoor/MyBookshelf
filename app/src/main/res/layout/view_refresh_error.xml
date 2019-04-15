@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clickable="true"
+    android:focusable="true"
     android:gravity="center"
-    android:focusable="true">
+    android:orientation="vertical">
+
     <TextView
         android:id="@+id/tv_error_msg"
         android:layout_width="wrap_content"
@@ -19,13 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
-        android:paddingTop="7dp"
-        android:paddingBottom="7dp"
         android:layout_marginTop="20dp"
-        android:text="@string/retry"
         android:gravity="center"
-        android:textSize="16sp"
-        android:lines="1" />
+        android:lines="1"
+        android:paddingLeft="18dp"
+        android:paddingTop="7dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="7dp"
+        android:text="@string/retry"
+        android:textSize="16sp" />
 </LinearLayout>

@@ -37,6 +37,7 @@ public interface BookSourceContract {
 
         void setResult(int resultCode);
 
+        int getSort();
     }
 
 }

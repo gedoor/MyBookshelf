@@ -95,7 +95,7 @@ public class BookInfoEditActivity extends MBaseActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("noteUrl", noteUrl);
     }
@@ -233,14 +233,16 @@ public class BookInfoEditActivity extends MBaseActivity {
     }
 
     private void saveInfo() {
-        book.getBookInfoBean().setName(tieBookName.getText().toString());
-        book.getBookInfoBean().setAuthor(tieBookAuthor.getText().toString());
-        book.getBookInfoBean().setIntroduce(tieBookJj.getText().toString());
-        book.setCustomCoverPath(tieCoverUrl.getText().toString());
-        initCover();
-        BookshelfHelp.saveBookToShelf(book);
-        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
-        SoftInputUtil.hideIMM(getCurrentFocus());
+        if (book != null) {
+            book.getBookInfoBean().setName(tieBookName.getText().toString());
+            book.getBookInfoBean().setAuthor(tieBookAuthor.getText().toString());
+            book.getBookInfoBean().setIntroduce(tieBookJj.getText().toString());
+            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+            initCover();
+            BookshelfHelp.saveBookToShelf(book);
+            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
+            SoftInputUtil.hideIMM(getCurrentFocus());
+        }
         finish();
     }
 

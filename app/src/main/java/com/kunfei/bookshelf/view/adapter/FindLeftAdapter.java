@@ -55,11 +55,11 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
         FindKindGroupBean groupBean = (FindKindGroupBean) data.get(i).getGroupData();
         myViewHolder.tvSourceName.setText(groupBean.getGroupName());
         if (i == showIndex) {
-            myViewHolder.findLeft.setBackgroundColor(context.getResources().getColor(R.color.transparent30));
+            myViewHolder.tvSourceName.setBackgroundColor(context.getResources().getColor(R.color.transparent30));
         } else {
-            myViewHolder.findLeft.setBackgroundColor(Color.TRANSPARENT);
+            myViewHolder.tvSourceName.setBackgroundColor(Color.TRANSPARENT);
         }
-        myViewHolder.findLeft.setOnClickListener(v -> {
+        myViewHolder.tvSourceName.setOnClickListener(v -> {
             if (onClickListener != null) {
                 int oldIndex = showIndex;
                 showIndex = i;
@@ -76,12 +76,10 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        View findLeft;
         TextView tvSourceName;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            findLeft = itemView.findViewById(R.id.find_left);
             tvSourceName = itemView.findViewById(R.id.tv_source_name);
         }
     }
