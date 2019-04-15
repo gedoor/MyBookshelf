@@ -205,6 +205,8 @@ public class SourceDebugActivity extends MBaseActivity {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         tvContent.setText(String.format("%s\n\n%s详情页获取成功", tvContent.getText(), TimeUtils.getNowString(dateFormat)));
+                        tvContent.setText(String.format("%s\n%s 书名:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getName()));
+                        tvContent.setText(String.format("%s\n%s 作者:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getAuthor()));
                         tvContent.setText(String.format("%s\n%s最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getLastChapterName()));
                         tvContent.setText(String.format("%s\n%s封面:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getCoverUrl()));
                         tvContent.setText(String.format("%s\n%s简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getIntroduce()));
