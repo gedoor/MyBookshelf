@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ReplaceRuleActivity;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         holder.checkBox.setText(data.get(position).getReplaceSummary());
         holder.checkBox.setChecked(data.get(position).getEnable());
         holder.checkBox.setOnClickListener((View view) -> {

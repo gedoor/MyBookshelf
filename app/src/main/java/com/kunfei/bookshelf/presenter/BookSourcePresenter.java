@@ -11,7 +11,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -52,7 +51,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
         AsyncTask.execute(() -> {
-            if (MApplication.getConfigPreferences().getInt("SourceSort", 0) == 0) {
+            if (mView.getSort() == 0) {
                 for (int i = 1; i <= bookSourceBeans.size(); i++) {
                     bookSourceBeans.get(i - 1).setSerialNumber(i);
                 }

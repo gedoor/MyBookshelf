@@ -18,6 +18,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
@@ -48,12 +49,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Activity activity = activityRef.get();
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.flContent.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(v, position);
         });
-        Activity activity = activityRef.get();
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())

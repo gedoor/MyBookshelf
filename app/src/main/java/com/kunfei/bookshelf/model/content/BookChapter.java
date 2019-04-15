@@ -35,8 +35,11 @@ class BookChapter {
     Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error)));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error) + bookShelfBean.getBookInfoBean().getChapterUrl()));
                 return;
+            } else {
+                Debug.printLog(tag, "目录页获取成功");
+                Debug.printLog(tag, "网址:" + bookShelfBean.getBookInfoBean().getChapterUrl());
             }
             analyzer = new AnalyzeRule(bookShelfBean);
             bookShelfBean.setTag(tag);
@@ -102,22 +105,36 @@ class BookChapter {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 
-        analyzer.setContent(s);
+        analyzer.setContent(s, chapterUrl);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), chapterUrl);
-
+            Debug.printLog(tag, "开始获取下一页Url");
+            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);
             }
+            Debug.printLog(tag, "下一页Url:" + nextUrlList.toString());
         }
-
+        Debug.printLog(tag, "开始获取目录列表");
         List<Object> collections = analyzer.getElements(ruleChapterList);
-        for (Object object : collections) {
-            analyzer.setContent(object);
-            String name = analyzer.getString(bookSourceBean.getRuleChapterName());
-            String url = analyzer.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
+        Debug.printLog(tag, "目录数量:" + collections.size());
+        for (int i = 0; i < collections.size(); i++) {
+            Object object = collections.get(i);
+            analyzer.setContent(object, chapterUrl);
+            String name;
+            String url;
+            if (i == 0) {
+                Debug.printLog(tag, "开始获取章节名称");
+                name = analyzer.getString(bookSourceBean.getRuleChapterName());
+                Debug.printLog(tag, "章节名称:" + name);
+                Debug.printLog(tag, "开始获取章节url");
+                url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
+                Debug.printLog(tag, "章节url:" + url);
+            } else {
+                name = analyzer.getString(bookSourceBean.getRuleChapterName());
+                url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
+            }
             if (!isEmpty(name) && !isEmpty(url)) {
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);

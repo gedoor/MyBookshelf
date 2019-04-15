@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -9,16 +10,17 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import retrofit2.Response;
 
+import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
@@ -33,8 +35,9 @@ public class AnalyzeRule {
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
 
     private BaseBookBean book;
-    private Object _object;
-    private Boolean _isJSON;
+    private Object object;
+    private Boolean isJSON;
+    private String baseUrl = null;
 
     private AnalyzeByXPath analyzeByXPath = null;
     private AnalyzeByJSoup analyzeByJSoup = null;
@@ -53,9 +56,14 @@ public class AnalyzeRule {
     }
 
     public AnalyzeRule setContent(Object body) {
+        return setContent(body, null);
+    }
+
+    public AnalyzeRule setContent(Object body, String baseUrl) {
         if (body == null) throw new AssertionError("Content cannot be null");
-        _isJSON = StringUtils.isJsonType(String.valueOf(body));
-        _object = body;
+        isJSON = StringUtils.isJsonType(String.valueOf(body));
+        object = body;
+        this.baseUrl = baseUrl;
         objectChangedXP = true;
         objectChangedJS = true;
         objectChangedJP = true;
@@ -75,7 +83,7 @@ public class AnalyzeRule {
     private AnalyzeByXPath getAnalyzeByXPath() {
         if (analyzeByXPath == null || objectChangedXP) {
             analyzeByXPath = new AnalyzeByXPath();
-            analyzeByXPath.parse(_object.toString());
+            analyzeByXPath.parse(object.toString());
             objectChangedXP = false;
         }
         return analyzeByXPath;
@@ -94,7 +102,7 @@ public class AnalyzeRule {
     private AnalyzeByJSoup getAnalyzeByJSoup() {
         if (analyzeByJSoup == null || objectChangedJS) {
             analyzeByJSoup = new AnalyzeByJSoup();
-            analyzeByJSoup.parse(_object);
+            analyzeByJSoup.parse(object);
             objectChangedJS = false;
         }
         return analyzeByJSoup;
@@ -116,10 +124,10 @@ public class AnalyzeRule {
     private AnalyzeByJSonPath getAnalyzeByJSonPath() {
         if (analyzeByJSonPath == null || objectChangedJP) {
             analyzeByJSonPath = new AnalyzeByJSonPath();
-            if (_object instanceof String) {
-                analyzeByJSonPath.parse(String.valueOf(_object));
+            if (object instanceof String) {
+                analyzeByJSonPath.parse(String.valueOf(object));
             } else {
-                analyzeByJSonPath.parse(_object);
+                analyzeByJSonPath.parse(object);
             }
             objectChangedJP = false;
         }
@@ -130,57 +138,56 @@ public class AnalyzeRule {
      * 获取文本列表
      */
     public List<String> getStringList(String rule) throws Exception {
-        return getStringList(rule, null);
+        return getStringList(rule, false);
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(String ruleStr, String baseUrl) throws Exception {
+    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = _object;
+                    if (result == null) result = object;
                     result = evalJS(rule.rule, result, baseUrl);
                     break;
                 case JSon:
-                    result = getAnalyzeByJSonPath(result).readStringList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
                     break;
                 case XPath:
                     result = getAnalyzeByXPath(result).getStringList(rule.rule);
                     break;
                 default:
-                    result = getAnalyzeByJSoup(result).getAllResultList(rule.rule);
+                    result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
         }
         if (result == null) return new ArrayList<>();
-        List<String> stringList = new ArrayList<>();
-        if (result instanceof List) {
-            stringList.addAll((Collection<? extends String>) result);
-        } else {
-            stringList.add(String.valueOf(result));
+        if (result instanceof String) {
+            List<String> stringList = new ArrayList<>();
+            stringList.add((String) result);
+            result = stringList;
         }
-        if (!StringUtils.isTrimEmpty(baseUrl)) {
+        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
-            for (String url : stringList) {
-                url = NetworkUtil.getAbsoluteURL(baseUrl, url);
-                if (!urlList.contains(url)) {
-                    urlList.add(url);
+            for (Object url : (List<Object>) result) {
+                String absoluteURL = NetworkUtil.getAbsoluteURL(baseUrl, String.valueOf(url));
+                if (!urlList.contains(absoluteURL)) {
+                    urlList.add(absoluteURL);
                 }
             }
             return urlList;
         }
-        return stringList;
+        return (List<String>) result;
     }
 
     /**
      * 获取文本
      */
     public String getString(String rule) throws Exception {
-        return getString(rule, null);
+        return getString(rule, false);
     }
 
-    public String getString(String ruleStr, String _baseUrl) throws Exception {
+    public String getString(String ruleStr, boolean isUrl) throws Exception {
         if (StringUtils.isTrimEmpty(ruleStr)) {
             return null;
         }
@@ -190,26 +197,26 @@ public class AnalyzeRule {
             if (!StringUtils.isTrimEmpty(rule.rule)) {
                 switch (rule.mode) {
                     case Js:
-                        if (result == null) result = _object;
-                        result = evalJS(rule.rule, result, _baseUrl);
+                        if (result == null) result = object;
+                        result = evalJS(rule.rule, result, baseUrl);
                         break;
                     case JSon:
-                        result = getAnalyzeByJSonPath(result).read(rule.rule);
+                        result = getAnalyzeByJSonPath(result).getString(rule.rule);
                         break;
                     case XPath:
-                        result = getAnalyzeByXPath(result).getString(rule.rule, _baseUrl);
+                        result = getAnalyzeByXPath(result).getString(rule.rule);
                         break;
                     case Default:
-                        if (TextUtils.isEmpty(_baseUrl)) {
-                            result = getAnalyzeByJSoup(result).getResult(rule.rule);
+                        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
+                            result = getAnalyzeByJSoup(result).getString0(rule.rule);
                         } else {
-                            result = getAnalyzeByJSoup(result).getResultUrl(rule.rule);
+                            result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
             }
         }
-        if (!StringUtils.isTrimEmpty(_baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(_baseUrl, (String) result);
+        if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
+            result = NetworkUtil.getAbsoluteURL(baseUrl, (String) result);
         }
         return (String) result;
     }
@@ -224,11 +231,11 @@ public class AnalyzeRule {
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = _object;
+                    if (result == null) result = object;
                     result = evalJS(rule.rule, result, null);
                     break;
                 case JSon:
-                    result = getAnalyzeByJSonPath(result).readList(rule.rule);
+                    result = getAnalyzeByJSonPath(result).getList(rule.rule);
                     break;
                 case XPath:
                     result = getAnalyzeByXPath(result).getElements(rule.rule);
@@ -254,9 +261,11 @@ public class AnalyzeRule {
     /**
      * 分解规则生成规则列表
      */
-    private List<SourceRule> splitSourceRule(String ruleStr) {
+    @SuppressLint("DefaultLocale")
+    private List<SourceRule> splitSourceRule(String ruleStr) throws ScriptException {
         List<SourceRule> ruleList = new ArrayList<>();
         if (ruleStr == null) return ruleList;
+        //检测Mode
         Mode mode;
         if (StringUtils.startWithIgnoreCase(ruleStr, "@XPath:")) {
             mode = Mode.XPath;
@@ -265,7 +274,7 @@ public class AnalyzeRule {
             mode = Mode.JSon;
             ruleStr = ruleStr.substring(6);
         } else {
-            if (_isJSON) {
+            if (isJSON) {
                 mode = Mode.JSon;
             } else {
                 mode = Mode.Default;
@@ -294,6 +303,32 @@ public class AnalyzeRule {
             }
             ruleStr = ruleStr.replace(find, value);
         }
+        //替换js
+        if(ruleStr.contains("{{") && ruleStr.contains("}}")){
+            Object jsEval;
+            StringBuffer sb = new StringBuffer(ruleStr.length());
+            SimpleBindings simpleBindings = new SimpleBindings(){{
+                this.put("java", this);
+                this.put("result", String.valueOf(object));
+                this.put("baseUrl", baseUrl);
+            }};
+            Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
+            while (expMatcher.find()){
+                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1),simpleBindings);
+                if(jsEval instanceof String){
+                    expMatcher.appendReplacement(sb,(String) jsEval);
+                }
+                else if(jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0){
+                    expMatcher.appendReplacement(sb,String.format("%.0f",(Double) jsEval));
+                }
+                else {
+                    expMatcher.appendReplacement(sb,String.valueOf(jsEval));
+                }
+            }
+            expMatcher.appendTail(sb);
+            ruleStr = sb.toString();
+        }
+        //拆分为列表
         int start = 0;
         String tmp;
         Matcher jsMatcher = JS_PATTERN.matcher(ruleStr);

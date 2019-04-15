@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -159,7 +158,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        setDragEnable(preferences.getInt("SourceSort", 0));
+        setDragEnable(getSort());
     }
 
     private void setDragEnable(int sort) {
@@ -328,16 +327,18 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         sortMenu.getItem(0).setChecked(false);
         sortMenu.getItem(1).setChecked(false);
         sortMenu.getItem(2).setChecked(false);
-        sortMenu.getItem(preferences.getInt("SourceSort", 0)).setChecked(true);
+        sortMenu.getItem(getSort()).setChecked(true);
     }
 
     private void upSourceSort(int sort) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("SourceSort", sort);
-        editor.apply();
+        preferences.edit().putInt("SourceSort", sort).apply();
         upSortMenu();
         setDragEnable(sort);
         refreshBookSource();
+    }
+
+    public int getSort() {
+        return preferences.getInt("SourceSort", 0);
     }
 
     private void scanBookSource() {
