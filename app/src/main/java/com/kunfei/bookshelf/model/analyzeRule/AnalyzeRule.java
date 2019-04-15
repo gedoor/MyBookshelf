@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -428,13 +427,4 @@ public class AnalyzeRule {
         return StringUtils.base64Decode(base64);
     }
 
-    @SuppressWarnings("unused")
-    public Object[] listToArray(List<Object> list) {
-        return list.toArray(new Object[0]);
-    }
-
-    @SuppressWarnings("unused")
-    public List<Object> arrayToList(Object[] objects) {
-        return Arrays.asList(objects);
-    }
 }
