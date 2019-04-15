@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -163,23 +162,22 @@ public class AnalyzeRule {
             }
         }
         if (result == null) return new ArrayList<>();
-        List<String> stringList = new ArrayList<>();
-        if (result instanceof List) {
-            stringList.addAll((Collection<? extends String>) result);
-        } else {
-            stringList.add(String.valueOf(result));
+        if (result instanceof String) {
+            List<String> stringList = new ArrayList<>();
+            stringList.add((String) result);
+            result = stringList;
         }
-        if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
+        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
-            for (String url : stringList) {
-                url = NetworkUtil.getAbsoluteURL(baseUrl, url);
-                if (!urlList.contains(url)) {
-                    urlList.add(url);
+            for (Object url : (List<Object>) result) {
+                String absoluteURL = NetworkUtil.getAbsoluteURL(baseUrl, String.valueOf(url));
+                if (!urlList.contains(absoluteURL)) {
+                    urlList.add(absoluteURL);
                 }
             }
             return urlList;
         }
-        return stringList;
+        return (List<String>) result;
     }
 
     /**
