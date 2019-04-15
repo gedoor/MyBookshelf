@@ -38,8 +38,8 @@ class BookChapter {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error) + bookShelfBean.getBookInfoBean().getChapterUrl()));
                 return;
             } else {
-                Debug.printLog(tag, "目录页获取成功");
-                Debug.printLog(tag, "网址:" + bookShelfBean.getBookInfoBean().getChapterUrl());
+                Debug.printLog(tag, "┌成功获取目录页");
+                Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl());
             }
             analyzer = new AnalyzeRule(bookShelfBean);
             bookShelfBean.setTag(tag);
@@ -108,29 +108,29 @@ class BookChapter {
         analyzer.setContent(s, chapterUrl);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            Debug.printLog(tag, "开始获取下一页Url");
+            Debug.printLog(tag, "┌获取目录下一页网址");
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);
             }
-            Debug.printLog(tag, "下一页Url:" + nextUrlList.toString());
+            Debug.printLog(tag, "└" + nextUrlList.toString());
         }
-        Debug.printLog(tag, "开始获取目录列表");
+        Debug.printLog(tag, "┌解析目录列表");
         List<Object> collections = analyzer.getElements(ruleChapterList);
-        Debug.printLog(tag, "目录数量:" + collections.size());
+        Debug.printLog(tag, "└找到 " + collections.size() + " 个章节");
         for (int i = 0; i < collections.size(); i++) {
             Object object = collections.get(i);
             analyzer.setContent(object, chapterUrl);
             String name;
             String url;
             if (i == 0) {
-                Debug.printLog(tag, "开始获取章节名称");
+                Debug.printLog(tag, "┌获取章节名称");
                 name = analyzer.getString(bookSourceBean.getRuleChapterName());
-                Debug.printLog(tag, "章节名称:" + name);
-                Debug.printLog(tag, "开始获取章节url");
+                Debug.printLog(tag, "└" + name);
+                Debug.printLog(tag, "┌获取章节网址");
                 url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
-                Debug.printLog(tag, "章节url:" + url);
+                Debug.printLog(tag, "└" + url);
             } else {
                 name = analyzer.getString(bookSourceBean.getRuleChapterName());
                 url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
