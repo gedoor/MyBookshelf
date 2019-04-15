@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -121,6 +122,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         });
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setSwipeRefreshLayout(refreshLayout);
+        itemTouchCallback.setViewPager(callBackValue.getViewPager());
         if (bookPx.equals("2")) {
             itemTouchCallback.setDragEnable(true);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
@@ -237,6 +239,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         boolean isRecreate();
 
         int getGroup();
+
+        ViewPager getViewPager();
     }
 
 }

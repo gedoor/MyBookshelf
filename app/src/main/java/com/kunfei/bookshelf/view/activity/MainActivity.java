@@ -59,6 +59,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -321,6 +322,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         im.setVisibility(View.VISIBLE);
         im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
         return tabView;
+    }
+
+    public ViewPager getViewPager() {
+        return mVp;
     }
 
     @Override
