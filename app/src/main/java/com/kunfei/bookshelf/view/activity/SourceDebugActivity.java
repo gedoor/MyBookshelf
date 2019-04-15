@@ -168,7 +168,7 @@ public class SourceDebugActivity extends MBaseActivity {
                         tvContent.setText(String.format("%s\n%s 书名:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getName()));
                         tvContent.setText(String.format("%s\n%s 作者:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getAuthor()));
                         tvContent.setText(String.format("%s\n%s 分类:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getKind()));
-                        tvContent.setText(String.format("%s\n%s 简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getOrigin()));
+                        tvContent.setText(String.format("%s\n%s 简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getIntroduce()));
                         tvContent.setText(String.format("%s\n%s 封面地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getCoverUrl()));
                         tvContent.setText(String.format("%s\n%s 最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getLastChapter()));
                         tvContent.setText(String.format("%s\n%s 书籍地址:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), searchBookBean.getNoteUrl()));
@@ -204,6 +204,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
+                        tvContent.setText(String.format("%s\n%s详情页获取成功", tvContent.getText(), TimeUtils.getNowString(dateFormat)));
                         tvContent.setText(String.format("%s\n%s最新章节:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getLastChapterName()));
                         tvContent.setText(String.format("%s\n%s封面:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getCoverUrl()));
                         tvContent.setText(String.format("%s\n%s简介:%s", tvContent.getText(), TimeUtils.getNowString(dateFormat), bookShelfBean.getBookInfoBean().getIntroduce()));
