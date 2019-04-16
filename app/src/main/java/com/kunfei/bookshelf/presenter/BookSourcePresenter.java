@@ -189,8 +189,8 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     }
 
     @Override
-    public void checkBookSource() {
-        CheckSourceService.start(mView.getContext());
+    public void checkBookSource(List<BookSourceBean> sourceBeans) {
+        CheckSourceService.start(mView.getContext(), sourceBeans);
     }
 
     /////////////////////////////////////////////////

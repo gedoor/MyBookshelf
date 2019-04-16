@@ -9,11 +9,11 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.task.CheckSourceTask;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 
@@ -45,8 +45,11 @@ public class CheckSourceService extends Service {
     /**
      * 启动服务
      */
-    public static void start(Context context) {
+    public static void start(Context context, List<BookSourceBean> sourceBeans) {
+        String key = String.valueOf(System.currentTimeMillis());
+        BitIntentDataManager.getInstance().putData(key, sourceBeans);
         Intent intent = new Intent(context, CheckSourceService.class);
+        intent.putExtra("data_key", key);
         intent.setAction(ActionStartService);
         context.startService(intent);
     }
@@ -84,11 +87,10 @@ public class CheckSourceService extends Service {
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
-        bookSourceBeanList = BookSourceManager.getAllBookSource();
         updateNotification(0);
-        startCheck();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
@@ -98,6 +100,11 @@ public class CheckSourceService extends Service {
                     case ActionDoneService:
                         doneService();
                         break;
+                    case ActionStartService:
+                        String key = intent.getStringExtra("data_key");
+                        bookSourceBeanList = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
+                        BitIntentDataManager.getInstance().cleanData(key);
+                        startCheck();
                 }
             }
         }
@@ -130,10 +137,14 @@ public class CheckSourceService extends Service {
                 .setSmallIcon(R.drawable.ic_network_check)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.check_book_source))
-                .setContentText(String.format(getString(R.string.progress_show), state, bookSourceBeanList.size()))
+                .setContentText(bookSourceBeanList != null
+                        ? String.format(getString(R.string.progress_show), state, bookSourceBeanList.size())
+                        : "正在加载")
                 .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
-        builder.setProgress(bookSourceBeanList.size(), state, false);
+        if (bookSourceBeanList != null) {
+            builder.setProgress(bookSourceBeanList.size(), state, false);
+        }
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
