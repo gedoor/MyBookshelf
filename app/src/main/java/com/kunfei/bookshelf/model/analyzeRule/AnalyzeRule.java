@@ -10,6 +10,7 @@ import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -163,9 +164,7 @@ public class AnalyzeRule {
         }
         if (result == null) return new ArrayList<>();
         if (result instanceof String) {
-            List<String> stringList = new ArrayList<>();
-            stringList.add((String) result);
-            result = stringList;
+            result = Arrays.asList(((String) result).split("\n"));
         }
         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
