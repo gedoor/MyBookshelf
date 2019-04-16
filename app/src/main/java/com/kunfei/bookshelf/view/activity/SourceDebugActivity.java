@@ -181,7 +181,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("\n%s └%s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s └%s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
                         loading.stop();
                     }
 
@@ -222,7 +222,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookChapterListDebug(BookShelfBean bookShelfBean) {
-        tvContent.setText(String.format("%s\n\n%s └≡开始获取目录页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        tvContent.setText(String.format("%s\n\n%s ≡开始获取目录页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
         WebBookModel.getInstance().getChapterList(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
