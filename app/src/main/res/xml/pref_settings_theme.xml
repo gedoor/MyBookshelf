@@ -4,6 +4,18 @@
 
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="false"
+        android:key="E-InkMode"
+        android:summary="@string/e_ink_mode_detail"
+        android:title="@string/e_ink_mode" />
+
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="false"
+        android:key="immersionStatusBar"
+        android:summary="@string/status_bar_immersion"
+        android:title="@string/immersion_status_bar" />
+
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="false"
         android:key="immersionStatusBar"
         android:summary="@string/status_bar_immersion"
         android:title="@string/immersion_status_bar" />

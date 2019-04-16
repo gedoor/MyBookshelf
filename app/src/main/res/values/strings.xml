@@ -407,4 +407,6 @@
     <string name="tip_padding">Tip边距</string>
     <string name="text_letter_spacing">字距</string>
 
+    <string name="e_ink_mode">E-Ink 模式</string>
+    <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
 </resources>

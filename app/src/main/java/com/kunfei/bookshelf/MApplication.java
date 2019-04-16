@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
+import com.kunfei.bookshelf.utils.Prefs;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
@@ -96,6 +97,7 @@ public class MApplication extends Application {
                 }
             }
         });
+        Prefs.init(this);
 
     }
 

@@ -14,6 +14,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.Prefs;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
@@ -74,6 +75,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AlertDialog alertDialog;
         switch (key) {
+            case "E-InkMode":
+                Prefs.setEInkModeStatus(getActivity(), sharedPreferences.getBoolean(key, false));
+                break;
             case "immersionStatusBar":
             case "navigationBarColorChange":
                 settingActivity.initImmersionBar();
@@ -147,7 +151,8 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                         MApplication.getInstance().upThemeStore();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {})
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
                     .show();
             ATH.setAlertDialogTint(alertDialog);
         }
