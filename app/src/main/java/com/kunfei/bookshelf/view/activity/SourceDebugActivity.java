@@ -23,8 +23,10 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
@@ -159,7 +161,23 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
+        if (NetworkUtil.isUrl(key)) {
+            tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡关键字为Url"));
+            BookShelfBean bookShelfBean = new BookShelfBean();
+            bookShelfBean.setTag(StringUtils.getBaseUrl(key));
+            bookShelfBean.setNoteUrl(key);
+            bookShelfBean.setDurChapter(0);
+            bookShelfBean.setGroup(0);
+            bookShelfBean.setDurChapterPage(0);
+            bookShelfBean.setFinalDate(System.currentTimeMillis());
+            bookInfoDebug(bookShelfBean);
+        } else {
+            tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
+            searchDebug(key);
+        }
+    }
+
+    private void searchDebug(String key) {
         WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -190,7 +208,6 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     }
                 });
-
     }
 
     private void bookInfoDebug(BookShelfBean bookShelfBean) {
