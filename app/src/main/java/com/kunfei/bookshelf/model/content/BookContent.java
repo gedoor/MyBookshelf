@@ -52,8 +52,8 @@ class BookContent {
                 e.onComplete();
                 return;
             }
-            Debug.printLog(tag, "获取内容网页成功");
-            Debug.printLog(tag, "网址:" + chapterBean.getDurChapterUrl());
+            Debug.printLog(tag, "┌成功获取正文页");
+            Debug.printLog(tag, "└" + chapterBean.getDurChapterUrl());
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
@@ -102,9 +102,9 @@ class BookContent {
 
         AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s, chapterUrl);
-        Debug.printLog(tag, "开始解析正文");
+        Debug.printLog(tag, "┌解析正文内容");
         webContentBean.content = analyzer.getString(ruleBookContent);
-        Debug.printLog(tag, "正文:" + webContentBean.content);
+        Debug.printLog(tag, "└" + webContentBean.content);
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {
             webContentBean.nextUrl = analyzer.getString(nextUrlRule, true);

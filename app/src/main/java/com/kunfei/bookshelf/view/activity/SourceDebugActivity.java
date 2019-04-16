@@ -159,7 +159,7 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "开始搜索"));
+        tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
         WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -194,7 +194,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookInfoDebug(BookShelfBean bookShelfBean) {
-        tvContent.setText(String.format("%s\n\n%s 开始获取详情页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        tvContent.setText(String.format("%s\n\n%s ≡开始获取详情页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
         WebBookModel.getInstance().getBookInfo(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
@@ -222,7 +222,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookChapterListDebug(BookShelfBean bookShelfBean) {
-        tvContent.setText(String.format("%s\n\n%s 开始获取目录", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        tvContent.setText(String.format("%s\n\n%s ≡开始获取目录页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
         WebBookModel.getInstance().getChapterList(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
@@ -260,7 +260,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
-        tvContent.setText(String.format("%s\n\n%s 开始获取正文", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        tvContent.setText(String.format("%s\n\n%s ≡开始获取正文页", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
         WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
