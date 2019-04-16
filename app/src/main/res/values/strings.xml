@@ -264,6 +264,7 @@
     <string name="allow_update">允许更新</string>
     <string name="revert_selection">反转选择</string>
     <string name="search_book_key">搜索书名、作者</string>
+    <string name="debug_hint">书名、作者、URL</string>
     <string name="faq">常见问题</string>
     <string name="pt_show_all_find">显示所有发现</string>
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>

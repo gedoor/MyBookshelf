@@ -147,7 +147,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void initSearchView() {
-        searchView.setQueryHint(getString(R.string.search_book_key));
+        searchView.setQueryHint(getString(R.string.debug_hint));
         searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
