@@ -230,6 +230,11 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
     }
 
+    @Override
+    public void initSearchEngineS() {
+        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
+    }
+
     /**
      * 停止搜索
      */
@@ -253,12 +258,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
     public void searchBook(String searchKey) {
         mView.searchBook(searchKey);
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
-    public void sourceListChange(Boolean change) {
-
-        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
 }

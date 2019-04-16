@@ -15,7 +15,6 @@ public class RxBusTag {
     public final static String CHECK_SOURCE_STATE = "checkSourceState";
     public final static String IMMERSION_CHANGE = "Immersion_Change";
     public final static String SEARCH_BOOK = "search_book";
-    public final static String SOURCE_LIST_CHANGE = "sourceListChange";
     public final static String UPDATE_APK_STATE = "updateApkState";
     public final static String DOWNLOAD_ALL = "downloadAll";
     public final static String UP_SEARCH_BOOK = "upSearchBook";
