@@ -1,20 +1,41 @@
 package com.kunfei.bookshelf.model.task;
 
-import com.kunfei.bookshelf.bean.BookSourceBean;
+import android.text.TextUtils;
 
+import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.service.CheckSourceService;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.script.SimpleBindings;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 public class CheckSourceTask {
 
-    BookSourceBean sourceBean;
+    private BookSourceBean sourceBean;
     private Scheduler scheduler;
+    private CheckSourceService.CheckSourceListener checkSourceListener;
 
-    public CheckSourceTask(BookSourceBean sourceBean, Scheduler scheduler) {
+    public CheckSourceTask(BookSourceBean sourceBean, Scheduler scheduler, CheckSourceService.CheckSourceListener checkSourceListener) {
         this.sourceBean = sourceBean;
         this.scheduler = scheduler;
+        this.checkSourceListener = checkSourceListener;
     }
-/*
-    private void startCheck() {
+
+    public void startCheck() {
         if (!TextUtils.isEmpty(sourceBean.getRuleSearchUrl())) {
             WebBookModel.getInstance().searchBook("我的", 1, sourceBean.getBookSourceUrl())
                     .subscribeOn(scheduler)
@@ -42,9 +63,9 @@ public class CheckSourceTask {
                     .subscribe(getObserver());
         } else {
             sourceBean.addGroup("失效");
-            sourceBean.setSerialNumber(10000 + checkIndex);
+            sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
             BookSourceManager.addBookSource(sourceBean);
-            nextCheck();
+            checkSourceListener.nextCheck();
         }
     }
 
@@ -52,14 +73,14 @@ public class CheckSourceTask {
         return new Observer<List<SearchBookBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                compositeDisposable.add(d);
+                checkSourceListener.compositeDisposableAdd(d);
             }
 
             @Override
             public void onNext(List<SearchBookBean> value) {
                 if (value.isEmpty()) {
                     sourceBean.addGroup("失效");
-                    sourceBean.setSerialNumber(10000 + checkIndex);
+                    sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
                     BookSourceManager.addBookSource(sourceBean);
                 } else {
                     if (sourceBean.containsGroup("失效")) {
@@ -67,31 +88,32 @@ public class CheckSourceTask {
                         BookSourceManager.addBookSource(sourceBean);
                     }
                 }
-                nextCheck();
+                checkSourceListener.nextCheck();
             }
 
             @Override
             public void onError(Throwable e) {
                 sourceBean.addGroup("失效");
-                sourceBean.setSerialNumber(10000 + checkIndex);
+                sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
                 BookSourceManager.addBookSource(sourceBean);
-                nextCheck();
+                checkSourceListener.nextCheck();
             }
 
             @Override
             public void onComplete() {
-                checkSource = null;
             }
         };
     }
 
-    *//**
+
+    /**
      * 执行JS
-     *//*
+     */
     private Object evalJS(String jsStr, String baseUrl) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", new AnalyzeRule(null));
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
-    }*/
+    }
+
 }
