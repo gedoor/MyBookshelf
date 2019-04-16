@@ -6,34 +6,38 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.script.SimpleBindings;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 public class CheckSourceService extends Service {
     public static final String ActionStartService = "startService";
@@ -47,7 +51,6 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
-    private Handler handler = new Handler();
 
     /**
      * 启动服务
@@ -179,34 +182,50 @@ public class CheckSourceService extends Service {
         }
 
         private void startCheck() {
-                try {
-                    new URL(sourceBean.getBookSourceUrl());
-                    BaseModelImpl.getInstance().getRetrofitString(sourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class)
-                            .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(sourceBean))
-                            .timeout(20, TimeUnit.SECONDS)
-                            .subscribeOn(scheduler)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(getObserver());
-                } catch (Exception e) {
-                    sourceBean.addGroup("失效");
-                    BookSourceManager.addBookSource(sourceBean);
-                    nextCheck();
-                }
+            if (!TextUtils.isEmpty(sourceBean.getRuleSearchUrl())) {
+                WebBookModel.getInstance().searchBook("我的", 1, sourceBean.getBookSourceUrl())
+                        .subscribeOn(scheduler)
+                        .timeout(60, TimeUnit.SECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getObserver());
+            } else if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
+                Observable.create(emitter -> {
+                    String kindA[];
+                    if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
+                        if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
+                            String jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
+                            Object object = evalJS(jsStr, sourceBean.getBookSourceUrl());
+                            kindA = object.toString().split("(&&|\n)+");
+                        } else {
+                            kindA = sourceBean.getRuleFindUrl().split("(&&|\n)+");
+                        }
+                        if (kindA.length > 0) {
+                            emitter.onNext(kindA[0]);
+                            emitter.onComplete();
+                        }
+                    }
+                });
+            }
         }
 
-        private Observer<Object> getObserver() {
-            return new Observer<Object>() {
+        private Observer<List<SearchBookBean>> getObserver() {
+            return new Observer<List<SearchBookBean>>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     compositeDisposable.add(d);
                 }
 
                 @Override
-                public void onNext(Object value) {
-                    if (sourceBean.containsGroup("失效")) {
-                        sourceBean.removeGroup("失效");
+                public void onNext(List<SearchBookBean> value) {
+                    if (value.isEmpty()) {
+                        sourceBean.addGroup("失效");
+                        sourceBean.setSerialNumber(10000 + checkIndex);
                         BookSourceManager.addBookSource(sourceBean);
+                    } else {
+                        if (sourceBean.containsGroup("失效")) {
+                            sourceBean.removeGroup("失效");
+                            BookSourceManager.addBookSource(sourceBean);
+                        }
                     }
                     nextCheck();
                 }
@@ -224,6 +243,16 @@ public class CheckSourceService extends Service {
                     checkSource = null;
                 }
             };
+        }
+
+        /**
+         * 执行JS
+         */
+        private Object evalJS(String jsStr, String baseUrl) throws Exception {
+            SimpleBindings bindings = new SimpleBindings();
+            bindings.put("java", new AnalyzeRule(null));
+            bindings.put("baseUrl", baseUrl);
+            return SCRIPT_ENGINE.eval(jsStr, bindings);
         }
     }
 }
