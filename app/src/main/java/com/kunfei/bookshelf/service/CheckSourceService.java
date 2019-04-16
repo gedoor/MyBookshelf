@@ -30,6 +30,7 @@ import javax.script.SimpleBindings;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -185,11 +186,11 @@ public class CheckSourceService extends Service {
             if (!TextUtils.isEmpty(sourceBean.getRuleSearchUrl())) {
                 WebBookModel.getInstance().searchBook("我的", 1, sourceBean.getBookSourceUrl())
                         .subscribeOn(scheduler)
-                        .timeout(60, TimeUnit.SECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
+                        .timeout(60, TimeUnit.SECONDS)
                         .subscribe(getObserver());
             } else if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                Observable.create(emitter -> {
+                Observable.create((ObservableOnSubscribe<String>) emitter -> {
                     String kindA[];
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                         if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
@@ -199,12 +200,19 @@ public class CheckSourceService extends Service {
                         } else {
                             kindA = sourceBean.getRuleFindUrl().split("(&&|\n)+");
                         }
-                        if (kindA.length > 0) {
-                            emitter.onNext(kindA[0]);
-                            emitter.onComplete();
-                        }
+                        emitter.onNext(kindA[0].split("::")[1]);
+                        emitter.onComplete();
                     }
-                });
+                }).flatMap(url -> WebBookModel.getInstance().findBook(url, 1, sourceBean.getBookSourceUrl()))
+                        .subscribeOn(scheduler)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .timeout(60, TimeUnit.SECONDS)
+                        .subscribe(getObserver());
+            } else {
+                sourceBean.addGroup("失效");
+                sourceBean.setSerialNumber(10000 + checkIndex);
+                BookSourceManager.addBookSource(sourceBean);
+                nextCheck();
             }
         }
 
