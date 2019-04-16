@@ -178,7 +178,7 @@ public class SourceDebugActivity extends MBaseActivity {
         if (NetworkUtil.isUrl(key)) {
             tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡关键字为Url"));
             BookShelfBean bookShelfBean = new BookShelfBean();
-            bookShelfBean.setTag(StringUtils.getBaseUrl(key));
+            bookShelfBean.setTag(DEBUG_TAG);
             bookShelfBean.setNoteUrl(key);
             bookShelfBean.setDurChapter(0);
             bookShelfBean.setGroup(0);
