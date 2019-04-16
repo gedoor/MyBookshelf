@@ -16,7 +16,6 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
@@ -76,8 +75,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Activity activity) {
-        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), AppConstant.BookSourceActivity);
+    public static void startThis(Activity activity, int requestCode) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), requestCode);
     }
 
     @Override

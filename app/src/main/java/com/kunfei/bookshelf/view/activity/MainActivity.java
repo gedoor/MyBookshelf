@@ -69,6 +69,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
+    private final int requestSource = 14;
     private String[] mTitles;
 
     @BindView(R.id.drawer)
@@ -489,7 +490,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
-                    handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
+                    handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
                     break;
                 case R.id.action_replace_rule:
                     handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
@@ -732,7 +733,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case requestSource:
+                    RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+                    break;
+            }
+        }
     }
 
     private void preloadReader() {
