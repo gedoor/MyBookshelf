@@ -13,8 +13,9 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.dao.BookInfoBeanDao;
+import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
@@ -24,8 +25,6 @@ import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
-
-import java.net.URL;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
@@ -109,20 +108,30 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 e.onComplete();
                 return;
             }
-            URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().load(bookUrl);
             if (temp != null) {
                 e.onNext(null);
             } else {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
-                bookShelfBean.setNoteUrl(url.toString());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setGroup(mView.getGroup() % 4);
-                bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                e.onNext(bookShelfBean);
+                String baseUrl = StringUtils.getBaseUrl(bookUrl);
+                BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
+                if (bookSourceBean == null) {
+                    bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.like(baseUrl + "%"))
+                            .limit(1).build().unique();
+                }
+                if (bookSourceBean != null) {
+                    BookShelfBean bookShelfBean = new BookShelfBean();
+                    bookShelfBean.setTag(bookSourceBean.getBookSourceUrl());
+                    bookShelfBean.setNoteUrl(bookUrl);
+                    bookShelfBean.setDurChapter(0);
+                    bookShelfBean.setGroup(mView.getGroup() % 4);
+                    bookShelfBean.setDurChapterPage(0);
+                    bookShelfBean.setFinalDate(System.currentTimeMillis());
+                    e.onNext(bookShelfBean);
+                } else {
+                    e.onError(new Throwable("未找到对应书源"));
+                    return;
+                }
             }
             e.onComplete();
         });
