@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
@@ -79,24 +80,15 @@ public class CheckSourceTask {
             @Override
             public void onNext(List<SearchBookBean> value) {
                 if (value.isEmpty()) {
-                    sourceBean.addGroup("失效");
-                    sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
-                    BookSourceManager.addBookSource(sourceBean);
+                    sourceInvalid();
                 } else {
-                    if (sourceBean.containsGroup("失效")) {
-                        sourceBean.removeGroup("失效");
-                        BookSourceManager.addBookSource(sourceBean);
-                    }
+                    sourceUnInvalid();
                 }
-                checkSourceListener.nextCheck();
             }
 
             @Override
             public void onError(Throwable e) {
-                sourceBean.addGroup("失效");
-                sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
-                BookSourceManager.addBookSource(sourceBean);
-                checkSourceListener.nextCheck();
+                sourceInvalid();
             }
 
             @Override
@@ -105,6 +97,21 @@ public class CheckSourceTask {
         };
     }
 
+    private void sourceInvalid() {
+        sourceBean.addGroup("失效");
+        sourceBean.setEnable(false);
+        sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
+        DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
+        checkSourceListener.nextCheck();
+    }
+
+    private void sourceUnInvalid() {
+        if (sourceBean.containsGroup("失效")) {
+            sourceBean.removeGroup("失效");
+            BookSourceManager.addBookSource(sourceBean);
+            checkSourceListener.nextCheck();
+        }
+    }
 
     /**
      * 执行JS
