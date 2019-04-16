@@ -61,12 +61,10 @@ public class AnalyzeUrl {
         }
         //分离编码规则
         ruleUrl = splitCharCode(ruleUrl);
-        //设置页数
-        if (page != null) {
-            ruleUrl = analyzePage(ruleUrl, page);
-        }
         //替换js
-        ruleUrl = replaceJs(ruleUrl, baseUrl);
+        ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
+        //设置页数
+        ruleUrl = analyzePage(ruleUrl, page);
         //执行规则列表
         List<String> ruleList = splitRule(ruleUrl);
         for (String rule : ruleList) {
@@ -137,7 +135,8 @@ public class AnalyzeUrl {
     /**
      * 解析页数
      */
-    private String analyzePage(String ruleUrl, final int searchPage) {
+    private String analyzePage(String ruleUrl, final Integer searchPage) {
+        if (searchPage == null) return ruleUrl;
         Matcher matcher = pagePattern.matcher(ruleUrl);
         while (matcher.find()) {
             String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
@@ -155,12 +154,15 @@ public class AnalyzeUrl {
     /**
      * 替换js
      */
-    private String replaceJs(String ruleUrl, String baseUrl) throws ScriptException {
+    @SuppressLint("DefaultLocale")
+    private String replaceJs(String ruleUrl, String baseUrl, Integer searchPage, String searchKey) throws ScriptException {
         if(ruleUrl.contains("{{") && ruleUrl.contains("}}")){
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleUrl.length());
             SimpleBindings simpleBindings = new SimpleBindings(){{
                 this.put("baseUrl", baseUrl);
+                this.put("searchPage", searchPage);
+                this.put("searchKey", searchKey);
             }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleUrl);
             while (expMatcher.find()){

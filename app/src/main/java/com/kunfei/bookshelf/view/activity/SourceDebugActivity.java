@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -22,9 +23,12 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
@@ -44,6 +48,7 @@ import static com.kunfei.bookshelf.model.content.Debug.DEBUG_TIME_FORMAT;
 
 public class SourceDebugActivity extends MBaseActivity {
     public static String DEBUG_TAG;
+    private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -110,11 +115,21 @@ public class SourceDebugActivity extends MBaseActivity {
         }
     }
 
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_debug_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_scan:
+                scan();
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -132,7 +147,7 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void initSearchView() {
-        searchView.setQueryHint(getString(R.string.search_book_key));
+        searchView.setQueryHint(getString(R.string.debug_hint));
         searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -153,12 +168,29 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
+        UpLastChapterModel.getInstance().onDestroy();
         if (TextUtils.isEmpty(DEBUG_TAG)) return;
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
+        if (NetworkUtil.isUrl(key)) {
+            tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡关键字为Url"));
+            BookShelfBean bookShelfBean = new BookShelfBean();
+            bookShelfBean.setTag(DEBUG_TAG);
+            bookShelfBean.setNoteUrl(key);
+            bookShelfBean.setDurChapter(0);
+            bookShelfBean.setGroup(0);
+            bookShelfBean.setDurChapterPage(0);
+            bookShelfBean.setFinalDate(System.currentTimeMillis());
+            bookInfoDebug(bookShelfBean);
+        } else {
+            searchDebug(key);
+        }
+    }
+
+    private void searchDebug(String key) {
         tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
         WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
@@ -181,7 +213,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("\n%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s └%s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
                         loading.stop();
                     }
 
@@ -190,7 +222,6 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     }
                 });
-
     }
 
     private void bookInfoDebug(BookShelfBean bookShelfBean) {
@@ -210,7 +241,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n\n%s %s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
+                        tvContent.setText(String.format("%s\n\n%s └%s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
                         loading.stop();
                     }
 
@@ -248,7 +279,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n%s %s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s └%s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
                         loading.stop();
                     }
 
@@ -276,7 +307,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n%s %s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
+                        tvContent.setText(String.format("%s\n%s └%s", tvContent.getText(), TimeUtils.getNowString(DEBUG_TIME_FORMAT), e.getMessage()));
                         loading.stop();
                     }
 
@@ -285,6 +316,25 @@ public class SourceDebugActivity extends MBaseActivity {
                         loading.stop();
                     }
                 });
+    }
+
+    private void scan() {
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
+        startActivityForResult(intent, REQUEST_QR);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_QR:
+                    String result = data.getStringExtra("result");
+                    if (!StringUtils.isTrimEmpty(result)) {
+                        searchView.setQuery(result, true);
+                    }
+            }
+        }
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})

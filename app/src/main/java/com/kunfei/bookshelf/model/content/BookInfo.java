@@ -58,8 +58,6 @@ class BookInfo {
                 bookInfoBean.setAuthor(FormatWebText.getAuthor(result));
             }
             Debug.printLog(tag, "└" + bookInfoBean.getAuthor());
-//            Debug.printLog(tag, "┌获取分类");
-//            Debug.printLog(tag, "└" + StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind()));
             Debug.printLog(tag, "┌获取最新章节");
             result = analyzer.getString(bookSourceBean.getRuleBookLastChapter());
             if (!isEmpty(result)) {

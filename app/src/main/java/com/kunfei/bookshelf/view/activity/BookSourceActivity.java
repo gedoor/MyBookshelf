@@ -288,7 +288,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 deleteDialog();
                 break;
             case R.id.action_check_book_source:
-                mPresenter.checkBookSource();
+                mPresenter.checkBookSource(adapter.getSelectDataList());
                 break;
             case R.id.sort_manual:
                 upSourceSort(0);

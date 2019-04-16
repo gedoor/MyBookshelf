@@ -6,31 +6,24 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.IBinder;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.model.task.CheckSourceTask;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.Observer;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -47,13 +40,16 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
-    private Handler handler = new Handler();
+    private CheckSourceListener checkSourceListener;
 
     /**
      * 启动服务
      */
-    public static void start(Context context) {
+    public static void start(Context context, List<BookSourceBean> sourceBeans) {
+        String key = String.valueOf(System.currentTimeMillis());
+        BitIntentDataManager.getInstance().putData(key, sourceBeans);
         Intent intent = new Intent(context, CheckSourceService.class);
+        intent.putExtra("data_key", key);
         intent.setAction(ActionStartService);
         context.startService(intent);
     }
@@ -71,15 +67,30 @@ public class CheckSourceService extends Service {
     public void onCreate() {
         super.onCreate();
         SharedPreferences preference = MApplication.getConfigPreferences();
+        checkSourceListener = new CheckSourceListener() {
+            @Override
+            public void nextCheck() {
+                CheckSourceService.this.nextCheck();
+            }
+
+            @Override
+            public void compositeDisposableAdd(Disposable disposable) {
+                compositeDisposable.add(disposable);
+            }
+
+            @Override
+            public int getCheckIndex() {
+                return checkIndex;
+            }
+        };
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
-        bookSourceBeanList = BookSourceManager.getAllBookSource();
         updateNotification(0);
-        startCheck();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
@@ -89,6 +100,11 @@ public class CheckSourceService extends Service {
                     case ActionDoneService:
                         doneService();
                         break;
+                    case ActionStartService:
+                        String key = intent.getStringExtra("data_key");
+                        bookSourceBeanList = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
+                        BitIntentDataManager.getInstance().cleanData(key);
+                        startCheck();
                 }
             }
         }
@@ -121,10 +137,14 @@ public class CheckSourceService extends Service {
                 .setSmallIcon(R.drawable.ic_network_check)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.check_book_source))
-                .setContentText(String.format(getString(R.string.progress_show), state, bookSourceBeanList.size()))
+                .setContentText(bookSourceBeanList != null
+                        ? String.format(getString(R.string.progress_show), state, bookSourceBeanList.size())
+                        : "正在加载")
                 .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
-        builder.setProgress(bookSourceBeanList.size(), state, false);
+        if (bookSourceBeanList != null) {
+            builder.setProgress(bookSourceBeanList.size(), state, false);
+        }
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
@@ -160,7 +180,7 @@ public class CheckSourceService extends Service {
         }
 
         if (checkIndex < bookSourceBeanList.size()) {
-            CheckSource checkSource = new CheckSource(bookSourceBeanList.get(checkIndex));
+            CheckSourceTask checkSource = new CheckSourceTask(bookSourceBeanList.get(checkIndex), scheduler, checkSourceListener);
             checkSource.startCheck();
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
@@ -169,61 +189,12 @@ public class CheckSourceService extends Service {
         }
     }
 
-    private class CheckSource {
-        CheckSource checkSource;
-        BookSourceBean sourceBean;
+    public interface CheckSourceListener {
+        void nextCheck();
 
-        CheckSource(BookSourceBean sourceBean) {
-            checkSource = this;
-            this.sourceBean = sourceBean;
-        }
+        void compositeDisposableAdd(Disposable disposable);
 
-        private void startCheck() {
-                try {
-                    new URL(sourceBean.getBookSourceUrl());
-                    BaseModelImpl.getInstance().getRetrofitString(sourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class)
-                            .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(sourceBean))
-                            .timeout(20, TimeUnit.SECONDS)
-                            .subscribeOn(scheduler)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(getObserver());
-                } catch (Exception e) {
-                    sourceBean.addGroup("失效");
-                    BookSourceManager.addBookSource(sourceBean);
-                    nextCheck();
-                }
-        }
-
-        private Observer<Object> getObserver() {
-            return new Observer<Object>() {
-                @Override
-                public void onSubscribe(Disposable d) {
-                    compositeDisposable.add(d);
-                }
-
-                @Override
-                public void onNext(Object value) {
-                    if (sourceBean.containsGroup("失效")) {
-                        sourceBean.removeGroup("失效");
-                        BookSourceManager.addBookSource(sourceBean);
-                    }
-                    nextCheck();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    sourceBean.addGroup("失效");
-                    sourceBean.setSerialNumber(10000 + checkIndex);
-                    BookSourceManager.addBookSource(sourceBean);
-                    nextCheck();
-                }
-
-                @Override
-                public void onComplete() {
-                    checkSource = null;
-                }
-            };
-        }
+        int getCheckIndex();
     }
+
 }
