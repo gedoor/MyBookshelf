@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -47,6 +48,7 @@ import static com.kunfei.bookshelf.model.content.Debug.DEBUG_TIME_FORMAT;
 
 public class SourceDebugActivity extends MBaseActivity {
     public static String DEBUG_TAG;
+    private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -113,11 +115,21 @@ public class SourceDebugActivity extends MBaseActivity {
         }
     }
 
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_debug_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_scan:
+                scan();
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -174,12 +186,12 @@ public class SourceDebugActivity extends MBaseActivity {
             bookShelfBean.setFinalDate(System.currentTimeMillis());
             bookInfoDebug(bookShelfBean);
         } else {
-            tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
             searchDebug(key);
         }
     }
 
     private void searchDebug(String key) {
+        tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
         WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -304,6 +316,25 @@ public class SourceDebugActivity extends MBaseActivity {
                         loading.stop();
                     }
                 });
+    }
+
+    private void scan() {
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
+        startActivityForResult(intent, REQUEST_QR);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_QR:
+                    String result = data.getStringExtra("result");
+                    if (!StringUtils.isTrimEmpty(result)) {
+                        searchView.setQuery(result, true);
+                    }
+            }
+        }
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
