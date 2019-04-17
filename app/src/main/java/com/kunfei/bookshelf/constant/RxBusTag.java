@@ -13,6 +13,7 @@ public class RxBusTag {
     public final static String ALOUD_TIMER = "aloud_timer";
     public final static String RECREATE = "recreate";
     public final static String CHECK_SOURCE_STATE = "checkSourceState";
+    public final static String CHECK_SOURCE_FINISH = "checkSourceFinish";
     public final static String IMMERSION_CHANGE = "Immersion_Change";
     public final static String SEARCH_BOOK = "search_book";
     public final static String UPDATE_APK_STATE = "updateApkState";
