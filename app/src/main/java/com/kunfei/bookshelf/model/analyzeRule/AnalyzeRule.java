@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
+import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -164,7 +165,7 @@ public class AnalyzeRule {
         }
         if (result == null) return new ArrayList<>();
         if (result instanceof String) {
-            result = Arrays.asList(((String) result).split("\n"));
+            result = Arrays.asList(FormatWebText.formatHtml((String) result).split("\n"));
         }
         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
@@ -215,9 +216,9 @@ public class AnalyzeRule {
             }
         }
         if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(baseUrl, (String) result);
+            return NetworkUtil.getAbsoluteURL(baseUrl, (String) result);
         }
-        return (String) result;
+        return FormatWebText.formatHtml((String) result);
     }
 
     /**

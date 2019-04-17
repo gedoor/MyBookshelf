@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.service.CheckSourceService;
@@ -41,8 +41,38 @@ public class CheckSourceTask {
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .timeout(60, TimeUnit.SECONDS)
-                    .subscribe(getObserver());
-        } else if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
+                    .subscribe(new Observer<List<SearchBookBean>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            checkSourceListener.compositeDisposableAdd(d);
+                        }
+
+                        @Override
+                        public void onNext(List<SearchBookBean> searchBookBeans) {
+                            if (searchBookBeans.isEmpty()) {
+                                checkFind();
+                            } else {
+                                sourceUnInvalid();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            checkFind();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        } else {
+            checkFind();
+        }
+    }
+
+    private void checkFind() {
+        if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
             Observable.create((ObservableOnSubscribe<String>) emitter -> {
                 String kindA[];
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
@@ -60,51 +90,51 @@ public class CheckSourceTask {
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .timeout(60, TimeUnit.SECONDS)
-                    .subscribe(getObserver());
+                    .subscribe(new Observer<List<SearchBookBean>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            checkSourceListener.compositeDisposableAdd(d);
+                        }
+
+                        @Override
+                        public void onNext(List<SearchBookBean> searchBookBeans) {
+                            if (searchBookBeans.isEmpty()) {
+                                sourceInvalid();
+                            } else {
+                                sourceUnInvalid();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            sourceInvalid();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
         } else {
-            sourceBean.addGroup("失效");
-            sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
-            BookSourceManager.addBookSource(sourceBean);
-            checkSourceListener.nextCheck();
+            sourceInvalid();
         }
     }
 
-    private Observer<List<SearchBookBean>> getObserver() {
-        return new Observer<List<SearchBookBean>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                checkSourceListener.compositeDisposableAdd(d);
-            }
-
-            @Override
-            public void onNext(List<SearchBookBean> value) {
-                if (value.isEmpty()) {
-                    sourceBean.addGroup("失效");
-                    sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
-                    BookSourceManager.addBookSource(sourceBean);
-                } else {
-                    if (sourceBean.containsGroup("失效")) {
-                        sourceBean.removeGroup("失效");
-                        BookSourceManager.addBookSource(sourceBean);
-                    }
-                }
-                checkSourceListener.nextCheck();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                sourceBean.addGroup("失效");
-                sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
-                BookSourceManager.addBookSource(sourceBean);
-                checkSourceListener.nextCheck();
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+    private void sourceInvalid() {
+        sourceBean.addGroup("失效");
+        sourceBean.setEnable(false);
+        sourceBean.setSerialNumber(10000 + checkSourceListener.getCheckIndex());
+        DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
+        checkSourceListener.nextCheck();
     }
 
+    private void sourceUnInvalid() {
+        if (sourceBean.containsGroup("失效")) {
+            sourceBean.removeGroup("失效");
+            DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
+        }
+        checkSourceListener.nextCheck();
+    }
 
     /**
      * 执行JS

@@ -183,11 +183,6 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         };
     }
 
-    private String getProgressStr(int state) {
-        return String.format(mView.getContext().getString(R.string.check_book_source) + mView.getContext().getString(R.string.progress_show),
-                state, BookSourceManager.getAllBookSource().size());
-    }
-
     @Override
     public void checkBookSource(List<BookSourceBean> sourceBeans) {
         CheckSourceService.start(mView.getContext(), sourceBeans);
@@ -209,21 +204,21 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     /////////////////////RxBus////////////////////////
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHECK_SOURCE_STATE)})
-    public void upCheckSourceState(Integer state) {
+    public void upCheckSourceState(String msg) {
         mView.refreshBookSource();
-
-        if (state == -1) {
-            mView.showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
-        } else {
             if (progressSnackBar == null) {
-                progressSnackBar = mView.getSnackBar(getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+                progressSnackBar = mView.getSnackBar(msg, Snackbar.LENGTH_INDEFINITE);
                 progressSnackBar.setAction(mView.getContext().getString(R.string.cancel), view -> CheckSourceService.stop(mView.getContext()));
             } else {
-                progressSnackBar.setText(getProgressStr(state));
+                progressSnackBar.setText(msg);
             }
             if (!progressSnackBar.isShown()) {
                 progressSnackBar.show();
             }
-        }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHECK_SOURCE_FINISH)})
+    public void checkSourceFinish(String msg) {
+        mView.showSnackBar(msg, Snackbar.LENGTH_SHORT);
     }
 }

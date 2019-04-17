@@ -11,13 +11,10 @@ import android.view.SubMenu;
 import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.constant.AppConstant;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -76,8 +73,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Activity activity) {
-        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), AppConstant.BookSourceActivity);
+    public static void startThis(Activity activity, int requestCode) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), requestCode);
     }
 
     @Override
@@ -107,7 +104,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onDestroy() {
-        RxBus.get().post(RxBusTag.SOURCE_LIST_CHANGE, true);
         super.onDestroy();
     }
 
@@ -190,6 +186,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     private void revertSelection() {
@@ -198,6 +195,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         adapter.notifyDataSetChanged();
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     public void upSearchView(int size) {
@@ -223,6 +221,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(BookSourceBean date) {

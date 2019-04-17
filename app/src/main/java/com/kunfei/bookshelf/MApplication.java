@@ -35,6 +35,7 @@ public class MApplication extends Application {
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final static int RESULT__PERMS = 263;
     public static String downloadPath;
+    public static boolean isEInkMode;
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
@@ -96,7 +97,7 @@ public class MApplication extends Application {
                 }
             }
         });
-
+        upEInkMode();
     }
 
     @Override
@@ -164,6 +165,10 @@ public class MApplication extends Application {
                 .putLong("DonateHb", System.currentTimeMillis())
                 .apply();
         donateHb = true;
+    }
+
+    public void upEInkMode() {
+        MApplication.isEInkMode = configPreferences.getBoolean("E-InkMode", false);
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

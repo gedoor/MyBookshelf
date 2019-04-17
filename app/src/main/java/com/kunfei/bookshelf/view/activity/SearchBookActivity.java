@@ -49,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
+    private final int requestSource = 14;
 
     @BindView(R.id.searchView)
     SearchView searchView;
@@ -162,7 +163,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         int id = item.getItemId();
         switch (id) {
             case R.id.action_book_source_manage:
-                BookSourceActivity.startThis(this);
+                BookSourceActivity.startThis(this, requestSource);
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);
@@ -465,7 +466,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case requestSource:
+                    mPresenter.initSearchEngineS();
+                    break;
+            }
+        }
     }
 
     @Override

@@ -46,6 +46,7 @@ public class CheckSourceService extends Service {
      * 启动服务
      */
     public static void start(Context context, List<BookSourceBean> sourceBeans) {
+        if (sourceBeans.isEmpty()) return;
         String key = String.valueOf(System.currentTimeMillis());
         BitIntentDataManager.getInstance().putData(key, sourceBeans);
         Intent intent = new Intent(context, CheckSourceService.class);
@@ -87,7 +88,7 @@ public class CheckSourceService extends Service {
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
-        updateNotification(0);
+        updateNotification(0, "正在加载");
     }
 
     @SuppressWarnings("unchecked")
@@ -124,7 +125,7 @@ public class CheckSourceService extends Service {
     }
 
     private void doneService() {
-        RxBus.get().post(RxBusTag.CHECK_SOURCE_STATE, -1);
+        RxBus.get().post(RxBusTag.CHECK_SOURCE_FINISH, "校验完成");
         compositeDisposable.dispose();
         stopSelf();
     }
@@ -132,16 +133,14 @@ public class CheckSourceService extends Service {
     /**
      * 更新通知
      */
-    private void updateNotification(int state) {
+    private void updateNotification(int state, String msg) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_network_check)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.check_book_source))
-                .setContentText(bookSourceBeanList != null
-                        ? String.format(getString(R.string.progress_show), state, bookSourceBeanList.size())
-                        : "正在加载")
-                .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
+                .setContentText(msg)
+                .setContentIntent(getActivityPendingIntent());
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent());
         if (bookSourceBeanList != null) {
             builder.setProgress(bookSourceBeanList.size(), state, false);
         }
@@ -150,21 +149,21 @@ public class CheckSourceService extends Service {
         startForeground(notificationId, notification);
     }
 
-    private PendingIntent getActivityPendingIntent(String actionStr) {
+    private PendingIntent getActivityPendingIntent() {
         Intent intent = new Intent(this, BookSourceActivity.class);
-        intent.setAction(actionStr);
+        intent.setAction(CheckSourceService.ActionOpenActivity);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent getThisServicePendingIntent(String actionStr) {
+    private PendingIntent getThisServicePendingIntent() {
         Intent intent = new Intent(this, this.getClass());
-        intent.setAction(actionStr);
+        intent.setAction(CheckSourceService.ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void startCheck() {
         if (bookSourceBeanList != null && bookSourceBeanList.size() > 0) {
-            RxBus.get().post(RxBusTag.CHECK_SOURCE_STATE, 0);
+            RxBus.get().post(RxBusTag.CHECK_SOURCE_STATE, "开始效验");
             checkIndex = -1;
             for (int i = 1; i <= threadsNum; i++) {
                 nextCheck();
@@ -175,8 +174,9 @@ public class CheckSourceService extends Service {
     private synchronized void nextCheck() {
         checkIndex++;
         if (checkIndex > threadsNum) {
-            RxBus.get().post(RxBusTag.CHECK_SOURCE_STATE, checkIndex - threadsNum);
-            updateNotification(checkIndex - threadsNum);
+            String msg = String.format(getString(R.string.progress_show), checkIndex - threadsNum, bookSourceBeanList.size());
+            RxBus.get().post(RxBusTag.CHECK_SOURCE_STATE, msg);
+            updateNotification(checkIndex - threadsNum, msg);
         }
 
         if (checkIndex < bookSourceBeanList.size()) {

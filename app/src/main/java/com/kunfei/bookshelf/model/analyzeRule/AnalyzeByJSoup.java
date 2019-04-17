@@ -402,15 +402,7 @@ public class AnalyzeByJSoup {
                 case "html":
                     elements.select("script").remove();
                     String html = elements.html();
-                    String[] htmlS = html.replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
-                            .replaceAll("<.*?>", "")
-                            .split("\n");
-                    for (String temp : htmlS) {
-                        temp = FormatWebText.getContent(temp);
-                        if (!isEmpty(temp)) {
-                            textS.add(temp);
-                        }
-                    }
+                    textS.add(html);
                     break;
                 default:
                     for (Element element : elements) {
