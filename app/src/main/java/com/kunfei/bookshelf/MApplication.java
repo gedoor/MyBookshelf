@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ import io.reactivex.plugins.RxJavaPlugins;
 public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
+    public final static String channelIdWeb = "channel_web";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final static int RESULT__PERMS = 263;
     public static String downloadPath;
@@ -72,8 +74,7 @@ public class MApplication extends Application {
             versionName = "0.0.0";
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannelIdDownload();
-            createChannelIdReadAloud();
+            createChannelId();
         }
         configPreferences = getSharedPreferences("CONFIG", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
@@ -171,37 +172,42 @@ public class MApplication extends Application {
         MApplication.isEInkMode = configPreferences.getBoolean("E-InkMode", false);
     }
 
+    /**
+     * 创建通知ID
+     */
     @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannelIdDownload() {
+    private void createChannelId() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //用唯一的ID创建渠道对象
-        NotificationChannel firstChannel = new NotificationChannel(channelIdDownload,
+        NotificationChannel downloadChannel = new NotificationChannel(channelIdDownload,
                 getString(R.string.download_offline),
                 NotificationManager.IMPORTANCE_LOW);
         //初始化channel
-        firstChannel.enableLights(false);
-        firstChannel.enableVibration(false);
-        firstChannel.setSound(null, null);
-        //向notification manager 提交channel
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            notificationManager.createNotificationChannel(firstChannel);
-        }
-    }
+        downloadChannel.enableLights(false);
+        downloadChannel.enableVibration(false);
+        downloadChannel.setSound(null, null);
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannelIdReadAloud() {
         //用唯一的ID创建渠道对象
-        NotificationChannel firstChannel = new NotificationChannel(channelIdReadAloud,
+        NotificationChannel readAloudChannel = new NotificationChannel(channelIdReadAloud,
                 getString(R.string.read_aloud),
                 NotificationManager.IMPORTANCE_LOW);
         //初始化channel
-        firstChannel.enableLights(false);
-        firstChannel.enableVibration(false);
-        firstChannel.setSound(null, null);
+        readAloudChannel.enableLights(false);
+        readAloudChannel.enableVibration(false);
+        readAloudChannel.setSound(null, null);
+
+        //用唯一的ID创建渠道对象
+        NotificationChannel webChannel = new NotificationChannel(channelIdWeb,
+                getString(R.string.web_edit_source),
+                NotificationManager.IMPORTANCE_LOW);
+        //初始化channel
+        webChannel.enableLights(false);
+        webChannel.enableVibration(false);
+        webChannel.setSound(null, null);
+
         //向notification manager 提交channel
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.createNotificationChannel(firstChannel);
+            notificationManager.createNotificationChannels(Arrays.asList(downloadChannel, readAloudChannel, webChannel));
         }
     }
 

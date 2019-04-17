@@ -28,9 +28,10 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
+import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
+
 public class CheckSourceService extends Service {
-    public static final String ActionStartService = "startService";
-    public static final String ActionDoneService = "doneService";
     private static final int notificationId = 3333;
     private static final String ActionOpenActivity = "openActivity";
 
@@ -157,7 +158,7 @@ public class CheckSourceService extends Service {
 
     private PendingIntent getThisServicePendingIntent() {
         Intent intent = new Intent(this, this.getClass());
-        intent.setAction(CheckSourceService.ActionDoneService);
+        intent.setAction(ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
