@@ -132,8 +132,8 @@ public class CheckSourceTask {
         if (sourceBean.containsGroup("失效")) {
             sourceBean.removeGroup("失效");
             DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
-            checkSourceListener.nextCheck();
         }
+        checkSourceListener.nextCheck();
     }
 
     /**
