@@ -29,20 +29,6 @@ public class FormatWebText {
                 .trim();
     }
 
-    public static String getBookName(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return "";
-        }
-
-        return trim(str.replace("&nbsp;", "")
-                .replace(":", "：")
-                .replace(",", "，")
-                .replaceAll("[\\u3000 ]+", "")
-                .replaceAll("\\s", " ")
-                .replaceAll("[?？!！。~《》【】]", "")
-                .replaceAll("([(（].*[）)])", ""));
-    }
-
     public static String getAuthor(String str) {
         if (TextUtils.isEmpty(str)) {
             return "";
