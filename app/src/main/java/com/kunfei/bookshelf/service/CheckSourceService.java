@@ -140,8 +140,8 @@ public class CheckSourceService extends Service {
                 .setContentText(bookSourceBeanList != null
                         ? String.format(getString(R.string.progress_show), state, bookSourceBeanList.size())
                         : "正在加载")
-                .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
+                .setContentIntent(getActivityPendingIntent());
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent());
         if (bookSourceBeanList != null) {
             builder.setProgress(bookSourceBeanList.size(), state, false);
         }
@@ -150,15 +150,15 @@ public class CheckSourceService extends Service {
         startForeground(notificationId, notification);
     }
 
-    private PendingIntent getActivityPendingIntent(String actionStr) {
+    private PendingIntent getActivityPendingIntent() {
         Intent intent = new Intent(this, BookSourceActivity.class);
-        intent.setAction(actionStr);
+        intent.setAction(CheckSourceService.ActionOpenActivity);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent getThisServicePendingIntent(String actionStr) {
+    private PendingIntent getThisServicePendingIntent() {
         Intent intent = new Intent(this, this.getClass());
-        intent.setAction(actionStr);
+        intent.setAction(CheckSourceService.ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
