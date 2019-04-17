@@ -76,7 +76,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
         AlertDialog alertDialog;
         switch (key) {
             case "E-InkMode":
-                Prefs.setEInkModeStatus(getActivity(), sharedPreferences.getBoolean(key, false));
+                Prefs.setEInkModeStatus(sharedPreferences.getBoolean(key, false));
                 break;
             case "immersionStatusBar":
             case "navigationBarColorChange":

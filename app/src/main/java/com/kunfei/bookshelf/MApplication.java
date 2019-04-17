@@ -97,7 +97,7 @@ public class MApplication extends Application {
                 }
             }
         });
-        Prefs.init(this);
+        Prefs.init();
 
     }
 

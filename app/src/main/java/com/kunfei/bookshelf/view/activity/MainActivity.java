@@ -9,8 +9,6 @@ import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -490,11 +488,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         upThemeVw();
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            if (Prefs.isEInkMode){
-                drawer.closeDrawer(Gravity.LEFT,false);
-            }else {
-                drawer.closeDrawers();
-            }
+            drawer.closeDrawer(GravityCompat.START, Prefs.isEInkMode);
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
                     handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
@@ -698,6 +692,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
@@ -709,7 +704,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(Gravity.LEFT, !Prefs.isEInkMode);
+                    drawer.closeDrawer(GravityCompat.START, !Prefs.isEInkMode);
                     return true;
                 }
                 exit();
