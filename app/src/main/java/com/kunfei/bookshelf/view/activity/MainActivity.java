@@ -425,7 +425,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 LauncherIcon.Change();
                 break;
             case R.id.action_web_start:
-                startService(new Intent(this, WebService.class));
+                WebService.startThis(this);
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)

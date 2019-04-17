@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -8,25 +9,35 @@ import android.os.IBinder;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.model.WebServerManager;
+import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
+
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
+import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    private WebServerManager webServerManager;
+    private Server server;
+
+    public static void startThis(Activity activity) {
+        Intent intent = new Intent(activity, WebService.class);
+        intent.setAction(ActionStartService);
+        activity.startService(intent);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-        webServerManager = new WebServerManager(new Server.ServerListener() {
+        Server.ServerListener listener = new Server.ServerListener() {
             @Override
             public void onStarted() {
-                updateNotification(webServerManager.getServer().getInetAddress().getHostAddress() + ":1122");
+                updateNotification( getString(R.string.http_ip, server.getInetAddress().getHostAddress()));
             }
 
             @Override
@@ -38,8 +49,14 @@ public class WebService extends Service {
             public void onException(Exception e) {
 
             }
-        });
-        webServerManager.startServer();
+        };
+        server = AndServer.serverBuilder()
+                .inetAddress(NetworkUtil.getLocalIPAddress())
+                .port(1122)
+                .timeout(10, TimeUnit.SECONDS)
+                .listener(listener)
+                .build();
+        server.startup();
     }
 
     @Override
@@ -58,7 +75,7 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (webServerManager != null) webServerManager.stopServer();
+        if (server != null) server.shutdown();
     }
 
     private PendingIntent getThisServicePendingIntent() {

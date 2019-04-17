@@ -7,6 +7,6 @@ import com.yanzhenjie.andserver.framework.website.AssetsWebsite;
 public class InternalWebsite extends AssetsWebsite {
 
     public InternalWebsite() {
-        super("/web");
+        super("/web", "index.html");
     }
 }
