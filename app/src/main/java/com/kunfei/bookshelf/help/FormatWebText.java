@@ -9,6 +9,13 @@ import android.text.TextUtils;
 
 public class FormatWebText {
 
+    public static String formatHtml(String html) {
+        if (TextUtils.isEmpty(html)) return html;
+        return html.replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
+                .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
+                .replaceAll("\\s*\\n+\\s*", "\n");                   // 移除空行,并增加段前缩进2个汉字
+    }
+
     public static String getContent(String str) {
         if (str == null) {
             return null;
