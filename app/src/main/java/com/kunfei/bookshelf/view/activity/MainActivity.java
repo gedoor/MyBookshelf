@@ -36,7 +36,6 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Prefs;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
@@ -429,7 +428,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 ) {
                     drawer.closeDrawers();
                 } else {
-                    drawer.openDrawer(GravityCompat.START, !Prefs.isEInkMode);
+                    drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
                 }
                 break;
         }
@@ -488,7 +487,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         upThemeVw();
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            drawer.closeDrawer(GravityCompat.START, !Prefs.isEInkMode);
+            drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
                     handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
@@ -704,7 +703,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START, !Prefs.isEInkMode);
+                    drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
                     return true;
                 }
                 exit();

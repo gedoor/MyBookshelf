@@ -23,7 +23,6 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.Prefs;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -246,7 +245,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        if (Prefs.isEInkMode){
+        if (MApplication.isEInkMode) {
             overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
         }
     }
@@ -254,7 +253,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
-        if (Prefs.isEInkMode){
+        if (MApplication.isEInkMode) {
             overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
         }
     }
@@ -262,7 +261,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     @Override
     public void finish() {
         super.finish();
-        if (Prefs.isEInkMode){
+        if (MApplication.isEInkMode) {
             overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
         }
     }
