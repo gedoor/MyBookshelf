@@ -88,11 +88,7 @@ class BookList {
                         Object object = collections.get(i);
                         analyzer.setContent(object, baseUrl);
                         SearchBookBean item;
-                        if (i == 0) {
-                            item = getItemInList0(analyzer, baseUrl);
-                        } else {
-                            item = getItemInList(analyzer, baseUrl);
-                        }
+                        item = getItemInList(analyzer, baseUrl, i == 0);
                         if (item != null) {
                             books.add(item);
                         }
@@ -127,7 +123,7 @@ class BookList {
             item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
             Debug.printLog(tag, "└" + item.getAuthor());
             Debug.printLog(tag, "┌获取封面");
-            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl()));
             Debug.printLog(tag, "└" + item.getCoverUrl());
             Debug.printLog(tag, "┌获取分类");
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
@@ -143,55 +139,35 @@ class BookList {
         return null;
     }
 
-    private SearchBookBean getItemInList0(AnalyzeRule analyzer, String baseUrl) throws Exception {
+    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl, boolean printLog) throws Exception {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
-        Debug.printLog(tag, "┌获取书名");
+        Debug.printLog(tag, "┌获取书名", printLog);
         String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
-        Debug.printLog(tag, "└" + bookName);
+        Debug.printLog(tag, "└" + bookName, printLog);
         if (!TextUtils.isEmpty(bookName)) {
             item.setTag(tag);
             item.setOrigin(name);
             item.setName(bookName);
-            Debug.printLog(tag, "┌获取作者");
+            Debug.printLog(tag, "┌获取作者", printLog);
             item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
-            Debug.printLog(tag, "└" + item.getAuthor());
-            Debug.printLog(tag, "┌获取分类");
+            Debug.printLog(tag, "└" + item.getAuthor(), printLog);
+            Debug.printLog(tag, "┌获取分类", printLog);
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
-            Debug.printLog(tag, "└" + item.getKind());
-            Debug.printLog(tag, "┌获取最新章节");
+            Debug.printLog(tag, "└" + item.getKind(), printLog);
+            Debug.printLog(tag, "┌获取最新章节", printLog);
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-            Debug.printLog(tag, "└" + item.getLastChapter());
-            Debug.printLog(tag, "┌获取简介");
+            Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
+            Debug.printLog(tag, "┌获取简介", printLog);
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-            Debug.printLog(tag, "└" + item.getIntroduce());
-            Debug.printLog(tag, "┌获取封面");
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), true));
-            Debug.printLog(tag, "└" + item.getCoverUrl());
-            Debug.printLog(tag, "┌获取书籍网址");
+            Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
+            Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), true);
             item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
-            Debug.printLog(tag, "└" + item.getNoteUrl());
-            return item;
-        }
-        return null;
-    }
-
-    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl) throws Exception {
-        SearchBookBean item = new SearchBookBean();
-        analyzer.setBook(item);
-        String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
-        if (!TextUtils.isEmpty(bookName)) {
-            item.setTag(tag);
-            item.setOrigin(name);
-            item.setName(bookName);
-            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
-            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
-            item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
-            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), true));
-            item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), true);
-            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
         return null;

@@ -49,7 +49,7 @@ class BookChapter {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
-            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList);
+            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList, true);
             List<ChapterListBean> chapterList = webChapterBean.data;
 
             if (webChapterBean.nextUrlList.size() > 1) {
@@ -61,7 +61,7 @@ class BookChapter {
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
-                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList);
+                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList, false);
                         chapterList.addAll(webChapterBean.data);
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
@@ -80,7 +80,7 @@ class BookChapter {
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
-                        webChapterBean = analyzeChapterList(body, webChapterBean.nextUrlList.get(0), ruleChapterList);
+                        webChapterBean = analyzeChapterList(body, webChapterBean.nextUrlList.get(0), ruleChapterList, false);
                         chapterList.addAll(webChapterBean.data);
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
@@ -101,40 +101,37 @@ class BookChapter {
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws Exception {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 
         analyzer.setContent(s, chapterUrl);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            Debug.printLog(tag, "┌获取目录下一页网址");
+            Debug.printLog(tag, "┌获取目录下一页网址", printLog);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);
             }
-            Debug.printLog(tag, "└" + nextUrlList.toString());
+            Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
-        Debug.printLog(tag, "┌解析目录列表");
+        Debug.printLog(tag, "┌解析目录列表", printLog);
         List<Object> collections = analyzer.getElements(ruleChapterList);
-        Debug.printLog(tag, "└找到 " + collections.size() + " 个章节");
+        Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
         for (int i = 0; i < collections.size(); i++) {
             Object object = collections.get(i);
             analyzer.setContent(object, chapterUrl);
             String name;
             String url;
-            if (i == 0) {
-                Debug.printLog(tag, "┌获取章节名称");
-                name = analyzer.getString(bookSourceBean.getRuleChapterName());
-                Debug.printLog(tag, "└" + name);
-                Debug.printLog(tag, "┌获取章节网址");
-                url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
-                Debug.printLog(tag, "└" + url);
-            } else {
-                name = analyzer.getString(bookSourceBean.getRuleChapterName());
-                url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
-            }
+            printLog = printLog && i == 0;
+            Debug.printLog(tag, "┌获取章节名称", printLog);
+            name = analyzer.getString(bookSourceBean.getRuleChapterName());
+            Debug.printLog(tag, "└" + name, printLog);
+            Debug.printLog(tag, "┌获取章节网址", printLog);
+            url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
+            Debug.printLog(tag, "└" + url, printLog);
+
             if (!isEmpty(name) && !isEmpty(url)) {
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);

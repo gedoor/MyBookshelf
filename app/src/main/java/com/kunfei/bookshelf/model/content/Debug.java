@@ -17,7 +17,11 @@ public class Debug {
     public static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
 
     static void printLog(String tag, String msg) {
-        if (Objects.equals(SourceDebugActivity.DEBUG_TAG, tag)) {
+        printLog(tag, msg, true);
+    }
+
+    static void printLog(String tag, String msg, boolean print) {
+        if (print && Objects.equals(SourceDebugActivity.DEBUG_TAG, tag)) {
             msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }
