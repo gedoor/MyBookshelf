@@ -488,7 +488,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         upThemeVw();
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            drawer.closeDrawer(GravityCompat.START, Prefs.isEInkMode);
+            drawer.closeDrawer(GravityCompat.START, !Prefs.isEInkMode);
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
                     handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
