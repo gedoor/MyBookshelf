@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>书源编辑器v2.2</title>
+	<title>书源编辑器v2.3</title>
 	<style>
 		body,
 		.rules,
@@ -179,15 +179,18 @@
 		</p>
 	</div>
 	<div class="menu">
+		<button id="push" title="推送书源">⇈</button>
+		<button id="pull" title="拉取书源">⇊</button>
 		<button id="editor" title="编辑书源">⋘</button>
 		<button id="conver" title="生成书源">⋙</button>
 		<button id="clear" title="清空书源">✗</button>
 		<button id="undo" title="撤销操作">↶</button>
 		<button id="redo" title="重做操作">↷</button>
+		<button id="debug" title="调试书源">⇏</button>
 		<button id="accept" title="保存书源">✓</button>
 	</div>
 	<div class="outbox">
-		<p><b>书源JSON</b><a>保存到本地</a></p>
+		<p><b>调试信息</b></p>
 		<textarea id="RuleJsonString" placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
 	</div>
 </div>
@@ -241,47 +244,47 @@
 	}
 	function rule2json() {
 		Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = dQuery('#' + key).value; });
-		RuleJSON['serialNumber'] = RuleJSON['serialNumber'] == '' ? 0 : parseInt(RuleJSON['serialNumber']);
-		RuleJSON['weight'] = RuleJSON['weight'] == '' ? 0 : parseInt(RuleJSON['weight']);
-		RuleJSON['enable'] = RuleJSON['enable'] == '' || RuleJSON['enable'].toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
+		RuleJSON.serialNumber = RuleJSON.serialNumber == '' ? 0 : parseInt(RuleJSON.serialNumber);
+		RuleJSON.weight = RuleJSON.weight == '' ? 0 : parseInt(RuleJSON.weight);
+		RuleJSON.enable = RuleJSON.enable == '' || RuleJSON.enable.toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
 		return RuleJSON;
 	}
 	function json2rule(RuleEditor) {
 		Object.keys(RuleEditor).forEach((key) => { dQuery("#" + key).value = RuleEditor[key] });
 	}
 	// 记录操作过程
-	var course = {};
+	var course = { "old": [], "now": {}, "new": [] };
 	if (localStorage.getItem('course') == null) {
-		course = { "old": [], "now": rule2json(), "new": [] };
+		course.now = rule2json();
 		window.localStorage.setItem('course', JSON.stringify(course));
 	}
 	else {
 		course = JSON.parse(localStorage.getItem('course'));
-		json2rule(course['now']);
+		json2rule(course.now);
 	}
 	function todo() {
-		course['old'].push(Object.assign({}, course['now']));
-		course['now'] = rule2json();
-		course['new'] = [];
-		if (course['old'].length > 50) course['old'].shift(); // 限制历史记录堆栈大小
+		course.old.push(Object.assign({}, course.now));
+		course.now = rule2json();
+		course.new = [];
+		if (course.old.length > 50) course.old.shift(); // 限制历史记录堆栈大小
 		localStorage.setItem('course', JSON.stringify(course));
 	}
 	function undo() {
 		course = JSON.parse(localStorage.getItem('course'));
-		if (course['old'].length > 0) {
-			course['new'].push(course['now']);
-			course['now'] = course['old'].pop();
+		if (course.old.length > 0) {
+			course.new.push(course.now);
+			course.now = course.old.pop();
 			localStorage.setItem('course', JSON.stringify(course));
-			json2rule(course['now']);
+			json2rule(course.now);
 		}
 	}
 	function redo() {
 		course = JSON.parse(localStorage.getItem('course'));
-		if (course['new'].length > 0) {
-			course['old'].push(course['now']);
-			course['now'] = course['new'].pop();
+		if (course.new.length > 0) {
+			course.old.push(course.now);
+			course.now = course.new.pop();
 			localStorage.setItem('course', JSON.stringify(course));
-			json2rule(course['now']);
+			json2rule(course.now);
 		}
 	}
 	dQueryAll('input').forEach((item) => { item.addEventListener('change', () => { todo() }) });
@@ -309,13 +312,25 @@
 			headers: new Headers({
 				'Content-Type': 'application/json'
 			})
-		}).then(res => res.json())
-			.catch(err => console.error('Error:', err))
-			.then(rep => console.log('Success:', rep));
+		}).then(res => res.json()).catch(err => console.error('Error:', err));
 	}
 	dQuery('#accept').addEventListener('click', () => {
-		console.log(HttpPost(window.location.origin + "/saveSource", rule2json()));
+		HttpPost(`/saveSource`, rule2json()).then(json=> {
+			alert(json.isSuccess ? json.data : json.errorMsg);
+		});
 	});
+	// 调试规则
+	dQuery('#debug').addEventListener('click', () => {
+		(async ()=>{
+			for(let i=0; i<10; i++){
+				let json = await HttpPost(`/debug`, rule2json());
+				console.log(json.isSuccess ? json.data : json.errorMsg);
+			}
+		})().catch(err => {
+			console.log(err);
+		});
+	});
+
 </script>
 
 </html>
