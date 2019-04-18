@@ -27,7 +27,6 @@ public class AppMessageConverter implements MessageConverter {
         }
         ReturnData returnData = new ReturnData();
         returnData.setSuccess(true);
-        returnData.setErrorCode(200);
         returnData.setData(output);
         return new JsonBody(new Gson().toJson(returnData));
     }
