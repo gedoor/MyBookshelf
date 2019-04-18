@@ -314,7 +314,7 @@
 			.then(rep => console.log('Success:', rep));
 	}
 	dQuery('#accept').addEventListener('click', () => {
-		console.log(HttpPost(window.location.origin, rule2json()));
+		console.log(HttpPost(window.location.origin + "/saveSource", rule2json()));
 	});
 </script>
 
