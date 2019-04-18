@@ -22,9 +22,11 @@ public class AppMessageConverter implements MessageConverter {
 
     @Override
     public ResponseBody convert(@NonNull Object output, @Nullable MediaType mediaType) {
+        if (output instanceof ReturnData) {
+            return new JsonBody(new Gson().toJson(output));
+        }
         ReturnData returnData = new ReturnData();
         returnData.setSuccess(true);
-        returnData.setErrorCode(200);
         returnData.setData(output);
         return new JsonBody(new Gson().toJson(returnData));
     }
