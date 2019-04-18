@@ -368,37 +368,18 @@ public class AnalyzeByJSoup {
                         textS.add(text);
                     }
                     break;
-                case "ownText":
-                    List<String> keptTags = Arrays.asList("br", "b", "em", "strong");
-                    for (Element element : elements) {
-                        Element ele = element.clone();
-                        for (Element child : ele.children()) {
-                            if (!keptTags.contains(child.tagName())) {
-                                child.remove();
-                            }
-                        }
-                        String[] htmlS = ele.html().replaceAll("(?i)<br[\\s/]*>", "\n")
-                                .replaceAll("<.*?>", "").split("\n");
-                        for (String temp : htmlS) {
-                            temp = FormatWebText.getContent(temp);
-                            if (!TextUtils.isEmpty(temp)) {
-                                textS.add(temp);
-                            }
-                        }
-                    }
-                    break;
                 case "textNodes":
                     for (Element element : elements) {
                         List<TextNode> contentEs = element.textNodes();
                         for (int i = 0; i < contentEs.size(); i++) {
                             String temp = contentEs.get(i).text().trim();
-                            temp = FormatWebText.getContent(temp);
                             if (!isEmpty(temp)) {
                                 textS.add(temp);
                             }
                         }
                     }
                     break;
+                case "ownText":
                 case "html":
                     elements.select("script").remove();
                     String html = elements.html();
