@@ -13,6 +13,9 @@ import javax.script.ScriptEngineManager;
 
 public class AppConstant {
 
+    public static final String ActionStartService = "startService";
+    public static final String ActionDoneService = "doneService";
+
     //Book Date Convert Format
     public static final String FORMAT_TIME = "HH:mm";
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";

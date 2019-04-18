@@ -42,6 +42,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 
 /**
  * Created by GKF on 2018/1/2.
@@ -51,7 +52,6 @@ public class ReadAloudService extends Service {
     private static final String TAG = ReadAloudService.class.getSimpleName();
     public static final String ActionMediaButton = "mediaButton";
     public static final String ActionNewReadAloud = "newReadAloud";
-    public static final String ActionDoneService = "doneService";
     public static final String ActionPauseService = "pauseService";
     public static final String ActionResumeService = "resumeService";
     private static final String ActionReadActivity = "readActivity";

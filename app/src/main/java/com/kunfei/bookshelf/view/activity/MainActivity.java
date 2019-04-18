@@ -35,6 +35,7 @@ import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
+import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -422,6 +423,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case R.id.action_change_icon:
                 LauncherIcon.Change();
+                break;
+            case R.id.action_web_start:
+                WebService.startThis(this);
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
