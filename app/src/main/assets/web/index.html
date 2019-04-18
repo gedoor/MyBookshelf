@@ -3,167 +3,204 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>书源编辑器v1.4</title>
+    <title>书源编辑器v2.0</title>
 	<style>
-		*{
-			margin-top: 0em;
+		body {
+			display: flex;
+			flex-direction: column;
 		}
-		input, #ruleFindUrl{
-			width: 30em; 
-			padding: 0em;
+
+		.editor {
+			display: flex;
+			align-items: stretch;
+			flex: 1;
 		}
-		textarea{
-			vertical-align: top;
-			margin-top: 2px;
+
+		.rules {
+			flex: 1;
+			min-width: 40em;
 		}
-		#submit{
-			position: absolute;
-			left: 40em;
-			top: 30em;
+
+		input,
+		textarea {
+			flex: 1;
+			margin-left: 5px;
 		}
-		#editor{
-			position: absolute;
-			left: 40em;
-			top: 32em;
+
+		p {
+			display: flex;
+			margin: 1px 0;
+		}
+
+		.outbox {
+			display: flex;
+			flex-flow: column;
+			flex: 1;
+		}
+
+		#RuleJsonString {
+			margin: 1px 0 0 0;
+		}
+
+		.menu {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			margin: 0 5px;
+		}
+
+		button {
+			margin: 1px;
 		}
 	</style>
 </head>
 
 <body>
-	<table>
-		<tr>
-			<td>
-				<ul>
-					<li>
-						<b>书源基础信息</b>
-					</li>
-					<li>
-						书源名称: <input type="text" id="bookSourceName" title="书源名称(bookSourceName)" placeholder="会显示在书源列表" />
-					</li>
-					<li>
-						书源分组: <input type="text" id="bookSourceGroup" title="书源分组(bookSourceGroup)" placeholder="描述书源的特征信息" />
-					</li>
-					<li>
-						书源域名: <input type="url" id="bookSourceUrl" title="书源URL(bookSourceUrl)" placeholder="通常填写网站主页(标头不可省略),例: https://www.qidian.com" />
-					</li>
-					<li>
-						登录网页: <input type="url" id="loginUrl" title="登录URL(loginUrl)" placeholder="填写网站登录地址,仅在需要登录的书源有用" />
-					</li>
-					<li>
-						发现内容: <textarea id="ruleFindUrl" title="发现规则(ruleFindUrl)" placeholder="每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..." rows="10"></textarea>
-					</li>
-					<li>
-						<b>书籍搜索规则</b>
-					</li>
-					<li>
-						搜索地址: <input type="url" id="ruleSearchUrl" title="搜索地址(ruleSearchUrl)" placeholder="[域名可省略]/search.php@kw=searchKey|char=utf-8" />
-					<li>
-						结果列表: <input type="text" id="ruleSearchList" title="搜索结果列表规则(ruleSearchList)" placeholder="选择搜索结果列表的书籍节点 (规则结果为Element集合)" />
-					</li>
-					<li>
-						书籍名称: <input type="text" id="ruleSearchName" title="搜索结果书名规则(ruleSearchName)" placeholder="选择节点书名 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍作者: <input type="text" id="ruleSearchAuthor" title="搜索结果作者规则(ruleSearchAuthor)" placeholder="选择节点作者 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍分类: <input type="text" id="ruleSearchKind" title="搜索结果分类规则(ruleSearchKind)" placeholder="选择节点分类信息 (规则结果为字符串集合或单个字符串)" />
-					</li>
-					<li>
-						最新章节: <input type="text" id="ruleSearchLastChapter" title="搜索结果最新章节规则(ruleSearchLastChapter)" placeholder="选择节点最新章节 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍封面: <input type="text" id="ruleSearchCoverUrl" title="搜索结果封面规则(ruleSearchCoverUrl)" placeholder="选择节点书籍封面 (规则结果为Url)" />
-					</li>
-					<li>
-						书籍链接: <input type="text" id="ruleSearchNoteUrl" title="搜索结果书籍URL规则(ruleSearchNoteUrl)" placeholder="选择书籍详情页地址 (规则结果为Url)" />
-					</li>
-					<li>
-						<b>书籍简介规则</b>
-					</li>
-					<li>
-						路径正则: <input type="text" id="ruleBookUrlPattern" title="书籍详情URL正则(ruleBookUrlPattern)" placeholder="Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)" />
-					</li>
-					<li>
-						书籍名称: <input type="text" id="ruleBookName" title="书名规则(ruleBookName)" placeholder="选择详情页书名 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍作者: <input type="text" id="ruleBookAuthor" title="作者规则(ruleBookAuthor)" placeholder="选择详情页作者 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍分类: <input type="text" id="ruleBookKind" title="分类规则(ruleBookKind)" placeholder="选择详情页分类信息 (规则结果为字符串集合或单个字符串)" />
-					</li>
-					<li>
-						最新章节: <input type="text" id="ruleBookLastChapter" title="最新章节规则(ruleBookLastChapter)" placeholder="选择详情页最新章节 (规则结果为字符串)" />
-					</li>
-					<li>
-						简介内容: <input type="text" id="ruleIntroduce" title="简介规则(ruleIntroduce)" placeholder="选择详情页书籍简介 (规则结果为字符串)" />
-					</li>
-					<li>
-						书籍封面: <input type="text" id="ruleCoverUrl" title="封面规则(ruleCoverUrl)" placeholder="选择详情页书籍封面 (规则结果为Url)" />
-					</li>
-					<li>
-						目录链接: <input type="text" id="ruleChapterUrl" title="目录URL规则(ruleChapterUrl)" placeholder="选择目录页地址 (规则结果为Url, 与详情页相同时可省略)" />
-					</li>
-					<li>
-						<b>目录列表规则</b>
-					</li>
-					<li>
-						目录列表: <input type="text" id="ruleChapterList" title="目录列表规则(ruleChapterList)" placeholder="选择目录列表的章节节点 (规则结果为Element集合)" />
-					</li>
-					<li>
-						目录翻页: <input type="text" id="ruleChapterUrlNext" title="目录下一页规则(ruleChapterUrlNext)" placeholder="选择目录下一页链接 (规则结果为Url, 仅一页时可省略)" />
-					</li>
-					<li>
-						章节名称: <input type="text" id="ruleChapterName" title="章节名称规则(ruleChapterName)" placeholder="选择章节名称 (规则结果为字符串)" />
-					</li>
-					<li>
-						章节链接: <input type="text" id="ruleContentUrl" title="章节URL规则(ruleContentUrl)" placeholder="选择章节链接 (规则结果为Url)" />
-					</li>
-					<li>
-						<b>正文阅读规则</b>
-					</li>
-					<li>
-						章节正文: <input type="text" id="ruleBookContent" title="正文规则(ruleBookContent)" placeholder="选择正文内容 (规则结果为字符串)" />
-					</li>
-					<li>
-						下一分页: <input type="text" id="ruleContentUrlNext" title="正文下一页URL规则(ruleContentUrlNext)" placeholder="选择正文下一分页链接 (规则结果为Url,注意:不能选择下一章链接!)" />
-					</li>
-					<li>
-						<b>其它规则</b>
-					</li>
-					<li>
-						浏览标识: <input type="text" id="httpUserAgent" title="HttpUserAgent" placeholder="浏览器标识:User-Agent (可选)" />
-					</li>
-					<li>
-						排序编号: <input type="text" id="serialNumber" placeholder="整数: 0~N (可选,默认0)" />
-					</li>
-					<li>
-						搜索权重: <input type="text" id="weight" placeholder="整数: 0~N (可选,默认0)" />
-					</li>
-					<li>
-						是否启用: <input type="text" id="enable" placeholder="默认启用=true,手动启用=false (可选,默认true)" />
-					</li>
-				</ul>
-			</td>
-			<td>
-				<ul>
-					<li>
-						<label>书源JSON</label>
-					</li>
-					<li>
-						<textarea id="RuleJsonString" placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP" rows="61" cols="90"></textarea>
-					</li>
-				</ul>
-			</td>
-		</tr>
-	</table>
-	<a href="https://zhuanlan.zhihu.com/p/29436838">Xpath使用教程(基础)</a>
-	<br />
-	<a href="https://zhuanlan.zhihu.com/p/32187820">Xpath使用教程(高级)</a>
-	
-	<button id="editor" title="编辑书源"><b>&lt;=</b></button>
-	<button id="submit" title="生成书源"><b>=&gt;</b></button>
+<div class="editor">
+    <div class="rules">
+        <p><b>书源基础信息</b></p>
+        <p>
+            书源名称: <input type="text" id="bookSourceName" title="书源名称(bookSourceName)"
+                         placeholder="会显示在书源列表"/>
+        </p>
+        <p>
+            书源分组: <input type="text" id="bookSourceGroup" title="书源分组(bookSourceGroup)"
+                         placeholder="描述书源的特征信息"/>
+        </p>
+        <p>
+            书源域名: <input type="url" id="bookSourceUrl" title="书源URL(bookSourceUrl)"
+                         placeholder="通常填写网站主页(标头不可省略),例: https://www.qidian.com"/>
+        </p>
+        <p>
+            登录网页: <input type="url" id="loginUrl" title="登录URL(loginUrl)"
+                         placeholder="填写网站登录地址,仅在需要登录的书源有用"/>
+        </p>
+        <p>
+            发现内容: <textarea rows="10" id="ruleFindUrl" title="发现规则(ruleFindUrl)"
+                            placeholder="每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
+        </p>
+        <p><b>书籍搜索规则</b></p>
+        <p>
+            搜索地址: <input type="url" id="ruleSearchUrl" title="搜索地址(ruleSearchUrl)"
+                         placeholder="[域名可省略]/search.php@kw=searchKey|char=utf-8"/>
+        </p>
+        <p>
+            结果列表: <input type="text" id="ruleSearchList" title="搜索结果列表规则(ruleSearchList)"
+                         placeholder="选择搜索结果列表的书籍节点 (规则结果为Element集合)"/>
+        </p>
+        <p>
+            书籍名称: <input type="text" id="ruleSearchName" title="搜索结果书名规则(ruleSearchName)"
+                         placeholder="选择节点书名 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍作者: <input type="text" id="ruleSearchAuthor" title="搜索结果作者规则(ruleSearchAuthor)"
+                         placeholder="选择节点作者 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍分类: <input type="text" id="ruleSearchKind" title="搜索结果分类规则(ruleSearchKind)"
+                         placeholder="选择节点分类信息 (规则结果为字符串集合或单个字符串)"/>
+        </p>
+        <p>
+            最新章节: <input type="text" id="ruleSearchLastChapter"
+                         title="搜索结果最新章节规则(ruleSearchLastChapter)"
+                         placeholder="选择节点最新章节 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍封面: <input type="text" id="ruleSearchCoverUrl" title="搜索结果封面规则(ruleSearchCoverUrl)"
+                         placeholder="选择节点书籍封面 (规则结果为Url)"/>
+        </p>
+        <p>
+            书籍链接: <input type="text" id="ruleSearchNoteUrl" title="搜索结果书籍URL规则(ruleSearchNoteUrl)"
+                         placeholder="选择书籍详情页地址 (规则结果为Url)"/>
+        </p>
+        <p><b>书籍简介规则</b></p>
+        <p>
+            路径正则: <input type="text" id="ruleBookUrlPattern" title="书籍详情URL正则(ruleBookUrlPattern)"
+                         placeholder="Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)"/>
+        </p>
+        <p>
+            书籍名称: <input type="text" id="ruleBookName" title="书名规则(ruleBookName)"
+                         placeholder="选择详情页书名 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍作者: <input type="text" id="ruleBookAuthor" title="作者规则(ruleBookAuthor)"
+                         placeholder="选择详情页作者 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍分类: <input type="text" id="ruleBookKind" title="分类规则(ruleBookKind)"
+                         placeholder="选择详情页分类信息 (规则结果为字符串集合或单个字符串)"/>
+        </p>
+        <p>
+            最新章节: <input type="text" id="ruleBookLastChapter" title="最新章节规则(ruleBookLastChapter)"
+                         placeholder="选择详情页最新章节 (规则结果为字符串)"/>
+        </p>
+        <p>
+            简介内容: <input type="text" id="ruleIntroduce" title="简介规则(ruleIntroduce)"
+                         placeholder="选择详情页书籍简介 (规则结果为字符串)"/>
+        </p>
+        <p>
+            书籍封面: <input type="text" id="ruleCoverUrl" title="封面规则(ruleCoverUrl)"
+                         placeholder="选择详情页书籍封面 (规则结果为Url)"/>
+        </p>
+        <p>
+            目录链接: <input type="text" id="ruleChapterUrl" title="目录URL规则(ruleChapterUrl)"
+                         placeholder="选择目录页地址 (规则结果为Url, 与详情页相同时可省略)"/>
+        </p>
+        <p><b>目录列表规则</b></p>
+        <p>
+            目录列表: <input type="text" id="ruleChapterList" title="目录列表规则(ruleChapterList)"
+                         placeholder="选择目录列表的章节节点 (规则结果为Element集合)"/>
+        </p>
+        <p>
+            目录翻页: <input type="text" id="ruleChapterUrlNext" title="目录下一页规则(ruleChapterUrlNext)"
+                         placeholder="选择目录下一页链接 (规则结果为Url, 仅一页时可省略)"/>
+        </p>
+        <p>
+            章节名称: <input type="text" id="ruleChapterName" title="章节名称规则(ruleChapterName)"
+                         placeholder="选择章节名称 (规则结果为字符串)"/>
+        </p>
+        <p>
+            章节链接: <input type="text" id="ruleContentUrl" title="章节URL规则(ruleContentUrl)"
+                         placeholder="选择章节链接 (规则结果为Url)"/>
+        </p>
+        <p><b>正文阅读规则</b></p>
+        <p>
+            章节正文: <input type="text" id="ruleBookContent" title="正文规则(ruleBookContent)"
+                         placeholder="选择正文内容 (规则结果为字符串)"/>
+        </p>
+        <p>
+            下一分页: <input type="text" id="ruleContentUrlNext" title="正文下一页URL规则(ruleContentUrlNext)"
+                         placeholder="选择正文下一分页链接 (规则结果为Url,注意:不能选择下一章链接!)"/>
+        </p>
+        <p><b>其它规则</b></p>
+        <p>
+            浏览标识: <input type="text" id="httpUserAgent" title="HttpUserAgent"
+                         placeholder="浏览器标识:User-Agent (可选)"/>
+        </p>
+        <p>
+            排序编号: <input type="number" id="serialNumber" placeholder="整数: 0~N (可选,默认0)"/>
+        </p>
+        <p>
+            搜索权重: <input type="number" id="weight" placeholder="整数: 0~N (可选,默认0)"/>
+        </p>
+        <p>
+            是否启用: <input type="text" id="enable" placeholder="默认启用=true,手动启用=false (可选,默认true)"/>
+        </p>
+    </div>
+    <div class="menu">
+        <button id="editor" title="编辑书源"><b>&lt;=</b></button>
+        <button id="submit" title="生成书源"><b>=&gt;</b></button>
+    </div>
+    <div class="outbox">
+        <p><b>书源JSON</b></p>
+        <textarea id="RuleJsonString" placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
+    </div>
+</div>
+<div>
+    <a href="https://zhuanlan.zhihu.com/p/29436838">Xpath使用教程(基础)</a>
+    <br/>
+    <a href="https://zhuanlan.zhihu.com/p/32187820">Xpath使用教程(高级)</a>
+</div>
 </body>
 <script language="javascript">
 	var RuleJSON = {
@@ -199,78 +236,19 @@
 		"weight": 0,
 		"enable": true
 	};
-	document.querySelector("#submit").addEventListener('click', () => {
-		RuleJSON['bookSourceName'] = document.querySelector("#bookSourceName").value;
-		RuleJSON['bookSourceGroup'] = document.querySelector("#bookSourceGroup").value;
-		RuleJSON['bookSourceUrl'] = document.querySelector("#bookSourceUrl").value;
-		RuleJSON['loginUrl'] = document.querySelector("#loginUrl").value;
-		RuleJSON['ruleFindUrl'] = document.querySelector("#ruleFindUrl").value;
-		RuleJSON['ruleSearchUrl'] = document.querySelector("#ruleSearchUrl").value;
-		RuleJSON['ruleSearchList'] = document.querySelector("#ruleSearchList").value;
-		RuleJSON['ruleSearchName'] = document.querySelector("#ruleSearchName").value;
-		RuleJSON['ruleSearchAuthor'] = document.querySelector("#ruleSearchAuthor").value;
-		RuleJSON['ruleSearchKind'] = document.querySelector("#ruleSearchKind").value;
-		RuleJSON['ruleSearchLastChapter'] = document.querySelector("#ruleSearchLastChapter").value;
-		RuleJSON['ruleSearchCoverUrl'] = document.querySelector("#ruleSearchCoverUrl").value;
-		RuleJSON['ruleSearchNoteUrl'] = document.querySelector("#ruleSearchNoteUrl").value;
-		RuleJSON['ruleBookUrlPattern'] = document.querySelector("#ruleBookUrlPattern").value;
-		RuleJSON['ruleBookName'] = document.querySelector("#ruleBookName").value;
-		RuleJSON['ruleBookAuthor'] = document.querySelector("#ruleBookAuthor").value;
-		RuleJSON['ruleBookKind'] = document.querySelector("#ruleBookKind").value;
-		RuleJSON['ruleBookLastChapter'] = document.querySelector("#ruleBookLastChapter").value;
-		RuleJSON['ruleCoverUrl'] = document.querySelector("#ruleCoverUrl").value;
-		RuleJSON['ruleIntroduce'] = document.querySelector("#ruleIntroduce").value;
-		RuleJSON['ruleChapterUrl'] = document.querySelector("#ruleChapterUrl").value;
-		RuleJSON['ruleChapterList'] = document.querySelector("#ruleChapterList").value;
-		RuleJSON['ruleChapterUrlNext'] = document.querySelector("#ruleChapterUrlNext").value;
-		RuleJSON['ruleChapterName'] = document.querySelector("#ruleChapterName").value;
-		RuleJSON['ruleContentUrl'] = document.querySelector("#ruleContentUrl").value;
-		RuleJSON['ruleContentUrlNext'] = document.querySelector("#ruleContentUrlNext").value;
-		RuleJSON['ruleBookContent'] = document.querySelector("#ruleBookContent").value;
-		RuleJSON['httpUserAgent'] = document.querySelector("#httpUserAgent").value;
-		RuleJSON['enable'] = document.querySelector("#enable").value == "" || document.querySelector("#enable").value.toLocaleLowerCase().replace(/(^\s*)|(\s*$)/g, "") == "true" ? true : false;
-		RuleJSON['serialNumber'] = parseInt(document.querySelector("#serialNumber").value);
-		RuleJSON['weight'] = parseInt(document.querySelector("#weight").value);
-		if (document.querySelector("#serialNumber").value == "") RuleJSON['serialNumber'] = 0;
-		if (document.querySelector("#weight").value == "") RuleJSON['weight'] = 0;
 
+	document.querySelector("#submit").addEventListener('click', () => {
+		Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = document.querySelector('#' + key).value; });
+		RuleJSON['serialNumber'] = RuleJSON['serialNumber'] == '' ? 0 : parseInt(RuleJSON['serialNumber']);
+		RuleJSON['weight'] = RuleJSON['weight'] == '' ? 0 : parseInt(RuleJSON['weight']);
+		RuleJSON['enable'] = RuleJSON['enable'] == '' || RuleJSON['enable'].toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true' ? true : false;
 		document.querySelector("#RuleJsonString").value = JSON.stringify(RuleJSON, null, 4);
 	});
 
 	document.querySelector("#editor").addEventListener('click', () => {
 		if (document.querySelector("#RuleJsonString").innerHTML == null) return;
-		var RuleEditor = JSON.parse(document.querySelector("#RuleJsonString").value);
-		document.querySelector("#bookSourceName").value = RuleEditor['bookSourceName'];
-		document.querySelector("#bookSourceGroup").value = RuleEditor['bookSourceGroup'];
-		document.querySelector("#bookSourceUrl").value = RuleEditor['bookSourceUrl'];
-		document.querySelector("#loginUrl").value = RuleEditor['loginUrl'];
-		document.querySelector("#ruleFindUrl").value = RuleEditor['ruleFindUrl'];
-		document.querySelector("#ruleSearchUrl").value = RuleEditor['ruleSearchUrl'];
-		document.querySelector("#ruleSearchList").value = RuleEditor['ruleSearchList'];
-		document.querySelector("#ruleSearchName").value = RuleEditor['ruleSearchName'];
-		document.querySelector("#ruleSearchAuthor").value = RuleEditor['ruleSearchAuthor'];
-		document.querySelector("#ruleSearchKind").value = RuleEditor['ruleSearchKind'];
-		document.querySelector("#ruleSearchLastChapter").value = RuleEditor['ruleSearchLastChapter'];
-		document.querySelector("#ruleSearchCoverUrl").value = RuleEditor['ruleSearchCoverUrl'];
-		document.querySelector("#ruleSearchNoteUrl").value = RuleEditor['ruleSearchNoteUrl'];
-		document.querySelector("#ruleBookUrlPattern").value = RuleEditor['ruleBookUrlPattern'];
-		document.querySelector("#ruleBookName").value = RuleEditor['ruleBookName'];
-		document.querySelector("#ruleBookAuthor").value = RuleEditor['ruleBookAuthor'];
-		document.querySelector("#ruleBookKind").value = RuleEditor['ruleBookKind'];
-		document.querySelector("#ruleBookLastChapter").value = RuleEditor['ruleBookLastChapter'];
-		document.querySelector("#ruleCoverUrl").value = RuleEditor['ruleCoverUrl'];
-		document.querySelector("#ruleIntroduce").value = RuleEditor['ruleIntroduce'];
-		document.querySelector("#ruleChapterUrl").value = RuleEditor['ruleChapterUrl'];
-		document.querySelector("#ruleChapterList").value = RuleEditor['ruleChapterList'];
-		document.querySelector("#ruleChapterUrlNext").value = RuleEditor['ruleChapterUrlNext'];
-		document.querySelector("#ruleChapterName").value = RuleEditor['ruleChapterName'];
-		document.querySelector("#ruleContentUrl").value = RuleEditor['ruleContentUrl'];
-		document.querySelector("#ruleContentUrlNext").value = RuleEditor['ruleContentUrlNext'];
-		document.querySelector("#ruleBookContent").value = RuleEditor['ruleBookContent'];
-		document.querySelector("#httpUserAgent").value = RuleEditor['httpUserAgent'];
-		document.querySelector("#enable").value = RuleEditor['enable'];
-		document.querySelector("#serialNumber").value = RuleEditor['serialNumber'];
-		document.querySelector("#weight").value = RuleEditor['weight'];
+		let RuleEditor = JSON.parse(document.querySelector("#RuleJsonString").value);
+		Object.keys(RuleEditor).forEach((key) => { document.querySelector("#" + key).value = RuleEditor[key] });
 	});
 
 </script>

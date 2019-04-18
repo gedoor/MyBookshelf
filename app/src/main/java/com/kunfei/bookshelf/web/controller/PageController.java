@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.controller;
+package com.kunfei.bookshelf.web.controller;
 
 import com.yanzhenjie.andserver.annotation.Controller;
 import com.yanzhenjie.andserver.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.component;
+package com.kunfei.bookshelf.web.component;
 
 import com.yanzhenjie.andserver.annotation.Website;
 import com.yanzhenjie.andserver.framework.website.AssetsWebsite;
@@ -7,6 +7,6 @@ import com.yanzhenjie.andserver.framework.website.AssetsWebsite;
 public class InternalWebsite extends AssetsWebsite {
 
     public InternalWebsite() {
-        super("/web", "index.html");
+        super("/web");
     }
 }
