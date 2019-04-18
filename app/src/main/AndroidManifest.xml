@@ -29,7 +29,9 @@
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:replace="android:theme">
 
-        <activity android:name=".view.activity.WelcomeActivity">
+        <activity
+            android:name=".view.activity.WelcomeActivity"
+            android:theme="@style/CAppWelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,6 +45,7 @@
         <activity
             android:name=".view.activity.WelcomeBookActivity"
             android:enabled="false"
+            android:theme="@style/CAppWelcomeTheme"
             android:icon="@mipmap/book_launcher"
             android:roundIcon="@mipmap/book_launcher_round">
             <intent-filter>
@@ -55,7 +58,9 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity android:name=".view.activity.WelcomeToReadActivity">
+        <activity
+            android:name=".view.activity.WelcomeToReadActivity"
+            android:theme="@style/CAppWelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -180,6 +185,7 @@
         <service android:name=".service.ReadAloudService" />
         <service android:name=".service.CheckSourceService" />
         <service android:name=".service.UpdateService" />
+        <service android:name=".service.WebService" />
 
         <receiver android:name=".service.MediaButtonIntentReceiver">
             <intent-filter>

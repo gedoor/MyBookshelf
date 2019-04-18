@@ -8,6 +8,7 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.content.WebBook;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
@@ -79,7 +80,11 @@ public class PageLoaderNet extends PageLoader {
 
                         @Override
                         public void onError(Throwable e) {
-                            chapterError(e.getMessage());
+                            if (e instanceof WebBook.NoSourceThrowable) {
+                                mPageView.autoChangeSource();
+                            } else {
+                                chapterError(e.getMessage());
+                            }
                         }
 
                         @Override
@@ -87,6 +92,16 @@ public class PageLoaderNet extends PageLoader {
 
                         }
                     });
+        }
+    }
+
+    @Override
+    public void changeSourceFinish(BookShelfBean book) {
+        if (book == null) {
+            super.changeSourceFinish(null);
+        } else {
+            bookShelfBean = book;
+            refreshChapterList();
         }
     }
 
@@ -124,7 +139,11 @@ public class PageLoaderNet extends PageLoader {
                         public void onError(Throwable e) {
                             DownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl());
                             if (chapterIndex == mCurChapterPos) {
-                                chapterError(e.getMessage());
+                                if (e instanceof WebBook.NoSourceThrowable) {
+                                    mPageView.autoChangeSource();
+                                } else {
+                                    chapterError(e.getMessage());
+                                }
                             }
                         }
 

@@ -49,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
+    private final int requestSource = 14;
 
     @BindView(R.id.searchView)
     SearchView searchView;
@@ -67,6 +68,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
+    private View refreshErrorView;
     private ExplosionField mExplosionField;
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
@@ -86,7 +88,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected SearchBookContract.Presenter initInjector() {
-        return new SearchBookPresenter(this);
+        return new SearchBookPresenter();
     }
 
     @Override
@@ -116,16 +118,15 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 .create());
         llSearchHistory.setOnClickListener(null);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
-
-        View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
-        viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
+        refreshErrorView = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
+        refreshErrorView.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             mPresenter.initPage();
             rfRvSearchBooks.startRefresh();
             mPresenter.toSearchBooks(null, true);
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
-                viewRefreshError);
+        rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
+                refreshErrorView);
 
         searchBookAdapter.setItemClickListener((view, position) -> {
             Intent intent = new Intent(SearchBookActivity.this, BookDetailActivity.class);
@@ -162,7 +163,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         int id = item.getItemId();
         switch (id) {
             case R.id.action_book_source_manage:
-                BookSourceActivity.startThis(this);
+                BookSourceActivity.startThis(this, requestSource);
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);
@@ -431,8 +432,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     @Override
-    public void searchBookError(Boolean isRefresh) {
-        if (isRefresh) {
+    public void searchBookError(Throwable throwable) {
+        if (searchBookAdapter.getICount() == 0) {
+            ((TextView) refreshErrorView.findViewById(R.id.tv_error_msg)).setText(throwable.getMessage());
             rfRvSearchBooks.refreshError();
         } else {
             rfRvSearchBooks.loadMoreError();
@@ -464,6 +466,18 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case requestSource:
+                    mPresenter.initSearchEngineS();
+                    break;
+            }
+        }
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, android.R.anim.fade_out);
     }
 }

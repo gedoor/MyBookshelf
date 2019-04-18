@@ -35,6 +35,7 @@ import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
+import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -59,6 +60,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -68,6 +70,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
+    private final int requestSource = 14;
     private String[] mTitles;
 
     @BindView(R.id.drawer)
@@ -207,11 +210,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab == null) return;
-            if (i == 0) { //设置第一个Item的点击事件(当下标为0时触发)
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            } else {
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            }
+            tab.setCustomView(tab_icon(mTitles[i]));
             View customView = tab.getCustomView();
             if (customView == null) return;
             TextView tv = customView.findViewById(R.id.tabtext);
@@ -316,19 +315,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tab.setContentDescription(String.format("%s,%s", tv.getText(), getString(R.string.click_on_selected_show_menu)));
     }
 
-    private View tab_icon(String name, Integer iconID) {
+    private View tab_icon(String name) {
         @SuppressLint("InflateParams")
         View tabView = LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right, null);
         TextView tv = tabView.findViewById(R.id.tabtext);
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
-        if (iconID != null) {
-            im.setVisibility(View.VISIBLE);
-            im.setImageResource(iconID);
-        } else {
-            im.setVisibility(View.GONE);
-        }
+        im.setVisibility(View.VISIBLE);
+        im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
         return tabView;
+    }
+
+    public ViewPager getViewPager() {
+        return mVp;
     }
 
     @Override
@@ -425,12 +424,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             case R.id.action_change_icon:
                 LauncherIcon.Change();
                 break;
+            case R.id.action_web_start:
+                WebService.startThis(this);
+                break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
                 ) {
                     drawer.closeDrawers();
                 } else {
-                    drawer.openDrawer(GravityCompat.START);
+                    drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
                 }
                 break;
         }
@@ -489,10 +491,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         upThemeVw();
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            drawer.closeDrawers();
+            drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
-                    handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
+                    handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
                     break;
                 case R.id.action_replace_rule:
                     handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
@@ -693,6 +695,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         });
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
@@ -704,7 +707,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawers();
+                    drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
                     return true;
                 }
                 exit();
@@ -735,7 +738,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case requestSource:
+                    RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+                    break;
+            }
+        }
     }
 
     private void preloadReader() {

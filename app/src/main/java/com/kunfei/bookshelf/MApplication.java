@@ -20,10 +20,12 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -31,9 +33,11 @@ import io.reactivex.plugins.RxJavaPlugins;
 public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
+    public final static String channelIdWeb = "channel_web";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final static int RESULT__PERMS = 263;
     public static String downloadPath;
+    public static boolean isEInkMode;
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
@@ -70,21 +74,21 @@ public class MApplication extends Application {
             versionName = "0.0.0";
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannelIdDownload();
-            createChannelIdReadAloud();
+            createChannelId();
         }
         configPreferences = getSharedPreferences("CONFIG", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
         if (TextUtils.isEmpty(downloadPath) | Objects.equals(downloadPath, FileHelp.getCachePath())) {
             setDownloadPath(null);
         }
+        initNightTheme();
         if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
         }
         AppFrontBackHelper.getInstance().register(this, new AppFrontBackHelper.OnAppStatusListener() {
             @Override
             public void onFront() {
-                donateHb = System.currentTimeMillis() - configPreferences.getLong("DonateHb", 0) <= TimeUnit.DAYS.toMillis(3);
+                donateHb = System.currentTimeMillis() - configPreferences.getLong("DonateHb", 0) <= TimeUnit.DAYS.toMillis(7);
             }
 
             @Override
@@ -94,7 +98,7 @@ public class MApplication extends Application {
                 }
             }
         });
-
+        upEInkMode();
     }
 
     @Override
@@ -103,11 +107,19 @@ public class MApplication extends Application {
         MultiDex.install(this);
     }
 
+    public void initNightTheme() {
+        if (isNightTheme()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
     /**
      * 初始化主题
      */
     public void upThemeStore() {
-        if (configPreferences.getBoolean("nightTheme", false)) {
+        if (isNightTheme()) {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.md_grey_800)))
                     .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.md_pink_800)))
@@ -120,6 +132,10 @@ public class MApplication extends Application {
                     .backgroundColor(configPreferences.getInt("colorBackground", getResources().getColor(R.color.md_grey_100)))
                     .apply();
         }
+    }
+
+    public boolean isNightTheme() {
+        return configPreferences.getBoolean("nightTheme", false);
     }
 
     /**
@@ -152,37 +168,46 @@ public class MApplication extends Application {
         donateHb = true;
     }
 
+    public void upEInkMode() {
+        MApplication.isEInkMode = configPreferences.getBoolean("E-InkMode", false);
+    }
+
+    /**
+     * 创建通知ID
+     */
     @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannelIdDownload() {
+    private void createChannelId() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //用唯一的ID创建渠道对象
-        NotificationChannel firstChannel = new NotificationChannel(channelIdDownload,
+        NotificationChannel downloadChannel = new NotificationChannel(channelIdDownload,
                 getString(R.string.download_offline),
                 NotificationManager.IMPORTANCE_LOW);
         //初始化channel
-        firstChannel.enableLights(false);
-        firstChannel.enableVibration(false);
-        firstChannel.setSound(null, null);
-        //向notification manager 提交channel
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            notificationManager.createNotificationChannel(firstChannel);
-        }
-    }
+        downloadChannel.enableLights(false);
+        downloadChannel.enableVibration(false);
+        downloadChannel.setSound(null, null);
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void createChannelIdReadAloud() {
         //用唯一的ID创建渠道对象
-        NotificationChannel firstChannel = new NotificationChannel(channelIdReadAloud,
+        NotificationChannel readAloudChannel = new NotificationChannel(channelIdReadAloud,
                 getString(R.string.read_aloud),
                 NotificationManager.IMPORTANCE_LOW);
         //初始化channel
-        firstChannel.enableLights(false);
-        firstChannel.enableVibration(false);
-        firstChannel.setSound(null, null);
+        readAloudChannel.enableLights(false);
+        readAloudChannel.enableVibration(false);
+        readAloudChannel.setSound(null, null);
+
+        //用唯一的ID创建渠道对象
+        NotificationChannel webChannel = new NotificationChannel(channelIdWeb,
+                getString(R.string.web_edit_source),
+                NotificationManager.IMPORTANCE_LOW);
+        //初始化channel
+        webChannel.enableLights(false);
+        webChannel.enableVibration(false);
+        webChannel.setSound(null, null);
+
         //向notification manager 提交channel
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.createNotificationChannel(firstChannel);
+            notificationManager.createNotificationChannels(Arrays.asList(downloadChannel, readAloudChannel, webChannel));
         }
     }
 

@@ -39,6 +39,8 @@
     <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
+    <string name="web_edit_source">Web编辑书源</string>
+    <string name="http_ip">http://%s:1122</string>
     <string name="download_offline">离线下载</string>
     <string name="download_offline_t">离线下载</string>
     <string name="download_offline_s">下载选择的章节到本地</string>
@@ -220,6 +222,7 @@
     <string name="padding_left">左边距</string>
     <string name="padding_right">右边距</string>
     <string name="check_book_source">校验书源</string>
+    <string name="check_select_source">校验所选</string>
     <string name="progress_show">进度 %d/%d</string>
     <string name="tts_fix">请安装并选择中文TTS!</string>
     <string name="tts_init_failed">TTS初始化失败!</string>
@@ -264,6 +267,7 @@
     <string name="allow_update">允许更新</string>
     <string name="revert_selection">反转选择</string>
     <string name="search_book_key">搜索书名、作者</string>
+    <string name="debug_hint">书名、作者、URL</string>
     <string name="faq">常见问题</string>
     <string name="pt_show_all_find">显示所有发现</string>
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>
@@ -405,4 +409,6 @@
     <string name="tip_padding">Tip边距</string>
     <string name="text_letter_spacing">字距</string>
 
+    <string name="e_ink_mode">E-Ink 模式</string>
+    <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -75,6 +74,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AlertDialog alertDialog;
         switch (key) {
+            case "E-InkMode":
+                MApplication.getInstance().upEInkMode();
+                break;
             case "immersionStatusBar":
             case "navigationBarColorChange":
                 settingActivity.initImmersionBar();
@@ -124,7 +126,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
         if (settingActivity.isNightTheme() == isNightTheme) {
             MApplication.getInstance().upThemeStore();
             RxBus.get().post(RxBusTag.RECREATE, true);
-            new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            if (getActivity() != null) {
+                getActivity().recreate();
+            }
         }
     }
 
@@ -146,7 +150,8 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                         MApplication.getInstance().upThemeStore();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {})
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
                     .show();
             ATH.setAlertDialogTint(alertDialog);
         }

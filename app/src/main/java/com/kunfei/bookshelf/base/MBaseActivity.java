@@ -2,6 +2,7 @@
 package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -30,7 +31,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     private static final String TAG = MBaseActivity.class.getSimpleName();
@@ -202,13 +202,14 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      * @return 是否夜间模式
      */
     public boolean isNightTheme() {
-        return preferences.getBoolean("nightTheme", false);
+        return MApplication.getInstance().isNightTheme();
     }
 
     protected void setNightTheme(boolean isNightTheme) {
         preferences.edit()
                 .putBoolean("nightTheme", isNightTheme)
                 .apply();
+        MApplication.getInstance().initNightTheme();
         MApplication.getInstance().upThemeStore();
         RxBus.get().post(RxBusTag.RECREATE, true);
     }
@@ -218,11 +219,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             setTheme(R.style.CAppTheme);
         } else {
             setTheme(R.style.CAppThemeBarDark);
-        }
-        if (isNightTheme()) {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
@@ -246,5 +242,27 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+        }
+    }
 
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
 }

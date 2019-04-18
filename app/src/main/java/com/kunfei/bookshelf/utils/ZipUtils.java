@@ -224,9 +224,7 @@ public final class ZipUtils {
      * @return the unzipped files
      * @throws IOException if unzip unsuccessfully
      */
-    public static List<File> unzipFile(final String zipFilePath,
-                                       final String destDirPath)
-            throws IOException {
+    public static List<File> unzipFile(final String zipFilePath, final String destDirPath) throws IOException {
         return unzipFileByKeyword(zipFilePath, destDirPath, null);
     }
 
@@ -255,8 +253,7 @@ public final class ZipUtils {
      */
     public static List<File> unzipFileByKeyword(final String zipFilePath,
                                                 final String destDirPath,
-                                                final String keyword)
-            throws IOException {
+                                                final String keyword) throws IOException {
         return unzipFileByKeyword(getFileByPath(zipFilePath), getFileByPath(destDirPath), keyword);
     }
 
@@ -271,8 +268,7 @@ public final class ZipUtils {
      */
     public static List<File> unzipFileByKeyword(final File zipFile,
                                                 final File destDir,
-                                                final String keyword)
-            throws IOException {
+                                                final String keyword) throws IOException {
         if (zipFile == null || destDir == null) return null;
         List<File> files = new ArrayList<>();
         ZipFile zip = new ZipFile(zipFile);

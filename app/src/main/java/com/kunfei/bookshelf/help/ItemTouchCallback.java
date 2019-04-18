@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by GKF on 2018/3/16.
@@ -16,9 +17,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 public class ItemTouchCallback extends ItemTouchHelper.Callback {
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ViewPager viewPager;
 
     public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
         this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
     }
 
     /**
@@ -131,9 +137,12 @@ public class ItemTouchCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
+        final boolean swiping = actionState == ItemTouchHelper.ACTION_STATE_DRAG;
         if (swipeRefreshLayout != null) {
-            final boolean swiping = actionState == ItemTouchHelper.ACTION_STATE_DRAG;
             swipeRefreshLayout.setEnabled(!swiping);
+        }
+        if (viewPager != null) {
+            viewPager.requestDisallowInterceptTouchEvent(swiping);
         }
     }
 

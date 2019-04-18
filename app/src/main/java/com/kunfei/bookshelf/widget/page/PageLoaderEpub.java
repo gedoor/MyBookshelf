@@ -174,7 +174,7 @@ public class PageLoaderEpub extends PageLoader {
             List<TextNode> contentEs = element.textNodes();
             for (int i = 0; i < contentEs.size(); i++) {
                 String text = contentEs.get(i).text().trim();
-                text = FormatWebText.getContent(text);
+                text = FormatWebText.formatHtml(text);
                 if (elements.size() > 1) {
                     if (text.length() > 0) {
                         if (content.length() > 0) {

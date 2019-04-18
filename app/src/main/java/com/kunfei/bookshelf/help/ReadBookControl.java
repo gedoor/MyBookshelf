@@ -166,7 +166,9 @@ public class ReadBookControl {
     }
 
     public void initTextDrawableIndex() {
-        if (getIsNightTheme()) {
+        if (MApplication.isEInkMode) {
+            textDrawableIndex = 1;
+        } else if (getIsNightTheme()) {
             textDrawableIndex = preferences.getInt("textDrawableIndexNight", 4);
         } else {
             textDrawableIndex = preferences.getInt("textDrawableIndex", DEFAULT_BG);
@@ -300,7 +302,7 @@ public class ReadBookControl {
     }
 
     private boolean getIsNightTheme() {
-        return preferences.getBoolean("nightTheme", false);
+        return MApplication.getInstance().isNightTheme();
     }
 
     public boolean getImmersionStatusBar() {
@@ -704,6 +706,9 @@ public class ReadBookControl {
     }
 
     public int getPageMode() {
+        if (MApplication.isEInkMode) {
+            return 4;
+        }
         return pageMode;
     }
 

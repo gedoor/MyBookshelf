@@ -72,7 +72,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
-        viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
+        viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             searchBookAdapter.replaceAll(null);
             //刷新失败 ，重试
@@ -80,7 +80,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
             mPresenter.toSearchBooks(null);
             startRefreshAnim();
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
+        rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 viewRefreshError);
     }
 

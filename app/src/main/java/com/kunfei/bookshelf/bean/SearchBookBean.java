@@ -329,4 +329,5 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     public void setUpTime(Long upTime) {
         this.upTime = upTime;
     }
+
 }

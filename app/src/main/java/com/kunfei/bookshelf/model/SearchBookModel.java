@@ -1,10 +1,7 @@
 package com.kunfei.bookshelf.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -32,7 +29,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SearchBookModel {
-    private Context context;
     private Handler handler = new Handler(Looper.getMainLooper());
     private ExecutorService executorService;
     private Scheduler scheduler;
@@ -45,11 +41,9 @@ public class SearchBookModel {
     private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
 
-    public SearchBookModel(Context context, OnSearchListener searchListener) {
-        this.context = context;
+    public SearchBookModel(OnSearchListener searchListener) {
         this.searchListener = searchListener;
-        SharedPreferences preference = MApplication.getConfigPreferences();
-        threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
+        threadsNum = MApplication.getConfigPreferences().getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
@@ -89,6 +83,16 @@ public class SearchBookModel {
         });
     }
 
+    private void searchBookError(Throwable throwable) {
+        compositeDisposable.dispose();
+        compositeDisposable = new CompositeDisposable();
+        handler.post(() -> {
+            searchListener.refreshFinish(true);
+            searchListener.loadMoreFinish(true);
+            searchListener.searchBookError(throwable);
+        });
+    }
+
     public void onDestroy() {
         stopSearch();
         executorService.shutdown();
@@ -112,11 +116,7 @@ public class SearchBookModel {
             handler.post(() -> searchListener.refreshSearchBook());
         }
         if (searchEngineS.size() == 0) {
-            handler.post(() -> {
-                Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show();
-                searchListener.refreshFinish(true);
-                searchListener.loadMoreFinish(true);
-            });
+            searchBookError(new Throwable("没有选中任何书源"));
             return;
         }
         searchSuccessNum = 0;
@@ -191,9 +191,9 @@ public class SearchBookModel {
             if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
                 if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
                     if (page == 1) {
-                        handler.post(() -> searchListener.searchBookError(true));
+                        searchBookError(new Throwable("未搜索到内容"));
                     } else {
-                        handler.post(() -> searchListener.searchBookError(false));
+                        searchBookError(new Throwable("未搜索到更多内容"));
                     }
                 } else {
                     if (page == 1) {
@@ -230,7 +230,7 @@ public class SearchBookModel {
 
         void loadMoreSearchBook(List<SearchBookBean> searchBookBeanList);
 
-        void searchBookError(Boolean isRefresh);
+        void searchBookError(Throwable throwable);
 
         int getItemCount();
     }

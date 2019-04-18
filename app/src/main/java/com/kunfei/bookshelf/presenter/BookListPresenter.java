@@ -18,6 +18,7 @@ import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.content.WebBook;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.utils.NetworkUtil;
@@ -156,11 +157,15 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
 
                             @Override
                             public void onError(Throwable e) {
-                                errBooks.add(bookShelfBean.getBookInfoBean().getName());
-                                Log.w("MonkBook", String.format("%s: %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()));
-                                bookShelfBean.setLoading(false);
-                                mView.refreshBook(bookShelfBean.getNoteUrl());
-                                refreshBookshelf();
+                                if (e instanceof WebBook.NoSourceThrowable) {
+
+                                } else {
+                                    errBooks.add(bookShelfBean.getBookInfoBean().getName());
+                                    Log.w("MonkBook", String.format("%s: %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()));
+                                    bookShelfBean.setLoading(false);
+                                    mView.refreshBook(bookShelfBean.getNoteUrl());
+                                    refreshBookshelf();
+                                }
                             }
 
                             @Override
@@ -169,7 +174,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             }
                         });
             } else {
-
                 refreshBookshelf();
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {

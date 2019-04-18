@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -50,6 +51,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
 
+    private CallBackValue callBackValue;
     private Unbinder unbinder;
     private String bookPx;
     private boolean resumed = false;
@@ -78,7 +80,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     protected void initData() {
-        CallBackValue callBackValue = (CallBackValue) getActivity();
+        callBackValue = (CallBackValue) getActivity();
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         isRecreate = callBackValue != null && callBackValue.isRecreate();
     }
@@ -120,6 +122,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         });
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setSwipeRefreshLayout(refreshLayout);
+        itemTouchCallback.setViewPager(callBackValue.getViewPager());
         if (bookPx.equals("2")) {
             itemTouchCallback.setDragEnable(true);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
@@ -138,28 +141,32 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             @Override
             public void onClick(View view, int index) {
                 BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
-                Intent intent = new Intent(getActivity(), ReadBookActivity.class);
-                intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
                 try {
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
                 } catch (CloneNotSupportedException e) {
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean);
                 }
+                Intent intent = new Intent(getActivity(), ReadBookActivity.class);
+                intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
+                intent.putExtra("data_key", key);
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
 
             @Override
             public void onLongClick(View view, int index) {
+                BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
+                String key = String.valueOf(System.currentTimeMillis());
+                try {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
+                } catch (CloneNotSupportedException e) {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
+                }
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra("openFrom", BookDetailPresenter.FROM_BOOKSHELF);
-                String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, bookShelfAdapter.getBooks().get(index));
-
+                intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-
             }
         };
     }
@@ -232,6 +239,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         boolean isRecreate();
 
         int getGroup();
+
+        ViewPager getViewPager();
     }
 
 }

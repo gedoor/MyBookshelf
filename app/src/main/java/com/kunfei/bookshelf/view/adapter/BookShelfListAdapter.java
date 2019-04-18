@@ -91,6 +91,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         BookShelfBean bookShelfBean = books.get(index);
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         if (!activity.isFinishing()) {

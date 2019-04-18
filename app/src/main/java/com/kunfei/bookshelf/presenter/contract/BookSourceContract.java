@@ -23,7 +23,7 @@ public interface BookSourceContract {
 
         void importBookSourceLocal(String path);
 
-        void checkBookSource();
+        void checkBookSource(List<BookSourceBean> sourceBeans);
 
     }
 
@@ -37,6 +37,7 @@ public interface BookSourceContract {
 
         void setResult(int resultCode);
 
+        int getSort();
     }
 
 }

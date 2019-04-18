@@ -18,7 +18,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private Handler handler;
     private int isRequesting = 0;   //0是未执行网络请求  1是正在下拉刷新  2是正在加载更多
-    private Boolean needLoadMore = false;
+    private Boolean needLoadMore;
     private Boolean isAll = false;  //判断是否还有更多
     private Boolean loadMoreError = false;
 
@@ -33,12 +33,12 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         return isRequesting;
     }
 
-    public void setIsRequesting(int isRequesting, Boolean needNoti) {
+    public void setIsRequesting(int isRequesting, Boolean needNotify) {
         this.isRequesting = isRequesting;
         if (this.isRequesting == 1) {
             isAll = false;
         }
-        if (needNoti) {
+        if (needNotify) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 notifyItemRangeChanged(getItemCount(), getItemCount() - getICount());
             } else {
@@ -101,9 +101,9 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public abstract int getICount();
 
-    public void setIsAll(Boolean isAll, Boolean needNoti) {
+    public void setIsAll(Boolean isAll, Boolean needNotify) {
         this.isAll = isAll;
-        if (needNoti) {
+        if (needNotify) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 if (getItemCount() > getICount()) {
                     notifyItemRangeChanged(getItemCount(), getItemCount() - getICount());
@@ -132,10 +132,10 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         return loadMoreError;
     }
 
-    public void setLoadMoreError(Boolean loadMoreError, Boolean needNoti) {
+    public void setLoadMoreError(Boolean loadMoreError, Boolean needNotify) {
         this.isRequesting = 0;
         this.loadMoreError = loadMoreError;
-        if (needNoti) {
+        if (needNotify) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 notifyDataSetChanged();
             } else {
@@ -152,7 +152,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         FrameLayout llLoadMore;
         TextView tvLoadMore;
 
-        public LoadMoreViewHolder(View itemView) {
+        LoadMoreViewHolder(View itemView) {
             super(itemView);
             llLoadMore = itemView.findViewById(R.id.ll_loadmore);
             tvLoadMore = itemView.findViewById(R.id.tv_loadmore);

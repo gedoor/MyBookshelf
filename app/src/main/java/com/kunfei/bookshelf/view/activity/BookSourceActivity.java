@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -12,13 +11,10 @@ import android.view.SubMenu;
 import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.constant.AppConstant;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -77,8 +73,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Activity activity) {
-        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), AppConstant.BookSourceActivity);
+    public static void startThis(Activity activity, int requestCode) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), requestCode);
     }
 
     @Override
@@ -108,7 +104,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onDestroy() {
-        RxBus.get().post(RxBusTag.SOURCE_LIST_CHANGE, true);
         super.onDestroy();
     }
 
@@ -159,7 +154,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        setDragEnable(preferences.getInt("SourceSort", 0));
+        setDragEnable(getSort());
     }
 
     private void setDragEnable(int sort) {
@@ -191,6 +186,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     private void revertSelection() {
@@ -199,6 +195,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         adapter.notifyDataSetChanged();
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     public void upSearchView(int size) {
@@ -224,6 +221,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(BookSourceBean date) {
@@ -289,7 +287,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 deleteDialog();
                 break;
             case R.id.action_check_book_source:
-                mPresenter.checkBookSource();
+                mPresenter.checkBookSource(adapter.getSelectDataList());
                 break;
             case R.id.sort_manual:
                 upSourceSort(0);
@@ -328,16 +326,18 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         sortMenu.getItem(0).setChecked(false);
         sortMenu.getItem(1).setChecked(false);
         sortMenu.getItem(2).setChecked(false);
-        sortMenu.getItem(preferences.getInt("SourceSort", 0)).setChecked(true);
+        sortMenu.getItem(getSort()).setChecked(true);
     }
 
     private void upSourceSort(int sort) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("SourceSort", sort);
-        editor.apply();
+        preferences.edit().putInt("SourceSort", sort).apply();
         upSortMenu();
         setDragEnable(sort);
         refreshBookSource();
+    }
+
+    public int getSort() {
+        return preferences.getInt("SourceSort", 0);
     }
 
     private void scanBookSource() {
