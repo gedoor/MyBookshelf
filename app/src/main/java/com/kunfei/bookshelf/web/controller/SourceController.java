@@ -13,7 +13,7 @@ import com.yanzhenjie.andserver.http.RequestBody;
 import java.io.IOException;
 
 @RestController
-public class SourceController {
+class SourceController {
 
     @PostMapping(path = "/saveSource", consumes = "application/json")
     String saveSource(RequestBody body) {

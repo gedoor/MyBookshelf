@@ -5,7 +5,9 @@
 	<meta charset="UTF-8">
 	<title>书源编辑器v2.0</title>
 	<style>
-		body, .rules, .outbox {
+		body,
+		.rules,
+		.outbox {
 			display: flex;
 			flex-flow: column;
 			flex: 1;
@@ -196,6 +198,67 @@
 	</div>
 </body>
 <script language="javascript">
+	// 定义简化函数
+	function dQuery(selector) {
+		return document.querySelector(selector)
+	}
+	function dQueryAll(selector) {
+		return document.querySelectorAll(selector)
+	}
+	function rule2json() {
+		Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = dQuery('#' + key).value; });
+		RuleJSON['serialNumber'] = RuleJSON['serialNumber'] == '' ? 0 : parseInt(RuleJSON['serialNumber']);
+		RuleJSON['weight'] = RuleJSON['weight'] == '' ? 0 : parseInt(RuleJSON['weight']);
+		RuleJSON['enable'] = RuleJSON['enable'] == '' || RuleJSON['enable'].toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
+		return RuleJSON;
+	}
+	function json2rule(RuleEditor) {
+		Object.keys(RuleEditor).forEach((key) => { dQuery("#" + key).value = RuleEditor[key] });
+	}
+	// 记录操作过程
+	var course = {};
+	if (localStorage.getItem('course') == null) {
+		course = { "old": [], "now": rule2json(), "new": [] };
+		window.localStorage.setItem('course', JSON.stringify(course));
+	}
+	else {
+		course = JSON.parse(localStorage.getItem('course'));
+		json2rule(course['now']);
+	}
+	function todo() {
+		course['old'].push(Object.assign({}, course['now']));
+		course['now'] = rule2json();
+		course['new'] = [];
+		if (course['old'].length > 50) course['old'].shift(); // 限制历史记录堆栈大小
+		localStorage.setItem('course', JSON.stringify(course));
+	}
+	function undo() {
+		course = JSON.parse(localStorage.getItem('course'));
+		if (course['old'].length > 0) {
+			course['new'].push(course['now']);
+			course['now'] = course['old'].pop();
+			localStorage.setItem('course', JSON.stringify(course));
+			json2rule(course['now']);
+		}
+	}
+	function redo() {
+		course = JSON.parse(localStorage.getItem('course'));
+		if (course['new'].length > 0) {
+			course['old'].push(course['now']);
+			course['now'] = course['new'].pop();
+			localStorage.setItem('course', JSON.stringify(course));
+			json2rule(course['now']);
+		}
+	}
+	dQueryAll('input').forEach((item) => { item.addEventListener('change', () => { todo() }) });
+	dQueryAll('textarea').forEach((item) => { item.addEventListener('change', () => { todo() }) });
+	dQuery('#undo').addEventListener('click', () => { undo() });
+	dQuery('#redo').addEventListener('click', () => { redo() });
+	dQuery('#clear').addEventListener('click', () => {
+		Object.keys(RuleJSON).forEach((key) => { dQuery('#' + key).value = ''; });
+		todo();
+	})
+	// 处理规则内容
 	var RuleJSON = {
 		"bookSourceName": "",
 		"bookSourceGroup": "",
@@ -229,23 +292,15 @@
 		"weight": 0,
 		"enable": true
 	};
-
-	function dQuery(selector){
-		return document.querySelector(selector)
-	}
-
-	function rule2json() {
-		Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = dQuery('#' + key).value; });
-		RuleJSON['serialNumber'] = RuleJSON['serialNumber'] == '' ? 0 : parseInt(RuleJSON['serialNumber']);
-		RuleJSON['weight'] = RuleJSON['weight'] == '' ? 0 : parseInt(RuleJSON['weight']);
-		RuleJSON['enable'] = RuleJSON['enable'] == '' || RuleJSON['enable'].toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
-		return RuleJSON;
-	}
-
-	function json2rule(RuleEditor) {
-		Object.keys(RuleEditor).forEach((key) => { dQuery("#" + key).value = RuleEditor[key] });
-	}
-
+	dQuery('#conver').addEventListener('click', () => {
+		dQuery('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);;
+	});
+	dQuery('#editor').addEventListener('click', () => {
+		if (dQuery('#RuleJsonString').value == '') return;
+		json2rule(JSON.parse(dQuery('#RuleJsonString').value));
+		todo();
+	});
+	// 提交规则数据
 	function HttpPost(url, data) {
 		return fetch(url, {
 			body: JSON.stringify(data),
@@ -257,20 +312,9 @@
 			.catch(err => console.error('Error:', err))
 			.then(rep => console.log('Success:', rep));
 	}
-
-	dQuery('#conver').addEventListener('click', () => {
-		dQuery('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);;
-	});
-
-	dQuery('#editor').addEventListener('click', () => {
-		if (dQuery('#RuleJsonString').value == '') return;
-		json2rule(JSON.parse(dQuery('#RuleJsonString').value));
-	});
-
 	dQuery('#accept').addEventListener('click', () => {
-		console.log(HttpPost(window.location.origin + "/saveSource", rule2json()));
+		console.log(HttpPost(window.location.origin, rule2json()));
 	});
-
 </script>
 
 </html>
