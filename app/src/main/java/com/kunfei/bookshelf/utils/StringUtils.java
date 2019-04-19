@@ -297,7 +297,7 @@ public class StringUtils {
     public static boolean endWithIgnoreCase(String src, String obj) {
         if (src == null || obj == null) return false;
         if (obj.length() > src.length()) return false;
-        return src.substring(src.length() - obj.length(), obj.length()).equalsIgnoreCase(obj);
+        return src.substring(src.length() - obj.length()).equalsIgnoreCase(obj);
     }
 
     /**
