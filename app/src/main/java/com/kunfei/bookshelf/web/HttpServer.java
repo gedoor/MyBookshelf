@@ -16,44 +16,44 @@ public class HttpServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
+        if(session.getMethod().name().equals("OPTIONS")){
+            Response response = newFixedLengthResponse("");
+            response.addHeader("Access-Control-Allow-Methods", "POST");
+            response.addHeader("Access-Control-Allow-Headers", "content-type");
+            response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
+            response.addHeader("Access-Control-Max-Age", "3600");
+            return response;
+        }
         String uri = session.getUri();
-
+        ReturnData returnData = null;
         try {
-            switch (uri) {
+            if (uri.endsWith("/")) {
+                uri = uri + "index.html";
+            } else switch (uri) {
                 case "/saveSource":
-                    return new SourceController().saveSource(session);
+                    returnData = new SourceController().saveSource(session);
+                    break;
                 case "/saveSources":
-                    return new SourceController().saveSources(session);
+                    returnData =  new SourceController().saveSources(session);
+                    break;
                 case "/getSource":
-                    return new SourceController().getSource(session);
+                    returnData =  new SourceController().getSource(session);
+                    break;
                 case "/getSources":
-                    return new SourceController().getSources(session);
-                default:
-                    if (uri.endsWith("/")) {
-                        uri = uri + "index.html";
-                    }
+                    returnData =  new SourceController().getSources(session);
+                    break;
             }
-            return assetsWeb.getResponse(uri);
+            if(returnData == null){
+                return assetsWeb.getResponse(uri);
+            }
+
+            Response response = newFixedLengthResponse(returnData.toJson());
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+            response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
+            return response;
         } catch (Exception e) {
             return newFixedLengthResponse(e.getMessage());
         }
-    }
-
-    public static Response newResponse(Object object) {
-        Response response;
-        if (object instanceof ReturnData) {
-            response = newFixedLengthResponse(((ReturnData) object).toJson());
-        } else {
-            ReturnData returnData = new ReturnData();
-            returnData.setSuccess(true);
-            returnData.setData(object);
-            response = newFixedLengthResponse(returnData.toJson());
-        }
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Max-Age", "" + 42 * 60 * 60);
-        return response;
     }
 
 }

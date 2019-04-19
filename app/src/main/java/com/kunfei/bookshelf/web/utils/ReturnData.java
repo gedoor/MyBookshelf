@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 public class ReturnData implements Parcelable {
 
-    private boolean isSuccess = true;
+    private boolean isSuccess;
 
     private int errorCode;
 
@@ -72,8 +72,10 @@ public class ReturnData implements Parcelable {
         return errorMsg;
     }
 
-    public void setErrorMsg(String errorMsg) {
+    public ReturnData setErrorMsg(String errorMsg) {
+        isSuccess = false;
         this.errorMsg = errorMsg;
+        return this;
     }
 
     public Object getData() {
@@ -81,6 +83,7 @@ public class ReturnData implements Parcelable {
     }
 
     public ReturnData setData(Object data) {
+        isSuccess = true;
         this.data = data;
         return this;
     }
