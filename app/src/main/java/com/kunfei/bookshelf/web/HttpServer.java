@@ -19,13 +19,13 @@ public class HttpServer extends NanoHTTPD {
 
         try {
             switch (uri) {
-                case "saveSource":
+                case "/saveSource":
                     return new SourceController().saveSource(session);
-                case "saveSources":
+                case "/saveSources":
                     return new SourceController().saveSources(session);
-                case "getSource":
+                case "/getSource":
                     return new SourceController().getSource(session);
-                case "getSources":
+                case "/getSources":
                     return new SourceController().getSources(session);
                 default:
                     if (uri.endsWith("/")) {
