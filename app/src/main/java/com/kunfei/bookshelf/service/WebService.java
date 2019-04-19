@@ -10,8 +10,6 @@ import android.os.IBinder;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.yanzhenjie.andserver.AndServer;
-import com.yanzhenjie.andserver.Server;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +20,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    private Server server;
+
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -34,29 +32,7 @@ public class WebService extends Service {
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-        Server.ServerListener listener = new Server.ServerListener() {
-            @Override
-            public void onStarted() {
-                updateNotification( getString(R.string.http_ip, server.getInetAddress().getHostAddress()));
-            }
 
-            @Override
-            public void onStopped() {
-
-            }
-
-            @Override
-            public void onException(Exception e) {
-
-            }
-        };
-        server = AndServer.serverBuilder()
-                .inetAddress(NetworkUtil.getLocalIPAddress())
-                .port(1122)
-                .timeout(10, TimeUnit.SECONDS)
-                .listener(listener)
-                .build();
-        server.startup();
     }
 
     @Override
@@ -75,7 +51,7 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (server != null) server.shutdown();
+
     }
 
     private PendingIntent getThisServicePendingIntent() {
