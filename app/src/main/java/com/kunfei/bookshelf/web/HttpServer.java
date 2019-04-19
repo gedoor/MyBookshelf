@@ -1,8 +1,16 @@
 package com.kunfei.bookshelf.web;
 
+import com.kunfei.bookshelf.MApplication;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import fi.iki.elonen.NanoHTTPD;
 
 public class HttpServer extends NanoHTTPD {
+
+    AssetsWeb assetsWeb = new AssetsWeb();
 
     public HttpServer(int port) {
         super(port);
@@ -11,11 +19,19 @@ public class HttpServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<!DOCTYPE html><html><body>");
-        builder.append("Sorry, Can't Found the page!");
-        builder.append("</body></html>\n");
-        return newFixedLengthResponse(builder.toString());
+        String uri = session.getUri();
+        if (uri.endsWith("/")) {
+            uri = uri + "index.html";
+        }
+
+        String body;
+        try {
+            body = assetsWeb.readFile(uri);
+        } catch (IOException e) {
+            body = e.getMessage();
+        }
+
+        return newFixedLengthResponse(body);
     }
 
 }
