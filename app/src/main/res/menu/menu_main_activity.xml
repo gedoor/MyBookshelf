@@ -48,6 +48,6 @@
     <item
         android:id="@+id/action_web_start"
         android:icon="@drawable/ic_speaker_phone_black_24dp"
-        android:title="web写源"
+        android:title="@string/web_menu"
         app:showAsAction="never" />
 </menu>
