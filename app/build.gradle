@@ -110,8 +110,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
     //webServer
-    implementation 'com.yanzhenjie.andserver:api:2.0.4'
-    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.4'
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
 
     //动画
     implementation 'com.victor:lib:1.0.4'

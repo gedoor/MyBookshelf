@@ -7,22 +7,22 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.yanzhenjie.andserver.AndServer;
-import com.yanzhenjie.andserver.Server;
+import com.kunfei.bookshelf.web.HttpServer;
 
-import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
+import java.io.IOException;
+import java.net.InetAddress;
 
 import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    private Server server;
+    HttpServer httpServer;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -34,29 +34,18 @@ public class WebService extends Service {
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-        Server.ServerListener listener = new Server.ServerListener() {
-            @Override
-            public void onStarted() {
-                updateNotification( getString(R.string.http_ip, server.getInetAddress().getHostAddress()));
+        httpServer = new HttpServer(1122);
+        InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
+        if (inetAddress != null) {
+            try {
+                httpServer.start();
+                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress()));
+            } catch (IOException e) {
+                stopSelf();
             }
-
-            @Override
-            public void onStopped() {
-
-            }
-
-            @Override
-            public void onException(Exception e) {
-
-            }
-        };
-        server = AndServer.serverBuilder()
-                .inetAddress(NetworkUtil.getLocalIPAddress())
-                .port(1122)
-                .timeout(10, TimeUnit.SECONDS)
-                .listener(listener)
-                .build();
-        server.startup();
+        } else {
+            stopSelf();
+        }
     }
 
     @Override
@@ -75,7 +64,11 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (server != null) server.shutdown();
+        if (httpServer != null) {
+            if (httpServer.isAlive()) {
+                httpServer.stop();
+            }
+        }
     }
 
     private PendingIntent getThisServicePendingIntent() {
