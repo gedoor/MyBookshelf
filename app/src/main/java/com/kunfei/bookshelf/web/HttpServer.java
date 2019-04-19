@@ -1,8 +1,13 @@
 package com.kunfei.bookshelf.web;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.web.controller.SourceController;
 import com.kunfei.bookshelf.web.utils.AssetsWeb;
 import com.kunfei.bookshelf.web.utils.ReturnData;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -16,44 +21,62 @@ public class HttpServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
+        ReturnData returnData = null;
         String uri = session.getUri();
 
         try {
-            switch (uri) {
-                case "/saveSource":
-                    return new SourceController().saveSource(session);
-                case "/saveSources":
-                    return new SourceController().saveSources(session);
-                case "/getSource":
-                    return new SourceController().getSource(session);
-                case "/getSources":
-                    return new SourceController().getSources(session);
-                default:
-                    if (uri.endsWith("/")) {
-                        uri = uri + "index.html";
+            switch (session.getMethod().name()){
+                case "OPTIONS":
+                    Response response = newFixedLengthResponse("");
+                    response.addHeader("Access-Control-Allow-Methods", "POST");
+                    response.addHeader("Access-Control-Allow-Headers", "content-type");
+                    response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
+                    //response.addHeader("Access-Control-Max-Age", "3600");
+                    return response;
+
+                case "POST":
+                    Map<String, String> files = new HashMap<>();
+                    session.parseBody(files);
+                    String postData = files.get("postData");
+
+                    switch (uri) {
+                        case "/saveSource":
+                            returnData = new SourceController().saveSource(postData);
+                            break;
+                        case "/saveSources":
+                            returnData =  new SourceController().saveSources(postData);
+                            break;
                     }
+                    break;
+
+                case "GET":
+                    Map<String,List<String>> parameters = session.getParameters();
+
+                    switch (uri) {
+                        case "/getSource":
+                            returnData = new SourceController().getSource(parameters);
+                            break;
+                        case "/getSources":
+                            returnData = new SourceController().getSources();
+                            break;
+                    }
+                    break;
             }
-            return assetsWeb.getResponse(uri);
+
+            if(returnData == null){
+                if (uri.endsWith("/")) {
+                    uri = uri + "index.html";
+                }
+                return assetsWeb.getResponse(uri);
+            }
+
+            Response response = newFixedLengthResponse(new Gson().toJson(returnData));
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+            response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
+            return response;
         } catch (Exception e) {
             return newFixedLengthResponse(e.getMessage());
         }
-    }
-
-    public static Response newResponse(Object object) {
-        Response response;
-        if (object instanceof ReturnData) {
-            response = newFixedLengthResponse(((ReturnData) object).toJson());
-        } else {
-            ReturnData returnData = new ReturnData();
-            returnData.setSuccess(true);
-            returnData.setData(object);
-            response = newFixedLengthResponse(returnData.toJson());
-        }
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Max-Age", "" + 42 * 60 * 60);
-        return response;
     }
 
 }
