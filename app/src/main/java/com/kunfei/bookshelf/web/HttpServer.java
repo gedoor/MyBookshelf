@@ -1,16 +1,14 @@
 package com.kunfei.bookshelf.web;
 
-import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.web.utils.AssetsWeb;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import fi.iki.elonen.NanoHTTPD;
 
 public class HttpServer extends NanoHTTPD {
 
-    AssetsWeb assetsWeb = new AssetsWeb();
+    private AssetsWeb assetsWeb = new AssetsWeb("web");
 
     public HttpServer(int port) {
         super(port);
@@ -26,7 +24,7 @@ public class HttpServer extends NanoHTTPD {
 
         String body;
         try {
-            body = assetsWeb.readFile(uri);
+            return assetsWeb.getResponse(uri);
         } catch (IOException e) {
             body = e.getMessage();
         }
