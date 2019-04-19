@@ -7,20 +7,22 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.web.HttpServer;
 
-import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
+import java.io.IOException;
+import java.net.InetAddress;
 
 import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-
+    HttpServer httpServer;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -32,7 +34,18 @@ public class WebService extends Service {
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-
+        httpServer = new HttpServer(1122);
+        InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
+        if (inetAddress != null) {
+            try {
+                httpServer.start();
+                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress()));
+            } catch (IOException e) {
+                stopSelf();
+            }
+        } else {
+            stopSelf();
+        }
     }
 
     @Override
@@ -51,7 +64,11 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        if (httpServer != null) {
+            if (httpServer.isAlive()) {
+                httpServer.stop();
+            }
+        }
     }
 
     private PendingIntent getThisServicePendingIntent() {
