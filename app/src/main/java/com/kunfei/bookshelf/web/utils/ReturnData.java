@@ -1,11 +1,13 @@
-package com.kunfei.bookshelf.web.model;
+package com.kunfei.bookshelf.web.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 public class ReturnData implements Parcelable {
 
-    private boolean isSuccess;
+    private boolean isSuccess = true;
 
     private int errorCode;
 
@@ -22,9 +24,13 @@ public class ReturnData implements Parcelable {
         errorMsg = in.readString();
     }
 
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte((byte)(isSuccess ? 1 : 0));
+        dest.writeByte((byte) (isSuccess ? 1 : 0));
         dest.writeInt(errorCode);
         dest.writeString(errorMsg);
     }
@@ -74,7 +80,8 @@ public class ReturnData implements Parcelable {
         return data;
     }
 
-    public void setData(Object data) {
+    public ReturnData setData(Object data) {
         this.data = data;
+        return this;
     }
 }

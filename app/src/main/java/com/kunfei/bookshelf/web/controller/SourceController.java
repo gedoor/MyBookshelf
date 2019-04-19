@@ -2,61 +2,69 @@ package com.kunfei.bookshelf.web.controller;
 
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.utils.TimeUtils;
-import com.kunfei.bookshelf.web.model.ReturnData;
-import com.yanzhenjie.andserver.annotation.GetMapping;
-import com.yanzhenjie.andserver.annotation.PostMapping;
-import com.yanzhenjie.andserver.annotation.RequestBody;
-import com.yanzhenjie.andserver.annotation.ResponseBody;
-import com.yanzhenjie.andserver.annotation.RestController;
-import com.yanzhenjie.andserver.util.MediaType;
+import com.kunfei.bookshelf.web.HttpServer;
+import com.kunfei.bookshelf.web.utils.Controller;
+import com.kunfei.bookshelf.web.utils.ReturnData;
 
 import java.util.List;
 
-@RestController
-class SourceController {
+import fi.iki.elonen.NanoHTTPD;
 
-    @ResponseBody
-    @PostMapping(path = "/saveSource", consumes = MediaType.APPLICATION_JSON_VALUE)
-    Object saveSource(@RequestBody BookSourceBean bookSourceBean) {
+public class SourceController {
+
+    public NanoHTTPD.Response saveSource(NanoHTTPD.IHTTPSession session) throws Exception {
+        BookSourceBean bookSourceBean = Controller.getPostData(session, new TypeToken<BookSourceBean>() {
+        }.getType());
+        ReturnData returnData = new ReturnData();
         if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
-            ReturnData returnData = new ReturnData();
             returnData.setSuccess(false);
             returnData.setErrorMsg("书源名称和URL不能为空");
-            return returnData;
+            return HttpServer.newResponse(returnData);
         }
         BookSourceManager.addBookSource(bookSourceBean);
-        return "书源["+bookSourceBean.getBookSourceName()+"]保存成功";
+        returnData.setSuccess(true);
+        returnData.setData("书源[" + bookSourceBean.getBookSourceName() + "]保存成功");
+        return HttpServer.newResponse(returnData);
     }
-    @ResponseBody
-    @PostMapping(path = "/saveSources", consumes = MediaType.APPLICATION_JSON_VALUE)
-    Object saveSources(@RequestBody List<BookSourceBean> bookSourceBeans) {
+
+    public NanoHTTPD.Response saveSources(NanoHTTPD.IHTTPSession session) throws Exception {
+        List<BookSourceBean> bookSourceBeans = Controller.getPostData(session, new TypeToken<List<BookSourceBean>>() {
+        }.getType());
         int count = 0;
         int allCount = bookSourceBeans.size();
-        for (BookSourceBean bookSourceBean: bookSourceBeans) {
+        for (BookSourceBean bookSourceBean : bookSourceBeans) {
             if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
                 continue;
             }
             BookSourceManager.addBookSource(bookSourceBean);
             count++;
         }
-        if(count == 0){
-            ReturnData returnData = new ReturnData();
+        ReturnData returnData = new ReturnData();
+        if (count == 0) {
             returnData.setSuccess(false);
             returnData.setErrorMsg("未添加书源，书源名称和URL不能为空");
-            return returnData;
+            return HttpServer.newResponse(returnData);
         }
-        if(count == allCount){
-            return "成功导入"+allCount+"个书源";
+        if (count == allCount) {
+            returnData.setSuccess(true);
+            returnData.setData("未添加书源，书源名称和URL不能为空");
+            return HttpServer.newResponse(returnData);
         }
-        return "一共"+allCount+"个书源，成功"+count+"个，失败"+(allCount-count)+"个";
+        returnData.setSuccess(true);
+        returnData.setData("一共" + allCount + "个书源，成功" + count + "个，失败" + (allCount - count) + "个");
+        return HttpServer.newResponse(returnData);
     }
 
-    @ResponseBody
-    @GetMapping(path = "/getSources")
-    Object getSources() {
-        return BookSourceManager.getAllBookSource();
+    public NanoHTTPD.Response getSource(NanoHTTPD.IHTTPSession session) throws Exception {
+
+
+        return NanoHTTPD.newFixedLengthResponse("");
+    }
+
+    public NanoHTTPD.Response getSources(NanoHTTPD.IHTTPSession session) throws Exception {
+        return HttpServer.newResponse(new ReturnData().setData(BookSourceManager.getAllBookSource()));
     }
 }
