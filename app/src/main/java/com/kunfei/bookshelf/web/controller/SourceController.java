@@ -61,10 +61,10 @@ public class SourceController {
     public NanoHTTPD.Response getSource(NanoHTTPD.IHTTPSession session) throws Exception {
 
 
-        return NanoHTTPD.newFixedLengthResponse("");
+        return HttpServer.newFixedLengthResponse("");
     }
 
     public NanoHTTPD.Response getSources(NanoHTTPD.IHTTPSession session) throws Exception {
-        return HttpServer.newResponse(new ReturnData().setData(BookSourceManager.getAllBookSource()));
+        return HttpServer.newResponse(BookSourceManager.getAllBookSource());
     }
 }
