@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.web;
 
 import com.kunfei.bookshelf.web.controller.SourceController;
 import com.kunfei.bookshelf.web.utils.AssetsWeb;
+import com.kunfei.bookshelf.web.utils.ReturnData;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -38,5 +39,21 @@ public class HttpServer extends NanoHTTPD {
         }
     }
 
+    public static Response newResponse(Object object) {
+        Response response;
+        if (object instanceof ReturnData) {
+            response = newFixedLengthResponse(((ReturnData) object).toJson());
+        } else {
+            ReturnData returnData = new ReturnData();
+            returnData.setSuccess(true);
+            returnData.setData(object);
+            response = newFixedLengthResponse(returnData.toJson());
+        }
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Max-Age", "" + 42 * 60 * 60);
+        return response;
+    }
 
 }

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.web.HttpServer;
 import com.kunfei.bookshelf.web.utils.Controller;
 import com.kunfei.bookshelf.web.utils.ReturnData;
 
@@ -21,12 +22,12 @@ public class SourceController {
         if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
             returnData.setSuccess(false);
             returnData.setErrorMsg("书源名称和URL不能为空");
-            return NanoHTTPD.newFixedLengthResponse(returnData.toJson());
+            return HttpServer.newResponse(returnData);
         }
         BookSourceManager.addBookSource(bookSourceBean);
         returnData.setSuccess(true);
         returnData.setData("书源[" + bookSourceBean.getBookSourceName() + "]保存成功");
-        return NanoHTTPD.newFixedLengthResponse(returnData.toJson());
+        return HttpServer.newResponse(returnData);
     }
 
     public NanoHTTPD.Response saveSources(NanoHTTPD.IHTTPSession session) throws Exception {
@@ -45,16 +46,16 @@ public class SourceController {
         if (count == 0) {
             returnData.setSuccess(false);
             returnData.setErrorMsg("未添加书源，书源名称和URL不能为空");
-            return NanoHTTPD.newFixedLengthResponse(returnData.toJson());
+            return HttpServer.newResponse(returnData);
         }
         if (count == allCount) {
             returnData.setSuccess(true);
             returnData.setData("未添加书源，书源名称和URL不能为空");
-            return NanoHTTPD.newFixedLengthResponse(returnData.toJson());
+            return HttpServer.newResponse(returnData);
         }
         returnData.setSuccess(true);
         returnData.setData("一共" + allCount + "个书源，成功" + count + "个，失败" + (allCount - count) + "个");
-        return NanoHTTPD.newFixedLengthResponse(returnData.toJson());
+        return HttpServer.newResponse(returnData);
     }
 
     public NanoHTTPD.Response getSource(NanoHTTPD.IHTTPSession session) throws Exception {
@@ -64,6 +65,6 @@ public class SourceController {
     }
 
     public NanoHTTPD.Response getSources(NanoHTTPD.IHTTPSession session) throws Exception {
-        return NanoHTTPD.newFixedLengthResponse(new ReturnData().setData(BookSourceManager.getAllBookSource()).toJson());
+        return HttpServer.newResponse(new ReturnData().setData(BookSourceManager.getAllBookSource()));
     }
 }
