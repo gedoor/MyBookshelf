@@ -1,8 +1,13 @@
 package com.kunfei.bookshelf.web;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.web.controller.SourceController;
 import com.kunfei.bookshelf.web.utils.AssetsWeb;
 import com.kunfei.bookshelf.web.utils.ReturnData;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -16,38 +21,56 @@ public class HttpServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
-        if(session.getMethod().name().equals("OPTIONS")){
-            Response response = newFixedLengthResponse("");
-            response.addHeader("Access-Control-Allow-Methods", "POST");
-            response.addHeader("Access-Control-Allow-Headers", "content-type");
-            response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
-            response.addHeader("Access-Control-Max-Age", "3600");
-            return response;
-        }
-        String uri = session.getUri();
         ReturnData returnData = null;
+        String uri = session.getUri();
+
         try {
-            if (uri.endsWith("/")) {
-                uri = uri + "index.html";
-            } else switch (uri) {
-                case "/saveSource":
-                    returnData = new SourceController().saveSource(session);
+            switch (session.getMethod().name()){
+                case "OPTIONS":
+                    Response response = newFixedLengthResponse("");
+                    response.addHeader("Access-Control-Allow-Methods", "POST");
+                    response.addHeader("Access-Control-Allow-Headers", "content-type");
+                    response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
+                    //response.addHeader("Access-Control-Max-Age", "3600");
+                    return response;
+
+                case "POST":
+                    Map<String, String> files = new HashMap<>();
+                    session.parseBody(files);
+                    String postData = files.get("postData");
+
+                    switch (uri) {
+                        case "/saveSource":
+                            returnData = new SourceController().saveSource(postData);
+                            break;
+                        case "/saveSources":
+                            returnData =  new SourceController().saveSources(postData);
+                            break;
+                    }
                     break;
-                case "/saveSources":
-                    returnData =  new SourceController().saveSources(session);
-                    break;
-                case "/getSource":
-                    returnData =  new SourceController().getSource(session);
-                    break;
-                case "/getSources":
-                    returnData =  new SourceController().getSources(session);
+
+                case "GET":
+                    Map<String,List<String>> parameters = session.getParameters();
+
+                    switch (uri) {
+                        case "/getSource":
+                            returnData = new SourceController().getSource(parameters);
+                            break;
+                        case "/getSources":
+                            returnData = new SourceController().getSources();
+                            break;
+                    }
                     break;
             }
+
             if(returnData == null){
+                if (uri.endsWith("/")) {
+                    uri = uri + "index.html";
+                }
                 return assetsWeb.getResponse(uri);
             }
 
-            Response response = newFixedLengthResponse(returnData.toJson());
+            Response response = newFixedLengthResponse(new Gson().toJson(returnData));
             response.addHeader("Access-Control-Allow-Methods", "GET, POST");
             response.addHeader("Access-Control-Allow-Origin", session.getHeaders().get("origin"));
             return response;
