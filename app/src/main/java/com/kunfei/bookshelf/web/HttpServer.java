@@ -1,13 +1,11 @@
 package com.kunfei.bookshelf.web;
 
+import com.kunfei.bookshelf.web.controller.SourceController;
 import com.kunfei.bookshelf.web.utils.AssetsWeb;
-
-import java.io.IOException;
 
 import fi.iki.elonen.NanoHTTPD;
 
 public class HttpServer extends NanoHTTPD {
-
     private AssetsWeb assetsWeb = new AssetsWeb("web");
 
     public HttpServer(int port) {
@@ -18,18 +16,27 @@ public class HttpServer extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
         String uri = session.getUri();
-        if (uri.endsWith("/")) {
-            uri = uri + "index.html";
-        }
 
-        String body;
         try {
+            switch (uri) {
+                case "saveSource":
+                    return new SourceController().saveSource(session);
+                case "saveSources":
+                    return new SourceController().saveSources(session);
+                case "getSource":
+                    return new SourceController().getSource(session);
+                case "getSources":
+                    return new SourceController().getSources(session);
+                default:
+                    if (uri.endsWith("/")) {
+                        uri = uri + "index.html";
+                    }
+            }
             return assetsWeb.getResponse(uri);
-        } catch (IOException e) {
-            body = e.getMessage();
+        } catch (Exception e) {
+            return newFixedLengthResponse(e.getMessage());
         }
-
-        return newFixedLengthResponse(body);
     }
+
 
 }
