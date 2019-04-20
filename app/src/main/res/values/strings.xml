@@ -412,4 +412,6 @@
     <string name="e_ink_mode">E-Ink 模式</string>
     <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
     <string name="web_menu">Web写源</string>
+    <string name="web_port_title">web端口</string>
+    <string name="web_port_summary">当前端口 %s</string>
 </resources>

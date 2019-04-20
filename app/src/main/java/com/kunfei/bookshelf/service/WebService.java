@@ -22,7 +22,8 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    HttpServer httpServer;
+    private static boolean isRunning = false;
+    private HttpServer httpServer;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -30,15 +31,45 @@ public class WebService extends Service {
         activity.startService(intent);
     }
 
+    public static void upHttpServer(Activity activity) {
+        if (isRunning) {
+            Intent intent = new Intent(activity, WebService.class);
+            intent.setAction(ActionStartService);
+            activity.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-        httpServer = new HttpServer(1122);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        if (action != null) {
+            switch (action) {
+                case ActionStartService:
+                    upServer();
+                case ActionDoneService:
+                    stopSelf();
+                    break;
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void upServer() {
+        if (httpServer != null && httpServer.isAlive()) {
+            httpServer.stop();
+        }
+        httpServer = new HttpServer(MApplication.getConfigPreferences().getInt("webPort", 1122));
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 httpServer.start();
+                isRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress()));
             } catch (IOException e) {
                 stopSelf();
@@ -49,21 +80,9 @@ public class WebService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action != null) {
-            switch (action) {
-                case ActionDoneService:
-                    stopSelf();
-                    break;
-            }
-        }
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        isRunning = false;
         if (httpServer != null) {
             if (httpServer.isAlive()) {
                 httpServer.stop();
