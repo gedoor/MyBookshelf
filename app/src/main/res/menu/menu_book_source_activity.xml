@@ -97,4 +97,9 @@
         android:title="@string/check_select_source"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_share_wifi"
+        android:title="@string/wifi_share"
+        app:showAsAction="never" />
+
 </menu>

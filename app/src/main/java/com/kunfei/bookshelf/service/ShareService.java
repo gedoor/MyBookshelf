@@ -8,37 +8,44 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.web.HttpServer;
-import com.kunfei.bookshelf.web.WebSocketServer;
+import com.kunfei.bookshelf.web.ShareServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.List;
 
 import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
-public class WebService extends Service {
+public class ShareService extends Service {
     private static boolean isRunning = false;
-    private HttpServer httpServer;
-    private WebSocketServer webSocketServer;
+    private ShareServer shareServer;
 
-    public static void startThis(Activity activity) {
-        Intent intent = new Intent(activity, WebService.class);
+    private List<BookSourceBean> bookSourceBeans;
+
+    public static void startThis(Activity activity, List<BookSourceBean> bookSourceBeans) {
+        String key = String.valueOf(System.currentTimeMillis());
+        BitIntentDataManager.getInstance().putData(key, bookSourceBeans);
+        Intent intent = new Intent(activity, ShareService.class);
+        intent.putExtra("data_key", key);
         intent.setAction(ActionStartService);
         activity.startService(intent);
     }
 
-    public static void upHttpServer(Activity activity) {
+    public static void upServer(Activity activity) {
         if (isRunning) {
-            Intent intent = new Intent(activity, WebService.class);
+            Intent intent = new Intent(activity, ShareService.class);
             intent.setAction(ActionStartService);
             activity.startService(intent);
         }
@@ -47,9 +54,9 @@ public class WebService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        updateNotification("正在启动服务");
+        updateNotification("正在启动分享");
         new Handler(Looper.getMainLooper())
-                .post(() -> Toast.makeText(this, "正在启动服务\n具体信息查看通知栏", Toast.LENGTH_SHORT).show());
+                .post(() -> Toast.makeText(this, "正在启动分享\n具体信息查看通知栏", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -58,7 +65,7 @@ public class WebService extends Service {
         if (action != null) {
             switch (action) {
                 case ActionStartService:
-                    upServer();
+                    upServer(intent);
                     break;
                 case ActionDoneService:
                     stopSelf();
@@ -68,23 +75,23 @@ public class WebService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void upServer() {
-        if (httpServer != null && httpServer.isAlive()) {
-            httpServer.stop();
+    @SuppressWarnings("unchecked")
+    private void upServer(Intent intent) {
+        String key = intent.getStringExtra("data_key");
+        if (!TextUtils.isEmpty(key)) {
+            bookSourceBeans = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
+            BitIntentDataManager.getInstance().cleanData(key);
         }
-        if (webSocketServer != null && webSocketServer.isAlive()) {
-            webSocketServer.stop();
+        if (shareServer != null && shareServer.isAlive()) {
+            shareServer.stop();
         }
-        int port = getPort();
-        httpServer = new HttpServer(port);
-        webSocketServer = new WebSocketServer(port + 1);
+        shareServer = new ShareServer(65501, () -> bookSourceBeans);
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
-                httpServer.start();
-                webSocketServer.start();
+                shareServer.start();
                 isRunning = true;
-                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
+                updateNotification(String.format("分享地址:%s", inetAddress));
             } catch (IOException e) {
                 stopSelf();
             }
@@ -97,11 +104,8 @@ public class WebService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        if (httpServer != null && httpServer.isAlive()) {
-            httpServer.stop();
-        }
-        if (webSocketServer != null && webSocketServer.isAlive()) {
-            webSocketServer.stop();
+        if (shareServer != null && shareServer.isAlive()) {
+            shareServer.stop();
         }
     }
 
@@ -109,14 +113,6 @@ public class WebService extends Service {
         Intent intent = new Intent(this, this.getClass());
         intent.setAction(ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    private int getPort() {
-        int port = MApplication.getConfigPreferences().getInt("webPort", 1122);
-        if (port > 65530 || port < 1024) {
-            port = 1122;
-        }
-        return port;
     }
 
     /**

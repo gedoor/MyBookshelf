@@ -414,4 +414,6 @@
     <string name="web_menu">Web写源</string>
     <string name="web_port_title">web端口</string>
     <string name="web_port_summary">当前端口 %s</string>
+    <string name="qr_share">二维码分享</string>
+    <string name="wifi_share">wifi分享</string>
 </resources>
