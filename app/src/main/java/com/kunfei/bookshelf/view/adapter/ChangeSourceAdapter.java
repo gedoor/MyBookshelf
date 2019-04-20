@@ -7,16 +7,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import static android.text.TextUtils.isEmpty;
 

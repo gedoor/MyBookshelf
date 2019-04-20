@@ -166,9 +166,7 @@ public class ReadBookControl {
     }
 
     public void initTextDrawableIndex() {
-        if (MApplication.isEInkMode) {
-            textDrawableIndex = 1;
-        } else if (getIsNightTheme()) {
+        if (getIsNightTheme()) {
             textDrawableIndex = preferences.getInt("textDrawableIndexNight", 4);
         } else {
             textDrawableIndex = preferences.getInt("textDrawableIndex", DEFAULT_BG);

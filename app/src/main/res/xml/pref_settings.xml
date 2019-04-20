@@ -40,6 +40,14 @@
         app:MaxValue="1024"
         app:MinValue="1" />
 
+    <com.kunfei.bookshelf.widget.number.NumberPickerPreference
+        android:defaultValue="1122"
+        android:key="webPort"
+        android:summary="@string/web_port_summary"
+        android:title="@string/web_port_title"
+        app:MaxValue="60000"
+        app:MinValue="1024" />
+
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="true"
         android:key="showAllFind"

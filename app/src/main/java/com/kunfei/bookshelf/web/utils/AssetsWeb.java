@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,13 +32,16 @@ public class AssetsWeb {
     }
 
     private String getMimeType(String path) {
+        String suffix = path.substring(path.lastIndexOf("."));
         String mimeType = "text/html";
-        if (StringUtils.endWithIgnoreCase(path, ".html") || StringUtils.endWithIgnoreCase(path, ".htm")) {
+        if (suffix.equalsIgnoreCase(".html") || suffix.equalsIgnoreCase(".htm")) {
             mimeType = "text/html";
-        } else if (StringUtils.endWithIgnoreCase(path, ".js")) {
+        } else if (suffix.equalsIgnoreCase(".js")) {
             mimeType = "text/javascript";
-        } else if (StringUtils.endWithIgnoreCase(path, ".css")) {
+        } else if (suffix.equalsIgnoreCase(".css")) {
             mimeType = "text/css";
+        } else if (suffix.equalsIgnoreCase(".ico")) {
+            mimeType = "image/x-icon";
         }
         return mimeType;
     }
