@@ -99,6 +99,7 @@
 
     <item
         android:id="@+id/action_share_wifi"
+        android:icon="@drawable/ic_share"
         android:title="@string/wifi_share"
         app:showAsAction="never" />
 
