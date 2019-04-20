@@ -65,13 +65,14 @@ public class WebService extends Service {
         if (httpServer != null && httpServer.isAlive()) {
             httpServer.stop();
         }
-        httpServer = new HttpServer(getPort());
+        int port = getPort();
+        httpServer = new HttpServer(port);
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 httpServer.start();
                 isRunning = true;
-                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress()));
+                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {
                 stopSelf();
             }
