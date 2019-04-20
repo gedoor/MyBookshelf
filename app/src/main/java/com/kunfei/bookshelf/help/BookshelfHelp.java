@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.help;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -17,7 +18,6 @@ import com.kunfei.bookshelf.dao.BookShelfBeanDao;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.BookmarkBeanDao;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import net.ricecode.similarity.JaroWinklerStrategy;

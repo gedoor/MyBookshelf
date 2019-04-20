@@ -13,6 +13,7 @@ public class ShareServer extends NanoHTTPD {
 
     public ShareServer(int port, Callback callback) {
         super(port);
+        this.callback = callback;
     }
 
     @Override

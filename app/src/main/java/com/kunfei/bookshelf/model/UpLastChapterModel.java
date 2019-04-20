@@ -5,12 +5,12 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.RxUtils;

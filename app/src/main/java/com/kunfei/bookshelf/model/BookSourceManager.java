@@ -7,11 +7,11 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
@@ -149,7 +149,7 @@ public class BookSourceManager {
         if (StringUtils.isTrimEmpty(string)) return null;
         string = string.trim();
         if (NetworkUtil.isIPv4Address(string)) {
-            string = String.format("http://%s", string);
+            string = String.format("http://%s:65501", string);
         }
         if (StringUtils.isJsonType(string)) {
             return importBookSourceFromJson(string.trim())

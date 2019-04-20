@@ -2,9 +2,9 @@ package com.kunfei.bookshelf.model.task;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.service.CheckSourceService;
