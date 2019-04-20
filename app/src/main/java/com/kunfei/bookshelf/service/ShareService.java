@@ -91,7 +91,7 @@ public class ShareService extends Service {
             try {
                 shareServer.start();
                 isRunning = true;
-                updateNotification(String.format("分享地址:%s", inetAddress));
+                updateNotification(String.format("分享地址:%s", inetAddress.getHostAddress()));
             } catch (IOException e) {
                 stopSelf();
             }
