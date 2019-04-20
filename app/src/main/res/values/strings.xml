@@ -334,7 +334,7 @@
     <string name="rule_search_url">搜索地址(ruleSearchUrl)</string>
     <string name="rule_find_url">发现规则(ruleFindUrl)</string>
     <string name="rule_content_url_next">正文下一页URL规则(ruleContentUrlNext)</string>
-    <string name="book_url_pattern">书籍详情域名规则(ruleBookUrlPattern)</string>
+    <string name="book_url_pattern">书籍详情URL正则(ruleBookUrlPattern)</string>
     <string name="rule_book_kind">分类规则(ruleBookKind)</string>
     <string name="rule_book_last_chapter">最新章节规则(ruleBookLastChapter)</string>
     <string name="source_user_agent">HttpUserAgent</string>
