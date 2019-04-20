@@ -28,6 +28,8 @@ import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import java.net.URL;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -110,17 +112,18 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 e.onError(new Throwable("已在书架中"));
                 return;
             } else {
-                String baseUrl = StringUtils.getBaseUrl(bookUrl);
+                String fixBookUrl = bookUrl.contains("://") ? bookUrl : "http://"+bookUrl;
+                String baseUrl = new URL(fixBookUrl).getHost();
                 BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
                 if (bookSourceBean == null) {
                     bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.like(baseUrl + "%"))
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.eq(baseUrl))
                             .limit(1).build().unique();
                 }
                 if (bookSourceBean != null) {
                     BookShelfBean bookShelfBean = new BookShelfBean();
                     bookShelfBean.setTag(bookSourceBean.getBookSourceUrl());
-                    bookShelfBean.setNoteUrl(bookUrl);
+                    bookShelfBean.setNoteUrl(fixBookUrl);
                     bookShelfBean.setDurChapter(0);
                     bookShelfBean.setGroup(mView.getGroup() % 4);
                     bookShelfBean.setDurChapterPage(0);
