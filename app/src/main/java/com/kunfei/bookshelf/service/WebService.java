@@ -52,6 +52,7 @@ public class WebService extends Service {
             switch (action) {
                 case ActionStartService:
                     upServer();
+                    break;
                 case ActionDoneService:
                     stopSelf();
                     break;
