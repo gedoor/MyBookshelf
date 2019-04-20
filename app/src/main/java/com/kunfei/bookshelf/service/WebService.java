@@ -108,7 +108,7 @@ public class WebService extends Service {
 
     private int getPort() {
         int port = MApplication.getConfigPreferences().getInt("webPort", 1122);
-        if (port > 65535 || port < 1024) {
+        if (port > 65530 || port < 1024) {
             port = 1122;
         }
         return port;
