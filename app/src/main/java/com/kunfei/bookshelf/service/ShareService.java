@@ -120,7 +120,7 @@ public class ShareService extends Service {
      */
     private void updateNotification(String content) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdWeb)
-                .setSmallIcon(R.drawable.ic_speaker_phone_black_24dp)
+                .setSmallIcon(R.drawable.ic_share)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.wifi_share))
                 .setContentText(content);
