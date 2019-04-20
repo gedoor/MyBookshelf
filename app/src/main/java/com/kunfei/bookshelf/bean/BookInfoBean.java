@@ -8,8 +8,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.StringUtils;
