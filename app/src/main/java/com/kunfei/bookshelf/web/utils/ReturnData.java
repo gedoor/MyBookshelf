@@ -37,7 +37,7 @@ public class ReturnData {
     }
 
     public ReturnData setErrorMsg(String errorMsg) {
-        isSuccess = false;
+        this.isSuccess = false;
         this.errorMsg = errorMsg;
         return this;
     }
@@ -47,7 +47,8 @@ public class ReturnData {
     }
 
     public ReturnData setData(Object data) {
-        isSuccess = true;
+        this.isSuccess = true;
+        this.errorMsg = "";
         this.data = data;
         return this;
     }
