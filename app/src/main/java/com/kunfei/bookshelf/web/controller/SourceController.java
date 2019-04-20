@@ -20,13 +20,11 @@ public class SourceController {
             return returnData.setErrorMsg("书源名称和URL不能为空");
         }
         BookSourceManager.addBookSource(bookSourceBean);
-        return returnData;
+        return returnData.setData("");
     }
 
     public ReturnData saveSources(String postData) {
         List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(postData, BookSourceBean.class);
-        int count = 0;
-        int allCount = bookSourceBeans.size();
         List<String> sourceNames= new ArrayList<>();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
             if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
@@ -34,16 +32,8 @@ public class SourceController {
             }
             BookSourceManager.addBookSource(bookSourceBean);
             sourceNames.add(bookSourceBean.getBookSourceName());
-            count++;
         }
-        ReturnData returnData = new ReturnData();
-        if (count == 0) {
-            return returnData.setErrorMsg("未添加书源，书源名称和URL不能为空");
-        }
-        if (count == allCount) {
-            return returnData;
-        }
-        return returnData.setData(sourceNames);
+        return (new ReturnData()).setData(sourceNames);
     }
 
     public ReturnData getSource(Map<String,List<String>> parameters) {

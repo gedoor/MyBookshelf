@@ -12,6 +12,8 @@ public class ReturnData {
     private Object data;
 
     public ReturnData() {
+        this.isSuccess = false;
+        this.errorMsg = "未知错误,请联系开发者!";
     }
 
     public boolean isSuccess() {
