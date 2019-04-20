@@ -14,6 +14,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.web.HttpServer;
+import com.kunfei.bookshelf.web.WebSocketServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -24,6 +25,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 public class WebService extends Service {
     private static boolean isRunning = false;
     private HttpServer httpServer;
+    private WebSocketServer webSocketServer;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -65,12 +67,17 @@ public class WebService extends Service {
         if (httpServer != null && httpServer.isAlive()) {
             httpServer.stop();
         }
+        if (webSocketServer != null && webSocketServer.isAlive()) {
+            webSocketServer.stop();
+        }
         int port = getPort();
         httpServer = new HttpServer(port);
+        webSocketServer = new WebSocketServer(port + 1);
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 httpServer.start();
+                webSocketServer.start();
                 isRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {
@@ -85,10 +92,11 @@ public class WebService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        if (httpServer != null) {
-            if (httpServer.isAlive()) {
-                httpServer.stop();
-            }
+        if (httpServer != null && httpServer.isAlive()) {
+            httpServer.stop();
+        }
+        if (webSocketServer != null && webSocketServer.isAlive()) {
+            webSocketServer.stop();
         }
     }
 
