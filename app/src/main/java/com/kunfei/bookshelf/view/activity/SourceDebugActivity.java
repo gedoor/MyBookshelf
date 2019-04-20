@@ -9,6 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -25,6 +29,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
@@ -35,9 +40,6 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observer;
@@ -47,7 +49,6 @@ import io.reactivex.disposables.Disposable;
 import static com.kunfei.bookshelf.model.content.Debug.DEBUG_TIME_FORMAT;
 
 public class SourceDebugActivity extends MBaseActivity {
-    public static String DEBUG_TAG;
     private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)
@@ -87,7 +88,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     @Override
     protected void onDestroy() {
-        DEBUG_TAG = null;
+        Debug.SOURCE_DEBUG_TAG = null;
         RxBus.get().unregister(this);
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
@@ -142,7 +143,7 @@ public class SourceDebugActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
-        DEBUG_TAG = getIntent().getStringExtra("sourceUrl");
+        Debug.SOURCE_DEBUG_TAG = getIntent().getStringExtra("sourceUrl");
         initSearchView();
     }
 
@@ -169,7 +170,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private void startDebug(String key) {
         UpLastChapterModel.getInstance().onDestroy();
-        if (TextUtils.isEmpty(DEBUG_TAG)) return;
+        if (TextUtils.isEmpty(Debug.SOURCE_DEBUG_TAG)) return;
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
@@ -178,7 +179,7 @@ public class SourceDebugActivity extends MBaseActivity {
         if (NetworkUtil.isUrl(key)) {
             tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡关键字为Url"));
             BookShelfBean bookShelfBean = new BookShelfBean();
-            bookShelfBean.setTag(DEBUG_TAG);
+            bookShelfBean.setTag(Debug.SOURCE_DEBUG_TAG);
             bookShelfBean.setNoteUrl(key);
             bookShelfBean.setDurChapter(0);
             bookShelfBean.setGroup(0);
@@ -192,7 +193,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private void searchDebug(String key) {
         tvContent.setText(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
-        WebBookModel.getInstance().searchBook(key, 1, DEBUG_TAG)
+        WebBookModel.getInstance().searchBook(key, 1, Debug.SOURCE_DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
                     @Override
@@ -327,12 +328,11 @@ public class SourceDebugActivity extends MBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_QR:
-                    String result = data.getStringExtra("result");
-                    if (!StringUtils.isTrimEmpty(result)) {
-                        searchView.setQuery(result, true);
-                    }
+            if (requestCode == REQUEST_QR) {
+                String result = data.getStringExtra("result");
+                if (!StringUtils.isTrimEmpty(result)) {
+                    searchView.setQuery(result, true);
+                }
             }
         }
     }

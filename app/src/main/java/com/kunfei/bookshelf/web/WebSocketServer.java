@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.web;
 
+import com.kunfei.bookshelf.web.controller.SourceDebugWebSocket;
+
 import fi.iki.elonen.NanoWSD;
 
 public class WebSocketServer extends NanoWSD {
@@ -10,6 +12,6 @@ public class WebSocketServer extends NanoWSD {
 
     @Override
     protected WebSocket openWebSocket(IHTTPSession handshake) {
-        return null;
+        return new SourceDebugWebSocket(handshake);
     }
 }
