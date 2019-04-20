@@ -49,8 +49,8 @@ public class DbHelper {
         return getInstance().mDaoSession;
     }
 
-    public SQLiteDatabase getDb() {
-        return db;
+    public static SQLiteDatabase getDb() {
+        return getInstance().db;
     }
 
     public class DaoOpenHelper extends DaoMaster.OpenHelper {

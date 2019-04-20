@@ -28,6 +28,8 @@ import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -113,9 +115,14 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 String baseUrl = StringUtils.getBaseUrl(bookUrl);
                 BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
                 if (bookSourceBean == null) {
-                    bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.like(baseUrl + "%"))
-                            .limit(1).build().unique();
+                    List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull(), BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")).list();
+                    for (BookSourceBean sourceBean : sourceBeans) {
+                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                            bookSourceBean = sourceBean;
+                            break;
+                        }
+                    }
                 }
                 if (bookSourceBean != null) {
                     BookShelfBean bookShelfBean = new BookShelfBean();

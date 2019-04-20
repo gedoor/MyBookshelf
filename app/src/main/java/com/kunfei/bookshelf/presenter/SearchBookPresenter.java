@@ -137,7 +137,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     public void cleanSearchHistory() {
         final String content = mView.getEdtContent().getText().toString().trim();
         Observable.create((ObservableOnSubscribe<Integer>) e -> {
-            int a = DbHelper.getInstance().getDb().delete(SearchHistoryBeanDao.TABLENAME,
+            int a = DbHelper.getDb().delete(SearchHistoryBeanDao.TABLENAME,
                     SearchHistoryBeanDao.Properties.Type.columnName + "=? and " + SearchHistoryBeanDao.Properties.Content.columnName + " like ?",
                     new String[]{String.valueOf(SearchBookPresenter.BOOK), "%" + content + "%"});
             e.onNext(a);
