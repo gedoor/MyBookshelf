@@ -65,7 +65,7 @@ public class WebService extends Service {
         if (httpServer != null && httpServer.isAlive()) {
             httpServer.stop();
         }
-        httpServer = new HttpServer(MApplication.getConfigPreferences().getInt("webPort", 1122));
+        httpServer = new HttpServer(getPort());
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
@@ -95,6 +95,14 @@ public class WebService extends Service {
         Intent intent = new Intent(this, this.getClass());
         intent.setAction(ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private int getPort() {
+        int port = MApplication.getConfigPreferences().getInt("webPort", 1122);
+        if (port > 65535 || port < 1024) {
+            port = 1122;
+        }
+        return port;
     }
 
     /**
