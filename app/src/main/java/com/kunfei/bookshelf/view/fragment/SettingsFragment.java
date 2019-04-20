@@ -16,6 +16,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
@@ -90,6 +91,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             RxBus.get().post(RxBusTag.RECREATE, true);
         } else if (key.equals("process_text")) {
             ProcessTextHelp.setProcessTextEnable(sharedPreferences.getBoolean("process_text", true));
+        } else if (key.equals("webPort")) {
+            WebService.upHttpServer(settingActivity);
         }
     }
 

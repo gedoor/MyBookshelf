@@ -111,6 +111,7 @@ dependencies {
 
     //webServer
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websocket:2.3.1'
 
     //动画
     implementation 'com.victor:lib:1.0.4'

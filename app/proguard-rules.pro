@@ -153,8 +153,10 @@
     public static int e(...);
 }
 
-# 保存js引擎调用的java类
+# 保持js引擎调用的java类
 -keep class **.analyzeRule.**{*;}
+# 保持web类
+-keep class **.web.**{*;}
 
 ### greenDAO 3
 -keep class org.greenrobot.greendao.**{ *; }

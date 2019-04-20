@@ -14,6 +14,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.web.HttpServer;
+import com.kunfei.bookshelf.web.WebSocketServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -22,7 +23,9 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    HttpServer httpServer;
+    private static boolean isRunning = false;
+    private HttpServer httpServer;
+    private WebSocketServer webSocketServer;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -30,16 +33,53 @@ public class WebService extends Service {
         activity.startService(intent);
     }
 
+    public static void upHttpServer(Activity activity) {
+        if (isRunning) {
+            Intent intent = new Intent(activity, WebService.class);
+            intent.setAction(ActionStartService);
+            activity.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
-        httpServer = new HttpServer(1122);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        if (action != null) {
+            switch (action) {
+                case ActionStartService:
+                    upServer();
+                    break;
+                case ActionDoneService:
+                    stopSelf();
+                    break;
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void upServer() {
+        if (httpServer != null && httpServer.isAlive()) {
+            httpServer.stop();
+        }
+        if (webSocketServer != null && webSocketServer.isAlive()) {
+            webSocketServer.stop();
+        }
+        int port = getPort();
+        httpServer = new HttpServer(port);
+        webSocketServer = new WebSocketServer(port + 1);
         InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 httpServer.start();
-                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress()));
+                webSocketServer.start();
+                isRunning = true;
+                updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {
                 stopSelf();
             }
@@ -49,25 +89,14 @@ public class WebService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action != null) {
-            switch (action) {
-                case ActionDoneService:
-                    stopSelf();
-                    break;
-            }
-        }
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (httpServer != null) {
-            if (httpServer.isAlive()) {
-                httpServer.stop();
-            }
+        isRunning = false;
+        if (httpServer != null && httpServer.isAlive()) {
+            httpServer.stop();
+        }
+        if (webSocketServer != null && webSocketServer.isAlive()) {
+            webSocketServer.stop();
         }
     }
 
@@ -75,6 +104,14 @@ public class WebService extends Service {
         Intent intent = new Intent(this, this.getClass());
         intent.setAction(ActionDoneService);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private int getPort() {
+        int port = MApplication.getConfigPreferences().getInt("webPort", 1122);
+        if (port > 65530 || port < 1024) {
+            port = 1122;
+        }
+        return port;
     }
 
     /**
