@@ -5,8 +5,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.base.BaseModelImpl;
@@ -14,6 +12,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -170,8 +169,7 @@ public class BookSourceManager {
             List<BookSourceBean> bookSourceBeans = new ArrayList<>();
             if (StringUtils.isJsonArray(json)) {
                 try {
-                    bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
-                    }.getType());
+                    bookSourceBeans = GsonUtils.parseJArray(json, BookSourceBean.class);
                     for (BookSourceBean bookSourceBean : bookSourceBeans) {
                         if (bookSourceBean.containsGroup("删除")) {
                             DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
@@ -197,8 +195,7 @@ public class BookSourceManager {
             }
             if (StringUtils.isJsonObject(json)) {
                 try {
-                    BookSourceBean bookSourceBean = new Gson().fromJson(json, new TypeToken<BookSourceBean>() {
-                    }.getType());
+                    BookSourceBean bookSourceBean = GsonUtils.parseJObject(json, BookSourceBean.class);
                     addBookSource(bookSourceBean);
                     bookSourceBeans.add(bookSourceBean);
                     e.onNext(bookSourceBeans);
