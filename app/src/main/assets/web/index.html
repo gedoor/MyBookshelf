@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-    <title>书源编辑器v2.7</title>
+    <title>书源编辑器v3.1</title>
 	<style>
 		body,
 		.rules,
@@ -29,16 +29,17 @@
 		.rules textarea {
 			flex: 1;
 			margin-left: 5px;
+			min-height: 1em;
 		}
 
 		p,
 		b {
 			display: flex;
 			margin: 1px 0;
+			min-height: 1em;
 		}
 
-		.menu,
-		.link {
+		.menu {
 			display: flex;
 			flex-flow: column;
 			justify-content: center;
@@ -76,11 +77,13 @@
 			flex: 1;
 			display: flex;
 			margin-top: -1px;
-			border-top: 1px solid #D7DBDD;
+			border: 1px solid #A9A9A9;
+			height: 0;
 		}
 
 		.tabbody>* {
 			flex: 1;
+			flex-flow: column;
 			display: none;
 		}
 
@@ -90,13 +93,48 @@
 
 		.tabbody>*>* {
 			flex: 1;
+			flex-flow: column;
+			border: 0;
+			padding: 5px;
+			overflow-y: auto;
+		}
+
+		.link>* {
+			display: flex;
+			margin: 5px;
+			border-bottom: 1px solid;
+			text-decoration: none;
+		}
+
+		#RuleList>label>* {
+			background: #eee;
+			justify-content: center;
+			font-size: 1em;
+			min-height: 1em;
+			padding: 5px;
+		}
+
+		#RuleList input[type=radio] {
+			display: none;
+		}
+
+		#RuleList input[type="radio"]:checked+* {
+			background: #4EBBE4;
 		}
 	</style>
 	<script>
-		var HashParams = window.location.hash == '' ? [] : window.location.hash.slice(1).split('&');
-		var Domain = '';
-		if (HashParams.find(x => x.startsWith('domain='))){
-			Domain = HashParams.find(x => x.startsWith('domain=')).replace('domain=','');
+		// 读写Hash值(val未赋值时为读取)
+		function hashParam(key, val) {
+			let hashstr = decodeURIComponent(window.location.hash);
+			let regKey = new RegExp(`${key}=(.*?&|.*$)`);
+			let getVal = regKey.test(hashstr) ? hashstr.match(regKey)[1].replace('&', '') : '';
+			if (val == undefined) return getVal;
+			if (hashstr == '') window.location.hash = `#${key}=${val}`;
+			window.location.hash = getVal == '' ? `${hashstr.replace(`&${key}=`)}&${key}=${val}` : hashstr.replace(getVal, val);
+		}
+		var Domain = hashParam('domain');
+		function addRule(name) {
+			return `<label for="${name}"><input type="radio" name="rule" id="${name}"><p>${name}</p></label>`;
 		}
 		function dQuery(selector) {
 			return document.querySelector(selector)
@@ -104,39 +142,20 @@
 		function dQueryAll(selector) {
 			return document.querySelectorAll(selector)
 		}
-		function showTab(sTab) {
+		function showTab(tabName) {
 			dQueryAll('.tabtitle>*').forEach(node => { node.className = node.className.replace(' this', ''); });
-			dQuery(`.tabtitle>.${sTab}`).className += ' this';
 			dQueryAll('.tabbody>*').forEach(node => { node.className = node.className.replace(' this', ''); });
-			dQuery(`.tabbody>.${sTab}`).className += ' this';
+			dQuery(`.tabbody>.${dQuery(`.tabtitle>*[name=${tabName}]`).className}`).className += ' this';
+			dQuery(`.tabtitle>*[name=${tabName}]`).className += ' this';
+			hashParam('tab', tabName);
 		}
 		window.onload = () => {
-			let sParam = HashParams.find(x => x.startsWith('tab='));
-			if (sParam) {
-				let sTab = sParam.replace('tab=', '').replace(/%20.*/, '');
-				if (sTab != '' && dQuery(`.tabtitle>.${sTab}`)) showTab(sTab);
-			}
 			dQueryAll('.tabtitle>*').forEach(item => {
 				item.addEventListener('click', () => {
-					if (item.className.indexOf('this') > -1) return;
-					if (HashParams.length == 0) {
-						HashParams.push(`tab=${item.className}`);
-					}
-					else {
-						for (i = 0, len = HashParams.length; i < len; i++) {
-							if (HashParams[i].startsWith('tab=')) {
-								HashParams[i] = `tab=${item.className}`;
-								break;
-							}
-							if (i + 1 == len) {
-								HashParams.push(`tab=${item.className}`);
-							}
-						}
-					}
-					window.location.hash = '#' + HashParams.join('&');
-					showTab(item.className);
+					showTab(item.innerHTML);
 				});
 			});
+			if (hashParam('tab') != '') showTab(hashParam('tab'));
 		}
 	</script>
 </head>
@@ -146,122 +165,121 @@
     <div class="rules">
         <p><b>书源基础信息</b></p>
         <p>
-            书源名称: <input type="text" id="bookSourceName" title="书源名称(bookSourceName)"
-                         placeholder="会显示在书源列表"/>
+            书源名称: <input type="text" id="bookSourceName"
+                         placeholder="书源名称(bookSourceName) | 会显示在书源列表"/>
         </p>
         <p>
-            书源分组: <input type="text" id="bookSourceGroup" title="书源分组(bookSourceGroup)"
-                         placeholder="描述书源的特征信息"/>
+            书源分组: <input type="text" id="bookSourceGroup"
+                         placeholder="书源分组(bookSourceGroup) | 描述书源的特征信息"/>
         </p>
         <p>
-            书源域名: <input type="url" id="bookSourceUrl" title="书源URL(bookSourceUrl)"
-                         placeholder="通常填写网站主页(标头不可省略),例: https://www.qidian.com"/>
+            书源域名: <input type="url" id="bookSourceUrl"
+                         placeholder="书源URL(bookSourceUrl) | 通常填写网站主页(标头不可省略),例: https://www.qidian.com"/>
         </p>
         <p>
-            登录网页: <input type="url" id="loginUrl" title="登录URL(loginUrl)"
-                         placeholder="填写网站登录地址,仅在需要登录的书源有用"/>
+            登录网页: <input type="url" id="loginUrl"
+                         placeholder="登录URL(loginUrl) | 填写网站登录地址,仅在需要登录的书源有用"/>
         </p>
         <p>
-            发现内容: <textarea rows="10" id="ruleFindUrl" title="发现规则(ruleFindUrl)"
-                            placeholder="每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
+            发现内容: <textarea rows="10" id="ruleFindUrl"
+                            placeholder="发现规则(ruleFindUrl)&#10;每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
         </p>
         <p><b>书籍搜索规则</b></p>
         <p>
-            搜索地址: <input type="url" id="ruleSearchUrl" title="搜索地址(ruleSearchUrl)"
-                         placeholder="[域名可省略]/search.php@kw=searchKey|char=utf-8"/>
+            搜索地址: <input type="url" id="ruleSearchUrl"
+                         placeholder="搜索地址(ruleSearchUrl) | [域名可省略]/search.php@kw=searchKey|char=utf-8"/>
         </p>
         <p>
-            结果列表: <input type="text" id="ruleSearchList" title="搜索结果列表规则(ruleSearchList)"
-                         placeholder="选择搜索结果列表的书籍节点 (规则结果为Element集合)"/>
+            结果列表: <input type="text" id="ruleSearchList"
+                         placeholder="搜索结果列表规则(ruleSearchList) | 选择搜索结果列表的书籍节点 (规则结果为Element集合)"/>
         </p>
         <p>
-            书籍名称: <input type="text" id="ruleSearchName" title="搜索结果书名规则(ruleSearchName)"
-                         placeholder="选择节点书名 (规则结果为字符串)"/>
+            书籍名称: <input type="text" id="ruleSearchName"
+                         placeholder="搜索结果书名规则(ruleSearchName) | 选择节点书名 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍作者: <input type="text" id="ruleSearchAuthor" title="搜索结果作者规则(ruleSearchAuthor)"
-                         placeholder="选择节点作者 (规则结果为字符串)"/>
+            书籍作者: <input type="text" id="ruleSearchAuthor"
+                         placeholder="搜索结果作者规则(ruleSearchAuthor) | 选择节点作者 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍分类: <input type="text" id="ruleSearchKind" title="搜索结果分类规则(ruleSearchKind)"
-                         placeholder="选择节点分类信息 (规则结果为字符串集合或单个字符串)"/>
+            书籍分类: <input type="text" id="ruleSearchKind"
+                         placeholder="搜索结果分类规则(ruleSearchKind) | 选择节点分类信息 (规则结果为字符串集合或单个字符串)"/>
         </p>
         <p>
             最新章节: <input type="text" id="ruleSearchLastChapter"
-                         title="搜索结果最新章节规则(ruleSearchLastChapter)"
-                         placeholder="选择节点最新章节 (规则结果为字符串)"/>
+                         placeholder="搜索结果最新章节规则(ruleSearchLastChapter) | 选择节点最新章节 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍封面: <input type="text" id="ruleSearchCoverUrl" title="搜索结果封面规则(ruleSearchCoverUrl)"
-                         placeholder="选择节点书籍封面 (规则结果为Url)"/>
+            书籍封面: <input type="text" id="ruleSearchCoverUrl"
+                         placeholder="搜索结果封面规则(ruleSearchCoverUrl) | 选择节点书籍封面 (规则结果为Url)"/>
         </p>
         <p>
-            书籍链接: <input type="text" id="ruleSearchNoteUrl" title="搜索结果书籍URL规则(ruleSearchNoteUrl)"
-                         placeholder="选择书籍详情页地址 (规则结果为Url)"/>
+            书籍链接: <input type="text" id="ruleSearchNoteUrl"
+                         placeholder="搜索结果书籍URL规则(ruleSearchNoteUrl) | 选择书籍详情页地址 (规则结果为Url)"/>
         </p>
         <p><b>书籍简介规则</b></p>
         <p>
-            路径正则: <input type="text" id="ruleBookUrlPattern" title="书籍详情URL正则(ruleBookUrlPattern)"
-                         placeholder="Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)"/>
+            路径正则: <input type="text" id="ruleBookUrlPattern"
+                         placeholder="书籍详情URL正则(ruleBookUrlPattern) | Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)"/>
         </p>
         <p>
-            书籍名称: <input type="text" id="ruleBookName" title="书名规则(ruleBookName)"
-                         placeholder="选择详情页书名 (规则结果为字符串)"/>
+            书籍名称: <input type="text" id="ruleBookName"
+                         placeholder="书名规则(ruleBookName) | 选择详情页书名 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍作者: <input type="text" id="ruleBookAuthor" title="作者规则(ruleBookAuthor)"
-                         placeholder="选择详情页作者 (规则结果为字符串)"/>
+            书籍作者: <input type="text" id="ruleBookAuthor"
+                         placeholder="作者规则(ruleBookAuthor) | 选择详情页作者 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍分类: <input type="text" id="ruleBookKind" title="分类规则(ruleBookKind)"
-                         placeholder="选择详情页分类信息 (规则结果为字符串集合或单个字符串)"/>
+            书籍分类: <input type="text" id="ruleBookKind"
+                         placeholder="分类规则(ruleBookKind) | 选择详情页分类信息 (规则结果为字符串集合或单个字符串)"/>
         </p>
         <p>
-            最新章节: <input type="text" id="ruleBookLastChapter" title="最新章节规则(ruleBookLastChapter)"
-                         placeholder="选择详情页最新章节 (规则结果为字符串)"/>
+            最新章节: <input type="text" id="ruleBookLastChapter"
+                         placeholder="最新章节规则(ruleBookLastChapter) | 选择详情页最新章节 (规则结果为字符串)"/>
         </p>
         <p>
-            简介内容: <input type="text" id="ruleIntroduce" title="简介规则(ruleIntroduce)"
-                         placeholder="选择详情页书籍简介 (规则结果为字符串)"/>
+            简介内容: <input type="text" id="ruleIntroduce"
+                         placeholder="简介规则(ruleIntroduce) | 选择详情页书籍简介 (规则结果为字符串)"/>
         </p>
         <p>
-            书籍封面: <input type="text" id="ruleCoverUrl" title="封面规则(ruleCoverUrl)"
-                         placeholder="选择详情页书籍封面 (规则结果为Url)"/>
+            书籍封面: <input type="text" id="ruleCoverUrl"
+                         placeholder="封面规则(ruleCoverUrl) | 选择详情页书籍封面 (规则结果为Url)"/>
         </p>
         <p>
-            目录链接: <input type="text" id="ruleChapterUrl" title="目录URL规则(ruleChapterUrl)"
-                         placeholder="选择目录页地址 (规则结果为Url, 与详情页相同时可省略)"/>
+            目录链接: <input type="text" id="ruleChapterUrl"
+                         placeholder="目录URL规则(ruleChapterUrl) | 选择目录页地址 (规则结果为Url, 与详情页相同时可省略)"/>
         </p>
         <p><b>目录列表规则</b></p>
         <p>
-            目录列表: <input type="text" id="ruleChapterList" title="目录列表规则(ruleChapterList)"
-                         placeholder="选择目录列表的章节节点 (规则结果为Element集合)"/>
+            目录列表: <input type="text" id="ruleChapterList"
+                         placeholder="目录列表规则(ruleChapterList) | 选择目录列表的章节节点 (规则结果为Element集合)"/>
         </p>
         <p>
-            目录翻页: <input type="text" id="ruleChapterUrlNext" title="目录下一页规则(ruleChapterUrlNext)"
-                         placeholder="选择目录下一页链接 (规则结果为Url, 仅一页时可省略)"/>
+            目录翻页: <input type="text" id="ruleChapterUrlNext"
+                         placeholder="目录下一页规则(ruleChapterUrlNext) | 选择目录下一页链接 (规则结果为Url, 仅一页时可省略)"/>
         </p>
         <p>
-            章节名称: <input type="text" id="ruleChapterName" title="章节名称规则(ruleChapterName)"
-                         placeholder="选择章节名称 (规则结果为字符串)"/>
+            章节名称: <input type="text" id="ruleChapterName"
+                         placeholder="章节名称规则(ruleChapterName) | 选择章节名称 (规则结果为字符串)"/>
         </p>
         <p>
-            章节链接: <input type="text" id="ruleContentUrl" title="章节URL规则(ruleContentUrl)"
-                         placeholder="选择章节链接 (规则结果为Url)"/>
+            章节链接: <input type="text" id="ruleContentUrl"
+                         placeholder="章节URL规则(ruleContentUrl) | 选择章节链接 (规则结果为Url)"/>
         </p>
         <p><b>正文阅读规则</b></p>
         <p>
-            章节正文: <input type="text" id="ruleBookContent" title="正文规则(ruleBookContent)"
-                         placeholder="选择正文内容 (规则结果为字符串)"/>
+            章节正文: <input type="text" id="ruleBookContent"
+                         placeholder="正文规则(ruleBookContent) | 选择正文内容 (规则结果为字符串)"/>
         </p>
         <p>
-            下一分页: <input type="text" id="ruleContentUrlNext" title="正文下一页URL规则(ruleContentUrlNext)"
-                         placeholder="选择正文下一分页链接 (规则结果为Url,注意:不能选择下一章链接!)"/>
+            下一分页: <input type="text" id="ruleContentUrlNext"
+                         placeholder="正文下一页URL规则(ruleContentUrlNext) | 不能选择下一章链接! (规则结果为Url)"/>
         </p>
         <p><b>其它规则</b></p>
         <p>
-            浏览标识: <input type="text" id="httpUserAgent" title="HttpUserAgent"
-                         placeholder="浏览器标识:User-Agent (可选)"/>
+            浏览标识: <input type="text" id="httpUserAgent"
+                         placeholder="浏览器UA(HttpUserAgent) | 浏览器标识:User-Agent (可选)"/>
         </p>
         <p>
             排序编号: <input type="number" id="serialNumber" placeholder="整数: 0~N (可选,默认0)"/>
@@ -274,23 +292,23 @@
         </p>
     </div>
     <div class="menu">
-        <button id="push" title="推送书源">⇈</button>
-        <button id="pull" title="拉取书源">⇊</button>
-        <button id="editor" title="编辑书源">⋘</button>
-        <button id="conver" title="生成书源">⋙</button>
-        <button id="initial" title="清空表单">✗</button>
-        <button id="undo" title="撤销操作">↶</button>
-        <button id="redo" title="重做操作">↷</button>
-        <button id="debug" title="调试书源">⇏</button>
-        <button id="accept" title="保存书源">✓</button>
+        <button id="push">⇈推送书源</button>
+        <button id="pull">⇊拉取书源</button>
+        <button id="editor">⋘编辑书源</button>
+        <button id="conver">⋙生成书源</button>
+        <button id="initial">✗清空表单</button>
+        <button id="undo">↶撤销操作</button>
+        <button id="redo">↷重做操作</button>
+        <button id="debug">⇏调试书源</button>
+        <button id="accept">✓保存书源</button>
     </div>
     <div class="outbox">
         <div class="tabbox">
             <div class="tabtitle">
-                <div class="tab1 this">编辑书源</div>
-                <div class="tab2">书源列表</div>
-                <div class="tab3">调试书源</div>
-                <div class="tab4">帮助信息</div>
+                <div name="编辑书源" class="tab1 this">编辑书源</div>
+                <div name="调试书源" class="tab2">调试书源</div>
+                <div name="书源列表" class="tab3">书源列表</div>
+                <div name="帮助信息" class="tab4">帮助信息</div>
             </div>
             <div class="tabbody">
                 <div class="tab1 this">
@@ -298,23 +316,27 @@
                               placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
                 </div>
                 <div class="tab2">
-                    <select id="RuleList" size="50">
-                    </select>
-                </div>
-                <div class="tab3">
                     <textarea id="DebugConsole" placeholder="这里用于输出调试信息"></textarea>
                 </div>
+                <div class="tab3">
+                    <div id="RuleList"></div>
+                </div>
                 <div class="tab4">
-                    <a href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
-                    <a href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
-                    <a href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
+                    <div class="link">
+                        <a target="_blank"
+                           href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
+                        <a target="_blank"
+                           href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
+                        <a target="_blank"
+                           href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script language="javascript">
+<script>
 		// 定义规则对象
 		var RuleJSON = {
 			"bookSourceName": "",
@@ -349,7 +371,23 @@
 			"weight": 0,
 			"enable": true
 		};
-		// 定义操作函数
+		// 获取数据
+		function HttpGet(url) {
+			return fetch(Domain + url)
+				.then(res => res.json()).catch(err => console.error('Error:', err));
+		}
+		// 提交数据
+		function HttpPost(url, data) {
+			return fetch(Domain + url, {
+				body: JSON.stringify(data),
+				method: 'POST',
+				mode: "cors",
+				headers: new Headers({
+					'Content-Type': 'application/json;charset=utf-8'
+				})
+			}).then(res => res.json()).catch(err => console.error('Error:', err));
+		}
+		// 将书源表单转化为书源对象
 		function rule2json() {
 			Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = dQuery('#' + key).value; });
 			RuleJSON.serialNumber = RuleJSON.serialNumber == '' ? 0 : parseInt(RuleJSON.serialNumber);
@@ -357,6 +395,7 @@
 			RuleJSON.enable = RuleJSON.enable == '' || RuleJSON.enable.toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
 			return RuleJSON;
 		}
+		// 将书源对象填充到书源表单
 		function json2rule(RuleEditor) {
 			Object.keys(RuleJSON).forEach((key) => { dQuery("#" + key).value = RuleEditor[key] });
 		}
@@ -365,7 +404,7 @@
 		if (localStorage.getItem('ruleSources')) {
 			ruleSources = JSON.parse(localStorage.getItem('ruleSources'));
 			ruleSources.forEach(item => {
-				dQuery('#RuleList').innerHTML += `<option title="${item.bookSourceName}">${item.bookSourceName}</option>`
+				dQuery('#RuleList').innerHTML += addRule(item.bookSourceName);
 			});
 		}
 		// 记录操作过程
@@ -409,13 +448,13 @@
 		dQuery('#redo').addEventListener('click', () => { redo() });
 		dQuery('#initial').addEventListener('click', () => {
 			dQueryAll('input').forEach(item => { item.value = '' });
-			dQueryAll('textarea').forEach(item => { item.value = ''});
+			dQueryAll('textarea').forEach(item => { item.value = '' });
 			dQuery('#RuleList').innerHTML = '';
 			todo();
 		})
 		// 处理规则内容
 		dQuery('#conver').addEventListener('click', () => {
-			showTab('tab1');
+			showTab('编辑书源');
 			dQuery('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);
 		});
 		dQuery('#editor').addEventListener('click', () => {
@@ -423,22 +462,6 @@
 			json2rule(JSON.parse(dQuery('#RuleJsonString').value));
 			todo();
 		});
-		// 获取数据
-		function HttpGet(url) {
-			return fetch(Domain + url)
-				.then(res => res.json()).catch(err => console.error('Error:', err));
-		}
-		// 提交数据
-		function HttpPost(url, data) {
-			return fetch(Domain + url, {
-				body: JSON.stringify(data),
-				method: 'POST',
-				mode: "cors",
-				headers: new Headers({
-					'Content-Type': 'application/json;charset=utf-8'
-				})
-			}).then(res => res.json()).catch(err => console.error('Error:', err));
-		}
 		// 提交单个规则
 		dQuery('#accept').addEventListener('click', () => {
 			HttpPost(`/saveSource`, rule2json()).then(json => {
@@ -447,7 +470,7 @@
 		});
 		// 拉取全部规则
 		dQuery('#pull').addEventListener('click', () => {
-			showTab('tab2');
+			showTab('书源列表');
 			HttpGet(`/getSources`).then(json => {
 				if (!json.isSuccess) {
 					return alert(json.errorMsg);
@@ -455,7 +478,7 @@
 				dQuery('#RuleList').innerHTML = ''
 				localStorage.setItem('ruleSources', JSON.stringify(ruleSources = json.data));
 				ruleSources.forEach(item => {
-					dQuery('#RuleList').innerHTML += `<option>${item.bookSourceName}</option>`
+					dQuery('#RuleList').innerHTML += addRule(item.bookSourceName);
 				});
 			});
 		});
@@ -466,15 +489,21 @@
 			});
 		});
 		// 列表规则更改事件
-		dQuery('#RuleList').addEventListener('change', () => {
+		dQuery('#RuleList').addEventListener('click', e => {
+			let ruleName = '';
+			if (e.target && e.target.nodeName.toUpperCase() == 'INPUT') {
+				ruleName = e.target.id;
+			} else {
+				return;
+			}
 			let tmpRule = rule2json();
 			for (i = 0, len = ruleSources.length; i < len; i++) {
-				if (ruleSources[i].bookSourceName == dQuery('#RuleList').selectedOptions[0].innerHTML) {
+				if (ruleSources[i].bookSourceName == ruleName) {
 					json2rule(ruleSources[i]);
 					break;
 				}
 			}
-			if (dQuery('#RuleList').selectedIndex < 0 || tmpRule.bookSourceName == '' || tmpRule.bookSourceUrl == '') return;
+			if (tmpRule.bookSourceName == '' || tmpRule.bookSourceUrl == '') return;
 			for (i = 0, len = ruleSources.length; i < len; i++) {
 				if (ruleSources[i].bookSourceName == tmpRule.bookSourceName) {
 					ruleSources[i] = Object.assign({}, tmpRule);
@@ -482,17 +511,17 @@
 				}
 				if (i + 1 == len) {
 					ruleSources.push(Object.assign({}, tmpRule));
-					dQuery('#RuleList').innerHTML += `<option>${tmpRule.bookSourceName}</option>`
+					dQuery('#RuleList').innerHTML += addRule(tmpRule.bookSourceName);
 				}
 			}
 			localStorage.setItem('ruleSources', JSON.stringify(ruleSources));
 		});
 		// 调试规则
 		dQuery('#debug').addEventListener('click', () => {
-			showTab('tab3');
+			showTab('调试书源');
 			(async () => {
 				for (let i = 0; i < 10; i++) {
-					let json = await HttpPost(`debug`, rule2json());
+					let json = await HttpPost(`/debug`, rule2json());
 					console.log(json.isSuccess ? json.data : json.errorMsg);
 				}
 			})().catch(err => {
