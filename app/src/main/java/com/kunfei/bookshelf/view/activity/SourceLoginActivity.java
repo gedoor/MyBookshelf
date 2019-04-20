@@ -14,18 +14,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.CookieBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

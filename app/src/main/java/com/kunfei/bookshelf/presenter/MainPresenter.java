@@ -11,6 +11,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -18,7 +19,6 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.DataRestore;
@@ -27,6 +27,8 @@ import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -113,9 +115,14 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 String baseUrl = StringUtils.getBaseUrl(bookUrl);
                 BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
                 if (bookSourceBean == null) {
-                    bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.like(baseUrl + "%"))
-                            .limit(1).build().unique();
+                    List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull(), BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")).list();
+                    for (BookSourceBean sourceBean : sourceBeans) {
+                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                            bookSourceBean = sourceBean;
+                            break;
+                        }
+                    }
                 }
                 if (bookSourceBean != null) {
                     BookShelfBean bookShelfBean = new BookShelfBean();

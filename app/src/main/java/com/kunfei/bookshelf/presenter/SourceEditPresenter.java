@@ -4,18 +4,19 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 

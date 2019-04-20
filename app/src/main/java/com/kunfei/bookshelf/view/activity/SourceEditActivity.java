@@ -22,6 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -40,6 +48,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
+import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
@@ -49,16 +58,10 @@ import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -548,6 +551,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 break;
             case R.id.action_share_it:
                 shareBookSource();
+                break;
+            case R.id.action_share_wifi:
+                ShareService.startThis(this, Collections.singletonList(getBookSource()));
                 break;
             case R.id.action_rule_summary:
                 openRuleSummary();

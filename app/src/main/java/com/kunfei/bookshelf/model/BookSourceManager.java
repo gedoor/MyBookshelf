@@ -3,13 +3,15 @@ package com.kunfei.bookshelf.model;
 import android.database.Cursor;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.NetworkUtil;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
@@ -146,6 +147,10 @@ public class BookSourceManager {
 
     public static Observable<List<BookSourceBean>> importSource(String string) {
         if (StringUtils.isTrimEmpty(string)) return null;
+        string = string.trim();
+        if (NetworkUtil.isIPv4Address(string)) {
+            string = String.format("http://%s:65501", string);
+        }
         if (StringUtils.isJsonType(string)) {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);

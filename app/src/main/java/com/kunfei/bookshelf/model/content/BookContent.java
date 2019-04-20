@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
@@ -10,7 +11,6 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.StringUtils;
