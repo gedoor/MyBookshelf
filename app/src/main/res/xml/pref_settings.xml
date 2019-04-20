@@ -46,7 +46,7 @@
         android:summary="@string/web_port_summary"
         android:title="@string/web_port_title"
         app:MaxValue="65535"
-        app:MinValue="1" />
+        app:MinValue="1024" />
 
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="true"
