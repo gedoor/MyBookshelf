@@ -12,6 +12,9 @@ public class WebSocketServer extends NanoWSD {
 
     @Override
     protected WebSocket openWebSocket(IHTTPSession handshake) {
-        return new SourceDebugWebSocket(handshake);
+        if (handshake.getUri().equals("/sourceDebug")) {
+            return new SourceDebugWebSocket(handshake);
+        }
+        return null;
     }
 }
