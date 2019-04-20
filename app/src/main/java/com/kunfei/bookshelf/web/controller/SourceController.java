@@ -7,6 +7,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.web.utils.ReturnData;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,18 +20,20 @@ public class SourceController {
             return returnData.setErrorMsg("书源名称和URL不能为空");
         }
         BookSourceManager.addBookSource(bookSourceBean);
-        return returnData.setData("书源[" + bookSourceBean.getBookSourceName() + "]保存成功");
+        return returnData;
     }
 
     public ReturnData saveSources(String postData) {
         List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(postData, BookSourceBean.class);
         int count = 0;
         int allCount = bookSourceBeans.size();
+        List<String> sourceNames= new ArrayList<>();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
             if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
                 continue;
             }
             BookSourceManager.addBookSource(bookSourceBean);
+            sourceNames.add(bookSourceBean.getBookSourceName());
             count++;
         }
         ReturnData returnData = new ReturnData();
@@ -38,9 +41,9 @@ public class SourceController {
             return returnData.setErrorMsg("未添加书源，书源名称和URL不能为空");
         }
         if (count == allCount) {
-            return returnData.setData("成功添加"+count+"个书源");
+            return returnData;
         }
-        return returnData.setData("一共" + allCount + "个书源，成功" + count + "个，失败" + (allCount - count) + "个");
+        return returnData.setData(sourceNames);
     }
 
     public ReturnData getSource(Map<String,List<String>> parameters) {
