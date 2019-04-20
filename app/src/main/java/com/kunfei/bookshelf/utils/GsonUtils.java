@@ -14,11 +14,6 @@ import java.util.List;
 public class GsonUtils {
     /**
      * 将Json数据解析成相应的映射对象
-     *
-     * @param jsonData
-     * @param type
-     * @param <T>
-     * @return
      */
     public static <T> T parseJObject(String jsonData, Class<T> type) {
         T result = null;
@@ -29,9 +24,7 @@ public class GsonUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (gson != null) {
-                    gson = null;
-                }
+                gson = null;
             }
         }
         return result;
@@ -39,11 +32,6 @@ public class GsonUtils {
 
     /**
      * 将Json数组解析成相应的映射对象List
-     *
-     * @param jsonData
-     * @param type
-     * @param <T>
-     * @return
      */
     public static <T> List<T> parseJArray(String jsonData, Class<T> type) {
         List<T> result = null;
@@ -66,9 +54,7 @@ public class GsonUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (gson != null) {
-                    gson = null;
-                }
+                gson = null;
             }
         }
         return result;
@@ -76,10 +62,6 @@ public class GsonUtils {
 
     /**
      * 将对象转换成Json
-     *
-     * @param entity
-     * @param <T>
-     * @return
      */
     public static <T> String toJsonWithSerializeNulls(T entity) {
         entity.getClass();
@@ -90,19 +72,13 @@ public class GsonUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (gson != null) {
-                gson = null;
-            }
+            gson = null;
         }
         return result;
     }
 
     /**
      * 将list排除值为null的字段转换成Json数组
-     *
-     * @param list
-     * @param <T>
-     * @return
      */
     public static <T> String toJsonArrayWithSerializeNulls(List<T> list) {
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -112,19 +88,13 @@ public class GsonUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (gson != null) {
-                gson = null;
-            }
+            gson = null;
         }
         return result;
     }
 
     /**
      * 将list中将Expose注解的字段转换成Json数组
-     *
-     * @param list
-     * @param <T>
-     * @return
      */
     public static <T> String toJsonArrayWithExpose(List<T> list) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -134,9 +104,7 @@ public class GsonUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (gson != null) {
-                gson = null;
-            }
+            gson = null;
         }
         return result;
     }
