@@ -70,6 +70,7 @@
 		}
 
 		.tabtitle>.this {
+			color: #4f9da6;
 			border-bottom-color: #4EBBE4;
 		}
 
@@ -108,10 +109,8 @@
 
 		#RuleList>label>* {
 			background: #eee;
-			justify-content: center;
-			font-size: 1em;
-			min-height: 1em;
-			padding: 5px;
+			min-height: 2em;
+			padding-left: 0.2em;
 		}
 
 		#RuleList input[type=radio] {
@@ -119,7 +118,7 @@
 		}
 
 		#RuleList input[type="radio"]:checked+* {
-			background: #4EBBE4;
+			background: #15cda8;
 		}
 
 		.isError {
@@ -137,8 +136,8 @@
 			window.location.hash = getVal == '' ? `${hashstr.replace(`&${key}=`)}&${key}=${val}` : hashstr.replace(getVal, val);
 		}
 		var Domain = hashParam('domain');
-		function addRule(name) {
-			return `<label for="${name}"><input type="radio" name="rule" id="${name}"><p>${name}</p></label>`;
+		function addRule(rule) {
+			return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><p>${rule.bookSourceName}<br>${rule.bookSourceUrl}</p></label>`;
 		}
 		function dQuery(selector) {
 			return document.querySelector(selector)
@@ -396,7 +395,7 @@
 		if (localStorage.getItem('ruleSources')) {
 			ruleSources = JSON.parse(localStorage.getItem('ruleSources'));
 			ruleSources.forEach(item => {
-				dQuery('#RuleList').innerHTML += addRule(item.bookSourceName);
+				dQuery('#RuleList').innerHTML += addRule(item);
 			});
 		}
 		// 记录操作过程
@@ -456,9 +455,9 @@
 		});
 		// 提交单个规则
 		dQuery('#accept').addEventListener('click', () => {
-			let tmpRule = rule2json();
-			HttpPost(`/saveSource`, tmpRule).then(json => {
-				alert(json.isSuccess ? `书源《${tmpRule.bookSourceName}》已成功保存到「阅读APP」` : `书源「${tmpRule.bookSourceName}」保存失败!\nError: ${json.errorMsg}`);
+			let editRule = rule2json();
+			HttpPost(`/saveSource`, editRule).then(json => {
+				alert(json.isSuccess ? `书源《${editRule.bookSourceName}》已成功保存到「阅读APP」` : `书源《${editRule.bookSourceName}》保存失败!\nErrorMsg: ${json.errorMsg}`);
 			});
 		});
 		// 拉取全部规则
@@ -469,18 +468,18 @@
 					dQuery('#RuleList').innerHTML = ''
 					localStorage.setItem('ruleSources', JSON.stringify(ruleSources = json.data));
 					ruleSources.forEach(item => {
-						dQuery('#RuleList').innerHTML += addRule(item.bookSourceName);
+						dQuery('#RuleList').innerHTML += addRule(item);
 					});
 					alert(`成功拉取 ${ruleSources.length} 条书源`);
 				}
 				else {
-					alert(`批量拉取书源失败!\nError: ${json.errorMsg}`);
+					alert(`批量拉取书源失败!\nErrorMsg: ${json.errorMsg}`);
 				}
 			});
 		});
 		// 推送全部规则
 		dQuery('#push').addEventListener('click', () => {
-			dQueryAll('#RuleList>label>p').forEach(item=>{
+			dQueryAll('#RuleList>label>p').forEach(item => {
 				item.className = '';
 			});
 			HttpPost(`/saveSources`, ruleSources).then(json => {
@@ -490,8 +489,8 @@
 						let failMsg = ``;
 						if (ruleSources.length > okData.length) {
 							ruleSources.forEach(item => {
-								if (okData.find(rName => rName == item.bookSourceName)) { }
-								else { dQuery(`#RuleList #${item.bookSourceName}+*`).className += 'isError'; }
+								if (okData.find(x => x.bookSourceUrl == item.bookSourceUrl)) { }
+								else { dQuery(`#RuleList #${item.bookSourceUrl}+*`).className += 'isError'; }
 							});
 							failMsg = '\n推送失败的书源将用红色字体标注!';
 						}
@@ -502,33 +501,26 @@
 					}
 				}
 				else {
-					alert(`批量推送书源失败!\nError: ${json.errorMsg}`);
+					alert(`批量推送书源失败!\nErrorMsg: ${json.errorMsg}`);
 				}
 			});
 		});
 		// 列表规则更改事件
 		dQuery('#RuleList').addEventListener('click', e => {
-			let ruleName = '';
+			let editRule = null;
 			if (e.target && e.target.nodeName.toUpperCase() == 'INPUT') {
-				ruleName = e.target.id;
+				editRule = rule2json();
+				json2rule(ruleSources.find(x => x.bookSourceUrl == e.target.id));
 			} else return;
-			let tmpRule = rule2json();
-			for (i = 0, len = ruleSources.length; i < len; i++) {
-				if (ruleSources[i].bookSourceName == ruleName) {
-					json2rule(ruleSources[i]);
-					break;
-				}
-			}
-			if (tmpRule.bookSourceName == '' || tmpRule.bookSourceUrl == '') return;
-			for (i = 0, len = ruleSources.length; i < len; i++) {
-				if (ruleSources[i].bookSourceName == tmpRule.bookSourceName) {
-					ruleSources[i] = Object.assign({}, tmpRule);
-					break;
-				}
-				if (i + 1 == len) {
-					ruleSources.push(Object.assign({}, tmpRule));
-					dQuery('#RuleList').innerHTML += addRule(tmpRule.bookSourceName);
-				}
+			if (editRule.bookSourceUrl == '') return;
+			if (editRule.bookSourceName == '') editRule.bookSourceName = editRule.bookSourceUrl.replace(/.*?\/\/|\/.*/g, '');
+			let checkRule = ruleSources.find(x => x.bookSourceUrl == editRule.bookSourceUrl);
+			if(checkRule){
+				checkRule = editRule;
+				dQuery(`input[id="${editRule.bookSourceUrl}"]+*`).innerHTML = `${editRule.bookSourceName}<br>${editRule.bookSourceUrl}`;
+			} else {
+				ruleSources.push(editRule);
+				dQuery('#RuleList').innerHTML += addRule(editRule);
 			}
 			localStorage.setItem('ruleSources', JSON.stringify(ruleSources));
 		});

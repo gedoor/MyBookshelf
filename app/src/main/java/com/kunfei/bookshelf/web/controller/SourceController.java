@@ -25,15 +25,15 @@ public class SourceController {
 
     public ReturnData saveSources(String postData) {
         List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(postData, BookSourceBean.class);
-        List<String> sourceNames= new ArrayList<>();
+        List<BookSourceBean> okSources= new ArrayList<>();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
             if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
                 continue;
             }
             BookSourceManager.addBookSource(bookSourceBean);
-            sourceNames.add(bookSourceBean.getBookSourceName());
+            okSources.add(bookSourceBean);
         }
-        return (new ReturnData()).setData(sourceNames);
+        return (new ReturnData()).setData(okSources);
     }
 
     public ReturnData getSource(Map<String,List<String>> parameters) {
