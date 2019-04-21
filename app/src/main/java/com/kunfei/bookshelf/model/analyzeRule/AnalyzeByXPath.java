@@ -30,7 +30,7 @@ public class AnalyzeByXPath {
         }
         Elements elements = new Elements();
         String elementsType;
-        String rules[];
+        String[] rules;
         if (xPath.contains("&&")) {
             rules = xPath.split("&&");
             elementsType = "&";
@@ -65,20 +65,18 @@ public class AnalyzeByXPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (Elements temp : results) {
-                                if (i < temp.size()) {
-                                    elements.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (Elements temp : results) {
+                            if (i < temp.size()) {
+                                elements.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (Elements temp : results) {
-                            elements.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (Elements temp : results) {
+                        elements.addAll(temp);
+                    }
                 }
             }
         }
@@ -88,7 +86,7 @@ public class AnalyzeByXPath {
     List<String> getStringList(String xPath) {
         List<String> result = new ArrayList<>();
         String elementsType;
-        String rules[];
+        String[] rules;
         if (xPath.contains("&&")) {
             rules = xPath.split("&&");
             elementsType = "&";
@@ -119,20 +117,18 @@ public class AnalyzeByXPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List<String> temp : results) {
-                                if (i < temp.size()) {
-                                    result.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List<String> temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List<String> temp : results) {
-                            result.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List<String> temp : results) {
+                        result.addAll(temp);
+                    }
                 }
             }
         }
@@ -141,7 +137,7 @@ public class AnalyzeByXPath {
 
     public String getString(String rule) {
         String result;
-        String rules[];
+        String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
