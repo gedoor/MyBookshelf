@@ -45,7 +45,7 @@ public class Debug {
         }
     }
 
-    public static void newDebug(@NonNull String tag, @NonNull String key, @NonNull CompositeDisposable compositeDisposable, @NonNull CallBack callBack) {
+    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull CallBack callBack) {
         new Debug(tag, key, compositeDisposable, callBack);
     }
 
@@ -53,6 +53,10 @@ public class Debug {
     private CompositeDisposable compositeDisposable;
 
     private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
+        if (TextUtils.isEmpty(tag)) {
+            callBack.printError("书源url不能为空");
+            return;
+        }
         key = StringUtils.trim(key);
         if (TextUtils.isEmpty(key)) {
             callBack.printError("关键字不能为空");
