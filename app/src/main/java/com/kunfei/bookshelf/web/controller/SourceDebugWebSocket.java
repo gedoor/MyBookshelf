@@ -76,7 +76,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onException(IOException exception) {
-
+        Debug.SOURCE_DEBUG_TAG = null;
     }
 
     @Subscribe(tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
