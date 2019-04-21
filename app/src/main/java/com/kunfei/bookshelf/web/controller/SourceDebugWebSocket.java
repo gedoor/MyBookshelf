@@ -71,7 +71,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onPong(NanoWSD.WebSocketFrame pong) {
-        pong.toString();
+
     }
 
     @Override
