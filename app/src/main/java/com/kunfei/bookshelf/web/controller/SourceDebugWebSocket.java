@@ -4,6 +4,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.model.content.Debug;
 
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         try {
             send(msg);
         } catch (IOException e) {
-
+            Debug.SOURCE_DEBUG_TAG = null;
         }
     }
 
