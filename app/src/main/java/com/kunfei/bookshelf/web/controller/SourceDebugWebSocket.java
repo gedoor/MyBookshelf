@@ -33,6 +33,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     protected void onClose(NanoWSD.WebSocketFrame.CloseCode code, String reason, boolean initiatedByRemote) {
         RxBus.get().unregister(this);
         compositeDisposable.dispose();
+        Debug.SOURCE_DEBUG_TAG = null;
     }
 
     @Override
