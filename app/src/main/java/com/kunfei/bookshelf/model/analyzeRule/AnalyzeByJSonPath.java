@@ -43,7 +43,7 @@ public class AnalyzeByJSonPath {
                     if (object instanceof List) {
                         StringBuilder builder = new StringBuilder();
                         for (Object o : (List) object) {
-                            builder.append(String.valueOf(o)).append("\n");
+                            builder.append(o).append("\n");
                         }
                         result = builder.toString();
                     } else {
@@ -148,7 +148,7 @@ public class AnalyzeByJSonPath {
         List<Object> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
         String elementsType;
-        String rules[];
+        String[] rules;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
@@ -177,20 +177,18 @@ public class AnalyzeByJSonPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List temp : results) {
-                                if (i < temp.size()) {
-                                    result.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List temp : results) {
-                            result.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List temp : results) {
+                        result.addAll(temp);
+                    }
                 }
             }
         }
