@@ -43,7 +43,11 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
 
     @Subscribe(tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
+        try {
+            send(msg);
+        } catch (IOException e) {
 
+        }
     }
 
 }
