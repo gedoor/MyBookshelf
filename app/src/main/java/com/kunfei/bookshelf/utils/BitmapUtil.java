@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@SuppressWarnings("unused")
 public class BitmapUtil {
     private static final String TAG = "BitmapUtil";
 
@@ -68,7 +69,7 @@ public class BitmapUtil {
         // scale = scale < scale2 ? scale : scale2;
         matrix.postScale(scale, scale);
         Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
-        if (bitmap != null && !bitmap.equals(bmp) && !bitmap.isRecycled()) {
+        if (!bitmap.equals(bmp) && !bitmap.isRecycled()) {
             bitmap.recycle();
             bitmap = null;
         }
@@ -84,7 +85,7 @@ public class BitmapUtil {
         options.inJustDecodeBounds = true;
         options.inPurgeable = true;
         options.inInputShareable = true;
-        Bitmap bm = BitmapFactory.decodeByteArray(buffer, 0, buffer.length, options);
+        Bitmap bm;
         // 计算缩放比例
         float reSize = options.outWidth / size;
         if (options.outWidth < options.outHeight) {
@@ -313,7 +314,7 @@ public class BitmapUtil {
             baos.reset();// 重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, 50, baos);// 这里压缩50%，把压缩后的数据存放到baos中
         }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        ByteArrayInputStream isBm;
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
@@ -368,6 +369,7 @@ public class BitmapUtil {
      * 高斯模糊
      */
     public static Bitmap stackBlur(Bitmap srcBitmap) {
+        if (srcBitmap == null) return null;
         RenderScript rs = RenderScript.create(MApplication.getInstance());
         Bitmap blurredBitmap = srcBitmap.copy(Bitmap.Config.ARGB_8888, true);
 
