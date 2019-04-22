@@ -115,7 +115,18 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
+    public synchronized void upData(DataAction action, List<SearchBookBean> newDataS, String keyWord) {
+        switch (action) {
+            case ADD:
+                addAll(newDataS, keyWord);
+                break;
+            case CLEAR:
+                clearAll();
+                break;
+        }
+    }
+
+    private void addAll(List<SearchBookBean> newDataS, String keyWord) {
         List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
         if (newDataS != null && newDataS.size() > 0) {
             saveData(newDataS);
@@ -180,7 +191,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    public void clearAll() {
+    private void clearAll() {
         int bookSize = searchBooks.size();
         if (bookSize > 0) {
             try {
@@ -245,6 +256,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             tvOrigin = itemView.findViewById(R.id.tv_origin);
             tvOriginNum = itemView.findViewById(R.id.tv_origin_num);
         }
+    }
+
+    public enum DataAction {
+        ADD, CLEAR
     }
 
 }
