@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.web.controller;
 
 import android.os.AsyncTask;
-import android.webkit.CookieSyncManager;
 
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
@@ -62,6 +61,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
                 AsyncTask.execute(() -> {
                     try {
                         send(msg);
+                        close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
                     } catch (IOException ignored) {
                     }
                     Debug.SOURCE_DEBUG_TAG = null;
@@ -73,6 +73,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
                 AsyncTask.execute(() -> {
                     try {
                         send("finish");
+                        close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
                     } catch (IOException ignored) {
                     }
                     Debug.SOURCE_DEBUG_TAG = null;
