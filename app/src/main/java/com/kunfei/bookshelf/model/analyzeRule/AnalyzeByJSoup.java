@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
@@ -79,7 +78,7 @@ public class AnalyzeByJSoup {
             textS.add(element.data());
         } else {
             String elementsType;
-            String ruleStrS[];
+            String[] ruleStrS;
             if (sourceRule.elementsRule.contains("&")) {
                 elementsType = "&";
                 ruleStrS = sourceRule.elementsRule.split("&+");
@@ -111,20 +110,18 @@ public class AnalyzeByJSoup {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List<String> temp : results) {
-                                if (i < temp.size()) {
-                                    textS.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List<String> temp : results) {
+                            if (i < temp.size()) {
+                                textS.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List<String> temp : results) {
-                            textS.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List<String> temp : results) {
+                        textS.addAll(temp);
+                    }
                 }
             }
         }
@@ -185,20 +182,18 @@ public class AnalyzeByJSoup {
             }
         }
         if (elementsList.size() > 0) {
-            switch (elementsType) {
-                case "%":
-                    for (int i = 0; i < elementsList.get(0).size(); i++) {
-                        for (Elements es : elementsList) {
-                            if (i < es.size()) {
-                                elements.add(es.get(i));
-                            }
+            if ("%".equals(elementsType)) {
+                for (int i = 0; i < elementsList.get(0).size(); i++) {
+                    for (Elements es : elementsList) {
+                        if (i < es.size()) {
+                            elements.add(es.get(i));
                         }
                     }
-                    break;
-                default:
-                    for (Elements es : elementsList) {
-                        elements.addAll(es);
-                    }
+                }
+            } else {
+                for (Elements es : elementsList) {
+                    elements.addAll(es);
+                }
             }
         }
         return elements;
@@ -368,49 +363,22 @@ public class AnalyzeByJSoup {
                         textS.add(text);
                     }
                     break;
-                case "ownText":
-                    List<String> keptTags = Arrays.asList("br", "b", "em", "strong");
-                    for (Element element : elements) {
-                        Element ele = element.clone();
-                        for (Element child : ele.children()) {
-                            if (!keptTags.contains(child.tagName())) {
-                                child.remove();
-                            }
-                        }
-                        String[] htmlS = ele.html().replaceAll("(?i)<br[\\s/]*>", "\n")
-                                .replaceAll("<.*?>", "").split("\n");
-                        for (String temp : htmlS) {
-                            temp = FormatWebText.getContent(temp);
-                            if (!TextUtils.isEmpty(temp)) {
-                                textS.add(temp);
-                            }
-                        }
-                    }
-                    break;
                 case "textNodes":
                     for (Element element : elements) {
                         List<TextNode> contentEs = element.textNodes();
                         for (int i = 0; i < contentEs.size(); i++) {
                             String temp = contentEs.get(i).text().trim();
-                            temp = FormatWebText.getContent(temp);
                             if (!isEmpty(temp)) {
                                 textS.add(temp);
                             }
                         }
                     }
                     break;
+                case "ownText":
                 case "html":
                     elements.select("script").remove();
                     String html = elements.html();
-                    String[] htmlS = html.replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
-                            .replaceAll("<.*?>", "")
-                            .split("\n");
-                    for (String temp : htmlS) {
-                        temp = FormatWebText.getContent(temp);
-                        if (!isEmpty(temp)) {
-                            textS.add(temp);
-                        }
-                    }
+                    textS.add(html);
                     break;
                 default:
                     for (Element element : elements) {

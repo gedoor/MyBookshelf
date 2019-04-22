@@ -27,7 +27,7 @@ public class AnalyzeByJSonPath {
     public String getString(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
         String result = "";
-        String rules[];
+        String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
@@ -43,7 +43,7 @@ public class AnalyzeByJSonPath {
                     if (object instanceof List) {
                         StringBuilder builder = new StringBuilder();
                         for (Object o : (List) object) {
-                            builder.append(String.valueOf(o)).append("\n");
+                            builder.append(o).append("\n");
                         }
                         result = builder.toString();
                     } else {
@@ -78,7 +78,7 @@ public class AnalyzeByJSonPath {
     List<String> getStringList(String rule) {
         List<String> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
-        String rules[];
+        String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
@@ -126,20 +126,18 @@ public class AnalyzeByJSonPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List<String> temp : results) {
-                                if (i < temp.size()) {
-                                    result.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List<String> temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List<String> temp : results) {
-                            result.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List<String> temp : results) {
+                        result.addAll(temp);
+                    }
                 }
             }
             return result;
@@ -150,7 +148,7 @@ public class AnalyzeByJSonPath {
         List<Object> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
         String elementsType;
-        String rules[];
+        String[] rules;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
@@ -179,20 +177,18 @@ public class AnalyzeByJSonPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List temp : results) {
-                                if (i < temp.size()) {
-                                    result.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List temp : results) {
-                            result.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List temp : results) {
+                        result.addAll(temp);
+                    }
                 }
             }
         }

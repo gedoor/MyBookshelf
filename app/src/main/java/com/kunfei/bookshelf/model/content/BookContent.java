@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
@@ -10,7 +11,6 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -43,7 +43,7 @@ class BookContent {
     Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
-                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error)));
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error) + chapterBean.getDurChapterUrl()));
                 return;
             }
 
@@ -52,13 +52,14 @@ class BookContent {
                 e.onComplete();
                 return;
             }
-
+            Debug.printLog(tag, "┌成功获取正文页");
+            Debug.printLog(tag, "└" + chapterBean.getDurChapterUrl());
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
             bookContentBean.setTag(tag);
 
-            WebContentBean webContentBean = analyzeBookContent(s, chapterBean.getDurChapterUrl());
+            WebContentBean webContentBean = analyzeBookContent(s, chapterBean.getDurChapterUrl(), true);
             bookContentBean.setDurChapterContent(webContentBean.content);
 
             /*
@@ -80,7 +81,7 @@ class BookContent {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();
                         body = response.body();
-                        webContentBean = analyzeBookContent(body, webContentBean.nextUrl);
+                        webContentBean = analyzeBookContent(body, webContentBean.nextUrl, false);
                         if (!TextUtils.isEmpty(webContentBean.content)) {
                             bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
                         }
@@ -96,17 +97,19 @@ class BookContent {
         });
     }
 
-    private WebContentBean analyzeBookContent(final String s, final String chapterUrl) throws Exception {
+    private WebContentBean analyzeBookContent(final String s, final String chapterUrl, boolean printLog) throws Exception {
         WebContentBean webContentBean = new WebContentBean();
 
         AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s, chapterUrl);
-
+        Debug.printLog(tag, "┌解析正文内容", printLog);
         webContentBean.content = analyzer.getString(ruleBookContent);
-
+        Debug.printLog(tag, "└" + webContentBean.content, printLog);
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {
+            Debug.printLog(tag, "┌解析下一页url", printLog);
             webContentBean.nextUrl = analyzer.getString(nextUrlRule, true);
+            Debug.printLog(tag, "└" + webContentBean.nextUrl, printLog);
         }
 
         return webContentBean;

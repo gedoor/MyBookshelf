@@ -11,6 +11,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 
@@ -100,6 +101,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         if (sort != 2) {
             holder.topView.setVisibility(View.VISIBLE);
         } else {

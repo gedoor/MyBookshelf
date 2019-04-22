@@ -74,6 +74,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AlertDialog alertDialog;
         switch (key) {
+            case "E-InkMode":
+                MApplication.getInstance().upEInkMode();
+                break;
             case "immersionStatusBar":
             case "navigationBarColorChange":
                 settingActivity.initImmersionBar();
@@ -147,7 +150,8 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                         MApplication.getInstance().upThemeStore();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {})
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
                     .show();
             ATH.setAlertDialogTint(alertDialog);
         }

@@ -2,6 +2,7 @@
 package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -241,5 +242,27 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+        }
+    }
 
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
 }

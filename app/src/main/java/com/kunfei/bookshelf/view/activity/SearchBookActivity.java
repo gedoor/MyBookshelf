@@ -17,6 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
@@ -40,15 +46,11 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
+    private final int requestSource = 14;
 
     @BindView(R.id.searchView)
     SearchView searchView;
@@ -162,7 +164,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         int id = item.getItemId();
         switch (id) {
             case R.id.action_book_source_manage:
-                BookSourceActivity.startThis(this);
+                BookSourceActivity.startThis(this, requestSource);
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);
@@ -404,8 +406,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     @Override
-    public void querySearchHistorySuccess(List<SearchHistoryBean> datas) {
-        addNewHistories(datas);
+    public void querySearchHistorySuccess(List<SearchHistoryBean> data) {
+        addNewHistories(data);
         if (flSearchHistory.getChildCount() > 0) {
             tvSearchHistoryClean.setVisibility(View.VISIBLE);
         } else {
@@ -415,7 +417,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void refreshSearchBook() {
-        searchBookAdapter.clearAll();
+        searchBookAdapter.upData(SearchBookAdapter.DataAction.CLEAR, null);
     }
 
     @Override
@@ -465,7 +467,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case requestSource:
+                    mPresenter.initSearchEngineS();
+                    break;
+            }
+        }
     }
 
     @Override

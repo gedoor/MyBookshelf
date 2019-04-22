@@ -17,7 +17,6 @@ import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
-import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -244,9 +243,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case SourceEditActivity.EDIT_SOURCE:
-                    mPresenter.initData();
-                    break;
-                case AppConstant.BookSourceActivity:
                     mPresenter.initData();
                     break;
             }

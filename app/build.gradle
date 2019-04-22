@@ -38,6 +38,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.myConfig
             buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -107,6 +108,10 @@ dependencies {
     //bind view
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+
+    //webServer
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websocket:2.3.1'
 
     //动画
     implementation 'com.victor:lib:1.0.4'

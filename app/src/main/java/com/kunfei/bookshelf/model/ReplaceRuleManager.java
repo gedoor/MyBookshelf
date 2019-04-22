@@ -2,14 +2,13 @@ package com.kunfei.bookshelf.model;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -105,8 +104,7 @@ public class ReplaceRuleManager {
     private static Observable<Boolean> importReplaceRuleO(String json) {
         return Observable.create(e -> {
             try {
-                List<ReplaceRuleBean> replaceRuleBeans = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
-                }.getType());
+                List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
                 addDataS(replaceRuleBeans);
                 e.onNext(true);
             } catch (Exception e1) {

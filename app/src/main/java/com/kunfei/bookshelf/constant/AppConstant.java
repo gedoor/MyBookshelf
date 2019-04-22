@@ -13,6 +13,9 @@ import javax.script.ScriptEngineManager;
 
 public class AppConstant {
 
+    public static final String ActionStartService = "startService";
+    public static final String ActionDoneService = "doneService";
+
     //Book Date Convert Format
     public static final String FORMAT_TIME = "HH:mm";
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
@@ -26,8 +29,6 @@ public class AppConstant {
 
     public static final Pattern JS_PATTERN = Pattern.compile("(<js>[\\w\\W]*?</js>|@js:[\\w\\W]*$)", Pattern.CASE_INSENSITIVE);
     public static final Pattern EXP_PATTERN = Pattern.compile("\\{\\{([\\w\\W]*?)\\}\\}");
-
-    public static final int BookSourceActivity = 4512;
 
     public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
 

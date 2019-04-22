@@ -3,19 +3,22 @@ package com.kunfei.bookshelf.presenter;
 
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.dao.BookInfoBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.DataRestore;
@@ -25,9 +28,8 @@ import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import java.net.URL;
+import java.util.List;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -89,16 +91,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean != null) {
-                            getBook(bookShelfBean);
-                        } else {
-                            mView.toast("已在书架中");
-                        }
+                        getBook(bookShelfBean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.toast("网址格式不对");
+                        mView.toast(e.getMessage());
                     }
                 });
     }
@@ -109,20 +107,36 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 e.onComplete();
                 return;
             }
-            URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().load(bookUrl);
             if (temp != null) {
-                e.onNext(null);
+                e.onError(new Throwable("已在书架中"));
+                return;
             } else {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
-                bookShelfBean.setNoteUrl(url.toString());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setGroup(mView.getGroup() % 4);
-                bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                e.onNext(bookShelfBean);
+                String baseUrl = StringUtils.getBaseUrl(bookUrl);
+                BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
+                if (bookSourceBean == null) {
+                    List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull(), BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")).list();
+                    for (BookSourceBean sourceBean : sourceBeans) {
+                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                            bookSourceBean = sourceBean;
+                            break;
+                        }
+                    }
+                }
+                if (bookSourceBean != null) {
+                    BookShelfBean bookShelfBean = new BookShelfBean();
+                    bookShelfBean.setTag(bookSourceBean.getBookSourceUrl());
+                    bookShelfBean.setNoteUrl(bookUrl);
+                    bookShelfBean.setDurChapter(0);
+                    bookShelfBean.setGroup(mView.getGroup() % 4);
+                    bookShelfBean.setDurChapterPage(0);
+                    bookShelfBean.setFinalDate(System.currentTimeMillis());
+                    e.onNext(bookShelfBean);
+                } else {
+                    e.onError(new Throwable("未找到对应书源"));
+                    return;
+                }
             }
             e.onComplete();
         });

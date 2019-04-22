@@ -94,7 +94,13 @@
     <item
         android:id="@+id/action_check_book_source"
         android:icon="@drawable/ic_check_source"
-        android:title="@string/check_book_source"
+        android:title="@string/check_select_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_wifi"
+        android:icon="@drawable/ic_share"
+        android:title="@string/wifi_share"
         app:showAsAction="never" />
 
 </menu>

@@ -28,6 +28,8 @@ public interface SearchBookContract {
         void toSearchBooks(String key, Boolean fromError);
 
         void stopSearch();
+
+        void initSearchEngineS();
     }
 
     interface View extends IView {

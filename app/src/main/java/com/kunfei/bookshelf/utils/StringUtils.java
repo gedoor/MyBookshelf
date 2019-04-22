@@ -294,6 +294,12 @@ public class StringUtils {
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
     }
 
+    public static boolean endWithIgnoreCase(String src, String obj) {
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
+        return src.substring(src.length() - obj.length()).equalsIgnoreCase(obj);
+    }
+
     /**
      * delimiter 分隔符
      * elements 需要连接的字符数组

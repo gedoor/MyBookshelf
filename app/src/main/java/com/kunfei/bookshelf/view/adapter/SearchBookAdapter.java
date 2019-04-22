@@ -11,13 +11,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
@@ -26,8 +29,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private WeakReference<Activity> activityRef;
@@ -48,12 +49,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Activity activity = activityRef.get();
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.flContent.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(v, position);
         });
-        Activity activity = activityRef.get();
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
@@ -111,6 +113,25 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     public void setItemClickListener(BaseListAdapter.OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public synchronized void upData(DataAction action, List<SearchBookBean> newDataS) {
+        switch (action) {
+            case ADD:
+                searchBooks = newDataS;
+                notifyDataSetChanged();
+                break;
+            case CLEAR:
+                if (!searchBooks.isEmpty()) {
+                    try {
+                        Glide.with(activityRef.get()).onDestroy();
+                    } catch (Exception ignored) {
+                    }
+                    searchBooks.clear();
+                    notifyDataSetChanged();
+                }
+                break;
+        }
     }
 
     public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
@@ -172,22 +193,8 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             }
             Activity activity = activityRef.get();
             if(activity != null) {
-                searchBooks = copyDataS;
-                activity.runOnUiThread(this::notifyDataSetChanged);
+                activity.runOnUiThread(() -> upData(DataAction.ADD, copyDataS));
             }
-        }
-    }
-
-    public void clearAll() {
-        int bookSize = searchBooks.size();
-        if (bookSize > 0) {
-            try {
-                Glide.with(activityRef.get()).onDestroy();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            searchBooks.clear();
-            notifyItemRangeRemoved(0, bookSize);
         }
     }
 
@@ -243,6 +250,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             tvOrigin = itemView.findViewById(R.id.tv_origin);
             tvOriginNum = itemView.findViewById(R.id.tv_origin_num);
         }
+    }
+
+    public enum DataAction {
+        ADD, CLEAR
     }
 
 }

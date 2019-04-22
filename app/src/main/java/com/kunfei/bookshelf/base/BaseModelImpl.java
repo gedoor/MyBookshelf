@@ -8,11 +8,10 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.CookieBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.EncodeConverter;
-import com.kunfei.bookshelf.help.HttpInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
@@ -92,8 +91,7 @@ public class BaseModelImpl {
                     .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.createTrustAllManager())
                     .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                    .addInterceptor(getHeaderInterceptor())
-                    .addInterceptor(new HttpInterceptor(1));
+                    .addInterceptor(getHeaderInterceptor());
         }
         return clientBuilder;
     }

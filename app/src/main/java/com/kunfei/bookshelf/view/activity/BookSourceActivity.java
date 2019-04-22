@@ -10,20 +10,27 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
-import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.constant.AppConstant;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
+import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
@@ -36,14 +43,6 @@ import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.FilePicker;
@@ -76,8 +75,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Activity activity) {
-        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), AppConstant.BookSourceActivity);
+    public static void startThis(Activity activity, int requestCode) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), requestCode);
     }
 
     @Override
@@ -107,7 +106,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onDestroy() {
-        RxBus.get().post(RxBusTag.SOURCE_LIST_CHANGE, true);
         super.onDestroy();
     }
 
@@ -190,6 +188,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     private void revertSelection() {
@@ -198,6 +197,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         adapter.notifyDataSetChanged();
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     public void upSearchView(int size) {
@@ -223,6 +223,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(BookSourceBean date) {
@@ -288,7 +289,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 deleteDialog();
                 break;
             case R.id.action_check_book_source:
-                mPresenter.checkBookSource();
+                mPresenter.checkBookSource(adapter.getSelectDataList());
                 break;
             case R.id.sort_manual:
                 upSourceSort(0);
@@ -298,6 +299,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
             case R.id.sort_pin_yin:
                 upSourceSort(2);
+                break;
+            case R.id.action_share_wifi:
+                ShareService.startThis(this, adapter.getSelectDataList());
                 break;
             case android.R.id.home:
                 finish();
