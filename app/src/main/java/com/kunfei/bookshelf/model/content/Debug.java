@@ -33,6 +33,11 @@ public class Debug {
     public static String SOURCE_DEBUG_TAG;
     @SuppressLint("ConstantLocale")
     private static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
+    private static long startTime;
+
+    private static String getDoTime() {
+        return TimeUtils.millis2String(System.currentTimeMillis() - startTime, DEBUG_TIME_FORMAT);
+    }
 
     static void printLog(String tag, String msg) {
         printLog(tag, msg, true);
@@ -40,19 +45,12 @@ public class Debug {
 
     static void printLog(String tag, String msg, boolean print) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
-            msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
+            msg = String.format("%s %s", getDoTime(), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }
     }
 
     public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull CallBack callBack) {
-        new Debug(tag, key, compositeDisposable, callBack);
-    }
-
-    private CallBack callBack;
-    private CompositeDisposable compositeDisposable;
-
-    private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
         if (TextUtils.isEmpty(tag)) {
             callBack.printError("书源url不能为空");
             return;
@@ -62,12 +60,20 @@ public class Debug {
             callBack.printError("关键字不能为空");
             return;
         }
+        new Debug(tag, key, compositeDisposable, callBack);
+    }
+
+    private CallBack callBack;
+    private CompositeDisposable compositeDisposable;
+
+    private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
         UpLastChapterModel.destroy();
+        startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
         this.callBack = callBack;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtil.isUrl(key)) {
-            printLog(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡关键字为Url"));
+            printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
             BookShelfBean bookShelfBean = new BookShelfBean();
             bookShelfBean.setTag(Debug.SOURCE_DEBUG_TAG);
             bookShelfBean.setNoteUrl(key);
@@ -82,7 +88,7 @@ public class Debug {
     }
 
     private void searchDebug(String key) {
-        printLog(String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), "≡开始搜索指定关键字"));
+        printLog(String.format("%s %s", getDoTime(), "≡开始搜索指定关键字"));
         WebBookModel.getInstance().searchBook(key, 1, Debug.SOURCE_DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -113,7 +119,7 @@ public class Debug {
     }
 
     private void bookInfoDebug(BookShelfBean bookShelfBean) {
-        printLog(String.format("\n%s ≡开始获取详情页", TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        printLog(String.format("\n%s ≡开始获取详情页", getDoTime()));
         WebBookModel.getInstance().getBookInfo(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
@@ -140,7 +146,7 @@ public class Debug {
     }
 
     private void bookChapterListDebug(BookShelfBean bookShelfBean) {
-        printLog(String.format("\n%s ≡开始获取目录页", TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        printLog(String.format("\n%s ≡开始获取目录页", getDoTime()));
         WebBookModel.getInstance().getChapterList(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
@@ -173,7 +179,7 @@ public class Debug {
     }
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
-        printLog(String.format("\n%s ≡开始获取正文页", TimeUtils.getNowString(DEBUG_TIME_FORMAT)));
+        printLog(String.format("\n%s ≡开始获取正文页", getDoTime()));
         WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
@@ -207,7 +213,7 @@ public class Debug {
 
     private void printError(String msg) {
         if (callBack != null) {
-            callBack.printError(String.format("%s └%s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg));
+            callBack.printError(String.format("%s └%s", getDoTime(), msg));
         }
     }
 
