@@ -406,8 +406,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     @Override
-    public void querySearchHistorySuccess(List<SearchHistoryBean> datas) {
-        addNewHistories(datas);
+    public void querySearchHistorySuccess(List<SearchHistoryBean> data) {
+        addNewHistories(data);
         if (flSearchHistory.getChildCount() > 0) {
             tvSearchHistoryClean.setVisibility(View.VISIBLE);
         } else {
@@ -417,7 +417,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void refreshSearchBook() {
-        searchBookAdapter.upData(SearchBookAdapter.DataAction.CLEAR, null, null);
+        searchBookAdapter.upData(SearchBookAdapter.DataAction.CLEAR, null);
     }
 
     @Override
