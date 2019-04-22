@@ -72,7 +72,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
             public void finish() {
                 AsyncTask.execute(() -> {
                     try {
-                        close(NanoWSD.WebSocketFrame.CloseCode.valueOf("finish"), "finish", true);
+                        send("finish");
                     } catch (IOException ignored) {
                     }
                     Debug.SOURCE_DEBUG_TAG = null;
