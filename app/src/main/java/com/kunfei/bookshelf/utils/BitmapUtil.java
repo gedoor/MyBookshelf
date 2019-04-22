@@ -60,12 +60,12 @@ public class BitmapUtil {
      * 缩放Bitmap满屏
      */
     public static Bitmap getBitmap(Bitmap bitmap, int screenWidth,
-                                   int screenHight) {
+                                   int screenHeight) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         Matrix matrix = new Matrix();
         float scale = (float) screenWidth / w;
-        float scale2 = (float) screenHight / h;
+        float scale2 = (float) screenHeight / h;
         // scale = scale < scale2 ? scale : scale2;
         matrix.postScale(scale, scale);
         Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
@@ -159,20 +159,17 @@ public class BitmapUtil {
 
     /**
      * Bitmap --> byte[]
-     *
-     * @param bmp
-     * @return
      */
     private static byte[] readBitmap(Bitmap bmp) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 60, stream);
         try {
-            baos.flush();
-            baos.close();
+            stream.flush();
+            stream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return baos.toByteArray();
+        return stream.toByteArray();
     }
 
     /**
@@ -278,18 +275,18 @@ public class BitmapUtil {
      * 图片的质量压缩方法
      */
     public static Bitmap compressImage(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
-        while (baos.toByteArray().length / 1024 > 100) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            baos.reset();// 重置baos即清空baos
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+        while (stream.toByteArray().length / 1024 > 100) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            stream.reset();// 重置stream即清空stream
+            image.compress(Bitmap.CompressFormat.JPEG, options, stream);// 这里压缩options%，把压缩后的数据存放到baos中
             options -= 10;// 每次都减少10
         }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+        ByteArrayInputStream isBm = new ByteArrayInputStream(stream.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
         try {
-            baos.close();
+            stream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -308,11 +305,11 @@ public class BitmapUtil {
      * 图片按比例大小压缩方法(根据Bitmap图片压缩)
      */
     public static Bitmap getImage(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        if (baos.toByteArray().length / 1024 > 1024) {// 判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
-            baos.reset();// 重置baos即清空baos
-            image.compress(Bitmap.CompressFormat.JPEG, 50, baos);// 这里压缩50%，把压缩后的数据存放到baos中
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        if (stream.toByteArray().length / 1024 > 1024) {// 判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
+            stream.reset();// 重置stream即清空stream
+            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 这里压缩50%，把压缩后的数据存放到baos中
         }
         ByteArrayInputStream isBm;
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
@@ -336,7 +333,7 @@ public class BitmapUtil {
             be = 1;
         newOpts.inSampleSize = be;// 设置缩放比例
         // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-        isBm = new ByteArrayInputStream(baos.toByteArray());
+        isBm = new ByteArrayInputStream(stream.toByteArray());
         bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
         try {
             isBm.close();
@@ -373,25 +370,20 @@ public class BitmapUtil {
         RenderScript rs = RenderScript.create(MApplication.getInstance());
         Bitmap blurredBitmap = srcBitmap.copy(Bitmap.Config.ARGB_8888, true);
 
-        // Allocate memory for Renderscript to work with
         //分配用于渲染脚本的内存
         Allocation input = Allocation.createFromBitmap(rs, blurredBitmap, Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SHARED);
         Allocation output = Allocation.createTyped(rs, input.getType());
 
-        // Load up an instance of the specific script that we want to use.
         //加载我们想要使用的特定脚本的实例。
         ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
         script.setInput(input);
 
-        // Set the blur radius
         //设置模糊半径
         script.setRadius(8);
 
-        // Start the ScriptIntrinisicBlur
-        //启动ScriptIntrinisicBlur,
+        //启动 ScriptIntrinsicBlur
         script.forEach(output);
 
-        // Copy the output to the blurred bitmap
         //将输出复制到模糊的位图
         output.copyTo(blurredBitmap);
 
