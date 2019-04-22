@@ -115,18 +115,27 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public synchronized void upData(DataAction action, List<SearchBookBean> newDataS, String keyWord) {
+    public synchronized void upData(DataAction action, List<SearchBookBean> newDataS) {
         switch (action) {
             case ADD:
-                addAll(newDataS, keyWord);
+                searchBooks = newDataS;
+                notifyDataSetChanged();
                 break;
             case CLEAR:
-                clearAll();
+                if (!searchBooks.isEmpty()) {
+                    try {
+                        Glide.with(activityRef.get()).onDestroy();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    searchBooks.clear();
+                    notifyDataSetChanged();
+                }
                 break;
         }
     }
 
-    private void addAll(List<SearchBookBean> newDataS, String keyWord) {
+    public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
         List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
         if (newDataS != null && newDataS.size() > 0) {
             saveData(newDataS);
@@ -185,22 +194,8 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             }
             Activity activity = activityRef.get();
             if(activity != null) {
-                searchBooks = copyDataS;
-                activity.runOnUiThread(this::notifyDataSetChanged);
+                activity.runOnUiThread(() -> upData(DataAction.ADD, copyDataS));
             }
-        }
-    }
-
-    private void clearAll() {
-        int bookSize = searchBooks.size();
-        if (bookSize > 0) {
-            try {
-                Glide.with(activityRef.get()).onDestroy();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            searchBooks.clear();
-            notifyItemRangeRemoved(0, bookSize);
         }
     }
 
