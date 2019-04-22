@@ -33,6 +33,11 @@ public class Debug {
     public static String SOURCE_DEBUG_TAG;
     @SuppressLint("ConstantLocale")
     private static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
+    private static long startTime;
+
+    private static String getDoTime() {
+        return TimeUtils.millis2String(System.currentTimeMillis() - startTime, DEBUG_TIME_FORMAT);
+    }
 
     static void printLog(String tag, String msg) {
         printLog(tag, msg, true);
@@ -40,7 +45,7 @@ public class Debug {
 
     static void printLog(String tag, String msg, boolean print) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
-            msg = String.format("%s %s", TimeUtils.getNowString(DEBUG_TIME_FORMAT), msg);
+            msg = String.format("%s %s", getDoTime(), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }
     }
@@ -60,7 +65,6 @@ public class Debug {
 
     private CallBack callBack;
     private CompositeDisposable compositeDisposable;
-    private long startTime;
 
     private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
         UpLastChapterModel.destroy();
@@ -199,10 +203,6 @@ public class Debug {
                         finish();
                     }
                 });
-    }
-
-    private String getDoTime() {
-        return TimeUtils.millis2String(System.currentTimeMillis() - startTime, DEBUG_TIME_FORMAT);
     }
 
     private void printLog(String log) {
