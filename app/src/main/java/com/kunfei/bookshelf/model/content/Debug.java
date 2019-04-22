@@ -46,13 +46,6 @@ public class Debug {
     }
 
     public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull CallBack callBack) {
-        new Debug(tag, key, compositeDisposable, callBack);
-    }
-
-    private CallBack callBack;
-    private CompositeDisposable compositeDisposable;
-
-    private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
         if (TextUtils.isEmpty(tag)) {
             callBack.printError("书源url不能为空");
             return;
@@ -62,6 +55,13 @@ public class Debug {
             callBack.printError("关键字不能为空");
             return;
         }
+        new Debug(tag, key, compositeDisposable, callBack);
+    }
+
+    private CallBack callBack;
+    private CompositeDisposable compositeDisposable;
+
+    private Debug(String tag, String key, CompositeDisposable compositeDisposable, CallBack callBack) {
         UpLastChapterModel.destroy();
         SOURCE_DEBUG_TAG = tag;
         this.callBack = callBack;
