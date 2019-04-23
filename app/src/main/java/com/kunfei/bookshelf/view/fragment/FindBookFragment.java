@@ -47,6 +47,7 @@ import com.kunfei.bookshelf.widget.recycler.sectioned.SectionedSpanSizeLookup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -160,14 +161,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
                     //position 为点击的position
                     counts += findRightAdapter.getData().get(i).getChildList().size();
                 }
-                ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, llContent.getHeight() / 3);
+                ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
             });
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
 
-            findRightAdapter = new FindRightAdapter(getActivity(), this);
+            findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
             //设置header
-            ((SimpleItemAnimator) rvFindRight.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) Objects.requireNonNull(rvFindRight.getItemAnimator())).setSupportsChangeAnimations(false);
             rightLayoutManager = new ScrollLinearLayoutManger(getActivity(), 3);
             ((ScrollLinearLayoutManger) rightLayoutManager).setSpanSizeLookup(new SectionedSpanSizeLookup(findRightAdapter, (ScrollLinearLayoutManger) rightLayoutManager));
             rvFindRight.setLayoutManager(rightLayoutManager);
@@ -177,15 +178,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rvFindRight.setItemAnimator(null);
             rvFindRight.setHasFixedSize(true);
             rvFindRight.setAdapter(findRightAdapter);
-
-            //滚动右边更新左边列表
-            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                @Override
-                public void onScrolled(@io.reactivex.annotations.NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-            });
         } else {
             rightLayoutManager = new LinearLayoutManager(getContext());
             rvFindLeft.setVisibility(View.GONE);
@@ -276,8 +268,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         }
     }
 
+    @SuppressWarnings("unused")
     public class ScrollLinearLayoutManger extends GridLayoutManager {
-
 
         private float MILLISECONDS_PER_INCH = 50f;
 
