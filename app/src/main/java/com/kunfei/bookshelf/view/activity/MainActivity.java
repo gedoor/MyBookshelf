@@ -275,11 +275,23 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add(0, 0, 0, getString(R.string.switch_display_style));
+        boolean findTypeIsFlexBox = preferences.getBoolean("findTypeIsFlexBox", true);
+        boolean showFindLeftView = preferences.getBoolean("showFindLeftView", true);
+        if (findTypeIsFlexBox) {
+            popupMenu.getMenu().add(0, 0, 1, showFindLeftView ? "隐藏左侧栏" : "显示左侧栏");
+        }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("findTypeIsFlexBox", !preferences.getBoolean("findTypeIsFlexBox", true));
-            editor.apply();
-            RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+            if (menuItem.getOrder() == 0) {
+                preferences.edit()
+                        .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
+                        .apply();
+                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+            } else if (menuItem.getOrder() == 0) {
+                preferences.edit()
+                        .putBoolean("showFindLeftView", !showFindLeftView)
+                        .apply();
+                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+            }
             return true;
         });
         popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(1, false));
