@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class BitmapUtil {
     private static final String TAG = "BitmapUtil";
 
