@@ -20,7 +20,6 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
-import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
@@ -236,9 +235,6 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
                     @Override
                     public void onSuccess(Object o) {
                         Toast.makeText(MApplication.getInstance(), "恢复完成", Toast.LENGTH_SHORT).show();
-                        MApplication.getInstance().upThemeStore();
-                        MApplication.getInstance().initNightTheme();
-                        ReadBookControl.getInstance().updateReaderSettings();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     }
 
