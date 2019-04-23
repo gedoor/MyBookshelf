@@ -286,7 +286,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
                         .apply();
                 RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
-            } else if (menuItem.getOrder() == 0) {
+            } else if (menuItem.getOrder() == 1) {
                 preferences.edit()
                         .putBoolean("showFindLeftView", !showFindLeftView)
                         .apply();
