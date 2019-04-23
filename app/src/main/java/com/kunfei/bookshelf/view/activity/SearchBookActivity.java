@@ -122,9 +122,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         refreshErrorView = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
         refreshErrorView.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
-            mPresenter.initPage();
-            rfRvSearchBooks.startRefresh();
-            mPresenter.toSearchBooks(null, true);
+            toSearch();
         });
         rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 refreshErrorView);
@@ -294,7 +292,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private void showHideSetting() {
         flSearchHistory.removeAllViews();
         TextView tagView;
-        String hideSettings[] = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
+        String[] hideSettings = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
 
         for (String text : hideSettings) {
             tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, flSearchHistory, false);
