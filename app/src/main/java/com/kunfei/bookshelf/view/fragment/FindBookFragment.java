@@ -133,16 +133,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             findLeftAdapter.setData(group);
             findRightAdapter.setData(group);
             rlEmptyView.setVisibility(View.GONE);
-            if (showLeftView()) {
+
+            if (group.size() <= 1 | !showLeftView()) {
+                rvFindLeft.setVisibility(View.GONE);
+                vwDivider.setVisibility(View.GONE);
+            } else {
                 rvFindLeft.setVisibility(View.VISIBLE);
                 vwDivider.setVisibility(View.VISIBLE);
-            } else {
-                rvFindLeft.setVisibility(View.GONE);
-                vwDivider.setVisibility(View.GONE);
-            }
-            if (group.size() <= 1) {
-                rvFindLeft.setVisibility(View.GONE);
-                vwDivider.setVisibility(View.GONE);
             }
         } else {
             findKindAdapter.setAllDatas(group);
@@ -160,20 +157,21 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     private void initRecyclerView() {
         if (isFlexBox()) {
             findKindAdapter = null;
-            RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-            //设置缓存view个数(当视图中view的个数很多时，设置合理的缓存大小，防止来回滚动时重新创建 View)
-            viewPool.setMaxRecycledViews(0, 10);
-            rvFindLeft.setRecycledViewPool(viewPool);
-            findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
-                int counts = 0;
-                for (int i = 0; i < pos; i++) {
-                    //position 为点击的position
-                    counts += findRightAdapter.getData().get(i).getChildList().size();
-                }
-                ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
-            });
-            rvFindLeft.setLayoutManager(leftLayoutManager);
-            rvFindLeft.setAdapter(findLeftAdapter);
+            if (showLeftView()) {
+                findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
+                    int counts = 0;
+                    for (int i = 0; i < pos; i++) {
+                        //position 为点击的position
+                        counts += findRightAdapter.getData().get(i).getChildList().size();
+                    }
+                    ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
+                });
+                rvFindLeft.setLayoutManager(leftLayoutManager);
+                rvFindLeft.setAdapter(findLeftAdapter);
+            } else {
+                rvFindLeft.setVisibility(View.GONE);
+                vwDivider.setVisibility(View.GONE);
+            }
 
             findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
             //设置header
