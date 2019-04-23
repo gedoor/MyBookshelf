@@ -19,5 +19,7 @@ public interface IHttpPostApi {
 
     @FormUrlEncoded
     @POST
-    Observable<Response<String>> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap, @HeaderMap Map<String, String> headers);
+    Observable<Response<String>> searchBook(@Url String url,
+                                            @FieldMap(encoded = true) Map<String, String> fieldMap,
+                                            @HeaderMap Map<String, String> headers);
 }
