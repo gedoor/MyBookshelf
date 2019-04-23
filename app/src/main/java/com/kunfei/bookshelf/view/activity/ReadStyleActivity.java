@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.hwangjr.rxbus.RxBus;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
@@ -29,8 +32,6 @@ import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -267,12 +268,10 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case ResultSelectBg:
-                if (resultCode == RESULT_OK && null != data) {
-                    setCustomBg(data.getData());
-                }
-                break;
+        if (requestCode == ResultSelectBg) {
+            if (resultCode == RESULT_OK && null != data) {
+                setCustomBg(data.getData());
+            }
         }
     }
 

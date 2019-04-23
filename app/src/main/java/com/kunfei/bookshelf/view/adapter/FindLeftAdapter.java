@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
@@ -15,16 +18,14 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyViewHolder> {
     private Context context;
     private int showIndex = 0;
     private List<RecyclerViewData> data = new ArrayList<>();
     private OnClickListener onClickListener;
 
-    public FindLeftAdapter(OnClickListener onClickListener) {
+    public FindLeftAdapter(Context context, OnClickListener onClickListener) {
+        this.context = context;
         this.onClickListener = onClickListener;
     }
 
@@ -46,7 +47,6 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
         return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_left, viewGroup, false));
     }
 

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.StringRes;
+
 import com.kunfei.bookshelf.MApplication;
 
 import java.nio.charset.StandardCharsets;
@@ -17,13 +19,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.annotation.StringRes;
-
-/**
- * Created by newbiechen on 17-4-22.
- * 对文字操作的工具类
- */
-
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     private static final String TAG = "StringUtils";
     private static final int HOUR_OF_DAY = 24;

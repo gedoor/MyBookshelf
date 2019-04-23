@@ -11,6 +11,8 @@ import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -32,7 +34,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AlertDialog;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;

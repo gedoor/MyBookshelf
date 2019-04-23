@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
@@ -79,7 +78,7 @@ public class AnalyzeByJSoup {
             textS.add(element.data());
         } else {
             String elementsType;
-            String ruleStrS[];
+            String[] ruleStrS;
             if (sourceRule.elementsRule.contains("&")) {
                 elementsType = "&";
                 ruleStrS = sourceRule.elementsRule.split("&+");
@@ -111,20 +110,18 @@ public class AnalyzeByJSoup {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List<String> temp : results) {
-                                if (i < temp.size()) {
-                                    textS.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List<String> temp : results) {
+                            if (i < temp.size()) {
+                                textS.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List<String> temp : results) {
-                            textS.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List<String> temp : results) {
+                        textS.addAll(temp);
+                    }
                 }
             }
         }
@@ -185,20 +182,18 @@ public class AnalyzeByJSoup {
             }
         }
         if (elementsList.size() > 0) {
-            switch (elementsType) {
-                case "%":
-                    for (int i = 0; i < elementsList.get(0).size(); i++) {
-                        for (Elements es : elementsList) {
-                            if (i < es.size()) {
-                                elements.add(es.get(i));
-                            }
+            if ("%".equals(elementsType)) {
+                for (int i = 0; i < elementsList.get(0).size(); i++) {
+                    for (Elements es : elementsList) {
+                        if (i < es.size()) {
+                            elements.add(es.get(i));
                         }
                     }
-                    break;
-                default:
-                    for (Elements es : elementsList) {
-                        elements.addAll(es);
-                    }
+                }
+            } else {
+                for (Elements es : elementsList) {
+                    elements.addAll(es);
+                }
             }
         }
         return elements;

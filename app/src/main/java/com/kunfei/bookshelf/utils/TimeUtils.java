@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils;
 
+import androidx.annotation.NonNull;
+
 import com.kunfei.bookshelf.constant.TimeConstants;
 
 import java.text.DateFormat;
@@ -9,16 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-
-/**
- * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/02
- *     desc  : utils about time
- * </pre>
- */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class TimeUtils {
 
     private static final ThreadLocal<SimpleDateFormat> SDF_THREAD_LOCAL = new ThreadLocal<>();

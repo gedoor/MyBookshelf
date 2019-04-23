@@ -17,6 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
@@ -40,11 +46,6 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -121,9 +122,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         refreshErrorView = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
         refreshErrorView.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
-            mPresenter.initPage();
-            rfRvSearchBooks.startRefresh();
-            mPresenter.toSearchBooks(null, true);
+            toSearch();
         });
         rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 refreshErrorView);
@@ -293,7 +292,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private void showHideSetting() {
         flSearchHistory.removeAllViews();
         TextView tagView;
-        String hideSettings[] = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
+        String[] hideSettings = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
 
         for (String text : hideSettings) {
             tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, flSearchHistory, false);
@@ -405,8 +404,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     @Override
-    public void querySearchHistorySuccess(List<SearchHistoryBean> datas) {
-        addNewHistories(datas);
+    public void querySearchHistorySuccess(List<SearchHistoryBean> data) {
+        addNewHistories(data);
         if (flSearchHistory.getChildCount() > 0) {
             tvSearchHistoryClean.setVisibility(View.VISIBLE);
         } else {
@@ -416,7 +415,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void refreshSearchBook() {
-        searchBookAdapter.clearAll();
+        searchBookAdapter.upData(SearchBookAdapter.DataAction.CLEAR, null);
     }
 
     @Override

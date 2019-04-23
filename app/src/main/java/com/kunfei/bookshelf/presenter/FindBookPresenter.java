@@ -6,17 +6,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -102,7 +97,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
 
                     @Override
                     public void onSuccess(List<RecyclerViewData> recyclerViewData) {
-                        mView.updateUI(recyclerViewData);
+                        mView.upData(recyclerViewData);
                         disposable.dispose();
                         disposable = null;
                     }
@@ -136,17 +131,11 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
     @Override
     public void attachView(@NonNull IView iView) {
         super.attachView(iView);
-        RxBus.get().register(this);
     }
 
     @Override
     public void detachView() {
-        RxBus.get().unregister(this);
+
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UP_FIND_STYLE)})
-    public void upFindStyle(Object object) {
-        mView.upStyle();
-        initData();
-    }
 }
