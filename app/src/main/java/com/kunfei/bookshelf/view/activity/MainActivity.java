@@ -287,8 +287,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .apply();
                 FindBookFragment findBookFragment = getFindFragment();
                 if (findBookFragment != null) {
-                    getFindFragment().upStyle();
-                    getFindFragment().upUI();
+                    findBookFragment.initRecyclerView();
+                    findBookFragment.upUI();
                 }
             } else if (menuItem.getOrder() == 1) {
                 preferences.edit()
@@ -296,8 +296,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .apply();
                 FindBookFragment findBookFragment = getFindFragment();
                 if (findBookFragment != null) {
-                    getFindFragment().upStyle();
-                    getFindFragment().upUI();
+                    findBookFragment.initRecyclerView();
+                    findBookFragment.upUI();
                 }
             }
             return true;

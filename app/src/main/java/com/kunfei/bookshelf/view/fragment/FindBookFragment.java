@@ -121,11 +121,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public void upStyle() {
-        initRecyclerView();
-    }
-
-    @Override
     public void upData(List<RecyclerViewData> group) {
         this.data = group;
         upUI();
@@ -166,7 +161,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return preferences.getBoolean("showFindLeftView", true);
     }
 
-    private void initRecyclerView() {
+    public void initRecyclerView() {
+        if (rvFindRight == null) return;
         if (isFlexBox()) {
             findKindAdapter = null;
             if (showLeftView()) {
