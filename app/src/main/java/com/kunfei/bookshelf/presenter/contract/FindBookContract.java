@@ -17,7 +17,8 @@ public interface FindBookContract {
 
         void upStyle();
 
-        void updateUI(List<RecyclerViewData> group);
+        void upData(List<RecyclerViewData> group);
 
+        void upUI();
     }
 }

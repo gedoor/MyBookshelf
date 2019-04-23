@@ -77,6 +77,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     private FindKindAdapter findKindAdapter;
     private LinearLayoutManager leftLayoutManager;
     private RecyclerView.LayoutManager rightLayoutManager;
+    private List<RecyclerViewData> data = new ArrayList<>();
 
     @Override
     public int createLayoutId() {
@@ -115,34 +116,45 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         mPresenter.initData();
     }
 
+    public void refreshData() {
+        mPresenter.initData();
+    }
+
     @Override
     public void upStyle() {
         initRecyclerView();
     }
 
     @Override
-    public synchronized void updateUI(List<RecyclerViewData> group) {
+    public void upData(List<RecyclerViewData> group) {
+        this.data = group;
+        upUI();
+    }
+
+    @Override
+    public void upUI() {
+        if (data == null) return;
         if (rlEmptyView == null) return;
-        if (group.size() == 0) {
+        if (data.size() == 0) {
             tvEmpty.setText(R.string.no_find);
             rlEmptyView.setVisibility(View.VISIBLE);
         } else {
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findRightAdapter.setData(group);
+            findRightAdapter.setData(data);
             rlEmptyView.setVisibility(View.GONE);
 
-            if (group.size() <= 1 | !showLeftView()) {
+            if (data.size() <= 1 | !showLeftView()) {
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
             } else {
-                findLeftAdapter.setData(group);
+                findLeftAdapter.setData(data);
                 rvFindLeft.setVisibility(View.VISIBLE);
                 vwDivider.setVisibility(View.VISIBLE);
             }
         } else {
-            findKindAdapter.setAllDatas(group);
+            findKindAdapter.setAllDatas(data);
         }
     }
 

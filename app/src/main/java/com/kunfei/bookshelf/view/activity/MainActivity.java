@@ -285,12 +285,20 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 preferences.edit()
                         .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
                         .apply();
-                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+                FindBookFragment findBookFragment = getFindFragment();
+                if (findBookFragment != null) {
+                    getFindFragment().upStyle();
+                    getFindFragment().upUI();
+                }
             } else if (menuItem.getOrder() == 1) {
                 preferences.edit()
                         .putBoolean("showFindLeftView", !showFindLeftView)
                         .apply();
-                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+                FindBookFragment findBookFragment = getFindFragment();
+                if (findBookFragment != null) {
+                    getFindFragment().upStyle();
+                    getFindFragment().upUI();
+                }
             }
             return true;
         });
@@ -341,6 +349,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     public ViewPager getViewPager() {
         return mVp;
+    }
+
+    public FindBookFragment getFindFragment() {
+        try {
+            return (FindBookFragment) mFragmentList.get(1);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -753,7 +769,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == requestSource) {
-                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+                FindBookFragment findBookFragment = getFindFragment();
+                if (findBookFragment != null) {
+                    getFindFragment().refreshData();
+                }
             }
         }
     }
