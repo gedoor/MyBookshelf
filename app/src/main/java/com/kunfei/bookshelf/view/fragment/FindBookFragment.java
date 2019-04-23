@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.kunfei.bookshelf.MApplication;
@@ -98,6 +97,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     protected void bindView() {
         super.bindView();
         unbinder = ButterKnife.bind(this, view);
+        rvFindRight.addItemDecoration(new GridSpacingItemDecoration(10));
         refreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.initData();
@@ -183,11 +183,9 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
             findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
             //设置header
-            ((SimpleItemAnimator) Objects.requireNonNull(rvFindRight.getItemAnimator())).setSupportsChangeAnimations(false);
             rightLayoutManager = new ScrollLinearLayoutManger(getActivity(), 3);
             ((ScrollLinearLayoutManger) rightLayoutManager).setSpanSizeLookup(new SectionedSpanSizeLookup(findRightAdapter, (ScrollLinearLayoutManger) rightLayoutManager));
             rvFindRight.setLayoutManager(rightLayoutManager);
-            rvFindRight.addItemDecoration(new GridSpacingItemDecoration(10));
             rvFindRight.setLayoutManager(rightLayoutManager);
             rvFindRight.setItemViewCacheSize(10);
             rvFindRight.setItemAnimator(null);
@@ -286,27 +284,17 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @SuppressWarnings("unused")
     public class ScrollLinearLayoutManger extends GridLayoutManager {
 
-        private float MILLISECONDS_PER_INCH = 50f;
-
         public ScrollLinearLayoutManger(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
             super(context, attrs, defStyleAttr, defStyleRes);
         }
 
         public ScrollLinearLayoutManger(Context context, int spanCount) {
             super(context, spanCount);
-            setSpeedSlow();
         }
 
         public ScrollLinearLayoutManger(Context context, int spanCount, int orientation, boolean reverseLayout) {
             super(context, spanCount, orientation, reverseLayout);
         }
-
-        public void setSpeedSlow() {
-            // 自己在这里用density去乘，希望不同分辨率设备上滑动速度相同
-            // 0.3f是自己估摸的一个值，可以根据不同需求自己修改
-            MILLISECONDS_PER_INCH = getActivity().getResources().getDisplayMetrics().density * 0.005f;
-        }
-
 
         @Override
         public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
