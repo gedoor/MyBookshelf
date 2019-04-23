@@ -740,10 +740,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case requestSource:
-                    RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
-                    break;
+            if (requestCode == requestSource) {
+                RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
             }
         }
     }
