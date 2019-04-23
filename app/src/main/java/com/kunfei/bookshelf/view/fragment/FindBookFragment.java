@@ -10,6 +10,12 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
@@ -32,11 +38,6 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -241,10 +242,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case SourceEditActivity.EDIT_SOURCE:
-                    mPresenter.initData();
-                    break;
+            if (requestCode == SourceEditActivity.EDIT_SOURCE) {
+                mPresenter.initData();
             }
         }
     }
