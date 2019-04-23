@@ -11,6 +11,8 @@ import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -18,6 +20,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.WebDavHelp;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
@@ -32,7 +35,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AlertDialog;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
@@ -234,6 +236,9 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
                     @Override
                     public void onSuccess(Object o) {
                         Toast.makeText(MApplication.getInstance(), "恢复完成", Toast.LENGTH_SHORT).show();
+                        MApplication.getInstance().upThemeStore();
+                        MApplication.getInstance().initNightTheme();
+                        ReadBookControl.getInstance().updateReaderSettings();
                         RxBus.get().post(RxBusTag.RECREATE, true);
                     }
 

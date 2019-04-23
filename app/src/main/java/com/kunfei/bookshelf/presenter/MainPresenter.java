@@ -12,6 +12,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -62,11 +63,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         if (value) {
                             //更新书架并刷新
                             mView.toast(R.string.restore_success);
-                            mView.recreate();
-                            ReadBookControl.getInstance().updateReaderSettings();
                         } else {
                             mView.toast(R.string.restore_fail);
                         }
+                        MApplication.getInstance().upThemeStore();
+                        MApplication.getInstance().initNightTheme();
+                        ReadBookControl.getInstance().updateReaderSettings();
+                        mView.recreate();
                     }
 
                     @Override
