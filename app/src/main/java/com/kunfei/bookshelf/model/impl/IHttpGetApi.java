@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.model.impl;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
@@ -25,7 +24,4 @@ public interface IHttpGetApi {
                                             @QueryMap(encoded = true) Map<String, String> queryMap,
                                             @HeaderMap Map<String, String> headers);
 
-    @GET
-    Call<String> getWebContentCall(@Url String url,
-                                   @HeaderMap Map<String, String> headers);
 }
