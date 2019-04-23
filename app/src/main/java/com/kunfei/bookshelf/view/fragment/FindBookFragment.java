@@ -130,7 +130,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findLeftAdapter.setData(group);
             findRightAdapter.setData(group);
             rlEmptyView.setVisibility(View.GONE);
 
@@ -138,6 +137,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
             } else {
+                findLeftAdapter.setData(group);
                 rvFindLeft.setVisibility(View.VISIBLE);
                 vwDivider.setVisibility(View.VISIBLE);
             }
