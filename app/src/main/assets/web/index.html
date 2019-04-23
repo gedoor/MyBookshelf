@@ -3,32 +3,57 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>书源编辑器v3.3</title>
+    <title>书源编辑器v3.4</title>
     <style>
-		body,
-		.rules,
-		.outbox {
-			display: flex;
-			flex-flow: column;
-			flex: 1;
-			max-height: 96vh;
-			overflow-y: auto;
+		body {
+			margin: 0;
 		}
 
 		.editor {
-			flex: 1;
 			display: flex;
 			align-items: stretch;
 		}
 
-		.rules {
+		.setbox,
+		.menu,
+		.outbox {
+			flex: 1;
+			display: flex;
+			flex-flow: column;
+			max-height: 100vh;
+			overflow-y: auto;
+		}
+
+		.menu {
+			justify-content: center;
+			max-width: 88px;
+			margin: 0 5px;
+		}
+
+		.setbox {
 			min-width: 40em;
 		}
 
-		.rules input,
+		.rules,
+		.tabbox {
+			flex: 1;
+			display: flex;
+			flex-flow: column;
+		}
+
+		.rules>* {
+			display: flex;
+			margin: 2px 0;
+		}
+
 		.rules textarea {
 			flex: 1;
 			margin-left: 5px;
+		}
+
+		.rules>*,
+		.rules>*>div,
+		.rules textarea {
 			min-height: 1em;
 		}
 
@@ -36,28 +61,9 @@
 			word-break: break-all;
 		}
 
-		p,
-		b {
-			display: flex;
-			margin: 1px 0;
-			min-height: 1em;
-		}
-
-		.menu {
-			display: flex;
-			flex-flow: column;
-			justify-content: center;
-			margin: 0 5px;
-		}
-
 		.menu button {
+			min-height: 18px;
 			margin: 5px 1px;
-		}
-
-		.tabbox {
-			flex: 1;
-			display: flex;
-			flex-flow: column;
 		}
 
 		.tabtitle {
@@ -113,8 +119,8 @@
 
 		#RuleList>label>* {
 			background: #eee;
-			min-height: 2em;
-			padding-left: 0.2em;
+			padding-left: 3px;
+			margin: 2px 0;
 		}
 
 		#RuleList input[type=radio] {
@@ -140,7 +146,7 @@
 			window.location.hash = getVal == '' ? `${hashstr.replace(`&${key}=`)}&${key}=${val}` : hashstr.replace(getVal, val);
 		}
 		function addRule(rule) {
-			return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><p>${rule.bookSourceName}<br>${rule.bookSourceUrl}</p></label>`;
+			return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><div>${rule.bookSourceName}<br>${rule.bookSourceUrl}</div></label>`;
 		}
 		function dQuery(selector) {
 			return document.querySelector(selector)
@@ -168,134 +174,137 @@
 
 <body>
 <div class="editor">
-    <div class="rules">
-        <p><b>书源基础信息</b></p>
-        <p>
-            书源名称: <input type="text" id="bookSourceName"
-                         placeholder="书源名称(bookSourceName) | 会显示在书源列表"/>
-        </p>
-        <p>
-            书源分组: <input type="text" id="bookSourceGroup"
-                         placeholder="书源分组(bookSourceGroup) | 描述书源的特征信息"/>
-        </p>
-        <p>
-            书源域名: <input type="url" id="bookSourceUrl"
-                         placeholder="书源URL(bookSourceUrl) | 通常填写网站主页(标头不可省略),例: https://www.qidian.com"/>
-        </p>
-        <p>
-            登录网页: <input type="url" id="loginUrl"
-                         placeholder="登录URL(loginUrl) | 填写网站登录地址,仅在需要登录的书源有用"/>
-        </p>
-        <p>
-            发现内容: <textarea rows="10" id="ruleFindUrl"
-                            placeholder="发现规则(ruleFindUrl)&#10;每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
-        </p>
-        <p><b>书籍搜索规则</b></p>
-        <p>
-            搜索地址: <input type="url" id="ruleSearchUrl"
-                         placeholder="搜索地址(ruleSearchUrl) | [域名可省略]/search.php@kw=searchKey|char=utf-8"/>
-        </p>
-        <p>
-            结果列表: <input type="text" id="ruleSearchList"
-                         placeholder="搜索结果列表规则(ruleSearchList) | 选择搜索结果列表的书籍节点 (规则结果为Element集合)"/>
-        </p>
-        <p>
-            书籍名称: <input type="text" id="ruleSearchName"
-                         placeholder="搜索结果书名规则(ruleSearchName) | 选择节点书名 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍作者: <input type="text" id="ruleSearchAuthor"
-                         placeholder="搜索结果作者规则(ruleSearchAuthor) | 选择节点作者 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍分类: <input type="text" id="ruleSearchKind"
-                         placeholder="搜索结果分类规则(ruleSearchKind) | 选择节点分类信息 (规则结果为字符串集合或单个字符串)"/>
-        </p>
-        <p>
-            最新章节: <input type="text" id="ruleSearchLastChapter"
-                         placeholder="搜索结果最新章节规则(ruleSearchLastChapter) | 选择节点最新章节 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍封面: <input type="text" id="ruleSearchCoverUrl"
-                         placeholder="搜索结果封面规则(ruleSearchCoverUrl) | 选择节点书籍封面 (规则结果为Url)"/>
-        </p>
-        <p>
-            书籍链接: <input type="text" id="ruleSearchNoteUrl"
-                         placeholder="搜索结果书籍URL规则(ruleSearchNoteUrl) | 选择书籍详情页地址 (规则结果为Url)"/>
-        </p>
-        <p><b>书籍简介规则</b></p>
-        <p>
-            路径正则: <input type="text" id="ruleBookUrlPattern"
-                         placeholder="书籍详情URL正则(ruleBookUrlPattern) | Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)"/>
-        </p>
-        <p>
-            书籍名称: <input type="text" id="ruleBookName"
-                         placeholder="书名规则(ruleBookName) | 选择详情页书名 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍作者: <input type="text" id="ruleBookAuthor"
-                         placeholder="作者规则(ruleBookAuthor) | 选择详情页作者 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍分类: <input type="text" id="ruleBookKind"
-                         placeholder="分类规则(ruleBookKind) | 选择详情页分类信息 (规则结果为字符串集合或单个字符串)"/>
-        </p>
-        <p>
-            最新章节: <input type="text" id="ruleBookLastChapter"
-                         placeholder="最新章节规则(ruleBookLastChapter) | 选择详情页最新章节 (规则结果为字符串)"/>
-        </p>
-        <p>
-            简介内容: <input type="text" id="ruleIntroduce"
-                         placeholder="简介规则(ruleIntroduce) | 选择详情页书籍简介 (规则结果为字符串)"/>
-        </p>
-        <p>
-            书籍封面: <input type="text" id="ruleCoverUrl"
-                         placeholder="封面规则(ruleCoverUrl) | 选择详情页书籍封面 (规则结果为Url)"/>
-        </p>
-        <p>
-            目录链接: <input type="text" id="ruleChapterUrl"
-                         placeholder="目录URL规则(ruleChapterUrl) | 选择目录页地址 (规则结果为Url, 与详情页相同时可省略)"/>
-        </p>
-        <p><b>目录列表规则</b></p>
-        <p>
-            目录列表: <input type="text" id="ruleChapterList"
-                         placeholder="目录列表规则(ruleChapterList) | 选择目录列表的章节节点 (规则结果为Element集合)"/>
-        </p>
-        <p>
-            目录翻页: <input type="text" id="ruleChapterUrlNext"
-                         placeholder="目录下一页规则(ruleChapterUrlNext) | 选择目录下一页链接 (规则结果为Url, 仅一页时可省略)"/>
-        </p>
-        <p>
-            章节名称: <input type="text" id="ruleChapterName"
-                         placeholder="章节名称规则(ruleChapterName) | 选择章节名称 (规则结果为字符串)"/>
-        </p>
-        <p>
-            章节链接: <input type="text" id="ruleContentUrl"
-                         placeholder="章节URL规则(ruleContentUrl) | 选择章节链接 (规则结果为Url)"/>
-        </p>
-        <p><b>正文阅读规则</b></p>
-        <p>
-            章节正文: <input type="text" id="ruleBookContent"
-                         placeholder="正文规则(ruleBookContent) | 选择正文内容 (规则结果为字符串)"/>
-        </p>
-        <p>
-            下一分页: <input type="text" id="ruleContentUrlNext"
-                         placeholder="正文下一页URL规则(ruleContentUrlNext) | 不能选择下一章链接! (规则结果为Url)"/>
-        </p>
-        <p><b>其它规则</b></p>
-        <p>
-            浏览标识: <input type="text" id="httpUserAgent"
-                         placeholder="浏览器UA(HttpUserAgent) | 浏览器标识:User-Agent (可选)"/>
-        </p>
-        <p>
-            排序编号: <input type="number" id="serialNumber" placeholder="整数: 0~N (可选,默认0)"/>
-        </p>
-        <p>
-            搜索权重: <input type="number" id="weight" placeholder="整数: 0~N (可选,默认0)"/>
-        </p>
-        <p>
-            是否启用: <input type="text" id="enable" placeholder="默认启用=true,手动启用=false (可选,默认true)"/>
-        </p>
+    <div class="setbox">
+        <div class="rules">
+            <div><b>书源基础信息</b></div>
+            <div>
+                <div>书源名称:</div> <textarea rows="1" id="bookSourceName"
+                                           placeholder="书源名称(bookSourceName) | 会显示在书源列表"></textarea>
+            </div>
+            <div>
+                <div>书源分组:</div> <textarea rows="1" id="bookSourceGroup"
+                                           placeholder="书源分组(bookSourceGroup) | 描述书源的特征信息"></textarea>
+            </div>
+            <div>
+                <div>书源域名:</div> <textarea rows="1" id="bookSourceUrl"
+                                           placeholder="书源URL(bookSourceUrl) | 通常填写网站主页(标头不可省略),例: https://www.qidian.com"></textarea>
+            </div>
+            <div>
+                <div>登录网页:</div> <textarea rows="1" id="loginUrl"
+                                           placeholder="登录URL(loginUrl) | 填写网站登录地址,仅在需要登录的书源有用"></textarea>
+            </div>
+            <div>
+                <div>发现内容:</div> <textarea rows="10" id="ruleFindUrl"
+                                           placeholder="发现规则(ruleFindUrl)&#10;每行一条发现分类(将使用书籍搜索规则解析发现页内容):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
+            </div>
+            <div><b>书籍搜索规则</b></div>
+            <div>
+                <div>搜索地址:</div> <textarea rows="1" id="ruleSearchUrl"
+                                           placeholder="搜索地址(ruleSearchUrl) | [域名可省略]/search.php@kw=searchKey|char=utf-8"></textarea>
+            </div>
+            <div>
+                <div>结果列表:</div> <textarea rows="1" id="ruleSearchList"
+                                           placeholder="搜索结果列表规则(ruleSearchList) | 选择搜索结果列表的书籍节点 (规则结果为Element集合)"></textarea>
+            </div>
+            <div>
+                <div>书籍名称:</div> <textarea rows="1" id="ruleSearchName"
+                                           placeholder="搜索结果书名规则(ruleSearchName) | 选择节点书名 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍作者:</div> <textarea rows="1" id="ruleSearchAuthor"
+                                           placeholder="搜索结果作者规则(ruleSearchAuthor) | 选择节点作者 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍分类:</div> <textarea rows="1" id="ruleSearchKind"
+                                           placeholder="搜索结果分类规则(ruleSearchKind) | 选择节点分类信息 (规则结果为字符串集合或单个字符串)"></textarea>
+            </div>
+            <div>
+                <div>最新章节:</div> <textarea rows="1" id="ruleSearchLastChapter"
+                                           placeholder="搜索结果最新章节规则(ruleSearchLastChapter) | 选择节点最新章节 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍封面:</div> <textarea rows="1" id="ruleSearchCoverUrl"
+                                           placeholder="搜索结果封面规则(ruleSearchCoverUrl) | 选择节点书籍封面 (规则结果为Url)"></textarea>
+            </div>
+            <div>
+                <div>书籍链接:</div> <textarea rows="1" id="ruleSearchNoteUrl"
+                                           placeholder="搜索结果书籍URL规则(ruleSearchNoteUrl) | 选择书籍详情页地址 (规则结果为Url)"></textarea>
+            </div>
+            <div><b>书籍简介规则</b></div>
+            <div>
+                <div>路径正则:</div> <textarea rows="1" id="ruleBookUrlPattern"
+                                           placeholder="书籍详情URL正则(ruleBookUrlPattern) | Url正则匹配 (规则结果为Bool值,判断Url是否为详情页)"></textarea>
+            </div>
+            <div>
+                <div>书籍名称:</div> <textarea rows="1" id="ruleBookName"
+                                           placeholder="书名规则(ruleBookName) | 选择详情页书名 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍作者:</div> <textarea rows="1" id="ruleBookAuthor"
+                                           placeholder="作者规则(ruleBookAuthor) | 选择详情页作者 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍分类:</div> <textarea rows="1" id="ruleBookKind"
+                                           placeholder="分类规则(ruleBookKind) | 选择详情页分类信息 (规则结果为字符串集合或单个字符串)"></textarea>
+            </div>
+            <div>
+                <div>最新章节:</div> <textarea rows="1" id="ruleBookLastChapter"
+                                           placeholder="最新章节规则(ruleBookLastChapter) | 选择详情页最新章节 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>简介内容:</div> <textarea rows="1" id="ruleIntroduce"
+                                           placeholder="简介规则(ruleIntroduce) | 选择详情页书籍简介 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>书籍封面:</div> <textarea rows="1" id="ruleCoverUrl"
+                                           placeholder="封面规则(ruleCoverUrl) | 选择详情页书籍封面 (规则结果为Url)"></textarea>
+            </div>
+            <div>
+                <div>目录链接:</div> <textarea rows="1" id="ruleChapterUrl"
+                                           placeholder="目录URL规则(ruleChapterUrl) | 选择目录页地址 (规则结果为Url, 与详情页相同时可省略)"></textarea>
+            </div>
+            <div><b>目录列表规则</b></div>
+            <div>
+                <div>目录列表:</div> <textarea rows="1" id="ruleChapterList"
+                                           placeholder="目录列表规则(ruleChapterList) | 选择目录列表的章节节点 (规则结果为Element集合)"></textarea>
+            </div>
+            <div>
+                <div>目录翻页:</div> <textarea rows="1" id="ruleChapterUrlNext"
+                                           placeholder="目录下一页规则(ruleChapterUrlNext) | 选择目录下一页链接 (规则结果为Url, 仅一页时可省略)"></textarea>
+            </div>
+            <div>
+                <div>章节名称:</div> <textarea rows="1" id="ruleChapterName"
+                                           placeholder="章节名称规则(ruleChapterName) | 选择章节名称 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>章节链接:</div> <textarea rows="1" id="ruleContentUrl"
+                                           placeholder="章节URL规则(ruleContentUrl) | 选择章节链接 (规则结果为Url)"></textarea>
+            </div>
+            <div><b>正文阅读规则</b></div>
+            <div>
+                <div>章节正文:</div> <textarea rows="1" id="ruleBookContent"
+                                           placeholder="正文规则(ruleBookContent) | 选择正文内容 (规则结果为字符串)"></textarea>
+            </div>
+            <div>
+                <div>下一分页:</div> <textarea rows="1" id="ruleContentUrlNext"
+                                           placeholder="正文下一页URL规则(ruleContentUrlNext) | 不能选择下一章链接! (规则结果为Url)"></textarea>
+            </div>
+            <div><b>其它规则</b></div>
+            <div>
+                <div>浏览标识:</div> <textarea rows="1" id="httpUserAgent"
+                                           placeholder="浏览器UA(HttpUserAgent) | 浏览器标识:User-Agent (可选)"></textarea>
+            </div>
+            <div>
+                <div>排序编号:</div> <textarea rows="1" id="serialNumber" placeholder="整数: 0~N (可选,默认0)"></textarea>
+            </div>
+            <div>
+                <div>搜索权重:</div> <textarea rows="1" id="weight" placeholder="整数: 0~N (可选,默认0)"></textarea>
+            </div>
+            <div>
+                <div>是否启用:</div> <textarea rows="1" id="enable"
+                                           placeholder="默认启用=true,手动启用=false (可选,默认true)"></textarea>
+            </div>
+        </div>
     </div>
     <div class="menu">
         <button id="push">⇈推送书源</button>
@@ -318,8 +327,7 @@
             </div>
             <div class="tabbody">
                 <div class="tab1 this">
-                    <textarea id="RuleJsonString"
-                              placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
+                    <textarea id="RuleJsonString" placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
                 </div>
                 <div class="tab2">
                     <textarea id="DebugConsole" placeholder="这里用于输出调试信息"></textarea>
@@ -329,12 +337,9 @@
                 </div>
                 <div class="tab4">
                     <div class="link">
-                        <a target="_blank"
-                           href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
-                        <a target="_blank"
-                           href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
-                        <a target="_blank"
-                           href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
+                        <a target="_blank" href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
+                        <a target="_blank" href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
+                        <a target="_blank" href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
                     </div>
                 </div>
             </div>
