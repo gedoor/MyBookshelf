@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,6 +30,7 @@ public class WebService extends Service {
     private static boolean isRunning = false;
     private HttpServer httpServer;
     private WebSocketServer webSocketServer;
+    private NetWorkStateReceiver netWorkStateReceiver;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, WebService.class);
@@ -44,12 +46,21 @@ public class WebService extends Service {
         }
     }
 
+    public static void stopThis(Context context) {
+        if (isRunning) {
+            Intent intent = new Intent(context, WebService.class);
+            intent.setAction(ActionDoneService);
+            context.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         updateNotification("正在启动服务");
         new Handler(Looper.getMainLooper())
                 .post(() -> Toast.makeText(this, "正在启动服务\n具体信息查看通知栏", Toast.LENGTH_SHORT).show());
+        netWorkStateReceiver = NetWorkStateReceiver.registerReceiver(this);
     }
 
     @Override
@@ -96,6 +107,7 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        NetWorkStateReceiver.unregisterReceiver(this, netWorkStateReceiver);
         isRunning = false;
         if (httpServer != null && httpServer.isAlive()) {
             httpServer.stop();
