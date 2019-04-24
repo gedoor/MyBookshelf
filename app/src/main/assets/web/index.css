@@ -29,7 +29,7 @@ body {
 		stroke-dashoffset: 0
 	}
 	100% {
-		stroke-dashoffset: 240
+		stroke-dashoffset: -240
 	}
 }
 .button rect {
