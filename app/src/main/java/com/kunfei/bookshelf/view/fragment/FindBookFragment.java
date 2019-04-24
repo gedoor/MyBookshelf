@@ -123,12 +123,23 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public void upData(List<RecyclerViewData> group) {
         this.data = group;
+        upStyle();
         upUI();
     }
 
-    @Override
+    public void upStyle() {
+        if (rlEmptyView == null) return;
+        initRecyclerView();
+        if (isFlexBox()) {
+            findRightAdapter.setData(data);
+            findLeftAdapter.setData(data);
+        } else {
+            findKindAdapter.setAllDatas(data);
+        }
+        upUI();
+    }
+
     public void upUI() {
-        if (data == null) return;
         if (rlEmptyView == null) return;
         if (data.size() == 0) {
             tvEmpty.setText(R.string.no_find);
@@ -137,19 +148,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findRightAdapter.setData(data);
             rlEmptyView.setVisibility(View.GONE);
-
             if (data.size() <= 1 | !showLeftView()) {
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
             } else {
-                findLeftAdapter.setData(data);
                 rvFindLeft.setVisibility(View.VISIBLE);
                 vwDivider.setVisibility(View.VISIBLE);
             }
-        } else {
-            findKindAdapter.setAllDatas(data);
         }
     }
 
@@ -161,25 +167,20 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return preferences.getBoolean("showFindLeftView", true);
     }
 
-    public void initRecyclerView() {
+    private void initRecyclerView() {
         if (rvFindRight == null) return;
         if (isFlexBox()) {
             findKindAdapter = null;
-            if (showLeftView()) {
-                findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
-                    int counts = 0;
-                    for (int i = 0; i < pos; i++) {
-                        //position 为点击的position
-                        counts += findRightAdapter.getData().get(i).getChildList().size();
-                    }
-                    ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
-                });
-                rvFindLeft.setLayoutManager(leftLayoutManager);
-                rvFindLeft.setAdapter(findLeftAdapter);
-            } else {
-                rvFindLeft.setVisibility(View.GONE);
-                vwDivider.setVisibility(View.GONE);
-            }
+            findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
+                int counts = 0;
+                for (int i = 0; i < pos; i++) {
+                    //position 为点击的position
+                    counts += findRightAdapter.getData().get(i).getChildList().size();
+                }
+                ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
+            });
+            rvFindLeft.setLayoutManager(leftLayoutManager);
+            rvFindLeft.setAdapter(findLeftAdapter);
 
             findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
             //设置header
