@@ -176,7 +176,7 @@ dQuery('.menu').addEventListener('click', e => {
 		case 'pull':
 			showTab('书源列表');
 			(async () => {
-				HttpGet(`/getSources`).then(json => {
+				await HttpGet(`/getSources`).then(json => {
 					if (json.isSuccess) {
 						dQuery('#RuleList').innerHTML = ''
 						localStorage.setItem('ruleSources', JSON.stringify(ruleSources = json.data));
