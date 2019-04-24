@@ -212,8 +212,7 @@ dQuery('.menu').addEventListener('click', e => {
 			dQuery('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);
 			break;
 		case 'initial':
-			dQueryAll('textarea').forEach(item => { item.value = '' });
-			dQuery('#RuleList').innerHTML = '';
+			dQueryAll('.rules textarea').forEach(item => { item.value = '' });
 			todo();
 			break;
 		case 'undo':
