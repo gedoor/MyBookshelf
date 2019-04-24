@@ -9,11 +9,8 @@ import android.net.ConnectivityManager;
 
 import androidx.annotation.NonNull;
 
-public class NetWorkStateReceiver extends BroadcastReceiver {
 
-    private static class InstanceHolder {
-        private static final NetWorkStateReceiver INSTANCE = new NetWorkStateReceiver();
-    }
+public class NetWorkStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
