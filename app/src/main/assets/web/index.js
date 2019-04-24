@@ -227,14 +227,14 @@ dQuery('.menu').addEventListener('click', e => {
 			let wsHost = (hashParam('domain') || location.host).replace(/.*\//, '').split(':');
 			function DebugPrint(msg) { dQuery('#DebugConsole').value += `\n${msg}` }
 			(async () => {
-				let editRule = rule2json();
-				let sResult = await HttpPost(`/saveSource`, editRule);
+				let saveRule = [rule2json()];
+				let sResult = await HttpPost(`/saveSources`, saveRule);
 				if (sResult.isSuccess) {
 					let sKey = '我的';
-					dQuery('#DebugConsole').value = `书源《${editRule.bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
+					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
 					let ws = new WebSocket(`ws://${wsHost[0]}:${parseInt(wsHost[1]) + 1}/sourceDebug`);
 					ws.onopen = () => {
-						ws.send(`{"tag":"${editRule.bookSourceUrl}", "key":"${sKey}"}`);
+						ws.send(`{"tag":"${saveRule[0].bookSourceUrl}", "key":"${sKey}"}`);
 					};
 					ws.onmessage = (msg) => {
 						if (msg.data == 'finish') {
@@ -253,10 +253,10 @@ dQuery('.menu').addEventListener('click', e => {
 			return;
 		case 'accept':
 			(async () => {
-				let editRule = rule2json();
-				await HttpPost(`/saveSource`, editRule).then(json => {
-					alert(json.isSuccess ? `书源《${editRule.bookSourceName}》已成功保存到「阅读APP」` : `书源《${editRule.bookSourceName}》保存失败!\nErrorMsg: ${json.errorMsg}`);
-					setRule(editRule);
+				let saveRule = [rule2json()];
+				await HttpPost(`/saveSources`, saveRule).then(json => {
+					alert(json.isSuccess ? `书源《${saveRule[0].bookSourceName}》已成功保存到「阅读APP」` : `书源《${saveRule[0].bookSourceName}》保存失败!\nErrorMsg: ${json.errorMsg}`);
+					setRule(saveRule[0]);
 				}).catch(err => { alert(`保存书源失败,无法连接到「阅读APP」!\n${err}`); });
 				e.target.setAttribute('class', '');
 			})();
