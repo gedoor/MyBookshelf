@@ -42,6 +42,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
      */
     @Override
     public void changePageEnd() {
+        changePage = false;
         switch (mDirection) {
             case NEXT:
                 mPreBitmap.recycle();
@@ -194,7 +195,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         canvas.drawBitmap(mCurBitmap, 0, 0, null);
                         break;
                 }
-                changePage = true;
             } else {
                 canvas.drawBitmap(mCurBitmap, 0, 0, null);
             }
