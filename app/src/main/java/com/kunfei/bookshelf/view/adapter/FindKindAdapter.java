@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
@@ -15,8 +17,6 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.GroupItem;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.List;
-
-import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by GKF on 2017/12/22.
@@ -34,7 +34,7 @@ public class FindKindAdapter extends BaseExpandableRecyclerAdapter<FindKindGroup
      */
     @Override
     public View getGroupView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_group, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find1_group, parent, false);
     }
 
     /**
@@ -42,7 +42,7 @@ public class FindKindAdapter extends BaseExpandableRecyclerAdapter<FindKindGroup
      */
     @Override
     public View getChildView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_kind, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find1_kind, parent, false);
     }
 
     /**

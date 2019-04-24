@@ -76,7 +76,9 @@ public class DataRestore {
         editor.putLong("DonateHb", donateHb);
         editor.putInt("versionCode", MApplication.getVersionCode());
         editor.apply();
+        ReadBookControl.getInstance().updateReaderSettings();
         MApplication.getInstance().upThemeStore();
+        MApplication.getInstance().initNightTheme();
     }
 
     private void restoreBookShelf(String file) throws Exception {

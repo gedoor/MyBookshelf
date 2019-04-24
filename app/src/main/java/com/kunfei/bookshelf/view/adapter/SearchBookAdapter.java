@@ -125,8 +125,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 if (!searchBooks.isEmpty()) {
                     try {
                         Glide.with(activityRef.get()).onDestroy();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ignored) {
                     }
                     searchBooks.clear();
                     notifyDataSetChanged();

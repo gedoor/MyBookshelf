@@ -3,17 +3,19 @@ package com.kunfei.bookshelf.utils;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
 
-import androidx.documentfile.provider.DocumentFile;
-
 /**
  * Created by PureDark on 2016/9/24.
  */
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class DocumentUtil {
 
     private static Pattern FilePattern = Pattern.compile("[\\\\/:*?\"<>|]");
@@ -65,11 +67,11 @@ public class DocumentUtil {
         return createDirIfNotExist(root, subDirs);
     }
 
-    public static DocumentFile createDirIfNotExist(DocumentFile root, String... subDirs) {
+    public static DocumentFile createDirIfNotExist(@NonNull DocumentFile root, String... subDirs) {
         DocumentFile parent = root;
         try {
-            for (int i = 0; i < subDirs.length; i++) {
-                String subDirName = filenameFilter(Uri.decode(subDirs[i]));
+            for (String subDir1 : subDirs) {
+                String subDirName = filenameFilter(Uri.decode(subDir1));
                 DocumentFile subDir = parent.findFile(subDirName);
                 if (subDir == null) {
                     subDir = parent.createDirectory(subDirName);

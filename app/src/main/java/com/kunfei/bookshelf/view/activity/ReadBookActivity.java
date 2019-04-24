@@ -24,6 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
@@ -43,6 +47,7 @@ import com.kunfei.bookshelf.utils.BatteryUtil;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
+import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.bar.BarHide;
@@ -63,9 +68,6 @@ import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -1327,6 +1329,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void onResume() {
         super.onResume();
+        SoftInputUtil.hideIMM(getCurrentFocus());
         if (batInfoReceiver == null) {
             batInfoReceiver = new ThisBatInfoReceiver();
             batInfoReceiver.registerThis();

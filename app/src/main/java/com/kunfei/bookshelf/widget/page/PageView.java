@@ -295,15 +295,8 @@ public class PageView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-
-        if (mPageAnim == null) {
-            return true;
-        }
-
-        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) {
-            return true;
-        }
-
+        if (mPageAnim == null) return true;
+        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) return true;
         if (actionFromEdge) {
             if (event.getAction() == MotionEvent.ACTION_UP)
                 actionFromEdge = false;
