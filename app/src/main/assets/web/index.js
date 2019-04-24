@@ -193,7 +193,7 @@ dQuery('.menu').addEventListener('click', e => {
 			})();
 			return;
 		case 'editor':
-			if (dQuery('#RuleJsonString').value == '') return;
+			if (dQuery('#RuleJsonString').value == '') break;
 			json2rule(JSON.parse(dQuery('#RuleJsonString').value));
 			todo();
 			break;
