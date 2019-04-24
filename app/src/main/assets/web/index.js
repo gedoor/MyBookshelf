@@ -6,7 +6,7 @@ function hashParam(key, val) {
 	let getVal = regKey.test(hashstr) ? hashstr.match(regKey)[1].replace('&', '') : null;
 	if (val == undefined) return getVal;
 	if (hashstr == '') window.location.hash = `#${key}=${val}`;
-	window.location.hash = getVal == '' ? `${hashstr.replace(`&${key}=`)}&${key}=${val}` : hashstr.replace(getVal, val);
+	window.location.hash = getVal ? hashstr.replace(getVal, val) : `${hashstr.replace(`&${key}=`)}&${key}=${val}`;
 }
 function addRule(rule) {
 	return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><div>${rule.bookSourceName}<br>${rule.bookSourceUrl}</div></label>`;
@@ -137,6 +137,16 @@ function redo() {
 		json2rule(course.now);
 	}
 }
+function setRule(editRule) {
+	let checkRule = ruleSources.find(x => x.bookSourceUrl == editRule.bookSourceUrl);
+	if (dQuery(`input[id="${editRule.bookSourceUrl}"]`)) {
+		Object.keys(checkRule).forEach(key => { checkRule[key] = editRule[key]; });
+		dQuery(`input[id="${editRule.bookSourceUrl}"]+*`).innerHTML = `${editRule.bookSourceName}<br>${editRule.bookSourceUrl}`;
+	} else {
+		ruleSources.push(editRule);
+		dQuery('#RuleList').innerHTML += addRule(editRule);
+	}
+}
 dQueryAll('input').forEach((item) => { item.addEventListener('change', () => { todo() }) });
 dQueryAll('textarea').forEach((item) => { item.addEventListener('change', () => { todo() }) });
 // 处理按钮点击事件
@@ -169,7 +179,7 @@ dQuery('.menu').addEventListener('click', e => {
 					else {
 						alert(`批量推送书源失败!\nErrorMsg: ${json.errorMsg}`);
 					}
-				});
+				}).catch(err => { alert(`批量推送书源失败,无法连接到「阅读APP」!\n${err}`); });
 				e.target.setAttribute('class', '');
 			})();
 			return;
@@ -188,7 +198,7 @@ dQuery('.menu').addEventListener('click', e => {
 					else {
 						alert(`批量拉取书源失败!\nErrorMsg: ${json.errorMsg}`);
 					}
-				});
+				}).catch(err => { alert(`批量拉取书源失败,无法连接到「阅读APP」!\n${err}`); });
 				e.target.setAttribute('class', '');
 			})();
 			return;
@@ -215,6 +225,7 @@ dQuery('.menu').addEventListener('click', e => {
 		case 'debug':
 			showTab('调试书源');
 			let wsHost = (hashParam('domain') || location.host).replace(/.*\//, '').split(':');
+			function DebugPrint(msg) { dQuery('#DebugConsole').value += `\n${msg}` }
 			(async () => {
 				let editRule = rule2json();
 				let sResult = await HttpPost(`/saveSource`, editRule);
@@ -227,23 +238,16 @@ dQuery('.menu').addEventListener('click', e => {
 					};
 					ws.onmessage = (msg) => {
 						if (msg.data == 'finish') {
-							dQuery('#DebugConsole').value += `\n成功完成调试任务!`;
+							DebugPrint(`成功完成调试任务!`);
 						} else {
-							dQuery('#DebugConsole').value += `\n${msg.data}`;
+							DebugPrint(msg.data);
 						}
 					};
-					ws.onerror = (err) => {
-						dQuery('#DebugConsole').value += `\n调试失败:\n${err.data}`;
-					}
-					ws.onclose = () => {
-						e.target.setAttribute('class', '');
-					}
-				} else {
-					dQuery('#DebugConsole').value += `\n保存书源失败,调试中止!\nErrorMsg: ${sResult.errorMsg}`;
-					e.target.setAttribute('class', '');
-				}
+					ws.onerror = (err) => { throw `${err.data}`; }
+					ws.onclose = () => { e.target.setAttribute('class', ''); }
+				} else throw `${sResult.errorMsg}`;
 			})().catch(err => {
-				dQuery('#DebugConsole').value += `\n调试过程意外中止，以下是详细错误信息:\n${err}`;
+				DebugPrint(`调试过程意外中止，以下是详细错误信息:\n${err}`);
 				e.target.setAttribute('class', '');
 			});
 			return;
@@ -252,10 +256,12 @@ dQuery('.menu').addEventListener('click', e => {
 				let editRule = rule2json();
 				await HttpPost(`/saveSource`, editRule).then(json => {
 					alert(json.isSuccess ? `书源《${editRule.bookSourceName}》已成功保存到「阅读APP」` : `书源《${editRule.bookSourceName}》保存失败!\nErrorMsg: ${json.errorMsg}`);
-				});
+					setRule(editRule);
+				}).catch(err => { alert(`保存书源失败,无法连接到「阅读APP」!\n${err}`); });
 				e.target.setAttribute('class', '');
 			})();
 			return;
+		default:
 	}
 	setTimeout(() => { e.target.setAttribute('class', ''); }, 500);
 });
@@ -263,19 +269,12 @@ dQuery('.menu').addEventListener('click', e => {
 // 列表规则更改事件
 dQuery('#RuleList').addEventListener('click', e => {
 	let editRule = null;
-	if (e.target && e.target.nodeName.toUpperCase() == 'INPUT') {
+	if (e.target && e.target.getAttribute('name') == 'rule') {
 		editRule = rule2json();
 		json2rule(ruleSources.find(x => x.bookSourceUrl == e.target.id));
 	} else return;
 	if (editRule.bookSourceUrl == '') return;
 	if (editRule.bookSourceName == '') editRule.bookSourceName = editRule.bookSourceUrl.replace(/.*?\/\/|\/.*/g, '');
-	let checkRule = ruleSources.find(x => x.bookSourceUrl == editRule.bookSourceUrl);
-	if (checkRule) {
-		checkRule = editRule;
-		dQuery(`input[id="${editRule.bookSourceUrl}"]+*`).innerHTML = `${editRule.bookSourceName}<br>${editRule.bookSourceUrl}`;
-	} else {
-		ruleSources.push(editRule);
-		dQuery('#RuleList').innerHTML += addRule(editRule);
-	}
+	setRule(editRule);
 	localStorage.setItem('ruleSources', JSON.stringify(ruleSources));
 });
