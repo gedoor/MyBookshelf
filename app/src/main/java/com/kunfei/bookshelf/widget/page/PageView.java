@@ -102,15 +102,15 @@ public class PageView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w;
-        mViewHeight = h;
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        mViewWidth = width;
+        mViewHeight = height;
 
         isPrepare = true;
 
         if (mPageLoader != null) {
-            mPageLoader.prepareDisplay(w, h);
+            mPageLoader.prepareDisplay(width, height);
         }
     }
 
