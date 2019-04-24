@@ -32,7 +32,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 public class ShareService extends Service {
     private static boolean isRunning = false;
     private ShareServer shareServer;
-    private NetWorkStateReceiver netWorkStateReceiver;
+
     private List<BookSourceBean> bookSourceBeans;
 
     public static void startThis(Activity activity, List<BookSourceBean> bookSourceBeans) {
@@ -66,7 +66,6 @@ public class ShareService extends Service {
         updateNotification("正在启动分享");
         new Handler(Looper.getMainLooper())
                 .post(() -> Toast.makeText(this, "正在启动分享\n具体信息查看通知栏", Toast.LENGTH_SHORT).show());
-        netWorkStateReceiver = NetWorkStateReceiver.registerReceiver(this);
     }
 
     @Override
@@ -113,7 +112,6 @@ public class ShareService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NetWorkStateReceiver.unregisterReceiver(this, netWorkStateReceiver);
         isRunning = false;
         if (shareServer != null && shareServer.isAlive()) {
             shareServer.stop();
