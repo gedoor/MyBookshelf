@@ -100,7 +100,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         rvFindRight.addItemDecoration(new GridSpacingItemDecoration(10));
         refreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.initData();
+            refreshData();
             refreshLayout.setRefreshing(false);
         });
         leftLayoutManager = new LinearLayoutManager(getContext());
@@ -113,11 +113,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        mPresenter.initData();
+        refreshData();
     }
 
     public void refreshData() {
-        mPresenter.initData();
+        if (mPresenter != null) {
+            mPresenter.initData();
+        }
     }
 
     @Override
@@ -248,12 +250,12 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
                         .subscribe(new MySingleObserver<Boolean>() {
                             @Override
                             public void onSuccess(Boolean aBoolean) {
-                                mPresenter.initData();
+                                refreshData();
                             }
                         });
             } else if (item.getTitle().equals(getString(R.string.delete))) {
                 BookSourceManager.removeBookSource(sourceBean);
-                mPresenter.initData();
+                refreshData();
             }
             return true;
         });
@@ -277,7 +279,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SourceEditActivity.EDIT_SOURCE) {
-                mPresenter.initData();
+                refreshData();
             }
         }
     }
