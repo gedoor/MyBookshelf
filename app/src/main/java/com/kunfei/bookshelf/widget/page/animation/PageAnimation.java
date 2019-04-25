@@ -208,7 +208,7 @@ public abstract class PageAnimation {
      * 翻页方向
      */
     public enum Direction {
-        NONE(true), NEXT(true), PREV(true), UP(false), DOWN(false);
+        NONE(true), NEXT(true), PREV(true);
 
         public final boolean isHorizontal;
 
