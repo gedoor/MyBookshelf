@@ -42,7 +42,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
      * 转换页面，在显示下一章的时候，必须首先调用此方法
      */
     @Override
-    public void changePageEnd() {
+    public boolean changePage() {
+        if (isCancel) return false;
         switch (mDirection) {
             case NEXT:
                 mPreBitmap.recycle();
@@ -60,7 +61,10 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 mCurBitmap = null;
                 mCurBitmap = mPreBitmap.copy(Bitmap.Config.ARGB_8888, true);
                 break;
+            default:
+                return false;
         }
+        return true;
     }
 
     public abstract void drawMove(Canvas canvas);
@@ -171,9 +175,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     }
                 } else {
                     isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
-                    if (isCancel) {
-                        setDirection(Direction.NONE);
-                    }
                 }
 
                 // 开启翻页效果
@@ -190,21 +191,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
         if (isRunning && !noNext) {
             drawMove(canvas);
         } else {
-            if (!isCancel && !noNext) {
-                switch (mDirection) {
-                    case NEXT:
-                        canvas.drawBitmap(mNextBitmap, 0, 0, null);
-                        break;
-                    case PREV:
-                        canvas.drawBitmap(mPreBitmap, 0, 0, null);
-                        break;
-                    default:
-                        canvas.drawBitmap(mCurBitmap, 0, 0, null);
-                        break;
-                }
-            } else {
-                canvas.drawBitmap(mCurBitmap, 0, 0, null);
-            }
+            canvas.drawBitmap(mCurBitmap, 0, 0, null);
             isCancel = true;
         }
     }

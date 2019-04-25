@@ -154,7 +154,7 @@ public abstract class PageAnimation {
      */
     public abstract void abortAnim();
 
-    public abstract void changePageEnd();
+    public abstract boolean changePage();
 
     /**
      * 获取背景板

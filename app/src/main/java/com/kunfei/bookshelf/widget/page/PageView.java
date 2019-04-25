@@ -281,8 +281,7 @@ public class PageView extends View {
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
             if (mPageAnim.isMoving() && !mPageAnim.getScroller().computeScrollOffset()) {
-                mPageAnim.changePageEnd();
-                if (mPageAnim.getDirection() != PageAnimation.Direction.NONE) {
+                if (mPageAnim.changePage()) {
                     mPageLoader.pagingEnd(mPageAnim.getDirection());
                     mPageAnim.setDirection(PageAnimation.Direction.NONE);
                 }
