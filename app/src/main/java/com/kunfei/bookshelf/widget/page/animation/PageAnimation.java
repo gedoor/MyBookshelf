@@ -98,6 +98,11 @@ public abstract class PageAnimation {
         return isMoving;
     }
 
+    public void movingFinish() {
+        isMoving = false;
+        isRunning = false;
+    }
+
     /**
      * 开启翻页动画
      */
@@ -140,9 +145,6 @@ public abstract class PageAnimation {
 
             setTouchPoint(x, y);
 
-            if (mScroller.getFinalX() == x && mScroller.getFinalY() == y) {
-                isRunning = false;
-            }
             mView.postInvalidate();
         }
     }

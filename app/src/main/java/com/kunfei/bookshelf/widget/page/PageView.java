@@ -286,6 +286,7 @@ public class PageView extends View {
                     mPageLoader.pagingEnd(mPageAnim.getDirection());
                     mPageAnim.setDirection(PageAnimation.Direction.NONE);
                 }
+                mPageAnim.movingFinish();
             }
         }
         super.computeScroll();
