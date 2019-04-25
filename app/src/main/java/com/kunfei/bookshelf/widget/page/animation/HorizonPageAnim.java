@@ -162,6 +162,9 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     }
                 } else {
                     isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
+                    if (isCancel) {
+                        setDirection(Direction.NONE);
+                    }
                 }
 
                 // 开启翻页效果
