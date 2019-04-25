@@ -140,6 +140,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     mView.invalidate();
                 }
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
@@ -172,11 +173,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     startAnim();
                     mView.invalidate();
                 }
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                isCancel = true;
-                isRunning = false;
-                setDirection(Direction.NONE);
                 break;
         }
     }
