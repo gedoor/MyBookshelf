@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 本地缓存
  */
-@SuppressWarnings({"unused","ResultOfMethodCallIgnored"})
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored", "WeakerAccess"})
 public class ACache {
     public static final int TIME_HOUR = 60 * 60;
     public static final int TIME_DAY = TIME_HOUR * 24;
@@ -53,7 +53,7 @@ public class ACache {
                         + cacheDir.getAbsolutePath());
             }
             mCache = new ACacheManager(cacheDir, max_size, max_count);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -151,9 +151,7 @@ public class ACache {
         if (!file.exists())
             return null;
         boolean removeFile = false;
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(file));
+        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             StringBuilder readString = new StringBuilder();
             String currentLine;
             while ((currentLine = in.readLine()) != null) {
@@ -168,12 +166,6 @@ public class ACache {
         } catch (IOException e) {
             return null;
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ignored) {
-                }
-            }
             if (removeFile)
                 remove(key);
         }
@@ -353,7 +345,7 @@ public class ACache {
      * @param saveTime 保存的时间，单位：秒
      */
     public void put(String key, Serializable value, int saveTime) {
-        ByteArrayOutputStream baos = null;
+        ByteArrayOutputStream baos;
         baos = new ByteArrayOutputStream();
         try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(value);
@@ -535,7 +527,7 @@ public class ACache {
                     String saveTimeStr = strs[0];
                     while (saveTimeStr.startsWith("0")) {
                         saveTimeStr = saveTimeStr
-                                .substring(1, saveTimeStr.length());
+                                .substring(1);
                     }
                     long saveTime = Long.valueOf(saveTimeStr);
                     long deleteAfter = Long.valueOf(strs[1]);
@@ -564,8 +556,7 @@ public class ACache {
 
         private static String clearDateInfo(String strInfo) {
             if (strInfo != null && hasDateInfo(strInfo.getBytes())) {
-                strInfo = strInfo.substring(strInfo.indexOf(mSeparator) + 1,
-                        strInfo.length());
+                strInfo = strInfo.substring(strInfo.indexOf(mSeparator) + 1);
             }
             return strInfo;
         }
@@ -688,7 +679,7 @@ public class ACache {
         private final long sizeLimit;
         private final int countLimit;
         private final Map<File, Long> lastUsageDates = Collections
-                .synchronizedMap(new HashMap<File, Long>());
+                .synchronizedMap(new HashMap<>());
         protected File cacheDir;
 
         private ACacheManager(File cacheDir, long sizeLimit, int countLimit) {

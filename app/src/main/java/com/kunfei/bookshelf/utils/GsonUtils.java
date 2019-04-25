@@ -11,6 +11,7 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"unused"})
 public class GsonUtils {
     /**
      * 将Json数据解析成相应的映射对象

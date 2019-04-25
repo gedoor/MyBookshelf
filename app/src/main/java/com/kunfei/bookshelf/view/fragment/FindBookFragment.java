@@ -1,7 +1,12 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -28,15 +41,13 @@ import com.kunfei.bookshelf.view.adapter.FindLeftAdapter;
 import com.kunfei.bookshelf.view.adapter.FindRightAdapter;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
+import com.kunfei.bookshelf.widget.recycler.sectioned.GridSpacingItemDecoration;
+import com.kunfei.bookshelf.widget.recycler.sectioned.SectionedSpanSizeLookup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -64,7 +75,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     private FindRightAdapter findRightAdapter;
     private FindKindAdapter findKindAdapter;
     private LinearLayoutManager leftLayoutManager;
-    private LinearLayoutManager rightLayoutManager;
+    private RecyclerView.LayoutManager rightLayoutManager;
+    private List<RecyclerViewData> data = new ArrayList<>();
 
     @Override
     public int createLayoutId() {
@@ -85,13 +97,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     protected void bindView() {
         super.bindView();
         unbinder = ButterKnife.bind(this, view);
+        rvFindRight.addItemDecoration(new GridSpacingItemDecoration(10));
         refreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.initData();
             refreshLayout.setRefreshing(false);
         });
         leftLayoutManager = new LinearLayoutManager(getContext());
-        rightLayoutManager = new LinearLayoutManager(getContext());
         initRecyclerView();
     }
 
@@ -104,32 +116,40 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         mPresenter.initData();
     }
 
-    @Override
-    public void upStyle() {
-        initRecyclerView();
+    public void refreshData() {
+        mPresenter.initData();
     }
 
     @Override
-    public synchronized void updateUI(List<RecyclerViewData> group) {
+    public void upData(List<RecyclerViewData> group) {
+        this.data = group;
+        upUI();
+    }
+
+    @Override
+    public void upUI() {
+        if (data == null) return;
         if (rlEmptyView == null) return;
-        if (group.size() == 0) {
+        if (data.size() == 0) {
             tvEmpty.setText(R.string.no_find);
             rlEmptyView.setVisibility(View.VISIBLE);
         } else {
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findLeftAdapter.setData(group);
-            findRightAdapter.setData(group);
+            findRightAdapter.setData(data);
             rlEmptyView.setVisibility(View.GONE);
-            rvFindLeft.setVisibility(View.VISIBLE);
-            vwDivider.setVisibility(View.VISIBLE);
-            if (group.size() <= 1) {
+
+            if (data.size() <= 1 | !showLeftView()) {
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
+            } else {
+                findLeftAdapter.setData(data);
+                rvFindLeft.setVisibility(View.VISIBLE);
+                vwDivider.setVisibility(View.VISIBLE);
             }
         } else {
-            findKindAdapter.setAllDatas(group);
+            findKindAdapter.setAllDatas(data);
         }
     }
 
@@ -137,28 +157,42 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return preferences.getBoolean("findTypeIsFlexBox", true);
     }
 
-    private void initRecyclerView() {
+    private boolean showLeftView() {
+        return preferences.getBoolean("showFindLeftView", true);
+    }
+
+    public void initRecyclerView() {
+        if (rvFindRight == null) return;
         if (isFlexBox()) {
             findKindAdapter = null;
-            findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
-            rvFindLeft.setLayoutManager(leftLayoutManager);
-            rvFindLeft.setAdapter(findLeftAdapter);
-            findRightAdapter = new FindRightAdapter(this);
-            rvFindRight.setLayoutManager(rightLayoutManager);
-            rvFindRight.setAdapter(findRightAdapter);
-            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    int index = rightLayoutManager.findFirstVisibleItemPosition();
-                    if (findLeftAdapter != null) {
-                        findLeftAdapter.upShowIndex(index);
-                        leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
+            if (showLeftView()) {
+                findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
+                    int counts = 0;
+                    for (int i = 0; i < pos; i++) {
+                        //position 为点击的position
+                        counts += findRightAdapter.getData().get(i).getChildList().size();
                     }
-                }
-            });
+                    ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
+                });
+                rvFindLeft.setLayoutManager(leftLayoutManager);
+                rvFindLeft.setAdapter(findLeftAdapter);
+            } else {
+                rvFindLeft.setVisibility(View.GONE);
+                vwDivider.setVisibility(View.GONE);
+            }
+
+            findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
+            //设置header
+            rightLayoutManager = new ScrollLinearLayoutManger(getActivity(), 3);
+            ((ScrollLinearLayoutManger) rightLayoutManager).setSpanSizeLookup(new SectionedSpanSizeLookup(findRightAdapter, (ScrollLinearLayoutManger) rightLayoutManager));
+            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setItemViewCacheSize(10);
+            rvFindRight.setItemAnimator(null);
+            rvFindRight.setHasFixedSize(true);
+            rvFindRight.setAdapter(findRightAdapter);
         } else {
+            rightLayoutManager = new LinearLayoutManager(getContext());
             rvFindLeft.setVisibility(View.GONE);
             vwDivider.setVisibility(View.GONE);
             findLeftAdapter = null;
@@ -241,11 +275,62 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case SourceEditActivity.EDIT_SOURCE:
-                    mPresenter.initData();
-                    break;
+            if (requestCode == SourceEditActivity.EDIT_SOURCE) {
+                mPresenter.initData();
             }
         }
+    }
+
+    @SuppressWarnings("unused")
+    public class ScrollLinearLayoutManger extends GridLayoutManager {
+
+        public ScrollLinearLayoutManger(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        public ScrollLinearLayoutManger(Context context, int spanCount) {
+            super(context, spanCount);
+        }
+
+        public ScrollLinearLayoutManger(Context context, int spanCount, int orientation, boolean reverseLayout) {
+            super(context, spanCount, orientation, reverseLayout);
+        }
+
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+            Log.e("linksu",
+                    "smoothScrollToPosition(ScrollSpeedLinearLayoutManger.java:62)");
+            RecyclerView.SmoothScroller smoothScroller = new CenterSmoothScroller(recyclerView.getContext());
+            smoothScroller.setTargetPosition(position);
+            startSmoothScroll(smoothScroller);
+        }
+
+        private class CenterSmoothScroller extends LinearSmoothScroller {
+
+            CenterSmoothScroller(Context context) {
+                super(context);
+            }
+
+            @Nullable
+            @Override
+            public PointF computeScrollVectorForPosition(int targetPosition) {
+                return ScrollLinearLayoutManger.this.computeScrollVectorForPosition(targetPosition);
+            }
+
+            @Override
+            public int calculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference) {
+                return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2);
+            }
+
+            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                return 0.2f;
+            }
+
+            @Override
+            protected int getVerticalSnapPreference() {
+                return SNAP_TO_START;
+            }
+        }
+
     }
 }

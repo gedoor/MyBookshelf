@@ -12,6 +12,10 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.text.TextUtils;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
+
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.AppFrontBackHelper;
 import com.kunfei.bookshelf.help.CrashHandler;
@@ -24,9 +28,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDex;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.plugins.RxJavaPlugins;
 
@@ -93,9 +94,7 @@ public class MApplication extends Application {
 
             @Override
             public void onBack() {
-                if (UpLastChapterModel.model != null) {
-                    UpLastChapterModel.model.onDestroy();
-                }
+                UpLastChapterModel.destroy();
             }
         });
         upEInkMode();

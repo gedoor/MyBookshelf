@@ -15,9 +15,8 @@ public interface FindBookContract {
 
     interface View extends IView {
 
-        void upStyle();
+        void upData(List<RecyclerViewData> group);
 
-        void updateUI(List<RecyclerViewData> group);
-
+        void upUI();
     }
 }

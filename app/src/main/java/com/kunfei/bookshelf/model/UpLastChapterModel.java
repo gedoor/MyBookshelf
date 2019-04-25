@@ -153,10 +153,12 @@ public class UpLastChapterModel {
         compositeDisposable = new CompositeDisposable();
     }
 
-    public void onDestroy() {
-        stopUp();
-        executorService.shutdownNow();
-        model = null;
+    public static void destroy() {
+        if (model != null) {
+            model.stopUp();
+            model.executorService.shutdownNow();
+            model = null;
+        }
     }
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {

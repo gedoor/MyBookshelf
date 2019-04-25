@@ -12,6 +12,8 @@ public class ReturnData {
     private Object data;
 
     public ReturnData() {
+        this.isSuccess = false;
+        this.errorMsg = "未知错误,请联系开发者!";
     }
 
     public boolean isSuccess() {
@@ -35,7 +37,7 @@ public class ReturnData {
     }
 
     public ReturnData setErrorMsg(String errorMsg) {
-        isSuccess = false;
+        this.isSuccess = false;
         this.errorMsg = errorMsg;
         return this;
     }
@@ -45,7 +47,8 @@ public class ReturnData {
     }
 
     public ReturnData setData(Object data) {
-        isSuccess = true;
+        this.isSuccess = true;
+        this.errorMsg = "";
         this.data = data;
         return this;
     }
