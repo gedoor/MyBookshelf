@@ -280,7 +280,7 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
-            if (mPageAnim.isChangePage() && !mPageAnim.getScroller().computeScrollOffset()) {
+            if (mPageAnim.isMoving() && !mPageAnim.getScroller().computeScrollOffset()) {
                 mPageAnim.changePageEnd();
                 if (mPageAnim.getDirection() != PageAnimation.Direction.NONE) {
                     mPageLoader.pagingEnd(mPageAnim.getDirection());

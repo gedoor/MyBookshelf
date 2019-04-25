@@ -48,7 +48,7 @@ public abstract class PageAnimation {
     float mLastY;
 
     boolean isRunning = false;
-    boolean changePage = false;
+    boolean isMoving = false;
 
     PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
         this(w, h, 0, 0, 0, view, listener);
@@ -94,8 +94,8 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
-    public boolean isChangePage() {
-        return changePage;
+    public boolean isMoving() {
+        return isMoving;
     }
 
     /**
@@ -103,7 +103,7 @@ public abstract class PageAnimation {
      */
     public void startAnim() {
         isRunning = true;
-        changePage = true;
+        isMoving = true;
         mView.postInvalidate();
     }
 

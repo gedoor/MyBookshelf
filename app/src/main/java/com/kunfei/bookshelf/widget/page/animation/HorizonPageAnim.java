@@ -42,7 +42,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
      */
     @Override
     public void changePageEnd() {
-        changePage = false;
+        isMoving = false;
         switch (mDirection) {
             case NEXT:
                 mPreBitmap.recycle();
@@ -67,7 +67,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public void onTouchEvent(MotionEvent event) {
-        changePage = false;
+        if (isMoving) return;
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         //获取点击位置
         int x = (int) event.getX();
