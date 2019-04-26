@@ -89,7 +89,6 @@ public class ShareService extends Service {
         String key = intent.getStringExtra("data_key");
         if (!TextUtils.isEmpty(key)) {
             bookSourceBeans = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
-            BitIntentDataManager.getInstance().cleanData(key);
         }
         if (shareServer != null && shareServer.isAlive()) {
             shareServer.stop();

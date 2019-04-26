@@ -269,7 +269,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
                 serialNumber = bookSourceBean.getSerialNumber();
                 enable = bookSourceBean.getEnable();
-                BitIntentDataManager.getInstance().cleanData(key);
             }
         }
     }

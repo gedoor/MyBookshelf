@@ -47,7 +47,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         if (openFrom == FROM_BOOKSHELF) {
             String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-            BitIntentDataManager.getInstance().cleanData(key);
             if (bookShelf == null) {
                 String noteUrl = intent.getStringExtra("noteUrl");
                 if (!TextUtils.isEmpty(noteUrl)) {

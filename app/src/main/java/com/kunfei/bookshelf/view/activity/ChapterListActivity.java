@@ -102,7 +102,6 @@ public class ChapterListActivity extends BaseTabActivity {
     protected void initData() {
         String key = getIntent().getStringExtra("data_key");
         bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-        BitIntentDataManager.getInstance().cleanData(key);
     }
 
     /**************abstract***********/

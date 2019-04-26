@@ -75,7 +75,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-                BitIntentDataManager.getInstance().cleanData(key);
             }
             if (bookShelf == null && !TextUtils.isEmpty(mView.getNoteUrl())) {
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());

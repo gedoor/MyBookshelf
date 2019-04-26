@@ -106,7 +106,6 @@ public class CheckSourceService extends Service {
                     case ActionStartService:
                         String key = intent.getStringExtra("data_key");
                         bookSourceBeanList = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
-                        BitIntentDataManager.getInstance().cleanData(key);
                         startCheck();
                 }
             }
