@@ -131,7 +131,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
+    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl) {
         String js = "document.documentElement.outerHTML";
         return Observable.create(e -> {
             final Html html = new Html("加载超时");
