@@ -150,7 +150,7 @@ public class AnalyzeRule {
             switch (rule.mode) {
                 case Js:
                     if (result == null) result = object;
-                    result = evalJS(rule.rule, result, baseUrl);
+                    result = evalJS(rule.rule, result);
                     break;
                 case JSon:
                     result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
@@ -197,7 +197,7 @@ public class AnalyzeRule {
                 switch (rule.mode) {
                     case Js:
                         if (result == null) result = object;
-                        result = evalJS(rule.rule, result, baseUrl);
+                        result = evalJS(rule.rule, result);
                         break;
                     case JSon:
                         result = getAnalyzeByJSonPath(result).getString(rule.rule);
@@ -231,7 +231,7 @@ public class AnalyzeRule {
             switch (rule.mode) {
                 case Js:
                     if (result == null) result = object;
-                    result = evalJS(rule.rule, result, null);
+                    result = evalJS(rule.rule, result);
                     break;
                 case JSon:
                     result = getAnalyzeByJSonPath(result).getList(rule.rule);
@@ -393,7 +393,7 @@ public class AnalyzeRule {
     /**
      * 执行JS
      */
-    private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
+    private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);
