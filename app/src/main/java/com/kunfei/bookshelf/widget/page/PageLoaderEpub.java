@@ -9,9 +9,9 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -104,7 +104,7 @@ public class PageLoaderEpub extends PageLoader {
         bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
         if (metadata.getAuthors().size() > 0) {
             String author = metadata.getAuthors().get(0).toString().replaceAll("^, |, $", "");
-            bookShelf.getBookInfoBean().setAuthor(FormatWebText.getAuthor(author));
+            bookShelf.getBookInfoBean().setAuthor(author);
         }
         if (metadata.getDescriptions().size() > 0) {
             bookShelf.getBookInfoBean().setIntroduce(Jsoup.parse(metadata.getDescriptions().get(0)).text());
@@ -174,7 +174,7 @@ public class PageLoaderEpub extends PageLoader {
             List<TextNode> contentEs = element.textNodes();
             for (int i = 0; i < contentEs.size(); i++) {
                 String text = contentEs.get(i).text().trim();
-                text = FormatWebText.formatHtml(text);
+                text = StringUtils.formatHtml(text);
                 if (elements.size() > 1) {
                     if (text.length() > 0) {
                         if (content.length() > 0) {

@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 
 import io.reactivex.Observable;
@@ -55,7 +54,7 @@ class BookInfo {
             Debug.printLog(tag, "┌获取作者");
             if (isEmpty(bookInfoBean.getAuthor())) {
                 result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
-                bookInfoBean.setAuthor(FormatWebText.getAuthor(result));
+                bookInfoBean.setAuthor(result);
             }
             Debug.printLog(tag, "└" + bookInfoBean.getAuthor());
             Debug.printLog(tag, "┌获取最新章节");

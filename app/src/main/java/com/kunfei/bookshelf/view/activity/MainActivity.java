@@ -769,7 +769,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             if (requestCode == requestSource) {
                 FindBookFragment findBookFragment = getFindFragment();
                 if (findBookFragment != null) {
-                    getFindFragment().refreshData();
+                    findBookFragment.refreshData();
                 }
             }
         }

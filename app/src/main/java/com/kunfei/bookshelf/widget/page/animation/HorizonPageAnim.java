@@ -18,6 +18,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     //是否取消翻页
     boolean isCancel = false;
 
+    private boolean touchInit = false;
     //可以使用 mLast代替
     private int mMoveX = 0;
     private int mMoveY = 0;
@@ -41,7 +42,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
      * 转换页面，在显示下一章的时候，必须首先调用此方法
      */
     @Override
-    public void changePageEnd() {
+    public boolean changePage() {
+        if (isCancel) return false;
         switch (mDirection) {
             case NEXT:
                 mPreBitmap.recycle();
@@ -59,14 +61,38 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 mCurBitmap = null;
                 mCurBitmap = mPreBitmap.copy(Bitmap.Config.ARGB_8888, true);
                 break;
+            default:
+                return false;
         }
+        return true;
     }
 
     public abstract void drawMove(Canvas canvas);
 
+    private void initTouch(int x, int y) {
+        if (!touchInit) {
+            //移动的点击位置
+            mMoveX = 0;
+            mMoveY = 0;
+            //是否移动
+            isMove = false;
+            //是否存在下一章
+            noNext = false;
+            //是下一章还是前一章
+            isNext = false;
+            //是否正在执行动画
+            isRunning = false;
+            //取消
+            isCancel = false;
+            //设置起始位置的触摸点
+            setStartPoint(x, y);
+            touchInit = true;
+        }
+    }
+
     @Override
     public void onTouchEvent(MotionEvent event) {
-        changePage = false;
+        if (isMoving) return;
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         //获取点击位置
         int x = (int) event.getX();
@@ -76,25 +102,10 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //移动的点击位置
-                mMoveX = 0;
-                mMoveY = 0;
-                //是否移动
-                isMove = false;
-                //是否存在下一章
-                noNext = false;
-                //是下一章还是前一章
-                isNext = false;
-                //是否正在执行动画
-                isRunning = false;
-                //取消
-                isCancel = false;
-                //设置起始位置的触摸点
-                setStartPoint(x, y);
-                //如果存在动画则取消动画
-                abortAnim();
+                initTouch(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
+                initTouch(x, y);
                 //判断是否移动了
                 if (!isMove) {
                     isMove = Math.abs(mStartX - x) > slop || Math.abs(mStartY - y) > slop;
@@ -139,7 +150,10 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     mView.invalidate();
                 }
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                initTouch(x, y);
+                touchInit = false;
                 isRunning = false;
                 if (!isMove) {
                     isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
@@ -169,11 +183,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     mView.invalidate();
                 }
                 break;
-            case MotionEvent.ACTION_CANCEL:
-                isCancel = true;
-                isRunning = false;
-                setDirection(Direction.NONE);
-                break;
         }
     }
 
@@ -182,22 +191,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
         if (isRunning && !noNext) {
             drawMove(canvas);
         } else {
-            if (!isCancel && !noNext) {
-                switch (mDirection) {
-                    case NEXT:
-                        canvas.drawBitmap(mNextBitmap, 0, 0, null);
-                        break;
-                    case PREV:
-                        canvas.drawBitmap(mPreBitmap, 0, 0, null);
-                        break;
-                    default:
-                        canvas.drawBitmap(mCurBitmap, 0, 0, null);
-                        break;
-                }
-                changePage = true;
-            } else {
-                canvas.drawBitmap(mCurBitmap, 0, 0, null);
-            }
+            canvas.drawBitmap(mCurBitmap, 0, 0, null);
             isCancel = true;
         }
     }

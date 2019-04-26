@@ -6,9 +6,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.base.MBaseActivity;
@@ -24,11 +30,6 @@ import com.kunfei.bookshelf.view.fragment.ChapterListFragment;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -101,7 +102,6 @@ public class ChapterListActivity extends BaseTabActivity {
     protected void initData() {
         String key = getIntent().getStringExtra("data_key");
         bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-        BitIntentDataManager.getInstance().cleanData(key);
     }
 
     /**************abstract***********/

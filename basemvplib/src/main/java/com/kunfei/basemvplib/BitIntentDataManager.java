@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.kunfei.bookshelf;
+package com.kunfei.basemvplib;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +25,13 @@ public class BitIntentDataManager {
     }
 
     public Object getData(String key) {
-        return bigData.get(key);
+        Object object = bigData.get(key);
+        bigData.remove(key);
+        return object;
     }
 
     public void putData(String key, Object data) {
         bigData.put(key, data);
     }
 
-    public void cleanData(String key) {
-        bigData.remove(key);
-    }
 }
