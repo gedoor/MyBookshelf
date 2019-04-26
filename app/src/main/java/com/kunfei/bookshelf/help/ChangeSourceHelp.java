@@ -36,11 +36,6 @@ public class ChangeSourceHelp {
             }
 
             @Override
-            public Boolean checkIsExist(SearchBookBean searchBookBean) {
-                return false;
-            }
-
-            @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 selectBook(value);
             }

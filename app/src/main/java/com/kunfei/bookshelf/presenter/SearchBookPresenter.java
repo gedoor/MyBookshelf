@@ -73,11 +73,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
 
             @Override
-            public Boolean checkIsExist(SearchBookBean value) {
-                return false;
-            }
-
-            @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 mView.loadMoreSearchBook(value);
             }
