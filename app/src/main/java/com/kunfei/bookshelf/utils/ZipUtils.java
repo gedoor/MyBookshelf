@@ -26,6 +26,7 @@ import java.util.zip.ZipOutputStream;
  *     desc  : utils about zip
  * </pre>
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class ZipUtils {
 
     private static final int BUFFER_LEN = 8192;

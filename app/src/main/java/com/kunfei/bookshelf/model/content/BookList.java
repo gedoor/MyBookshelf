@@ -6,7 +6,6 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -120,7 +119,7 @@ class BookList {
             item.setNoteUrl(baseUrl);
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者");
-            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
+            item.setAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor()));
             Debug.printLog(tag, "└" + item.getAuthor());
             Debug.printLog(tag, "┌获取封面");
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl()));
@@ -150,7 +149,7 @@ class BookList {
             item.setOrigin(name);
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者", printLog);
-            item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor())));
+            item.setAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor()));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));

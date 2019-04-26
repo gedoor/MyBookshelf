@@ -102,15 +102,15 @@ public class PageView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w;
-        mViewHeight = h;
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        mViewWidth = width;
+        mViewHeight = height;
 
         isPrepare = true;
 
         if (mPageLoader != null) {
-            mPageLoader.prepareDisplay(w, h);
+            mPageLoader.prepareDisplay(width, height);
         }
     }
 
@@ -280,12 +280,12 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
-            if (mPageAnim.isChangePage() && !mPageAnim.getScroller().computeScrollOffset()) {
-                mPageAnim.changePageEnd();
-                if (mPageAnim.getDirection() != PageAnimation.Direction.NONE) {
+            if (mPageAnim.isMoving() && !mPageAnim.getScroller().computeScrollOffset()) {
+                if (mPageAnim.changePage()) {
                     mPageLoader.pagingEnd(mPageAnim.getDirection());
                     mPageAnim.setDirection(PageAnimation.Direction.NONE);
                 }
+                mPageAnim.movingFinish();
             }
         }
         super.computeScroll();
@@ -295,15 +295,8 @@ public class PageView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-
-        if (mPageAnim == null) {
-            return true;
-        }
-
-        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) {
-            return true;
-        }
-
+        if (mPageAnim == null) return true;
+        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) return true;
         if (actionFromEdge) {
             if (event.getAction() == MotionEvent.ACTION_UP)
                 actionFromEdge = false;

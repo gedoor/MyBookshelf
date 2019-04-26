@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -21,8 +24,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -105,7 +106,6 @@ public class CheckSourceService extends Service {
                     case ActionStartService:
                         String key = intent.getStringExtra("data_key");
                         bookSourceBeanList = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
-                        BitIntentDataManager.getInstance().cleanData(key);
                         startCheck();
                 }
             }

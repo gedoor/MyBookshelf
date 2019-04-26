@@ -19,8 +19,8 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -75,7 +75,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-                BitIntentDataManager.getInstance().cleanData(key);
             }
             if (bookShelf == null && !TextUtils.isEmpty(mView.getNoteUrl())) {
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());

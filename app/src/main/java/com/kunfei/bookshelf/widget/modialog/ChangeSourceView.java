@@ -136,18 +136,6 @@ public class ChangeSourceView {
             }
 
             @Override
-            public Boolean checkIsExist(SearchBookBean searchBookBean) {
-                boolean result = false;
-                for (int i = 0; i < adapter.getICount(); i++) {
-                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
-                        result = true;
-                        break;
-                    }
-                }
-                return result;
-            }
-
-            @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 addSearchBook(value);
             }

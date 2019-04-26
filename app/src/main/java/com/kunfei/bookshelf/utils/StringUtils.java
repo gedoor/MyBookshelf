@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.StringRes;
+
 import com.kunfei.bookshelf.MApplication;
 
 import java.nio.charset.StandardCharsets;
@@ -17,13 +19,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.annotation.StringRes;
-
-/**
- * Created by newbiechen on 17-4-22.
- * 对文字操作的工具类
- */
-
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     private static final String TAG = "StringUtils";
     private static final int HOUR_OF_DAY = 24;
@@ -377,5 +373,12 @@ public class StringUtils {
         }
         m.appendTail(buf);
         return buf.toString();
+    }
+
+    public static String formatHtml(String html) {
+        if (TextUtils.isEmpty(html)) return html;
+        return html.replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
+                .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
+                .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
     }
 }

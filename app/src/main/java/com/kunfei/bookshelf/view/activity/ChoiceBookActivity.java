@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -20,11 +24,7 @@ import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -97,10 +97,8 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -160,12 +158,6 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
         if (books.size() <= 0) {
             loadMoreFinish(true);
             return;
-        }
-        for (SearchBookBean searchBook : searchBookAdapter.getSearchBooks()) {
-            if (Objects.equals(books.get(0).getName(), searchBook.getName()) && Objects.equals(books.get(0).getAuthor(), searchBook.getAuthor())) {
-                loadMoreFinish(true);
-                return;
-            }
         }
         searchBookAdapter.addAll(books);
         loadMoreFinish(false);

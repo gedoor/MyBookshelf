@@ -22,7 +22,6 @@ import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.DataRestore;
-import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -59,14 +58,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     @Override
                     public void onNext(Boolean value) {
                         mView.dismissHUD();
-                        if (value) {
-                            //更新书架并刷新
-                            mView.toast(R.string.restore_success);
-                            mView.recreate();
-                            ReadBookControl.getInstance().updateReaderSettings();
-                        } else {
-                            mView.toast(R.string.restore_fail);
-                        }
+                        mView.toast(R.string.restore_success);
+                        //更新书架并刷新
+                        mView.recreate();
                     }
 
                     @Override

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -151,7 +150,7 @@ public class AnalyzeRule {
             switch (rule.mode) {
                 case Js:
                     if (result == null) result = object;
-                    result = evalJS(rule.rule, result, baseUrl);
+                    result = evalJS(rule.rule, result);
                     break;
                 case JSon:
                     result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
@@ -165,7 +164,7 @@ public class AnalyzeRule {
         }
         if (result == null) return new ArrayList<>();
         if (result instanceof String) {
-            result = Arrays.asList(FormatWebText.formatHtml((String) result).split("\n"));
+            result = Arrays.asList(StringUtils.formatHtml((String) result).split("\n"));
         }
         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
@@ -198,7 +197,7 @@ public class AnalyzeRule {
                 switch (rule.mode) {
                     case Js:
                         if (result == null) result = object;
-                        result = evalJS(rule.rule, result, baseUrl);
+                        result = evalJS(rule.rule, result);
                         break;
                     case JSon:
                         result = getAnalyzeByJSonPath(result).getString(rule.rule);
@@ -218,7 +217,7 @@ public class AnalyzeRule {
         if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
             return NetworkUtil.getAbsoluteURL(baseUrl, (String) result);
         }
-        return FormatWebText.formatHtml((String) result);
+        return StringUtils.formatHtml((String) result);
     }
 
     /**
@@ -232,7 +231,7 @@ public class AnalyzeRule {
             switch (rule.mode) {
                 case Js:
                     if (result == null) result = object;
-                    result = evalJS(rule.rule, result, null);
+                    result = evalJS(rule.rule, result);
                     break;
                 case JSon:
                     result = getAnalyzeByJSonPath(result).getList(rule.rule);
@@ -394,7 +393,7 @@ public class AnalyzeRule {
     /**
      * 执行JS
      */
-    private Object evalJS(String jsStr, Object result, String baseUrl) throws Exception {
+    private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
         bindings.put("result", result);

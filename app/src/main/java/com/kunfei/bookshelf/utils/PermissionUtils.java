@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <pre>
@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat;
  *     version: 1.0
  * </pre>
  */
-
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class PermissionUtils {
 
     /**
@@ -130,7 +130,7 @@ public class PermissionUtils {
                     break;
                 }
             }
-            String[] unauthorizedMorePermissions = (String[]) permissionList.toArray(new String[permissionList.size()]);
+            String[] unauthorizedMorePermissions = permissionList.toArray(new String[0]);
             if (isFirst)// 用户之前已拒绝过权限申请
                 callBack.onAlreadyTurnedDownAndNoAsk(unauthorizedMorePermissions);
             else       // 用户之前已拒绝并勾选了不在询问、用户第一次申请权限。
