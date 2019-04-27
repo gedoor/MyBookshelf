@@ -128,15 +128,6 @@ public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
     }
 
     public void setDurChapterName(String durChapterName) {
-        if (durChapterName != null) {
-            durChapterName = durChapterName.trim();
-            Matcher matcher = BookshelfHelp.chapterNamePattern.matcher(durChapterName);
-            if (matcher.find()) {
-                int num = StringUtils.stringToInt(matcher.group(2));
-                this.durChapterName = num > 0 ? matcher.replaceFirst("第" + num + "章 ") : matcher.replaceFirst("$1 ");
-                return;
-            }
-        }
         this.durChapterName = durChapterName;
     }
 

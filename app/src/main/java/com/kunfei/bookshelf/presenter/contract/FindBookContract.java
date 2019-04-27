@@ -17,6 +17,5 @@ public interface FindBookContract {
 
         void upData(List<RecyclerViewData> group);
 
-        void upUI();
     }
 }

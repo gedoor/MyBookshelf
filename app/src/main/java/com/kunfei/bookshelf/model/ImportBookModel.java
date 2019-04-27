@@ -8,7 +8,6 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.FormatWebText;
 
 import java.io.File;
 
@@ -48,7 +47,7 @@ public class ImportBookModel extends BaseModelImpl {
                     fileName = fileName.substring(0, lastDotIndex);
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
-                    bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
+                    bookInfoBean.setAuthor(fileName.substring(authorIndex));
                     fileName = fileName.substring(0, authorIndex).trim();
                 } else {
                     bookInfoBean.setAuthor("");

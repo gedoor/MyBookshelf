@@ -415,11 +415,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
     }
 
     @Override
-    public void changePageEnd() {
-        super.changePageEnd();
-
+    public boolean changePage() {
         if (!blurBackImage)
-            return;
+            return super.changePage();
 
         switch (mDirection) {
             case NEXT:
@@ -439,6 +437,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 }
                 break;
         }
+        return super.changePage();
     }
 
     public void onPageDrawn(int pageOnCur) {

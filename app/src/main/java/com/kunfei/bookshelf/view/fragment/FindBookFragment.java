@@ -100,7 +100,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         rvFindRight.addItemDecoration(new GridSpacingItemDecoration(10));
         refreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.initData();
+            refreshData();
             refreshLayout.setRefreshing(false);
         });
         leftLayoutManager = new LinearLayoutManager(getContext());
@@ -113,22 +113,35 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        mPresenter.initData();
+        refreshData();
     }
 
     public void refreshData() {
-        mPresenter.initData();
+        if (mPresenter != null) {
+            mPresenter.initData();
+        }
     }
 
     @Override
     public void upData(List<RecyclerViewData> group) {
         this.data = group;
+        upStyle();
         upUI();
     }
 
-    @Override
+    public void upStyle() {
+        if (rlEmptyView == null) return;
+        initRecyclerView();
+        if (isFlexBox()) {
+            findRightAdapter.setData(data);
+            findLeftAdapter.setData(data);
+        } else {
+            findKindAdapter.setAllDatas(data);
+        }
+        upUI();
+    }
+
     public void upUI() {
-        if (data == null) return;
         if (rlEmptyView == null) return;
         if (data.size() == 0) {
             tvEmpty.setText(R.string.no_find);
@@ -137,19 +150,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
         }
         if (isFlexBox()) {
-            findRightAdapter.setData(data);
             rlEmptyView.setVisibility(View.GONE);
-
             if (data.size() <= 1 | !showLeftView()) {
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
             } else {
-                findLeftAdapter.setData(data);
                 rvFindLeft.setVisibility(View.VISIBLE);
                 vwDivider.setVisibility(View.VISIBLE);
             }
-        } else {
-            findKindAdapter.setAllDatas(data);
         }
     }
 
@@ -161,25 +169,20 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return preferences.getBoolean("showFindLeftView", true);
     }
 
-    public void initRecyclerView() {
+    private void initRecyclerView() {
         if (rvFindRight == null) return;
         if (isFlexBox()) {
             findKindAdapter = null;
-            if (showLeftView()) {
-                findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
-                    int counts = 0;
-                    for (int i = 0; i < pos; i++) {
-                        //position 为点击的position
-                        counts += findRightAdapter.getData().get(i).getChildList().size();
-                    }
-                    ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
-                });
-                rvFindLeft.setLayoutManager(leftLayoutManager);
-                rvFindLeft.setAdapter(findLeftAdapter);
-            } else {
-                rvFindLeft.setVisibility(View.GONE);
-                vwDivider.setVisibility(View.GONE);
-            }
+            findLeftAdapter = new FindLeftAdapter(getActivity(), pos -> {
+                int counts = 0;
+                for (int i = 0; i < pos; i++) {
+                    //position 为点击的position
+                    counts += findRightAdapter.getData().get(i).getChildList().size();
+                }
+                ((ScrollLinearLayoutManger) rightLayoutManager).scrollToPositionWithOffset(counts + pos, 0);
+            });
+            rvFindLeft.setLayoutManager(leftLayoutManager);
+            rvFindLeft.setAdapter(findLeftAdapter);
 
             findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
             //设置header
@@ -247,12 +250,12 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
                         .subscribe(new MySingleObserver<Boolean>() {
                             @Override
                             public void onSuccess(Boolean aBoolean) {
-                                mPresenter.initData();
+                                refreshData();
                             }
                         });
             } else if (item.getTitle().equals(getString(R.string.delete))) {
                 BookSourceManager.removeBookSource(sourceBean);
-                mPresenter.initData();
+                refreshData();
             }
             return true;
         });
@@ -276,7 +279,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SourceEditActivity.EDIT_SOURCE) {
-                mPresenter.initData();
+                refreshData();
             }
         }
     }

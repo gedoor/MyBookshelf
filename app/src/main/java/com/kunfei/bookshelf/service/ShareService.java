@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -51,6 +52,14 @@ public class ShareService extends Service {
         }
     }
 
+    public static void stopThis(Context context) {
+        if (isRunning) {
+            Intent intent = new Intent(context, ShareService.class);
+            intent.setAction(ActionDoneService);
+            context.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -80,7 +89,6 @@ public class ShareService extends Service {
         String key = intent.getStringExtra("data_key");
         if (!TextUtils.isEmpty(key)) {
             bookSourceBeans = (List<BookSourceBean>) BitIntentDataManager.getInstance().getData(key);
-            BitIntentDataManager.getInstance().cleanData(key);
         }
         if (shareServer != null && shareServer.isAlive()) {
             shareServer.stop();

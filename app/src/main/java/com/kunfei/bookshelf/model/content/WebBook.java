@@ -133,7 +133,7 @@ public class WebBook extends BaseModelImpl {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, tag);
             if (bookSourceBean.getRuleBookContent().startsWith("$") && !bookSourceBean.getRuleBookContent().startsWith("$.")) {
-                return getAjaxHtml(analyzeUrl, tag)
+                return getAjaxString(analyzeUrl, tag)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)

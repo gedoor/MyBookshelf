@@ -139,7 +139,8 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     @Override
-    public void changePageEnd() {
+    public boolean changePage() {
+        return false;
     }
 
     @Override
