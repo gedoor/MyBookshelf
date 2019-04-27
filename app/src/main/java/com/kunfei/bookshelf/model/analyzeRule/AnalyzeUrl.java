@@ -61,7 +61,7 @@ public class AnalyzeUrl {
         //分离编码规则
         ruleUrl = splitCharCode(ruleUrl);
         //判断是否有下一页
-        if (page > 1 && !ruleUrl.contains("searchKey")) throw new Exception("没有下一页");
+        if (page > 1 && !ruleUrl.contains("searchPage")) throw new Exception("没有下一页");
         //替换js
         ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
         //设置页数
