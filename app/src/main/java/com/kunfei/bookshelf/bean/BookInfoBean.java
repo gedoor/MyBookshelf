@@ -202,7 +202,12 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     public String getCoverUrl() {
         if (isEpub() && (TextUtils.isEmpty(coverUrl) || !(new File(coverUrl)).exists())) {
-            AsyncTask.execute(this::extractEpubCoverImage);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    extractEpubCoverImage();
+                }
+            });
             return "";
         }
         return coverUrl;
