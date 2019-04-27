@@ -281,7 +281,7 @@ public class ChangeSourceView {
                         searchBookBean.setIsCurrentSource(false);
                     }
                     boolean saveBookSource = false;
-                    BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(searchBookBean.getTag());
+                    BookSourceBean bookSourceBean = BookSourceManager.getBookSourceByUrl(searchBookBean.getTag());
                     if (searchBookBean.getSearchTime() < 60 && bookSourceBean != null) {
                         bookSourceBean.increaseWeight(100 / (10 + searchBookBean.getSearchTime()));
                         saveBookSource = true;

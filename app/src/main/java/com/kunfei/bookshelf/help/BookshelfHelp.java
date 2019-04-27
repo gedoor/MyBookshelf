@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
@@ -15,7 +14,6 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.BookShelfBeanDao;
-import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.BookmarkBeanDao;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -408,11 +406,11 @@ public class BookshelfHelp {
         return percent;
     }
 
-    public static BookSourceBean getBookSourceByTag(String tag) {
-        if (tag == null)
-            return null;
-        return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).unique();
+    public static String formatAuthor(String author) {
+        if (author == null) {
+            return "";
+        }
+        return author.replaceAll("\\s*作\\s*者[\\s:：]*", "");
     }
 
     public static int guessChapterNum(String name) {

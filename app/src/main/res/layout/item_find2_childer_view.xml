@@ -3,13 +3,12 @@
     android:id="@+id/tv_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:background="@drawable/shape_card_view"
-    android:ellipsize="middle"
+    android:clickable="true"
+    android:ellipsize="end"
+    android:focusable="true"
     android:gravity="center"
-    android:orientation="vertical"
     android:padding="5dp"
     android:singleLine="true"
     android:textColor="@color/tv_text_default"
-    android:textSize="14sp"
-    android:typeface="monospace" />
+    android:textSize="14sp" />
