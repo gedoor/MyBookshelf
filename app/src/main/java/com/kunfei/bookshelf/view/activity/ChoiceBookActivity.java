@@ -166,10 +166,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public void searchBookError(String msg) {
         if (mPresenter.getPage() > 1) {
-            rfRvSearchBooks.loadMoreError();
-            if (msg != null) {
-                toast(msg);
-            }
+            rfRvSearchBooks.finishLoadMore(true, false);
         } else {
             //刷新失败
             rfRvSearchBooks.refreshError();
