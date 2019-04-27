@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.BookSourceManager;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -190,7 +191,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public void setAuthor(String author) {
-        this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
+        this.author = BookshelfHelp.formatAuthor(author);
     }
 
     public String getLastChapter() {
@@ -288,7 +289,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public int getWeight() {
-        BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
+        BookSourceBean source = BookSourceManager.getBookSourceByUrl(this.tag);
         if (source != null)
             this.weight = source.getWeight();
         else

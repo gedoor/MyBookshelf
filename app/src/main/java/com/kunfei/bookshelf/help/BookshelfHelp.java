@@ -408,6 +408,13 @@ public class BookshelfHelp {
         return percent;
     }
 
+    public static String formatAuthor(String author) {
+        if (author == null) {
+            return "";
+        }
+        return author.replaceAll("\\s*作\\s*者[\\s:：]*", "");
+    }
+
     public static BookSourceBean getBookSourceByTag(String tag) {
         if (tag == null)
             return null;
