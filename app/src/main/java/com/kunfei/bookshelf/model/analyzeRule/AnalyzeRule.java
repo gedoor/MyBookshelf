@@ -9,15 +9,8 @@ import com.kunfei.bookshelf.bean.BaseBookBean;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import org.jsoup.select.Elements;
-import org.mozilla.javascript.ConsString;
-import org.mozilla.javascript.NativeArray;
-import org.mozilla.javascript.NativeObject;
-import org.mozilla.javascript.ScriptableObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -315,7 +308,7 @@ public class AnalyzeRule {
             StringBuffer sb = new StringBuffer(ruleStr.length());
             SimpleBindings simpleBindings = new SimpleBindings(){{
                 this.put("java", this);
-                this.put("result", WrapForJS(object));
+                this.put("result", object);
                 this.put("baseUrl", baseUrl);
             }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
@@ -403,61 +396,9 @@ public class AnalyzeRule {
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
-        bindings.put("result", WrapForJS(result));
+        bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
-        return UnWrapFromJS(SCRIPT_ENGINE.eval(jsStr, bindings));
-    }
-
-    // 参考 新方圆 参数调整
-    // https://github.com/qiusunshine/movienow/blob/master/core/parser/JSEngine.java
-    // line486: private Object argsNativeObjectAdjust(Object input)
-    private Object UnWrapFromJS(Object o){
-        if(o instanceof ConsString){
-            return String.valueOf(o);
-        }
-        if(o instanceof Double && ((Double) o) % 1.0 == 0){
-            return ((Double) o).intValue();
-        }
-        if(o instanceof NativeObject){
-            NativeObject nativeObject = (NativeObject) o;
-            Map<String, Object> map = new HashMap<>();
-            for (Object key : nativeObject.keySet()) {
-                map.put((String)key, UnWrapFromJS(nativeObject.get(key)));
-            }
-            return map;
-        }
-        if(o instanceof NativeArray){
-            NativeArray nativeArray = (NativeArray) o;
-            List<Object> list = new ArrayList<>();
-            for (int i = 0; i < nativeArray.size(); i++) {
-                list.add(UnWrapFromJS(nativeArray.get(i)));
-            }
-            return list;
-        }
-        return o;
-    }
-
-    private Object WrapForJS(Object o){
-        if(o instanceof Elements){
-            return String.valueOf(o);
-        }
-        if(o instanceof Map){
-            Map map = (Map) o;
-            NativeObject nativeObject = new NativeObject();
-            for (Object key : map.keySet()) {
-                ScriptableObject.putProperty(nativeObject, (String) key, WrapForJS(map.get(key)));
-            }
-            return nativeObject;
-        }
-        if(o instanceof List){
-            List list = (List) o;
-            NativeArray nativeArray = new NativeArray(list.size());
-            for (int i = 0; i < list.size(); i++) {
-                ScriptableObject.putProperty(nativeArray, i, WrapForJS(list.get(i)));
-            }
-            return nativeArray;
-        }
-        return o;
+        return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
     /**
