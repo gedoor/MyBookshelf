@@ -30,6 +30,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.view.adapter.ChangeSourceAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
@@ -88,6 +89,7 @@ public class ChangeSourceView {
             PopupMenu popupMenu = new PopupMenu(context, view);
             popupMenu.getMenu().add(0, 0, 1, "禁用书源");
             popupMenu.getMenu().add(0, 0, 2, "删除书源");
+            popupMenu.getMenu().add(0, 0, 3, "编辑书源");
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 if (sourceBean != null) {
                     switch (menuItem.getOrder()) {
@@ -99,6 +101,9 @@ public class ChangeSourceView {
                         case 2:
                             BookSourceManager.removeBookSource(sourceBean);
                             adapter.removeData(pos);
+                            break;
+                        case 3:
+                            SourceEditActivity.startThis(context, sourceBean);
                             break;
                     }
                 }

@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -31,9 +35,6 @@ import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -75,6 +76,7 @@ public class BookInfoEditActivity extends MBaseActivity {
     public static void startThis(Context context, String noteUrl) {
         Intent intent = new Intent(context, BookInfoEditActivity.class);
         intent.putExtra("noteUrl", noteUrl);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

@@ -13,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -22,9 +26,6 @@ import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
@@ -95,10 +96,11 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String allQQ[] = new String[]{"(公众号)开源阅读软件", "(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(QQ群)981838750"};
+    private String[] allQQ = new String[]{"(公众号)开源阅读软件", "(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(QQ群)981838750"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
