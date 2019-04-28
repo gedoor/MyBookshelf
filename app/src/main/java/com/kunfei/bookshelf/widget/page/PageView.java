@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -343,7 +342,7 @@ public class PageView extends View {
                         return true;
                     }
 
-                    if (mPageAnim instanceof ScrollPageAnim && MApplication.getConfigPreferences().getBoolean("disableScrollClickTurn", false)) {
+                    if (mPageAnim instanceof ScrollPageAnim && readBookControl.disableScrollClickTurn()) {
                         return true;
                     }
                 }

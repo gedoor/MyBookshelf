@@ -768,4 +768,8 @@ public class ReadBookControl {
         }
         return value;
     }
+
+    public boolean disableScrollClickTurn() {
+        return preferences.getBoolean("disableScrollClickTurn", false);
+    }
 }
