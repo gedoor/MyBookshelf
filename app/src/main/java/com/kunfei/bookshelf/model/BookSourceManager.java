@@ -63,6 +63,7 @@ public class BookSourceManager {
 
     @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
+        if (url == null) return null;
         return DbHelper.getDaoSession().getBookSourceBeanDao().load(url);
     }
 

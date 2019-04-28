@@ -180,8 +180,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 // 开启翻页效果
                 if (!noNext) {
                     startAnim();
-                    mView.invalidate();
                 }
+                mView.invalidate();
                 break;
         }
     }

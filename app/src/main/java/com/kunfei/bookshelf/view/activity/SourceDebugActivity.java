@@ -125,6 +125,7 @@ public class SourceDebugActivity extends MBaseActivity {
                 return false;
             }
         });
+        searchView.setQuery("我的", false);
     }
 
     private void startDebug(String key) {

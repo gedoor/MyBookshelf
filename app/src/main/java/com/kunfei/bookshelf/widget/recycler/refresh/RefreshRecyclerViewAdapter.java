@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.kunfei.bookshelf.R;
 
 public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     private final int LOAD_MORE_TYPE = 2001;
@@ -125,7 +125,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void setClickTryAgainListener(OnClickTryAgainListener clickTryAgainListener) {
         this.clickTryAgainListener = clickTryAgainListener;
-
     }
 
     public Boolean getLoadMoreError() {

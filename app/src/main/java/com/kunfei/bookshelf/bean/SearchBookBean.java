@@ -6,15 +6,15 @@ import android.os.Parcelable;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.BookSourceManager;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
@@ -48,7 +48,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     @Transient
     private int searchTime = Integer.MAX_VALUE;
     @Transient
-    private List<String> originUrls;
+    private LinkedHashSet<String> originUrls;
     @Transient
     private Map<String, String> variableMap;
 
@@ -72,7 +72,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         chapterUrl = in.readString();
         addTime = in.readLong();
         upTime = in.readLong();
-        originUrls = in.createStringArrayList();
         variable = in.readString();
     }
 
@@ -113,7 +112,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         dest.writeString(chapterUrl);
         dest.writeLong(addTime);
         dest.writeLong(upTime);
-        dest.writeStringList(originUrls);
         dest.writeString(variable);
     }
 
@@ -193,7 +191,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public void setAuthor(String author) {
-        this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
+        this.author = BookshelfHelp.formatAuthor(author);
     }
 
     public String getLastChapter() {
@@ -254,27 +252,16 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
             this.addTime = System.currentTimeMillis();
     }
 
-    public void originNumAdd() {
-        originNum = originNum + 1;
-    }
-
     public int getOriginNum() {
         return originNum;
     }
 
     public void addOriginUrl(String origin) {
         if (this.originUrls == null) {
-            this.originUrls = new ArrayList<>();
+            this.originUrls = new LinkedHashSet<>();
         }
-
-        if (!this.originUrls.contains(origin)) {
-            this.originUrls.add(origin);
-        }
+        this.originUrls.add(origin);
         originNum = this.originUrls.size();
-    }
-
-    public List<String> getOriginUrls() {
-        return this.originUrls == null ? new ArrayList<String>() : this.originUrls;
     }
 
     public String getIntroduce() {
@@ -302,7 +289,7 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public int getWeight() {
-        BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
+        BookSourceBean source = BookSourceManager.getBookSourceByUrl(this.tag);
         if (source != null)
             this.weight = source.getWeight();
         else

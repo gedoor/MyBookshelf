@@ -60,7 +60,6 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void startAnim() {
-        super.startAnim();
         int dx;
         if (mDirection == Direction.NEXT) {
             if (isCancel) {
@@ -83,5 +82,6 @@ public class CoverPageAnim extends HorizonPageAnim {
         //滑动速度保持一致
         int duration = (animationSpeed * Math.abs(dx)) / mViewWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
+        super.startAnim();
     }
 }

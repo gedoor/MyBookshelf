@@ -17,7 +17,7 @@ public class BookKindBean {
                 if (StringUtils.isNumeric(kind)) {
                     int words = Integer.valueOf(kind);
                     if (words > 0) {
-                        wordsS = Long.toString(words) + "字";
+                        wordsS = words + "字";
                         if (words > 10000) {
                             DecimalFormat df = new DecimalFormat("#.#");
                             wordsS = df.format(words * 1.0f / 10000f) + "万字";
