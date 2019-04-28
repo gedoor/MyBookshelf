@@ -109,7 +109,7 @@ public abstract class PageAnimation {
     public void startAnim() {
         isRunning = true;
         isMoving = true;
-        mView.postInvalidate();
+        mView.invalidate();
     }
 
     public Direction getDirection() {
