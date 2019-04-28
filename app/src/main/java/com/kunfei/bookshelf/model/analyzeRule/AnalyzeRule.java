@@ -308,7 +308,7 @@ public class AnalyzeRule {
             StringBuffer sb = new StringBuffer(ruleStr.length());
             SimpleBindings simpleBindings = new SimpleBindings(){{
                 this.put("java", this);
-                this.put("result", String.valueOf(object));
+                this.put("result", JSHelper.WrapForJS(object));
                 this.put("baseUrl", baseUrl);
             }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
@@ -396,9 +396,9 @@ public class AnalyzeRule {
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
-        bindings.put("result", result);
+        bindings.put("result", JSHelper.WrapForJS(result));
         bindings.put("baseUrl", baseUrl);
-        return SCRIPT_ENGINE.eval(jsStr, bindings);
+        return JSHelper.UnWrapFromJS(SCRIPT_ENGINE.eval(jsStr, bindings));
     }
 
     /**
