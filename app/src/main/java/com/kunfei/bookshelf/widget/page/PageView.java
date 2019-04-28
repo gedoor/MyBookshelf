@@ -116,6 +116,9 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.prepareDisplay(width, height);
         }
+        //设置中间区域范围
+        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
+                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
     }
 
     //设置翻页的模式
@@ -328,12 +331,6 @@ public class PageView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!isMove) {
-                    //设置中间区域范围
-                    if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
-                                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
-                    }
-
                     //是否点击了中间
                     if (mCenterRect.contains(x, y)) {
                         if (mTouchListener != null) {
