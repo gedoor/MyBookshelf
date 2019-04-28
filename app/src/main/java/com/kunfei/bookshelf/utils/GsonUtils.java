@@ -24,8 +24,6 @@ public class GsonUtils {
                 result = gson.fromJson(jsonData, type);
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                gson = null;
             }
         }
         return result;
@@ -40,10 +38,10 @@ public class GsonUtils {
             Gson gson = new GsonBuilder().create();
             try {
                 JsonParser parser = new JsonParser();
-                JsonArray Jarray = parser.parse(jsonData).getAsJsonArray();
-                if (Jarray != null) {
+                JsonArray JArray = parser.parse(jsonData).getAsJsonArray();
+                if (JArray != null) {
                     result = new ArrayList<>();
-                    for (JsonElement obj : Jarray) {
+                    for (JsonElement obj : JArray) {
                         try {
                             T cse = gson.fromJson(obj, type);
                             result.add(cse);
@@ -54,8 +52,6 @@ public class GsonUtils {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                gson = null;
             }
         }
         return result;
@@ -72,8 +68,6 @@ public class GsonUtils {
             result = gson.toJson(entity);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            gson = null;
         }
         return result;
     }
@@ -88,8 +82,6 @@ public class GsonUtils {
             result = gson.toJson(list);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            gson = null;
         }
         return result;
     }
@@ -104,8 +96,6 @@ public class GsonUtils {
             result = gson.toJson(list);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            gson = null;
         }
         return result;
     }
