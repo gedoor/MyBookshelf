@@ -410,7 +410,7 @@ public class BookshelfHelp {
         if (author == null) {
             return "";
         }
-        return author.replaceAll("作\\s*者[\\s:：]*", "").replaceAll("\\s*", " ").trim();
+        return author.replaceAll("作\\s*者[\\s:：]*", "").replaceAll("\\s+", " ").trim();
     }
 
     public static int guessChapterNum(String name) {
