@@ -87,6 +87,10 @@ public class PageView extends View {
             PageView.this.drawBackground(canvas);
         }
 
+        @Override
+        public void changePage(PageAnimation.Direction direction) {
+            mPageLoader.pagingEnd(direction);
+        }
     };
 
     public PageView(Context context) {
@@ -280,13 +284,6 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
-            if (mPageAnim.isMoving() && !mPageAnim.getScroller().computeScrollOffset()) {
-                if (mPageAnim.changePage()) {
-                    mPageLoader.pagingEnd(mPageAnim.getDirection());
-                    mPageAnim.setDirection(PageAnimation.Direction.NONE);
-                }
-                mPageAnim.movingFinish();
-            }
         }
         super.computeScroll();
     }

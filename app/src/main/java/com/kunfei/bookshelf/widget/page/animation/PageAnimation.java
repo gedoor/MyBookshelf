@@ -94,11 +94,7 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
-    public boolean isMoving() {
-        return isMoving;
-    }
-
-    public void movingFinish() {
+    private void movingFinish() {
         isMoving = false;
         isRunning = false;
     }
@@ -110,10 +106,6 @@ public abstract class PageAnimation {
         isRunning = true;
         isMoving = true;
         mView.invalidate();
-    }
-
-    public Direction getDirection() {
-        return mDirection;
     }
 
     public void setDirection(Direction direction) {
@@ -146,6 +138,12 @@ public abstract class PageAnimation {
             setTouchPoint(x, y);
 
             mView.postInvalidate();
+        } else if (isMoving) {
+            if (changePage()) {
+                mListener.changePage(mDirection);
+                setDirection(PageAnimation.Direction.NONE);
+            }
+            movingFinish();
         }
     }
 
@@ -230,6 +228,8 @@ public abstract class PageAnimation {
         void drawContent(Canvas canvas, float offset);
 
         void drawBackground(Canvas canvas);
+
+        void changePage(Direction direction);
     }
 
 }
