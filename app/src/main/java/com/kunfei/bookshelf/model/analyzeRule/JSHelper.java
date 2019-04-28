@@ -16,7 +16,7 @@ class JSHelper {
     // 参考 新方圆 参数调整
     // https://github.com/qiusunshine/movienow/blob/master/core/parser/JSEngine.java
     // line486: private Object argsNativeObjectAdjust(Object input)
-    static Object UnWrapFromJS(Object o){
+    Object UnWrapFromJS(Object o){
         if(o instanceof ConsString){
             return String.valueOf(o);
         }
@@ -42,7 +42,7 @@ class JSHelper {
         return o;
     }
 
-    static Object WrapForJS(Object o){
+    Object WrapForJS(Object o){
         if(o instanceof Elements){
             return String.valueOf(o);
         }
