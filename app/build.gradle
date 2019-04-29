@@ -39,7 +39,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.myConfig
-            buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -47,7 +46,6 @@ android {
             signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
             versionNameSuffix 'debug'
-            buildConfigField "boolean", "IS_RELEASE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -89,6 +87,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
+
+    //JS
     implementation 'io.apisense:rhino-android:1.0'
 
     //GreenDao
