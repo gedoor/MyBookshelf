@@ -498,7 +498,7 @@ public abstract class PageLoader {
      */
     public boolean updateBattery(int level) {
         if (mBatteryLevel == level) {
-            return true;
+            return false;
         }
         mBatteryLevel = level;
         if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
@@ -510,7 +510,7 @@ public abstract class PageLoader {
             mPageView.invalidate();
             return true;
         }
-        return true;
+        return false;
     }
 
     /**
