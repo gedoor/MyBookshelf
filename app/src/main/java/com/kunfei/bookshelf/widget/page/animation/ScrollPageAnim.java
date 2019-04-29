@@ -57,6 +57,7 @@ public class ScrollPageAnim extends PageAnimation {
                 // 进行刷新
                 mView.postInvalidate();
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
@@ -81,16 +82,9 @@ public class ScrollPageAnim extends PageAnimation {
                     startAnim();
                 }
                 // 删除检测器
-                mVelocity.recycle();
-                mVelocity = null;
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-                try {
-                    mVelocity.recycle(); // if velocityTracker won't be used should be recycled
+                if (mVelocity != null) {
+                    mVelocity.recycle();
                     mVelocity = null;
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
                 break;
         }
