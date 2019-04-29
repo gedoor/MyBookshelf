@@ -87,6 +87,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
+
+    //JS
     implementation 'io.apisense:rhino-android:1.0'
 
     //GreenDao
