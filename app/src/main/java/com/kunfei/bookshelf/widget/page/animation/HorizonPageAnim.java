@@ -17,7 +17,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
     Bitmap mNextBitmap;
     //是否取消翻页
     boolean isCancel = false;
-
     private boolean touchInit = false;
     //可以使用 mLast代替
     private int mMoveX = 0;
@@ -156,6 +155,15 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 touchInit = false;
                 isRunning = false;
                 if (!isMove) {
+                    if (mCenterRect.contains(x, y)) {
+                        mListener.clickCenter();
+                        return;
+                    }
+
+                    if (!readBookControl.getCanClickTurn()) {
+                        return;
+                    }
+
                     isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
 
                     if (isNext) {

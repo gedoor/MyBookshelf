@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.FileHelp;
@@ -42,16 +40,9 @@ public class PageView extends View {
     private int mViewHeight = 0; // 当前View的高
     private int statusBarHeight = 0; //状态栏高度
 
-    private int mStartX = 0;
-    private int mStartY = 0;
-    private boolean isMove = false;
     private boolean actionFromEdge = false;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    // 是否允许点击
-    private boolean canTouch = true;
-    // 唤醒菜单的区域
-    private RectF mCenterRect = null;
     private boolean isPrepare;
     // 动画类
     private PageAnimation mPageAnim;
@@ -90,6 +81,13 @@ public class PageView extends View {
         public void changePage(PageAnimation.Direction direction) {
             mPageLoader.pagingEnd(direction);
         }
+
+        @Override
+        public void clickCenter() {
+            if (mTouchListener != null) {
+                mTouchListener.center();
+            }
+        }
     };
 
     public PageView(Context context) {
@@ -115,9 +113,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             mPageLoader.prepareDisplay(width, height);
         }
-        //设置中间区域范围
-        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
-                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
+
     }
 
     //设置翻页的模式
@@ -295,59 +291,21 @@ public class PageView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         if (mPageAnim == null) return true;
-        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) return true;
         if (actionFromEdge) {
             if (event.getAction() == MotionEvent.ACTION_UP)
                 actionFromEdge = false;
             return true;
         }
 
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
-                    actionFromEdge = true;
-                    return true;
-                }
-                mStartX = x;
-                mStartY = y;
-                isMove = false;
-                canTouch = mTouchListener.onTouch();
-                mPageAnim.onTouchEvent(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                // 判断是否大于最小滑动值。
-                int slop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-                if (!isMove) {
-                    isMove = Math.abs(mStartX - event.getX()) > slop || Math.abs(mStartY - event.getY()) > slop;
-                }
-
-                // 如果滑动了，则进行翻页。
-                if (isMove) {
-                    mPageAnim.onTouchEvent(event);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if (!isMove) {
-                    //是否点击了中间
-                    if (mCenterRect.contains(x, y)) {
-                        if (mTouchListener != null) {
-                            mTouchListener.center();
-                        }
-                        return true;
-                    }
-
-                    if (!readBookControl.getCanClickTurn() || isRunning()) {
-                        return true;
-                    }
-
-                    if (mPageAnim instanceof ScrollPageAnim && readBookControl.disableScrollClickTurn()) {
-                        return true;
-                    }
-                }
-                mPageAnim.onTouchEvent(event);
-                break;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
+                actionFromEdge = true;
+                return true;
+            }
+            mTouchListener.onTouch();
+            mPageAnim.onTouchEvent(event);
+        } else {
+            mPageAnim.onTouchEvent(event);
         }
         return true;
     }
@@ -445,7 +403,7 @@ public class PageView extends View {
     }
 
     public interface TouchListener {
-        boolean onTouch();
+        void onTouch();
 
         void center();
     }
