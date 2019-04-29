@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 10000 + gitCommits
         versionName version
@@ -69,7 +69,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
-    testImplementation 'junit:junit:4.12'
 
     //fireBase
     implementation 'com.google.firebase:firebase-core:16.0.8'

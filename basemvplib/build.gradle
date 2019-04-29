@@ -27,7 +27,7 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.13-beta-2'
+    testApi 'junit:junit:4.13-beta-2'
 
     //support
     api 'androidx.core:core:1.1.0-alpha05'
