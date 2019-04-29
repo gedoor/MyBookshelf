@@ -42,7 +42,6 @@ android {
             buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            multiDexEnabled = true
         }
         debug {
             signingConfig signingConfigs.myConfig
@@ -51,7 +50,6 @@ android {
             buildConfigField "boolean", "IS_RELEASE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            multiDexEnabled = true
         }
         android.applicationVariants.all { variant ->
             variant.outputs.all {
@@ -67,6 +65,7 @@ android {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13-beta-2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
@@ -97,7 +96,8 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     //codecMD5
-    implementation 'commons-codec:commons-codec:20041127.091804'
+    //noinspection GradleDependency
+    implementation 'commons-codec:commons-codec:1.12'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
