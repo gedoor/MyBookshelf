@@ -39,7 +39,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.myConfig
-            buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -47,7 +46,6 @@ android {
             signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
             versionNameSuffix 'debug'
-            buildConfigField "boolean", "IS_RELEASE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
