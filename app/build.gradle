@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 10000 + gitCommits
         versionName version
@@ -42,14 +42,16 @@ android {
             buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexEnabled = true
         }
         debug {
             signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
-            versionNameSuffix ' debug'
+            versionNameSuffix 'debug'
             buildConfigField "boolean", "IS_RELEASE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexEnabled = true
         }
         android.applicationVariants.all { variant ->
             variant.outputs.all {
@@ -75,14 +77,14 @@ dependencies {
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.1.0-alpha04'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
     implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
     //J_SOUP
@@ -96,18 +98,18 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     //codecMD5
-    implementation 'commons-codec:commons-codec:1.11'
+    implementation 'commons-codec:commons-codec:20041127.091804'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     //bind view
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     //webServer
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
@@ -132,7 +134,7 @@ dependencies {
     implementation 'net.ricecode:string-similarity:1.0.0'
 
     //MarkDown
-    implementation 'ru.noties.markwon:core:3.0.0'
+    implementation 'ru.noties.markwon:core:3.0.1'
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
