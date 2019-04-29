@@ -809,11 +809,9 @@ public abstract class PageLoader {
                 txtPage = mNextChapter.getPage(0);
             }
         }
-        if (txtChapter != null) {
-            if (bitmap != null)
-                drawBackground(bitmap, txtChapter, txtPage);
-                drawContent(bitmap, txtChapter, txtPage);
-        }
+        if (bitmap != null)
+            drawBackground(bitmap, txtChapter, txtPage);
+        drawContent(bitmap, txtChapter, txtPage);
     }
 
     /**

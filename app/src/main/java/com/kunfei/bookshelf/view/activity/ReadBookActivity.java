@@ -708,9 +708,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         );
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
-            public boolean onTouch() {
+            public void onTouch() {
                 screenOffTimerStart();
-                return true;
             }
 
             @Override
