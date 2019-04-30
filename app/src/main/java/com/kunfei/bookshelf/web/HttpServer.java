@@ -47,6 +47,9 @@ public class HttpServer extends NanoHTTPD {
                         case "/saveSources":
                             returnData =  new SourceController().saveSources(postData);
                             break;
+                        case "/saveBook":
+                            returnData = new BookshelfController().saveBook(postData);
+                            break;
                     }
                     break;
 

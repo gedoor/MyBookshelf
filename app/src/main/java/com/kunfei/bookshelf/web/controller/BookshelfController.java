@@ -8,6 +8,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.web.utils.ReturnData;
 
 import java.util.List;
@@ -60,5 +61,14 @@ public class BookshelfController {
         }
     }
 
+    public ReturnData saveBook(String postData) {
+        BookShelfBean bookShelfBean = GsonUtils.parseJObject(postData, BookShelfBean.class);
+        ReturnData returnData = new ReturnData();
+        if (bookShelfBean != null) {
+            DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            return returnData.setData("");
+        }
+        return returnData.setErrorMsg("格式不对");
+    }
 
 }
