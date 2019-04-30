@@ -46,6 +46,6 @@ public class TextChapterRuleActivity extends MBaseActivity<TextChapterRuleContra
 
     @Override
     public Snackbar getSnackBar(String msg, int length) {
-        return null;
+        return Snackbar.make(llContent, msg, length);
     }
 }
