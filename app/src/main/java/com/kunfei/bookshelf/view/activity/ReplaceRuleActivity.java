@@ -8,6 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
@@ -30,12 +37,6 @@ import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.FilePicker;
@@ -53,7 +54,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.recycler_view)
-    RecyclerView recyclerViewBookSource;
+    RecyclerView recyclerView;
 
     private MoDialogHUD moDialogHUD;
     private ReplaceRuleAdapter adapter;
@@ -95,14 +96,14 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void initRecyclerView() {
-        recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReplaceRuleAdapter(this);
-        recyclerViewBookSource.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
