@@ -66,7 +66,7 @@ public class HttpServer extends NanoHTTPD {
                         case "/getChapterList":
                             returnData = new BookshelfController().getChapterList(parameters);
                             break;
-                        case "getBookContent":
+                        case "/getBookContent":
                             returnData = new BookshelfController().getBookContent(parameters);
                             break;
                     }
