@@ -6,14 +6,11 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -183,14 +180,8 @@ public class PageLoaderNet extends PageLoader {
     }
 
     @Override
-    protected String getChapterContent(ChapterListBean chapter) throws Exception {
-        @SuppressLint("DefaultLocale")
-        File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
-                chapter.getDurChapterIndex(), chapter.getDurChapterName());
-        if (!file.exists()) return null;
-
-        byte[] contentByte = DocumentHelper.getBytes(file);
-        return new String(contentByte, StandardCharsets.UTF_8);
+    protected String getChapterContent(ChapterListBean chapter) {
+        return BookshelfHelp.getChapterCache(bookShelfBean, chapter);
     }
 
     @SuppressLint("DefaultLocale")

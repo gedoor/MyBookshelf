@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.web;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.web.controller.BookshelfController;
 import com.kunfei.bookshelf.web.controller.SourceController;
 import com.kunfei.bookshelf.web.utils.AssetsWeb;
 import com.kunfei.bookshelf.web.utils.ReturnData;
@@ -58,6 +59,15 @@ public class HttpServer extends NanoHTTPD {
                             break;
                         case "/getSources":
                             returnData = new SourceController().getSources();
+                            break;
+                        case "/getBookshelf":
+                            returnData = new BookshelfController().getBookshelf();
+                            break;
+                        case "/getChapterList":
+                            returnData = new BookshelfController().getChapterList(parameters);
+                            break;
+                        case "getBookContent":
+                            returnData = new BookshelfController().getBookContent(parameters);
                             break;
                     }
                     break;

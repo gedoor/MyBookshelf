@@ -654,7 +654,7 @@ public abstract class PageLoader {
     public abstract void refreshChapterList();
 
     /**
-     * 获取章节的文本流
+     * 获取章节的文本
      */
     protected abstract String getChapterContent(ChapterListBean chapter) throws Exception;
 
