@@ -70,10 +70,4 @@
         android:summary="长按文字在操作菜单中显示阅读·搜索"
         android:title="文字操作显示搜索" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="true"
-        android:key="behaviorMain"
-        android:summary="@string/behavior_main_s"
-        android:title="@string/behavior_main_t" />
-
 </PreferenceScreen>

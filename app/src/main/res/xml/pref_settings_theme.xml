@@ -20,6 +20,12 @@
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="true"
+        android:key="behaviorMain"
+        android:summary="@string/behavior_main_s"
+        android:title="@string/behavior_main_t" />
+
     <Preference
         android:key="defaultTheme"
         android:summary="@string/restore_default_theme"
