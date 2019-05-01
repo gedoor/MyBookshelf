@@ -86,7 +86,7 @@ public class ReadBookControl {
         updateReaderSettings();
     }
 
-    public void updateReaderSettings() {
+    void updateReaderSettings() {
         this.hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = preferences.getBoolean("hide_navigation_bar", false);
         this.indent = preferences.getInt("indent", 2);

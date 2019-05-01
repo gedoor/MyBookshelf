@@ -1336,7 +1336,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         screenOffTimerStart();
         if (mPageLoader != null) {
             if (!mPageLoader.updateBattery(BatteryUtil.getLevel(this))) {
-                pageView.invalidate();
+                mPageLoader.updateTime();
             }
         }
         if (showCheckPermission && mPresenter.getOpen_from() == ReadBookPresenter.OPEN_FROM_OTHER && PermissionUtils.checkMorePermissions(this, MApplication.PerList).isEmpty()) {
