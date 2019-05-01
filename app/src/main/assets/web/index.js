@@ -229,7 +229,7 @@ dQuery('.menu').addEventListener('click', e => {
 				let saveRule = [rule2json()];
 				let sResult = await HttpPost(`/saveSources`, saveRule);
 				if (sResult.isSuccess) {
-					let sKey = '我的';
+					let sKey = DebugKey.value ? DebugKey.value : '我的';
 					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
 					let ws = new WebSocket(`ws://${wsHost[0]}:${parseInt(wsHost[1]) + 1}/sourceDebug`);
 					ws.onopen = () => {

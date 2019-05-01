@@ -112,6 +112,12 @@ textarea {
 	padding: 5px;
 	overflow-y: auto;
 }
+.tabbody>*>.inputbox{
+	border: 0;
+	border-bottom: #A9A9A9 solid 1px;
+	height: 15px;
+	text-align:center;
+}
 .link>* {
 	display: flex;
 	margin: 5px;
