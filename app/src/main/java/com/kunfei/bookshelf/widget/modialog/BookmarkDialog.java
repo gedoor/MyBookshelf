@@ -60,25 +60,23 @@ public class BookmarkDialog {
     }
 
     public BookmarkDialog setPositiveButton(CallBack callBack) {
-        builder.setPositiveButton("确认", (dialog, which) -> {
-            tvChapterName.setOnClickListener(v -> {
-                callBack.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
-                dialog.dismiss();
-            });
-            tvOk.setOnClickListener(v -> {
-                bookmarkBean.setContent(tvContent.getText().toString());
-                callBack.saveBookmark(bookmarkBean);
-                dialog.dismiss();
-            });
-            tvSave.setOnClickListener(v -> {
-                bookmarkBean.setContent(tvContent.getText().toString());
-                callBack.saveBookmark(bookmarkBean);
-                dialog.dismiss();
-            });
-            tvDel.setOnClickListener(v -> {
-                callBack.delBookmark(bookmarkBean);
-                dialog.dismiss();
-            });
+        tvChapterName.setOnClickListener(v -> {
+            callBack.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
+            dialog.dismiss();
+        });
+        tvOk.setOnClickListener(v -> {
+            bookmarkBean.setContent(tvContent.getText().toString());
+            callBack.saveBookmark(bookmarkBean);
+            dialog.dismiss();
+        });
+        tvSave.setOnClickListener(v -> {
+            bookmarkBean.setContent(tvContent.getText().toString());
+            callBack.saveBookmark(bookmarkBean);
+            dialog.dismiss();
+        });
+        tvDel.setOnClickListener(v -> {
+            callBack.delBookmark(bookmarkBean);
+            dialog.dismiss();
         });
         return this;
     }
