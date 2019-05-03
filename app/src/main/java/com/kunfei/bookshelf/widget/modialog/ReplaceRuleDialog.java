@@ -37,7 +37,7 @@ public class ReplaceRuleDialog {
         this.replaceRuleBean = replaceRuleBean;
         this.bookShelfBean = bookShelfBean;
         builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.mo_dialog_replace_rule, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_replace_rule, null);
         bindView(view);
         builder.setView(view);
         builder.setTitle(context.getString(R.string.replace_rule_edit));

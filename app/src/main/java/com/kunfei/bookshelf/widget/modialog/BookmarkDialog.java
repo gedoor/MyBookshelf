@@ -34,7 +34,7 @@ public class BookmarkDialog {
         this.context = context;
         this.bookmarkBean = bookmarkBean;
         builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.mo_dialog_bookmark, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_bookmark, null);
         bindView(view);
         builder.setView(view);
         tvChapterName.setText(bookmarkBean.getChapterName());
