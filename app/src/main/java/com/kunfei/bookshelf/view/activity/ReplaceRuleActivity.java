@@ -115,7 +115,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
-        ReplaceRuleDialog.builder(this, replaceRuleBean)
+        ReplaceRuleDialog.builder(this, replaceRuleBean, bookShelfBean)
                 .setPositiveButton(replaceRuleBean1 ->
                         ReplaceRuleManager.saveData(replaceRuleBean1)
                                 .subscribe(new MySingleObserver<Boolean>() {
