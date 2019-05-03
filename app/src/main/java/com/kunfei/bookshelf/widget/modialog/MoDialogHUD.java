@@ -285,22 +285,6 @@ public class MoDialogHUD {
     }
 
     /**
-     * 离线下载
-     */
-    public void showDownloadList(int startIndex, int endIndex, int all, DownLoadView.OnClickDownload clickDownload) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        DownLoadView.getInstance(mSharedView)
-                .showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
      * 换源
      */
     public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
