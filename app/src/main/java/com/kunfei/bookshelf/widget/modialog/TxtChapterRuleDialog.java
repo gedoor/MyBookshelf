@@ -5,8 +5,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import androidx.appcompat.app.AlertDialog;
+import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
@@ -16,8 +15,9 @@ public class TxtChapterRuleDialog {
 
     private ATEEditText tieRuleName;
     private ATEEditText tieRuleRegex;
+    private TextView tvOk;
 
-    private AlertDialog.Builder builder;
+    private BaseDialog dialog;
     private TxtChapterRuleBean txtChapterRuleBean;
 
     public static TxtChapterRuleDialog builder(Context context, TxtChapterRuleBean txtChapterRuleBean) {
@@ -28,13 +28,16 @@ public class TxtChapterRuleDialog {
         if (txtChapterRuleBean != null) {
             this.txtChapterRuleBean = txtChapterRuleBean.copy();
         }
-        builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_txt_chpater_rule, null);
+        bindView(view);
+        dialog.setContentView(view);
+    }
+
+    private void bindView(View view) {
         tieRuleName = view.findViewById(R.id.tie_rule_name);
         tieRuleRegex = view.findViewById(R.id.tie_rule_regex);
-        builder.setView(view);
-        builder.setTitle(context.getString(R.string.txt_chapter_regex));
-        builder.setNegativeButton(R.string.cancel, null);
+        tvOk = view.findViewById(R.id.tv_ok);
         if (txtChapterRuleBean != null) {
             tieRuleName.setText(txtChapterRuleBean.getName());
             tieRuleRegex.setText(txtChapterRuleBean.getRule());
@@ -42,7 +45,7 @@ public class TxtChapterRuleDialog {
     }
 
     public TxtChapterRuleDialog setPositiveButton(CallBack callBack) {
-        builder.setPositiveButton("确认", (dialog, which) -> {
+        tvOk.setOnClickListener(v -> {
             if (txtChapterRuleBean == null) {
                 txtChapterRuleBean = new TxtChapterRuleBean();
             }
@@ -61,7 +64,7 @@ public class TxtChapterRuleDialog {
     }
 
     public TxtChapterRuleDialog show() {
-        builder.show();
+        dialog.show();
         return this;
     }
 
