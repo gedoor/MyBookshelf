@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -40,6 +41,7 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
@@ -52,6 +54,7 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.bar.BarHide;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;
 import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
@@ -454,7 +457,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void openReplaceRule() {
                 popMenuOut();
-                ReplaceRuleActivity.startThis(ReadBookActivity.this);
+                ReplaceRuleActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf());
             }
 
             @Override
@@ -928,19 +931,20 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setTextChapterRegex() {
         if (mPresenter.getBookShelf().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-            final String regex = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
-            moDialogHUD.showInputBox(getString(R.string.text_chapter_list_rule),
-                    regex,
-                    null,
-                    (inputText -> {
-                        if (!Objects.equals(regex, inputText)) {
-                            mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(inputText);
-                            mPresenter.saveProgress();
-                            if (mPageLoader != null) {
-                                mPageLoader.updateChapter();
-                            }
+            AlertDialog dialog = new AlertDialog.Builder(this, R.style.alertDialogTheme)
+                    .setTitle("选择目录正则")
+                    .setSingleChoiceItems(TxtChapterRuleManager.enabledNameList().toArray(new String[0]), 0, (dialog1, which) -> {
+                        if (which < 0) return;
+                        mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(TxtChapterRuleManager.getEnabled().get(which).getRule());
+                        mPresenter.saveProgress();
+                        if (mPageLoader != null) {
+                            mPageLoader.updateChapter();
                         }
-                    }));
+                        dialog1.dismiss();
+                    })
+                    .setPositiveButton("管理正则", (dialog12, which) -> TxtChapterRuleActivity.startThis(ReadBookActivity.this))
+                    .show();
+            ATH.setAlertDialogTint(dialog);
         }
     }
 

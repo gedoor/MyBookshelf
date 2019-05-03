@@ -524,7 +524,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
                     break;
                 case R.id.action_replace_rule:
-                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
+                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this, null), 200);
                     break;
                 case R.id.action_download:
                     handler.postDelayed(() -> DownloadActivity.startThis(this), 200);

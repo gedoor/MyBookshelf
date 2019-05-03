@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    app:cardBackgroundColor="@color/background_card">
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+            android:id="@+id/til_rule_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="名称">
+
+            <com.kunfei.bookshelf.widget.views.ATEEditText
+                android:id="@+id/tie_rule_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3" />
+        </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+        <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+            android:id="@+id/til_rule_regex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="正则">
+
+            <com.kunfei.bookshelf.widget.views.ATEEditText
+                android:id="@+id/tie_rule_regex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3" />
+        </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
