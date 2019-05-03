@@ -10,8 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-
 import com.kunfei.bookshelf.R;
 
 public class DownLoadDialog {
@@ -20,8 +18,7 @@ public class DownLoadDialog {
     private EditText edtEnd;
     private TextView tvCancel;
     private TextView tvDownload;
-    private AlertDialog dialog;
-    private AlertDialog.Builder builder;
+    private BaseDialog dialog;
 
     public static DownLoadDialog builder(Context context, int startIndex, int endIndex, final int all) {
         return new DownLoadDialog(context, startIndex, endIndex, all);
@@ -29,10 +26,10 @@ public class DownLoadDialog {
 
     private DownLoadDialog(Context context, int startIndex, int endIndex, final int all) {
         this.context = context;
-        builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_download_choice, null);
         bindView(view, startIndex, endIndex, all);
-        builder.setView(view);
+        dialog.setContentView(view);
     }
 
     private void bindView(View view, int startIndex, int endIndex, final int all) {
@@ -124,7 +121,7 @@ public class DownLoadDialog {
     }
 
     public DownLoadDialog show() {
-        dialog = builder.show();
+        dialog.show();
         return this;
     }
 

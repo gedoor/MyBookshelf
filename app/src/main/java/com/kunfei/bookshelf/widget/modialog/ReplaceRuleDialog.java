@@ -6,8 +6,8 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -23,8 +23,9 @@ public class ReplaceRuleDialog {
     private AppCompatEditText tieReplaceTo;
     private AppCompatEditText tieUseTo;
     private CheckBox cbUseRegex;
+    private TextView tvOk;
 
-    private AlertDialog.Builder builder;
+    private BaseDialog dialog;
     private ReplaceRuleBean replaceRuleBean;
     private BookShelfBean bookShelfBean;
 
@@ -36,12 +37,10 @@ public class ReplaceRuleDialog {
         this.context = context;
         this.replaceRuleBean = replaceRuleBean;
         this.bookShelfBean = bookShelfBean;
-        builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_replace_rule, null);
         bindView(view);
-        builder.setView(view);
-        builder.setTitle(context.getString(R.string.replace_rule_edit));
-        builder.setNegativeButton(R.string.cancel, null);
+        dialog.setContentView(view);
     }
 
     private void bindView(View view) {
@@ -61,6 +60,7 @@ public class ReplaceRuleDialog {
         tieReplaceTo = view.findViewById(R.id.tie_replace_to);
         tieUseTo = view.findViewById(R.id.tie_use_to);
         cbUseRegex = view.findViewById(R.id.cb_use_regex);
+        tvOk = view.findViewById(R.id.tv_ok);
         if (replaceRuleBean != null) {
             tieReplaceSummary.setText(replaceRuleBean.getReplaceSummary());
             tieReplaceTo.setText(replaceRuleBean.getReplacement());
@@ -78,7 +78,7 @@ public class ReplaceRuleDialog {
     }
 
     public ReplaceRuleDialog setPositiveButton(CallBack callBack) {
-        builder.setPositiveButton("确认", (dialog, which) -> {
+        tvOk.setOnClickListener(v -> {
             replaceRuleBean.setReplaceSummary(getEditableText(tieReplaceSummary.getText()));
             replaceRuleBean.setRegex(getEditableText(tieReplaceRule.getText()));
             replaceRuleBean.setIsRegex(cbUseRegex.isChecked());
@@ -97,7 +97,7 @@ public class ReplaceRuleDialog {
     }
 
     public ReplaceRuleDialog show() {
-        builder.show();
+        dialog.show();
         return this;
     }
 

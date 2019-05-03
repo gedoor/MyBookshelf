@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.widget.modialog;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.R;
@@ -20,8 +20,7 @@ public class BookmarkDialog {
     private EditText tvContent;
     private View llEdit;
     private View tvOk;
-    private AlertDialog dialog;
-    private AlertDialog.Builder builder;
+    private Dialog dialog;
     private BookmarkBean bookmarkBean;
     private View tvSave;
     private View tvDel;
@@ -33,10 +32,10 @@ public class BookmarkDialog {
     private BookmarkDialog(Context context, @NonNull BookmarkBean bookmarkBean, boolean isAdd) {
         this.context = context;
         this.bookmarkBean = bookmarkBean;
-        builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_bookmark, null);
         bindView(view);
-        builder.setView(view);
+        dialog.setContentView(view);
         tvChapterName.setText(bookmarkBean.getChapterName());
         tvContent.setText(bookmarkBean.getContent());
         if (isAdd) {
@@ -82,7 +81,7 @@ public class BookmarkDialog {
     }
 
     public BookmarkDialog show() {
-        dialog = builder.show();
+        dialog.show();
         return this;
     }
 
