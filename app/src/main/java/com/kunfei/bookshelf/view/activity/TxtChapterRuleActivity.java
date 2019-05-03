@@ -126,7 +126,7 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     }
 
     public void editChapterRule(TxtChapterRuleBean txtChapterRuleBean) {
-        new TxtChapterRuleDialog(this, txtChapterRuleBean)
+        TxtChapterRuleDialog.builder(this, txtChapterRuleBean)
                 .setPositiveButton(txtChapterRuleBean1 -> {
                     if (txtChapterRuleBean != null) {
                         TxtChapterRuleManager.del(txtChapterRuleBean);

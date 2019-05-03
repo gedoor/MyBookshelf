@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 
 /**
@@ -328,22 +327,6 @@ public class MoDialogHUD {
         rootView.setOnClickListener(v -> dismiss());
         InputView.getInstance(mSharedView)
                 .showInputView(onInputOk, this, title, defaultValue, adapterValues);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 编辑替换规则
-     */
-    public void showPutReplaceRule(ReplaceRuleBean replaceRuleBean, EditReplaceRuleView.OnSaveReplaceRule onSaveReplaceRule) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        EditReplaceRuleView.getInstance(mSharedView)
-                .showEditReplaceRule(replaceRuleBean, onSaveReplaceRule, this);
         if (!isShowing()) {
             onAttached();
         }

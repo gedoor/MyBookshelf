@@ -20,8 +20,11 @@ public class TxtChapterRuleDialog {
     private AlertDialog.Builder builder;
     private TxtChapterRuleBean txtChapterRuleBean;
 
+    public static TxtChapterRuleDialog builder(Context context, TxtChapterRuleBean txtChapterRuleBean) {
+        return new TxtChapterRuleDialog(context, txtChapterRuleBean);
+    }
 
-    public TxtChapterRuleDialog(Context context, TxtChapterRuleBean txtChapterRuleBean) {
+    private TxtChapterRuleDialog(Context context, TxtChapterRuleBean txtChapterRuleBean) {
         if (txtChapterRuleBean != null) {
             this.txtChapterRuleBean = txtChapterRuleBean.copy();
         }

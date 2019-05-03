@@ -37,6 +37,7 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+import com.kunfei.bookshelf.widget.modialog.ReplaceRuleDialog;
 
 import java.util.List;
 
@@ -114,14 +115,15 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
-        moDialogHUD.showPutReplaceRule(replaceRuleBean, ruleBean ->
-                ReplaceRuleManager.saveData(ruleBean)
-                        .subscribe(new MySingleObserver<Boolean>() {
-                            @Override
-                            public void onSuccess(Boolean aBoolean) {
-                                refresh();
-                            }
-                        }));
+        ReplaceRuleDialog.builder(this, replaceRuleBean)
+                .setPositiveButton(replaceRuleBean1 ->
+                        ReplaceRuleManager.saveData(replaceRuleBean1)
+                                .subscribe(new MySingleObserver<Boolean>() {
+                                    @Override
+                                    public void onSuccess(Boolean aBoolean) {
+                                        refresh();
+                                    }
+                                })).show();
     }
 
     public void upDateSelectAll() {
