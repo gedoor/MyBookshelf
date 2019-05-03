@@ -61,8 +61,8 @@ import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
 import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
+import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
 import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
-import com.kunfei.bookshelf.widget.modialog.EditBookmarkView;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageView;
@@ -836,22 +836,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 bookmarkBean.setPageIndex(mPresenter.getBookShelf().getDurChapterPage());
                 bookmarkBean.setChapterName(mPresenter.getBookShelf().getDurChapterName());
             }
-            moDialogHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
-                @Override
-                public void saveBookmark(BookmarkBean bookmarkBean) {
-                    mPresenter.saveBookmark(bookmarkBean);
-                }
+            BookmarkDialog.builder(this, bookmarkBean, isAdd)
+                    .setPositiveButton(new BookmarkDialog.CallBack() {
+                        @Override
+                        public void saveBookmark(BookmarkBean bookmarkBean) {
+                            mPresenter.saveBookmark(bookmarkBean);
+                        }
 
-                @Override
-                public void delBookmark(BookmarkBean bookmarkBean) {
-                    mPresenter.delBookmark(bookmarkBean);
-                }
+                        @Override
+                        public void delBookmark(BookmarkBean bookmarkBean) {
+                            mPresenter.delBookmark(bookmarkBean);
+                        }
 
-                @Override
-                public void openChapter(int chapterIndex, int pageIndex) {
-                    skipToChapter(chapterIndex, pageIndex);
-                }
-            });
+                        @Override
+                        public void openChapter(int chapterIndex, int pageIndex) {
+                            skipToChapter(chapterIndex, pageIndex);
+                        }
+                    }).show();
         }
 
     }
