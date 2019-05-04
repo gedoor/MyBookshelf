@@ -227,9 +227,9 @@ public class PageLoaderText extends PageLoader {
     private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
         chapterPatterns.clear();
         if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
-            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
-        } else {
             chapterPatterns.addAll(TxtChapterRuleManager.enabledNameList());
+        } else {
+            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
         }
         //首先获取128k的数据
         byte[] buffer = new byte[BUFFER_SIZE / 4];
