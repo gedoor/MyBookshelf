@@ -52,6 +52,7 @@ public class TxtChapterRuleDialog {
             txtChapterRuleBean.setName(getEditableText(tieRuleName.getText()));
             txtChapterRuleBean.setRule(getEditableText(tieRuleRegex.getText()));
             callBack.onPositiveButton(txtChapterRuleBean);
+            dialog.dismiss();
         });
         return this;
     }
