@@ -13,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 
 /**
@@ -277,23 +276,6 @@ public class MoDialogHUD {
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
         mSharedView.showAssetMarkdown(assetFileName);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 换源
-     */
-    public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        ChangeSourceView changeSourceView = ChangeSourceView.getInstance(mSharedView);
-        changeSourceView.showChangeSource(bookShelf, clickSource, this);
-        dismissListener = changeSourceView::onDestroy;
         if (!isShowing()) {
             onAttached();
         }

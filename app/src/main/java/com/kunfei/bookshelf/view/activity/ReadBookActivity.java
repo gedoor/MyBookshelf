@@ -62,6 +62,7 @@ import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
 import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
 import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.page.PageLoader;
@@ -878,12 +879,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            moDialogHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
-                if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
-                    mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
-                    mPresenter.changeBookSource(searchBookBean);
-                }
-            });
+            ChangeSourceDialog.builder(this, mPresenter.getBookShelf())
+                    .setCallBack(searchBookBean -> {
+                        if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                            mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+                            mPresenter.changeBookSource(searchBookBean);
+                        }
+                    }).show();
         }
     }
 

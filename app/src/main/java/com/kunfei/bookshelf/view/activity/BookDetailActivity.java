@@ -37,6 +37,7 @@ import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
 import com.kunfei.bookshelf.widget.CoverImageView;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
@@ -258,19 +259,20 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
         });
 
-        tvChangeOrigin.setOnClickListener(view -> moDialogHUD.showChangeSource(mPresenter.getBookShelf(),
-                searchBookBean -> {
-                    tvOrigin.setText(searchBookBean.getOrigin());
-                    tvLoading.setVisibility(View.VISIBLE);
-                    tvLoading.setText(R.string.loading);
-                    tvLoading.setOnClickListener(null);
-                    if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
-                        mPresenter.changeBookSource(searchBookBean);
-                    } else {
-                        mPresenter.initBookFormSearch(searchBookBean);
-                        mPresenter.getBookShelfInfo();
-                    }
-                }));
+        tvChangeOrigin.setOnClickListener(view ->
+                ChangeSourceDialog.builder(BookDetailActivity.this, mPresenter.getBookShelf())
+                        .setCallBack(searchBookBean -> {
+                            tvOrigin.setText(searchBookBean.getOrigin());
+                            tvLoading.setVisibility(View.VISIBLE);
+                            tvLoading.setText(R.string.loading);
+                            tvLoading.setOnClickListener(null);
+                            if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
+                                mPresenter.changeBookSource(searchBookBean);
+                            } else {
+                                mPresenter.initBookFormSearch(searchBookBean);
+                                mPresenter.getBookShelfInfo();
+                            }
+                        }).show());
 
         tvRead.setOnClickListener(v -> {
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);

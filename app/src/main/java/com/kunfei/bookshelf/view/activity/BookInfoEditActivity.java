@@ -31,6 +31,7 @@ import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
@@ -151,11 +152,12 @@ public class BookInfoEditActivity extends MBaseActivity {
         super.bindEvent();
         tvSelectCover.setOnClickListener(view -> selectCover());
         tvChangeCover.setOnClickListener(view ->
-                moDialogHUD.showChangeSource(book, searchBookBean -> {
-                    tieCoverUrl.setText(searchBookBean.getCoverUrl());
-                    book.setCustomCoverPath(tieCoverUrl.getText().toString());
-                    initCover();
-                }));
+                ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
+                        .setCallBack(searchBookBean -> {
+                            tieCoverUrl.setText(searchBookBean.getCoverUrl());
+                            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                            initCover();
+                        }).show());
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();

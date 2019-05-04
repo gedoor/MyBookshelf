@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
+import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.view.adapter.ChangeSourceAdapter;
@@ -47,21 +50,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Created by GKF on 2018/1/17.
- * 换源
- */
-
-public class ChangeSourceView {
-    public static SavedSource savedSource = new SavedSource();
+public class ChangeSourceDialog {
+    private Context context;
     private TextView atvTitle;
     private ImageButton ibtStop;
     private SearchView searchView;
     private RefreshRecyclerView rvSource;
-    private MoDialogHUD moProgressHUD;
-    private MoDialogView moProgressView;
-    private OnClickSource onClickSource;
-    private Context context;
     private Handler handler = new Handler(Looper.getMainLooper());
     private ChangeSourceAdapter adapter;
     private SearchBookModel searchBookModel;
@@ -71,17 +65,70 @@ public class ChangeSourceView {
     private String bookAuthor;
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
+    private CallBack callBack;
+    private BaseDialog dialog;
+
+    public static ChangeSourceDialog builder(Context context, BookShelfBean bookShelfBean) {
+        return new ChangeSourceDialog(context, bookShelfBean);
+    }
+
+    private ChangeSourceDialog(Context context, BookShelfBean bookShelf) {
+        this.context = context;
+        this.book = bookShelf;
+        compositeDisposable = new CompositeDisposable();
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_change_source, null);
+        bindView(view);
+        dialog.setContentView(view);
+        initData();
+    }
+
+    private void bindView(View view) {
+        View llContent = view.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
+        searchView = view.findViewById(R.id.searchView);
+        atvTitle = view.findViewById(R.id.atv_title);
+        ibtStop = view.findViewById(R.id.ibt_stop);
+        rvSource = view.findViewById(R.id.rf_rv_change_source);
+        ibtStop.setVisibility(View.INVISIBLE);
+
+        rvSource.setBaseRefreshListener(this::reSearchBook);
+        ibtStop.setOnClickListener(v -> stopChangeSource());
+        searchView.onActionViewExpanded();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (StringUtils.isTrimEmpty(newText)) {
+                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
+                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor))
+                            .build().list();
+                    adapter.reSetSourceAdapter();
+                    adapter.addAllSourceAdapter(searchBookBeans);
+                } else {
+                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
+                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor), SearchBookBeanDao.Properties.Origin.like("%" + searchView.getQuery().toString() + "%"))
+                            .build().list();
+                    adapter.reSetSourceAdapter();
+                    adapter.addAllSourceAdapter(searchBookBeans);
+                }
+                return false;
+            }
+        });
+    }
 
     @SuppressLint("InflateParams")
-    private ChangeSourceView(MoDialogView moProgressView) {
-        this.moProgressView = moProgressView;
-        this.context = moProgressView.getContext();
-        bindView();
+    private void initData() {
         adapter = new ChangeSourceAdapter(false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
-            moProgressHUD.dismiss();
-            onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
+            dialog.dismiss();
+            callBack.changeSource(adapter.getSearchBookBeans().get(index));
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
             final String url = adapter.getSearchBookBeans().get(pos).getTag();
@@ -159,40 +206,41 @@ public class ChangeSourceView {
             }
         };
         searchBookModel = new SearchBookModel(searchListener);
-    }
-
-    public static ChangeSourceView getInstance(MoDialogView moProgressView) {
-        return new ChangeSourceView(moProgressView);
-    }
-
-    void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoDialogHUD moProgressHUD) {
-        this.moProgressHUD = moProgressHUD;
-        this.onClickSource = onClickSource;
-        compositeDisposable = new CompositeDisposable();
-        book = bookShelf;
-        bookTag = bookShelf.getTag();
-        bookName = bookShelf.getBookInfoBean().getName();
-        bookAuthor = bookShelf.getBookInfoBean().getAuthor();
-        shelfLastChapter = BookshelfHelp.guessChapterNum(bookShelf.getLastChapterName());
+        bookTag = book.getTag();
+        bookName = book.getBookInfoBean().getName();
+        bookAuthor = book.getBookInfoBean().getAuthor();
+        shelfLastChapter = BookshelfHelp.guessChapterNum(book.getLastChapterName());
         atvTitle.setText(String.format("%s (%s)", bookName, bookAuthor));
         rvSource.startRefresh();
-        getSearchBookInDb(bookShelf);
+        getSearchBookInDb(book);
         RxBus.get().register(this);
+        dialog.setOnDismissListener(dialog -> {
+            RxBus.get().unregister(ChangeSourceDialog.this);
+            compositeDisposable.dispose();
+            if (searchBookModel != null) {
+                searchBookModel.onDestroy();
+            }
+        });
     }
 
-    private void stopChangeSource() {
-        compositeDisposable.dispose();
-        if (searchBookModel != null) {
-            searchBookModel.stopSearch();
-        }
+    public ChangeSourceDialog setCallBack(CallBack callBack) {
+        this.callBack = callBack;
+        return this;
     }
 
-    void onDestroy() {
-        RxBus.get().unregister(this);
-        compositeDisposable.dispose();
-        if (searchBookModel != null) {
-            searchBookModel.onDestroy();
+    private String getEditableText(Editable editable) {
+        if (editable == null) {
+            return "";
         }
+        return editable.toString();
+    }
+
+    public ChangeSourceDialog show() {
+        dialog.show();
+        WindowManager.LayoutParams params = Objects.requireNonNull(dialog.getWindow()).getAttributes();
+        params.height = ScreenUtils.getAppSize()[1] - 60;
+        dialog.getWindow().setAttributes(params);
+        return this;
     }
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {
@@ -311,48 +359,6 @@ public class ChangeSourceView {
         }
     }
 
-    private void bindView() {
-        moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.mo_dialog_change_source, moProgressView, true);
-
-        View llContent = moProgressView.findViewById(R.id.ll_content);
-        llContent.setOnClickListener(null);
-        searchView = moProgressView.findViewById(R.id.searchView);
-        atvTitle = moProgressView.findViewById(R.id.atv_title);
-        ibtStop = moProgressView.findViewById(R.id.ibt_stop);
-        rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
-        ibtStop.setVisibility(View.INVISIBLE);
-
-        rvSource.setBaseRefreshListener(this::reSearchBook);
-        ibtStop.setOnClickListener(v -> stopChangeSource());
-        searchView.onActionViewExpanded();
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (StringUtils.isTrimEmpty(newText)) {
-                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
-                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor))
-                            .build().list();
-                    adapter.reSetSourceAdapter();
-                    adapter.addAllSourceAdapter(searchBookBeans);
-                } else {
-                    List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
-                            .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor), SearchBookBeanDao.Properties.Origin.like("%" + searchView.getQuery().toString() + "%"))
-                            .build().list();
-                    adapter.reSetSourceAdapter();
-                    adapter.addAllSourceAdapter(searchBookBeans);
-                }
-                return false;
-            }
-        });
-    }
-
     private int compareSearchBooks(SearchBookBean s1, SearchBookBean s2) {
         boolean s1tag = s1.getTag().equals(bookTag);
         boolean s2tag = s2.getTag().equals(bookTag);
@@ -369,46 +375,15 @@ public class ChangeSourceView {
         return Integer.compare(s2.getWeight(), s1.getWeight());
     }
 
-    /**
-     * 换源确定
-     */
-    public interface OnClickSource {
-        void changeSource(SearchBookBean searchBookBean);
+    private void stopChangeSource() {
+        compositeDisposable.dispose();
+        if (searchBookModel != null) {
+            searchBookModel.stopSearch();
+        }
     }
 
-    public static class SavedSource {
-        String bookName;
-        long saveTime;
-        BookSourceBean bookSource;
-
-        SavedSource() {
-            this.bookName = "";
-            saveTime = 0;
-        }
-
-        public String getBookName() {
-            return this.bookName;
-        }
-
-        public void setBookName(String bookName) {
-            this.bookName = bookName;
-        }
-
-        public long getSaveTime() {
-            return saveTime;
-        }
-
-        public void setSaveTime(long saveTime) {
-            this.saveTime = saveTime;
-        }
-
-        public BookSourceBean getBookSource() {
-            return bookSource;
-        }
-
-        public void setBookSource(BookSourceBean bookSource) {
-            this.bookSource = bookSource;
-        }
+    public interface CallBack {
+        void changeSource(SearchBookBean searchBookBean);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UP_SEARCH_BOOK)})
