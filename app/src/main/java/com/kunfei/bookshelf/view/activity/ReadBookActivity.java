@@ -64,6 +64,7 @@ import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
 import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageView;
@@ -911,10 +912,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setCharset() {
         final String charset = mPresenter.getBookShelf().getBookInfoBean().getCharset();
-        moDialogHUD.showInputBox(getString(R.string.input_charset),
-                charset,
-                new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"},
-                (inputText -> {
+        InputDialog.builder(this)
+                .setTitle(getString(R.string.input_charset))
+                .setDefaultValue(charset)
+                .setAdapterValues(new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"})
+                .setCallBack(inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
                         mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
@@ -923,7 +925,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             mPageLoader.updateChapter();
                         }
                     }
-                }));
+                }).show();
     }
 
     /**

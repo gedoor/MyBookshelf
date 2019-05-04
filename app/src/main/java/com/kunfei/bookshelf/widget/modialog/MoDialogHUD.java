@@ -282,22 +282,6 @@ public class MoDialogHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    /**
-     * 弹出输入框
-     */
-    public void showInputBox(String title, String defaultValue, String[] adapterValues, InputView.OnInputOk onInputOk) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        InputView.getInstance(mSharedView)
-                .showInputView(onInputOk, this, title, defaultValue, adapterValues);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
     public void showImageText(Bitmap bitmap, String text) {
         initCenter();
         initAnimation();

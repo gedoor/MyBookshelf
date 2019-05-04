@@ -36,6 +36,7 @@ import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.modialog.ReplaceRuleDialog;
 
@@ -185,14 +186,15 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 break;
             case R.id.action_import_onLine:
                 String cacheUrl = ACache.get(this).getAsString("replaceUrl");
-                moDialogHUD.showInputBox(getString(R.string.input_replace_url),
-                        cacheUrl,
-                        new String[]{cacheUrl},
-                        inputText -> {
+                InputDialog.builder(this)
+                        .setTitle(getString(R.string.input_replace_url))
+                        .setDefaultValue(cacheUrl)
+                        .setAdapterValues(new String[]{cacheUrl})
+                        .setCallBack(inputText -> {
                             inputText = StringUtils.trim(inputText);
                             ACache.get(this).put("replaceUrl", inputText);
                             mPresenter.importDataS(inputText);
-                        });
+                        }).show();
                 break;
             case R.id.action_del_all:
                 mPresenter.delData(adapter.getData());
