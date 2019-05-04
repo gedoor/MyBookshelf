@@ -32,13 +32,16 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
@@ -71,6 +74,7 @@ import com.kunfei.bookshelf.widget.page.PageView;
 import com.kunfei.bookshelf.widget.page.TxtChapter;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -933,11 +937,40 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setTextChapterRegex() {
         if (mPresenter.getBookShelf().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+            int checkedItem = 0;
+            List<TxtChapterRuleBean> ruleBeanList = TxtChapterRuleManager.getEnabled();
+            List<String> ruleNameList = new ArrayList<>();
+            String rule = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
+            if (!TextUtils.isEmpty(rule)) {
+                TxtChapterRuleBean ruleBean = DbHelper.getDaoSession().getTxtChapterRuleBeanDao().queryBuilder()
+                        .where(TxtChapterRuleBeanDao.Properties.Rule.eq(rule))
+                        .limit(1).unique();
+                if (ruleBean != null) {
+                    if (!ruleBean.getEnable()) {
+                        ruleBeanList.add(ruleBean);
+                        checkedItem = ruleBeanList.size() - 1;
+                    } else {
+                        checkedItem = ruleBeanList.indexOf(ruleBean);
+                    }
+                } else {
+                    ruleBean = new TxtChapterRuleBean();
+                    ruleBean.setName(rule);
+                    ruleBean.setRule(rule);
+                    ruleBeanList.add(ruleBean);
+                    checkedItem = ruleBeanList.size() - 1;
+                }
+            }
+            for (TxtChapterRuleBean bean : ruleBeanList) {
+                ruleNameList.add(bean.getName());
+            }
+            if (checkedItem < 0) {
+                checkedItem = 0;
+            }
             AlertDialog dialog = new AlertDialog.Builder(this, R.style.alertDialogTheme)
                     .setTitle("选择目录正则")
-                    .setSingleChoiceItems(TxtChapterRuleManager.enabledNameList().toArray(new String[0]), 0, (dialog1, which) -> {
+                    .setSingleChoiceItems(ruleNameList.toArray(new String[0]), checkedItem, (dialog1, which) -> {
                         if (which < 0) return;
-                        mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(TxtChapterRuleManager.getEnabled().get(which).getRule());
+                        mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(ruleBeanList.get(which).getRule());
                         mPresenter.saveProgress();
                         if (mPageLoader != null) {
                             mPageLoader.updateChapter();

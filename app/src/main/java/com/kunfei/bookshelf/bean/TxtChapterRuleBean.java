@@ -1,9 +1,13 @@
 package com.kunfei.bookshelf.bean;
 
+import androidx.annotation.Nullable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.OrderBy;
+
+import java.util.Objects;
 
 @Entity
 public class TxtChapterRuleBean {
@@ -26,6 +30,14 @@ public class TxtChapterRuleBean {
 
     @Generated(hash = 382733400)
     public TxtChapterRuleBean() {
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof TxtChapterRuleBean) {
+            return Objects.equals(this.name, ((TxtChapterRuleBean) obj).name);
+        }
+        return false;
     }
 
     public TxtChapterRuleBean copy() {

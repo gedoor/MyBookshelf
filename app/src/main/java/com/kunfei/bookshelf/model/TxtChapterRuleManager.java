@@ -27,19 +27,21 @@ public class TxtChapterRuleManager {
         return beans;
     }
 
-    public static List<String> enabledNameList() {
+    public static List<String> enabledRuleList() {
         List<TxtChapterRuleBean> beans = getEnabled();
-        List<String> nameList = new ArrayList<>();
+        List<String> ruleList = new ArrayList<>();
         for (TxtChapterRuleBean chapterRuleBean : beans) {
-            nameList.add(chapterRuleBean.getName());
+            ruleList.add(chapterRuleBean.getRule());
         }
-        return nameList;
+        return ruleList;
     }
 
     public static TxtChapterRuleBean getDefault() {
         TxtChapterRuleBean txtChapterRuleBean = new TxtChapterRuleBean();
+        txtChapterRuleBean.setSerialNumber(0);
         txtChapterRuleBean.setName("默认正则");
         txtChapterRuleBean.setRule("^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$");
+        save(txtChapterRuleBean);
         return txtChapterRuleBean;
     }
 
@@ -61,6 +63,6 @@ public class TxtChapterRuleManager {
     }
 
     public static void save(List<TxtChapterRuleBean> txtChapterRuleBeans) {
-
+        DbHelper.getDaoSession().getTxtChapterRuleBeanDao().insertOrReplaceInTx(txtChapterRuleBeans);
     }
 }

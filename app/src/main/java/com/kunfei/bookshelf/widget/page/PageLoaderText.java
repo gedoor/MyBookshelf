@@ -227,7 +227,7 @@ public class PageLoaderText extends PageLoader {
     private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
         chapterPatterns.clear();
         if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
-            chapterPatterns.addAll(TxtChapterRuleManager.enabledNameList());
+            chapterPatterns.addAll(TxtChapterRuleManager.enabledRuleList());
         } else {
             chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
         }
