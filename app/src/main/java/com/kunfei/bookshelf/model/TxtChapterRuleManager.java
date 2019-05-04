@@ -12,7 +12,7 @@ public class TxtChapterRuleManager {
     public static List<TxtChapterRuleBean> getAll() {
         List<TxtChapterRuleBean> beans = DbHelper.getDaoSession().getTxtChapterRuleBeanDao().loadAll();
         if (beans.isEmpty()) {
-            beans.add(getDefault());
+            return getDefault();
         }
         return beans;
     }
@@ -22,7 +22,7 @@ public class TxtChapterRuleManager {
                 .where(TxtChapterRuleBeanDao.Properties.Enable.eq(true))
                 .list();
         if (beans.isEmpty()) {
-            beans.add(getDefault());
+            return getAll();
         }
         return beans;
     }
@@ -36,13 +36,40 @@ public class TxtChapterRuleManager {
         return ruleList;
     }
 
-    public static TxtChapterRuleBean getDefault() {
-        TxtChapterRuleBean txtChapterRuleBean = new TxtChapterRuleBean();
-        txtChapterRuleBean.setSerialNumber(0);
-        txtChapterRuleBean.setName("默认正则");
-        txtChapterRuleBean.setRule("^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$");
-        save(txtChapterRuleBean);
-        return txtChapterRuleBean;
+    public static List<TxtChapterRuleBean> getDefault() {
+        List<TxtChapterRuleBean> ruleBeanList = new ArrayList<>();
+        TxtChapterRuleBean ruleBean1 = new TxtChapterRuleBean();
+        ruleBean1.setSerialNumber(0);
+        ruleBean1.setName("默认正则1");
+        ruleBean1.setRule("^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$");
+        ruleBeanList.add(ruleBean1);
+        TxtChapterRuleBean ruleBean2 = new TxtChapterRuleBean();
+        ruleBean2.setSerialNumber(1);
+        ruleBean2.setName("默认正则2");
+        ruleBean2.setRule("^([0-9]{1,5})([\\,\\.，-])(.{1,20})$");
+        ruleBeanList.add(ruleBean2);
+        TxtChapterRuleBean ruleBean3 = new TxtChapterRuleBean();
+        ruleBean3.setSerialNumber(2);
+        ruleBean3.setName("默认正则3");
+        ruleBean3.setRule("^(\\s{0,4})([\\(【《]?(卷)?)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([\\.:： \f\t])(.{0,30})$");
+        ruleBeanList.add(ruleBean3);
+        TxtChapterRuleBean ruleBean4 = new TxtChapterRuleBean();
+        ruleBean4.setSerialNumber(3);
+        ruleBean4.setName("默认正则4");
+        ruleBean4.setRule("^(\\s{0,4})([\\(（【《])(.{0,30})([\\)）】》])(\\s{0,2})$");
+        ruleBeanList.add(ruleBean4);
+        TxtChapterRuleBean ruleBean5 = new TxtChapterRuleBean();
+        ruleBean5.setSerialNumber(4);
+        ruleBean5.setName("默认正则5");
+        ruleBean5.setRule("^(\\s{0,4})(正文)(.{0,20})$");
+        ruleBeanList.add(ruleBean5);
+        TxtChapterRuleBean ruleBean6 = new TxtChapterRuleBean();
+        ruleBean6.setSerialNumber(5);
+        ruleBean6.setName("默认正则6");
+        ruleBean6.setRule("^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$");
+        ruleBeanList.add(ruleBean6);
+        DbHelper.getDaoSession().getTxtChapterRuleBeanDao().insertOrReplaceInTx(ruleBeanList);
+        return ruleBeanList;
     }
 
     public static void del(TxtChapterRuleBean txtChapterRuleBean) {
