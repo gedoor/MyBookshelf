@@ -35,8 +35,8 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private String name; //小说名
     private String tag;
     @Id
-    private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
-    private String chapterUrl;  //章节目录地址
+    private String noteUrl;  //如果是来源网站,则小说根地址,如果是本地则是小说本地MD5
+    private String chapterUrl;  //章节目录地址,本地目录正则
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
     private String author;//作者
