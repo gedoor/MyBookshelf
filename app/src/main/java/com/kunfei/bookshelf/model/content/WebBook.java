@@ -16,10 +16,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.WS_PATTERN;
 
 /**
  * 默认检索规则
@@ -132,8 +134,15 @@ public class WebBook extends BaseModelImpl {
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, tag);
-            if (bookSourceBean.getRuleBookContent().startsWith("$") && !bookSourceBean.getRuleBookContent().startsWith("$.")) {
-                return getAjaxString(analyzeUrl, tag)
+            String contentRule = bookSourceBean.getRuleBookContent();
+            if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
+                contentRule = contentRule.substring(1);
+                String ts = null;
+                Matcher tsMatcher = WS_PATTERN.matcher(contentRule);
+                if (tsMatcher.find()) {
+                    ts = tsMatcher.group().substring(4, tsMatcher.group().lastIndexOf("<"));
+                }
+                return getAjaxString(analyzeUrl, tag, ts)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)

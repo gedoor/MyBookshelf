@@ -18,9 +18,12 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
+
+import static com.kunfei.bookshelf.constant.AppConstant.WS_PATTERN;
 
 class BookContent {
     private String tag;
@@ -33,6 +36,10 @@ class BookContent {
         ruleBookContent = bookSourceBean.getRuleBookContent();
         if (ruleBookContent.startsWith("$") && !ruleBookContent.startsWith("$.")) {
             ruleBookContent = ruleBookContent.substring(1);
+            Matcher tsMatcher = WS_PATTERN.matcher(ruleBookContent);
+            if (tsMatcher.find()) {
+                ruleBookContent = ruleBookContent.replace(tsMatcher.group(), "");
+            }
         }
     }
 
