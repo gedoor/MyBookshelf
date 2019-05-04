@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -226,13 +225,6 @@ public class ChangeSourceDialog {
     public ChangeSourceDialog setCallBack(CallBack callBack) {
         this.callBack = callBack;
         return this;
-    }
-
-    private String getEditableText(Editable editable) {
-        if (editable == null) {
-            return "";
-        }
-        return editable.toString();
     }
 
     public ChangeSourceDialog show() {

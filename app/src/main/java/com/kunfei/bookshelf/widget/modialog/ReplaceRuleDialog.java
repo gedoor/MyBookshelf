@@ -85,6 +85,7 @@ public class ReplaceRuleDialog {
             replaceRuleBean.setReplacement(getEditableText(tieReplaceTo.getText()));
             replaceRuleBean.setUseTo(getEditableText(tieUseTo.getText()));
             callBack.onPositiveButton(replaceRuleBean);
+            dialog.dismiss();
         });
         return this;
     }

@@ -8,12 +8,15 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
@@ -30,18 +33,19 @@ public class DataRestore {
     }
 
     public Boolean run() {
-        String dirPath = FileUtils.getSdCardPath() + "/YueDu";
+        String dirPath = FileUtils.getSdCardPath() + File.separator + "YueDu";
         restoreConfig(dirPath);
         restoreBookSource(dirPath);
         restoreBookShelf(dirPath);
         restoreSearchHistory(dirPath);
         restoreReplaceRule(dirPath);
+        restoreTxtChapterRule(dirPath);
         return true;
     }
 
     private void restoreConfig(String dirPath) {
         Map<String, ?> entries = null;
-        try (FileInputStream ins = new FileInputStream(dirPath + "/config.xml")) {
+        try (FileInputStream ins = new FileInputStream(dirPath + File.separator + "config.xml")) {
             entries = XmlUtils.readMapXml(ins);
         } catch (Exception ignored) {
         }
@@ -118,5 +122,13 @@ public class DataRestore {
         List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
         if (replaceRuleBeans == null) return;
         ReplaceRuleManager.addDataS(replaceRuleBeans);
+    }
+
+    private void restoreTxtChapterRule(String file) {
+        String json = DocumentHelper.readString("myTxtChapterRule.json", file);
+        if (json == null) return;
+        List<TxtChapterRuleBean> ruleBeanList = GsonUtils.parseJArray(json, TxtChapterRuleBean.class);
+        if (ruleBeanList == null) return;
+        TxtChapterRuleManager.save(ruleBeanList);
     }
 }
