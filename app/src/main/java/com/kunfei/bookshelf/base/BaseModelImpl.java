@@ -131,10 +131,12 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl, String jsStr) {
-        String js = "document.documentElement.outerHTML";
+    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl, String js) {
+        final Web web = new Web("加载超时");
+        if (!TextUtils.isEmpty(js)) {
+            web.js = js;
+        }
         return Observable.create(e -> {
-            final Html html = new Html("加载超时");
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 Runnable timeoutRunnable;
@@ -145,10 +147,10 @@ public class BaseModelImpl {
                 Runnable retryRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        webView.evaluateJavascript(js, value -> {
-                            html.content = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(html.content)) {
-                                e.onNext(html.content);
+                        webView.evaluateJavascript(web.js, value -> {
+                            web.content = StringEscapeUtils.unescapeJson(value);
+                            if (isLoadFinish(web.content)) {
+                                e.onNext(web.content);
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
@@ -161,7 +163,7 @@ public class BaseModelImpl {
                 timeoutRunnable = () -> {
                     if (!e.isDisposed()) {
                         handler.removeCallbacks(retryRunnable);
-                        e.onNext(html.content);
+                        e.onNext(web.content);
                         e.onComplete();
                         webView.destroy();
                     }
@@ -194,10 +196,11 @@ public class BaseModelImpl {
         return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
     }
 
-    private class Html {
+    private class Web {
         private String content;
+        private String js = "document.documentElement.outerHTML";
 
-        Html(String content) {
+        Web(String content) {
             this.content = content;
         }
     }
