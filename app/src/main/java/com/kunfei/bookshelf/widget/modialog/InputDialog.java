@@ -2,23 +2,20 @@ package com.kunfei.bookshelf.widget.modialog;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.Selector;
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.widget.views.ATEAutoCompleteTextView;
 
 /**
  * 输入框
  */
 public class InputDialog {
     private TextView tvTitle;
-    private AutoCompleteTextView etInput;
+    private ATEAutoCompleteTextView etInput;
     private TextView tvOk;
 
     private Context context;
@@ -64,11 +61,6 @@ public class InputDialog {
         tvTitle = view.findViewById(R.id.tv_title);
         etInput = view.findViewById(R.id.et_input);
         tvOk = view.findViewById(R.id.tv_ok);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            etInput.setBackgroundTintList(Selector.colorBuild().setFocusedColor(ThemeStore.accentColor(context)).create());
-        }
-
     }
 
     public InputDialog setCallBack(CallBack callBack) {

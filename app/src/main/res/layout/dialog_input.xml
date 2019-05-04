@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp" />
 
-        <AutoCompleteTextView
+        <com.kunfei.bookshelf.widget.views.ATEAutoCompleteTextView
             android:id="@+id/et_input"
             android:maxLines="5"
             android:layout_width="match_parent"
