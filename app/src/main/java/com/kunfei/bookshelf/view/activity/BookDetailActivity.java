@@ -188,6 +188,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             } else {
                 upImageView(bookInfoBean.getCoverUrl());
             }
+            if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                tvChangeOrigin.setVisibility(View.INVISIBLE);
+            } else {
+                tvChangeOrigin.setVisibility(View.VISIBLE);
+            }
             upChapterSizeTv();
         }
         tvLoading.setVisibility(View.GONE);
