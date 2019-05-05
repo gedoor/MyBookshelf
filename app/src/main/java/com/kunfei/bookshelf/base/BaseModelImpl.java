@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -148,8 +147,8 @@ public class BaseModelImpl {
                     @Override
                     public void run() {
                         webView.evaluateJavascript(web.js, value -> {
-                            web.content = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(web.content)) {
+                            if (!TextUtils.isEmpty(value)) {
+                                web.content = StringEscapeUtils.unescapeJson(value);
                                 e.onNext(web.content);
                                 e.onComplete();
                                 webView.destroy();
@@ -189,11 +188,6 @@ public class BaseModelImpl {
                 }
             });
         });
-    }
-
-    private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
-        value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
-        return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
     }
 
     private class Web {
