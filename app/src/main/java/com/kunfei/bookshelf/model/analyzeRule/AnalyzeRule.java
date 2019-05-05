@@ -190,7 +190,7 @@ public class AnalyzeRule {
 
     public String getString(String ruleStr, boolean isUrl) throws Exception {
         if (StringUtils.isTrimEmpty(ruleStr)) {
-            return null;
+            return StringUtils.formatHtml(String.valueOf(object));
         }
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);

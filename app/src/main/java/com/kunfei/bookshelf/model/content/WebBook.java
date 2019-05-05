@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import io.reactivex.Observable;
 
 import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.WS_PATTERN;
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 
 /**
  * 默认检索规则
@@ -137,12 +137,17 @@ public class WebBook extends BaseModelImpl {
             String contentRule = bookSourceBean.getRuleBookContent();
             if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
                 contentRule = contentRule.substring(1);
-                String ts = null;
-                Matcher tsMatcher = WS_PATTERN.matcher(contentRule);
-                if (tsMatcher.find()) {
-                    ts = tsMatcher.group().substring(4, tsMatcher.group().lastIndexOf("<"));
+                String js = null;
+                Matcher jsMatcher = JS_PATTERN.matcher(contentRule);
+                if (jsMatcher.find()) {
+                    js = jsMatcher.group();
+                    if (js.startsWith("<js>")) {
+                        js = js.substring(4, js.lastIndexOf("<"));
+                    } else {
+                        js = js.substring(4);
+                    }
                 }
-                return getAjaxString(analyzeUrl, tag, ts)
+                return getAjaxString(analyzeUrl, tag, js)
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)

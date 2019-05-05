@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import io.reactivex.Observable;
 import retrofit2.Response;
 
-import static com.kunfei.bookshelf.constant.AppConstant.WS_PATTERN;
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 
 class BookContent {
     private String tag;
@@ -36,9 +36,9 @@ class BookContent {
         ruleBookContent = bookSourceBean.getRuleBookContent();
         if (ruleBookContent.startsWith("$") && !ruleBookContent.startsWith("$.")) {
             ruleBookContent = ruleBookContent.substring(1);
-            Matcher tsMatcher = WS_PATTERN.matcher(ruleBookContent);
-            if (tsMatcher.find()) {
-                ruleBookContent = ruleBookContent.replace(tsMatcher.group(), "");
+            Matcher jsMatcher = JS_PATTERN.matcher(ruleBookContent);
+            if (jsMatcher.find()) {
+                ruleBookContent = ruleBookContent.replace(jsMatcher.group(), "");
             }
         }
     }
