@@ -68,9 +68,6 @@ public class UrlEncoderUtils {
 
     /**
      * 判断c是否是16进制的字符
-     *
-     * @param c
-     * @return
      */
     private static boolean isDigit16Char(char c) {
         return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F');
