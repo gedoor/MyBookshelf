@@ -943,6 +943,7 @@ public abstract class PageLoader {
             canvas.drawRect(outFrame, mBatteryPaint);
 
             //绘制电量
+            mBatteryPaint.setStyle(Paint.Style.FILL);
             float batTipLeft = outFrameLeft + ScreenUtils.dpToPx(4);
             canvas.drawText(String.valueOf(mBatteryLevel), batTipLeft, tipBottomBot - 2, mBatteryPaint);
         }
