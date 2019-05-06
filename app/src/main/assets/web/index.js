@@ -152,8 +152,9 @@ dQueryAll('textarea').forEach((item) => { item.addEventListener('change', () => 
 // 处理按钮点击事件
 dQuery('.menu').addEventListener('click', e => {
 	let thisNode = e.target;
-	if (thisNode.nodeName == 'text') thisNode = thisNode.nextSibling;
-	if (thisNode && thisNode.nodeName == 'rect') { } else return;
+	thisNode = thisNode.parentNode.nodeName == 'svg' ? thisNode.parentNode.querySelector('rect') :
+		thisNode.nodeName == 'svg' ? thisNode.querySelector('rect') : null;
+	if (!thisNode) return;
 	if (thisNode.getAttribute('class') == 'busy') return;
 	thisNode.setAttribute('class', 'busy');
 	switch (thisNode.id) {
