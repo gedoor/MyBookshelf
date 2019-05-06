@@ -23,7 +23,7 @@ body {
 	width: 90px;
 	height: 30px;
 	min-height: 30px;
-	margin: 5px 0;
+	margin: 5px 0px;
 	cursor: pointer;
 }
 @keyframes stroker {
@@ -39,7 +39,7 @@ body {
 	height: 100%;
 	fill: transparent;
 	stroke: #666;
-	stroke-width: 3px;
+	stroke-width: 2px;
 }
 .button rect.busy {
 	stroke: #fD1850;

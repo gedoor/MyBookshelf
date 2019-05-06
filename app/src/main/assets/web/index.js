@@ -151,10 +151,12 @@ dQueryAll('input').forEach((item) => { item.addEventListener('change', () => { t
 dQueryAll('textarea').forEach((item) => { item.addEventListener('change', () => { todo() }) });
 // 处理按钮点击事件
 dQuery('.menu').addEventListener('click', e => {
-	if (e.target && e.target.nodeName == 'rect') { } else return;
-	if (e.target.getAttribute('class') == 'busy') return;
-	e.target.setAttribute('class', 'busy');
-	switch (e.target.id) {
+	let thisNode = e.target;
+	if (thisNode.nodeName == 'text') thisNode = thisNode.nextSibling;
+	if (thisNode && thisNode.nodeName == 'rect') { } else return;
+	if (thisNode.getAttribute('class') == 'busy') return;
+	thisNode.setAttribute('class', 'busy');
+	switch (thisNode.id) {
 		case 'push':
 			dQueryAll('#RuleList>label>div').forEach(item => { item.className = ''; });
 			(async () => {
@@ -180,7 +182,7 @@ dQuery('.menu').addEventListener('click', e => {
 						alert(`批量推送书源失败!\nErrorMsg: ${json.errorMsg}`);
 					}
 				}).catch(err => { alert(`批量推送书源失败,无法连接到「阅读APP」!\n${err}`); });
-				e.target.setAttribute('class', '');
+				thisNode.setAttribute('class', '');
 			})();
 			return;
 		case 'pull':
@@ -199,13 +201,18 @@ dQuery('.menu').addEventListener('click', e => {
 						alert(`批量拉取书源失败!\nErrorMsg: ${json.errorMsg}`);
 					}
 				}).catch(err => { alert(`批量拉取书源失败,无法连接到「阅读APP」!\n${err}`); });
-				e.target.setAttribute('class', '');
+				thisNode.setAttribute('class', '');
 			})();
 			return;
 		case 'editor':
 			if (dQuery('#RuleJsonString').value == '') break;
-			json2rule(JSON.parse(dQuery('#RuleJsonString').value));
-			todo();
+			try {
+				json2rule(JSON.parse(dQuery('#RuleJsonString').value));
+				todo();
+			} catch (error) {
+				console.log(error);
+				alert(error);
+			}
 			break;
 		case 'conver':
 			showTab('编辑书源');
@@ -243,11 +250,11 @@ dQuery('.menu').addEventListener('click', e => {
 						}
 					};
 					ws.onerror = (err) => { throw `${err.data}`; }
-					ws.onclose = () => { e.target.setAttribute('class', ''); }
+					ws.onclose = () => { thisNode.setAttribute('class', ''); }
 				} else throw `${sResult.errorMsg}`;
 			})().catch(err => {
 				DebugPrint(`调试过程意外中止，以下是详细错误信息:\n${err}`);
-				e.target.setAttribute('class', '');
+				thisNode.setAttribute('class', '');
 			});
 			return;
 		case 'accept':
@@ -257,12 +264,12 @@ dQuery('.menu').addEventListener('click', e => {
 					alert(json.isSuccess ? `书源《${saveRule[0].bookSourceName}》已成功保存到「阅读APP」` : `书源《${saveRule[0].bookSourceName}》保存失败!\nErrorMsg: ${json.errorMsg}`);
 					setRule(saveRule[0]);
 				}).catch(err => { alert(`保存书源失败,无法连接到「阅读APP」!\n${err}`); });
-				e.target.setAttribute('class', '');
+				thisNode.setAttribute('class', '');
 			})();
 			return;
 		default:
 	}
-	setTimeout(() => { e.target.setAttribute('class', ''); }, 500);
+	setTimeout(() => { thisNode.setAttribute('class', ''); }, 500);
 });
 
 // 列表规则更改事件
