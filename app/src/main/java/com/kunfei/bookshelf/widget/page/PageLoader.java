@@ -942,9 +942,11 @@ public abstract class PageLoader {
 
             //绘制电量
             mBatteryPaint.setStyle(Paint.Style.FILL);
+            Paint.FontMetrics fontMetrics = mBatteryPaint.getFontMetrics();
             String batteryLevel = String.valueOf(mBatteryLevel);
-            float batTipLeft = outFrameLeft + (outFrameWidth - mBatteryPaint.measureText(batteryLevel)) / 2;
-            canvas.drawText(batteryLevel, batTipLeft, tipBottomBot - oneSpPx, mBatteryPaint);
+            float batTextLeft = outFrameLeft + (outFrameWidth - mBatteryPaint.measureText(batteryLevel)) / 2;
+            float batTextBaseLine = tipBottomBot - outFrameHeight / 2f - fontMetrics.top / 2 - fontMetrics.bottom / 2;
+            canvas.drawText(batteryLevel, batTextLeft, batTextBaseLine, mBatteryPaint);
         }
     }
 
