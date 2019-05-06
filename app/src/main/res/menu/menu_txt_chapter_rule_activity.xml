@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.BookSourceActivity">
+
+    <item
+        android:id="@+id/action_add_replace_rule"
+        android:icon="@drawable/ic_add"
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_done_all_black"
+        android:title="@string/select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_replace_rule"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_onLine"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_replace_rule_on_line"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_del_all"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/del_all"
+        app:showAsAction="never" />
+
+</menu>

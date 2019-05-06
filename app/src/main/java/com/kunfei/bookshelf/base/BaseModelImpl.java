@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -131,10 +130,12 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl) {
-        String js = "document.documentElement.outerHTML";
+    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl, String js) {
+        final Web web = new Web("加载超时");
+        if (!TextUtils.isEmpty(js)) {
+            web.js = js;
+        }
         return Observable.create(e -> {
-            final Html html = new Html("加载超时");
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 Runnable timeoutRunnable;
@@ -145,10 +146,10 @@ public class BaseModelImpl {
                 Runnable retryRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        webView.evaluateJavascript(js, value -> {
-                            html.content = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(html.content)) {
-                                e.onNext(html.content);
+                        webView.evaluateJavascript(web.js, value -> {
+                            if (!TextUtils.isEmpty(value)) {
+                                web.content = StringEscapeUtils.unescapeJson(value);
+                                e.onNext(web.content);
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
@@ -161,12 +162,12 @@ public class BaseModelImpl {
                 timeoutRunnable = () -> {
                     if (!e.isDisposed()) {
                         handler.removeCallbacks(retryRunnable);
-                        e.onNext(html.content);
+                        e.onNext(web.content);
                         e.onComplete();
                         webView.destroy();
                     }
                 };
-                handler.postDelayed(timeoutRunnable, 25000);
+                handler.postDelayed(timeoutRunnable, 30000);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
@@ -189,15 +190,11 @@ public class BaseModelImpl {
         });
     }
 
-    private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
-        value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
-        return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
-    }
-
-    private class Html {
+    private class Web {
         private String content;
+        private String js = "document.documentElement.outerHTML";
 
-        Html(String content) {
+        Web(String content) {
             this.content = content;
         }
     }

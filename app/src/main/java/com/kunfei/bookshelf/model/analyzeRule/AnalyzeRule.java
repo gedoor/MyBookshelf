@@ -245,6 +245,9 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
         }
+        if (result == null) {
+            return new ArrayList<>();
+        }
         return (List<Object>) result;
     }
 

@@ -176,7 +176,7 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
-            android:name=".view.activity.TextChapterRuleActivity"
+            android:name=".view.activity.TxtChapterRuleActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
 

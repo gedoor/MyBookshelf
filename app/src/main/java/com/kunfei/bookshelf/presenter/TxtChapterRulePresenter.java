@@ -7,12 +7,13 @@ import androidx.documentfile.provider.DocumentFile;
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BasePresenterImpl;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
-import com.kunfei.bookshelf.base.observer.MySingleObserver;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
-import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
+import com.kunfei.bookshelf.presenter.contract.TxtChapterRuleContract;
 
 import java.io.File;
 import java.util.List;
@@ -24,12 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
-/**
- * Created by GKF on 2017/12/18.
- * 书源管理
- */
-
-public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
+public class TxtChapterRulePresenter extends BasePresenterImpl<TxtChapterRuleContract.View> implements TxtChapterRuleContract.Presenter {
 
     @Override
     public void detachView() {
@@ -37,14 +33,14 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
     }
 
     @Override
-    public void saveData(List<ReplaceRuleBean> replaceRuleBeans) {
+    public void saveData(List<TxtChapterRuleBean> txtChapterRuleBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             int i = 0;
-            for (ReplaceRuleBean replaceRuleBean : replaceRuleBeans) {
+            for (TxtChapterRuleBean ruleBean : txtChapterRuleBeans) {
                 i++;
-                replaceRuleBean.setSerialNumber(i + 1);
+                ruleBean.setSerialNumber(i + 1);
             }
-            ReplaceRuleManager.addDataS(replaceRuleBeans);
+            DbHelper.getDaoSession().getTxtChapterRuleBeanDao().insertOrReplaceInTx(txtChapterRuleBeans);
             e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -53,9 +49,9 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
     }
 
     @Override
-    public void delData(ReplaceRuleBean replaceRuleBean) {
+    public void delData(TxtChapterRuleBean txtChapterRuleBean) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            ReplaceRuleManager.delData(replaceRuleBean);
+            TxtChapterRuleManager.del(txtChapterRuleBean);
             e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -64,8 +60,8 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
                     @Override
                     public void onNext(Boolean replaceRuleBeans) {
                         mView.refresh();
-                        mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
-                                .setAction("恢复", view -> restoreData(replaceRuleBean))
+                        mView.getSnackBar(txtChapterRuleBean.getName() + "已删除", Snackbar.LENGTH_LONG)
+                                .setAction("恢复", view -> restoreData(txtChapterRuleBean))
                                 .setActionTextColor(Color.WHITE)
                                 .show();
                     }
@@ -78,9 +74,9 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
     }
 
     @Override
-    public void delData(List<ReplaceRuleBean> replaceRuleBeans) {
+    public void delData(List<TxtChapterRuleBean> txtChapterRuleBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            ReplaceRuleManager.delDataS(replaceRuleBeans);
+            TxtChapterRuleManager.del(txtChapterRuleBeans);
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,14 +94,9 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
                 });
     }
 
-    private void restoreData(ReplaceRuleBean replaceRuleBean) {
-        ReplaceRuleManager.saveData(replaceRuleBean)
-                .subscribe(new MySingleObserver<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean aBoolean) {
-                        mView.refresh();
-                    }
-                });
+    private void restoreData(TxtChapterRuleBean txtChapterRuleBean) {
+        TxtChapterRuleManager.save(txtChapterRuleBean);
+        mView.refresh();
     }
 
     @Override
