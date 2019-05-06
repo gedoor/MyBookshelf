@@ -8,12 +8,15 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +32,20 @@ public class DataRestore {
         return new DataRestore();
     }
 
-    public Boolean run() throws Exception {
-        String dirPath = FileUtils.getSdCardPath() + "/YueDu";
+    public Boolean run() {
+        String dirPath = FileUtils.getSdCardPath() + File.separator + "YueDu";
         restoreConfig(dirPath);
         restoreBookSource(dirPath);
         restoreBookShelf(dirPath);
         restoreSearchHistory(dirPath);
         restoreReplaceRule(dirPath);
+        restoreTxtChapterRule(dirPath);
         return true;
     }
 
     private void restoreConfig(String dirPath) {
         Map<String, ?> entries = null;
-        try (FileInputStream ins = new FileInputStream(dirPath + "/config.xml")) {
+        try (FileInputStream ins = new FileInputStream(dirPath + File.separator + "config.xml")) {
             entries = XmlUtils.readMapXml(ins);
         } catch (Exception ignored) {
         }
@@ -81,44 +85,50 @@ public class DataRestore {
         MApplication.getInstance().initNightTheme();
     }
 
-    private void restoreBookShelf(String file) throws Exception {
+    private void restoreBookShelf(String file) {
         String json = DocumentHelper.readString("myBookShelf.json", file);
-        if (json != null) {
-            List<BookShelfBean> bookShelfList = GsonUtils.parseJArray(json, BookShelfBean.class);
-            for (BookShelfBean bookshelf : bookShelfList) {
-                if (bookshelf.getNoteUrl() != null) {
-                    DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
-                }
-                if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
-                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
-                }
+        if (json == null) return;
+        List<BookShelfBean> bookShelfList = GsonUtils.parseJArray(json, BookShelfBean.class);
+        if (bookShelfList == null) return;
+        for (BookShelfBean bookshelf : bookShelfList) {
+            if (bookshelf.getNoteUrl() != null) {
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+            }
+            if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
+                DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
             }
         }
     }
 
-    private void restoreBookSource(String file) throws Exception {
+    private void restoreBookSource(String file) {
         String json = DocumentHelper.readString("myBookSource.json", file);
-        if (json != null) {
-            List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(json, BookSourceBean.class);
-            BookSourceManager.addBookSource(bookSourceBeans);
-        }
+        if (json == null) return;
+        List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(json, BookSourceBean.class);
+        if (bookSourceBeans == null) return;
+        BookSourceManager.addBookSource(bookSourceBeans);
     }
 
-    private void restoreSearchHistory(String file) throws Exception {
+    private void restoreSearchHistory(String file) {
         String json = DocumentHelper.readString("myBookSearchHistory.json", file);
-        if (json != null) {
-            List<SearchHistoryBean> searchHistoryBeans = GsonUtils.parseJArray(json, SearchHistoryBean.class);
-            if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
-                DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
-            }
-        }
+        if (json == null) return;
+        List<SearchHistoryBean> searchHistoryBeans = GsonUtils.parseJArray(json, SearchHistoryBean.class);
+        if (searchHistoryBeans == null) return;
+        DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
     }
 
-    private void restoreReplaceRule(String file) throws Exception {
+    private void restoreReplaceRule(String file) {
         String json = DocumentHelper.readString("myBookReplaceRule.json", file);
-        if (json != null) {
-            List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
-            ReplaceRuleManager.addDataS(replaceRuleBeans);
-        }
+        if (json == null) return;
+        List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
+        if (replaceRuleBeans == null) return;
+        ReplaceRuleManager.addDataS(replaceRuleBeans);
+    }
+
+    private void restoreTxtChapterRule(String file) {
+        String json = DocumentHelper.readString("myTxtChapterRule.json", file);
+        if (json == null) return;
+        List<TxtChapterRuleBean> ruleBeanList = GsonUtils.parseJArray(json, TxtChapterRuleBean.class);
+        if (ruleBeanList == null) return;
+        TxtChapterRuleManager.save(ruleBeanList);
     }
 }

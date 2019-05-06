@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.page.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -37,6 +38,8 @@ public abstract class PageAnimation {
     //视图的尺寸
     int mViewWidth;
     int mViewHeight;
+    // 唤醒菜单的区域
+    RectF mCenterRect;
     //起始点
     float mStartX;
     float mStartY;
@@ -46,7 +49,6 @@ public abstract class PageAnimation {
     //上一个触碰点
     float mLastX;
     float mLastY;
-
     boolean isRunning = false;
     boolean isMoving = false;
 
@@ -68,6 +70,10 @@ public abstract class PageAnimation {
         mListener = listener;
 
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
+
+        //设置中间区域范围
+        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
+                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
     }
 
     public Scroller getScroller() {
@@ -94,11 +100,7 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
-    public boolean isMoving() {
-        return isMoving;
-    }
-
-    public void movingFinish() {
+    private void movingFinish() {
         isMoving = false;
         isRunning = false;
     }
@@ -109,11 +111,7 @@ public abstract class PageAnimation {
     public void startAnim() {
         isRunning = true;
         isMoving = true;
-        mView.postInvalidate();
-    }
-
-    public Direction getDirection() {
-        return mDirection;
+        mView.invalidate();
     }
 
     public void setDirection(Direction direction) {
@@ -146,6 +144,12 @@ public abstract class PageAnimation {
             setTouchPoint(x, y);
 
             mView.postInvalidate();
+        } else if (isMoving) {
+            if (changePage()) {
+                mListener.changePage(mDirection);
+                setDirection(PageAnimation.Direction.NONE);
+            }
+            movingFinish();
         }
     }
 
@@ -230,6 +234,10 @@ public abstract class PageAnimation {
         void drawContent(Canvas canvas, float offset);
 
         void drawBackground(Canvas canvas);
+
+        void changePage(Direction direction);
+
+        void clickCenter();
     }
 
 }

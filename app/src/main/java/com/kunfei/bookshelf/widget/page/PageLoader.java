@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Layout;
@@ -68,7 +67,7 @@ public abstract class PageLoader {
     private TxtChapter mNextChapter;
 
     // 绘制电池的画笔
-    private Paint mBatteryPaint;
+    private TextPaint mBatteryPaint;
     // 绘制提示的画笔(章节名称和时间)
     private TextPaint mTipPaint;
     private float pageOffset = 0;
@@ -287,9 +286,10 @@ public abstract class PageLoader {
         mTextEndPaint.setTextAlign(Paint.Align.CENTER);
 
         // 绘制电池的画笔
-        mBatteryPaint = new Paint();
+        mBatteryPaint = new TextPaint();
         mBatteryPaint.setAntiAlias(true);
         mBatteryPaint.setDither(true);
+        mBatteryPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE - 2));
 
         setupTextInterval();
         // 初始化页面样式
@@ -369,7 +369,8 @@ public abstract class PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
-        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()), mCurChapterPos, bookShelfBean.getChapter(mCurChapterPos).getDurChapterName());
+        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
+                mCurChapterPos, bookShelfBean.getChapter(mCurChapterPos).getDurChapterName());
         skipToChapter(mCurChapterPos, 0);
     }
 
@@ -498,7 +499,7 @@ public abstract class PageLoader {
      */
     public boolean updateBattery(int level) {
         if (mBatteryLevel == level) {
-            return true;
+            return false;
         }
         mBatteryLevel = level;
         if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
@@ -510,7 +511,7 @@ public abstract class PageLoader {
             mPageView.invalidate();
             return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -654,7 +655,7 @@ public abstract class PageLoader {
     public abstract void refreshChapterList();
 
     /**
-     * 获取章节的文本流
+     * 获取章节的文本
      */
     protected abstract String getChapterContent(ChapterListBean chapter) throws Exception;
 
@@ -809,11 +810,9 @@ public abstract class PageLoader {
                 txtPage = mNextChapter.getPage(0);
             }
         }
-        if (txtChapter != null) {
-            if (bitmap != null)
-                drawBackground(bitmap, txtChapter, txtPage);
-                drawContent(bitmap, txtChapter, txtPage);
-        }
+        if (bitmap != null)
+            drawBackground(bitmap, txtChapter, txtPage);
+        drawContent(bitmap, txtChapter, txtPage);
     }
 
     /**
@@ -918,14 +917,13 @@ public abstract class PageLoader {
             canvas.drawText(time, timeTipLeft, tipBottomBot, mTipPaint);
 
             //绘制电池
-            int outFrameWidth = (int) mTipPaint.measureText("xxx");
-            int outFrameHeight = (int) mTipPaint.getTextSize() - ScreenUtils.dpToPx(4);
+            int outFrameWidth = (int) mBatteryPaint.measureText("xxxx");
+            int outFrameHeight = (int) mBatteryPaint.getTextSize();
             int visibleBottom = mDisplayHeight - (tipMarginBottom - outFrameHeight) / 2;
 
             int polarHeight = ScreenUtils.dpToPx(4);
             int polarWidth = ScreenUtils.dpToPx(2);
-            int border = 1;
-            int innerMargin = 1;
+            int border = 2;
 
             //电极的制作
             int polarLeft = visibleRight - polarWidth;
@@ -944,17 +942,10 @@ public abstract class PageLoader {
             mBatteryPaint.setStrokeWidth(border);
             canvas.drawRect(outFrame, mBatteryPaint);
 
-            //内框的制作
-            float innerWidth = (outFrame.width() - innerMargin * 2 - border) * (mBatteryLevel / 100.0f);
-            RectF innerFrame = new RectF(outFrameLeft + border + innerMargin, outFrameTop + border + innerMargin,
-                    outFrameLeft + border + innerMargin + innerWidth, visibleBottom - border - innerMargin);
-
+            //绘制电量
             mBatteryPaint.setStyle(Paint.Style.FILL);
-            canvas.drawRect(innerFrame, mBatteryPaint);
-
-            String batLevel = mBatteryLevel + "%";
-            float batTipLeft = outFrameLeft - mTipPaint.measureText(batLevel) - ScreenUtils.dpToPx(4);
-            canvas.drawText(batLevel, batTipLeft, tipBottomBot, mTipPaint);
+            float batTipLeft = outFrameLeft + ScreenUtils.dpToPx(4);
+            canvas.drawText(String.valueOf(mBatteryLevel), batTipLeft, tipBottomBot - 2, mBatteryPaint);
         }
     }
 

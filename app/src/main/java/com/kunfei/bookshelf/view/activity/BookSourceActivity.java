@@ -38,6 +38,7 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.util.ArrayList;
@@ -397,14 +398,15 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-        moDialogHUD.showInputBox(getString(R.string.input_book_source_url),
-                cacheUrl,
-                new String[]{cacheUrl},
-                inputText -> {
+        InputDialog.builder(this)
+                .setDefaultValue(cacheUrl)
+                .setTitle(getString(R.string.input_book_source_url))
+                .setAdapterValues(new String[]{cacheUrl})
+                .setCallBack(inputText -> {
                     inputText = StringUtils.trim(inputText);
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
-                });
+                }).show();
     }
 
     private void selectFileSys() {

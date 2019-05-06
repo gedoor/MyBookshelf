@@ -56,6 +56,7 @@ import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.util.Arrays;
@@ -128,14 +129,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         String shared_url = preferences.getString("shared_url", "");
         assert shared_url != null;
         if (shared_url.length() > 1) {
-            moDialogHUD.showInputBox(getString(R.string.add_book_url),
-                    shared_url,
-                    null,
-                    inputText -> {
+            InputDialog.builder(this)
+                    .setTitle(getString(R.string.add_book_url))
+                    .setDefaultValue(shared_url)
+                    .setCallBack(inputText -> {
                         inputText = StringUtils.trim(inputText);
                         mPresenter.addBookUrl(inputText);
-                    });
-
+                    }).show();
             preferences.edit()
                     .putString("shared_url", "")
                     .apply();
@@ -412,13 +412,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 });
                 break;
             case R.id.action_add_url:
-                moDialogHUD.showInputBox(getString(R.string.add_book_url),
-                        null,
-                        null,
-                        inputText -> {
+                InputDialog.builder(this)
+                        .setTitle(getString(R.string.add_book_url))
+                        .setCallBack(inputText -> {
                             inputText = StringUtils.trim(inputText);
                             mPresenter.addBookUrl(inputText);
-                        });
+                        }).show();
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
@@ -524,7 +523,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
                     break;
                 case R.id.action_replace_rule:
-                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
+                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this, null), 200);
                     break;
                 case R.id.action_download:
                     handler.postDelayed(() -> DownloadActivity.startThis(this), 200);

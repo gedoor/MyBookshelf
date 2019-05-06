@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,13 +31,11 @@ import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -75,6 +77,7 @@ public class BookInfoEditActivity extends MBaseActivity {
     public static void startThis(Context context, String noteUrl) {
         Intent intent = new Intent(context, BookInfoEditActivity.class);
         intent.putExtra("noteUrl", noteUrl);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -149,11 +152,12 @@ public class BookInfoEditActivity extends MBaseActivity {
         super.bindEvent();
         tvSelectCover.setOnClickListener(view -> selectCover());
         tvChangeCover.setOnClickListener(view ->
-                moDialogHUD.showChangeSource(book, searchBookBean -> {
-                    tieCoverUrl.setText(searchBookBean.getCoverUrl());
-                    book.setCustomCoverPath(tieCoverUrl.getText().toString());
-                    initCover();
-                }));
+                ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
+                        .setCallBack(searchBookBean -> {
+                            tieCoverUrl.setText(searchBookBean.getCoverUrl());
+                            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                            initCover();
+                        }).show());
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();

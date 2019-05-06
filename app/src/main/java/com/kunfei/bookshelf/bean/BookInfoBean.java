@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -23,7 +24,6 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,8 +35,8 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private String name; //小说名
     private String tag;
     @Id
-    private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
-    private String chapterUrl;  //章节目录地址
+    private String noteUrl;  //如果是来源网站,则小说根地址,如果是本地则是小说本地MD5
+    private String chapterUrl;  //章节目录地址,本地目录正则
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
     private String author;//作者
@@ -134,17 +134,15 @@ public class BookInfoBean implements Parcelable, Cloneable {
         bookInfoBean.charset = charset;
         if (chapterList != null) {
             List<ChapterListBean> newListC = new ArrayList<>();
-            Iterator<ChapterListBean> iteratorC = chapterList.iterator();
-            while (iteratorC.hasNext()) {
-                newListC.add((ChapterListBean) iteratorC.next().clone());
+            for (ChapterListBean chapterListBean : chapterList) {
+                newListC.add((ChapterListBean) chapterListBean.clone());
             }
             bookInfoBean.setChapterList(newListC);
         }
         if (bookmarkList != null) {
             List<BookmarkBean> newListM = new ArrayList<>();
-            Iterator<BookmarkBean> iteratorM = bookmarkList.iterator();
-            while (iteratorM.hasNext()) {
-                newListM.add((BookmarkBean) iteratorM.next().clone());
+            for (BookmarkBean bookmarkBean : bookmarkList) {
+                newListM.add((BookmarkBean) bookmarkBean.clone());
             }
             bookInfoBean.setBookmarkList(newListM);
         }
@@ -224,7 +222,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = BookshelfHelp.formatAuthor(author);
     }
 
     public String getIntroduce() {

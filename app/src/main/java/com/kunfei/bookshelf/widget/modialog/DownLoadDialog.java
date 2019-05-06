@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.modialog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,32 +12,33 @@ import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
 
-/**
- * Created by GKF on 2018/1/17.
- * 离线下载
- */
-
-class DownLoadView {
-    private MoDialogView moDialogView;
+public class DownLoadDialog {
     private Context context;
-
     private EditText edtStart;
     private EditText edtEnd;
     private TextView tvCancel;
     private TextView tvDownload;
+    private BaseDialog dialog;
 
-    private DownLoadView(MoDialogView moDialogView) {
-        this.moDialogView = moDialogView;
-        this.context = moDialogView.getContext();
-        bindView();
+    public static DownLoadDialog builder(Context context, int startIndex, int endIndex, final int all) {
+        return new DownLoadDialog(context, startIndex, endIndex, all);
     }
 
-    public static DownLoadView getInstance(MoDialogView moDialogView) {
-        return new DownLoadView(moDialogView);
+    private DownLoadDialog(Context context, int startIndex, int endIndex, final int all) {
+        this.context = context;
+        dialog = new BaseDialog(context, R.style.alertDialogTheme);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_download_choice, null);
+        bindView(view, startIndex, endIndex, all);
+        dialog.setContentView(view);
     }
 
-    void showDownloadList(int startIndex, int endIndex, final int all, final OnClickDownload clickDownload, View.OnClickListener cancel) {
-        tvCancel.setOnClickListener(cancel);
+    private void bindView(View view, int startIndex, int endIndex, final int all) {
+        View llContent = view.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
+        edtStart = view.findViewById(R.id.edt_start);
+        edtEnd = view.findViewById(R.id.edt_end);
+        tvCancel = view.findViewById(R.id.tv_cancel);
+        tvDownload = view.findViewById(R.id.tv_download);
         edtStart.setText(String.valueOf(startIndex + 1));
         edtEnd.setText(String.valueOf(endIndex + 1));
         edtStart.addTextChangedListener(new TextWatcher() {
@@ -99,38 +101,32 @@ class DownLoadView {
                 }
             }
         });
+        tvCancel.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    public DownLoadDialog setPositiveButton(CallBack callBack) {
         tvDownload.setOnClickListener(v -> {
             if (edtStart.getText().length() > 0 && edtEnd.getText().length() > 0) {
                 if (Integer.parseInt(edtStart.getText().toString()) > Integer.parseInt(edtEnd.getText().toString())) {
                     Toast.makeText(context, "输入错误", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (clickDownload != null) {
-                        clickDownload.download(Integer.parseInt(edtStart.getText().toString()) - 1, Integer.parseInt(edtEnd.getText().toString()) - 1);
-                    }
+                    callBack.download(Integer.parseInt(edtStart.getText().toString()) - 1, Integer.parseInt(edtEnd.getText().toString()) - 1);
                 }
+                dialog.dismiss();
             } else {
                 Toast.makeText(context, "请输入要离线的章节", Toast.LENGTH_SHORT).show();
             }
         });
+        return this;
     }
 
-    private void bindView() {
-        moDialogView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.mo_dialog_download_choice, moDialogView, true);
-
-        View llContent = moDialogView.findViewById(R.id.ll_content);
-        llContent.setOnClickListener(null);
-        edtStart = moDialogView.findViewById(R.id.edt_start);
-        edtEnd = moDialogView.findViewById(R.id.edt_end);
-        tvCancel = moDialogView.findViewById(R.id.tv_cancel);
-        tvDownload = moDialogView.findViewById(R.id.tv_download);
+    public DownLoadDialog show() {
+        dialog.show();
+        return this;
     }
 
-
-    /**
-     * 离线下载确定
-     */
-    public interface OnClickDownload {
+    public interface CallBack {
         void download(int start, int end);
     }
+
 }

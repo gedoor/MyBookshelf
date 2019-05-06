@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
@@ -74,6 +75,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
                     public void onNext(Boolean aBoolean) {
                         mView.getSnackBar(delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> restoreBookSource(delBookSource))
+                                .setActionTextColor(Color.WHITE)
                                 .show();
                     }
 
@@ -209,6 +211,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         mView.refreshBookSource();
             if (progressSnackBar == null) {
                 progressSnackBar = mView.getSnackBar(msg, Snackbar.LENGTH_INDEFINITE);
+                progressSnackBar.setActionTextColor(Color.WHITE);
                 progressSnackBar.setAction(mView.getContext().getString(R.string.cancel), view -> CheckSourceService.stop(mView.getContext()));
             } else {
                 progressSnackBar.setText(msg);

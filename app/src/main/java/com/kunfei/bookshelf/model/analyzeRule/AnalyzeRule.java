@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
@@ -16,7 +18,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import retrofit2.Response;
@@ -31,6 +32,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
  * Created by REFGD.
  * 统一解析接口
  */
+@Keep
 public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
@@ -243,6 +245,9 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
         }
+        if (result == null) {
+            return new ArrayList<>();
+        }
         return (List<Object>) result;
     }
 
@@ -261,7 +266,7 @@ public class AnalyzeRule {
      * 分解规则生成规则列表
      */
     @SuppressLint("DefaultLocale")
-    private List<SourceRule> splitSourceRule(String ruleStr) throws ScriptException {
+    private List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
         if (ruleStr == null) return ruleList;
         //检测Mode
@@ -306,14 +311,9 @@ public class AnalyzeRule {
         if(ruleStr.contains("{{") && ruleStr.contains("}}")){
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleStr.length());
-            SimpleBindings simpleBindings = new SimpleBindings(){{
-                this.put("java", this);
-                this.put("result", String.valueOf(object));
-                this.put("baseUrl", baseUrl);
-            }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
             while (expMatcher.find()){
-                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1),simpleBindings);
+                jsEval = evalJS(expMatcher.group(1), object);
                 if(jsEval instanceof String){
                     expMatcher.appendReplacement(sb,(String) jsEval);
                 }

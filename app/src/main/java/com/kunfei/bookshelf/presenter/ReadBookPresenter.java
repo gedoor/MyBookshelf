@@ -35,10 +35,10 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChangeSourceHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ImportBookModel;
+import com.kunfei.bookshelf.model.SavedSource;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 
 import java.io.File;
 import java.util.List;
@@ -235,15 +235,16 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         try {
                             long currentTime = System.currentTimeMillis();
                             String bookName = bookShelf.getBookInfoBean().getName();
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                            if (ChangeSourceView.savedSource.getBookSource() != null
-                                    && currentTime - ChangeSourceView.savedSource.getSaveTime() < 60000
-                                    && ChangeSourceView.savedSource.getBookName().equals(bookName))
-                                ChangeSourceView.savedSource.getBookSource().increaseWeight(-450);
-                            BookSourceManager.saveBookSource(ChangeSourceView.savedSource.getBookSource());
-                            ChangeSourceView.savedSource.setBookName(bookName);
-                            ChangeSourceView.savedSource.setSaveTime(currentTime);
-                            ChangeSourceView.savedSource.setBookSource(bookSourceBean);
+                            BookSourceBean bookSourceBean = BookSourceManager.getBookSourceByUrl(tag);
+                            if (SavedSource.Instance.getBookSource() != null
+                                    && currentTime - SavedSource.Instance.getSaveTime() < 60000
+                                    && SavedSource.Instance.getBookName().equals(bookName))
+                                SavedSource.Instance.getBookSource().increaseWeight(-450);
+                            BookSourceManager.saveBookSource(SavedSource.Instance.getBookSource());
+                            SavedSource.Instance.setBookName(bookName);
+                            SavedSource.Instance.setSaveTime(currentTime);
+                            SavedSource.Instance.setBookSource(bookSourceBean);
+                            assert bookSourceBean != null;
                             bookSourceBean.increaseWeightBySelection();
                             BookSourceManager.saveBookSource(bookSourceBean);
                         } catch (Exception e) {

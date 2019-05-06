@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.dao.DaoMaster;
 import com.kunfei.bookshelf.dao.DaoSession;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.dao.SearchHistoryBeanDao;
+import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -73,7 +74,8 @@ public class DbHelper {
                     },
                     BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class,
                     SearchHistoryBeanDao.class, BookSourceBeanDao.class,
-                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class, CookieBeanDao.class
+                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class, CookieBeanDao.class,
+                    TxtChapterRuleBeanDao.class
             );
         }
     }

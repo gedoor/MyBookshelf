@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
@@ -16,7 +18,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
@@ -28,7 +29,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
  * Created by GKF on 2018/1/24.
  * 搜索URL规则解析
  */
-
+@Keep
 public class AnalyzeUrl {
     private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
@@ -61,6 +62,9 @@ public class AnalyzeUrl {
         }
         //分离编码规则
         ruleUrl = splitCharCode(ruleUrl);
+        //判断是否有下一页
+        if (page != null && page > 1 && !ruleUrl.contains("searchPage"))
+            throw new Exception("没有下一页");
         //替换js
         ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
         //设置页数
@@ -155,7 +159,7 @@ public class AnalyzeUrl {
      * 替换js
      */
     @SuppressLint("DefaultLocale")
-    private String replaceJs(String ruleUrl, String baseUrl, Integer searchPage, String searchKey) throws ScriptException {
+    private String replaceJs(String ruleUrl, String baseUrl, Integer searchPage, String searchKey) throws Exception {
         if(ruleUrl.contains("{{") && ruleUrl.contains("}}")){
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleUrl.length());

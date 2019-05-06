@@ -20,9 +20,6 @@ import com.kunfei.bookshelf.widget.recycler.sectioned.SectionedRecyclerViewAdapt
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdapter.HeaderHolder, FindRightAdapter.DescHolder, RecyclerView.ViewHolder> {
     private List<RecyclerViewData> data = new ArrayList<>();
     private LayoutInflater inflater;
@@ -92,6 +89,7 @@ public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdap
     protected void onBindItemViewHolder(DescHolder holder, int section, int position) {
         try {
             FindKindBean kindBean = (FindKindBean) data.get(section).getChild(position);
+            holder.tv_item.setHorizontallyScrolling(false);
             holder.tv_item.setText(kindBean.getKindName());
             holder.tv_item.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ChoiceBookActivity.class);
@@ -110,26 +108,21 @@ public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdap
         return data;
     }
 
-    class DescHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_item)
-        TextView tv_item;
-
-        DescHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     class HeaderHolder extends RecyclerView.ViewHolder {
         TextView tv_source_name;
 
         HeaderHolder(View itemView) {
             super(itemView);
-            initView();
-        }
-
-        private void initView() {
             tv_source_name = itemView.findViewById(R.id.tv_source_name);
+        }
+    }
+
+    class DescHolder extends RecyclerView.ViewHolder {
+        TextView tv_item;
+
+        DescHolder(View view) {
+            super(view);
+            tv_item = view.findViewById(R.id.tv_item);
         }
     }
 }

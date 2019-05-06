@@ -57,9 +57,19 @@ public class ScrollPageAnim extends PageAnimation {
                 // 进行刷新
                 mView.postInvalidate();
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
+                    if (mCenterRect.contains(x, y)) {
+                        mListener.clickCenter();
+                        return;
+                    }
+
+                    if (!readBookControl.getCanClickTurn() || readBookControl.disableScrollClickTurn()) {
+                        return;
+                    }
+
                     //是否翻阅下一页。true表示翻到下一页，false表示上一页。
                     boolean isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
                     if (isNext) {
@@ -72,16 +82,9 @@ public class ScrollPageAnim extends PageAnimation {
                     startAnim();
                 }
                 // 删除检测器
-                mVelocity.recycle();
-                mVelocity = null;
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-                try {
-                    mVelocity.recycle(); // if velocityTracker won't be used should be recycled
+                if (mVelocity != null) {
+                    mVelocity.recycle();
                     mVelocity = null;
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
                 break;
         }

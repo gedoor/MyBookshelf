@@ -17,7 +17,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.BookmarkAdapter;
-import com.kunfei.bookshelf.widget.modialog.EditBookmarkView;
+import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
 
@@ -109,30 +109,30 @@ public class BookmarkFragment extends MBaseFragment {
     }
 
     private void showBookmark(BookmarkBean bookmarkBean) {
-        moDialogHUD.showBookmark(bookmarkBean, false, new EditBookmarkView.OnBookmarkClick() {
-            @Override
-            public void saveBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
-                bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
-                adapter.notifyDataSetChanged();
-            }
+        BookmarkDialog.builder(getContext(), bookmarkBean, false)
+                .setPositiveButton(new BookmarkDialog.CallBack() {
+                    @Override
+                    public void saveBookmark(BookmarkBean bookmarkBean) {
+                        DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+                        bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
+                        adapter.notifyDataSetChanged();
+                    }
 
-            @Override
-            public void delBookmark(BookmarkBean bookmarkBean) {
-                DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
-                bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
-                adapter.notifyDataSetChanged();
-            }
+                    @Override
+                    public void delBookmark(BookmarkBean bookmarkBean) {
+                        DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
+                        bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
+                        adapter.notifyDataSetChanged();
+                    }
 
-            @Override
-            public void openChapter(int chapterIndex, int pageIndex) {
-                RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
-                if (getFatherActivity() != null) {
-                    getFatherActivity().finish();
-                }
-            }
-        });
-
+                    @Override
+                    public void openChapter(int chapterIndex, int pageIndex) {
+                        RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
+                        if (getFatherActivity() != null) {
+                            getFatherActivity().finish();
+                        }
+                    }
+                }).show();
     }
 
     private ChapterListActivity getFatherActivity() {
