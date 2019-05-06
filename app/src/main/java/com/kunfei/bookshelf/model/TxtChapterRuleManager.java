@@ -1,9 +1,14 @@
 package com.kunfei.bookshelf.model;
 
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
+import com.kunfei.bookshelf.utils.GsonUtils;
+import com.kunfei.bookshelf.utils.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,39 +42,20 @@ public class TxtChapterRuleManager {
     }
 
     public static List<TxtChapterRuleBean> getDefault() {
-        List<TxtChapterRuleBean> ruleBeanList = new ArrayList<>();
-        TxtChapterRuleBean ruleBean1 = new TxtChapterRuleBean();
-        ruleBean1.setSerialNumber(0);
-        ruleBean1.setName("默认正则1");
-        ruleBean1.setRule("^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$");
-        ruleBeanList.add(ruleBean1);
-        TxtChapterRuleBean ruleBean2 = new TxtChapterRuleBean();
-        ruleBean2.setSerialNumber(1);
-        ruleBean2.setName("默认正则2");
-        ruleBean2.setRule("^([0-9]{1,5})([\\,\\.，-])(.{1,20})$");
-        ruleBeanList.add(ruleBean2);
-        TxtChapterRuleBean ruleBean3 = new TxtChapterRuleBean();
-        ruleBean3.setSerialNumber(2);
-        ruleBean3.setName("默认正则3");
-        ruleBean3.setRule("^(\\s{0,4})([\\(【《]?(卷)?)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([\\.:： \f\t])(.{0,30})$");
-        ruleBeanList.add(ruleBean3);
-        TxtChapterRuleBean ruleBean4 = new TxtChapterRuleBean();
-        ruleBean4.setSerialNumber(3);
-        ruleBean4.setName("默认正则4");
-        ruleBean4.setRule("^(\\s{0,4})([\\(（【《])(.{0,30})([\\)）】》])(\\s{0,2})$");
-        ruleBeanList.add(ruleBean4);
-        TxtChapterRuleBean ruleBean5 = new TxtChapterRuleBean();
-        ruleBean5.setSerialNumber(4);
-        ruleBean5.setName("默认正则5");
-        ruleBean5.setRule("^(\\s{0,4})(正文)(.{0,20})$");
-        ruleBeanList.add(ruleBean5);
-        TxtChapterRuleBean ruleBean6 = new TxtChapterRuleBean();
-        ruleBean6.setSerialNumber(5);
-        ruleBean6.setName("默认正则6");
-        ruleBean6.setRule("^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$");
-        ruleBeanList.add(ruleBean6);
-        DbHelper.getDaoSession().getTxtChapterRuleBeanDao().insertOrReplaceInTx(ruleBeanList);
-        return ruleBeanList;
+        String json = null;
+        try {
+            InputStream inputStream = MApplication.getInstance().getAssets().open("txtChapterRule.json");
+            json = IOUtils.toString(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<TxtChapterRuleBean> ruleBeanList = GsonUtils.parseJArray(json, TxtChapterRuleBean.class);
+        if (ruleBeanList != null) {
+            DbHelper.getDaoSession().getTxtChapterRuleBeanDao().insertOrReplaceInTx(ruleBeanList);
+            return ruleBeanList;
+        }
+        return new ArrayList<>();
     }
 
     public static void del(TxtChapterRuleBean txtChapterRuleBean) {
