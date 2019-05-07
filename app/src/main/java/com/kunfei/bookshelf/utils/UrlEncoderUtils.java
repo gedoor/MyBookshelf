@@ -27,7 +27,7 @@ public class UrlEncoderUtils {
         dontNeedEncoding.set('-');
         dontNeedEncoding.set('_');
         dontNeedEncoding.set('.');
-        dontNeedEncoding.set('~');
+        dontNeedEncoding.set('$');
         dontNeedEncoding.set(':');
         dontNeedEncoding.set('(');
         dontNeedEncoding.set(')');
