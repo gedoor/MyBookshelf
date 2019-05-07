@@ -417,4 +417,5 @@
     <string name="web_port_summary">当前端口 %s</string>
     <string name="qr_share">二维码分享</string>
     <string name="wifi_share">wifi分享</string>
+    <string name="please_grant_storage_permission">请给于存储权限</string>
 </resources>
