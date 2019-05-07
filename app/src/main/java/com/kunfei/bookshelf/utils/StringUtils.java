@@ -380,6 +380,6 @@ public class StringUtils {
         return html.replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
                 .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
                 .replaceAll("\\s*\\n+\\s*", "\n　　")                   // 移除空行,并增加段前缩进2个汉字
-                .replaceAll("\\s*\\n+\\s*$", "");
+                .replaceAll("^[\\n\\s]*|[\\n\\s]*$", "");
     }
 }
