@@ -158,7 +158,7 @@ public class BookSourceManager {
         if (NetworkUtil.isUrl(string)) {
             return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(string), "utf-8")
                     .create(IHttpGetApi.class)
-                    .getWebContent(string, AnalyzeHeaders.getMap(null))
+                    .get(string, AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importBookSourceFromJson(rsp.body()))
                     .compose(RxUtils::toSimpleSingle);
         }

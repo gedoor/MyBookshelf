@@ -384,6 +384,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
                 BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
@@ -426,6 +427,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
                 BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
