@@ -194,11 +194,12 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.import_book_source);
+                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.requestMorePermissions(TxtChapterRuleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
             }
         });
@@ -222,12 +223,12 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.import_book_source);
+                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.import_book_source);
+                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.toAppSetting(TxtChapterRuleActivity.this);
             }
         });

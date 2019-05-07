@@ -181,6 +181,7 @@ public class BookInfoEditActivity extends MBaseActivity {
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                BookInfoEditActivity.this.toast(R.string.bg_image_per);
                 PermissionUtils.requestMorePermissions(BookInfoEditActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });

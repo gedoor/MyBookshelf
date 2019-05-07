@@ -1301,11 +1301,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                ReadBookActivity.this.toast(R.string.open_from_other);
+                ReadBookActivity.this.toast(R.string.please_grant_storage_permission);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                ReadBookActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.requestMorePermissions(ReadBookActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
