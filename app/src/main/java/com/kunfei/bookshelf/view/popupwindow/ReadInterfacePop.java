@@ -32,7 +32,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReadInterfacePop extends FrameLayout {
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
     @BindView(R.id.fl_text_font)
@@ -108,6 +109,7 @@ public class ReadInterfacePop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_interface, this);
         ButterKnife.bind(this, view);
+        vwBg.setOnClickListener(null);
     }
 
     public void setListener(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {

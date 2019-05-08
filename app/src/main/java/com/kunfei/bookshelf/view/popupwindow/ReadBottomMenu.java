@@ -18,7 +18,8 @@ import butterknife.ButterKnife;
 
 public class ReadBottomMenu extends FrameLayout {
 
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.fab_read_aloud_timer)
     FloatingActionButton fabReadAloudTimer;
     @BindView(R.id.tv_read_aloud_timer)
@@ -72,6 +73,7 @@ public class ReadBottomMenu extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, this);
         ButterKnife.bind(this, view);
+        vwBg.setOnClickListener(null);
     }
 
     public void setListener(OnMenuListener menuListener) {

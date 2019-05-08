@@ -20,6 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ReadAdjustPop extends FrameLayout {
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.hpb_light)
     SeekBar hpbLight;
     @BindView(R.id.scb_follow_sys)
@@ -61,6 +63,7 @@ public class ReadAdjustPop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, this);
         ButterKnife.bind(this, view);
+        vwBg.setOnClickListener(null);
     }
 
     public void setListener(Activity activity, OnAdjustListener adjustListener) {
