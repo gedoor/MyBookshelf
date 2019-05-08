@@ -44,6 +44,10 @@
 
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="其它设置">
 
+        <Preference
+            android:key="@string/pk_download_path"
+            android:title="@string/download_path" />
+
         <com.kunfei.bookshelf.widget.number.NumberPickerPreference
             android:defaultValue="6"
             android:key="@string/pk_threads_num"
@@ -52,9 +56,13 @@
             app:MaxValue="1024"
             app:MinValue="1" />
 
-        <Preference
-            android:key="@string/pk_download_path"
-            android:title="@string/download_path" />
+        <com.kunfei.bookshelf.widget.number.NumberPickerPreference
+            android:defaultValue="1122"
+            android:key="webPort"
+            android:summary="@string/web_port_summary"
+            android:title="@string/web_port_title"
+            app:MaxValue="60000"
+            app:MinValue="1024" />
 
         <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
             android:defaultValue="false"
@@ -67,14 +75,6 @@
             android:key="process_text"
             android:summary="长按文字在操作菜单中显示阅读·搜索"
             android:title="文字操作显示搜索" />
-
-        <com.kunfei.bookshelf.widget.number.NumberPickerPreference
-            android:defaultValue="1122"
-            android:key="webPort"
-            android:summary="@string/web_port_summary"
-            android:title="@string/web_port_title"
-            app:MaxValue="60000"
-            app:MinValue="1024" />
 
     </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
