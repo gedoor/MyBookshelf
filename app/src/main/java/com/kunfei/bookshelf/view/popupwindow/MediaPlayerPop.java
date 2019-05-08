@@ -27,7 +27,8 @@ import butterknife.ButterKnife;
 
 public class MediaPlayerPop extends FrameLayout {
 
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.tv_dur_time)
     TextView tvDurTime;
     @BindView(R.id.hpb_read_progress)
@@ -68,6 +69,7 @@ public class MediaPlayerPop extends FrameLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_media_player, this);
         ButterKnife.bind(this, view);
         view.setBackgroundColor(ThemeStore.primaryColor(context));
+        vwBg.setOnClickListener(null);
         primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(ThemeStore.primaryColor(context)));
         setColor(ivSkipPrevious.getDrawable());
         setColor(ivSkipNext.getDrawable());
