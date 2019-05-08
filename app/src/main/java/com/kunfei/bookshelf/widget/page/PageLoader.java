@@ -582,6 +582,7 @@ public abstract class PageLoader {
      */
     public String getUnReadContent() {
         if (mCurChapter == null) return null;
+        if (mCurChapter.getStatus() == TxtChapter.Status.MP3) return mCurChapter.getMsg();
         if (mCurChapter.getTxtPageList() == null) return null;
         StringBuilder s = new StringBuilder();
         String content = getContent();

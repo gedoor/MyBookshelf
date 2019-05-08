@@ -698,7 +698,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
-
+                            readAloud();
                             return;
                         } else {
                             if (mediaPlayerPop.getVisibility() == View.VISIBLE) {

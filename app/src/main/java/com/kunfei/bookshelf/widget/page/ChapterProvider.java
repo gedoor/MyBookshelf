@@ -45,7 +45,7 @@ class ChapterProvider {
         }
         if (content.matches("http.+\\.mp3")) {
             txtChapter.setStatus(TxtChapter.Status.MP3);
-            txtChapter.addPage(new TxtPage(content));
+            txtChapter.setMsg(content);
             return txtChapter;
         }
         return loadPageList(chapter, content);
