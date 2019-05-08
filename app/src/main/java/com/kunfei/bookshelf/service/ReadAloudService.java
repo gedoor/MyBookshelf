@@ -219,9 +219,12 @@ public class ReadAloudService extends Service {
     }
 
     private void initMediaPlayer() {
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-        }
+        if (mediaPlayer != null) return;
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+        mediaPlayer.setOnCompletionListener(mp -> {
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
+        });
     }
 
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
@@ -261,7 +264,6 @@ public class ReadAloudService extends Service {
             try {
                 mediaPlayer.setDataSource(audioUrl);
                 mediaPlayer.prepareAsync();
-                mediaPlayer.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -351,6 +353,7 @@ public class ReadAloudService extends Service {
     private void resumeReadAloud() {
         updateTimer(0);
         pause = false;
+        updateNotification();
         if (isAudio) {
             mediaPlayer.start();
         } else {

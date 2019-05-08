@@ -67,7 +67,6 @@ public class MediaPlayerPop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_media_player, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
         view.setBackgroundColor(ThemeStore.primaryColor(context));
         primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(ThemeStore.primaryColor(context)));
         setColor(ivSkipPrevious.getDrawable());
