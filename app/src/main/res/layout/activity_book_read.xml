@@ -16,6 +16,11 @@
         android:focusable="true"
         tools:visibility="gone" />
 
+    <com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
     <FrameLayout
         android:id="@+id/fl_menu"
         android:layout_width="match_parent"
