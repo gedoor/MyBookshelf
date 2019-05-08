@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
@@ -22,14 +24,14 @@ import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 
 /**
  * Created by GKF on 2018/1/24.
  * 搜索URL规则解析
  */
-
+@Keep
 public class AnalyzeUrl {
-    private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
 
     private String url;

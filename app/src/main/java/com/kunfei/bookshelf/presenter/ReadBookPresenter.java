@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -35,10 +34,10 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChangeSourceHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ImportBookModel;
+import com.kunfei.bookshelf.model.SavedSource;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 
 import java.io.File;
 import java.util.List;
@@ -125,8 +124,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                 mView.toast("已禁用" + bookSourceBean.getBookSourceName());
             }
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage() + "\n" + e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -236,14 +234,14 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                             long currentTime = System.currentTimeMillis();
                             String bookName = bookShelf.getBookInfoBean().getName();
                             BookSourceBean bookSourceBean = BookSourceManager.getBookSourceByUrl(tag);
-                            if (ChangeSourceView.savedSource.getBookSource() != null
-                                    && currentTime - ChangeSourceView.savedSource.getSaveTime() < 60000
-                                    && ChangeSourceView.savedSource.getBookName().equals(bookName))
-                                ChangeSourceView.savedSource.getBookSource().increaseWeight(-450);
-                            BookSourceManager.saveBookSource(ChangeSourceView.savedSource.getBookSource());
-                            ChangeSourceView.savedSource.setBookName(bookName);
-                            ChangeSourceView.savedSource.setSaveTime(currentTime);
-                            ChangeSourceView.savedSource.setBookSource(bookSourceBean);
+                            if (SavedSource.Instance.getBookSource() != null
+                                    && currentTime - SavedSource.Instance.getSaveTime() < 60000
+                                    && SavedSource.Instance.getBookName().equals(bookName))
+                                SavedSource.Instance.getBookSource().increaseWeight(-450);
+                            BookSourceManager.saveBookSource(SavedSource.Instance.getBookSource());
+                            SavedSource.Instance.setBookName(bookName);
+                            SavedSource.Instance.setSaveTime(currentTime);
+                            SavedSource.Instance.setBookSource(bookSourceBean);
                             assert bookSourceBean != null;
                             bookSourceBean.increaseWeightBySelection();
                             BookSourceManager.saveBookSource(bookSourceBean);
@@ -462,6 +460,16 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
     public void recreate(Boolean recreate) {
         mView.recreate();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
+    public void upAudioSize(int audioSize) {
+        mView.upAudioSize(audioSize);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})
+    public void upAudioDur(int audioDur) {
+        mView.upAudioDur(audioDur);
     }
 
     public interface OnAddListener {

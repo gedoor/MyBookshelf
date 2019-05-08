@@ -466,10 +466,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case requestSource:
-                    mPresenter.initSearchEngineS();
-                    break;
+            if (requestCode == requestSource) {
+                mPresenter.initSearchEngineS();
             }
         }
     }

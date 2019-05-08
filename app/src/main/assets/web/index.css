@@ -23,7 +23,7 @@ body {
 	width: 90px;
 	height: 30px;
 	min-height: 30px;
-	margin: 5px 0;
+	margin: 5px 0px;
 	cursor: pointer;
 }
 @keyframes stroker {
@@ -39,7 +39,7 @@ body {
 	height: 100%;
 	fill: transparent;
 	stroke: #666;
-	stroke-width: 3px;
+	stroke-width: 2px;
 }
 .button rect.busy {
 	stroke: #fD1850;
@@ -111,6 +111,12 @@ textarea {
 	border: 0;
 	padding: 5px;
 	overflow-y: auto;
+}
+.tabbody>*>.inputbox{
+	border: 0;
+	border-bottom: #A9A9A9 solid 1px;
+	height: 15px;
+	text-align:center;
 }
 .link>* {
 	display: flex;

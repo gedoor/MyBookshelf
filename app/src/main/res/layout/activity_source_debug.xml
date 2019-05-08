@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textIsSelectable="true"
+            android:autoLink="web"
             android:clickable="true"
             android:focusable="true" />
 

@@ -41,13 +41,12 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-
         <activity
             android:name=".view.activity.WelcomeBookActivity"
             android:enabled="false"
-            android:theme="@style/CAppWelcomeTheme"
             android:icon="@mipmap/book_launcher"
-            android:roundIcon="@mipmap/book_launcher_round">
+            android:roundIcon="@mipmap/book_launcher_round"
+            android:theme="@style/CAppWelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -57,7 +56,6 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-
         <activity
             android:name=".view.activity.WelcomeToReadActivity"
             android:theme="@style/CAppWelcomeTheme">
@@ -65,7 +63,6 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.ReadBookActivity"
             android:configChanges="locale|keyboardHidden"
@@ -77,13 +74,26 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".view.activity.ReceivingSharedActivity"
+            android:enabled="true"
+            android:label="@string/receiving_shared_label">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activity.QRCodeScanActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
@@ -101,8 +111,8 @@
             android:name=".view.activity.BookDetailActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"
+            android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ImportBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
@@ -157,7 +167,8 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
             android:screenOrientation="behind" />
-        <activity android:name=".view.activity.SourceLoginActivity"
+        <activity
+            android:name=".view.activity.SourceLoginActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
@@ -165,20 +176,9 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
-            android:name=".view.activity.ReceivingSharedActivity"
-            android:label="@string/receiving_shared_label"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
+            android:name=".view.activity.TxtChapterRuleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
 
 
         <service android:name=".service.DownloadService" />

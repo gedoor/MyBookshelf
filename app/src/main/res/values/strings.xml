@@ -39,7 +39,8 @@
     <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
-    <string name="web_edit_source">Web编辑书源</string>
+    <string name="web_service">web服务</string>
+    <string name="web_edit_source">web编辑书源</string>
     <string name="http_ip">http://%s:%d</string>
     <string name="download_offline">离线下载</string>
     <string name="download_offline_t">离线下载</string>
@@ -272,7 +273,7 @@
     <string name="pt_show_all_find">显示所有发现</string>
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>
     <string name="update_chapter">更新目录</string>
-    <string name="txt_chapter_regex">目录正则</string>
+    <string name="txt_chapter_regex">txt目录正则</string>
     <string name="set_charset">设置编码</string>
     <string name="swap_sort">倒序-顺序</string>
     <string name="sort">排序</string>
@@ -416,4 +417,7 @@
     <string name="web_port_summary">当前端口 %s</string>
     <string name="qr_share">二维码分享</string>
     <string name="wifi_share">wifi分享</string>
+    <string name="please_grant_storage_permission">请给于存储权限</string>
+    <string name="skip_previous">上一个</string>
+    <string name="skip_next">下一个</string>
 </resources>

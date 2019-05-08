@@ -17,8 +17,10 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -67,14 +69,15 @@ public class DataBackup {
                     }
                 }
                 DocumentHelper.createDirIfNotExist(FileUtils.getSdCardPath(), "YueDu");
-                String dirPath = FileUtils.getSdCardPath() + "/YueDu";
+                String dirPath = FileUtils.getSdCardPath() + File.separator + "YueDu";
                 DocumentHelper.createDirIfNotExist(dirPath, "autoSave");
-                dirPath += "/autoSave";
+                dirPath += File.separator + "autoSave";
+                backupConfig(dirPath);
                 backupBookShelf(dirPath);
                 backupBookSource(dirPath);
                 backupSearchHistory(dirPath);
                 backupReplaceRule(dirPath);
-                backupConfig(dirPath);
+                backupTxtChapterRule(dirPath);
                 upload(dirPath);
                 e.onSuccess(true);
             }
@@ -86,12 +89,13 @@ public class DataBackup {
     public void run() {
         Single.create((SingleOnSubscribe<Boolean>) e -> {
             DocumentHelper.createDirIfNotExist(FileUtils.getSdCardPath(), "YueDu");
-            String dirPath = FileUtils.getSdCardPath() + "/YueDu";
+            String dirPath = FileUtils.getSdCardPath() + File.separator + "YueDu";
+            backupConfig(dirPath);
             backupBookShelf(dirPath);
             backupBookSource(dirPath);
             backupSearchHistory(dirPath);
             backupReplaceRule(dirPath);
-            backupConfig(dirPath);
+            backupTxtChapterRule(dirPath);
             upload(dirPath);
             e.onSuccess(true);
         })
@@ -122,12 +126,13 @@ public class DataBackup {
 
     private void upload(String dirPath) {
         List<String> filePaths = new ArrayList<>();
-        filePaths.add(dirPath + "/myBookShelf.json");
-        filePaths.add(dirPath + "/myBookSource.json");
-        filePaths.add(dirPath + "/myBookSearchHistory.json");
-        filePaths.add(dirPath + "/myBookReplaceRule.json");
-        filePaths.add(dirPath + "/config.xml");
-        String zipFilePath = FileHelp.getCachePath() + "/backup" + ".zip";
+        filePaths.add(dirPath + File.separator + "config.xml");
+        filePaths.add(dirPath + File.separator + "myBookShelf.json");
+        filePaths.add(dirPath + File.separator + "myBookSource.json");
+        filePaths.add(dirPath + File.separator + "myBookSearchHistory.json");
+        filePaths.add(dirPath + File.separator + "myBookReplaceRule.json");
+        filePaths.add(dirPath + File.separator + "myTxtChapterRule.json");
+        String zipFilePath = FileHelp.getCachePath() + File.separator + "backup" + ".zip";
         try {
             FileHelp.deleteFile(zipFilePath);
             if (ZipUtils.zipFiles(filePaths, zipFilePath)) {
@@ -212,9 +217,24 @@ public class DataBackup {
         }
     }
 
+    private void backupTxtChapterRule(String file) {
+        List<TxtChapterRuleBean> ruleBeans = TxtChapterRuleManager.getAll();
+        if (ruleBeans != null && ruleBeans.size() > 0) {
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
+            String str = gson.toJson(ruleBeans);
+            DocumentFile docFile = DocumentHelper.createFileIfNotExist("myTxtChapterRule.json", file);
+            if (docFile != null) {
+                DocumentHelper.writeString(str, docFile);
+            }
+        }
+    }
+
     private void backupConfig(String file) {
         SharedPreferences pref = MApplication.getConfigPreferences();
-        try (FileOutputStream out = new FileOutputStream(file + "/config.xml")) {
+        try (FileOutputStream out = new FileOutputStream(file + File.separator + "config.xml")) {
             XmlUtils.writeMapXml(pref.getAll(), out);
         } catch (Exception e) {
             e.printStackTrace();

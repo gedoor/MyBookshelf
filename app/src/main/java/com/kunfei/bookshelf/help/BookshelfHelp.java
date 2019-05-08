@@ -26,8 +26,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -103,6 +103,16 @@ public class BookshelfHelp {
     public static boolean isChapterCached(BookInfoBean book, BaseChapterBean chapter) {
         final String path = getCachePathName(book);
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
+    }
+
+    public static String getChapterCache(BookShelfBean bookShelfBean, ChapterListBean chapter) {
+        @SuppressLint("DefaultLocale")
+        File file = getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
+                chapter.getDurChapterIndex(), chapter.getDurChapterName());
+        if (!file.exists()) return null;
+
+        byte[] contentByte = DocumentHelper.getBytes(file);
+        return new String(contentByte, StandardCharsets.UTF_8);
     }
 
     public static void clearCaches(boolean clearChapterList) {
@@ -355,15 +365,11 @@ public class BookshelfHelp {
     }
 
     public static List<ChapterListBean> getChapterList(String noteUrl) {
-        List<ChapterListBean> chapterListBeans = DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
+        return DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
                 .build()
                 .list();
-        if (chapterListBeans == null) {
-            chapterListBeans = new ArrayList<>();
-        }
-        return chapterListBeans;
     }
 
     public static void delChapterList(String noteUrl) {
@@ -410,7 +416,7 @@ public class BookshelfHelp {
         if (author == null) {
             return "";
         }
-        return author.replaceAll("\\s*作\\s*者[\\s:：]*", "");
+        return author.replaceAll("作\\s*者[\\s:：]*", "").replaceAll("\\s+", " ").trim();
     }
 
     public static int guessChapterNum(String name) {

@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 书本信息
@@ -35,8 +36,8 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private String name; //小说名
     private String tag;
     @Id
-    private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
-    private String chapterUrl;  //章节目录地址
+    private String noteUrl;  //如果是来源网站,则小说根地址,如果是本地则是小说本地MD5
+    private String chapterUrl;  //章节目录地址,本地目录正则
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
     private String author;//作者
@@ -263,7 +264,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private void extractEpubCoverImage() {
         try {
             FileHelp.createFolderIfNotExists(coverPath);
-            Bitmap cover = BitmapFactory.decodeStream(PageLoaderEpub.readBook(new File(noteUrl)).getCoverImage().getInputStream());
+            Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
             String md5Path = coverPath + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
             FileOutputStream out = new FileOutputStream(new File(md5Path));
             cover.compress(Bitmap.CompressFormat.JPEG, 90, out);

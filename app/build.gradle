@@ -39,15 +39,13 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.myConfig
-            buildConfigField "boolean", "IS_RELEASE", "true"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
-            versionNameSuffix ' debug'
-            buildConfigField "boolean", "IS_RELEASE", "false"
+            versionNameSuffix 'debug'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -65,49 +63,48 @@ android {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13-beta-2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
-    testImplementation 'junit:junit:4.12'
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.1.0-alpha04'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
     //J_SOUP
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
-    implementation 'io.apisense:rhino-android:1.0'
+
+    //JS
+    implementation 'com.github.gedoor:rhino-android:1.2'
 
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
-    //codecMD5
-    implementation 'commons-codec:commons-codec:1.11'
-
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     //bind view
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     //webServer
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
@@ -132,7 +129,7 @@ dependencies {
     implementation 'net.ricecode:string-similarity:1.0.0'
 
     //MarkDown
-    implementation 'ru.noties.markwon:core:3.0.0'
+    implementation 'ru.noties.markwon:core:3.0.1'
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
@@ -143,7 +140,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 55
+    schemaVersion 56
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }

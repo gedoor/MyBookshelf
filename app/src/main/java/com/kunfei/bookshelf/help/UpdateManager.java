@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,7 +25,6 @@ import com.kunfei.bookshelf.view.activity.UpdateActivity;
 
 import java.io.File;
 
-import androidx.core.content.FileProvider;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -44,7 +45,7 @@ public class UpdateManager {
     public void checkUpdate(boolean showMsg) {
         BaseModelImpl.getInstance().getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
-                .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
+                .get(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

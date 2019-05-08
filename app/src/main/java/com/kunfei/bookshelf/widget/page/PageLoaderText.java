@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.IOUtils;
 import com.kunfei.bookshelf.utils.MD5Utils;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,15 +36,6 @@ public class PageLoaderText extends PageLoader {
     private final static int BUFFER_SIZE = 512 * 1024;
     //没有标题的时候，每个章节的最大长度
     private final static int MAX_LENGTH_WITH_NO_CHAPTER = 10 * 1024;
-
-    //正则表达式章节匹配模式
-    // "(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节回集卷])(.*)"
-    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节卷集部篇回场])(.{0,30})$",
-            "^([0-9]{1,5})([\\,\\.，-])(.{1,20})$",
-            "^(\\s{0,4})([\\(【《]?(卷)?)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([\\.:： \f\t])(.{0,30})$",
-            "^(\\s{0,4})([\\(（【《])(.{0,30})([\\)）】》])(\\s{0,2})$",
-            "^(\\s{0,4})(正文)(.{0,20})$",
-            "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"};
 
     private List<String> chapterPatterns = new ArrayList<>();
     //章节解析模式
@@ -235,15 +226,11 @@ public class PageLoaderText extends PageLoader {
      */
     private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
         chapterPatterns.clear();
-        if (!TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
-            for (String x : bookShelfBean.getBookInfoBean().getChapterUrl().split("\n")) {
-                x = x.trim();
-                if (!TextUtils.isEmpty(x)) {
-                    chapterPatterns.add(x);
-                }
-            }
+        if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
+            chapterPatterns.addAll(TxtChapterRuleManager.enabledRuleList());
+        } else {
+            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
         }
-        chapterPatterns.addAll(Arrays.asList(CHAPTER_PATTERNS));
         //首先获取128k的数据
         byte[] buffer = new byte[BUFFER_SIZE / 4];
         int length = bookStream.read(buffer, 0, buffer.length);

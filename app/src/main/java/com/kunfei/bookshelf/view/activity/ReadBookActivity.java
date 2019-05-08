@@ -26,20 +26,25 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
@@ -52,19 +57,25 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.bar.BarHide;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;
+import com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop;
 import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
 import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
-import com.kunfei.bookshelf.widget.modialog.EditBookmarkView;
+import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
+import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageView;
 import com.kunfei.bookshelf.widget.page.TxtChapter;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -109,6 +120,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     MoreSettingPop moreSettingPop;
     @BindView(R.id.pb_nextPage)
     ProgressBar progressBarNextPage;
+    @BindView(R.id.mediaPlayerPop)
+    MediaPlayerPop mediaPlayerPop;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -116,7 +129,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Animation menuBottomOut;
     private ActionBar actionBar;
     private PageLoader mPageLoader;
-    private Handler mHandler  = new Handler();
+    private Handler mHandler = new Handler();
     private Runnable autoPageRunnable;
     private Runnable keepScreenRunnable;
     private Runnable upHpbNextPage;
@@ -454,7 +467,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void openReplaceRule() {
                 popMenuOut();
-                ReplaceRuleActivity.startThis(ReadBookActivity.this);
+                ReplaceRuleActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf());
             }
 
             @Override
@@ -681,6 +694,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
+                        if (mPageLoader.getPageStatus() == TxtChapter.Status.MP3) {
+                            if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
+                                mediaPlayerPop.setVisibility(View.VISIBLE);
+                            }
+                            readAloud();
+                            return;
+                        } else {
+                            if (mediaPlayerPop.getVisibility() == View.VISIBLE) {
+                                mediaPlayerPop.setVisibility(View.GONE);
+                            }
+                        }
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
@@ -708,9 +732,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         );
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
-            public boolean onTouch() {
+            public void onTouch() {
                 screenOffTimerStart();
-                return true;
             }
 
             @Override
@@ -833,22 +856,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 bookmarkBean.setPageIndex(mPresenter.getBookShelf().getDurChapterPage());
                 bookmarkBean.setChapterName(mPresenter.getBookShelf().getDurChapterName());
             }
-            moDialogHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
-                @Override
-                public void saveBookmark(BookmarkBean bookmarkBean) {
-                    mPresenter.saveBookmark(bookmarkBean);
-                }
+            BookmarkDialog.builder(this, bookmarkBean, isAdd)
+                    .setPositiveButton(new BookmarkDialog.CallBack() {
+                        @Override
+                        public void saveBookmark(BookmarkBean bookmarkBean) {
+                            mPresenter.saveBookmark(bookmarkBean);
+                        }
 
-                @Override
-                public void delBookmark(BookmarkBean bookmarkBean) {
-                    mPresenter.delBookmark(bookmarkBean);
-                }
+                        @Override
+                        public void delBookmark(BookmarkBean bookmarkBean) {
+                            mPresenter.delBookmark(bookmarkBean);
+                        }
 
-                @Override
-                public void openChapter(int chapterIndex, int pageIndex) {
-                    skipToChapter(chapterIndex, pageIndex);
-                }
-            });
+                        @Override
+                        public void openChapter(int chapterIndex, int pageIndex) {
+                            skipToChapter(chapterIndex, pageIndex);
+                        }
+                    }).show();
         }
 
     }
@@ -874,12 +898,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            moDialogHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
-                if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
-                    mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
-                    mPresenter.changeBookSource(searchBookBean);
-                }
-            });
+            ChangeSourceDialog.builder(this, mPresenter.getBookShelf())
+                    .setCallBack(searchBookBean -> {
+                        if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                            mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+                            mPresenter.changeBookSource(searchBookBean);
+                        }
+                    }).show();
         }
     }
 
@@ -895,12 +920,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (mPresenter.getBookShelf() != null) {
             //弹出离线下载界面
             int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
-            moDialogHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
-                    mPresenter.getBookShelf().getChapterListSize(),
-                    (start, end) -> {
-                        moDialogHUD.dismiss();
-                        mPresenter.addDownload(start, end);
-                    });
+            DownLoadDialog.builder(this, mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getChapterListSize())
+                    .setPositiveButton((start, end) -> mPresenter.addDownload(start, end)).show();
         }
     }
 
@@ -909,10 +930,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setCharset() {
         final String charset = mPresenter.getBookShelf().getBookInfoBean().getCharset();
-        moDialogHUD.showInputBox(getString(R.string.input_charset),
-                charset,
-                new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"},
-                (inputText -> {
+        InputDialog.builder(this)
+                .setTitle(getString(R.string.input_charset))
+                .setDefaultValue(charset)
+                .setAdapterValues(new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"})
+                .setCallBack(inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
                         mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
@@ -921,7 +943,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             mPageLoader.updateChapter();
                         }
                     }
-                }));
+                }).show();
     }
 
     /**
@@ -929,19 +951,49 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setTextChapterRegex() {
         if (mPresenter.getBookShelf().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-            final String regex = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
-            moDialogHUD.showInputBox(getString(R.string.text_chapter_list_rule),
-                    regex,
-                    null,
-                    (inputText -> {
-                        if (!Objects.equals(regex, inputText)) {
-                            mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(inputText);
-                            mPresenter.saveProgress();
-                            if (mPageLoader != null) {
-                                mPageLoader.updateChapter();
-                            }
+            int checkedItem = 0;
+            List<TxtChapterRuleBean> ruleBeanList = TxtChapterRuleManager.getEnabled();
+            List<String> ruleNameList = new ArrayList<>();
+            String rule = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
+            if (!TextUtils.isEmpty(rule)) {
+                TxtChapterRuleBean ruleBean = DbHelper.getDaoSession().getTxtChapterRuleBeanDao().queryBuilder()
+                        .where(TxtChapterRuleBeanDao.Properties.Rule.eq(rule))
+                        .limit(1).unique();
+                if (ruleBean != null) {
+                    if (!ruleBean.getEnable()) {
+                        ruleBeanList.add(ruleBean);
+                        checkedItem = ruleBeanList.size() - 1;
+                    } else {
+                        checkedItem = ruleBeanList.indexOf(ruleBean);
+                    }
+                } else {
+                    ruleBean = new TxtChapterRuleBean();
+                    ruleBean.setName(rule);
+                    ruleBean.setRule(rule);
+                    ruleBeanList.add(ruleBean);
+                    checkedItem = ruleBeanList.size() - 1;
+                }
+            }
+            for (TxtChapterRuleBean bean : ruleBeanList) {
+                ruleNameList.add(bean.getName());
+            }
+            if (checkedItem < 0) {
+                checkedItem = 0;
+            }
+            AlertDialog dialog = new AlertDialog.Builder(this, R.style.alertDialogTheme)
+                    .setTitle("选择目录正则")
+                    .setSingleChoiceItems(ruleNameList.toArray(new String[0]), checkedItem, (dialog1, which) -> {
+                        if (which < 0) return;
+                        mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(ruleBeanList.get(which).getRule());
+                        mPresenter.saveProgress();
+                        if (mPageLoader != null) {
+                            mPageLoader.updateChapter();
                         }
-                    }));
+                        dialog1.dismiss();
+                    })
+                    .setPositiveButton("管理正则", (dialog12, which) -> TxtChapterRuleActivity.startThis(ReadBookActivity.this))
+                    .show();
+            ATH.setAlertDialogTint(dialog);
         }
     }
 
@@ -1239,6 +1291,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
+    public void upAudioSize(int audioSize) {
+
+    }
+
+    @Override
+    public void upAudioDur(int audioDur) {
+
+    }
+
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }
@@ -1263,11 +1325,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                ReadBookActivity.this.toast(R.string.open_from_other);
+                ReadBookActivity.this.toast(R.string.please_grant_storage_permission);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                ReadBookActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.requestMorePermissions(ReadBookActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
@@ -1337,7 +1400,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         screenOffTimerStart();
         if (mPageLoader != null) {
             if (!mPageLoader.updateBattery(BatteryUtil.getLevel(this))) {
-                pageView.invalidate();
+                mPageLoader.updateTime();
             }
         }
         if (showCheckPermission && mPresenter.getOpen_from() == ReadBookPresenter.OPEN_FROM_OTHER && PermissionUtils.checkMorePermissions(this, MApplication.PerList).isEmpty()) {

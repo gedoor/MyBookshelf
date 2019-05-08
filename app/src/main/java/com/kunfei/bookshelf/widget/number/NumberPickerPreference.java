@@ -5,17 +5,16 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 
+import androidx.annotation.NonNull;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-
-import androidx.annotation.NonNull;
 
 /**
  * Displaying a NumberPicker in a DialogPreference
@@ -102,7 +101,6 @@ public class NumberPickerPreference extends DialogPreference {
             int pickerValue = numPicker.getValue();
             updateSummary(pickerValue);
             setValue(pickerValue);
-            Log.d(TAG, "number picked = " + pickerValue);
         }
     }
 
@@ -123,11 +121,6 @@ public class NumberPickerPreference extends DialogPreference {
             setValue(getPersistedInt(minValue));
         } else {
             setValue((Integer) defaultValue);
-            if (((Integer) defaultValue > maxValue)) {
-                Log.w(TAG, "default value is bigger than maxValue!");
-            } else if (((Integer) defaultValue < minValue)) {
-                Log.w(TAG, "default value is smaller than minValue!");
-            }
         }
         updateSummary(getValue());
     }
@@ -161,4 +154,6 @@ public class NumberPickerPreference extends DialogPreference {
     private void updateSummary(int val) {
         setSummary(String.format(getSummaryPattern(), Integer.toString(val)));
     }
+
+
 }

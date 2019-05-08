@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -18,8 +20,6 @@ import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
 import java.util.Objects;
-
-import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -74,6 +74,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AlertDialog alertDialog;
         switch (key) {
+            case "behaviorMain":
+                RxBus.get().post(RxBusTag.RECREATE, true);
+                break;
             case "E-InkMode":
                 MApplication.getInstance().upEInkMode();
                 break;

@@ -30,13 +30,21 @@
 
     </group>
 
+    <group android:id="@+id/menu_text">
+        <item
+            android:id="@+id/action_set_regex"
+            android:icon="@drawable/ic_exchange"
+            android:title="@string/txt_chapter_regex"
+            app:showAsAction="always" />
+    </group>
+
     <group android:id="@+id/menuLocal">
 
         <item
             android:id="@+id/action_set_charset"
             android:icon="@drawable/ic_translate_black_24dp"
             android:title="@string/set_charset"
-            app:showAsAction="never" />
+            app:showAsAction="ifRoom" />
 
     </group>
 
@@ -63,14 +71,6 @@
             android:id="@+id/action_book_info"
             android:icon="@drawable/ic_toc"
             android:title="@string/book_info"
-            app:showAsAction="never" />
-    </group>
-
-    <group android:id="@+id/menu_text">
-        <item
-            android:id="@+id/action_set_regex"
-            android:icon="@drawable/ic_toc"
-            android:title="@string/txt_chapter_regex"
             app:showAsAction="never" />
     </group>
 

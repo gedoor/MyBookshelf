@@ -14,6 +14,7 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.content.WebBook;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 
@@ -29,7 +30,8 @@ public class WebBookModel {
      */
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
         return WebBook.getInstance(bookShelfBean.getTag())
-                .getBookInfo(bookShelfBean);
+                .getBookInfo(bookShelfBean)
+                .timeout(60, TimeUnit.SECONDS);
     }
 
     /**
@@ -39,6 +41,7 @@ public class WebBookModel {
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         return WebBook.getInstance(bookShelfBean.getTag())
                 .getChapterList(bookShelfBean)
+                .timeout(60, TimeUnit.SECONDS)
                 .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
     }
 
@@ -48,6 +51,7 @@ public class WebBookModel {
     public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean, String bookName) {
         return WebBook.getInstance(chapterBean.getTag())
                 .getBookContent(chapterBean)
+                .timeout(60, TimeUnit.SECONDS)
                 .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
     }
 
@@ -55,14 +59,18 @@ public class WebBookModel {
      * 搜索
      */
     public Observable<List<SearchBookBean>> searchBook(String content, int page, String tag) {
-        return WebBook.getInstance(tag).searchBook(content, page);
+        return WebBook.getInstance(tag)
+                .searchBook(content, page)
+                .timeout(60, TimeUnit.SECONDS);
     }
 
     /**
      * 发现页
      */
     public Observable<List<SearchBookBean>> findBook(String url, int page, String tag) {
-        return WebBook.getInstance(tag).findBook(url, page);
+        return WebBook.getInstance(tag)
+                .findBook(url, page)
+                .timeout(60, TimeUnit.SECONDS);
     }
 
     /**

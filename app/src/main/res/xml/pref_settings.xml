@@ -4,76 +4,78 @@
 
     <Preference
         android:key="webDavSetting"
-        android:title="WebDav设置"
-        android:summary="WebDav备份与恢复" />
+        android:summary="WebDav备份与恢复"
+        android:title="WebDav设置" />
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/bookshelf_px_title"
-        android:entryValues="@array/bookshelf_px_value"
-        android:key="@string/pk_bookshelf_px"
-        android:title="@string/bookshelf_px" />
+    <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="书架设置">
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="true"
-        android:key="@string/pk_auto_refresh"
-        android:summary="@string/ps_auto_refresh"
-        android:title="@string/pt_auto_refresh" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/bookshelf_px_title"
+            android:entryValues="@array/bookshelf_px_value"
+            android:key="@string/pk_bookshelf_px"
+            android:title="@string/bookshelf_px" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_auto_download"
-        android:summary="@string/ps_auto_download"
-        android:title="@string/pt_auto_download" />
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="true"
+            android:key="@string/pk_auto_refresh"
+            android:summary="@string/ps_auto_refresh"
+            android:title="@string/pt_auto_refresh" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_default_read"
-        android:summary="@string/ps_default_read"
-        android:title="@string/pt_default_read" />
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pk_auto_download"
+            android:summary="@string/ps_auto_download"
+            android:title="@string/pt_auto_download" />
 
-    <com.kunfei.bookshelf.widget.number.NumberPickerPreference
-        android:defaultValue="6"
-        android:key="@string/pk_threads_num"
-        android:summary="@string/threads_num"
-        android:title="@string/update_search_threads_num"
-        app:MaxValue="1024"
-        app:MinValue="1" />
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pk_default_read"
+            android:summary="@string/ps_default_read"
+            android:title="@string/pt_default_read" />
 
-    <com.kunfei.bookshelf.widget.number.NumberPickerPreference
-        android:defaultValue="1122"
-        android:key="webPort"
-        android:summary="@string/web_port_summary"
-        android:title="@string/web_port_title"
-        app:MaxValue="60000"
-        app:MinValue="1024" />
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="true"
+            android:key="showAllFind"
+            android:summary="@string/ps_show_all_find"
+            android:title="@string/pt_show_all_find" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="true"
-        android:key="showAllFind"
-        android:summary="@string/ps_show_all_find"
-        android:title="@string/pt_show_all_find" />
+    </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
-    <Preference
-        android:key="@string/pk_download_path"
-        android:title="@string/download_path" />
+    <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="其它设置">
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="false"
-        android:key="upChangeSourceLastChapter"
-        android:summary="@string/up_change_source_last_chapter_s"
-        android:title="@string/up_change_source_last_chapter_t" />
+        <Preference
+            android:key="@string/pk_download_path"
+            android:title="@string/download_path" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="true"
-        android:key="process_text"
-        android:summary="长按文字在操作菜单中显示阅读·搜索"
-        android:title="文字操作显示搜索" />
+        <com.kunfei.bookshelf.widget.number.NumberPickerPreference
+            android:defaultValue="6"
+            android:key="@string/pk_threads_num"
+            android:summary="@string/threads_num"
+            android:title="@string/update_search_threads_num"
+            app:MaxValue="1024"
+            app:MinValue="1" />
 
-    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
-        android:defaultValue="true"
-        android:key="behaviorMain"
-        android:summary="@string/behavior_main_s"
-        android:title="@string/behavior_main_t" />
+        <com.kunfei.bookshelf.widget.number.NumberPickerPreference
+            android:defaultValue="1122"
+            android:key="webPort"
+            android:summary="@string/web_port_summary"
+            android:title="@string/web_port_title"
+            app:MaxValue="60000"
+            app:MinValue="1024" />
+
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="false"
+            android:key="upChangeSourceLastChapter"
+            android:summary="@string/up_change_source_last_chapter_s"
+            android:title="@string/up_change_source_last_chapter_t" />
+
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="true"
+            android:key="process_text"
+            android:summary="长按文字在操作菜单中显示阅读·搜索"
+            android:title="文字操作显示搜索" />
+
+    </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
 </PreferenceScreen>

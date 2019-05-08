@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -226,6 +227,12 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             Intent intent = new Intent(fragment.getContext(), SourceEditActivity.class);
             intent.putExtra("data_key", key);
             fragment.startActivityForResult(intent, EDIT_SOURCE);
+        } else if (object instanceof Context) {
+            Context context = (Context) object;
+            Intent intent = new Intent(context, SourceEditActivity.class);
+            intent.putExtra("data_key", key);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 

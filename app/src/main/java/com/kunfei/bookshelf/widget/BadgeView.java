@@ -6,7 +6,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,9 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TabWidget;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.appcompat.widget.AppCompatTextView;
+
+import com.kunfei.bookshelf.R;
 
 
 /**
@@ -100,9 +99,7 @@ public class BadgeView extends AppCompatTextView {
         setText(getText());
     }
 
-    /*
-     * (non-Javadoc)
-     *
+    /**
      * @see android.widget.TextView#setText(java.lang.CharSequence, android.widget.TextView.BufferType)
      */
     @Override
@@ -180,18 +177,9 @@ public class BadgeView extends AppCompatTextView {
         incrementBadgeCount(-decrement);
     }
 
-    /*
+    /**
      * Attach the BadgeView to the TabWidget
-     *
      * @param target the TabWidget to attach the BadgeView
-     *
-     * @param tabIndex index of the tab
-     */
-    /*
-     * Attach the BadgeView to the TabWidget
-     *
-     * @param target the TabWidget to attach the BadgeView
-     *
      * @param tabIndex index of the tab
      */
     public void setTargetView(TabWidget target, int tabIndex) {
@@ -199,9 +187,8 @@ public class BadgeView extends AppCompatTextView {
         setTargetView(tabView);
     }
 
-    /*
+    /**
      * Attach the BadgeView to the target view
-     *
      * @param target the view to attach the BadgeView
      */
     public void setTargetView(View target) {
@@ -233,13 +220,11 @@ public class BadgeView extends AppCompatTextView {
             badgeContainer.addView(target);
 
             badgeContainer.addView(this);
-        } else if (target.getParent() == null) {
-            Log.e(getClass().getSimpleName(), "ParentView is needed");
         }
 
     }
 
-    /*
+    /**
      * converts dip to px
      */
     private int dip2Px(float dip) {

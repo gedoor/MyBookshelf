@@ -13,9 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 
 /**
@@ -279,87 +276,6 @@ public class MoDialogHUD {
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
         mSharedView.showAssetMarkdown(assetFileName);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 离线下载
-     */
-    public void showDownloadList(int startIndex, int endIndex, int all, DownLoadView.OnClickDownload clickDownload) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        DownLoadView.getInstance(mSharedView)
-                .showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 换源
-     */
-    public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        ChangeSourceView changeSourceView = ChangeSourceView.getInstance(mSharedView);
-        changeSourceView.showChangeSource(bookShelf, clickSource, this);
-        dismissListener = changeSourceView::onDestroy;
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 弹出输入框
-     */
-    public void showInputBox(String title, String defaultValue, String[] adapterValues, InputView.OnInputOk onInputOk) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        InputView.getInstance(mSharedView)
-                .showInputView(onInputOk, this, title, defaultValue, adapterValues);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 编辑替换规则
-     */
-    public void showPutReplaceRule(ReplaceRuleBean replaceRuleBean, EditReplaceRuleView.OnSaveReplaceRule onSaveReplaceRule) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        EditReplaceRuleView.getInstance(mSharedView)
-                .showEditReplaceRule(replaceRuleBean, onSaveReplaceRule, this);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    /**
-     * 书签
-     */
-    public void showBookmark(BookmarkBean bookmarkBean, boolean isAdd, EditBookmarkView.OnBookmarkClick bookmarkClick) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(v -> dismiss());
-        EditBookmarkView.getInstance(mSharedView)
-                .showBookmark(bookmarkBean, isAdd, bookmarkClick, this);
         if (!isShowing()) {
             onAttached();
         }

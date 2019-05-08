@@ -1,5 +1,9 @@
 package com.kunfei.bookshelf.presenter;
 
+import android.graphics.Color;
+
+import androidx.documentfile.provider.DocumentFile;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BasePresenterImpl;
@@ -13,7 +17,6 @@ import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import java.io.File;
 import java.util.List;
 
-import androidx.documentfile.provider.DocumentFile;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,6 +66,7 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
                         mView.refresh();
                         mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> restoreData(replaceRuleBean))
+                                .setActionTextColor(Color.WHITE)
                                 .show();
                     }
 

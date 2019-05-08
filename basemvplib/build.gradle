@@ -15,6 +15,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        android {
+        }
     }
 
     compileOptions {
@@ -24,19 +26,19 @@ android {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13-beta-2'
     api fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
 
     //support
     api 'androidx.core:core:1.1.0-alpha05'
     api 'androidx.appcompat:appcompat:1.1.0-alpha04'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxjava:2.2.6'
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    api 'io.reactivex.rxjava2:rxjava:2.2.8'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //RxBus
-    api 'com.hwangjr.rxbus:rxbus:2.0.0'
+    api 'com.hwangjr.rxbus:rxbus:2.0.1'
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'

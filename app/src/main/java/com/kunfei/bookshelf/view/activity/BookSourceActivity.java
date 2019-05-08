@@ -38,7 +38,7 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SubMenu groupMenu;
     private SubMenu sortMenu;
     private BookSourceAdapter adapter;
-    private MoDialogHUD moDialogHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
@@ -96,7 +95,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -385,11 +383,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
@@ -397,14 +397,15 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-        moDialogHUD.showInputBox(getString(R.string.input_book_source_url),
-                cacheUrl,
-                new String[]{cacheUrl},
-                inputText -> {
+        InputDialog.builder(this)
+                .setDefaultValue(cacheUrl)
+                .setTitle(getString(R.string.input_book_source_url))
+                .setAdapterValues(new String[]{cacheUrl})
+                .setCallBack(inputText -> {
                     inputText = StringUtils.trim(inputText);
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
-                });
+                }).show();
     }
 
     private void selectFileSys() {
@@ -425,12 +426,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.toAppSetting(BookSourceActivity.this);
             }
         });

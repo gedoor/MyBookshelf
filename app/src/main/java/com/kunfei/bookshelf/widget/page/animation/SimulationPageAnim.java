@@ -110,7 +110,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
     @Override
     public void startAnim() {
-        super.startAnim();
         int dx, dy;
         // dx 水平方向滑动的距离，负值会使滚动向左滚动
         // dy 垂直方向滑动的距离，负值会使滚动向上滚动
@@ -144,6 +143,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
         }
         mScroller.startScroll((int) mTouchX, (int) mTouchY, dx, dy, animationSpeed);
+        super.startAnim();
     }
 
     @Override

@@ -59,30 +59,27 @@ public class SlidePageAnim extends HorizonPageAnim {
 
     @Override
     public void startAnim() {
-        super.startAnim();
         int dx;
-        switch (mDirection) {
-            case NEXT:
-                if (isCancel) {
-                    int dis = (int) ((mScreenWidth - mStartX) + mTouchX);
-                    if (dis > mScreenWidth) {
-                        dis = mScreenWidth;
-                    }
-                    dx = mScreenWidth - dis;
-                } else {
-                    dx = (int) -(mTouchX + (mScreenWidth - mStartX));
+        if (mDirection == Direction.NEXT) {
+            if (isCancel) {
+                int dis = (int) ((mScreenWidth - mStartX) + mTouchX);
+                if (dis > mScreenWidth) {
+                    dis = mScreenWidth;
                 }
-                break;
-            default:
-                if (isCancel) {
-                    dx = (int) -Math.abs(mTouchX - mStartX);
-                } else {
-                    dx = (int) (mScreenWidth - (mTouchX - mStartX));
-                }
-                break;
+                dx = mScreenWidth - dis;
+            } else {
+                dx = (int) -(mTouchX + (mScreenWidth - mStartX));
+            }
+        } else {
+            if (isCancel) {
+                dx = (int) -Math.abs(mTouchX - mStartX);
+            } else {
+                dx = (int) (mScreenWidth - (mTouchX - mStartX));
+            }
         }
         //滑动速度保持一致
         int duration = (animationSpeed * Math.abs(dx)) / mScreenWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
+        super.startAnim();
     }
 }
