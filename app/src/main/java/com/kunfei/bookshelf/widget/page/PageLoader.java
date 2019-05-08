@@ -846,7 +846,7 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
-
+        if (txtChapter.getStatus() == TxtChapter.Status.MP3) return;
         if (!bookShelfBean.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? bookShelfBean.getChapter(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
@@ -951,6 +951,81 @@ public abstract class PageLoader {
         }
     }
 
+
+    /**
+     * 绘制内容
+     */
+    private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
+        if (bitmap == null) return;
+        if (txtChapter.getStatus() == TxtChapter.Status.MP3) return;
+
+        Canvas canvas = new Canvas(bitmap);
+        if (mPageMode == PageAnimation.Mode.SCROLL) {
+            bitmap.eraseColor(Color.TRANSPARENT);
+        }
+
+        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+
+        if (txtChapter.getStatus() != TxtChapter.Status.FINISH) {
+            //绘制字体
+            String tip = getStatusText(txtChapter);
+            drawErrorMsg(canvas, tip, 0);
+        } else {
+            float top = contentMarginHeight - fontMetrics.ascent;
+            if (mPageMode != PageAnimation.Mode.SCROLL) {
+                top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
+            }
+
+            //对标题进行绘制
+            String str;
+            int strLength = 0;
+            boolean isLight;
+            for (int i = 0; i < txtPage.titleLines; ++i) {
+                str = txtPage.lines.get(i);
+                strLength = strLength + str.length();
+                isLight = ReadAloudService.running && readAloudParagraph == 0;
+                mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
+
+                //进行绘制
+                canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
+
+                //设置尾部间距
+                if (i == txtPage.titleLines - 1) {
+                    top += titlePara;
+                } else {
+                    //行间距
+                    top += titleInterval;
+                }
+            }
+
+            if (txtPage.lines == null) {
+                return;
+            }
+            //对内容进行绘制
+            for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
+                str = txtPage.lines.get(i);
+                strLength = strLength + str.length();
+                int paragraphLength = txtPage.position == 0 ? strLength : txtChapter.getPageLength(txtPage.position - 1) + strLength;
+                isLight = ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(paragraphLength);
+                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
+                Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
+                if (needScale(str)) {
+                    drawScaledText(canvas, str, width, mTextPaint, top);
+                } else {
+                    canvas.drawText(str, mMarginLeft, top, mTextPaint);
+                }
+
+                //设置尾部间距
+                if (str.endsWith("\n")) {
+                    top += textPara;
+                } else {
+                    top += textInterval;
+                }
+            }
+        }
+    }
+
     public void drawCover(Canvas canvas, float top) {
     }
 
@@ -958,59 +1033,13 @@ public abstract class PageLoader {
         return cover == null ? 0 : cover.getHeight() + 20;
     }
 
-    void resetPageOffset() {
-        pageOffset = 0;
-        linePos = 0;
-        isLastPage = false;
-    }
-
-    private void switchToPageOffset(int offset) {
-        switch (offset) {
-            case 1:
-                if (mCurPagePos < mCurChapter.getPageSize() - 1) {
-                    mCurPagePos = mCurPagePos + 1;
-                } else if (mCurChapterPos < bookShelfBean.getChapterListSize() - 1) {
-                    mCurChapterPos = mCurChapterPos + 1;
-                    mPreChapter = mCurChapter;
-                    mCurChapter = mNextChapter;
-                    mNextChapter = null;
-                    mCurPagePos = 0;
-                    if (mCurChapter == null) {
-                        mCurChapter = new TxtChapter(mCurChapterPos);
-                        parseCurChapter();
-                    } else {
-                        parseNextChapter();
-                    }
-                }
-                break;
-            case -1:
-                if (mCurPagePos > 0) {
-                    mCurPagePos = mCurPagePos - 1;
-                } else if (mCurChapterPos > 0) {
-                    mCurChapterPos = mCurChapterPos - 1;
-                    mNextChapter = mCurChapter;
-                    mCurChapter = mPreChapter;
-                    mPreChapter = null;
-                    if (mCurChapter == null) {
-                        mCurChapter = new TxtChapter(mCurChapterPos);
-                        mCurPagePos = 0;
-                        parseCurChapter();
-                    } else {
-                        mCurPagePos = mCurChapter.getPageSize() - 1;
-                        parsePrevChapter();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     /**
      * 绘制内容-滚动
      */
     @SuppressWarnings("ConstantConditions")
     void drawContent(final Canvas canvas, float offset) {
+        if (mCurChapter.getStatus() == TxtChapter.Status.MP3) return;
+
         if (offset > MAX_SCROLL_OFFSET) {
             offset = MAX_SCROLL_OFFSET;
         } else if (offset < 0 - MAX_SCROLL_OFFSET) {
@@ -1180,6 +1209,54 @@ public abstract class PageLoader {
         }
     }
 
+    void resetPageOffset() {
+        pageOffset = 0;
+        linePos = 0;
+        isLastPage = false;
+    }
+
+    private void switchToPageOffset(int offset) {
+        switch (offset) {
+            case 1:
+                if (mCurPagePos < mCurChapter.getPageSize() - 1) {
+                    mCurPagePos = mCurPagePos + 1;
+                } else if (mCurChapterPos < bookShelfBean.getChapterListSize() - 1) {
+                    mCurChapterPos = mCurChapterPos + 1;
+                    mPreChapter = mCurChapter;
+                    mCurChapter = mNextChapter;
+                    mNextChapter = null;
+                    mCurPagePos = 0;
+                    if (mCurChapter == null) {
+                        mCurChapter = new TxtChapter(mCurChapterPos);
+                        parseCurChapter();
+                    } else {
+                        parseNextChapter();
+                    }
+                }
+                break;
+            case -1:
+                if (mCurPagePos > 0) {
+                    mCurPagePos = mCurPagePos - 1;
+                } else if (mCurChapterPos > 0) {
+                    mCurChapterPos = mCurChapterPos - 1;
+                    mNextChapter = mCurChapter;
+                    mCurChapter = mPreChapter;
+                    mPreChapter = null;
+                    if (mCurChapter == null) {
+                        mCurChapter = new TxtChapter(mCurChapterPos);
+                        mCurPagePos = 0;
+                        parseCurChapter();
+                    } else {
+                        mCurPagePos = mCurChapter.getPageSize() - 1;
+                        parsePrevChapter();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private float getFixedPageHeight(TxtChapter chapter, int pagePos) {
         float height = getPageHeight(chapter, pagePos);
         if (height == 0) {
@@ -1258,78 +1335,6 @@ public abstract class PageLoader {
                 tip = mContext.getString(R.string.on_change_source);
         }
         return tip;
-    }
-
-    /**
-     * 绘制内容
-     */
-    private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
-        if (bitmap == null) return;
-        Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == PageAnimation.Mode.SCROLL) {
-            bitmap.eraseColor(Color.TRANSPARENT);
-        }
-
-        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-
-        if (txtChapter.getStatus() != TxtChapter.Status.FINISH) {
-            //绘制字体
-            String tip = getStatusText(txtChapter);
-            drawErrorMsg(canvas, tip, 0);
-        } else {
-            float top = contentMarginHeight - fontMetrics.ascent;
-            if (mPageMode != PageAnimation.Mode.SCROLL) {
-                top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
-            }
-
-            //对标题进行绘制
-            String str;
-            int strLength = 0;
-            boolean isLight;
-            for (int i = 0; i < txtPage.titleLines; ++i) {
-                str = txtPage.lines.get(i);
-                strLength = strLength + str.length();
-                isLight = ReadAloudService.running && readAloudParagraph == 0;
-                mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-
-                //进行绘制
-                canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
-
-                //设置尾部间距
-                if (i == txtPage.titleLines - 1) {
-                    top += titlePara;
-                } else {
-                    //行间距
-                    top += titleInterval;
-                }
-            }
-
-            if (txtPage.lines == null) {
-                return;
-            }
-            //对内容进行绘制
-            for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
-                str = txtPage.lines.get(i);
-                strLength = strLength + str.length();
-                int paragraphLength = txtPage.position == 0 ? strLength : txtChapter.getPageLength(txtPage.position - 1) + strLength;
-                isLight = ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(paragraphLength);
-                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-                Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
-                if (needScale(str)) {
-                    drawScaledText(canvas, str, width, mTextPaint, top);
-                } else {
-                    canvas.drawText(str, mMarginLeft, top, mTextPaint);
-                }
-
-                //设置尾部间距
-                if (str.endsWith("\n")) {
-                    top += textPara;
-                } else {
-                    top += textInterval;
-                }
-            }
-        }
     }
 
     /**

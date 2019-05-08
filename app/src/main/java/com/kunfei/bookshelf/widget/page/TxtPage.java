@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,16 @@ class TxtPage {
     String title;
     int titleLines; //当前 lines 中为 title 的行数。
     List<String> lines;
+
+    TxtPage() {
+
+    }
+
+    TxtPage(String content) {
+        position = 0;
+        lines = new ArrayList<>();
+        lines.add(content);
+    }
 
     String getContent() {
         StringBuilder s = new StringBuilder();
