@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 书本信息
@@ -263,7 +264,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private void extractEpubCoverImage() {
         try {
             FileHelp.createFolderIfNotExists(coverPath);
-            Bitmap cover = BitmapFactory.decodeStream(PageLoaderEpub.readBook(new File(noteUrl)).getCoverImage().getInputStream());
+            Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
             String md5Path = coverPath + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
             FileOutputStream out = new FileOutputStream(new File(md5Path));
             cover.compress(Bitmap.CompressFormat.JPEG, 90, out);

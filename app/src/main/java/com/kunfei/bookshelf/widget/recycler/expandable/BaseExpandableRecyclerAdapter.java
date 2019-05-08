@@ -1,9 +1,11 @@
 package com.kunfei.bookshelf.widget.recycler.expandable;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.BaseItem;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.GroupItem;
@@ -11,9 +13,6 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleViewHolder.VIEW_TYPE_CHILD;
 import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleViewHolder.VIEW_TYPE_PARENT;
@@ -178,14 +177,14 @@ public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandA
         childDatas.clear();
         GroupItem groupItem;
         for (int i = 0; i < allDatas.size(); i++) {
-            if (allDatas.get(i).getGroupItem() instanceof GroupItem) {
+            if (allDatas.get(i).getGroupItem() != null) {
                 groupItem = allDatas.get(i).getGroupItem();
             } else {
                 break;
             }
             childDatas.add(i, groupItem.getChildDatas());
             showingDatas.add(groupItem);
-            if (null != groupItem && groupItem.hasChilds() && groupItem.isExpand()) {
+            if (groupItem.hasChilds() && groupItem.isExpand()) {
                 showingDatas.addAll(groupItem.getChildDatas());
             }
         }
@@ -291,17 +290,11 @@ public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandA
         return -1;
     }
 
-    /**
-     * @param groupPosition
-     * @param showDataPosition
-     * @return ChildPosition
-     */
     private int getChildPosition(int groupPosition, int showDataPosition) {
         Object item = showingDatas.get(showDataPosition);
         try {
             return childDatas.get(groupPosition).indexOf(item);
-        } catch (IndexOutOfBoundsException ex) {
-            Log.e(TAG, ex.getMessage());
+        } catch (IndexOutOfBoundsException ignored) {
         }
         return 0;
     }
@@ -323,17 +316,11 @@ public abstract class BaseExpandableRecyclerAdapter<T, S, VH extends BaseExpandA
 
     /**
      * onBind groupData to groupView
-     *
-     * @param holder
-     * @param position
      */
     public abstract void onBindGroupHolder(VH holder, int groupPos, int position, T groupData);
 
     /**
      * onBind childData to childView
-     *
-     * @param holder
-     * @param position
      */
     public abstract void onBindChildpHolder(VH holder, int groupPos, int childPos, int position, S childData);
 
