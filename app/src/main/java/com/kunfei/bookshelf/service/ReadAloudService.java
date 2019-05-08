@@ -221,10 +221,22 @@ public class ReadAloudService extends Service {
     private void initMediaPlayer() {
         if (mediaPlayer != null) return;
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnPreparedListener(MediaPlayer::start);
-        mediaPlayer.setOnCompletionListener(mp -> {
-            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
+        mediaPlayer.setOnPreparedListener(mp -> {
+            RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
+            RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
+            mp.start();
         });
+        mediaPlayer.setOnCompletionListener(mp -> RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT));
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    RxBus.get().post(RxBusTag.AUDIO_DUR, mediaPlayer.getCurrentPosition());
+                }
+                handler.postDelayed(this, 1000);
+            }
+        };
+        handler.postDelayed(runnable, 1000);
     }
 
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {

@@ -1291,6 +1291,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
+    public void upAudioSize(int audioSize) {
+
+    }
+
+    @Override
+    public void upAudioDur(int audioDur) {
+
+    }
+
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }

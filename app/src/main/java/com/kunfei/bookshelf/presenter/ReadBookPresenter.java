@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -125,8 +124,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                 mView.toast("已禁用" + bookSourceBean.getBookSourceName());
             }
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage() + "\n" + e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -462,6 +460,16 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
     public void recreate(Boolean recreate) {
         mView.recreate();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
+    public void upAudioSize(int audioSize) {
+        mView.upAudioSize(audioSize);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})
+    public void upAudioDur(int audioDur) {
+        mView.upAudioDur(audioDur);
     }
 
     public interface OnAddListener {

@@ -47,6 +47,10 @@ public interface ReadBookContract {
         void finish();
 
         void recreate();
+
+        void upAudioSize(int audioSize);
+
+        void upAudioDur(int audioDur);
     }
 
     interface Presenter extends IPresenter {
