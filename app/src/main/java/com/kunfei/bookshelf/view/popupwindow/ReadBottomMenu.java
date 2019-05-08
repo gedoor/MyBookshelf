@@ -72,7 +72,6 @@ public class ReadBottomMenu extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
     }
 
     public void setListener(OnMenuListener menuListener) {

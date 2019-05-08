@@ -60,6 +60,7 @@ import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;
+import com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop;
 import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
@@ -119,6 +120,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     MoreSettingPop moreSettingPop;
     @BindView(R.id.pb_nextPage)
     ProgressBar progressBarNextPage;
+    @BindView(R.id.mediaPlayerPop)
+    MediaPlayerPop mediaPlayerPop;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -691,6 +694,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
+                        if (mPageLoader.getPageStatus() == TxtChapter.Status.MP3) {
+                            if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
+                                mediaPlayerPop.setVisibility(View.VISIBLE);
+                            }
+                            readAloud();
+                            return;
+                        } else {
+                            if (mediaPlayerPop.getVisibility() == View.VISIBLE) {
+                                mediaPlayerPop.setVisibility(View.GONE);
+                            }
+                        }
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );

@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -23,7 +24,12 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
@@ -32,14 +38,11 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.MediaManager;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 
 import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
@@ -88,6 +91,9 @@ public class ReadAloudService extends Service {
     private Runnable dsRunnable;
     private MediaManager mediaManager;
     private int readAloudNumber;
+    private boolean isAudio;
+    private MediaPlayer mediaPlayer;
+    private String audioUrl;
 
     /**
      * 朗读
@@ -149,7 +155,6 @@ public class ReadAloudService extends Service {
         super.onCreate();
         running = true;
         preference = MApplication.getConfigPreferences();
-        textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaManager = MediaManager.getInstance();
@@ -208,8 +213,22 @@ public class ReadAloudService extends Service {
         }
     }
 
+    private void initTTS() {
+        if (textToSpeech == null)
+            textToSpeech = new TextToSpeech(this, new TTSListener());
+    }
+
+    private void initMediaPlayer() {
+        if (mediaPlayer != null) return;
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+        mediaPlayer.setOnCompletionListener(mp -> {
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
+        });
+    }
+
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
-        if (content == null) {
+        if (TextUtils.isEmpty(content)) {
             stopSelf();
             return;
         }
@@ -218,10 +237,18 @@ public class ReadAloudService extends Service {
         nowSpeak = 0;
         readAloudNumber = 0;
         contentList.clear();
-        String[] splitSpeech = content.split("\n");
-        for (String aSplitSpeech : splitSpeech) {
-            if (!isEmpty(aSplitSpeech)) {
-                contentList.add(aSplitSpeech);
+        if (content.matches("http.+\\.mp3")) {
+            isAudio = true;
+            initMediaPlayer();
+            audioUrl = content;
+        } else {
+            isAudio = false;
+            initTTS();
+            String[] splitSpeech = content.split("\n");
+            for (String aSplitSpeech : splitSpeech) {
+                if (!isEmpty(aSplitSpeech)) {
+                    contentList.add(aSplitSpeech);
+                }
             }
         }
         if (aloudButton || speak) {
@@ -232,11 +259,21 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (fadeTts) {
-            AsyncTask.execute(() -> mediaManager.fadeInVolume());
-            handler.postDelayed(this::playTTSN, 200);
+        updateNotification();
+        if (isAudio) {
+            try {
+                mediaPlayer.setDataSource(audioUrl);
+                mediaPlayer.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            playTTSN();
+            if (fadeTts) {
+                AsyncTask.execute(() -> mediaManager.fadeInVolume());
+                handler.postDelayed(this::playTTSN, 200);
+            } else {
+                playTTSN();
+            }
         }
     }
 
@@ -297,11 +334,15 @@ public class ReadAloudService extends Service {
         speak = false;
         updateNotification();
         updateMediaSessionPlaybackState();
-        if (fadeTts) {
-            AsyncTask.execute(() -> mediaManager.fadeOutVolume());
-            handler.postDelayed(() -> textToSpeech.stop(), 300);
+        if (isAudio) {
+            mediaPlayer.pause();
         } else {
-            textToSpeech.stop();
+            if (fadeTts) {
+                AsyncTask.execute(() -> mediaManager.fadeOutVolume());
+                handler.postDelayed(() -> textToSpeech.stop(), 300);
+            } else {
+                textToSpeech.stop();
+            }
         }
         RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
     }
@@ -312,7 +353,12 @@ public class ReadAloudService extends Service {
     private void resumeReadAloud() {
         updateTimer(0);
         pause = false;
-        playTTS();
+        updateNotification();
+        if (isAudio) {
+            mediaPlayer.start();
+        } else {
+            playTTS();
+        }
     }
 
     private void updateTimer(int minute) {
@@ -405,6 +451,10 @@ public class ReadAloudService extends Service {
     }
 
     private void clearTTS() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         if (textToSpeech != null) {
             if (fadeTts) {
                 AsyncTask.execute(() -> mediaManager.fadeOutVolume());
@@ -428,7 +478,9 @@ public class ReadAloudService extends Service {
      * @return 音频焦点
      */
     private boolean requestFocus() {
-        MediaManager.playSilentSound(this);
+        if (!isAudio) {
+            MediaManager.playSilentSound(this);
+        }
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             request = audioManager.requestAudioFocus(mFocusRequest);

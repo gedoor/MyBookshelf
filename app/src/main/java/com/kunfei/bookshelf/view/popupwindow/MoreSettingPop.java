@@ -10,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -17,8 +20,6 @@ import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.widget.views.ATESwitch;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -101,7 +102,6 @@ public class MoreSettingPop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
     }
 
     public void setListener(@NonNull OnChangeProListener changeProListener) {

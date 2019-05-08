@@ -16,6 +16,13 @@
         android:focusable="true"
         tools:visibility="gone" />
 
+    <com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop
+        android:id="@+id/mediaPlayerPop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <FrameLayout
         android:id="@+id/fl_menu"
         android:layout_width="match_parent"
@@ -34,8 +41,8 @@
             android:id="@+id/ll_menu_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <LinearLayout
                 android:id="@+id/ll_ISB"
@@ -67,12 +74,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:singleLine="true"
                         android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="2dp"
+                        android:singleLine="true"
                         android:textColor="@color/tv_text_default" />
 
                     <TextView
@@ -80,12 +87,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:singleLine="true"
                         android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="2dp"
+                        android:singleLine="true"
                         android:textColor="@color/tv_text_default"
                         android:visibility="gone" />
 
@@ -134,10 +141,10 @@
 
     <ProgressBar
         android:id="@+id/pb_nextPage"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_gravity="bottom"
-        android:visibility="invisible"
-        style="@android:style/Widget.ProgressBar.Horizontal" />
+        android:visibility="invisible" />
 
 </FrameLayout>
