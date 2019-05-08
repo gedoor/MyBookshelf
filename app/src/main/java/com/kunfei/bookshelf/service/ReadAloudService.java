@@ -256,6 +256,7 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
+        updateNotification();
         if (isAudio) {
             try {
                 mediaPlayer.setDataSource(audioUrl);
