@@ -381,6 +381,6 @@ public class StringUtils {
                 .replaceAll("<[script>]*.*?>|&nbsp;", "")// 删除script标签对和空格转义符
                 .replaceAll("\\s*\\n+\\s*", "\n　　")// 移除空行,并增加段前缩进2个汉字
                 .replaceAll("^[\\n\\s]+", "　　")//移除开头空行,并增加段前缩进2个汉字
-                .replaceAll("[\\n\\s]*$", "");//移除尾部空行
+                .replaceAll("[\\n\\s]+$", "");//移除尾部空行
     }
 }
