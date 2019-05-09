@@ -435,14 +435,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     }
 
+    /**
+     * 初始化播放界面
+     */
     private void initMediaPlayer() {
         mediaPlayerPop.setPlayClickListener(v -> onMediaButton());
-        mediaPlayerPop.setPrevClickListener(v -> mPageLoader.skipToPrePage());
-        mediaPlayerPop.setNextClickListener(v -> mPageLoader.skipToNextPage());
+        mediaPlayerPop.setPrevClickListener(v -> {
+            mPresenter.getBookShelf().setDurChapterPage(0);
+            mPageLoader.skipToPrePage();
+        });
+        mediaPlayerPop.setNextClickListener(v -> {
+            mPresenter.getBookShelf().setDurChapterPage(0);
+            mPageLoader.skipToNextPage();
+        });
     }
 
     /**
-     * 底部菜单
+     * 初始化底部菜单
      */
     private void initBottomMenu() {
         llMenuBottom.setListener(new ReadBottomMenu.OnMenuListener() {
@@ -533,7 +542,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
 
     /**
-     * 调节
+     * 初始化调节
      */
     private void initReadAdjustPop() {
         readAdjustPop.setListener(this, new ReadAdjustPop.OnAdjustListener() {
@@ -555,7 +564,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
-     * 界面设置
+     * 初始化界面设置
      */
     private void initReadInterfacePop() {
         readInterfacePop.setListener(this, new ReadInterfacePop.OnChangeProListener() {
@@ -602,7 +611,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
-     * 其它设置
+     * 初始化其它设置
      */
     private void initMoreSettingPop() {
         moreSettingPop.setListener(new MoreSettingPop.OnChangeProListener() {
@@ -1113,10 +1122,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(unReadContent)) {
             ReadAloudService.play(ReadBookActivity.this, false, unReadContent,
                     mPresenter.getBookShelf().getBookInfoBean().getName(),
-                    ChapterContentHelp.getInstance()
-                            .replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
+                    ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
                                     mPresenter.getBookShelf().getTag(),
-                                    mPresenter.getBookShelf().getDurChapterName()));
+                            mPresenter.getBookShelf().getDurChapterName()),
+                    mPresenter.getBookShelf().getDurChapterPage());
         }
     }
 
