@@ -68,8 +68,8 @@ dependencies {
     implementation project(':basemvplib')
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -79,7 +79,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
@@ -94,10 +94,6 @@ dependencies {
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
-
-    //codecMD5
-    //noinspection GradleDependency
-    implementation 'commons-codec:commons-codec:1.12'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'

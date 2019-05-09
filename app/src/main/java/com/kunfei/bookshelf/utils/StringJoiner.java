@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class StringJoiner {
@@ -53,6 +55,7 @@ public class StringJoiner {
     }
 
     //重写了toString 方法
+    @NonNull
     @Override
     public String toString() {
         if (value == null) {

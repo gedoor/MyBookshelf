@@ -17,6 +17,7 @@ package com.kunfei.bookshelf.widget.recycler.sectioned;
 
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -48,7 +49,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         setupIndices();
     }
@@ -112,8 +113,9 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
         positionWithinSection[index] = position;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
 
         if (isSectionHeaderViewType(viewType)) {
@@ -128,7 +130,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int section = sectionForPosition[position];
         int index = positionWithinSection[position];
 

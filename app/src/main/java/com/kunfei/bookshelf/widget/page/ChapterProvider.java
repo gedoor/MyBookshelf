@@ -3,14 +3,14 @@ package com.kunfei.bookshelf.widget.page;
 import android.text.Layout;
 import android.text.StaticLayout;
 
+import androidx.annotation.NonNull;
+
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 class ChapterProvider {
     private PageLoader pageLoader;
@@ -56,7 +56,12 @@ class ChapterProvider {
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
-        String allLine[] = content.split("\n");
+        String[] allLine = content.split("\n");
+        if (allLine[2].matches("http.+\\.mp3")) {
+            txtChapter.setStatus(TxtChapter.Status.MP3);
+            txtChapter.setMsg(allLine[2]);
+            return txtChapter;
+        }
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
         int titleLinesCount = 0;

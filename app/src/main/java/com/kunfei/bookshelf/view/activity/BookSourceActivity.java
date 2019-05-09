@@ -39,7 +39,6 @@ import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SubMenu groupMenu;
     private SubMenu sortMenu;
     private BookSourceAdapter adapter;
-    private MoDialogHUD moDialogHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
@@ -97,7 +95,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -386,11 +383,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
@@ -427,12 +426,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
             @Override
             public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
             }
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookSourceActivity.this.toast(R.string.import_book_source);
+                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
                 PermissionUtils.toAppSetting(BookSourceActivity.this);
             }
         });

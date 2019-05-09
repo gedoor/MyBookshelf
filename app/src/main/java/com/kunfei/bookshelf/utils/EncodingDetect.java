@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils;
 
+import androidx.annotation.NonNull;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,8 +12,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-
-import androidx.annotation.NonNull;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -279,7 +279,7 @@ class BytesEncodingDetect extends Encoding {
      * number from 0 to 100 representing probability text in array uses GB-2312
      * encoding
      */
-    int gb2312_probability(byte[] rawtext) {
+    private int gb2312_probability(byte[] rawtext) {
         int i, rawtextlen = 0;
         int dbchars = 1, gbchars = 1;
         long gbfreq = 0, totalfreq = 1;
@@ -320,60 +320,58 @@ class BytesEncodingDetect extends Encoding {
      * number from 0 to 100 representing probability text in array uses GBK
      * encoding
      */
-    int gbk_probability(byte[] rawtext) {
-        int i, rawtextlen = 0;
-        int dbchars = 1, gbchars = 1;
-        long gbfreq = 0, totalfreq = 1;
-        float rangeval = 0, freqval = 0;
+    private int gbk_probability(byte[] rawText) {
+        int i, rawTextLen = 0;
+        int dbChars = 1, gbChars = 1;
+        long gbFreq = 0, totalFreq = 1;
+        float rangeVal = 0, freqVal = 0;
         int row, column;
         // Stage 1: Check to see if characters fit into acceptable ranges
-        rawtextlen = rawtext.length;
-        for (i = 0; i < rawtextlen - 1; i++) {
-            // System.err.println(rawtext[i]);
-            if (rawtext[i] >= 0) {
-                // asciichars++;
-            } else {
-                dbchars++;
-                if ((byte) 0xA1 <= rawtext[i] && rawtext[i] <= (byte) 0xF7
+        rawTextLen = rawText.length;
+        for (i = 0; i < rawTextLen - 1; i++) {
+            // System.err.println(rawText[i]);
+            if (rawText[i] < 0) {
+                dbChars++;
+                if ((byte) 0xA1 <= rawText[i] && rawText[i] <= (byte) 0xF7
                         && // Original GB range
-                        (byte) 0xA1 <= rawtext[i + 1]
-                        && rawtext[i + 1] <= (byte) 0xFE) {
-                    gbchars++;
-                    totalfreq += 500;
-                    row = rawtext[i] + 256 - 0xA1;
-                    column = rawtext[i + 1] + 256 - 0xA1;
+                        (byte) 0xA1 <= rawText[i + 1]
+                        && rawText[i + 1] <= (byte) 0xFE) {
+                    gbChars++;
+                    totalFreq += 500;
+                    row = rawText[i] + 256 - 0xA1;
+                    column = rawText[i + 1] + 256 - 0xA1;
                     // System.out.println("original row " + row + " column " +
                     // column);
                     if (GBFreq[row][column] != 0) {
-                        gbfreq += GBFreq[row][column];
+                        gbFreq += GBFreq[row][column];
                     } else if (15 <= row && row < 55) {
-                        gbfreq += 200;
+                        gbFreq += 200;
                     }
-                } else if ((byte) 0x81 <= rawtext[i]
-                        && rawtext[i] <= (byte) 0xFE && // Extended GB range
-                        (((byte) 0x80 <= rawtext[i + 1] && rawtext[i + 1] <= (byte) 0xFE) || ((byte) 0x40 <= rawtext[i + 1] && rawtext[i + 1] <= (byte) 0x7E))) {
-                    gbchars++;
-                    totalfreq += 500;
-                    row = rawtext[i] + 256 - 0x81;
-                    if (0x40 <= rawtext[i + 1] && rawtext[i + 1] <= 0x7E) {
-                        column = rawtext[i + 1] - 0x40;
+                } else if ((byte) 0x81 <= rawText[i]
+                        && rawText[i] <= (byte) 0xFE && // Extended GB range
+                        (((byte) 0x80 <= rawText[i + 1] && rawText[i + 1] <= (byte) 0xFE) || ((byte) 0x40 <= rawText[i + 1] && rawText[i + 1] <= (byte) 0x7E))) {
+                    gbChars++;
+                    totalFreq += 500;
+                    row = rawText[i] + 256 - 0x81;
+                    if (0x40 <= rawText[i + 1] && rawText[i + 1] <= 0x7E) {
+                        column = rawText[i + 1] - 0x40;
                     } else {
-                        column = rawtext[i + 1] + 256 - 0x40;
+                        column = rawText[i + 1] + 256 - 0x40;
                     }
                     // System.out.println("extended row " + row + " column " +
                     // column + " rawtext[i] " + rawtext[i]);
                     if (GBKFreq[row][column] != 0) {
-                        gbfreq += GBKFreq[row][column];
+                        gbFreq += GBKFreq[row][column];
                     }
                 }
                 i++;
             }
         }
-        rangeval = 50 * ((float) gbchars / (float) dbchars);
-        freqval = 50 * ((float) gbfreq / (float) totalfreq);
+        rangeVal = 50 * ((float) gbChars / (float) dbChars);
+        freqVal = 50 * ((float) gbFreq / (float) totalFreq);
         // For regular GB files, this would give the same score, so I handicap
         // it slightly
-        return (int) (rangeval + freqval) - 1;
+        return (int) (rangeVal + freqVal) - 1;
     }
 
     /*
@@ -381,7 +379,7 @@ class BytesEncodingDetect extends Encoding {
      * number from 0 to 100 representing probability text in array uses GBK
      * encoding
      */
-    int gb18030_probability(byte[] rawtext) {
+    private int gb18030_probability(byte[] rawtext) {
         int i, rawtextlen = 0;
         int dbchars = 1, gbchars = 1;
         long gbfreq = 0, totalfreq = 1;
@@ -390,10 +388,8 @@ class BytesEncodingDetect extends Encoding {
         // Stage 1: Check to see if characters fit into acceptable ranges
         rawtextlen = rawtext.length;
         for (i = 0; i < rawtextlen - 1; i++) {
-            // System.err.println(rawtext[i]);
-            if (rawtext[i] >= 0) {
-                // asciichars++;
-            } else {
+            // System.err.println(rawText[i]);
+            if (rawtext[i] < 0) {
                 dbchars++;
                 if ((byte) 0xA1 <= rawtext[i] && rawtext[i] <= (byte) 0xF7
                         && // Original GB range
@@ -462,7 +458,7 @@ class BytesEncodingDetect extends Encoding {
      * Function: hz_probability Argument: byte array Returns : number from 0 to
      * 100 representing probability text in array uses HZ encoding
      */
-    int hz_probability(byte[] rawtext) {
+    private int hz_probability(byte[] rawtext) {
         int i, rawtextlen;
         int hzchars = 0, dbchars = 1;
         long hzfreq = 0, totalfreq = 1;
@@ -487,17 +483,6 @@ class BytesEncodingDetect extends Encoding {
                             hzchars += 2;
                             row = rawtext[i] - 0x21;
                             column = rawtext[i + 1] - 0x21;
-                            totalfreq += 500;
-                            if (GBFreq[row][column] != 0) {
-                                hzfreq += GBFreq[row][column];
-                            } else if (15 <= row && row < 55) {
-                                hzfreq += 200;
-                            }
-                        } else if ((0xA1 <= rawtext[i] && rawtext[i] <= 0xF7)
-                                && (0xA1 <= rawtext[i + 1] && rawtext[i + 1] <= 0xF7)) {
-                            hzchars += 2;
-                            row = rawtext[i] + 256 - 0xA1;
-                            column = rawtext[i + 1] + 256 - 0xA1;
                             totalfreq += 500;
                             if (GBFreq[row][column] != 0) {
                                 hzfreq += GBFreq[row][column];
@@ -534,7 +519,7 @@ class BytesEncodingDetect extends Encoding {
      * Function: big5_probability Argument: byte array Returns : number from 0
      * to 100 representing probability text in array uses Big5 encoding
      */
-    int big5_probability(byte[] rawtext) {
+    private int big5_probability(byte[] rawtext) {
         int i, rawtextlen = 0;
         int dbchars = 1, bfchars = 1;
         float rangeval = 0, freqval = 0;
@@ -543,9 +528,7 @@ class BytesEncodingDetect extends Encoding {
         // Check to see if characters fit into acceptable ranges
         rawtextlen = rawtext.length;
         for (i = 0; i < rawtextlen - 1; i++) {
-            if (rawtext[i] >= 0) {
-                // asciichars++;
-            } else {
+            if (rawtext[i] < 0) {
                 dbchars++;
                 if ((byte) 0xA1 <= rawtext[i]
                         && rawtext[i] <= (byte) 0xF9
@@ -573,77 +556,11 @@ class BytesEncodingDetect extends Encoding {
     }
 
     /*
-     * Function: big5plus_probability Argument: pointer to unsigned char array
-     * Returns : number from 0 to 100 representing probability text in array
-     * uses Big5+ encoding
-     */
-    int big5plus_probability(byte[] rawtext) {
-        int i, rawtextlen = 0;
-        int dbchars = 1, bfchars = 1;
-        long bffreq = 0, totalfreq = 1;
-        float rangeval = 0, freqval = 0;
-        int row, column;
-        // Stage 1: Check to see if characters fit into acceptable ranges
-        rawtextlen = rawtext.length;
-        for (i = 0; i < rawtextlen - 1; i++) {
-            // System.err.println(rawtext[i]);
-            if (rawtext[i] >= 128) {
-                // asciichars++;
-            } else {
-                dbchars++;
-                if (0xA1 <= rawtext[i]
-                        && rawtext[i] <= 0xF9
-                        && // Original Big5 range
-                        ((0x40 <= rawtext[i + 1] && rawtext[i + 1] <= 0x7E) || (0xA1 <= rawtext[i + 1] && rawtext[i + 1] <= 0xFE))) {
-                    bfchars++;
-                    totalfreq += 500;
-                    row = rawtext[i] - 0xA1;
-                    if (0x40 <= rawtext[i + 1] && rawtext[i + 1] <= 0x7E) {
-                        column = rawtext[i + 1] - 0x40;
-                    } else {
-                        column = rawtext[i + 1] - 0x61;
-                    }
-                    // System.out.println("original row " + row + " column " +
-                    // column);
-                    if (Big5Freq[row][column] != 0) {
-                        bffreq += Big5Freq[row][column];
-                    } else if (3 <= row && row < 37) {
-                        bffreq += 200;
-                    }
-                } else if (0x81 <= rawtext[i]
-                        && rawtext[i] <= 0xFE
-                        && // Extended Big5 range
-                        ((0x40 <= rawtext[i + 1] && rawtext[i + 1] <= 0x7E) || (0x80 <= rawtext[i + 1] && rawtext[i + 1] <= 0xFE))) {
-                    bfchars++;
-                    totalfreq += 500;
-                    row = rawtext[i] - 0x81;
-                    if (0x40 <= rawtext[i + 1] && rawtext[i + 1] <= 0x7E) {
-                        column = rawtext[i + 1] - 0x40;
-                    } else {
-                        column = rawtext[i + 1] - 0x40;
-                    }
-                    // System.out.println("extended row " + row + " column " +
-                    // column + " rawtext[i] " + rawtext[i]);
-                    if (Big5PFreq[row][column] != 0) {
-                        bffreq += Big5PFreq[row][column];
-                    }
-                }
-                i++;
-            }
-        }
-        rangeval = 50 * ((float) bfchars / (float) dbchars);
-        freqval = 50 * ((float) bffreq / (float) totalfreq);
-        // For regular Big5 files, this would give the same score, so I handicap
-        // it slightly
-        return (int) (rangeval + freqval) - 1;
-    }
-
-    /*
      * Function: euc_tw_probability Argument: byte array Returns : number from 0
      * to 100 representing probability text in array uses EUC-TW (CNS 11643)
      * encoding
      */
-    int euc_tw_probability(byte[] rawtext) {
+    private int euc_tw_probability(byte[] rawtext) {
         int i, rawtextlen = 0;
         int dbchars = 1, cnschars = 1;
         long cnsfreq = 0, totalfreq = 1;
@@ -653,9 +570,7 @@ class BytesEncodingDetect extends Encoding {
         // and have expected frequency of use
         rawtextlen = rawtext.length;
         for (i = 0; i < rawtextlen - 1; i++) {
-            if (rawtext[i] >= 0) { // in ASCII range
-                // asciichars++;
-            } else { // high bit set
+            if (rawtext[i] < 0) { // high bit set
                 dbchars++;
                 if (i + 3 < rawtextlen && (byte) 0x8E == rawtext[i]
                         && (byte) 0xA1 <= rawtext[i + 1]
@@ -965,7 +880,7 @@ class BytesEncodingDetect extends Encoding {
         return (int) (rangeval + freqval);
     }
 
-    int iso_2022_kr_probability(byte[] rawtext) {
+    private int iso_2022_kr_probability(byte[] rawtext) {
         int i;
         for (i = 0; i < rawtext.length; i++) {
             if (i + 3 < rawtext.length && rawtext[i] == 0x1b
@@ -983,7 +898,7 @@ class BytesEncodingDetect extends Encoding {
      * number from 0 to 100 representing probability text in array uses EUC-JP
      * encoding
      */
-    int euc_jp_probability(byte[] rawtext) {
+    private int euc_jp_probability(byte[] rawtext) {
         int i, rawtextlen = 0;
         int dbchars = 1, jpchars = 1;
         long jpfreq = 0, totalfreq = 1;
@@ -992,9 +907,9 @@ class BytesEncodingDetect extends Encoding {
         // Stage 1: Check to see if characters fit into acceptable ranges
         rawtextlen = rawtext.length;
         for (i = 0; i < rawtextlen - 1; i++) {
-            // System.err.println(rawtext[i]);
+            // System.err.println(rawText[i]);
             if (rawtext[i] >= 0) {
-                // asciichars++;
+                // asciiChars++;
             } else {
                 dbchars++;
                 if ((byte) 0xA1 <= rawtext[i] && rawtext[i] <= (byte) 0xFE

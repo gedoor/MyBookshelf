@@ -43,19 +43,19 @@ public class BaseModelImpl {
             case POST:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getPath(),
+                        .postMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getPath(),
+                        .getMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getPath(),
+                        .get(analyzeUrl.getPath(),
                                 analyzeUrl.getHeaderMap());
         }
     }

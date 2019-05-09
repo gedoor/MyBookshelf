@@ -3,11 +3,11 @@ package com.kunfei.bookshelf.view.adapter.base;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by newbiechen on 17-3-21.
@@ -31,8 +31,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
         View view = viewHolder.createItemView(parent);
         //初始化
-        RecyclerView.ViewHolder holder = new BaseViewHolder(view, viewHolder);
-        return holder;
+        return new BaseViewHolder(view, viewHolder);
     }
 
     @Override

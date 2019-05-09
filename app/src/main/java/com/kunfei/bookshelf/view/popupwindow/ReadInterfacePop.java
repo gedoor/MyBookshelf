@@ -11,6 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -24,14 +27,13 @@ import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReadInterfacePop extends FrameLayout {
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
     @BindView(R.id.fl_text_font)
@@ -107,7 +109,7 @@ public class ReadInterfacePop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_interface, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
+        vwBg.setOnClickListener(null);
     }
 
     public void setListener(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {

@@ -25,4 +25,6 @@ public class RxBusTag {
     public final static String READ_ALOUD_START = "readAloudStart";
     public final static String AUTO_BACKUP = "autoBackup";
     public final static String PRINT_DEBUG_LOG = "printDebugLog";
+    public final static String AUDIO_SIZE = "audioSize";
+    public final static String AUDIO_DUR = "audioDur";
 }
