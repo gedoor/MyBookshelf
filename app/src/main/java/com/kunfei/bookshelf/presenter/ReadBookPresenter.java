@@ -463,12 +463,12 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
-    public void upAudioSize(int audioSize) {
+    public void upAudioSize(Integer audioSize) {
         mView.upAudioSize(audioSize);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})
-    public void upAudioDur(int audioDur) {
+    public void upAudioDur(Integer audioDur) {
         mView.upAudioDur(audioDur);
     }
 

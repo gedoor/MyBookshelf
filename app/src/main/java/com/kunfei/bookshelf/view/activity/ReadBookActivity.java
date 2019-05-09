@@ -416,6 +416,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initReadAdjustPop();
         initMoreSettingPop();
         pageView.setBackground(readBookControl.getTextBackground(this));
+        mediaPlayerPop.setPlayClickListener(v -> onMediaButton());
+        mediaPlayerPop.setPrevClickListener(v -> mPageLoader.skipToPrePage());
+        mediaPlayerPop.setNextClickListener(v -> mPageLoader.skipToNextPage());
     }
 
     /**
@@ -698,8 +701,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
-                            readAloud();
-                            return;
                         } else {
                             if (mediaPlayerPop.getVisibility() == View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.GONE);

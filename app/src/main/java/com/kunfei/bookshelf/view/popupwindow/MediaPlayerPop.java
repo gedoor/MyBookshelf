@@ -87,4 +87,16 @@ public class MediaPlayerPop extends FrameLayout {
     public void upAudioDur(int audioDur) {
         playerProgress.setProgress(audioDur);
     }
+
+    public void setPlayClickListener(View.OnClickListener onClickListener) {
+        fabPlayStop.setOnClickListener(onClickListener);
+    }
+
+    public void setPrevClickListener(View.OnClickListener onClickListener) {
+        ivSkipPrevious.setOnClickListener(onClickListener);
+    }
+
+    public void setNextClickListener(View.OnClickListener onClickListener) {
+        ivSkipNext.setOnClickListener(onClickListener);
+    }
 }
