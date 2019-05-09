@@ -95,17 +95,19 @@ public class ReadAloudService extends Service {
     private boolean isAudio;
     private MediaPlayer mediaPlayer;
     private String audioUrl;
+    private int progress;
 
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content, String title, String text) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text, int progress) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
         readAloudIntent.putExtra("content", content);
         readAloudIntent.putExtra("title", title);
         readAloudIntent.putExtra("text", text);
+        readAloudIntent.putExtra("progress", progress);
         context.startService(readAloudIntent);
     }
 
@@ -203,7 +205,8 @@ public class ReadAloudService extends Service {
                         newReadAloud(intent.getStringExtra("content"),
                                 intent.getBooleanExtra("aloudButton", false),
                                 intent.getStringExtra("title"),
-                                intent.getStringExtra("text"));
+                                intent.getStringExtra("text"),
+                                intent.getIntExtra("progress", 0));
                         break;
                 }
             }
@@ -240,6 +243,7 @@ public class ReadAloudService extends Service {
         });
         mediaPlayer.setOnPreparedListener(mp -> {
             mp.start();
+            mp.seekTo(progress);
             speak = true;
             RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
             RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
@@ -252,13 +256,14 @@ public class ReadAloudService extends Service {
         });
     }
 
-    private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text, int progress) {
         if (TextUtils.isEmpty(content)) {
             stopSelf();
             return;
         }
         this.text = text;
         this.title = title;
+        this.progress = progress;
         nowSpeak = 0;
         readAloudNumber = 0;
         contentList.clear();
@@ -287,6 +292,7 @@ public class ReadAloudService extends Service {
         updateNotification();
         if (isAudio) {
             try {
+                mediaPlayer.reset();
                 mediaPlayer.setDataSource(audioUrl);
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
@@ -386,6 +392,7 @@ public class ReadAloudService extends Service {
         } else {
             playTTS();
         }
+        RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
     }
 
     private void updateTimer(int minute) {

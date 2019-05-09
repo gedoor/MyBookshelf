@@ -19,7 +19,7 @@
     <com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop
         android:id="@+id/mediaPlayerPop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:visibility="gone" />
 
