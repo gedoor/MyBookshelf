@@ -448,9 +448,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mPresenter.getBookShelf().setDurChapterPage(0);
             mPageLoader.skipToNextPage();
         });
-        mediaPlayerPop.setCallback(dur -> {
-
-        });
+        mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, dur));
     }
 
     /**
