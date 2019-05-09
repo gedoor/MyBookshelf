@@ -240,6 +240,8 @@ public class ReadAloudService extends Service {
         });
         mediaPlayer.setOnPreparedListener(mp -> {
             mp.start();
+            speak = true;
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
             RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
             RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
             handler.postDelayed(mpRunnable, 1000);
