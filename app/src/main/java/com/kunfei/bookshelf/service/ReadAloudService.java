@@ -89,7 +89,7 @@ public class ReadAloudService extends Service {
     private Handler handler = new Handler();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable dsRunnable;
-    private Runnable mPrunnable;
+    private Runnable mpRunnable;
     private MediaManager mediaManager;
     private int readAloudNumber;
     private boolean isAudio;
@@ -170,7 +170,7 @@ public class ReadAloudService extends Service {
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
-        mPrunnable = new Runnable() {
+        mpRunnable = new Runnable() {
             @Override
             public void run() {
                 if (mediaPlayer != null) {
@@ -241,9 +241,9 @@ public class ReadAloudService extends Service {
             mp.start();
             RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
             RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
-            handler.postDelayed(mPrunnable, 1000);
+            handler.postDelayed(mpRunnable, 1000);
         });
-        mediaPlayer.setOnCompletionListener(mp -> handler.removeCallbacks(mPrunnable));
+        mediaPlayer.setOnCompletionListener(mp -> handler.removeCallbacks(mpRunnable));
     }
 
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
