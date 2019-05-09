@@ -222,9 +222,9 @@ public class ReadAloudService extends Service {
         if (mediaPlayer != null) return;
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(mp -> {
-            RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
-            RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
-            mp.start();
+            RxBus.get().post(RxBusTag.AUDIO_SIZE, mediaPlayer.getDuration());
+            RxBus.get().post(RxBusTag.AUDIO_DUR, mediaPlayer.getCurrentPosition());
+            mediaPlayer.start();
         });
         mediaPlayer.setOnCompletionListener(mp -> RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT));
         Runnable runnable = new Runnable() {
@@ -237,6 +237,12 @@ public class ReadAloudService extends Service {
             }
         };
         handler.postDelayed(runnable, 1000);
+        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+            mainHandler.post(() ->
+                    Toast.makeText(ReadAloudService.this, "播放出错", Toast.LENGTH_LONG).show());
+            pauseReadAloud(true);
+            return false;
+        });
     }
 
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {

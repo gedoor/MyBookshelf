@@ -31,8 +31,8 @@ public class MediaPlayerPop extends FrameLayout {
     View vwBg;
     @BindView(R.id.tv_dur_time)
     TextView tvDurTime;
-    @BindView(R.id.hpb_read_progress)
-    ATESeekBar hpbReadProgress;
+    @BindView(R.id.player_progress)
+    ATESeekBar playerProgress;
     @BindView(R.id.tv_all_time)
     TextView tvAllTime;
     @BindView(R.id.iv_skip_previous)
@@ -78,5 +78,13 @@ public class MediaPlayerPop extends FrameLayout {
     private void setColor(Drawable drawable) {
         drawable.mutate();
         drawable.setColorFilter(primaryTextColor, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    public void upAudioSize(int audioSize) {
+        playerProgress.setMax(audioSize);
+    }
+
+    public void upAudioDur(int audioDur) {
+        playerProgress.setProgress(audioDur);
     }
 }

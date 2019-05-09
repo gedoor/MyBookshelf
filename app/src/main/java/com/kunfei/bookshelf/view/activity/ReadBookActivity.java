@@ -1292,12 +1292,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void upAudioSize(int audioSize) {
-
+        mediaPlayerPop.upAudioSize(audioSize);
     }
 
     @Override
     public void upAudioDur(int audioDur) {
-
+        mediaPlayerPop.upAudioDur(audioDur);
     }
 
     @Override
