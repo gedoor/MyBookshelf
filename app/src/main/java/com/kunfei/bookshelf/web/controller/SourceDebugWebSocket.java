@@ -44,7 +44,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         Map<String, String> debugBean = new Gson().fromJson(message.getTextPayload(), MAP_STRING);
         String tag = debugBean.get("tag");
         String key = debugBean.get("key");
-        Debug.newDebug(tag, key, compositeDisposable, new Debug.CallBack() {
+        Debug.newDebug(tag, key, compositeDisposable, new Debug.Callback() {
             @Override
             public void printLog(String msg) {
                 AsyncTask.execute(() -> {

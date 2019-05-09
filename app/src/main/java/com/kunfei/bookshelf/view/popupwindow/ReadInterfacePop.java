@@ -89,7 +89,7 @@ public class ReadInterfacePop extends FrameLayout {
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private OnChangeProListener changeProListener;
+    private Callback callback;
 
     public ReadInterfacePop(Context context) {
         super(context);
@@ -112,9 +112,9 @@ public class ReadInterfacePop extends FrameLayout {
         vwBg.setOnClickListener(null);
     }
 
-    public void setListener(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
+    public void setListener(ReadBookActivity readBookActivity, @NonNull Callback callback) {
         this.activity = readBookActivity;
-        this.changeProListener = changeProListener;
+        this.callback = callback;
         initData();
         bindEvent();
     }
@@ -131,7 +131,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTextSize())
                 .setOnChangedListener(number -> {
                     readBookControl.setTextSize((int) number);
-                    changeProListener.upTextSize();
+                    callback.upTextSize();
                 });
 
         nbLetterSpacing.setTitle(activity.getContext().getString(R.string.text_letter_spacing))
@@ -143,7 +143,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTextLetterSpacing())
                 .setOnChangedListener(number -> {
                     readBookControl.setTextLetterSpacing(number);
-                    changeProListener.upTextSize();
+                    callback.upTextSize();
                 });
 
         nbLineSize.setTitle(activity.getString(R.string.line_size))
@@ -155,7 +155,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getLineMultiplier())
                 .setOnChangedListener(number -> {
                     readBookControl.setLineMultiplier(number);
-                    changeProListener.upTextSize();
+                    callback.upTextSize();
                 });
 
         nbParagraphSize.setTitle(activity.getString(R.string.paragraph_size))
@@ -167,7 +167,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getParagraphSize())
                 .setOnChangedListener(number -> {
                     readBookControl.setParagraphSize(number);
-                    changeProListener.upTextSize();
+                    callback.upTextSize();
                 });
 
         nbPaddingTop.setTitle(activity.getString(R.string.padding_top))
@@ -177,7 +177,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getPaddingTop())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingTop((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
@@ -187,7 +187,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getPaddingBottom())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingBottom((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbPaddingLeft.setTitle(activity.getString(R.string.padding_left))
@@ -197,7 +197,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getPaddingLeft())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingLeft((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbPaddingRight.setTitle(activity.getString(R.string.padding_right))
@@ -207,7 +207,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getPaddingRight())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingRight((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
         nbTipPaddingTop.setTitle(activity.getString(R.string.padding_top))
                 .setMinNumber(0)
@@ -216,7 +216,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTipPaddingTop())
                 .setOnChangedListener(number -> {
                     readBookControl.setTipPaddingTop((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbTipPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
@@ -226,7 +226,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTipPaddingBottom())
                 .setOnChangedListener(number -> {
                     readBookControl.setTipPaddingBottom((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbTipPaddingLeft.setTitle(activity.getString(R.string.padding_left))
@@ -236,7 +236,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTipPaddingLeft())
                 .setOnChangedListener(number -> {
                     readBookControl.setTipPaddingLeft((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
 
         nbTipPaddingRight.setTitle(activity.getString(R.string.padding_right))
@@ -246,7 +246,7 @@ public class ReadInterfacePop extends FrameLayout {
                 .setNumber(readBookControl.getTipPaddingRight())
                 .setOnChangedListener(number -> {
                     readBookControl.setTipPaddingRight((int) number);
-                    changeProListener.upMargin();
+                    callback.upMargin();
                 });
     }
 
@@ -262,7 +262,7 @@ public class ReadInterfacePop extends FrameLayout {
                             readBookControl.getIndent(),
                             (dialogInterface, i) -> {
                                 readBookControl.setIndent(i);
-                                changeProListener.refresh();
+                                callback.refresh();
                                 dialogInterface.dismiss();
                             })
                     .create();
@@ -276,7 +276,7 @@ public class ReadInterfacePop extends FrameLayout {
                     .setSingleChoiceItems(PageAnimation.Mode.getAllPageMode(), readBookControl.getPageMode(), (dialogInterface, i) -> {
                         readBookControl.setPageMode(i);
                         updatePageMode(i);
-                        changeProListener.upPageMode();
+                        callback.upPageMode();
                         dialogInterface.dismiss();
                     })
                     .create();
@@ -287,28 +287,28 @@ public class ReadInterfacePop extends FrameLayout {
         flTextBold.setOnClickListener(view -> {
             readBookControl.setTextBold(!readBookControl.getTextBold());
             updateBoldText(readBookControl.getTextBold());
-            changeProListener.refresh();
+            callback.refresh();
         });
         //背景选择
         civBgWhite.setOnClickListener(v -> {
             updateBg(0);
-            changeProListener.bgChange();
+            callback.bgChange();
         });
         civBgYellow.setOnClickListener(v -> {
             updateBg(1);
-            changeProListener.bgChange();
+            callback.bgChange();
         });
         civBgGreen.setOnClickListener(v -> {
             updateBg(2);
-            changeProListener.bgChange();
+            callback.bgChange();
         });
         civBgBlue.setOnClickListener(v -> {
             updateBg(3);
-            changeProListener.bgChange();
+            callback.bgChange();
         });
         civBgBlack.setOnClickListener(v -> {
             updateBg(4);
-            changeProListener.bgChange();
+            callback.bgChange();
         });
         //自定义阅读样式
         civBgWhite.setOnLongClickListener(view -> customReadStyle(0));
@@ -361,13 +361,13 @@ public class ReadInterfacePop extends FrameLayout {
     //设置字体
     public void setReadFonts(String path) {
         readBookControl.setReadBookFont(path);
-        changeProListener.refresh();
+        callback.refresh();
     }
 
     //清除字体
     private void clearFontPath() {
         readBookControl.setReadBookFont(null);
-        changeProListener.refresh();
+        callback.refresh();
     }
 
     private void updatePageMode(int pageMode) {
@@ -417,7 +417,7 @@ public class ReadInterfacePop extends FrameLayout {
         readBookControl.setTextDrawableIndex(index);
     }
 
-    public interface OnChangeProListener {
+    public interface Callback {
         void upPageMode();
 
         void upTextSize();

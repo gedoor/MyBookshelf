@@ -80,7 +80,7 @@ public class MoreSettingPop extends FrameLayout {
 
     private Context context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private OnChangeProListener changeProListener;
+    private Callback callback;
 
     public MoreSettingPop(Context context) {
         super(context);
@@ -106,8 +106,8 @@ public class MoreSettingPop extends FrameLayout {
         vwBg.setOnClickListener(null);
     }
 
-    public void setListener(@NonNull OnChangeProListener changeProListener) {
-        this.changeProListener = changeProListener;
+    public void setListener(@NonNull Callback callback) {
+        this.callback = callback;
         initData();
         bindEvent();
     }
@@ -117,21 +117,21 @@ public class MoreSettingPop extends FrameLayout {
         sbImmersionStatusBar.setOnCheckedChangeListener(((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setImmersionStatusBar(b);
-                changeProListener.upBar();
+                callback.upBar();
                 RxBus.get().post(RxBusTag.RECREATE, true);
             }
         }));
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
-                changeProListener.recreate();
+                callback.recreate();
             }
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideNavigationBar(isChecked);
                 initData();
-                changeProListener.recreate();
+                callback.recreate();
             }
         });
         swVolumeNextPage.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -160,19 +160,19 @@ public class MoreSettingPop extends FrameLayout {
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTitle(isChecked);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTimeBattery(isChecked);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowLine(isChecked);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
@@ -181,7 +181,7 @@ public class MoreSettingPop extends FrameLayout {
                     .setSingleChoiceItems(context.getResources().getStringArray(R.array.screen_time_out), readBookControl.getScreenTimeOut(), (dialogInterface, i) -> {
                         readBookControl.setScreenTimeOut(i);
                         upScreenTimeOut(i);
-                        changeProListener.keepScreenOnChange(i);
+                        callback.keepScreenOnChange(i);
                         dialogInterface.dismiss();
                     })
                     .create();
@@ -195,7 +195,7 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
                         dialogInterface.dismiss();
-                        changeProListener.refreshPage();
+                        callback.refreshPage();
                     })
                     .create();
             dialog.show();
@@ -208,7 +208,7 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setScreenDirection(i);
                         upScreenDirection(i);
                         dialogInterface.dismiss();
-                        changeProListener.recreate();
+                        callback.recreate();
                     })
                     .create();
             dialog.show();
@@ -221,7 +221,7 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setNavBarColor(i);
                         upNavBarColor(i);
                         dialogInterface.dismiss();
-                        changeProListener.recreate();
+                        callback.recreate();
                     })
                     .create();
             dialog.show();
@@ -293,7 +293,7 @@ public class MoreSettingPop extends FrameLayout {
         reNavBarColorVal.setText(context.getResources().getStringArray(R.array.NavBarColors)[nColor]);
     }
 
-    public interface OnChangeProListener {
+    public interface Callback {
         void upBar();
 
         void keepScreenOnChange(int keepScreenOn);

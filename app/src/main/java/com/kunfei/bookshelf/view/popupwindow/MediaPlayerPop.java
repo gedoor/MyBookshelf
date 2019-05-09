@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,7 @@ public class MediaPlayerPop extends FrameLayout {
     @BindView(R.id.tv_dur_time)
     TextView tvDurTime;
     @BindView(R.id.player_progress)
-    ATESeekBar playerProgress;
+    ATESeekBar seekBar;
     @BindView(R.id.tv_all_time)
     TextView tvAllTime;
     @BindView(R.id.iv_skip_previous)
@@ -58,6 +59,7 @@ public class MediaPlayerPop extends FrameLayout {
     ImageView ivSkipNext;
 
     private int primaryTextColor;
+    private Callback callback;
 
     public MediaPlayerPop(@NonNull Context context) {
         super(context);
@@ -88,6 +90,25 @@ public class MediaPlayerPop extends FrameLayout {
         primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(ThemeStore.primaryColor(context)));
         setColor(ivSkipPrevious.getDrawable());
         setColor(ivSkipNext.getDrawable());
+        seekBar.setEnabled(false);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (callback != null) {
+                    callback.onStopTrackingTouch(seekBar.getProgress());
+                }
+            }
+        });
     }
 
     private void setColor(Drawable drawable) {
@@ -95,13 +116,21 @@ public class MediaPlayerPop extends FrameLayout {
         drawable.setColorFilter(primaryTextColor, PorterDuff.Mode.SRC_ATOP);
     }
 
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    public void setSeekBarEnable(boolean enable) {
+        seekBar.setEnabled(enable);
+    }
+
     public void upAudioSize(int audioSize) {
-        playerProgress.setMax(audioSize);
+        seekBar.setMax(audioSize);
         tvAllTime.setText(TimeUtils.millis2String(audioSize, timeFormat));
     }
 
     public void upAudioDur(int audioDur) {
-        playerProgress.setProgress(audioDur);
+        seekBar.setProgress(audioDur);
         tvDurTime.setText(TimeUtils.millis2String(audioDur, timeFormat));
     }
 
@@ -136,4 +165,10 @@ public class MediaPlayerPop extends FrameLayout {
                     .into(ivCover);
         }
     }
+
+    public interface Callback {
+
+        void onStopTrackingTouch(int dur);
+    }
+
 }

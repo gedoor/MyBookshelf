@@ -365,7 +365,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void selectBookSourceFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 FilePicker filePicker = new FilePicker(BookSourceActivity.this, FilePicker.FILE);
@@ -401,7 +401,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 .setDefaultValue(cacheUrl)
                 .setTitle(getString(R.string.input_book_source_url))
                 .setAdapterValues(new String[]{cacheUrl})
-                .setCallBack(inputText -> {
+                .setCallback(inputText -> {
                     inputText = StringUtils.trim(inputText);
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
@@ -418,7 +418,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 selectBookSourceFile();

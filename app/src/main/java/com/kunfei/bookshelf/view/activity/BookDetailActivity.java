@@ -266,7 +266,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         tvChangeOrigin.setOnClickListener(view ->
                 ChangeSourceDialog.builder(BookDetailActivity.this, mPresenter.getBookShelf())
-                        .setCallBack(searchBookBean -> {
+                        .setCallback(searchBookBean -> {
                             tvOrigin.setText(searchBookBean.getOrigin());
                             tvLoading.setVisibility(View.VISIBLE);
                             tvLoading.setText(R.string.loading);
