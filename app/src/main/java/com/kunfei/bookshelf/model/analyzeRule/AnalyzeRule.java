@@ -39,7 +39,7 @@ public class AnalyzeRule {
 
     private BaseBookBean book;
     private Object object;
-    private Boolean isJSON;
+    private Boolean isJSON = false;
     private String baseUrl = null;
 
     private AnalyzeByXPath analyzeByXPath = null;
@@ -274,7 +274,7 @@ public class AnalyzeRule {
     @SuppressLint("DefaultLocale")
     public List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
-        if (ruleStr == null) return ruleList;
+        if (TextUtils.isEmpty(ruleStr)) return ruleList;
         //检测Mode
         Mode mode;
         if (StringUtils.startWithIgnoreCase(ruleStr, "@XPath:")) {
