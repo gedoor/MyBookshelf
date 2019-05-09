@@ -11,6 +11,8 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 
+import org.mozilla.javascript.NativeObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -119,6 +121,42 @@ class BookChapter {
             }
             Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
+
+        if(ruleChapterList.startsWith("AllInOne")) {
+            Debug.printLog(tag, "┌解析目录列表", printLog);
+            List<Object> collections = analyzer.getElements(ruleChapterList.substring(8));
+            Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
+            NativeObject nativeObject = (NativeObject)collections.get(0);
+            Debug.printLog(tag, "┌获取章节名称");
+            String nameRule = bookSourceBean.getRuleChapterName();
+            if(isEmpty(nameRule)){
+                nameRule = "name";
+            }
+            String name = String.valueOf(nativeObject.get(nameRule));
+            Debug.printLog(tag, "└" + name);
+            Debug.printLog(tag, "┌获取章节网址");
+            String urlRule = bookSourceBean.getRuleContentUrl();
+            if(isEmpty(urlRule)){
+                urlRule = "url";
+            }
+            String url = String.valueOf(nativeObject.get(urlRule));
+            Debug.printLog(tag, "└" + url);
+
+            for (Object object: collections) {
+                nativeObject = (NativeObject)object;
+                name = String.valueOf(nativeObject.get(nameRule));
+                url = String.valueOf(nativeObject.get(urlRule));
+                if (!isEmpty(name) && !isEmpty(url)) {
+                    ChapterListBean temp = new ChapterListBean();
+                    temp.setTag(tag);
+                    temp.setDurChapterName(name);
+                    temp.setDurChapterUrl(url);
+                    chapterBeans.add(temp);
+                }
+            }
+            return new WebChapterBean<>(chapterBeans, nextUrlList);
+        }
+
         Debug.printLog(tag, "┌解析目录列表", printLog);
         List<Object> collections = analyzer.getElements(ruleChapterList);
         Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
