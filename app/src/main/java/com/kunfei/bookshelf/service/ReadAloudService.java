@@ -386,6 +386,7 @@ public class ReadAloudService extends Service {
         } else {
             playTTS();
         }
+        RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
     }
 
     private void updateTimer(int minute) {
