@@ -59,6 +59,7 @@
                     android:id="@+id/iv_skip_previous"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:background="@drawable/bg_ib_pre_round"
                     android:contentDescription="@string/skip_previous"
                     android:src="@drawable/ic_skip_previous_black_24dp" />
 
@@ -79,6 +80,7 @@
                     android:id="@+id/iv_skip_next"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:background="@drawable/bg_ib_pre_round"
                     android:contentDescription="@string/skip_next"
                     android:src="@drawable/ic_skip_next_black_24dp" />
 

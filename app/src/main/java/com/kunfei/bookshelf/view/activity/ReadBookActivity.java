@@ -1119,14 +1119,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case PLAY:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_pause_outline_24dp);
                 llMenuBottom.setReadAloudTimer(true);
+                mediaPlayerPop.setFabReadAloudImage(R.drawable.ic_pause_24dp);
                 break;
             case PAUSE:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_play_outline_24dp);
                 llMenuBottom.setReadAloudTimer(true);
+                mediaPlayerPop.setFabReadAloudImage(R.drawable.ic_play_24dp);
                 break;
             default:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_read_aloud);
                 llMenuBottom.setReadAloudTimer(false);
+                mediaPlayerPop.setFabReadAloudImage(R.drawable.ic_play_24dp);
                 pageView.drawPage(0);
                 pageView.invalidate();
                 pageView.drawPage(-1);

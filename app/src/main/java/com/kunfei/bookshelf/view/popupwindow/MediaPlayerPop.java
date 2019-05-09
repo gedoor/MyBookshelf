@@ -109,4 +109,8 @@ public class MediaPlayerPop extends FrameLayout {
     public void setNextClickListener(View.OnClickListener onClickListener) {
         ivSkipNext.setOnClickListener(onClickListener);
     }
+
+    public void setFabReadAloudImage(int id) {
+        fabPlayStop.setImageResource(id);
+    }
 }
