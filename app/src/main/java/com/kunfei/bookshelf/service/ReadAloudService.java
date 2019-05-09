@@ -287,6 +287,7 @@ public class ReadAloudService extends Service {
         updateNotification();
         if (isAudio) {
             try {
+                mediaPlayer.reset();
                 mediaPlayer.setDataSource(audioUrl);
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
