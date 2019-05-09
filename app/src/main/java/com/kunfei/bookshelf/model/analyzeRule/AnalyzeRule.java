@@ -144,10 +144,14 @@ public class AnalyzeRule {
         return getStringList(rule, false);
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
-        Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
+        return getStringList(ruleList, isUrl);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
+        Object result = null;
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
@@ -189,11 +193,13 @@ public class AnalyzeRule {
     }
 
     public String getString(String ruleStr, boolean isUrl) throws Exception {
-        if (StringUtils.isTrimEmpty(ruleStr)) {
-            return null;
-        }
-        Object result = null;
+        if (TextUtils.isEmpty(ruleStr)) return null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
+        return getString(ruleList, isUrl);
+    }
+
+    public String getString(List<SourceRule> ruleList, boolean isUrl) throws Exception {
+        Object result = null;
         for (SourceRule rule : ruleList) {
             if (!StringUtils.isTrimEmpty(rule.rule)) {
                 switch (rule.mode) {
@@ -266,7 +272,7 @@ public class AnalyzeRule {
      * 分解规则生成规则列表
      */
     @SuppressLint("DefaultLocale")
-    private List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
+    public List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
         if (ruleStr == null) return ruleList;
         //检测Mode
@@ -353,7 +359,7 @@ public class AnalyzeRule {
     /**
      * 规则类
      */
-    private class SourceRule {
+    public class SourceRule {
         Mode mode;
         String rule;
 

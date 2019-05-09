@@ -26,6 +26,9 @@ class BookChapter {
     private String tag;
     private BookSourceBean bookSourceBean;
     private AnalyzeRule analyzer;
+    private List<AnalyzeRule.SourceRule> nameRule;
+    private List<AnalyzeRule.SourceRule> urlRule;
+    private List<AnalyzeRule.SourceRule> nextUrlRule;
 
     BookChapter(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -41,8 +44,11 @@ class BookChapter {
                 Debug.printLog(tag, "┌成功获取目录页");
                 Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl());
             }
-            analyzer = new AnalyzeRule(bookShelfBean);
             bookShelfBean.setTag(tag);
+            analyzer = new AnalyzeRule(bookShelfBean);
+            nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
+            urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterUrl());
+            nextUrlRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterUrlNext());
             boolean dx = false;
             String ruleChapterList = bookSourceBean.getRuleChapterList();
             if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
@@ -109,7 +115,7 @@ class BookChapter {
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
             Debug.printLog(tag, "┌获取目录下一页网址", printLog);
-            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
+            nextUrlList = analyzer.getStringList(nextUrlRule, true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);
@@ -126,10 +132,10 @@ class BookChapter {
             String url;
             printLog = printLog && i == 0;
             Debug.printLog(tag, "┌获取章节名称", printLog);
-            name = analyzer.getString(bookSourceBean.getRuleChapterName());
+            name = analyzer.getString(nameRule, false);
             Debug.printLog(tag, "└" + name, printLog);
             Debug.printLog(tag, "┌获取章节网址", printLog);
-            url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
+            url = analyzer.getString(urlRule, true);
             Debug.printLog(tag, "└" + url, printLog);
 
             if (!isEmpty(name) && !isEmpty(url)) {
