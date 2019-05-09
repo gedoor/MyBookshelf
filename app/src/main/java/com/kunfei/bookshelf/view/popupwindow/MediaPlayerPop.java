@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -18,14 +19,21 @@ import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.views.ATESeekBar;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MediaPlayerPop extends FrameLayout {
+    @SuppressLint("ConstantLocale")
+    private final DateFormat timeFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
 
     @BindView(R.id.vw_bg)
     View vwBg;
@@ -82,10 +90,12 @@ public class MediaPlayerPop extends FrameLayout {
 
     public void upAudioSize(int audioSize) {
         playerProgress.setMax(audioSize);
+        tvAllTime.setText(TimeUtils.millis2String(audioSize, timeFormat));
     }
 
     public void upAudioDur(int audioDur) {
         playerProgress.setProgress(audioDur);
+        tvDurTime.setText(TimeUtils.millis2String(audioDur, timeFormat));
     }
 
     public void setPlayClickListener(View.OnClickListener onClickListener) {
@@ -98,5 +108,9 @@ public class MediaPlayerPop extends FrameLayout {
 
     public void setNextClickListener(View.OnClickListener onClickListener) {
         ivSkipNext.setOnClickListener(onClickListener);
+    }
+
+    public void setFabReadAloudImage(int id) {
+        fabPlayStop.setImageResource(id);
     }
 }

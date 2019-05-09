@@ -25,7 +25,8 @@ import butterknife.ButterKnife;
 
 
 public class MoreSettingPop extends FrameLayout {
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.sb_click_all_next)
     Switch sbClickAllNext;
     @BindView(R.id.sb_click)
@@ -102,6 +103,7 @@ public class MoreSettingPop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, this);
         ButterKnife.bind(this, view);
+        vwBg.setOnClickListener(null);
     }
 
     public void setListener(@NonNull OnChangeProListener changeProListener) {

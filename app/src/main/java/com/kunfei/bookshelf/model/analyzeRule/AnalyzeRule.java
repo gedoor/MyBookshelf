@@ -39,7 +39,7 @@ public class AnalyzeRule {
 
     private BaseBookBean book;
     private Object object;
-    private Boolean isJSON;
+    private Boolean isJSON = false;
     private String baseUrl = null;
 
     private AnalyzeByXPath analyzeByXPath = null;
@@ -144,14 +144,10 @@ public class AnalyzeRule {
         return getStringList(rule, false);
     }
 
-    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
-        List<SourceRule> ruleList = splitSourceRule(ruleStr);
-        return getStringList(ruleList, isUrl);
-    }
-
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
+    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
         Object result = null;
+        List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
@@ -274,7 +270,7 @@ public class AnalyzeRule {
     @SuppressLint("DefaultLocale")
     public List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
-        if (ruleStr == null) return ruleList;
+        if (TextUtils.isEmpty(ruleStr)) return ruleList;
         //检测Mode
         Mode mode;
         if (StringUtils.startWithIgnoreCase(ruleStr, "@XPath:")) {
