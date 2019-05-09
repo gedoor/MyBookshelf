@@ -629,6 +629,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public void startLoadingBook() {
         initPageView();
+        mediaPlayerPop.setCover(mPresenter.getBookShelf().getCustomCoverPath() != null ? mPresenter.getBookShelf().getCustomCoverPath()
+                : mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
     }
 
     /**
