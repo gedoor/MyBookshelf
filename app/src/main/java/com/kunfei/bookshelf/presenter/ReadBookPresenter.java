@@ -134,27 +134,22 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
+    public void saveBook() {
+        if (bookShelf != null) {
+            AsyncTask.execute(() -> BookshelfHelp.saveBookToShelf(bookShelf));
+        }
+    }
+
+    @Override
     public void saveProgress() {
         if (bookShelf != null) {
-            Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            AsyncTask.execute(() -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 bookShelf.upDurChapterName();
                 bookShelf.setHasUpdate(false);
-                BookshelfHelp.saveBookToShelf(bookShelf);
-                e.onNext(bookShelf);
-                e.onComplete();
-            }).subscribeOn(Schedulers.newThread())
-                    .subscribe(new MyObserver<BookShelfBean>() {
-                        @Override
-                        public void onNext(BookShelfBean value) {
-                            RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                        }
-                    });
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
+            });
         }
     }
 
