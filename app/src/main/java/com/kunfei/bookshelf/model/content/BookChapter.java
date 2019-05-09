@@ -28,7 +28,6 @@ class BookChapter {
     private AnalyzeRule analyzer;
     private List<AnalyzeRule.SourceRule> nameRule;
     private List<AnalyzeRule.SourceRule> urlRule;
-    private List<AnalyzeRule.SourceRule> nextUrlRule;
 
     BookChapter(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -111,10 +110,9 @@ class BookChapter {
         analyzer.setContent(s, chapterUrl);
         nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
         urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterUrl());
-        nextUrlRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterUrlNext());
-        if (!nextUrlRule.isEmpty()) {
+        if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
             Debug.printLog(tag, "┌获取目录下一页网址", printLog);
-            nextUrlList = analyzer.getStringList(nextUrlRule, true);
+            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);

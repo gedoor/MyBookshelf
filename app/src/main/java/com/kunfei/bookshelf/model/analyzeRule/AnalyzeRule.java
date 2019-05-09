@@ -144,14 +144,10 @@ public class AnalyzeRule {
         return getStringList(rule, false);
     }
 
-    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
-        List<SourceRule> ruleList = splitSourceRule(ruleStr);
-        return getStringList(ruleList, isUrl);
-    }
-
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
+    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
         Object result = null;
+        List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
