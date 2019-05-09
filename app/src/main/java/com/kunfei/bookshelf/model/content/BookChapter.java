@@ -109,7 +109,7 @@ class BookChapter {
 
         analyzer.setContent(s, chapterUrl);
         nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
-        urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterUrl());
+        urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleContentUrl());
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
             Debug.printLog(tag, "┌获取目录下一页网址", printLog);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
