@@ -368,8 +368,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mPresenter.saveProgress();
         //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
-        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
-        menuBottomIn.setAnimationListener(new Animation.AnimationListener() {
+        menuTopIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 initImmersionBar();
@@ -386,9 +385,49 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             }
         });
+        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
+        menuBottomIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                vMenuBg.setOnClickListener(v -> popMenuOut());
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         //隐藏菜单
         menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
+        menuTopOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                vMenuBg.setOnClickListener(null);
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                flMenu.setVisibility(View.INVISIBLE);
+                llMenuTop.setVisibility(View.INVISIBLE);
+                llMenuBottom.setVisibility(View.INVISIBLE);
+                readAdjustPop.setVisibility(View.INVISIBLE);
+                readInterfacePop.setVisibility(View.INVISIBLE);
+                moreSettingPop.setVisibility(View.INVISIBLE);
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
         menuBottomOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -439,6 +478,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化播放界面
      */
     private void initMediaPlayer() {
+        mediaPlayerPop.setIvChapterClickListener(v -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf()));
+        mediaPlayerPop.setIvTimerClickListener(v -> ReadAloudService.setTimer(getContext(), 10));
+        mediaPlayerPop.setIvCoverBgClickListener(v -> {
+            flMenu.setVisibility(View.VISIBLE);
+            llMenuTop.setVisibility(View.VISIBLE);
+            llMenuTop.startAnimation(menuTopIn);
+        });
         mediaPlayerPop.setPlayClickListener(v -> onMediaButton());
         mediaPlayerPop.setPrevClickListener(v -> {
             mPresenter.getBookShelf().setDurChapterPage(0);
@@ -748,7 +794,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
-                        if (mPresenter.getBookShelf().isMusic()) {
+                        if (mPresenter.getBookShelf().isMusic() && mPageLoader.getPageStatus() == TxtChapter.Status.FINISH) {
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
@@ -1102,6 +1148,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (flMenu.getVisibility() == View.VISIBLE) {
             if (llMenuTop.getVisibility() == View.VISIBLE) {
                 llMenuTop.startAnimation(menuTopOut);
+            }
+            if (llMenuBottom.getVisibility() == View.VISIBLE) {
                 llMenuBottom.startAnimation(menuBottomOut);
             }
             if (moreSettingPop.getVisibility() == View.VISIBLE) {
@@ -1126,7 +1174,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             ReadAloudService.play(ReadBookActivity.this, false, unReadContent,
                     mPresenter.getBookShelf().getBookInfoBean().getName(),
                     ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                    mPresenter.getBookShelf().getTag(),
+                            mPresenter.getBookShelf().getTag(),
                             mPresenter.getBookShelf().getDurChapterName()),
                     mPresenter.getBookShelf().isMusic(),
                     mPresenter.getBookShelf().getDurChapterPage());

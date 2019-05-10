@@ -154,7 +154,10 @@ public class BookSourceBean implements Cloneable {
     }
 
     public String getBookSourceName() {
-        return bookSourceType + bookSourceName;
+        if (StringUtils.startWithIgnoreCase(bookSourceName, BookType.MUSIC)) {
+            return bookSourceName;
+        }
+        return getBookSourceType() + bookSourceName;
     }
 
     public void setBookSourceName(String bookSourceName) {
@@ -472,7 +475,7 @@ public class BookSourceBean implements Cloneable {
     }
 
     public String getBookSourceType() {
-        return this.bookSourceType;
+        return bookSourceType == null ? "" : bookSourceType;
     }
 
     public void setBookSourceType(String bookSourceType) {

@@ -25,6 +25,7 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
+import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
@@ -460,6 +461,9 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
     public void upAudioSize(Integer audioSize) {
         mView.upAudioSize(audioSize);
+        ChapterListBean bean = bookShelf.getChapter(bookShelf.getDurChapter());
+        bean.setEnd(Long.valueOf(audioSize));
+        DbHelper.getDaoSession().getChapterListBeanDao().insertOrReplace(bean);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})
