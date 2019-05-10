@@ -1,16 +1,12 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -19,7 +15,7 @@ import java.util.regex.Matcher;
  * 章节列表
  */
 @Entity
-public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
+public class ChapterListBean implements Cloneable, BaseChapterBean {
 
     private String noteUrl; //对应BookInfoBean noteUrl;
 
@@ -32,16 +28,6 @@ public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
     private Long start;
     //章节内容在文章中的终止位置(本地)
     private Long end;
-
-    protected ChapterListBean(Parcel in) {
-        noteUrl = in.readString();
-        durChapterIndex = in.readInt();
-        durChapterUrl = in.readString();
-        durChapterName = in.readString();
-        tag = in.readString();
-        start = in.readLong();
-        end = in.readLong();
-    }
 
     @Generated(hash = 1504053071)
     public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
@@ -58,35 +44,6 @@ public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
     @Generated(hash = 1096893365)
     public ChapterListBean() {
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeInt(durChapterIndex);
-        dest.writeString(durChapterUrl);
-        dest.writeString(durChapterName);
-        dest.writeString(tag);
-        dest.writeLong(start);
-        dest.writeLong(end);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Transient
-    public static final Creator<ChapterListBean> CREATOR = new Creator<ChapterListBean>() {
-        @Override
-        public ChapterListBean createFromParcel(Parcel in) {
-            return new ChapterListBean(in);
-        }
-
-        @Override
-        public ChapterListBean[] newArray(int size) {
-            return new ChapterListBean[size];
-        }
-    };
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

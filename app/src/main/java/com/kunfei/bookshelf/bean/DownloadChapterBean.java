@@ -1,13 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Transient;
-
-public class DownloadChapterBean implements Parcelable, BaseChapterBean {
+public class DownloadChapterBean implements BaseChapterBean {
     private String noteUrl;
 
     private int durChapterIndex;  //当前章节数
@@ -20,45 +14,7 @@ public class DownloadChapterBean implements Parcelable, BaseChapterBean {
 
     private String bookName;
 
-    protected DownloadChapterBean(Parcel in) {
-        noteUrl = in.readString();
-        durChapterIndex = in.readInt();
-        durChapterUrl = in.readString();
-        durChapterName = in.readString();
-        tag = in.readString();
-        bookName = in.readString();
-    }
-
-    @Generated(hash = 301211198)
     public DownloadChapterBean() {
-    }
-
-    @Transient
-    public static final Creator<DownloadChapterBean> CREATOR = new Creator<DownloadChapterBean>() {
-        @Override
-        public DownloadChapterBean createFromParcel(Parcel in) {
-            return new DownloadChapterBean(in);
-        }
-
-        @Override
-        public DownloadChapterBean[] newArray(int size) {
-            return new DownloadChapterBean[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeInt(durChapterIndex);
-        dest.writeString(durChapterUrl);
-        dest.writeString(durChapterName);
-        dest.writeString(tag);
-        dest.writeString(bookName);
     }
 
     @Override
