@@ -143,8 +143,8 @@ public class MediaPlayerPop extends FrameLayout {
         tvDurTime.setText(TimeUtils.millis2String(audioDur, timeFormat));
     }
 
-    public void setIvCoverClickListener(OnClickListener onClickListener) {
-        ivCover.setOnClickListener(onClickListener);
+    public void setIvCoverBgClickListener(OnClickListener onClickListener) {
+        ivCoverBg.setOnClickListener(onClickListener);
     }
 
     public void setPlayClickListener(OnClickListener onClickListener) {
@@ -157,6 +157,14 @@ public class MediaPlayerPop extends FrameLayout {
 
     public void setNextClickListener(OnClickListener onClickListener) {
         ivSkipNext.setOnClickListener(onClickListener);
+    }
+
+    public void setIvTimerClickListener(OnClickListener onClickListener) {
+        ivTimer.setOnClickListener(onClickListener);
+    }
+
+    public void setIvChapterClickListener(OnClickListener onClickListener) {
+        ivChapter.setOnClickListener(onClickListener);
     }
 
     public void setFabReadAloudImage(int id) {
