@@ -274,7 +274,7 @@ public class AnalyzeRule {
     }
 
     /**
-     * 分离put规则
+     * 分离并执行put规则
      */
     private String splitPutRule(String ruleStr) throws Exception {
         Matcher putMatcher = putPattern.matcher(ruleStr);
