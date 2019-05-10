@@ -233,9 +233,8 @@ dQuery('.menu').addEventListener('click', e => {
 			showTab('调试书源');
 			let wsHost = (hashParam('domain') || location.host).replace(/.*\//, '').split(':');
 			function DebugPrint(msg) { dQuery('#DebugConsole').value += `\n${msg}` }
-			(async () => {
-				let saveRule = [rule2json()];
-				let sResult = await HttpPost(`/saveSources`, saveRule);
+			let saveRule = [rule2json()];
+			HttpPost(`/saveSources`, saveRule).then(sResult => {
 				if (sResult.isSuccess) {
 					let sKey = DebugKey.value ? DebugKey.value : '我的';
 					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
@@ -244,16 +243,17 @@ dQuery('.menu').addEventListener('click', e => {
 						ws.send(`{"tag":"${saveRule[0].bookSourceUrl}", "key":"${sKey}"}`);
 					};
 					ws.onmessage = (msg) => {
-						if (msg.data == 'finish') {
-							DebugPrint(`成功完成调试任务!`);
-						} else {
-							DebugPrint(msg.data);
-						}
+						DebugPrint(msg.data == 'finish' ? `\n[${Date().split(' ')[4]}] 调试任务已完成!` : msg.data);
 					};
-					ws.onerror = (err) => { throw `${err.data}`; }
-					ws.onclose = () => { thisNode.setAttribute('class', ''); }
+					ws.onerror = (err) => {
+						throw `${err.data}`;
+					}
+					ws.onclose = () => {
+						thisNode.setAttribute('class', '');
+						DebugPrint(`[${Date().split(' ')[4]}] 调试服务已关闭!`);
+					}
 				} else throw `${sResult.errorMsg}`;
-			})().catch(err => {
+			}).catch(err => {
 				DebugPrint(`调试过程意外中止，以下是详细错误信息:\n${err}`);
 				thisNode.setAttribute('class', '');
 			});

@@ -1,7 +1,8 @@
 package com.kunfei.bookshelf.web.controller;
 
 import android.os.AsyncTask;
-import android.os.Handler;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
@@ -23,16 +24,16 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     private CompositeDisposable compositeDisposable;
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    // 创建定时器用于向客户端发送心跳包
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
         @Override
         public void run() {
             try {
-                send(new byte[]{});
+                ping(new byte[]{0x9});
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            handler.postDelayed(this, 10000);
         }
     };
 
@@ -44,11 +45,12 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     protected void onOpen() {
         RxBus.get().register(this);
         compositeDisposable = new CompositeDisposable();
+        timer.schedule(task, 1000*10, 1000*10); // 启动心跳定时器
     }
 
     @Override
     protected void onClose(NanoWSD.WebSocketFrame.CloseCode code, String reason, boolean initiatedByRemote) {
-        handler.removeCallbacks(runnable);
+        timer.cancel();  // 关闭心跳定时器
         RxBus.get().unregister(this);
         compositeDisposable.dispose();
         Debug.SOURCE_DEBUG_TAG = null;
@@ -96,7 +98,6 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
                 });
             }
         });
-        handler.postDelayed(runnable, 10000);
     }
 
     @Override
