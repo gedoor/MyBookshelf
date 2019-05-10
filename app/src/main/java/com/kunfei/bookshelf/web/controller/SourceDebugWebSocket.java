@@ -36,7 +36,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     protected void onOpen() {
         RxBus.get().register(this);
         compositeDisposable = new CompositeDisposable();
-        Observable.timer(10, TimeUnit.SECONDS)
+        Observable.interval(10, 10, TimeUnit.SECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe(new MyObserver<Long>() {
                     @Override
