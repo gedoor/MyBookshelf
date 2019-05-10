@@ -9,6 +9,8 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import org.mozilla.javascript.NativeObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +66,7 @@ class BookList {
             } else {
                 List<Object> collections;
                 boolean reverse;
+                boolean allInOne = false;
                 String ruleSearchList;
                 if (bookSourceBean.getRuleSearchList().startsWith("-")) {
                     reverse = true;
@@ -71,6 +74,10 @@ class BookList {
                 } else {
                     reverse = false;
                     ruleSearchList = bookSourceBean.getRuleSearchList();
+                }
+                if (ruleSearchList.startsWith("+")) {
+                    allInOne = true;
+                    ruleSearchList = ruleSearchList.substring(1);
                 }
                 //获取列表
                 Debug.printLog(tag, "┌解析搜索列表");
@@ -83,13 +90,22 @@ class BookList {
                     }
                 } else {
                     Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
-                    for (int i = 0; i < collections.size(); i++) {
-                        Object object = collections.get(i);
-                        analyzer.setContent(object, baseUrl);
-                        SearchBookBean item;
-                        item = getItemInList(analyzer, baseUrl, i == 0);
-                        if (item != null) {
-                            books.add(item);
+                    if (allInOne) {
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            analyzer.setContent(object, baseUrl);
+                            SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
+                            }
                         }
                     }
                     if (books.size() > 1 && reverse) {
@@ -134,6 +150,40 @@ class BookList {
             Debug.printLog(tag, "┌获取简介");
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
             Debug.printLog(tag, "└" + item.getIntroduce());
+            return item;
+        }
+        return null;
+    }
+
+    private SearchBookBean getItemAllInOne(Object object, String baseUrl, boolean printLog) {
+        SearchBookBean item = new SearchBookBean();
+        NativeObject nativeObject = (NativeObject) object;
+        Debug.printLog(tag, "┌获取书名", printLog);
+        String bookName = String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchName()));
+        Debug.printLog(tag, "└" + bookName, printLog);
+        if (!TextUtils.isEmpty(bookName)) {
+            item.setTag(tag);
+            item.setOrigin(name);
+            item.setName(bookName);
+            Debug.printLog(tag, "┌获取作者", printLog);
+            item.setAuthor(String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchAuthor())));
+            Debug.printLog(tag, "└" + item.getAuthor(), printLog);
+            Debug.printLog(tag, "┌获取分类", printLog);
+            item.setKind(StringUtils.join(",", String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchKind()))));
+            Debug.printLog(tag, "└" + item.getKind(), printLog);
+            Debug.printLog(tag, "┌获取最新章节", printLog);
+            item.setLastChapter(String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchLastChapter())));
+            Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
+            Debug.printLog(tag, "┌获取简介", printLog);
+            item.setIntroduce(String.valueOf(nativeObject.get(bookSourceBean.getRuleIntroduce())));
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "┌获取封面", printLog);
+            item.setCoverUrl(String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchCoverUrl())));
+            Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
+            Debug.printLog(tag, "┌获取书籍网址", printLog);
+            String resultUrl = String.valueOf(nativeObject.get(bookSourceBean.getRuleSearchNoteUrl()));
+            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
         return null;
