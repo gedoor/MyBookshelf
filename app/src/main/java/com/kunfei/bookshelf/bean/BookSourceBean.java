@@ -154,6 +154,9 @@ public class BookSourceBean implements Cloneable {
     }
 
     public String getBookSourceName() {
+        if (StringUtils.startWithIgnoreCase(bookSourceName, BookType.MUSIC)) {
+            return bookSourceName;
+        }
         return getBookSourceType() + bookSourceName;
     }
 
