@@ -11,7 +11,6 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -23,14 +22,6 @@ class BookList {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private HashSet<String> putRule = new HashSet<>();
-    private List<AnalyzeRule.SourceRule> nameRule;
-    private List<AnalyzeRule.SourceRule> authorRule;
-    private List<AnalyzeRule.SourceRule> bookUrlRule;
-    private List<AnalyzeRule.SourceRule> coverUrlRule;
-    private List<AnalyzeRule.SourceRule> kindRule;
-    private List<AnalyzeRule.SourceRule> lastChapterRule;
-    private List<AnalyzeRule.SourceRule> introRule;
 
     BookList(String tag, String name, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -92,11 +83,11 @@ class BookList {
                     }
                 } else {
                     Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
-                    upRule(analyzer);
                     for (int i = 0; i < collections.size(); i++) {
                         Object object = collections.get(i);
                         analyzer.setContent(object, baseUrl);
-                        SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
+                        SearchBookBean item;
+                        item = getItemInList(analyzer, baseUrl, i == 0);
                         if (item != null) {
                             books.add(item);
                         }
@@ -110,20 +101,10 @@ class BookList {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.no_book_name)));
                 return;
             }
-            Debug.printLog(tag, "-搜索列表解析完成");
+            Debug.printLog(tag, "-书籍列表解析结束");
             e.onNext(books);
             e.onComplete();
         });
-    }
-
-    private void upRule(AnalyzeRule analyzeRule) throws Exception {
-        nameRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchName(), putRule));
-        authorRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchAuthor(), putRule));
-        bookUrlRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchNoteUrl(), putRule));
-        coverUrlRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchCoverUrl(), putRule));
-        kindRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchKind(), putRule));
-        lastChapterRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleSearchLastChapter(), putRule));
-        introRule = analyzeRule.splitSourceRule(analyzeRule.splitPutRule(bookSourceBean.getRuleIntroduce(), putRule));
     }
 
     private SearchBookBean getItem(AnalyzeRule analyzer, String baseUrl) throws Exception {
@@ -161,31 +142,30 @@ class BookList {
     private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl, boolean printLog) throws Exception {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
-        analyzer.putVariable(putRule);
         Debug.printLog(tag, "┌获取书名", printLog);
-        String bookName = analyzer.getString(nameRule);
+        String bookName = analyzer.getString(bookSourceBean.getRuleSearchName());
         Debug.printLog(tag, "└" + bookName, printLog);
         if (!TextUtils.isEmpty(bookName)) {
             item.setTag(tag);
             item.setOrigin(name);
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者", printLog);
-            item.setAuthor(analyzer.getString(authorRule));
+            item.setAuthor(analyzer.getString(bookSourceBean.getRuleSearchAuthor()));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
-            item.setKind(StringUtils.join(",", analyzer.getStringList(kindRule, false)));
+            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleSearchKind())));
             Debug.printLog(tag, "└" + item.getKind(), printLog);
             Debug.printLog(tag, "┌获取最新章节", printLog);
-            item.setLastChapter(analyzer.getString(lastChapterRule));
+            item.setLastChapter(analyzer.getString(bookSourceBean.getRuleSearchLastChapter()));
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
-            item.setIntroduce(analyzer.getString(introRule));
+            item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
             Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
             Debug.printLog(tag, "┌获取封面", printLog);
-            item.setCoverUrl(analyzer.getString(coverUrlRule, true));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleSearchCoverUrl(), true));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
-            String resultUrl = analyzer.getString(bookUrlRule, true);
+            String resultUrl = analyzer.getString(bookSourceBean.getRuleSearchNoteUrl(), true);
             item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
