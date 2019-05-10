@@ -91,7 +91,7 @@ public class WebService extends Service {
         if (inetAddress != null) {
             try {
                 httpServer.start();
-                webSocketServer.start(30000);
+                webSocketServer.start(60000);
                 isRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {
