@@ -439,6 +439,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化播放界面
      */
     private void initMediaPlayer() {
+        mediaPlayerPop.setIvCoverClickListener(v -> popMenuOut());
         mediaPlayerPop.setPlayClickListener(v -> onMediaButton());
         mediaPlayerPop.setPrevClickListener(v -> {
             mPresenter.getBookShelf().setDurChapterPage(0);

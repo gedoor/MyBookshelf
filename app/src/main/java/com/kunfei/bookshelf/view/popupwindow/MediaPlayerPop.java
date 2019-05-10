@@ -134,6 +134,10 @@ public class MediaPlayerPop extends FrameLayout {
         tvDurTime.setText(TimeUtils.millis2String(audioDur, timeFormat));
     }
 
+    public void setIvCoverClickListener(View.OnClickListener onClickListener) {
+        ivCover.setOnClickListener(onClickListener);
+    }
+
     public void setPlayClickListener(View.OnClickListener onClickListener) {
         fabPlayStop.setOnClickListener(onClickListener);
     }
