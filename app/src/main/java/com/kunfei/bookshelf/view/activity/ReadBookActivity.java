@@ -448,13 +448,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mPresenter.getBookShelf().setDurChapterPage(0);
             mPageLoader.skipToNextPage();
         });
+        mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, dur));
     }
 
     /**
      * 初始化底部菜单
      */
     private void initBottomMenu() {
-        llMenuBottom.setListener(new ReadBottomMenu.OnMenuListener() {
+        llMenuBottom.setListener(new ReadBottomMenu.Callback() {
             @Override
             public void skipToPage(int page) {
                 if (mPageLoader != null) {
@@ -545,7 +546,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化调节
      */
     private void initReadAdjustPop() {
-        readAdjustPop.setListener(this, new ReadAdjustPop.OnAdjustListener() {
+        readAdjustPop.setListener(this, new ReadAdjustPop.Callback() {
             @Override
             public void changeSpeechRate(int speechRate) {
                 if (ReadAloudService.running) {
@@ -567,7 +568,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化界面设置
      */
     private void initReadInterfacePop() {
-        readInterfacePop.setListener(this, new ReadInterfacePop.OnChangeProListener() {
+        readInterfacePop.setListener(this, new ReadInterfacePop.Callback() {
 
             @Override
             public void upPageMode() {
@@ -614,7 +615,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化其它设置
      */
     private void initMoreSettingPop() {
-        moreSettingPop.setListener(new MoreSettingPop.OnChangeProListener() {
+        moreSettingPop.setListener(new MoreSettingPop.Callback() {
             @Override
             public void upBar() {
                 initImmersionBar();
@@ -909,7 +910,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 bookmarkBean.setChapterName(mPresenter.getBookShelf().getDurChapterName());
             }
             BookmarkDialog.builder(this, bookmarkBean, isAdd)
-                    .setPositiveButton(new BookmarkDialog.CallBack() {
+                    .setPositiveButton(new BookmarkDialog.Callback() {
                         @Override
                         public void saveBookmark(BookmarkBean bookmarkBean) {
                             mPresenter.saveBookmark(bookmarkBean);
@@ -954,7 +955,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
             ChangeSourceDialog.builder(this, mPresenter.getBookShelf())
-                    .setCallBack(searchBookBean -> {
+                    .setCallback(searchBookBean -> {
                         if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
                             mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
                             mPresenter.changeBookSource(searchBookBean);
@@ -989,7 +990,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 .setTitle(getString(R.string.input_charset))
                 .setDefaultValue(charset)
                 .setAdapterValues(new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"})
-                .setCallBack(inputText -> {
+                .setCallback(inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
                         mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
@@ -1183,11 +1184,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_pause_outline_24dp);
                 llMenuBottom.setReadAloudTimer(true);
                 mediaPlayerPop.setFabReadAloudImage(R.drawable.ic_pause_24dp);
+                mediaPlayerPop.setSeekBarEnable(true);
                 break;
             case PAUSE:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_play_outline_24dp);
                 llMenuBottom.setReadAloudTimer(true);
                 mediaPlayerPop.setFabReadAloudImage(R.drawable.ic_play_24dp);
+                mediaPlayerPop.setSeekBarEnable(false);
                 break;
             default:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_read_aloud);
@@ -1410,7 +1413,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void openBookFromOther() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 mPresenter.openBookFromOther(ReadBookActivity.this);
@@ -1456,7 +1459,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 mPresenter.openBookFromOther(ReadBookActivity.this);

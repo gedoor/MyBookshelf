@@ -131,7 +131,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
             if (!WebDavHelp.initWebDav()) return super.onPreferenceTreeClick(preferenceScreen, preference);
-            PermissionUtils.checkMorePermissions(settingActivity, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            PermissionUtils.checkMorePermissions(settingActivity, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
 
                 /**
                  * 用户已授予权限

@@ -134,7 +134,7 @@ public class SourceDebugActivity extends MBaseActivity {
         compositeDisposable = new CompositeDisposable();
         loading.start();
         tvContent.setText("");
-        Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.CallBack() {
+        Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.Callback() {
             @Override
             public void printLog(String msg) {
                 printDebugLog(msg);

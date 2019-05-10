@@ -9,6 +9,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -41,10 +42,11 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onMessage(NanoWSD.WebSocketFrame message) {
+        if (!StringUtils.isJsonType(message.getTextPayload())) return;
         Map<String, String> debugBean = new Gson().fromJson(message.getTextPayload(), MAP_STRING);
         String tag = debugBean.get("tag");
         String key = debugBean.get("key");
-        Debug.newDebug(tag, key, compositeDisposable, new Debug.CallBack() {
+        Debug.newDebug(tag, key, compositeDisposable, new Debug.Callback() {
             @Override
             public void printLog(String msg) {
                 AsyncTask.execute(() -> {

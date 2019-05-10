@@ -77,14 +77,14 @@ public class ReplaceRuleDialog {
         }
     }
 
-    public ReplaceRuleDialog setPositiveButton(CallBack callBack) {
+    public ReplaceRuleDialog setPositiveButton(Callback callback) {
         tvOk.setOnClickListener(v -> {
             replaceRuleBean.setReplaceSummary(getEditableText(tieReplaceSummary.getText()));
             replaceRuleBean.setRegex(getEditableText(tieReplaceRule.getText()));
             replaceRuleBean.setIsRegex(cbUseRegex.isChecked());
             replaceRuleBean.setReplacement(getEditableText(tieReplaceTo.getText()));
             replaceRuleBean.setUseTo(getEditableText(tieUseTo.getText()));
-            callBack.onPositiveButton(replaceRuleBean);
+            callback.onPositiveButton(replaceRuleBean);
             dialog.dismiss();
         });
         return this;
@@ -102,7 +102,7 @@ public class ReplaceRuleDialog {
         return this;
     }
 
-    public interface CallBack {
+    public interface Callback {
         void onPositiveButton(ReplaceRuleBean replaceRuleBean);
     }
 

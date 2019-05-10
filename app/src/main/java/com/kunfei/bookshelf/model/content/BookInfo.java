@@ -85,6 +85,7 @@ class BookInfo {
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             bookInfoBean.setOrigin(name);
             bookShelfBean.setBookInfoBean(bookInfoBean);
+            Debug.printLog(tag, "-详情页解析完成");
             e.onNext(bookShelfBean);
             e.onComplete();
         });

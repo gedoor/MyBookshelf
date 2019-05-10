@@ -13,6 +13,7 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -144,10 +145,15 @@ public class AnalyzeRule {
         return getStringList(rule, false);
     }
 
+    public List<String> getStringList(String rule, boolean isUrl) throws Exception {
+        if (TextUtils.isEmpty(rule)) return null;
+        List<SourceRule> ruleList = splitSourceRule(rule);
+        return getStringList(ruleList, isUrl);
+    }
+
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(String ruleStr, boolean isUrl) throws Exception {
+    public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
         Object result = null;
-        List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
@@ -192,6 +198,10 @@ public class AnalyzeRule {
         if (TextUtils.isEmpty(ruleStr)) return null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         return getString(ruleList, isUrl);
+    }
+
+    public String getString(List<SourceRule> ruleList) throws Exception {
+        return getString(ruleList, false);
     }
 
     public String getString(List<SourceRule> ruleList, boolean isUrl) throws Exception {
@@ -256,12 +266,30 @@ public class AnalyzeRule {
     /**
      * 保存变量
      */
-    private void analyzeVariable(Map<String, String> putVariable) throws Exception {
-        for (Map.Entry<String, String> entry : putVariable.entrySet()) {
-            if (book != null) {
-                book.putVariable(entry.getKey(), getString(entry.getValue()));
+    public void putVariable(HashSet<String> putRule) throws Exception {
+        if (putRule.isEmpty()) return;
+        for (String rule : putRule) {
+            Map<String, String> putVariable = new Gson().fromJson(rule, MAP_STRING);
+            for (Map.Entry<String, String> entry : putVariable.entrySet()) {
+                if (book != null) {
+                    book.putVariable(entry.getKey(), getString(entry.getValue()));
+                }
             }
         }
+    }
+
+    /**
+     * 分离put规则
+     */
+    public String splitPutRule(String ruleStr, HashSet<String> putRule) {
+        Matcher putMatcher = putPattern.matcher(ruleStr);
+        while (putMatcher.find()) {
+            String find = putMatcher.group();
+            ruleStr = ruleStr.replace(find, "");
+            find = find.substring(5);
+            putRule.add(find);
+        }
+        return ruleStr;
     }
 
     /**
@@ -287,17 +315,9 @@ public class AnalyzeRule {
             }
         }
         //分离put规则
-        Matcher putMatcher = putPattern.matcher(ruleStr);
-        while (putMatcher.find()) {
-            String find = putMatcher.group();
-            ruleStr = ruleStr.replace(find, "");
-            find = find.substring(5);
-            try {
-                Map<String, String> putVariable = new Gson().fromJson(find, MAP_STRING);
-                analyzeVariable(putVariable);
-            } catch (Exception ignored) {
-            }
-        }
+        HashSet<String> putRule = new HashSet<>();
+        ruleStr = splitPutRule(ruleStr, putRule);
+        putVariable(putRule);
         //替换get值
         Matcher getMatcher = getPattern.matcher(ruleStr);
         while (getMatcher.find()) {

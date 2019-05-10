@@ -63,9 +63,9 @@ public class InputDialog {
         tvOk = view.findViewById(R.id.tv_ok);
     }
 
-    public InputDialog setCallBack(CallBack callBack) {
+    public InputDialog setCallback(Callback callback) {
         tvOk.setOnClickListener(view -> {
-            callBack.setInputText(etInput.getText().toString());
+            callback.setInputText(etInput.getText().toString());
             dialog.dismiss();
         });
         return this;
@@ -78,7 +78,7 @@ public class InputDialog {
     /**
      * 输入book地址确定
      */
-    public interface CallBack {
+    public interface Callback {
         void setInputText(String inputText);
     }
 }

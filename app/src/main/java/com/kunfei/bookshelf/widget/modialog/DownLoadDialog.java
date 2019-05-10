@@ -104,13 +104,13 @@ public class DownLoadDialog {
         tvCancel.setOnClickListener(v -> dialog.dismiss());
     }
 
-    public DownLoadDialog setPositiveButton(CallBack callBack) {
+    public DownLoadDialog setPositiveButton(Callback callback) {
         tvDownload.setOnClickListener(v -> {
             if (edtStart.getText().length() > 0 && edtEnd.getText().length() > 0) {
                 if (Integer.parseInt(edtStart.getText().toString()) > Integer.parseInt(edtEnd.getText().toString())) {
                     Toast.makeText(context, "输入错误", Toast.LENGTH_SHORT).show();
                 } else {
-                    callBack.download(Integer.parseInt(edtStart.getText().toString()) - 1, Integer.parseInt(edtEnd.getText().toString()) - 1);
+                    callback.download(Integer.parseInt(edtStart.getText().toString()) - 1, Integer.parseInt(edtEnd.getText().toString()) - 1);
                 }
                 dialog.dismiss();
             } else {
@@ -125,7 +125,7 @@ public class DownLoadDialog {
         return this;
     }
 
-    public interface CallBack {
+    public interface Callback {
         void download(int start, int end);
     }
 

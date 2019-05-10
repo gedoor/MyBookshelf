@@ -59,6 +59,7 @@ public class ReadAloudService extends Service {
     public static final String ActionResumeService = "resumeService";
     private static final String ActionReadActivity = "readActivity";
     private static final String ActionSetTimer = "updateTimer";
+    private static final String ActionSetProgress = "setProgress";
     private static final int notificationId = 3222;
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
             | PlaybackStateCompat.ACTION_PAUSE
@@ -153,6 +154,15 @@ public class ReadAloudService extends Service {
         }
     }
 
+    public static void setProgress(Context context, int progress) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionSetProgress);
+            intent.putExtra("progress", progress);
+            context.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -207,6 +217,11 @@ public class ReadAloudService extends Service {
                                 intent.getStringExtra("title"),
                                 intent.getStringExtra("text"),
                                 intent.getIntExtra("progress", 0));
+                        break;
+                    case ActionSetProgress:
+                        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                            mediaPlayer.seekTo(intent.getIntExtra("progress", 0));
+                        }
                         break;
                 }
             }
