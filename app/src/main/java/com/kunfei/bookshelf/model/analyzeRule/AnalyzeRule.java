@@ -13,7 +13,6 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -266,14 +265,10 @@ public class AnalyzeRule {
     /**
      * 保存变量
      */
-    public void putVariable(HashSet<String> putRule) throws Exception {
-        if (putRule.isEmpty()) return;
-        for (String rule : putRule) {
-            Map<String, String> putVariable = new Gson().fromJson(rule, MAP_STRING);
-            for (Map.Entry<String, String> entry : putVariable.entrySet()) {
-                if (book != null) {
-                    book.putVariable(entry.getKey(), getString(entry.getValue()));
-                }
+    private void putVar(Map<String, String> map) throws Exception {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (book != null) {
+                book.putVariable(entry.getKey(), getString(entry.getValue()));
             }
         }
     }
@@ -281,13 +276,13 @@ public class AnalyzeRule {
     /**
      * 分离put规则
      */
-    public String splitPutRule(String ruleStr, HashSet<String> putRule) {
+    private String splitPutRule(String ruleStr) throws Exception {
         Matcher putMatcher = putPattern.matcher(ruleStr);
         while (putMatcher.find()) {
             String find = putMatcher.group();
             ruleStr = ruleStr.replace(find, "");
-            find = find.substring(5);
-            putRule.add(find);
+            Map<String, String> map = new Gson().fromJson(find.substring(5), MAP_STRING);
+            putVar(map);
         }
         return ruleStr;
     }
@@ -315,9 +310,7 @@ public class AnalyzeRule {
             }
         }
         //分离put规则
-        HashSet<String> putRule = new HashSet<>();
-        ruleStr = splitPutRule(ruleStr, putRule);
-        putVariable(putRule);
+        ruleStr = splitPutRule(ruleStr);
         //替换get值
         Matcher getMatcher = getPattern.matcher(ruleStr);
         while (getMatcher.find()) {
