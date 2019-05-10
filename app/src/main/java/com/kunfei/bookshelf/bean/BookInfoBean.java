@@ -4,12 +4,11 @@ package com.kunfei.bookshelf.bean;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
@@ -31,7 +30,7 @@ import java.util.Objects;
  * 书本信息
  */
 @Entity
-public class BookInfoBean implements Parcelable, Cloneable {
+public class BookInfoBean implements Cloneable {
 
     private String name; //小说名
     private String tag;
@@ -44,6 +43,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
     private String introduce; //简介
     private String origin; //来源
     private String charset;//编码
+    private String bookSourceType = BookType.TEXT.name();
 
     @Transient
     private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
@@ -57,37 +57,9 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     }
 
-    @Transient
-    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
-        @Override
-        public BookInfoBean createFromParcel(Parcel in) {
-            return new BookInfoBean(in);
-        }
-
-        @Override
-        public BookInfoBean[] newArray(int size) {
-            return new BookInfoBean[size];
-        }
-    };
-
-    protected BookInfoBean(Parcel in) {
-        name = in.readString();
-        tag = in.readString();
-        noteUrl = in.readString();
-        chapterUrl = in.readString();
-        finalRefreshData = in.readLong();
-        coverUrl = in.readString();
-        author = in.readString();
-        introduce = in.readString();
-        origin = in.readString();
-        charset = in.readString();
-        chapterList = in.createTypedArrayList(ChapterListBean.CREATOR);
-        bookmarkList = in.createTypedArrayList(BookmarkBean.CREATOR);
-    }
-
-    @Generated(hash = 1022173528)
-    public BookInfoBean(String name, String tag, String noteUrl, String chapterUrl, long finalRefreshData, String coverUrl,
-                        String author, String introduce, String origin, String charset) {
+    @Generated(hash = 906814482)
+    public BookInfoBean(String name, String tag, String noteUrl, String chapterUrl, long finalRefreshData, String coverUrl, String author, String introduce,
+                        String origin, String charset, String bookSourceType) {
         this.name = name;
         this.tag = tag;
         this.noteUrl = noteUrl;
@@ -98,27 +70,7 @@ public class BookInfoBean implements Parcelable, Cloneable {
         this.introduce = introduce;
         this.origin = origin;
         this.charset = charset;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(tag);
-        dest.writeString(noteUrl);
-        dest.writeString(chapterUrl);
-        dest.writeLong(finalRefreshData);
-        dest.writeString(coverUrl);
-        dest.writeString(author);
-        dest.writeString(introduce);
-        dest.writeString(origin);
-        dest.writeString(charset);
-        dest.writeTypedList(chapterList);
-        dest.writeTypedList(bookmarkList);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        this.bookSourceType = bookSourceType;
     }
 
     @Override
@@ -278,6 +230,14 @@ public class BookInfoBean implements Parcelable, Cloneable {
 
     private boolean isEpub() {
         return tag.equals(BookShelfBean.LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
+    }
+
+    public String getBookSourceType() {
+        return this.bookSourceType;
+    }
+
+    public void setBookSourceType(String bookSourceType) {
+        this.bookSourceType = bookSourceType;
     }
 
 }
