@@ -110,6 +110,7 @@ class BookList {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.no_book_name)));
                 return;
             }
+            Debug.printLog(tag, "-搜索列表解析完成");
             e.onNext(books);
             e.onComplete();
         });
