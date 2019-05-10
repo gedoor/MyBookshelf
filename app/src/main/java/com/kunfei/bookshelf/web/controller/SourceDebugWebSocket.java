@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.web.controller;
 
 import android.os.AsyncTask;
-import android.os.Handler;
 
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
@@ -23,8 +22,6 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     private CompositeDisposable compositeDisposable;
-    private Handler handler = new Handler();
-    private Runnable runnable;
 
     public SourceDebugWebSocket(NanoHTTPD.IHTTPSession handshakeRequest) {
         super(handshakeRequest);
@@ -38,7 +35,6 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onClose(NanoWSD.WebSocketFrame.CloseCode code, String reason, boolean initiatedByRemote) {
-        handler.removeCallbacks(runnable);
         RxBus.get().unregister(this);
         compositeDisposable.dispose();
         Debug.SOURCE_DEBUG_TAG = null;
@@ -86,18 +82,6 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
                 });
             }
         });
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    send(new byte[]{});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                handler.postDelayed(this, 10000);
-            }
-        };
-        handler.postDelayed(runnable, 10000);
     }
 
     @Override
