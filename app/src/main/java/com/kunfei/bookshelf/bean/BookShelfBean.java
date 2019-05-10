@@ -4,6 +4,7 @@ package com.kunfei.bookshelf.bean;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.constant.BookType;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -13,6 +14,7 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
@@ -341,4 +343,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         this.useReplaceRule = useReplaceRule;
     }
 
+    public boolean isMusic() {
+        return Objects.equals(bookInfoBean.getBookSourceType(), BookType.MUSIC);
+    }
 }

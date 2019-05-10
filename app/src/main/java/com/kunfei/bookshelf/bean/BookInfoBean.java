@@ -8,7 +8,6 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
@@ -43,7 +42,7 @@ public class BookInfoBean implements Cloneable {
     private String introduce; //简介
     private String origin; //来源
     private String charset;//编码
-    private String bookSourceType = BookType.TEXT.name();
+    private String bookSourceType;
 
     @Transient
     private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表

@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.bean;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.constant.BookType;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -26,7 +27,7 @@ public class BookSourceBean implements Cloneable {
     private String bookSourceUrl;
     private String bookSourceName;
     private String bookSourceGroup;
-    private String bookSourceType = BookType.TEXT.name();
+    private String bookSourceType;
     private String loginUrl;
     private Long lastUpdateTime;
     @OrderBy
@@ -153,10 +154,16 @@ public class BookSourceBean implements Cloneable {
     }
 
     public String getBookSourceName() {
-        return bookSourceName;
+        return bookSourceType + bookSourceName;
     }
 
     public void setBookSourceName(String bookSourceName) {
+        if (StringUtils.startWithIgnoreCase(bookSourceName, BookType.MUSIC)) {
+            setBookSourceType(BookType.MUSIC);
+            bookSourceName = bookSourceName.substring(BookType.MUSIC.length());
+        } else {
+            setBookSourceType("");
+        }
         this.bookSourceName = bookSourceName;
     }
 
