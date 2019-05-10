@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.help.BlurTransformation;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
@@ -57,6 +58,12 @@ public class MediaPlayerPop extends FrameLayout {
     FloatingActionButton fabPlayStop;
     @BindView(R.id.iv_skip_next)
     ImageView ivSkipNext;
+    @BindView(R.id.iv_timer)
+    ImageView ivTimer;
+    @BindView(R.id.iv_chapter)
+    ImageView ivChapter;
+    @BindView(R.id.iv_cover_bg)
+    ImageView ivCoverBg;
 
     private int primaryTextColor;
     private Callback callback;
@@ -90,6 +97,8 @@ public class MediaPlayerPop extends FrameLayout {
         primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(ThemeStore.primaryColor(context)));
         setColor(ivSkipPrevious.getDrawable());
         setColor(ivSkipNext.getDrawable());
+        setColor(ivChapter.getDrawable());
+        setColor(ivTimer.getDrawable());
         seekBar.setEnabled(false);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -134,19 +143,19 @@ public class MediaPlayerPop extends FrameLayout {
         tvDurTime.setText(TimeUtils.millis2String(audioDur, timeFormat));
     }
 
-    public void setIvCoverClickListener(View.OnClickListener onClickListener) {
+    public void setIvCoverClickListener(OnClickListener onClickListener) {
         ivCover.setOnClickListener(onClickListener);
     }
 
-    public void setPlayClickListener(View.OnClickListener onClickListener) {
+    public void setPlayClickListener(OnClickListener onClickListener) {
         fabPlayStop.setOnClickListener(onClickListener);
     }
 
-    public void setPrevClickListener(View.OnClickListener onClickListener) {
+    public void setPrevClickListener(OnClickListener onClickListener) {
         ivSkipPrevious.setOnClickListener(onClickListener);
     }
 
-    public void setNextClickListener(View.OnClickListener onClickListener) {
+    public void setNextClickListener(OnClickListener onClickListener) {
         ivSkipNext.setOnClickListener(onClickListener);
     }
 
@@ -161,12 +170,22 @@ public class MediaPlayerPop extends FrameLayout {
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                             .placeholder(R.drawable.img_cover_default))
                     .into(ivCover);
+            Glide.with(this).load(coverPath)
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .placeholder(R.drawable.img_cover_gs))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)))
+                    .into(ivCoverBg);
         } else {
             File file = new File(coverPath);
             Glide.with(this).load(file)
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                             .placeholder(R.drawable.img_cover_default))
                     .into(ivCover);
+            Glide.with(this).load(file)
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .placeholder(R.drawable.img_cover_gs))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)))
+                    .into(ivCoverBg);
         }
     }
 
