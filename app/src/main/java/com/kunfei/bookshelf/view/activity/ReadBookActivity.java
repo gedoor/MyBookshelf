@@ -368,7 +368,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mPresenter.saveProgress();
         //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
-        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
         menuTopIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -386,11 +385,51 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             }
         });
+        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
+        menuBottomIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                vMenuBg.setOnClickListener(v -> popMenuOut());
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         //隐藏菜单
         menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
-        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
         menuTopOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                vMenuBg.setOnClickListener(null);
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                flMenu.setVisibility(View.INVISIBLE);
+                llMenuTop.setVisibility(View.INVISIBLE);
+                llMenuBottom.setVisibility(View.INVISIBLE);
+                readAdjustPop.setVisibility(View.INVISIBLE);
+                readInterfacePop.setVisibility(View.INVISIBLE);
+                moreSettingPop.setVisibility(View.INVISIBLE);
+                initImmersionBar();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
+        menuBottomOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 vMenuBg.setOnClickListener(null);
