@@ -24,17 +24,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     private CompositeDisposable compositeDisposable;
     private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                send(new byte[]{});
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            handler.postDelayed(this, 10000);
-        }
-    };
+    private Runnable runnable;
 
     public SourceDebugWebSocket(NanoHTTPD.IHTTPSession handshakeRequest) {
         super(handshakeRequest);
@@ -96,6 +86,17 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
                 });
             }
         });
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    send(new byte[]{});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                handler.postDelayed(this, 10000);
+            }
+        };
         handler.postDelayed(runnable, 10000);
     }
 

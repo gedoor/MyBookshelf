@@ -2,8 +2,6 @@ package com.kunfei.bookshelf.bean;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.constant.BookType;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -26,7 +24,7 @@ public class BookSourceBean implements Cloneable {
     private String bookSourceUrl;
     private String bookSourceName;
     private String bookSourceGroup;
-    private String bookSourceType = BookType.TEXT.name();
+    private String bookSourceType;
     private String loginUrl;
     private Long lastUpdateTime;
     @OrderBy
