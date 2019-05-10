@@ -101,13 +101,14 @@ public class ReadAloudService extends Service {
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content, String title, String text, int progress) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text, boolean isAudio, int progress) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
         readAloudIntent.putExtra("content", content);
         readAloudIntent.putExtra("title", title);
         readAloudIntent.putExtra("text", text);
+        readAloudIntent.putExtra("isAudio", isAudio);
         readAloudIntent.putExtra("progress", progress);
         context.startService(readAloudIntent);
     }
@@ -216,6 +217,7 @@ public class ReadAloudService extends Service {
                                 intent.getBooleanExtra("aloudButton", false),
                                 intent.getStringExtra("title"),
                                 intent.getStringExtra("text"),
+                                intent.getBooleanExtra("isAudio", false),
                                 intent.getIntExtra("progress", 0));
                         break;
                     case ActionSetProgress:
@@ -271,7 +273,7 @@ public class ReadAloudService extends Service {
         });
     }
 
-    private void newReadAloud(String content, Boolean aloudButton, String title, String text, int progress) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text, boolean isAudio, int progress) {
         if (TextUtils.isEmpty(content)) {
             stopSelf();
             return;
@@ -279,15 +281,14 @@ public class ReadAloudService extends Service {
         this.text = text;
         this.title = title;
         this.progress = progress;
+        this.isAudio = isAudio;
         nowSpeak = 0;
         readAloudNumber = 0;
         contentList.clear();
-        if (content.matches("http.+\\.mp3")) {
-            isAudio = true;
+        if (isAudio) {
             initMediaPlayer();
             audioUrl = content;
         } else {
-            isAudio = false;
             initTTS();
             String[] splitSpeech = content.split("\n");
             for (String aSplitSpeech : splitSpeech) {

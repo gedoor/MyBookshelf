@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.bean;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -157,9 +158,9 @@ public class BookSourceBean implements Cloneable {
     }
 
     public void setBookSourceName(String bookSourceName) {
-        if (StringUtils.startWithIgnoreCase(bookSourceName, "[MUSIC]")) {
-            setBookSourceType("[MUSIC]");
-            bookSourceName = bookSourceName.substring(7);
+        if (StringUtils.startWithIgnoreCase(bookSourceName, BookType.MUSIC)) {
+            setBookSourceType(BookType.MUSIC);
+            bookSourceName = bookSourceName.substring(BookType.MUSIC.length());
         } else {
             setBookSourceType("");
         }

@@ -1,5 +1,5 @@
 package com.kunfei.bookshelf.constant;
 
-public enum BookType {
-    TEXT,
+public class BookType {
+    public final static String MUSIC = "[MUSIC]";
 }

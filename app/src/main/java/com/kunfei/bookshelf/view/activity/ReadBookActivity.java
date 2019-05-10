@@ -745,7 +745,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
-                        if (mPageLoader.getPageStatus() == TxtChapter.Status.MP3) {
+                        llMenuBottom.getReadProgress().post(
+                                () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
+                        );
+                        if (mPresenter.getBookShelf().isMusic()) {
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
@@ -754,9 +757,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 mediaPlayerPop.setVisibility(View.GONE);
                             }
                         }
-                        llMenuBottom.getReadProgress().post(
-                                () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
-                        );
                         if ((ReadAloudService.running)) {
                             if (resetReadAloud) {
                                 readAloud();
@@ -957,7 +957,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             ChangeSourceDialog.builder(this, mPresenter.getBookShelf())
                     .setCallback(searchBookBean -> {
                         if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
-                            mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+                            if (mPageLoader != null) {
+                                mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+                            }
                             mPresenter.changeBookSource(searchBookBean);
                         }
                     }).show();
@@ -1126,6 +1128,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
                                     mPresenter.getBookShelf().getTag(),
                             mPresenter.getBookShelf().getDurChapterName()),
+                    mPresenter.getBookShelf().isMusic(),
                     mPresenter.getBookShelf().getDurChapterPage());
         }
     }
