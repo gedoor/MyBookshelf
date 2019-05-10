@@ -232,13 +232,14 @@ dQuery('.menu').addEventListener('click', e => {
 		case 'debug':
 			showTab('调试书源');
 			let wsHost = (hashParam('domain') || location.host).replace(/.*\//, '').split(':');
-			function DebugPrint(msg) { dQuery('#DebugConsole').value += `\n${msg}` }
+			let DebugInfos = dQuery('#DebugConsole');
+			function DebugPrint(msg) { DebugInfos.value += `\n${msg}`; DebugInfos.scrollTop = DebugInfos.scrollHeight; }
 			let saveRule = [rule2json()];
 			HttpPost(`/saveSources`, saveRule).then(sResult => {
 				if (sResult.isSuccess) {
 					let sKey = DebugKey.value ? DebugKey.value : '我的';
 					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
-					let ws = new WebSocket(`ws://${wsHost[0]}:${parseInt(wsHost[1]) + 1}/sourceDebug`);
+					let ws = new WebSocket(`ws:/\/${wsHost[0]}:${parseInt(wsHost[1]) + 1}/sourceDebug`);
 					ws.onopen = () => {
 						ws.send(`{"tag":"${saveRule[0].bookSourceUrl}", "key":"${sKey}"}`);
 					};
@@ -271,6 +272,14 @@ dQuery('.menu').addEventListener('click', e => {
 		default:
 	}
 	setTimeout(() => { thisNode.setAttribute('class', ''); }, 500);
+});
+dQuery('#DebugKey').addEventListener('keydown', e => {
+	console.log(e.keyCode);
+	if (e.keyCode == 13) {
+		let clickEvent = document.createEvent('MouseEvents');
+		clickEvent.initEvent("click", true, false);
+		dQuery('#debug').dispatchEvent(clickEvent);
+	}
 });
 
 // 列表规则更改事件
