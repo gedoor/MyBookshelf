@@ -7,16 +7,21 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoWSD;
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
@@ -31,6 +36,23 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     protected void onOpen() {
         RxBus.get().register(this);
         compositeDisposable = new CompositeDisposable();
+        Observable.timer(10, TimeUnit.SECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe(new MyObserver<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        try {
+                            ping(new byte[]{aLong.byteValue()});
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     @Override

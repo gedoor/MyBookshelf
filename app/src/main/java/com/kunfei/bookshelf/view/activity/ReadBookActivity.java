@@ -748,7 +748,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
-                        if (mPresenter.getBookShelf().isMusic()) {
+                        if (mPresenter.getBookShelf().isMusic() && mPageLoader.getPageStatus() == TxtChapter.Status.FINISH) {
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
