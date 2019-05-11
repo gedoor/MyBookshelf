@@ -243,4 +243,5 @@ public class BookInfoBean implements Cloneable {
     public boolean isAudio() {
         return Objects.equals(BookType.AUDIO, bookSourceType);
     }
+
 }

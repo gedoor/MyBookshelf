@@ -8,7 +8,6 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
-import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
@@ -182,9 +181,6 @@ public class PageLoaderNet extends PageLoader {
 
     @Override
     protected String getChapterContent(ChapterListBean chapter) {
-        if (bookShelfBean.isAudio()) {
-            return ACache.get(mContext).getAsString(chapter.getDurChapterUrl());
-        }
         return BookshelfHelp.getChapterCache(bookShelfBean, chapter);
     }
 

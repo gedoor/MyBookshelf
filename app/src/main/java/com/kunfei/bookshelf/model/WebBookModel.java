@@ -4,7 +4,7 @@ package com.kunfei.bookshelf.model;
 import android.annotation.SuppressLint;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -14,7 +14,6 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.content.WebBook;
-import com.kunfei.bookshelf.utils.ACache;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -115,7 +114,8 @@ public class WebBookModel {
             if (bookContentBean.getDurChapterContent() == null) {
                 e.onError(new Throwable("下载章节出错"));
             } else if (infoBean.isAudio()) {
-                ACache.get(MApplication.getInstance()).put(chapterBean.getDurChapterUrl(), bookContentBean.getDurChapterContent(), ACache.TIME_HOUR);
+                bookContentBean.setTimeMillis(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
+                DbHelper.getDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                 e.onNext(bookContentBean);
             } else if (BookshelfHelp.saveChapterInfo(infoBean.getName() + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
                     chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
