@@ -10,8 +10,11 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 
+import org.jsoup.nodes.Element;
 import org.mozilla.javascript.NativeObject;
+import org.seimicrawler.xpath.JXNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -128,31 +131,47 @@ class BookChapter {
             Debug.printLog(tag, "┌解析目录列表", printLog);
             List<Object> collections = analyzer.getElements(ruleChapterList.substring(1));
             Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
-            NativeObject nativeObject = (NativeObject)collections.get(0);
-            Debug.printLog(tag, "┌获取章节名称");
+
+            Object object0 = collections.get(0);
             String nameRule = bookSourceBean.getRuleChapterName();
-            if(isEmpty(nameRule)){
-                nameRule = "name";
-            }
-            String name = String.valueOf(nativeObject.get(nameRule));
-            Debug.printLog(tag, "└" + name);
-            Debug.printLog(tag, "┌获取章节网址");
             String urlRule = bookSourceBean.getRuleContentUrl();
-            if(isEmpty(urlRule)){
-                urlRule = "url";
+            String name = "";
+            String url = "";
+            Debug.printLog(tag, "┌获取章节名称");
+            if(object0 instanceof NativeObject){
+                name = String.valueOf(((NativeObject)object0).get(nameRule));
+            } else if(object0 instanceof Element){
+                name = ((Element)object0).text();
+            } else if(object0 instanceof JXNode) {
+                name = String.valueOf(((JXNode) object0).selOne(nameRule));
             }
-            String url = String.valueOf(nativeObject.get(urlRule));
+            Debug.printLog(tag, "└" + name);
+            if(object0 instanceof NativeObject){
+                url = String.valueOf(((NativeObject)object0).get(urlRule));
+            } else if(object0 instanceof Element){
+                url = ((Element)object0).attr(urlRule);
+            } else if(object0 instanceof JXNode) {
+                url = String.valueOf(((JXNode)object0).selOne(urlRule));
+            }
+            Debug.printLog(tag, "┌获取章节网址");
             Debug.printLog(tag, "└" + url);
 
             for (Object object: collections) {
-                nativeObject = (NativeObject)object;
-                name = String.valueOf(nativeObject.get(nameRule));
-                url = String.valueOf(nativeObject.get(urlRule));
+                if(object instanceof NativeObject){
+                    name = String.valueOf(((NativeObject)object).get(nameRule));
+                    url = String.valueOf(((NativeObject)object).get(urlRule));
+                } else if(object instanceof Element){
+                    name = ((Element)object).text();
+                    url = ((Element)object).attr(urlRule);
+                } else if(object instanceof JXNode) {
+                    name = String.valueOf(((JXNode) object).selOne(nameRule));
+                    url = String.valueOf(((JXNode)object).selOne(urlRule));
+                }
                 if (!isEmpty(name) && !isEmpty(url)) {
                     ChapterListBean temp = new ChapterListBean();
                     temp.setTag(tag);
                     temp.setDurChapterName(name);
-                    temp.setDurChapterUrl(url);
+                    temp.setDurChapterUrl(NetworkUtil.getAbsoluteURL(chapterUrl, url));
                     chapterBeans.add(temp);
                 }
             }
