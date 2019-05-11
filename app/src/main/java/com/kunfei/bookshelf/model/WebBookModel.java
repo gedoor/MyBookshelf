@@ -118,7 +118,6 @@ public class WebBookModel {
                 e.onError(new Throwable("下载章节出错"));
             } else if (infoBean.isMuisc()) {
                 ACache.get(MApplication.getInstance()).put(chapterBean.getDurChapterUrl(), bookContentBean.getDurChapterContent(), ACache.TIME_HOUR);
-                RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterBean);
                 e.onNext(bookContentBean);
             } else if (BookshelfHelp.saveChapterInfo(infoBean.getName() + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
                     chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
