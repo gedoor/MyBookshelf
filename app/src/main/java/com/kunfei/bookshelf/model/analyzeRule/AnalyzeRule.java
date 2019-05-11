@@ -33,6 +33,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
  * 统一解析接口
  */
 @Keep
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
@@ -78,7 +79,7 @@ public class AnalyzeRule {
      */
     private AnalyzeByXPath getAnalyzeByXPath(Object o) {
         if (o != null) {
-            return new AnalyzeByXPath().parse(o.toString());
+            return new AnalyzeByXPath().parse(o);
         }
         return getAnalyzeByXPath();
     }
@@ -86,7 +87,7 @@ public class AnalyzeRule {
     private AnalyzeByXPath getAnalyzeByXPath() {
         if (analyzeByXPath == null || objectChangedXP) {
             analyzeByXPath = new AnalyzeByXPath();
-            analyzeByXPath.parse(object.toString());
+            analyzeByXPath.parse(object);
             objectChangedXP = false;
         }
         return analyzeByXPath;
@@ -97,7 +98,7 @@ public class AnalyzeRule {
      */
     private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
         if (o != null) {
-            return new AnalyzeByJSoup().parse(o.toString());
+            return new AnalyzeByJSoup().parse(o);
         }
         return getAnalyzeByJSoup();
     }
@@ -116,9 +117,6 @@ public class AnalyzeRule {
      */
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
         if (o != null) {
-            if (o instanceof String) {
-                return new AnalyzeByJSonPath().parse(o.toString());
-            }
             return new AnalyzeByJSonPath().parse(o);
         }
         return getAnalyzeByJSonPath();
@@ -127,11 +125,7 @@ public class AnalyzeRule {
     private AnalyzeByJSonPath getAnalyzeByJSonPath() {
         if (analyzeByJSonPath == null || objectChangedJP) {
             analyzeByJSonPath = new AnalyzeByJSonPath();
-            if (object instanceof String) {
-                analyzeByJSonPath.parse(String.valueOf(object));
-            } else {
-                analyzeByJSonPath.parse(object);
-            }
+            analyzeByJSonPath.parse(object);
             objectChangedJP = false;
         }
         return analyzeByJSonPath;
@@ -419,7 +413,6 @@ public class AnalyzeRule {
     /**
      * js实现跨域访问,不能删
      */
-    @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
@@ -434,7 +427,6 @@ public class AnalyzeRule {
     /**
      * js实现解码,不能删
      */
-    @SuppressWarnings("unused")
     public String base64Decoder(String base64) {
         return StringUtils.base64Decode(base64);
     }

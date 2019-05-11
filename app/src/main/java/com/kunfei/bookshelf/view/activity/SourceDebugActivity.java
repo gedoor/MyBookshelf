@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -42,9 +43,10 @@ public class SourceDebugActivity extends MBaseActivity {
     RotateLoading loading;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
-    @BindView(R.id.tv_content)
-    TextView tvContent;
+    @BindView(R.id.lv_log)
+    ListView lvLog;
 
+    private ArrayAdapter<String> adapter;
     private CompositeDisposable compositeDisposable;
     private String sourceTag;
 
@@ -95,6 +97,7 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void initData() {
         sourceTag = getIntent().getStringExtra("sourceUrl");
+        adapter = new ArrayAdapter<>(this, R.layout.item_text_view, R.id.tv);
     }
 
     @Override
@@ -104,6 +107,7 @@ public class SourceDebugActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initSearchView();
+        lvLog.setAdapter(adapter);
     }
 
     private void initSearchView() {
@@ -133,7 +137,7 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        tvContent.setText("");
+        adapter.clear();
         Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.Callback() {
             @Override
             public void printLog(String msg) {
@@ -203,11 +207,12 @@ public class SourceDebugActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
-        if (TextUtils.isEmpty(tvContent.getText().toString())) {
-            tvContent.setText(msg);
-        } else {
-            tvContent.setText(String.format("%s\n%s", tvContent.getText(), msg));
-        }
+//        if (TextUtils.isEmpty(tvContent.getText().toString())) {
+//            tvContent.setText(msg);
+//        } else {
+//            tvContent.setText(String.format("%s\n%s", tvContent.getText(), msg));
+//        }
+        adapter.add(msg);
     }
 
 }

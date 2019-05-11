@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Emitter;
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -91,17 +92,21 @@ class BookChapter {
                     }
                 }
             }
-            //去除重复,保留后面的,先倒序,从后面往前判断
-            if (!dx) {
-                Collections.reverse(chapterList);
-            }
-            LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
-            chapterList = new ArrayList<>(lh);
-            Collections.reverse(chapterList);
-            Debug.printLog(tag, "-目录解析完成");
-            e.onNext(chapterList);
-            e.onComplete();
+            finish(dx, chapterList, e);
         });
+    }
+
+    private void finish(boolean dx, List<ChapterListBean> chapterList, Emitter<List<ChapterListBean>> emitter) {
+        //去除重复,保留后面的,先倒序,从后面往前判断
+        if (!dx) {
+            Collections.reverse(chapterList);
+        }
+        LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
+        chapterList = new ArrayList<>(lh);
+        Collections.reverse(chapterList);
+        Debug.printLog(tag, "-目录解析完成");
+        emitter.onNext(chapterList);
+        emitter.onComplete();
     }
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
@@ -123,6 +128,9 @@ class BookChapter {
             Debug.printLog(tag, "┌解析目录列表", printLog);
             List<Object> collections = analyzer.getElements(ruleChapterList.substring(1));
             Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
+            if (collections.isEmpty()) {
+                return new WebChapterBean<>(chapterBeans, nextUrlList);
+            }
             NativeObject nativeObject = (NativeObject)collections.get(0);
             Debug.printLog(tag, "┌获取章节名称");
             String nameRule = bookSourceBean.getRuleChapterName();

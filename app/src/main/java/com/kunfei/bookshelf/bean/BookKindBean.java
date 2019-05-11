@@ -12,6 +12,7 @@ public class BookKindBean {
     private String kind;
 
     public BookKindBean(String kindS) {
+        if (TextUtils.isEmpty(kindS)) return;
         for (String kind : kindS.split(",")) {
             if (StringUtils.isContainNumber(kind) && TextUtils.isEmpty(wordsS)) {
                 if (StringUtils.isNumeric(kind)) {

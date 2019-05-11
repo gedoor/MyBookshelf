@@ -8,6 +8,7 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
@@ -114,7 +115,7 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex)))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {
@@ -181,14 +182,16 @@ public class PageLoaderNet extends PageLoader {
 
     @Override
     protected String getChapterContent(ChapterListBean chapter) {
+        if (bookShelfBean.isMusic()) {
+            return ACache.get(mContext).getAsString(chapter.getDurChapterUrl());
+        }
         return BookshelfHelp.getChapterCache(bookShelfBean, chapter);
     }
 
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean noChapterData(ChapterListBean chapter) {
-        return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
-                chapter.getDurChapterIndex(), chapter.getDurChapterName());
+        return !BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapter);
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {

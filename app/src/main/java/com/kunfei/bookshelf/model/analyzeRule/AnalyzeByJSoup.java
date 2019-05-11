@@ -24,10 +24,10 @@ public class AnalyzeByJSoup {
     private Element element;
 
     public AnalyzeByJSoup parse(Object doc) {
-        if (doc instanceof String) {
-            element = Jsoup.parse(doc.toString());
-        } else {
+        if (doc instanceof Element) {
             element = (Element) doc;
+        } else {
+            element = Jsoup.parse(doc.toString());
         }
         return this;
     }

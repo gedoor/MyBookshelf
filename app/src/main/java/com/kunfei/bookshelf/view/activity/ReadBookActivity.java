@@ -794,6 +794,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
+                        Long end = mPresenter.getBookShelf().getChapter(mPresenter.getBookShelf().getDurChapter()).getEnd();
+                        int audioSize = end != null ? end.intValue() : 0;
+                        mediaPlayerPop.upAudioSize(audioSize);
+                        mediaPlayerPop.upAudioDur(mPresenter.getBookShelf().getDurChapterPage());
                         if (mPresenter.getBookShelf().isMusic() && mPageLoader.getPageStatus() == TxtChapter.Status.FINISH) {
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
@@ -1336,7 +1340,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     return true;
                 } else if (ReadAloudService.running && aloudStatus == ReadAloudService.Status.PLAY) {
                     ReadAloudService.pause(this);
-                    toast(R.string.read_aloud_pause);
+                    if (!mPresenter.getBookShelf().isMusic()) {
+                        toast(R.string.read_aloud_pause);
+                    }
                     return true;
                 } else {
                     finish();

@@ -4,14 +4,18 @@ package com.kunfei.bookshelf.model;
 import android.annotation.SuppressLint;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
+import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.content.WebBook;
+import com.kunfei.bookshelf.utils.ACache;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,11 +52,11 @@ public class WebBookModel {
     /**
      * 章节缓存
      */
-    public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean, String bookName) {
+    public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean) {
         return WebBook.getInstance(chapterBean.getTag())
                 .getBookContent(chapterBean)
                 .timeout(60, TimeUnit.SECONDS)
-                .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
+                .flatMap((bookContentBean -> saveContent(chapterBean, bookContentBean)));
     }
 
     /**
@@ -106,12 +110,16 @@ public class WebBookModel {
      * 保存章节
      */
     @SuppressLint("DefaultLocale")
-    private Observable<BookContentBean> saveContent(String bookName, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
+    private Observable<BookContentBean> saveContent(BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
+            BookInfoBean infoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(chapterBean.getNoteUrl());
             if (bookContentBean.getDurChapterContent() == null) {
                 e.onError(new Throwable("下载章节出错"));
-            } else if (BookshelfHelp.saveChapterInfo(bookName + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
+            } else if (infoBean.isMuisc()) {
+                ACache.get(MApplication.getInstance()).put(chapterBean.getDurChapterUrl(), bookContentBean.getDurChapterContent(), ACache.TIME_HOUR);
+                e.onNext(bookContentBean);
+            } else if (BookshelfHelp.saveChapterInfo(infoBean.getName() + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
                     chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
                 RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterBean);
                 e.onNext(bookContentBean);

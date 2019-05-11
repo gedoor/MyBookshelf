@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -16,6 +17,7 @@ import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.BookShelfBeanDao;
 import com.kunfei.bookshelf.dao.BookmarkBeanDao;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import net.ricecode.similarity.JaroWinklerStrategy;
@@ -101,6 +103,9 @@ public class BookshelfHelp {
     }
 
     public static boolean isChapterCached(BookInfoBean book, BaseChapterBean chapter) {
+        if (book.isMuisc()) {
+            return !TextUtils.isEmpty(ACache.get(MApplication.getInstance()).getAsString(chapter.getDurChapterUrl()));
+        }
         final String path = getCachePathName(book);
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }

@@ -160,7 +160,7 @@ public class Debug {
                     public void onNext(BookShelfBean bookShelfBean) {
                         if (bookShelfBean.getChapterList().size() > 0) {
                             ChapterListBean chapterListBean = bookShelfBean.getChapter(0);
-                            bookContentDebug(chapterListBean, bookShelfBean.getBookInfoBean().getName());
+                            bookContentDebug(chapterListBean);
                         } else {
                             printError("获取到的目录为空");
                         }
@@ -178,9 +178,9 @@ public class Debug {
                 });
     }
 
-    private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
+    private void bookContentDebug(ChapterListBean chapterListBean) {
         printLog(String.format("\n%s ≡开始获取正文页", getDoTime()));
-        WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
+        WebBookModel.getInstance().getBookContent(chapterListBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

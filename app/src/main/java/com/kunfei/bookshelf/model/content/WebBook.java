@@ -136,6 +136,7 @@ public class WebBook extends BaseModelImpl {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, tag);
             String contentRule = bookSourceBean.getRuleBookContent();
             if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
+                //动态网页第一个js放到webView里执行
                 contentRule = contentRule.substring(1);
                 String js = null;
                 Matcher jsMatcher = JS_PATTERN.matcher(contentRule);
