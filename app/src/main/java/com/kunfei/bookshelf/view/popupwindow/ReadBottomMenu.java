@@ -193,10 +193,6 @@ public class ReadBottomMenu extends FrameLayout {
         tvNext.setEnabled(enable);
     }
 
-    public void setNavigationBar(int nbHeight) {
-        llNavigationBar.setPadding(0, 0, 0, nbHeight);
-    }
-
     public void setAutoPage(boolean autoPage) {
         if (autoPage) {
             fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
