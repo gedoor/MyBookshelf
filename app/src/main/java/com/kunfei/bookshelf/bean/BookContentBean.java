@@ -1,13 +1,10 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * 书本缓存内容
  */
-public class BookContentBean implements Parcelable {
+public class BookContentBean {
     private String noteUrl; //对应BookInfoBean noteUrl;
 
     private String durChapterUrl;
@@ -21,40 +18,6 @@ public class BookContentBean implements Parcelable {
     public BookContentBean() {
 
     }
-
-    private BookContentBean(Parcel in) {
-        durChapterUrl = in.readString();
-        durChapterIndex = in.readInt();
-        durChapterContent = in.readString();
-        tag = in.readString();
-        noteUrl = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(durChapterUrl);
-        dest.writeInt(durChapterIndex);
-        dest.writeString(durChapterContent);
-        dest.writeString(tag);
-        dest.writeString(noteUrl);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<BookContentBean> CREATOR = new Creator<BookContentBean>() {
-        @Override
-        public BookContentBean createFromParcel(Parcel in) {
-            return new BookContentBean(in);
-        }
-
-        @Override
-        public BookContentBean[] newArray(int size) {
-            return new BookContentBean[size];
-        }
-    };
 
     public String getDurChapterUrl() {
         return durChapterUrl;

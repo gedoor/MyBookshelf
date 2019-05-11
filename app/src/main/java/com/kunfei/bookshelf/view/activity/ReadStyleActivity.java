@@ -157,7 +157,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
                 PermissionUtils
                         .checkMorePermissions(ReadStyleActivity.this,
                                 MApplication.PerList,
-                                new PermissionUtils.PermissionCheckCallBack() {
+                                new PermissionUtils.PermissionCheckCallback() {
                                     @Override
                                     public void onHasPermission() {
                                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

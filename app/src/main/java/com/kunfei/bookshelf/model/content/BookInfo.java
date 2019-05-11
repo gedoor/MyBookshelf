@@ -41,6 +41,7 @@ class BookInfo {
             String result;
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(tag);
+            bookInfoBean.setBookSourceType(bookSourceBean.getBookSourceType());
 
             AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
             analyzer.setContent(s, bookShelfBean.getNoteUrl());
@@ -85,6 +86,7 @@ class BookInfo {
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             bookInfoBean.setOrigin(name);
             bookShelfBean.setBookInfoBean(bookInfoBean);
+            Debug.printLog(tag, "-详情页解析完成");
             e.onNext(bookShelfBean);
             e.onComplete();
         });

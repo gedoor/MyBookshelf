@@ -94,7 +94,7 @@ public class ReplaceRuleManager {
         if (NetworkUtil.isUrl(text)) {
             return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(text), "utf-8")
                     .create(IHttpGetApi.class)
-                    .getWebContent(text, AnalyzeHeaders.getMap(null))
+                    .get(text, AnalyzeHeaders.getMap(null))
                     .flatMap(rsp -> importReplaceRuleO(rsp.body()))
                     .compose(RxUtils::toSimpleSingle);
         }

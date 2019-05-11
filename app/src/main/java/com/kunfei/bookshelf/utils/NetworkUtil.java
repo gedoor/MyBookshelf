@@ -16,9 +16,11 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NetworkUtil {
+    public static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     public static final int SUCCESS = 10000;
     public static final int ERROR_CODE_NONET = 10001;
     public static final int ERROR_CODE_OUTTIME = 10002;
@@ -52,6 +54,8 @@ public class NetworkUtil {
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
         String header = null;
+        Matcher matcher = headerPattern.matcher(baseURL);
+        baseURL = matcher.replaceAll("");
         if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
             header = relativePath.substring(0, relativePath.indexOf("}") + 1);
             relativePath = relativePath.substring(header.length());

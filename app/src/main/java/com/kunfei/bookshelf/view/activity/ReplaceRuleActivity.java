@@ -190,7 +190,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                         .setTitle(getString(R.string.input_replace_url))
                         .setDefaultValue(cacheUrl)
                         .setAdapterValues(new String[]{cacheUrl})
-                        .setCallBack(inputText -> {
+                        .setCallback(inputText -> {
                             inputText = StringUtils.trim(inputText);
                             ACache.get(this).put("replaceUrl", inputText);
                             mPresenter.importDataS(inputText);
@@ -207,7 +207,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectReplaceRuleFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 FilePicker filePicker = new FilePicker(ReplaceRuleActivity.this, FilePicker.FILE);
@@ -260,7 +260,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 selectReplaceRuleFile();

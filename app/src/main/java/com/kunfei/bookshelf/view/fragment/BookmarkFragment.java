@@ -110,7 +110,7 @@ public class BookmarkFragment extends MBaseFragment {
 
     private void showBookmark(BookmarkBean bookmarkBean) {
         BookmarkDialog.builder(getContext(), bookmarkBean, false)
-                .setPositiveButton(new BookmarkDialog.CallBack() {
+                .setPositiveButton(new BookmarkDialog.Callback() {
                     @Override
                     public void saveBookmark(BookmarkBean bookmarkBean) {
                         DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);

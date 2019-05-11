@@ -153,7 +153,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         tvSelectCover.setOnClickListener(view -> selectCover());
         tvChangeCover.setOnClickListener(view ->
                 ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
-                        .setCallBack(searchBookBean -> {
+                        .setCallback(searchBookBean -> {
                             tieCoverUrl.setText(searchBookBean.getCoverUrl());
                             book.setCustomCoverPath(tieCoverUrl.getText().toString());
                             initCover();
@@ -165,7 +165,7 @@ public class BookInfoEditActivity extends MBaseActivity {
     }
 
     private void selectCover() {
-        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -181,6 +181,7 @@ public class BookInfoEditActivity extends MBaseActivity {
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                BookInfoEditActivity.this.toast(R.string.bg_image_per);
                 PermissionUtils.requestMorePermissions(BookInfoEditActivity.this, permission, MApplication.RESULT__PERMS);
             }
         });
@@ -266,7 +267,7 @@ public class BookInfoEditActivity extends MBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 selectCover();

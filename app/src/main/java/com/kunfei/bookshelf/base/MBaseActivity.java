@@ -85,10 +85,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int primaryTextColor = MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this)));
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.setColorFilter(MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this))), PorterDuff.Mode.SRC_ATOP);
+                drawable.mutate();
+                drawable.setColorFilter(primaryTextColor, PorterDuff.Mode.SRC_ATOP);
             }
         }
         return super.onCreateOptionsMenu(menu);
@@ -111,6 +113,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                         for (MenuItem menuItem : menuItems) {
                             Drawable drawable = menuItem.getIcon();
                             if (drawable != null) {
+                                drawable.mutate();
                                 drawable.setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
                             }
                         }

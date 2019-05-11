@@ -24,6 +24,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 
 /**
  * Created by GKF on 2018/1/24.
@@ -31,7 +32,6 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
  */
 @Keep
 public class AnalyzeUrl {
-    private static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
 
     private String url;

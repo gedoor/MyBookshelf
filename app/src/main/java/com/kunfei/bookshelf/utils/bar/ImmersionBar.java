@@ -17,14 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.FloatRange;
@@ -36,6 +28,14 @@ import androidx.core.graphics.ColorUtils;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * android 4.4以上沉浸式以及bar的管理
@@ -995,7 +995,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarDarkFont(boolean isDarkFont, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
-        mBarParams.navigationBardarkFont = isDarkFont;
+        mBarParams.navigationBarDarkFont = isDarkFont;
         if (canNavigationBarDarkFont()) {
             mBarParams.navigationBarAlpha = 0;
         } else {
@@ -1788,7 +1788,7 @@ public class ImmersionBar {
      * 设置暗色导航栏按钮
      */
     private int setNavigationBarLightFont(int uiFlags) {
-        if (canNavigationBarDarkFont() && mBarParams.navigationBardarkFont) {
+        if (canNavigationBarDarkFont() && mBarParams.navigationBarDarkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         } else {
             return uiFlags;

@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -26,6 +25,7 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
+import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
@@ -125,8 +125,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                 mView.toast("已禁用" + bookSourceBean.getBookSourceName());
             }
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage() + "\n" + e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -136,27 +135,22 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
+    public void saveBook() {
+        if (bookShelf != null) {
+            AsyncTask.execute(() -> BookshelfHelp.saveBookToShelf(bookShelf));
+        }
+    }
+
+    @Override
     public void saveProgress() {
         if (bookShelf != null) {
-            Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            AsyncTask.execute(() -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 bookShelf.upDurChapterName();
                 bookShelf.setHasUpdate(false);
-                BookshelfHelp.saveBookToShelf(bookShelf);
-                e.onNext(bookShelf);
-                e.onComplete();
-            }).subscribeOn(Schedulers.newThread())
-                    .subscribe(new MyObserver<BookShelfBean>() {
-                        @Override
-                        public void onNext(BookShelfBean value) {
-                            RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                        }
-                    });
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
+            });
         }
     }
 
@@ -462,6 +456,19 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
     public void recreate(Boolean recreate) {
         mView.recreate();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
+    public void upAudioSize(Integer audioSize) {
+        mView.upAudioSize(audioSize);
+        ChapterListBean bean = bookShelf.getChapter(bookShelf.getDurChapter());
+        bean.setEnd(Long.valueOf(audioSize));
+        DbHelper.getDaoSession().getChapterListBeanDao().insertOrReplace(bean);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})
+    public void upAudioDur(Integer audioDur) {
+        mView.upAudioDur(audioDur);
     }
 
     public interface OnAddListener {

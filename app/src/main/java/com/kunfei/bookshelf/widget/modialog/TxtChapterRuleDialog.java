@@ -44,14 +44,14 @@ public class TxtChapterRuleDialog {
         }
     }
 
-    public TxtChapterRuleDialog setPositiveButton(CallBack callBack) {
+    public TxtChapterRuleDialog setPositiveButton(Callback callback) {
         tvOk.setOnClickListener(v -> {
             if (txtChapterRuleBean == null) {
                 txtChapterRuleBean = new TxtChapterRuleBean();
             }
             txtChapterRuleBean.setName(getEditableText(tieRuleName.getText()));
             txtChapterRuleBean.setRule(getEditableText(tieRuleRegex.getText()));
-            callBack.onPositiveButton(txtChapterRuleBean);
+            callback.onPositiveButton(txtChapterRuleBean);
             dialog.dismiss();
         });
         return this;
@@ -69,7 +69,7 @@ public class TxtChapterRuleDialog {
         return this;
     }
 
-    public interface CallBack {
+    public interface Callback {
         void onPositiveButton(TxtChapterRuleBean txtChapterRuleBean);
     }
 

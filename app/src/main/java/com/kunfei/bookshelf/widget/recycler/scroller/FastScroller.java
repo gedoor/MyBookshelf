@@ -18,10 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.ColorUtil;
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -35,6 +31,10 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 
 public class FastScroller extends LinearLayout {
@@ -67,13 +67,13 @@ public class FastScroller extends LinearLayout {
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             if (!mHandleView.isSelected() && isEnabled()) {
                 setViewPositions(getScrollProportion(recyclerView));
             }
         }
         @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (isEnabled()) {
                 switch (newState) {

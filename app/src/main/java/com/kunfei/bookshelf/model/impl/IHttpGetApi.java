@@ -16,12 +16,12 @@ import retrofit2.http.Url;
 
 public interface IHttpGetApi {
     @GET
-    Observable<Response<String>> getWebContent(@Url String url,
-                                               @HeaderMap Map<String, String> headers);
+    Observable<Response<String>> get(@Url String url,
+                                     @HeaderMap Map<String, String> headers);
 
     @GET
-    Observable<Response<String>> searchBook(@Url String url,
-                                            @QueryMap(encoded = true) Map<String, String> queryMap,
-                                            @HeaderMap Map<String, String> headers);
+    Observable<Response<String>> getMap(@Url String url,
+                                        @QueryMap(encoded = true) Map<String, String> queryMap,
+                                        @HeaderMap Map<String, String> headers);
 
 }

@@ -52,7 +52,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
 
-    private CallBackValue callBackValue;
+    private CallbackValue callbackValue;
     private Unbinder unbinder;
     private String bookPx;
     private boolean resumed = false;
@@ -81,9 +81,9 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     protected void initData() {
-        callBackValue = (CallBackValue) getActivity();
+        callbackValue = (CallbackValue) getActivity();
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-        isRecreate = callBackValue != null && callBackValue.isRecreate();
+        isRecreate = callbackValue != null && callbackValue.isRecreate();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         });
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setSwipeRefreshLayout(refreshLayout);
-        itemTouchCallback.setViewPager(callBackValue.getViewPager());
+        itemTouchCallback.setViewPager(callbackValue.getViewPager());
         if (bookPx.equals("2")) {
             itemTouchCallback.setDragEnable(true);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
@@ -236,7 +236,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         unbinder.unbind();
     }
 
-    public interface CallBackValue {
+    public interface CallbackValue {
         boolean isRecreate();
 
         int getGroup();

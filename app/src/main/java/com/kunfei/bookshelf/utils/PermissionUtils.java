@@ -102,14 +102,14 @@ public class PermissionUtils {
      * 检测权限
      * 具体实现由回调接口决定
      */
-    public static void checkPermission(Context context, String permission, PermissionCheckCallBack callBack) {
+    public static void checkPermission(Context context, String permission, PermissionCheckCallback callback) {
         if (checkPermission(context, permission)) { // 用户已授予权限
-            callBack.onHasPermission();
+            callback.onHasPermission();
         } else {
             if (judgePermission(context, permission))  // 用户之前已拒绝过权限申请
-                callBack.onUserHasAlreadyTurnedDown(permission);
+                callback.onUserHasAlreadyTurnedDown(permission);
             else                                       // 用户之前已拒绝并勾选了不在询问、用户第一次申请权限。
-                callBack.onAlreadyTurnedDownAndNoAsk(permission);
+                callback.onAlreadyTurnedDownAndNoAsk(permission);
         }
     }
 
@@ -117,10 +117,10 @@ public class PermissionUtils {
      * 检测多个权限
      * 具体实现由回调接口决定
      */
-    public static void checkMorePermissions(Context context, String[] permissions, PermissionCheckCallBack callBack) {
+    public static void checkMorePermissions(Context context, String[] permissions, PermissionCheckCallback callback) {
         List<String> permissionList = checkMorePermissions(context, permissions);
         if (permissionList.size() == 0) {  // 用户已授予权限
-            callBack.onHasPermission();
+            callback.onHasPermission();
         } else {
             boolean isFirst = true;
             for (int i = 0; i < permissionList.size(); i++) {
@@ -132,9 +132,9 @@ public class PermissionUtils {
             }
             String[] unauthorizedMorePermissions = permissionList.toArray(new String[0]);
             if (isFirst)// 用户之前已拒绝过权限申请
-                callBack.onAlreadyTurnedDownAndNoAsk(unauthorizedMorePermissions);
+                callback.onAlreadyTurnedDownAndNoAsk(unauthorizedMorePermissions);
             else       // 用户之前已拒绝并勾选了不在询问、用户第一次申请权限。
-                callBack.onUserHasAlreadyTurnedDown(unauthorizedMorePermissions);
+                callback.onUserHasAlreadyTurnedDown(unauthorizedMorePermissions);
 
         }
     }
@@ -143,9 +143,9 @@ public class PermissionUtils {
     /**
      * 检测并申请权限
      */
-    public static void checkAndRequestPermission(Context context, String permission, int requestCode, PermissionRequestSuccessCallBack callBack) {
+    public static void checkAndRequestPermission(Context context, String permission, int requestCode, PermissionRequestSuccessCallback callback) {
         if (checkPermission(context, permission)) {// 用户已授予权限
-            callBack.onHasPermission();
+            callback.onHasPermission();
         } else {
             requestPermission(context, permission, requestCode);
         }
@@ -154,10 +154,10 @@ public class PermissionUtils {
     /**
      * 检测并申请多个权限
      */
-    public static void checkAndRequestMorePermissions(Context context, String[] permissions, int requestCode, PermissionRequestSuccessCallBack callBack) {
+    public static void checkAndRequestMorePermissions(Context context, String[] permissions, int requestCode, PermissionRequestSuccessCallback callback) {
         List<String> permissionList = checkMorePermissions(context, permissions);
         if (permissionList.size() == 0) {  // 用户已授予权限
-            callBack.onHasPermission();
+            callback.onHasPermission();
         } else {
             requestMorePermissions(context, permissionList, requestCode);
         }
@@ -173,7 +173,7 @@ public class PermissionUtils {
     /**
      * 用户申请权限返回
      */
-    public static void onRequestPermissionResult(Context context, String permission, int[] grantResults, PermissionCheckCallBack callback) {
+    public static void onRequestPermissionResult(Context context, String permission, int[] grantResults, PermissionCheckCallback callback) {
         if (PermissionUtils.isPermissionRequestSuccess(grantResults)) {
             callback.onHasPermission();
         } else {
@@ -188,7 +188,7 @@ public class PermissionUtils {
     /**
      * 用户申请多个权限返回
      */
-    public static void onRequestMorePermissionsResult(Context context, String[] permissions, PermissionCheckCallBack callback) {
+    public static void onRequestMorePermissionsResult(Context context, String[] permissions, PermissionCheckCallback callback) {
         boolean isBannedPermission = false;
         List<String> permissionList = checkMorePermissions(context, permissions);
         if (permissionList.size() == 0)
@@ -221,7 +221,7 @@ public class PermissionUtils {
         context.startActivity(intent);
     }
 
-    public interface PermissionRequestSuccessCallBack {
+    public interface PermissionRequestSuccessCallback {
         /**
          * 用户已授予权限
          */
@@ -229,7 +229,7 @@ public class PermissionUtils {
     }
 
 
-    public interface PermissionCheckCallBack {
+    public interface PermissionCheckCallback {
 
         /**
          * 用户已授予权限

@@ -58,23 +58,23 @@ public class BookmarkDialog {
         llEdit = view.findViewById(R.id.llEdit);
     }
 
-    public BookmarkDialog setPositiveButton(CallBack callBack) {
+    public BookmarkDialog setPositiveButton(Callback callback) {
         tvChapterName.setOnClickListener(v -> {
-            callBack.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
+            callback.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
             dialog.dismiss();
         });
         tvOk.setOnClickListener(v -> {
             bookmarkBean.setContent(tvContent.getText().toString());
-            callBack.saveBookmark(bookmarkBean);
+            callback.saveBookmark(bookmarkBean);
             dialog.dismiss();
         });
         tvSave.setOnClickListener(v -> {
             bookmarkBean.setContent(tvContent.getText().toString());
-            callBack.saveBookmark(bookmarkBean);
+            callback.saveBookmark(bookmarkBean);
             dialog.dismiss();
         });
         tvDel.setOnClickListener(v -> {
-            callBack.delBookmark(bookmarkBean);
+            callback.delBookmark(bookmarkBean);
             dialog.dismiss();
         });
         return this;
@@ -85,7 +85,7 @@ public class BookmarkDialog {
         return this;
     }
 
-    public interface CallBack {
+    public interface Callback {
         void saveBookmark(BookmarkBean bookmarkBean);
 
         void delBookmark(BookmarkBean bookmarkBean);

@@ -108,7 +108,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void selectDownloadPath(Preference preference) {
-        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
@@ -140,6 +140,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
             @Override
             public void onAlreadyTurnedDownAndNoAsk(String... permission) {
+                Toast.makeText(getActivity(), R.string.set_download_per, Toast.LENGTH_SHORT).show();
                 PermissionUtils.requestMorePermissions(getActivity(), MApplication.PerList, MApplication.RESULT__PERMS);
             }
         });

@@ -1,14 +1,11 @@
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 @Entity
-public class BookmarkBean implements Parcelable,Cloneable{
+public class BookmarkBean implements Cloneable {
 
     @Id
     private Long id = System.currentTimeMillis();
@@ -18,17 +15,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
     private Integer chapterIndex;
     private Integer pageIndex;
     private String content;
-    
 
-    protected BookmarkBean(Parcel in) {
-        id = in.readLong();
-        noteUrl = in.readString();
-        bookName = in.readString();
-        chapterName = in.readString();
-        chapterIndex = in.readInt();
-        pageIndex = in.readInt();
-        content = in.readString();
-    }
 
     @Generated(hash = 1176037419)
     public BookmarkBean(Long id, String noteUrl, String bookName, String chapterName,
@@ -44,34 +31,6 @@ public class BookmarkBean implements Parcelable,Cloneable{
 
     @Generated(hash = 1612540172)
     public BookmarkBean() {
-    }
-
-    public static final Creator<BookmarkBean> CREATOR = new Creator<BookmarkBean>() {
-        @Override
-        public BookmarkBean createFromParcel(Parcel in) {
-            return new BookmarkBean(in);
-        }
-
-        @Override
-        public BookmarkBean[] newArray(int size) {
-            return new BookmarkBean[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(noteUrl);
-        parcel.writeString(bookName);
-        parcel.writeString(chapterName);
-        parcel.writeInt(chapterIndex);
-        parcel.writeInt(pageIndex);
-        parcel.writeString(content);
     }
 
     @Override

@@ -20,14 +20,6 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
     public DownloadBookBean() {
     }
 
-    public DownloadBookBean(String name, String noteUrl, String coverUrl, int start, int end) {
-        this.name = name;
-        this.noteUrl = noteUrl;
-        this.coverUrl = coverUrl;
-        this.start = start;
-        this.end = end;
-    }
-
     protected DownloadBookBean(Parcel in) {
         name = in.readString();
         noteUrl = in.readString();
