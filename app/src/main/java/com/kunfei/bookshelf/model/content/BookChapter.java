@@ -126,12 +126,13 @@ class BookChapter {
             }
             Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
-
         if (ruleChapterList.startsWith("+")) {
             Debug.printLog(tag, "┌解析目录列表", printLog);
             List<Object> collections = analyzer.getElements(ruleChapterList.substring(1));
             Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
-
+            if (collections.isEmpty()) {
+                return new WebChapterBean<>(chapterBeans, nextUrlList);
+            }
             Object object0 = collections.get(0);
             String nameRule = bookSourceBean.getRuleChapterName();
             String urlRule = bookSourceBean.getRuleContentUrl();
