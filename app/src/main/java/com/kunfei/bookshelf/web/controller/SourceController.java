@@ -57,4 +57,18 @@ public class SourceController {
         }
         return returnData.setData(BookSourceManager.getAllBookSource());
     }
+    public ReturnData deleteSources(String postData) {
+        List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(postData, BookSourceBean.class);
+        /*List<BookSourceBean> okSources= new ArrayList<>();*/
+        for (BookSourceBean bookSourceBean : bookSourceBeans) {
+            /*if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl())) {
+                continue;
+            }*/
+            BookSourceManager.removeBookSource(bookSourceBean);
+            /*if(BookSourceManager.getBookSourceByUrl(bookSourceBean.getBookSourceUrl()) == null){
+                okSources.add(bookSourceBean);
+            }*/
+        }
+        return (new ReturnData()).setData("已执行"/*okSources*/);
+    }
 }
