@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.seimicrawler.xpath.JXDocument;
@@ -12,15 +13,22 @@ import java.util.List;
 public class AnalyzeByXPath {
     private JXDocument jxDocument;
 
-    public AnalyzeByXPath parse(String doc) {
-        // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
-        if (doc.endsWith("</td>")) {
-            doc = "<tr>" + doc + "</tr>";
+    public AnalyzeByXPath parse(Object doc) {
+        if (doc instanceof Document) {
+            jxDocument = JXDocument.create((Document) doc);
+        } else if (doc instanceof Elements) {
+            jxDocument = JXDocument.create((Elements) doc);
+        } else {
+            String html = (String) doc;
+            // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
+            if (html.endsWith("</td>")) {
+                html = "<tr>" + html + "</tr>";
+            }
+            if (html.endsWith("</tr>") || html.endsWith("</tbody>")) {
+                html = "<table>" + html + "</table>";
+            }
+            jxDocument = JXDocument.create(html);
         }
-        if (doc.endsWith("</tr>") || doc.endsWith("</tbody>")) {
-            doc = "<table>" + doc + "</table>";
-        }
-        jxDocument = JXDocument.create(doc);
         return this;
     }
 
