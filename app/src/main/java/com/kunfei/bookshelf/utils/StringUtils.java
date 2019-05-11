@@ -317,8 +317,8 @@ public class StringUtils {
     }
 
     public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
-        Objects.requireNonNull(delimiter);
-        Objects.requireNonNull(elements);
+        if (elements == null) return null;
+        if (delimiter == null) delimiter = ",";
         StringJoiner joiner = new StringJoiner(delimiter);
         for (CharSequence cs: elements) {
             joiner.add(cs);
