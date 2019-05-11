@@ -240,7 +240,8 @@ public class BookInfoBean implements Cloneable {
         this.bookSourceType = bookSourceType;
     }
 
-    public boolean isMuisc() {
-        return Objects.equals(BookType.MUSIC, bookSourceType);
+    public boolean isAudio() {
+        return Objects.equals(BookType.AUDIO, bookSourceType);
     }
+
 }

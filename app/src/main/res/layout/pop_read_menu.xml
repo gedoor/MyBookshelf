@@ -133,13 +133,13 @@
         <View
             android:id="@+id/vw_bg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/background_menu" />
 
         <LinearLayout
             android:id="@+id/llNavigationBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_menu"
             android:orientation="vertical">
             <!--章节设置-->
             <LinearLayout

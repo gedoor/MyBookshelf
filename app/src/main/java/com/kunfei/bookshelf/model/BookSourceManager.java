@@ -99,9 +99,6 @@ public class BookSourceManager {
                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).unique();
         if (temp != null) {
             bookSourceBean.setSerialNumber(temp.getSerialNumber());
-            bookSourceBean.setEnable(temp.getEnable());
-        } else {
-            bookSourceBean.setEnable(true);
         }
         if (bookSourceBean.getSerialNumber() < 0) {
             bookSourceBean.setSerialNumber((int) (DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder().count() + 1));

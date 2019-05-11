@@ -57,7 +57,7 @@ class ChapterProvider {
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
         String[] allLine = content.split("\n");
-        if (pageLoader.bookShelfBean.isMusic()) {
+        if (pageLoader.bookShelfBean.isAudio()) {
             txtChapter.setMsg(content);
         }
         List<String> lines = new ArrayList<>();

@@ -152,4 +152,5 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
     public Boolean getHasCache(BookInfoBean bookInfoBean) {
         return BookshelfHelp.isChapterCached(bookInfoBean, this);
     }
+
 }

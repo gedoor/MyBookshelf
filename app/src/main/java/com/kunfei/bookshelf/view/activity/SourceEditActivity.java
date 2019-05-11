@@ -11,7 +11,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -46,6 +45,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
@@ -56,12 +56,14 @@ import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
+import com.kunfei.bookshelf.widget.views.ATECheckBox;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -202,6 +204,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     TextInputLayout tilLoginUrl;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
+    @BindView(R.id.cb_is_audio)
+    ATECheckBox cbIsAudio;
+    @BindView(R.id.cb_is_enable)
+    ATECheckBox cbIsEnable;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -355,8 +361,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setRuleBookUrlPattern(trim(tieRuleBookUrlPattern.getText()));
         bookSourceBeanN.setRuleBookKind(trim(tieRuleBookKind.getText()));
         bookSourceBeanN.setRuleBookLastChapter(trim(tieRuleBookLastChapter.getText()));
-        bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
+        bookSourceBeanN.setEnable(cbIsEnable.isChecked());
+        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : "");
         return bookSourceBeanN;
     }
 
@@ -393,6 +400,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieRuleBookUrlPattern.setText(StringUtils.trim(bookSourceBean.getRuleBookUrlPattern()));
         tieRuleBookKind.setText(StringUtils.trim(bookSourceBean.getRuleBookKind()));
         tieRuleBookLastChapter.setText(StringUtils.trim(bookSourceBean.getRuleBookLastChapter()));
+        cbIsAudio.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.AUDIO));
+        cbIsEnable.setChecked(bookSourceBean.getEnable());
     }
 
     private void setHint() {
@@ -540,7 +549,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 }
                 break;
             case R.id.action_login:
-                if (!TextUtils.isEmpty(getBookSource().getLoginUrl())) {
+                if (!isEmpty(getBookSource().getLoginUrl())) {
                     SourceLoginActivity.startThis(this, getBookSource());
                 } else {
                     toast(R.string.source_no_login);
@@ -643,7 +652,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     private void insertTextToEditText(String txt) {
-        if (TextUtils.isEmpty(txt)) return;
+        if (isEmpty(txt)) return;
         View view = getWindow().getDecorView().findFocus();
         if (view instanceof EditText) {
             EditText editText = (EditText) view;
