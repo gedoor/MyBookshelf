@@ -33,6 +33,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
  * 统一解析接口
  */
 @Keep
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AnalyzeRule {
     private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
@@ -419,7 +420,6 @@ public class AnalyzeRule {
     /**
      * js实现跨域访问,不能删
      */
-    @SuppressWarnings("unused")
     public String ajax(String urlStr) {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
@@ -434,7 +434,6 @@ public class AnalyzeRule {
     /**
      * js实现解码,不能删
      */
-    @SuppressWarnings("unused")
     public String base64Decoder(String base64) {
         return StringUtils.base64Decode(base64);
     }
