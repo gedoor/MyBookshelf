@@ -64,7 +64,7 @@ public class ChangeSourceDialog {
     private String bookAuthor;
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
-    private CallBack callBack;
+    private Callback callback;
     private BaseDialog dialog;
 
     public static ChangeSourceDialog builder(Context context, BookShelfBean bookShelfBean) {
@@ -127,7 +127,7 @@ public class ChangeSourceDialog {
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
             dialog.dismiss();
-            callBack.changeSource(adapter.getSearchBookBeans().get(index));
+            callback.changeSource(adapter.getSearchBookBeans().get(index));
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
             final String url = adapter.getSearchBookBeans().get(pos).getTag();
@@ -222,8 +222,8 @@ public class ChangeSourceDialog {
         });
     }
 
-    public ChangeSourceDialog setCallBack(CallBack callBack) {
-        this.callBack = callBack;
+    public ChangeSourceDialog setCallback(Callback callback) {
+        this.callback = callback;
         return this;
     }
 
@@ -374,7 +374,7 @@ public class ChangeSourceDialog {
         }
     }
 
-    public interface CallBack {
+    public interface Callback {
         void changeSource(SearchBookBean searchBookBean);
     }
 

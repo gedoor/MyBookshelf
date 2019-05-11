@@ -134,19 +134,19 @@ public class EncodingDetect {
 class BytesEncodingDetect extends Encoding {
     // Frequency tables to hold the GB, Big5, and EUC-TW character
     // frequencies
-    int GBFreq[][];
+    private int[][] GBFreq;
 
-    int GBKFreq[][];
+    private int[][] GBKFreq;
 
-    int Big5Freq[][];
+    private int[][] Big5Freq;
 
-    int Big5PFreq[][];
+    private int[][] Big5PFreq;
 
-    int EUC_TWFreq[][];
+    private int[][] EUC_TWFreq;
 
-    int KRFreq[][];
+    private int[][] KRFreq;
 
-    int JPFreq[][];
+    private int[][] JPFreq;
 
     // int UnicodeFreq[94][128];
     // public static String[] nicename;

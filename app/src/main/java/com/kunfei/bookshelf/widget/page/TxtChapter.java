@@ -91,6 +91,6 @@ public class TxtChapter {
     }
 
     public enum Status {
-        LOADING, FINISH, ERROR, EMPTY, CATEGORY_EMPTY, CHANGE_SOURCE, MP3,
+        LOADING, FINISH, ERROR, EMPTY, CATEGORY_EMPTY, CHANGE_SOURCE,
     }
 }

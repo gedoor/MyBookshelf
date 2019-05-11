@@ -59,6 +59,7 @@ public class ReadAloudService extends Service {
     public static final String ActionResumeService = "resumeService";
     private static final String ActionReadActivity = "readActivity";
     private static final String ActionSetTimer = "updateTimer";
+    private static final String ActionSetProgress = "setProgress";
     private static final int notificationId = 3222;
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
             | PlaybackStateCompat.ACTION_PAUSE
@@ -89,22 +90,26 @@ public class ReadAloudService extends Service {
     private Handler handler = new Handler();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable dsRunnable;
+    private Runnable mpRunnable;
     private MediaManager mediaManager;
     private int readAloudNumber;
     private boolean isAudio;
     private MediaPlayer mediaPlayer;
     private String audioUrl;
+    private int progress;
 
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content, String title, String text) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text, boolean isAudio, int progress) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
         readAloudIntent.putExtra("content", content);
         readAloudIntent.putExtra("title", title);
         readAloudIntent.putExtra("text", text);
+        readAloudIntent.putExtra("isAudio", isAudio);
+        readAloudIntent.putExtra("progress", progress);
         context.startService(readAloudIntent);
     }
 
@@ -150,6 +155,15 @@ public class ReadAloudService extends Service {
         }
     }
 
+    public static void setProgress(Context context, int progress) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionSetProgress);
+            intent.putExtra("progress", progress);
+            context.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -169,6 +183,15 @@ public class ReadAloudService extends Service {
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
+        mpRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    RxBus.get().post(RxBusTag.AUDIO_DUR, mediaPlayer.getCurrentPosition());
+                }
+                handler.postDelayed(this, 1000);
+            }
+        };
     }
 
     @Override
@@ -193,7 +216,14 @@ public class ReadAloudService extends Service {
                         newReadAloud(intent.getStringExtra("content"),
                                 intent.getBooleanExtra("aloudButton", false),
                                 intent.getStringExtra("title"),
-                                intent.getStringExtra("text"));
+                                intent.getStringExtra("text"),
+                                intent.getBooleanExtra("isAudio", false),
+                                intent.getIntExtra("progress", 0));
+                        break;
+                    case ActionSetProgress:
+                        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                            mediaPlayer.seekTo(intent.getIntExtra("progress", 0));
+                        }
                         break;
                 }
             }
@@ -221,40 +251,44 @@ public class ReadAloudService extends Service {
     private void initMediaPlayer() {
         if (mediaPlayer != null) return;
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+            mainHandler.post(() ->
+                    Toast.makeText(ReadAloudService.this, "播放出错", Toast.LENGTH_LONG).show());
+            pauseReadAloud(true);
+            mp.reset();
+            return false;
+        });
         mediaPlayer.setOnPreparedListener(mp -> {
+            mp.start();
+            mp.seekTo(progress);
+            speak = true;
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
             RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
             RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
-            mp.start();
+            handler.postDelayed(mpRunnable, 1000);
         });
-        mediaPlayer.setOnCompletionListener(mp -> RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT));
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mediaPlayer != null) {
-                    RxBus.get().post(RxBusTag.AUDIO_DUR, mediaPlayer.getCurrentPosition());
-                }
-                handler.postDelayed(this, 1000);
-            }
-        };
-        handler.postDelayed(runnable, 1000);
+        mediaPlayer.setOnCompletionListener(mp -> {
+            handler.removeCallbacks(mpRunnable);
+            mp.reset();
+        });
     }
 
-    private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text, boolean isAudio, int progress) {
         if (TextUtils.isEmpty(content)) {
             stopSelf();
             return;
         }
         this.text = text;
         this.title = title;
+        this.progress = progress;
+        this.isAudio = isAudio;
         nowSpeak = 0;
         readAloudNumber = 0;
         contentList.clear();
-        if (content.matches("http.+\\.mp3")) {
-            isAudio = true;
+        if (isAudio) {
             initMediaPlayer();
             audioUrl = content;
         } else {
-            isAudio = false;
             initTTS();
             String[] splitSpeech = content.split("\n");
             for (String aSplitSpeech : splitSpeech) {
@@ -274,6 +308,7 @@ public class ReadAloudService extends Service {
         updateNotification();
         if (isAudio) {
             try {
+                mediaPlayer.reset();
                 mediaPlayer.setDataSource(audioUrl);
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
@@ -347,7 +382,8 @@ public class ReadAloudService extends Service {
         updateNotification();
         updateMediaSessionPlaybackState();
         if (isAudio) {
-            mediaPlayer.pause();
+            if (mediaPlayer != null && mediaPlayer.isPlaying())
+                mediaPlayer.pause();
         } else {
             if (fadeTts) {
                 AsyncTask.execute(() -> mediaManager.fadeOutVolume());
@@ -367,10 +403,12 @@ public class ReadAloudService extends Service {
         pause = false;
         updateNotification();
         if (isAudio) {
-            mediaPlayer.start();
+            if (mediaPlayer != null && !mediaPlayer.isPlaying())
+                mediaPlayer.start();
         } else {
             playTTS();
         }
+        RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
     }
 
     private void updateTimer(int minute) {

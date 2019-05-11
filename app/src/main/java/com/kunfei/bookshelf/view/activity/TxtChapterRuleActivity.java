@@ -175,7 +175,7 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     }
 
     private void selectReplaceRuleFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 FilePicker filePicker = new FilePicker(TxtChapterRuleActivity.this, FilePicker.FILE);
@@ -215,7 +215,7 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 selectReplaceRuleFile();

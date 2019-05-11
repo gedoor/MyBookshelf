@@ -1,11 +1,10 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.constant.BookType;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -15,6 +14,7 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
@@ -23,7 +23,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
  */
 
 @Entity
-public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
+public class BookShelfBean implements Cloneable, BaseBookBean {
     @Transient
     public static final String LOCAL_TAG = "loc_book";
     @Transient
@@ -60,38 +60,6 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
 
     }
 
-    @Transient
-    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
-        @Override
-        public BookShelfBean createFromParcel(Parcel in) {
-            return new BookShelfBean(in);
-        }
-
-        @Override
-        public BookShelfBean[] newArray(int size) {
-            return new BookShelfBean[size];
-        }
-    };
-
-    protected BookShelfBean(Parcel in) {
-        noteUrl = in.readString();
-        durChapter = in.readInt();
-        durChapterPage = in.readInt();
-        finalDate = in.readLong();
-        tag = in.readString();
-        bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
-        serialNumber = in.readInt();
-        finalRefreshData = in.readLong();
-        group = in.readInt();
-        durChapterName = in.readString();
-        lastChapterName = in.readString();
-        chapterListSize = in.readInt();
-        customCoverPath = in.readString();
-        allowUpdate = in.readByte() != 0 && !tag.equals(LOCAL_TAG);
-        useReplaceRule = in.readByte() != 0;
-        variable = in.readString();
-    }
-
     @Generated(hash = 63205856)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate, Boolean hasUpdate,
                          Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData, Integer group,
@@ -114,31 +82,6 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
         this.allowUpdate = allowUpdate;
         this.useReplaceRule = useReplaceRule;
         this.variable = variable;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeInt(group);
-        dest.writeInt(durChapter);
-        dest.writeInt(durChapterPage);
-        dest.writeLong(finalDate);
-        dest.writeString(tag);
-        dest.writeParcelable(bookInfoBean, flags);
-        dest.writeInt(serialNumber);
-        dest.writeLong(finalRefreshData);
-        dest.writeString(durChapterName);
-        dest.writeString(lastChapterName);
-        dest.writeInt(chapterListSize);
-        dest.writeString(customCoverPath);
-        dest.writeByte((byte) (allowUpdate ? 1 : 0));
-        dest.writeByte((byte) (useReplaceRule ? 1 : 0));
-        dest.writeString(variable);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
@@ -400,4 +343,7 @@ public class BookShelfBean implements Parcelable, Cloneable, BaseBookBean {
         this.useReplaceRule = useReplaceRule;
     }
 
+    public boolean isMusic() {
+        return Objects.equals(bookInfoBean.getBookSourceType(), BookType.MUSIC);
+    }
 }

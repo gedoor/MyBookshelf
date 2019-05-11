@@ -108,7 +108,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void selectDownloadPath(Preference preference) {
-        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
                 FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);

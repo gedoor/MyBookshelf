@@ -63,7 +63,7 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13-beta-2'
+    testImplementation 'junit:junit:4.13-beta-3'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
@@ -140,7 +140,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 56
+    schemaVersion 58
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }

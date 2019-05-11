@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Emitter;
 import io.reactivex.Observable;
 import retrofit2.Response;
 
@@ -43,8 +44,8 @@ class BookChapter {
                 Debug.printLog(tag, "┌成功获取目录页");
                 Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl());
             }
-            analyzer = new AnalyzeRule(bookShelfBean);
             bookShelfBean.setTag(tag);
+            analyzer = new AnalyzeRule(bookShelfBean);
             boolean dx = false;
             String ruleChapterList = bookSourceBean.getRuleChapterList();
             if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
@@ -91,16 +92,21 @@ class BookChapter {
                     }
                 }
             }
-            //去除重复,保留后面的,先倒序,从后面往前判断
-            if (!dx) {
-                Collections.reverse(chapterList);
-            }
-            LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
-            chapterList = new ArrayList<>(lh);
-            Collections.reverse(chapterList);
-            e.onNext(chapterList);
-            e.onComplete();
+            finish(dx, chapterList, e);
         });
+    }
+
+    private void finish(boolean dx, List<ChapterListBean> chapterList, Emitter<List<ChapterListBean>> emitter) {
+        //去除重复,保留后面的,先倒序,从后面往前判断
+        if (!dx) {
+            Collections.reverse(chapterList);
+        }
+        LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
+        chapterList = new ArrayList<>(lh);
+        Collections.reverse(chapterList);
+        Debug.printLog(tag, "-目录解析完成");
+        emitter.onNext(chapterList);
+        emitter.onComplete();
     }
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
@@ -108,7 +114,6 @@ class BookChapter {
         List<String> nextUrlList = new ArrayList<>();
 
         analyzer.setContent(s, chapterUrl);
-
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
             Debug.printLog(tag, "┌获取目录下一页网址", printLog);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
@@ -119,9 +124,9 @@ class BookChapter {
             Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
 
-        if(ruleChapterList.startsWith("AllInOne")) {
+        if (ruleChapterList.startsWith("+")) {
             Debug.printLog(tag, "┌解析目录列表", printLog);
-            List<Object> collections = analyzer.getElements(ruleChapterList.substring(8));
+            List<Object> collections = analyzer.getElements(ruleChapterList.substring(1));
             Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
             NativeObject nativeObject = (NativeObject)collections.get(0);
             Debug.printLog(tag, "┌获取章节名称");
@@ -157,6 +162,8 @@ class BookChapter {
         Debug.printLog(tag, "┌解析目录列表", printLog);
         List<Object> collections = analyzer.getElements(ruleChapterList);
         Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
+        List<AnalyzeRule.SourceRule> nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
+        List<AnalyzeRule.SourceRule> urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleContentUrl());
         for (int i = 0; i < collections.size(); i++) {
             Object object = collections.get(i);
             analyzer.setContent(object, chapterUrl);
@@ -164,10 +171,10 @@ class BookChapter {
             String url;
             printLog = printLog && i == 0;
             Debug.printLog(tag, "┌获取章节名称", printLog);
-            name = analyzer.getString(bookSourceBean.getRuleChapterName());
+            name = analyzer.getString(nameRule, false);
             Debug.printLog(tag, "└" + name, printLog);
             Debug.printLog(tag, "┌获取章节网址", printLog);
-            url = analyzer.getString(bookSourceBean.getRuleContentUrl(), true);
+            url = analyzer.getString(urlRule, true);
             Debug.printLog(tag, "└" + url, printLog);
 
             if (!isEmpty(name) && !isEmpty(url)) {

@@ -59,6 +59,8 @@ public interface ReadBookContract {
 
         BookShelfBean getBookShelf();
 
+        void saveBook();
+
         void saveProgress();
 
         void addToShelf(final ReadBookPresenter.OnAddListener Listener);
