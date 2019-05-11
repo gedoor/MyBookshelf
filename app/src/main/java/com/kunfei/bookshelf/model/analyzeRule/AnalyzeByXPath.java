@@ -20,10 +20,10 @@ public class AnalyzeByXPath {
             String html = doc.toString();
             // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
             if (html.endsWith("</td>")) {
-                html = "<tr>" + html + "</tr>";
+                html = String.format("<tr>%s</tr>", html);
             }
             if (html.endsWith("</tr>") || html.endsWith("</tbody>")) {
-                html = "<table>" + html + "</table>";
+                html = String.format("<table>%s</table>", html);
             }
             jxDocument = JXDocument.create(html);
         }
