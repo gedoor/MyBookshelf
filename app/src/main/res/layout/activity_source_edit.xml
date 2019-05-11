@@ -371,6 +371,13 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/source_user_agent" />
             </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATECheckBox
+                android:id="@+id/cb_is_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/music" />
+
         </LinearLayout>
     </ScrollView>
 
