@@ -128,6 +128,9 @@ class BookChapter {
             Debug.printLog(tag, "┌解析目录列表", printLog);
             List<Object> collections = analyzer.getElements(ruleChapterList.substring(1));
             Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
+            if (collections.isEmpty()) {
+                return new WebChapterBean<>(chapterBeans, nextUrlList);
+            }
             NativeObject nativeObject = (NativeObject)collections.get(0);
             Debug.printLog(tag, "┌获取章节名称");
             String nameRule = bookSourceBean.getRuleChapterName();
