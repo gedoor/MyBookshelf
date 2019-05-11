@@ -93,11 +93,12 @@ public class AnalyzeByXPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            List<Object> objects = jxDocument.sel(xPath);
-            for (Object object : objects) {
-                if (object instanceof String) {
-                    result.add((String) object);
-                }
+            List<JXNode> jxNodes = jxDocument.selN(xPath);
+            for (JXNode jxNode : jxNodes) {
+                /*if(jxNode.isString()){
+                    result.add(String.valueOf(jxNode));
+                }*/
+                result.add(String.valueOf(jxNode));
             }
             return result;
         } else {
@@ -143,7 +144,9 @@ public class AnalyzeByXPath {
         if (rules.length == 1) {
             /*Object object = jxDocument.selOne(rule);
             result = object instanceof Element ? ((Element) object).html() : (String) object;*/
-            return String.valueOf(jxDocument.selN(rule));
+            List<JXNode> jxNodes = jxDocument.selN(rule);
+            if(jxNodes == null) return null;
+            return TextUtils.join(",", jxNodes);
         } else {
             StringBuilder sb = new StringBuilder();
             for (String rl : rules) {
