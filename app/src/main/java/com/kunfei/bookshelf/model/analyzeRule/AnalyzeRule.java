@@ -79,7 +79,7 @@ public class AnalyzeRule {
      */
     private AnalyzeByXPath getAnalyzeByXPath(Object o) {
         if (o != null) {
-            return new AnalyzeByXPath().parse(o.toString());
+            return new AnalyzeByXPath().parse(o);
         }
         return getAnalyzeByXPath();
     }
@@ -87,7 +87,7 @@ public class AnalyzeRule {
     private AnalyzeByXPath getAnalyzeByXPath() {
         if (analyzeByXPath == null || objectChangedXP) {
             analyzeByXPath = new AnalyzeByXPath();
-            analyzeByXPath.parse(object.toString());
+            analyzeByXPath.parse(object);
             objectChangedXP = false;
         }
         return analyzeByXPath;
@@ -117,9 +117,6 @@ public class AnalyzeRule {
      */
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
         if (o != null) {
-            if (o instanceof String) {
-                return new AnalyzeByJSonPath().parse(o.toString());
-            }
             return new AnalyzeByJSonPath().parse(o);
         }
         return getAnalyzeByJSonPath();
@@ -128,11 +125,7 @@ public class AnalyzeRule {
     private AnalyzeByJSonPath getAnalyzeByJSonPath() {
         if (analyzeByJSonPath == null || objectChangedJP) {
             analyzeByJSonPath = new AnalyzeByJSonPath();
-            if (object instanceof String) {
-                analyzeByJSonPath.parse(String.valueOf(object));
-            } else {
-                analyzeByJSonPath.parse(object);
-            }
+            analyzeByJSonPath.parse(object);
             objectChangedJP = false;
         }
         return analyzeByJSonPath;
