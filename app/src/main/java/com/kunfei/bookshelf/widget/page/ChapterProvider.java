@@ -58,7 +58,7 @@ class ChapterProvider {
         content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
         String[] allLine = content.split("\n");
         if (pageLoader.bookShelfBean.isMusic()) {
-            txtChapter.setMsg(allLine[2]);
+            txtChapter.setMsg(content);
         }
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;

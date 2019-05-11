@@ -53,7 +53,7 @@ public abstract class PageLoader {
     private static final int TIP_ALPHA = 180;
     // 监听器
     OnPageChangeListener mPageChangeListener;
-    private Context mContext;
+    Context mContext;
     BookShelfBean bookShelfBean;
     // 页面显示类
     PageView mPageView;
