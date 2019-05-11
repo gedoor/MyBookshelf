@@ -115,7 +115,7 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex)))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapter(chapterIndex)))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {

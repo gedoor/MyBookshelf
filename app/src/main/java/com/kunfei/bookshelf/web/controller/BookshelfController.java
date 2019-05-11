@@ -54,7 +54,7 @@ public class BookshelfController {
             return returnData.setData(chapter);
         }
         try {
-            BookContentBean bookContentBean = WebBookModel.getInstance().getBookContent(chapter).blockingFirst();
+            BookContentBean bookContentBean = WebBookModel.getInstance().getBookContent(bookShelfBean.getBookInfoBean(), chapter).blockingFirst();
             return returnData.setData(bookContentBean.getDurChapterContent());
         } catch (Exception e) {
             return returnData.setErrorMsg(e.getMessage());

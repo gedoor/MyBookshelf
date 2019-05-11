@@ -3,8 +3,10 @@ package com.kunfei.bookshelf.model.task;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookContentBean;
+import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
@@ -193,6 +195,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
      */
     private synchronized void downloading(DownloadChapterBean chapter, Scheduler scheduler) {
         whenProgress(chapter);
+        BookInfoBean infoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(chapter.getNoteUrl());
         Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
             if (!BookshelfHelp.isChapterCached(
                     BookshelfHelp.getCachePathName(chapter), chapter.getDurChapterIndex(),
@@ -204,7 +207,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             }
             e.onComplete();
         })
-                .flatMap(result -> WebBookModel.getInstance().getBookContent(chapter))
+                .flatMap(result -> WebBookModel.getInstance().getBookContent(infoBean, chapter))
                 .subscribeOn(scheduler)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BookContentBean>() {

@@ -4,7 +4,6 @@ package com.kunfei.bookshelf.model;
 import android.annotation.SuppressLint;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
@@ -52,11 +51,11 @@ public class WebBookModel {
     /**
      * 章节缓存
      */
-    public Observable<BookContentBean> getBookContent(BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(BookInfoBean infoBean, BaseChapterBean chapterBean) {
         return WebBook.getInstance(chapterBean.getTag())
                 .getBookContent(chapterBean)
                 .timeout(60, TimeUnit.SECONDS)
-                .flatMap((bookContentBean -> saveContent(chapterBean, bookContentBean)));
+                .flatMap((bookContentBean -> saveContent(infoBean, chapterBean, bookContentBean)));
     }
 
     /**
@@ -110,10 +109,9 @@ public class WebBookModel {
      * 保存章节
      */
     @SuppressLint("DefaultLocale")
-    private Observable<BookContentBean> saveContent(BaseChapterBean chapterBean, BookContentBean bookContentBean) {
+    private Observable<BookContentBean> saveContent(BookInfoBean infoBean, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
-            BookInfoBean infoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(chapterBean.getNoteUrl());
             if (bookContentBean.getDurChapterContent() == null) {
                 e.onError(new Throwable("下载章节出错"));
             } else if (infoBean.isAudio()) {
