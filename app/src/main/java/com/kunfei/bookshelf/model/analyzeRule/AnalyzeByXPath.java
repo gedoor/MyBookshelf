@@ -16,8 +16,6 @@ public class AnalyzeByXPath {
     public AnalyzeByXPath parse(Object doc) {
         if (doc instanceof Document) {
             jxDocument = JXDocument.create((Document) doc);
-        } else if (doc instanceof Elements) {
-            jxDocument = JXDocument.create((Elements) doc);
         } else {
             String html = (String) doc;
             // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
