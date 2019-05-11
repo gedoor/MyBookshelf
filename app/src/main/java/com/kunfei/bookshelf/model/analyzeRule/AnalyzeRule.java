@@ -98,7 +98,7 @@ public class AnalyzeRule {
      */
     private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
         if (o != null) {
-            return new AnalyzeByJSoup().parse(o.toString());
+            return new AnalyzeByJSoup().parse(o);
         }
         return getAnalyzeByJSoup();
     }
