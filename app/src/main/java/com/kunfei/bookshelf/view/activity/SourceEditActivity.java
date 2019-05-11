@@ -204,8 +204,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     TextInputLayout tilLoginUrl;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
-    @BindView(R.id.cb_is_music)
-    ATECheckBox cbIsMusic;
+    @BindView(R.id.cb_is_audio)
+    ATECheckBox cbIsAudio;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -361,7 +361,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setRuleBookLastChapter(trim(tieRuleBookLastChapter.getText()));
         bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
-        bookSourceBeanN.setBookSourceType(cbIsMusic.isChecked() ? BookType.MUSIC : "");
+        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : "");
         return bookSourceBeanN;
     }
 
@@ -398,7 +398,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieRuleBookUrlPattern.setText(StringUtils.trim(bookSourceBean.getRuleBookUrlPattern()));
         tieRuleBookKind.setText(StringUtils.trim(bookSourceBean.getRuleBookKind()));
         tieRuleBookLastChapter.setText(StringUtils.trim(bookSourceBean.getRuleBookLastChapter()));
-        cbIsMusic.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.MUSIC));
+        cbIsAudio.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.AUDIO));
     }
 
     private void setHint() {

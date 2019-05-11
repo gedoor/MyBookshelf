@@ -116,7 +116,7 @@ public class WebBookModel {
             BookInfoBean infoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(chapterBean.getNoteUrl());
             if (bookContentBean.getDurChapterContent() == null) {
                 e.onError(new Throwable("下载章节出错"));
-            } else if (infoBean.isMuisc()) {
+            } else if (infoBean.isAudio()) {
                 ACache.get(MApplication.getInstance()).put(chapterBean.getDurChapterUrl(), bookContentBean.getDurChapterContent(), ACache.TIME_HOUR);
                 e.onNext(bookContentBean);
             } else if (BookshelfHelp.saveChapterInfo(infoBean.getName() + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),

@@ -1,5 +1,5 @@
 package com.kunfei.bookshelf.constant;
 
 public class BookType {
-    public final static String MUSIC = "[MUSIC]";
+    public final static String AUDIO = "AUDIO";
 }

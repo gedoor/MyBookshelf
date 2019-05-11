@@ -103,7 +103,7 @@ public class BookshelfHelp {
     }
 
     public static boolean isChapterCached(BookInfoBean book, BaseChapterBean chapter) {
-        if (book.isMuisc()) {
+        if (book.isAudio()) {
             return !TextUtils.isEmpty(ACache.get(MApplication.getInstance()).getAsString(chapter.getDurChapterUrl()));
         }
         final String path = getCachePathName(book);

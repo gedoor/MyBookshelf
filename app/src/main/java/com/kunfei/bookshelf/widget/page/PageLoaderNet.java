@@ -182,7 +182,7 @@ public class PageLoaderNet extends PageLoader {
 
     @Override
     protected String getChapterContent(ChapterListBean chapter) {
-        if (bookShelfBean.isMusic()) {
+        if (bookShelfBean.isAudio()) {
             return ACache.get(mContext).getAsString(chapter.getDurChapterUrl());
         }
         return BookshelfHelp.getChapterCache(bookShelfBean, chapter);

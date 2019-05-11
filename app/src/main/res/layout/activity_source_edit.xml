@@ -373,10 +373,10 @@
             </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
 
             <com.kunfei.bookshelf.widget.views.ATECheckBox
-                android:id="@+id/cb_is_music"
+                android:id="@+id/cb_is_audio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/music" />
+                android:text="@string/audio" />
 
         </LinearLayout>
     </ScrollView>

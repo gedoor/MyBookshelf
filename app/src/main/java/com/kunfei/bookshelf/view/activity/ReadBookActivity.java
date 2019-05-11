@@ -798,7 +798,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         int audioSize = end != null ? end.intValue() : 0;
                         mediaPlayerPop.upAudioSize(audioSize);
                         mediaPlayerPop.upAudioDur(mPresenter.getBookShelf().getDurChapterPage());
-                        if (mPresenter.getBookShelf().isMusic() && mPageLoader.getPageStatus() == TxtChapter.Status.FINISH) {
+                        if (mPresenter.getBookShelf().isAudio() && mPageLoader.getPageStatus() == TxtChapter.Status.FINISH) {
                             if (mediaPlayerPop.getVisibility() != View.VISIBLE) {
                                 mediaPlayerPop.setVisibility(View.VISIBLE);
                             }
@@ -1180,7 +1180,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
                             mPresenter.getBookShelf().getTag(),
                             mPresenter.getBookShelf().getDurChapterName()),
-                    mPresenter.getBookShelf().isMusic(),
+                    mPresenter.getBookShelf().isAudio(),
                     mPresenter.getBookShelf().getDurChapterPage());
         }
     }
@@ -1340,7 +1340,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     return true;
                 } else if (ReadAloudService.running && aloudStatus == ReadAloudService.Status.PLAY) {
                     ReadAloudService.pause(this);
-                    if (!mPresenter.getBookShelf().isMusic()) {
+                    if (!mPresenter.getBookShelf().isAudio()) {
                         toast(R.string.read_aloud_pause);
                     }
                     return true;
