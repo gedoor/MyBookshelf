@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@drawable/shape_card_view"
+    android:clickable="true"
+    android:ellipsize="middle"
+    android:focusable="true"
+    android:padding="6dp"
+    android:singleLine="true"
+    android:text="@string/app_name"
+    android:textColor="@color/tv_text_default" />

@@ -1,0 +1,53 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.MainActivity">
+
+    <item
+        android:id="@+id/action_add_local"
+        android:icon="@drawable/ic_add"
+        android:title="@string/book_local"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_url"
+        android:icon="@drawable/ic_add_online"
+        android:title="@string/add_url"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_download_all"
+        android:icon="@drawable/ic_download_line"
+        android:title="@string/download_all"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_list_grid"
+        android:icon="@drawable/ic_view_quilt"
+        android:title="@string/action_list_grid"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_change_icon"
+        android:icon="@drawable/ic_face"
+        android:title="@string/change_icon"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_clear_cache"
+        android:icon="@drawable/ic_clear_cache"
+        android:title="@string/clear_content"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_clearBookshelf"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/clear_bookshelf"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_web_start"
+        android:icon="@drawable/ic_speaker_phone_black_24dp"
+        android:title="@string/web_menu"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background"
+            android:theme="?attr/actionBarStyle" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_tl_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="@color/background" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!--文件点击按钮-->
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:paddingRight="10dp"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <com.kunfei.bookshelf.widget.views.ATECheckBox
+            android:id="@+id/file_system_cb_selected_all"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/select_all"
+            android:textColor="@color/tv_text_default" />
+
+        <com.kunfei.bookshelf.widget.views.ATEAccentStrokeTextView
+            android:id="@+id/file_system_btn_add_book"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:minWidth="110dp"
+            android:text="加入书架" />
+
+        <com.kunfei.bookshelf.widget.views.ATEAccentStrokeTextView
+            android:id="@+id/file_system_btn_delete"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/file_system_btn_add_book"
+            android:text="删除" />
+    </RelativeLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/tab_vp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_bottom"
+        android:layout_below="@+id/action_bar" />
+
+    <View
+        android:id="@+id/v_shadow"
+        style="@style/Style.Shadow.Bottom"
+        android:layout_above="@+id/rl_bottom" />
+</RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.AppCompat" parent="@style/Base.V28.Theme.AppCompat" tools:ignore="PrivateResource" />
+    <style name="Base.Theme.AppCompat.Light" parent="@style/Base.V28.Theme.AppCompat.Light" tools:ignore="PrivateResource" />
+    <style name="Base.V28.Theme.AppCompat" parent="@style/Base.V26.Theme.AppCompat" tools:ignore="PrivateResource">
+        <item name="android:navigationBarColor">#ff212121</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:navigationBarDividerColor">#ff545454</item>
+    </style>
+    <style name="Base.V28.Theme.AppCompat.Light" parent="@style/Base.V26.Theme.AppCompat.Light" tools:ignore="PrivateResource">
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarDividerColor">#ffdcdcdc</item>
+    </style>
+</resources>

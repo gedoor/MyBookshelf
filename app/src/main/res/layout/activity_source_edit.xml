@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:id="@+id/ll_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?attr/actionBarStyle"
+        android:transitionName="sharedView"
+        tools:ignore="UnusedAttribute">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_book_source_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_book_source_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/book_source_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_book_source_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_book_source_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/book_source_name" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_bookSourceGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_bookSourceGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/book_source_group" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_loginUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_loginUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/book_source_login_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleFindUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleFindUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_find_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_list" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_name" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_author" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchKind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchKind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_kind" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchLastChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchLastChapter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_last_chapter" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchCoverUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchCoverUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_cover_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleSearchNoteUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleSearchNoteUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_search_note_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookUrlPattern"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookUrlPattern"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/book_url_pattern" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_book_name" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_book_author" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleCoverUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleCoverUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_cover_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookKind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookKind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_book_kind" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookLastChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookLastChapter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_book_last_chapter" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleIntroduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleIntroduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_introduce" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleChapterListUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleChapterListUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_chapter_list_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleChapterList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleChapterList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_chapter_list" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleChapterListUrlNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleChapterListUrlNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_chapter_list_url_next" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleChapterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleChapterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_chapter_name" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleContentUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleContentUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_content_url" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleContentUrlNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleContentUrlNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_content_url_next" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_ruleBookContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_ruleBookContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rule_book_content" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATETextInputLayout
+                android:id="@+id/til_httpUserAgent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kunfei.bookshelf.widget.views.ATEEditText
+                    android:id="@+id/tie_httpUserAgent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/source_user_agent" />
+            </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+            <com.kunfei.bookshelf.widget.views.ATECheckBox
+                android:id="@+id/cb_is_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

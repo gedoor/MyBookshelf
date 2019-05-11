@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal">
+
+            <com.kunfei.bookshelf.widget.CoverImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:contentDescription="@string/book"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="@string/app_name"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        tools:ignore="RtlHardcoded">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="3dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_origin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="来源"
+                                android:textColor="@color/tv_text_default"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_origin_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:textColor="@color/tv_text_default"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                                android:id="@+id/tv_state"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="5dp"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
+                                android:text="连载"
+                                android:textSize="12sp" />
+
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                                android:id="@+id/tv_kind"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="5dp"
+                                android:lines="1"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
+                                android:text="现代都市"
+                                android:textSize="12sp" />
+
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                                android:id="@+id/tv_words"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:lines="1"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="0.4dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="0.4dp"
+                                android:text="1.2万字"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_lasted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="最新章节"
+                            android:textColor="@color/tv_text_default"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                        android:id="@+id/tv_add_shelf"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="+书架"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="bottom"
+            android:background="@color/bg_divider_line" />
+    </FrameLayout>
+
+</FrameLayout>

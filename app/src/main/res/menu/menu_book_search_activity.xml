@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.MainActivity">
+
+    <item
+        android:id="@+id/action_book_source_manage"
+        android:icon="@drawable/ic_book_source_manage"
+        android:title="@string/book_source_manage"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_donate"
+        android:icon="@drawable/ic_donate"
+        android:title="@string/donate"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_get_hb"
+        android:icon="@drawable/ic_donate"
+        android:title="@string/get_ali_pay_hb"
+        app:showAsAction="never" />
+
+</menu>

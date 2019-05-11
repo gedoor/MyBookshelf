@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kunfei.bookshelf.view.activity.ReadStyleActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="5dp"
+            android:layout_margin="16dp"
+            android:lineSpacingMultiplier="1"
+            android:text="@string/content_sl"
+            android:textSize="19sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_menu"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <com.kunfei.bookshelf.widget.views.ATESwitch
+                android:id="@+id/sw_darkStatusIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:text="@string/darkStatusIcon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                android:id="@+id/tvSelectTextColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="文字颜色"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                android:id="@+id/tvSelectBgColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="背景颜色"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                android:id="@+id/tvSelectBgImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="背景图片"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                android:id="@+id/tvDefault"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="恢复默认"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="?attr/actionBarStyle">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/background_menu"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+    </LinearLayout>
+</FrameLayout>

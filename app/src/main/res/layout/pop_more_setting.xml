@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View style="@style/Style.Shadow.Bottom" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp">
+
+        <View
+            android:id="@+id/vw_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_menu" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_screen_direction"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/background_menu"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/screen_direction" />
+
+                        <TextView
+                            android:id="@+id/tv_screen_direction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/screen_unspecified" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/llScreenTimeOut"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/background_menu"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/keep_light" />
+
+                        <TextView
+                            android:id="@+id/tv_screen_time_out"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/keep_light" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/llJFConvert"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/background_menu"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/jf_convert" />
+
+                        <TextView
+                            android:id="@+id/tvJFConvert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/keep_light" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llImmersionStatusBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sbImmersionStatusBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/immersion_status_bar" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_hideStatusBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_hideStatusBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/pt_hide_status_bar" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_hideNavigationBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_hideNavigationBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/pt_hide_navigation_bar" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llNavigationBarColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/background_menu"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp">
+
+                        <TextView
+                            android:id="@+id/reNavBarColor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@color/menu_color_default"
+                            android:text="@string/re_navigation_bar_color" />
+
+                        <TextView
+                            android:id="@+id/reNavBarColor_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/selector_menu_text"
+                            android:text="@string/black" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_show_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/showTitle" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sw_volume_next_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/volume_open_page" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_read_aloud_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sw_read_aloud_key"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/aloud_volume_page" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_click"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/click_open_page" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_click_all_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_click_all_next"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/click_all_next_page" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_showLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/showLine" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_showTimeBattery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_menu"
+                    android:orientation="vertical">
+
+                    <com.kunfei.bookshelf.widget.views.ATESwitch
+                        android:id="@+id/sb_showTimeBattery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/showTimeBattery" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="@color/btn_bg_press" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+</LinearLayout>
