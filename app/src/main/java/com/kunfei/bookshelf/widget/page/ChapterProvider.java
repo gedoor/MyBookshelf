@@ -56,10 +56,20 @@ class ChapterProvider {
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         if (pageLoader.bookShelfBean.isAudio()) {
+            txtChapter.setStatus(TxtChapter.Status.FINISH);
             txtChapter.setMsg(content);
-        } else {
-            content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
+            TxtPage page = new TxtPage();
+            page.position = txtChapter.getTxtPageList().size();
+            page.title = chapter.getDurChapterName();
+            page.lines = new ArrayList<>();
+            page.lines.add(content);
+            page.titleLines = 0;
+            txtChapter.addPage(page);
+            addTxtPageLength(txtChapter, page.getContent().length());
+            txtChapter.addPage(page);
+            return txtChapter;
         }
+        content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
         String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
@@ -114,7 +124,6 @@ class ChapterProvider {
                 } else {
                     Layout tempLayout = new StaticLayout(paragraph, pageLoader.mTextPaint, pageLoader.mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                     wordCount = tempLayout.getLineEnd(0);
-
                 }
 
                 subStr = paragraph.substring(0, wordCount);
