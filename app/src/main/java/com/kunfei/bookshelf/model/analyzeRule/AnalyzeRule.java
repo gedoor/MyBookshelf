@@ -407,7 +407,6 @@ public class AnalyzeRule {
         bindings.put("java", this);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
-        bindings.put("map", book.getVariableMap());
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
