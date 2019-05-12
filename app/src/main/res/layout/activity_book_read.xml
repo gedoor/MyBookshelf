@@ -109,26 +109,12 @@
             <View style="@style/Style.Shadow.Top" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_menu_bottom"
+        <com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu
+            android:id="@+id/read_menu_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:visibility="invisible">
-
-            <com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu
-                android:id="@+id/read_menu_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:id="@+id/vwNavigationBar"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@color/background_menu" />
-
-        </LinearLayout>
+            android:visibility="invisible" />
 
         <com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop
             android:id="@+id/readAdjustPop"
