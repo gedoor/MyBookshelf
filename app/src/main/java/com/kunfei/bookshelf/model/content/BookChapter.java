@@ -155,9 +155,7 @@ class BookChapter {
     }
 
     private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
-        List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
-
         analyzer.setContent(s, chapterUrl);
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext()) && analyzeNextUrl) {
             Debug.printLog(tag, "┌获取目录下一页网址", printLog);
@@ -169,98 +167,68 @@ class BookChapter {
             Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
 
+        List<ChapterListBean> chapterBeans = new ArrayList<>();
+        Debug.printLog(tag, "┌解析目录列表", printLog);
         // 仅使用java正则表达式提取目录列表
         if(ruleChapterList.startsWith("J$")){
             ruleChapterList = ruleChapterList.substring(2);
-            Debug.printLog(tag, "┌解析目录列表", printLog);
             chapterBeans = Reger(s, ruleChapterList.split("&&"),0,
                     Integer.parseInt(bookSourceBean.getRuleChapterName()),
                     Integer.parseInt(bookSourceBean.getRuleContentUrl()),
                     chapterBeans
             );
-            Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
-            if (chapterBeans.size() == 0) return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
-            ChapterListBean firstChapter = chapterBeans.get(0);
-            Debug.printLog(tag, "┌获取章节名称");
-            Debug.printLog(tag, "└" + firstChapter.getDurChapterName());
-            Debug.printLog(tag, "┌获取章节网址");
-            Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl());
-            return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+            if (chapterBeans.size() == 0){
+                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+            }
         }
-
-        boolean allInOne = false;
-        if (ruleChapterList.startsWith("+")){
-            allInOne = true;
+        // 使用AllInOne规则模式提取目录列表
+        else if (ruleChapterList.startsWith("+")){
             ruleChapterList = ruleChapterList.substring(1);
-        }
-        Debug.printLog(tag, "┌解析目录列表", printLog);
-        List<Object> collections = analyzer.getElements(ruleChapterList);
-        Debug.printLog(tag, "└找到 " + collections.size() + " 个章节", printLog);
-        if (collections.isEmpty()) {
-            return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
-        }
-        String name = "";
-        String url = "";
-        String baseUrl = headerPattern.matcher(chapterUrl).replaceAll("");
-        if (allInOne) {
+            List<Object> collections = analyzer.getElements(ruleChapterList);
+            if (collections.size() == 0){
+                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+            }
             String nameRule = bookSourceBean.getRuleChapterName();
-            String urlRule = bookSourceBean.getRuleContentUrl();
-            Object object0 = collections.get(0);
-            Debug.printLog(tag, "┌获取章节名称");
-            if(object0 instanceof NativeObject){
-                name = String.valueOf(((NativeObject)object0).get(nameRule));
-            } else if(object0 instanceof Element){
-                name = ((Element)object0).text();
-            }
-            Debug.printLog(tag, "└" + name);
-            Debug.printLog(tag, "┌获取章节网址");
-            if(object0 instanceof NativeObject){
-                url = String.valueOf(((NativeObject)object0).get(urlRule));
-            } else if(object0 instanceof Element){
-                url = ((Element)object0).attr(urlRule);
-            }
-            Debug.printLog(tag, "└" + url);
-
+            String linkRule = bookSourceBean.getRuleContentUrl();
+            String name = "";
+            String link = "";
             for (Object object: collections) {
                 if(object instanceof NativeObject){
                     name = String.valueOf(((NativeObject)object).get(nameRule));
-                    url = String.valueOf(((NativeObject)object).get(urlRule));
+                    link = String.valueOf(((NativeObject)object).get(linkRule));
                 } else if(object instanceof Element){
                     name = ((Element)object).text();
-                    url = ((Element)object).attr(urlRule);
+                    link = ((Element)object).attr(linkRule);
                 }
-                if (!isEmpty(name) && !isEmpty(url)) {
-                    ChapterListBean temp = new ChapterListBean();
-                    temp.setTag(tag);
-                    temp.setDurChapterName(name);
-                    temp.setDurChapterUrl(NetworkUtil.getAbsoluteURL(baseUrl, url));
-                    chapterBeans.add(temp);
-                }
-            }
-            return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
-        }
-
-        List<AnalyzeRule.SourceRule> nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
-        List<AnalyzeRule.SourceRule> urlRule = analyzer.splitSourceRule(bookSourceBean.getRuleContentUrl());
-        for (int i = 0; i < collections.size(); i++) {
-            Object object = collections.get(i);
-            analyzer.setContent(object, chapterUrl);
-            printLog = printLog && i == 0;
-            Debug.printLog(tag, "┌获取章节名称", printLog);
-            name = analyzer.getString(nameRule, false);
-            Debug.printLog(tag, "└" + name, printLog);
-            Debug.printLog(tag, "┌获取章节网址", printLog);
-            url = analyzer.getString(urlRule, true);
-            Debug.printLog(tag, "└" + url, printLog);
-
-            if (!isEmpty(name) && !isEmpty(url)) {
-                ChapterListBean temp = new ChapterListBean();
-                temp.setTag(tag);
-                temp.setDurChapterName(name);
-                temp.setDurChapterUrl(url);
-                chapterBeans.add(temp);
+                chapterBeans.add(new ChapterListBean(tag, name, link));
             }
         }
+        // 使用默认规则解析流程提取目录列表
+        else{
+            List<Object> collections = analyzer.getElements(ruleChapterList);
+            if (collections.size() == 0){
+                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+            }
+            List<AnalyzeRule.SourceRule> nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
+            List<AnalyzeRule.SourceRule> linkRule = analyzer.splitSourceRule(bookSourceBean.getRuleContentUrl());
+            for (Object object: collections) {
+                analyzer.setContent(object, chapterUrl);
+                chapterBeans.add(new ChapterListBean(
+                        tag,
+                        analyzer.getString(nameRule, false),
+                        analyzer.getString(linkRule, true)
+                ));
+            }
+        }
+        Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
+        ChapterListBean firstChapter = chapterBeans.get(0);
+        Debug.printLog(tag, "┌获取章节名称");
+        Debug.printLog(tag, "└" + firstChapter.getDurChapterName());
+        Debug.printLog(tag, "┌获取章节网址");
+        Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl());
         return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
     }
 
