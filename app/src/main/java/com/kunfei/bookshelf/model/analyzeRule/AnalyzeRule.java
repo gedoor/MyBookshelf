@@ -259,7 +259,7 @@ public class AnalyzeRule {
     /**
      * 保存变量
      */
-    private void putVar(Map<String, String> map) throws Exception {
+    private void putRule(Map<String, String> map) throws Exception {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (book != null) {
                 book.putVariable(entry.getKey(), getString(entry.getValue()));
@@ -276,7 +276,7 @@ public class AnalyzeRule {
             String find = putMatcher.group();
             ruleStr = ruleStr.replace(find, "");
             Map<String, String> map = new Gson().fromJson(find.substring(5), MAP_STRING);
-            putVar(map);
+            putRule(map);
         }
         return ruleStr;
     }
@@ -407,6 +407,7 @@ public class AnalyzeRule {
         bindings.put("java", this);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
+        bindings.put("map", book.getVariableMap());
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
