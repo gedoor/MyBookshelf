@@ -283,9 +283,50 @@ public class AnalyzeRule {
     }
 
     /**
-     * 分解规则生成规则列表
+     * 替换@get
+     */
+    private String replaceGet(String ruleStr) {
+        Matcher getMatcher = getPattern.matcher(ruleStr);
+        while (getMatcher.find()) {
+            String find = getMatcher.group();
+            String value = "";
+            if (book != null && book.getVariableMap() != null) {
+                value = book.getVariableMap().get(find.substring(6, find.length() - 1));
+                if (value == null) value = "";
+            }
+            ruleStr = ruleStr.replace(find, value);
+        }
+        return ruleStr;
+    }
+
+    /**
+     * 替换JS
      */
     @SuppressLint("DefaultLocale")
+    private String replaceJs(String ruleStr) throws Exception {
+        if (ruleStr.contains("{{") && ruleStr.contains("}}")) {
+            Object jsEval;
+            StringBuffer sb = new StringBuffer(ruleStr.length());
+            Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
+            while (expMatcher.find()) {
+                jsEval = evalJS(expMatcher.group(1), object);
+                if (jsEval instanceof String) {
+                    expMatcher.appendReplacement(sb, (String) jsEval);
+                } else if (jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0) {
+                    expMatcher.appendReplacement(sb, String.format("%.0f", (Double) jsEval));
+                } else {
+                    expMatcher.appendReplacement(sb, String.valueOf(jsEval));
+                }
+            }
+            expMatcher.appendTail(sb);
+            ruleStr = sb.toString();
+        }
+        return ruleStr;
+    }
+
+    /**
+     * 分解规则生成规则列表
+     */
     public List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
         if (TextUtils.isEmpty(ruleStr)) return ruleList;
@@ -307,36 +348,9 @@ public class AnalyzeRule {
         //分离put规则
         ruleStr = splitPutRule(ruleStr);
         //替换get值
-        Matcher getMatcher = getPattern.matcher(ruleStr);
-        while (getMatcher.find()) {
-            String find = getMatcher.group();
-            String value = "";
-            if (book != null && book.getVariableMap() != null) {
-                value = book.getVariableMap().get(find.substring(6, find.length() - 1));
-                if (value == null) value = "";
-            }
-            ruleStr = ruleStr.replace(find, value);
-        }
+        ruleStr = replaceGet(ruleStr);
         //替换js
-        if(ruleStr.contains("{{") && ruleStr.contains("}}")){
-            Object jsEval;
-            StringBuffer sb = new StringBuffer(ruleStr.length());
-            Matcher expMatcher = EXP_PATTERN.matcher(ruleStr);
-            while (expMatcher.find()){
-                jsEval = evalJS(expMatcher.group(1), object);
-                if(jsEval instanceof String){
-                    expMatcher.appendReplacement(sb,(String) jsEval);
-                }
-                else if(jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0){
-                    expMatcher.appendReplacement(sb,String.format("%.0f",(Double) jsEval));
-                }
-                else {
-                    expMatcher.appendReplacement(sb,String.valueOf(jsEval));
-                }
-            }
-            expMatcher.appendTail(sb);
-            ruleStr = sb.toString();
-        }
+        ruleStr = replaceJs(ruleStr);
         //拆分为列表
         int start = 0;
         String tmp;
