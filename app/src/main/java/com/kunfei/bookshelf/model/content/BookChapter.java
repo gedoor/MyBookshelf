@@ -140,8 +140,8 @@ class BookChapter {
         List<String> nextUrlList = new ArrayList<>();
 
         analyzer.setContent(s, chapterUrl);
-        if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            Debug.printLog(tag, "┌获取目录下一页网址", printLog && analyzeNextUrl);
+        if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext()) && analyzeNextUrl) {
+            Debug.printLog(tag, "┌获取目录下一页网址", printLog);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
