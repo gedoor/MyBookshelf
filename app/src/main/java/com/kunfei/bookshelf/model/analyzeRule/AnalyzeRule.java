@@ -399,13 +399,14 @@ public class AnalyzeRule {
         XPath, JSon, Default, Js
     }
 
-    public void putVar(String key, String value) {
+    public String put(String key, String value) {
         if (book != null) {
             book.putVariable(key, value);
         }
+        return value;
     }
 
-    public String getVar(String key) {
+    public String get(String key) {
         if (book == null) {
             return null;
         }
