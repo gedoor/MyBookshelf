@@ -59,22 +59,8 @@ class BookChapter {
             List<ChapterListBean> chapterList = webChapterBean.data;
 
             List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
-            if (chapterUrlS.size() > 1) {
-                for (int i = 0; i < chapterUrlS.size(); i++) {
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
-                    try {
-                        String body;
-                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
-                                .blockingFirst();
-                        body = response.body();
-                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList, false);
-                        chapterList.addAll(webChapterBean.data);
-                    } catch (Exception exception) {
-                        if (!e.isDisposed()) {
-                            e.onError(exception);
-                        }
-                    }
-                }
+            if (chapterUrlS.isEmpty()) {
+                finish(dx, chapterList, e);
             } else if (chapterUrlS.size() == 1) {
                 List<String> usedUrl = new ArrayList<>();
                 usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
@@ -94,8 +80,25 @@ class BookChapter {
                         }
                     }
                 }
+                finish(dx, chapterList, e);
+            } else {
+                for (int i = 0; i < chapterUrlS.size(); i++) {
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
+                    try {
+                        String body;
+                        Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                                .blockingFirst();
+                        body = response.body();
+                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(i), ruleChapterList, false);
+                        chapterList.addAll(webChapterBean.data);
+                    } catch (Exception exception) {
+                        if (!e.isDisposed()) {
+                            e.onError(exception);
+                        }
+                    }
+                }
+                finish(dx, chapterList, e);
             }
-            finish(dx, chapterList, e);
         });
     }
 
