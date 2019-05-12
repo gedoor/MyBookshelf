@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.Emitter;
 import io.reactivex.Observable;
@@ -135,6 +137,23 @@ class BookChapter {
         emitter.onComplete();
     }
 
+    // 纯java模式正则表达式获取目录列表
+    public List<ChapterListBean> Reger(String str,String[] regex,int index,int s1,int s2,List<ChapterListBean> chapterBeans)
+    {
+        Matcher m = Pattern.compile(regex[index]).matcher(str);
+        if(index + 1 == regex.length){
+            while(m.find()){
+                chapterBeans.add(new ChapterListBean(tag, m.group(s1), m.group(s2)));
+            }
+            return chapterBeans;
+        }
+        else{
+            String result = "";
+            while(m.find()) result += m.group(0);
+            return Reger(result,regex,++index,s1,s2,chapterBeans);
+        }
+    }
+
     private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
@@ -149,6 +168,26 @@ class BookChapter {
             }
             Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
         }
+
+        // 仅使用java正则表达式提取目录列表
+        if(ruleChapterList.startsWith("J$")){
+            ruleChapterList = ruleChapterList.substring(2);
+            Debug.printLog(tag, "┌解析目录列表", printLog);
+            chapterBeans = Reger(s, ruleChapterList.split("&&"),0,
+                    Integer.parseInt(bookSourceBean.getRuleChapterName()),
+                    Integer.parseInt(bookSourceBean.getRuleContentUrl()),
+                    chapterBeans
+            );
+            Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
+            if (chapterBeans.size() == 0) return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+            ChapterListBean firstChapter = chapterBeans.get(0);
+            Debug.printLog(tag, "┌获取章节名称");
+            Debug.printLog(tag, "└" + firstChapter.getDurChapterName());
+            Debug.printLog(tag, "┌获取章节网址");
+            Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl());
+            return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
+        }
+
         boolean allInOne = false;
         if (ruleChapterList.startsWith("+")){
             allInOne = true;

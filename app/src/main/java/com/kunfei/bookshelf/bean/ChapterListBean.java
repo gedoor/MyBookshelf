@@ -41,6 +41,12 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
         this.end = end;
     }
 
+    public ChapterListBean(String tag, String durChapterName, String durChapterUrl) {
+        this.tag = tag;
+        this.durChapterName = durChapterName;
+        this.durChapterUrl = durChapterUrl;
+    }
+
     @Generated(hash = 1096893365)
     public ChapterListBean() {
     }
