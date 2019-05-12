@@ -44,7 +44,7 @@ public class WebBookModel {
         return WebBook.getInstance(bookShelfBean.getTag())
                 .getChapterList(bookShelfBean)
                 .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList))
-                .timeout(60, TimeUnit.SECONDS);
+                .timeout(120, TimeUnit.SECONDS);
     }
 
     /**
