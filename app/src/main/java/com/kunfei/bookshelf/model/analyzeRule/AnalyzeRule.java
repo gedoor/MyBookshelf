@@ -36,8 +36,8 @@ import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 @Keep
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AnalyzeRule {
-    private static final Pattern putPattern = Pattern.compile("@put:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
-    private static final Pattern getPattern = Pattern.compile("@get:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern putPattern = Pattern.compile("@put:\\{(.+?)\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern getPattern = Pattern.compile("@get:\\{(.+?)\\}", Pattern.CASE_INSENSITIVE);
 
     private BaseBookBean book;
     private Object object;
@@ -274,9 +274,8 @@ public class AnalyzeRule {
     private String splitPutRule(String ruleStr) throws Exception {
         Matcher putMatcher = putPattern.matcher(ruleStr);
         while (putMatcher.find()) {
-            String find = putMatcher.group();
-            ruleStr = ruleStr.replace(find, "");
-            Map<String, String> map = new Gson().fromJson(find.substring(5), MAP_STRING);
+            ruleStr = ruleStr.replace(putMatcher.group(), "");
+            Map<String, String> map = new Gson().fromJson(putMatcher.group(1), MAP_STRING);
             putRule(map);
         }
         return ruleStr;
@@ -288,13 +287,12 @@ public class AnalyzeRule {
     private String replaceGet(String ruleStr) {
         Matcher getMatcher = getPattern.matcher(ruleStr);
         while (getMatcher.find()) {
-            String find = getMatcher.group();
             String value = "";
             if (book != null && book.getVariableMap() != null) {
-                value = book.getVariableMap().get(find.substring(6, find.length() - 1));
+                value = book.getVariableMap().get(getMatcher.group(1));
                 if (value == null) value = "";
             }
-            ruleStr = ruleStr.replace(find, value);
+            ruleStr = ruleStr.replace(getMatcher.group(), value);
         }
         return ruleStr;
     }
