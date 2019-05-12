@@ -569,10 +569,10 @@ public abstract class PageLoader {
         if (mCurChapter.getPageSize() == 0) return null;
         TxtPage txtPage = mCurChapter.getPage(mCurPagePos);
         StringBuilder s = new StringBuilder();
-        int size = txtPage.lines.size();
+        int size = txtPage.size();
         int start = mPageMode == PageAnimation.Mode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
         for (int i = start; i < size; i++) {
-            s.append(txtPage.lines.get(i));
+            s.append(txtPage.getLine(i));
         }
         return s.toString();
     }
@@ -595,8 +595,8 @@ public abstract class PageLoader {
         }
         readTextLength = mCurPagePos > 0 ? mCurChapter.getPageLength(mCurPagePos - 1) : 0;
         if (mPageMode == PageAnimation.Mode.SCROLL) {
-            for (int i = 0; i < Math.min(Math.max(0, linePos), mCurChapter.getPage(mCurPagePos).lines.size() - 1); i++) {
-                readTextLength += mCurChapter.getPage(mCurPagePos).lines.get(i).length();
+            for (int i = 0; i < Math.min(Math.max(0, linePos), mCurChapter.getPage(mCurPagePos).size() - 1); i++) {
+                readTextLength += mCurChapter.getPage(mCurPagePos).getLine(i).length();
             }
         }
         return s.toString();
@@ -851,7 +851,7 @@ public abstract class PageLoader {
             String title = isChapterListPrepare ? bookShelfBean.getChapter(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
             String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
-                    : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
+                    : String.format("%d/%d", txtPage.getPosition() + 1, txtChapter.getPageSize());
             String progress = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
                     : BookshelfHelp.getReadProgress(mCurChapterPos, bookShelfBean.getChapterListSize(), mCurPagePos, mCurChapter.getPageSize());
 
@@ -979,8 +979,8 @@ public abstract class PageLoader {
             String str;
             int strLength = 0;
             boolean isLight;
-            for (int i = 0; i < txtPage.titleLines; ++i) {
-                str = txtPage.lines.get(i);
+            for (int i = 0; i < txtPage.getTitleLines(); ++i) {
+                str = txtPage.getLine(i);
                 strLength = strLength + str.length();
                 isLight = ReadAloudService.running && readAloudParagraph == 0;
                 mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
@@ -989,7 +989,7 @@ public abstract class PageLoader {
                 canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
 
                 //设置尾部间距
-                if (i == txtPage.titleLines - 1) {
+                if (i == txtPage.getTitleLines() - 1) {
                     top += titlePara;
                 } else {
                     //行间距
@@ -997,14 +997,14 @@ public abstract class PageLoader {
                 }
             }
 
-            if (txtPage.lines == null) {
+            if (txtPage.getLines().isEmpty()) {
                 return;
             }
             //对内容进行绘制
-            for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
-                str = txtPage.lines.get(i);
+            for (int i = txtPage.getTitleLines(); i < txtPage.size(); ++i) {
+                str = txtPage.getLine(i);
                 strLength = strLength + str.length();
-                int paragraphLength = txtPage.position == 0 ? strLength : txtChapter.getPageLength(txtPage.position - 1) + strLength;
+                int paragraphLength = txtPage.getPosition() == 0 ? strLength : txtChapter.getPageLength(txtPage.getPosition() - 1) + strLength;
                 isLight = ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(paragraphLength);
                 mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
@@ -1121,22 +1121,22 @@ public abstract class PageLoader {
             }
             if (chapter.getPageSize() == 0) break;
             TxtPage page = chapter.getPage(pagePos);
-            if (page.lines == null) break;
+            if (page.getLines().isEmpty()) break;
             if (top > totalHeight) break;
             float topi = top;
             int strLength = 0;
             isLight = ReadAloudService.running && readAloudParagraph == 0;
             mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-            for (int i = 0; i < page.titleLines; i++) {
+            for (int i = 0; i < page.getTitleLines(); i++) {
                 if (top > totalHeight) {
                     break;
                 } else if (top > startHeight) {
-                    str = page.lines.get(i);
+                    str = page.getLine(i);
                     strLength = strLength + str.length();
                     //进行绘制
                     canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
                 }
-                top += (i == page.titleLines - 1) ? titlePara : titleInterval;
+                top += (i == page.getTitleLines() - 1) ? titlePara : titleInterval;
                 if (!linePosSet && chapterPos == mCurChapterPos && top > titlePara) {
                     linePos = i;
                     linePosSet = true;
@@ -1149,10 +1149,10 @@ public abstract class PageLoader {
                 top += getCoverHeight();
             }
             if (top > totalHeight) break;
-            for (int i = page.titleLines, size = page.lines.size(); i < size; i++) {
-                str = page.lines.get(i);
+            for (int i = page.getTitleLines(); i < page.size(); i++) {
+                str = page.getLine(i);
                 strLength = strLength + str.length();
-                int paragraphLength = page.position == 0 ? strLength : chapter.getPageLength(page.position - 1) + strLength;
+                int paragraphLength = page.getPosition() == 0 ? strLength : chapter.getPageLength(page.getPosition() - 1) + strLength;
                 isLight = ReadAloudService.running && readAloudParagraph == chapter.getParagraphIndex(paragraphLength);
                 mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
                 if (top > totalHeight) {
@@ -1285,13 +1285,13 @@ public abstract class PageLoader {
     }
 
     private float getPageHeight(TxtPage page) {
-        if (page.lines == null || page.lines.size() == 0)
+        if (page.getLines().isEmpty())
             return 0;
         float height = 0;
-        if (page.titleLines > 0)
-            height += titleInterval * (page.titleLines - 1) + titlePara;
-        for (int i = page.titleLines; i < page.lines.size(); i++) {
-            height += page.lines.get(i).endsWith("\n") ? textPara : textInterval;
+        if (page.getTitleLines() > 0)
+            height += titleInterval * (page.getTitleLines() - 1) + titlePara;
+        for (int i = page.getTitleLines(); i < page.size(); i++) {
+            height += page.getLine(i).endsWith("\n") ? textPara : textInterval;
         }
         return height;
     }

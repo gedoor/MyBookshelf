@@ -58,12 +58,11 @@ class ChapterProvider {
         if (pageLoader.bookShelfBean.isAudio()) {
             txtChapter.setStatus(TxtChapter.Status.FINISH);
             txtChapter.setMsg(content);
-            TxtPage page = new TxtPage();
-            page.position = txtChapter.getTxtPageList().size();
-            page.title = chapter.getDurChapterName();
-            page.lines = new ArrayList<>();
-            page.lines.add(content);
-            page.titleLines = 0;
+            TxtPage page = new TxtPage(txtChapter.getTxtPageList().size());
+            page.setTitle(chapter.getDurChapterName());
+            page.addLine(chapter.getDurChapterName());
+            page.addLine(content);
+            page.setTitleLines(1);
             txtChapter.addPage(page);
             addTxtPageLength(txtChapter, page.getContent().length());
             txtChapter.addPage(page);
@@ -102,11 +101,10 @@ class ChapterProvider {
                 // 一页已经填充满了，创建 TextPage
                 if (rHeight <= 0) {
                     // 创建Page
-                    TxtPage page = new TxtPage();
-                    page.position = txtChapter.getTxtPageList().size();
-                    page.title = chapter.getDurChapterName();
-                    page.lines = new ArrayList<>(lines);
-                    page.titleLines = titleLinesCount;
+                    TxtPage page = new TxtPage(txtChapter.getTxtPageList().size());
+                    page.setTitle(chapter.getDurChapterName());
+                    page.addLines(lines);
+                    page.setTitleLines(titleLinesCount);
                     txtChapter.addPage(page);
                     addTxtPageLength(txtChapter, page.getContent().length());
                     // 重置Lines
@@ -155,11 +153,10 @@ class ChapterProvider {
 
         if (lines.size() != 0) {
             //创建Page
-            TxtPage page = new TxtPage();
-            page.position = txtChapter.getTxtPageList().size();
-            page.title = chapter.getDurChapterName();
-            page.lines = new ArrayList<>(lines);
-            page.titleLines = titleLinesCount;
+            TxtPage page = new TxtPage(txtChapter.getTxtPageList().size());
+            page.setTitle(chapter.getDurChapterName());
+            page.addLines(lines);
+            page.setTitleLines(titleLinesCount);
             txtChapter.addPage(page);
             addTxtPageLength(txtChapter, page.getContent().length());
             //重置Lines
