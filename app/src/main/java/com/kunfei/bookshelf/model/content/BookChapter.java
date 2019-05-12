@@ -64,7 +64,7 @@ class BookChapter {
             final List<ChapterListBean> chapterList = webChapterBean.data;
 
             List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
-            if (chapterUrlS.isEmpty()) {
+            if (chapterUrlS.isEmpty() || !analyzeNextUrl) {
                 finish(chapterList, e);
             } else if (chapterUrlS.size() == 1) {
                 List<String> usedUrl = new ArrayList<>();
