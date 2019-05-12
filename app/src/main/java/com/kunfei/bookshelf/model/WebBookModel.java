@@ -43,8 +43,8 @@ public class WebBookModel {
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         return WebBook.getInstance(bookShelfBean.getTag())
                 .getChapterList(bookShelfBean)
-                .timeout(60, TimeUnit.SECONDS)
-                .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
+                .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList))
+                .timeout(120, TimeUnit.SECONDS);
     }
 
     /**
@@ -53,8 +53,8 @@ public class WebBookModel {
     public Observable<BookContentBean> getBookContent(BookInfoBean infoBean, BaseChapterBean chapterBean) {
         return WebBook.getInstance(chapterBean.getTag())
                 .getBookContent(chapterBean)
-                .timeout(60, TimeUnit.SECONDS)
-                .flatMap((bookContentBean -> saveContent(infoBean, chapterBean, bookContentBean)));
+                .flatMap((bookContentBean -> saveContent(infoBean, chapterBean, bookContentBean)))
+                .timeout(60, TimeUnit.SECONDS);
     }
 
     /**

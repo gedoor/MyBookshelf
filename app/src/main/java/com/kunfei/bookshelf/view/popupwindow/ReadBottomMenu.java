@@ -52,6 +52,8 @@ public class ReadBottomMenu extends FrameLayout {
     LinearLayout llNavigationBar;
     @BindView(R.id.ll_floating_button)
     LinearLayout llFloatingButton;
+    @BindView(R.id.vwNavigationBar)
+    View vwNavigationBar;
 
     private Callback callback;
 
@@ -74,6 +76,11 @@ public class ReadBottomMenu extends FrameLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, this);
         ButterKnife.bind(this, view);
         vwBg.setOnClickListener(null);
+        vwNavigationBar.setOnClickListener(null);
+    }
+
+    public void setNavigationBarHeight(int height) {
+        vwNavigationBar.getLayoutParams().height = height;
     }
 
     public void setListener(Callback callback) {

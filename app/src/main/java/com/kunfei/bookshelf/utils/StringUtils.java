@@ -150,7 +150,6 @@ public class StringUtils {
         return map;
     }
 
-    // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
     @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;

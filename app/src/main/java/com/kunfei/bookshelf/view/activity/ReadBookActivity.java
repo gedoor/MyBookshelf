@@ -94,8 +94,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
     View vMenuBg;
-    @BindView(R.id.ll_menu_bottom)
-    LinearLayout llMenuBottom;
     @BindView(R.id.read_menu_bottom)
     ReadBottomMenu readBottomMenu;
     @BindView(R.id.toolbar)
@@ -124,8 +122,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     ProgressBar progressBarNextPage;
     @BindView(R.id.mediaPlayerPop)
     MediaPlayerPop mediaPlayerPop;
-    @BindView(R.id.vwNavigationBar)
-    View vwNavigationBar;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -204,7 +200,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (readBookControl.getHideNavigationBar()) {
             mImmersionBar.fullScreen(true);
             if (ImmersionBar.hasNavigationBar(this)) {
-                vwNavigationBar.getLayoutParams().height = ImmersionBar.getNavigationBarHeight(this);
+                readBottomMenu.setNavigationBarHeight(ImmersionBar.getNavigationBarHeight(this));
             }
         }
 
@@ -214,7 +210,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             progressBarNextPage.setY(ImmersionBar.getStatusBarHeight(this));
         }
 
-        if (llMenuBottom.getVisibility() == View.VISIBLE) {
+        if (readBottomMenu.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
@@ -259,7 +255,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mImmersionBar.showBarDivider();
         }
         int barColorType = readBookControl.getNavBarColor();
-        if (llMenuBottom.getVisibility() == View.VISIBLE
+        if (readBottomMenu.getVisibility() == View.VISIBLE
                 || readAdjustPop.getVisibility() == View.VISIBLE
                 || readInterfacePop.getVisibility() == View.VISIBLE
                 || moreSettingPop.getVisibility() == View.VISIBLE) {
@@ -420,7 +416,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
                 llMenuTop.setVisibility(View.INVISIBLE);
-                llMenuBottom.setVisibility(View.INVISIBLE);
+                readBottomMenu.setVisibility(View.INVISIBLE);
                 readAdjustPop.setVisibility(View.INVISIBLE);
                 readInterfacePop.setVisibility(View.INVISIBLE);
                 moreSettingPop.setVisibility(View.INVISIBLE);
@@ -444,7 +440,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
                 llMenuTop.setVisibility(View.INVISIBLE);
-                llMenuBottom.setVisibility(View.INVISIBLE);
+                readBottomMenu.setVisibility(View.INVISIBLE);
                 readAdjustPop.setVisibility(View.INVISIBLE);
                 readInterfacePop.setVisibility(View.INVISIBLE);
                 moreSettingPop.setVisibility(View.INVISIBLE);
@@ -1143,9 +1139,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void popMenuIn() {
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.setVisibility(View.VISIBLE);
-        llMenuBottom.setVisibility(View.VISIBLE);
+        readBottomMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
-        llMenuBottom.startAnimation(menuBottomIn);
+        readBottomMenu.startAnimation(menuBottomIn);
         hideSnackBar();
     }
 
@@ -1157,8 +1153,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             if (llMenuTop.getVisibility() == View.VISIBLE) {
                 llMenuTop.startAnimation(menuTopOut);
             }
-            if (llMenuBottom.getVisibility() == View.VISIBLE) {
-                llMenuBottom.startAnimation(menuBottomOut);
+            if (readBottomMenu.getVisibility() == View.VISIBLE) {
+                readBottomMenu.startAnimation(menuBottomOut);
             }
             if (moreSettingPop.getVisibility() == View.VISIBLE) {
                 moreSettingPop.startAnimation(menuBottomOut);

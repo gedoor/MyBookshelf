@@ -259,7 +259,7 @@ public class AnalyzeRule {
     /**
      * 保存变量
      */
-    private void putVar(Map<String, String> map) throws Exception {
+    private void putRule(Map<String, String> map) throws Exception {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (book != null) {
                 book.putVariable(entry.getKey(), getString(entry.getValue()));
@@ -276,7 +276,7 @@ public class AnalyzeRule {
             String find = putMatcher.group();
             ruleStr = ruleStr.replace(find, "");
             Map<String, String> map = new Gson().fromJson(find.substring(5), MAP_STRING);
-            putVar(map);
+            putRule(map);
         }
         return ruleStr;
     }
@@ -399,6 +399,23 @@ public class AnalyzeRule {
         XPath, JSon, Default, Js
     }
 
+    public String put(String key, String value) {
+        if (book != null) {
+            book.putVariable(key, value);
+        }
+        return value;
+    }
+
+    public String get(String key) {
+        if (book == null) {
+            return null;
+        }
+        if (book.getVariableMap() == null) {
+            return null;
+        }
+        return book.getVariableMap().get(key);
+    }
+
     /**
      * 执行JS
      */
@@ -429,6 +446,21 @@ public class AnalyzeRule {
      */
     public String base64Decoder(String base64) {
         return StringUtils.base64Decode(base64);
+    }
+
+    /**
+     * 章节数转数字
+     */
+    public String toNumChapter(String s) {
+        if (s == null) {
+            return null;
+        }
+        Pattern pattern = Pattern.compile("(第)(.+?)(章)");
+        Matcher matcher = pattern.matcher(s);
+        if (matcher.find()) {
+            return matcher.group(1) + StringUtils.stringToInt(matcher.group(2)) + matcher.group(3);
+        }
+        return s;
     }
 
 }
