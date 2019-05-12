@@ -399,6 +399,22 @@ public class AnalyzeRule {
         XPath, JSon, Default, Js
     }
 
+    public void putVar(String key, String value) {
+        if (book != null) {
+            book.putVariable(key, value);
+        }
+    }
+
+    public String getVar(String key) {
+        if (book == null) {
+            return null;
+        }
+        if (book.getVariableMap() == null) {
+            return null;
+        }
+        return book.getVariableMap().get(key);
+    }
+
     /**
      * 执行JS
      */
