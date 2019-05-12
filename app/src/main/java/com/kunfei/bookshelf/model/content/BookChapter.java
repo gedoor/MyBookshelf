@@ -130,7 +130,7 @@ class BookChapter {
         LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
         chapterList = new ArrayList<>(lh);
         Collections.reverse(chapterList);
-        Debug.printLog(tag, "-目录解析完成");
+        Debug.printLog(tag, "-目录解析完成", analyzeNextUrl);
         emitter.onNext(chapterList);
         emitter.onComplete();
     }
