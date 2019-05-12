@@ -141,7 +141,7 @@ class BookChapter {
 
         analyzer.setContent(s, chapterUrl);
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            Debug.printLog(tag, "┌获取目录下一页网址", printLog);
+            Debug.printLog(tag, "┌获取目录下一页网址", printLog && analyzeNextUrl);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
