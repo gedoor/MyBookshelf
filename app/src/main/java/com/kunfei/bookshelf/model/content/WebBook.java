@@ -113,7 +113,7 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
-        BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
+        BookChapter bookChapter = new BookChapter(tag, bookSourceBean, true);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, tag);
             return getResponseO(analyzeUrl)

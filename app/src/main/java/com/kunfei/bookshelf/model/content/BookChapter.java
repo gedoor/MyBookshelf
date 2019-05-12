@@ -36,10 +36,12 @@ class BookChapter {
     private AnalyzeRule analyzer;
     private List<WebChapterBean> webChapterBeans;
     private boolean dx = false;
+    private boolean analyzeNextUrl;
 
-    BookChapter(String tag, BookSourceBean bookSourceBean) {
+    BookChapter(String tag, BookSourceBean bookSourceBean, boolean analyzeNextUrl) {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
+        this.analyzeNextUrl = analyzeNextUrl;
     }
 
     Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean, Map<String, String> headerMap) {
@@ -92,7 +94,8 @@ class BookChapter {
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
                     BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                             .flatMap(stringResponse ->
-                                    new BookChapter(tag, bookSourceBean).analyzeChapterList(stringResponse.body(), bookShelfBean, headerMap))
+                                    new BookChapter(tag, bookSourceBean, false)
+                                            .analyzeChapterList(stringResponse.body(), bookShelfBean, headerMap))
                             .subscribeOn(Schedulers.io())
                             .observeOn(Schedulers.io())
                             .subscribe(new MyObserver<List<ChapterListBean>>() {
