@@ -55,11 +55,12 @@ class ChapterProvider {
     private TxtChapter loadPageList(ChapterListBean chapter, @NonNull String content) {
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
-        content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
-        String[] allLine = content.split("\n");
         if (pageLoader.bookShelfBean.isAudio()) {
             txtChapter.setMsg(content);
+        } else {
+            content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
         }
+        String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
         int titleLinesCount = 0;
