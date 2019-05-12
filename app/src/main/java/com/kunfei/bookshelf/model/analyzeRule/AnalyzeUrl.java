@@ -32,7 +32,7 @@ import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
  */
 @Keep
 public class AnalyzeUrl {
-    private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
+    private static final Pattern pagePattern = Pattern.compile("\\{(.*?)\\}");
 
     private String url;
     private String hostUrl;
@@ -143,7 +143,7 @@ public class AnalyzeUrl {
         if (searchPage == null) return ruleUrl;
         Matcher matcher = pagePattern.matcher(ruleUrl);
         while (matcher.find()) {
-            String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
+            String[] pages = matcher.group(1).split(",");
             if (searchPage <= pages.length) {
                 ruleUrl = ruleUrl.replace(matcher.group(), pages[searchPage - 1].trim());
             } else {

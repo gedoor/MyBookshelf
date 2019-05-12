@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NetworkUtil {
@@ -54,8 +53,6 @@ public class NetworkUtil {
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
         String header = null;
-        Matcher matcher = headerPattern.matcher(baseURL);
-        baseURL = matcher.replaceAll("");
         if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
             header = relativePath.substring(0, relativePath.indexOf("}") + 1);
             relativePath = relativePath.substring(header.length());
