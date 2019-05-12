@@ -26,6 +26,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 
 
 /**
@@ -67,7 +68,7 @@ public class AnalyzeRule {
         if (body == null) throw new AssertionError("Content cannot be null");
         isJSON = StringUtils.isJsonType(String.valueOf(body));
         object = body;
-        this.baseUrl = baseUrl;
+        this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         objectChangedXP = true;
         objectChangedJS = true;
         objectChangedJP = true;

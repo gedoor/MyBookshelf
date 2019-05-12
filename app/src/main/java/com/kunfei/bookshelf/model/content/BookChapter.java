@@ -26,6 +26,7 @@ import io.reactivex.Observable;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 
 class BookChapter {
     private String tag;
@@ -138,6 +139,7 @@ class BookChapter {
         }
         String name = "";
         String url = "";
+        String baseUrl = headerPattern.matcher(chapterUrl).replaceAll("");
         if (allInOne) {
             String nameRule = bookSourceBean.getRuleChapterName();
             String urlRule = bookSourceBean.getRuleContentUrl();
@@ -169,7 +171,7 @@ class BookChapter {
                     ChapterListBean temp = new ChapterListBean();
                     temp.setTag(tag);
                     temp.setDurChapterName(name);
-                    temp.setDurChapterUrl(NetworkUtil.getAbsoluteURL(chapterUrl, url));
+                    temp.setDurChapterUrl(NetworkUtil.getAbsoluteURL(baseUrl, url));
                     chapterBeans.add(temp);
                 }
             }
