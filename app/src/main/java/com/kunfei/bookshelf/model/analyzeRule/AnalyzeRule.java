@@ -431,4 +431,19 @@ public class AnalyzeRule {
         return StringUtils.base64Decode(base64);
     }
 
+    /**
+     * 章节数转数字
+     */
+    public String toNumChapter(String s) {
+        if (s == null) {
+            return null;
+        }
+        Pattern pattern = Pattern.compile("(第)(.+?)(章)");
+        Matcher matcher = pattern.matcher(s);
+        if (matcher.find()) {
+            return matcher.group(1) + StringUtils.stringToInt(matcher.group(2)) + matcher.group(3);
+        }
+        return s;
+    }
+
 }
