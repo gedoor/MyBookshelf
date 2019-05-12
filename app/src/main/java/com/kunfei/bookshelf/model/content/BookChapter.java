@@ -83,6 +83,7 @@ class BookChapter {
                 finish(dx, chapterList, e);
             } else {
                 for (int i = 0; i < chapterUrlS.size(); i++) {
+//                    List<WebChapterBean> webChapterBeanList = new ArrayList<>();
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
                     try {
                         String body;
