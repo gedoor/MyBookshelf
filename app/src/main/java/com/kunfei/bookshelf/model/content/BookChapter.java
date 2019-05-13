@@ -61,7 +61,7 @@ public class BookChapter {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
-            WebChapterBean webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList, true);
+            WebChapterBean webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList, analyzeNextUrl);
             final List<ChapterListBean> chapterList = webChapterBean.getData();
 
             List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
@@ -70,7 +70,8 @@ public class BookChapter {
             } else if (chapterUrlS.size() == 1) {
                 List<String> usedUrl = new ArrayList<>();
                 usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
-                if (!usedUrl.contains(chapterUrlS.get(0))) {
+                while (!usedUrl.contains(chapterUrlS.get(0))) {
+                    Debug.printLog(tag, "正在加载下一页");
                     usedUrl.add(chapterUrlS.get(0));
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(0), headerMap, tag);
                     try {
@@ -78,6 +79,7 @@ public class BookChapter {
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
+                        Debug.printLog(tag, "正在解析下一页");
                         webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false);
                         chapterList.addAll(webChapterBean.getData());
                     } catch (Exception exception) {
@@ -88,6 +90,7 @@ public class BookChapter {
                 }
                 finish(chapterList, e);
             } else {
+                Debug.printLog(tag, "正在加载其它页");
                 compositeDisposable = new CompositeDisposable();
                 webChapterBeans = new ArrayList<>();
                 AnalyzeNextUrlTask.Callback callback = new AnalyzeNextUrlTask.Callback() {
@@ -102,6 +105,7 @@ public class BookChapter {
                             for (WebChapterBean chapterBean : webChapterBeans) {
                                 chapterList.addAll(chapterBean.getData());
                             }
+                            Debug.printLog(tag, "其它页加载完成,目录共" + chapterList.size() + "条");
                             finish(chapterList, e);
                         }
                     }
