@@ -32,6 +32,7 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
@@ -45,6 +46,7 @@ import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +77,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
     private String searchKey;
+    private Menu menu;
+    private String group;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -153,6 +157,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_search_activity, menu);
+        this.menu = menu;
+        initMenu();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -164,16 +170,20 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             case R.id.action_book_source_manage:
                 BookSourceActivity.startThis(this, requestSource);
                 break;
-            case R.id.action_donate:
-                DonateActivity.startThis(this);
-                break;
-            case R.id.action_get_hb:
-                DonateActivity.getZfbHb(this);
-                break;
             case android.R.id.home:
                 SoftInputUtil.hideIMM(getCurrentFocus());
                 finish();
                 break;
+            default:
+                if (item.getGroupId() == R.id.source_group) {
+                    item.setChecked(true);
+                    if (Objects.equals(getString(R.string.all_source), item.getTitle().toString())) {
+                        group = null;
+                    } else {
+                        group = item.getTitle().toString();
+                    }
+                    mPresenter.initSearchEngineS(group);
+                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -287,6 +297,18 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             mPresenter.querySearchHistory("");
         }
         openOrCloseHistory(showHistory);
+    }
+
+    private void initMenu() {
+        if (menu == null) return;
+        menu.removeGroup(R.id.source_group);
+        menu.add(R.id.source_group, Menu.NONE, Menu.NONE, R.string.all_source);
+        List<String> groupList = BookSourceManager.getEnableGroupList();
+        for (String groupName : groupList) {
+            menu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
+        }
+        menu.setGroupCheckable(R.id.source_group, true, true);
+        menu.getItem(1).setChecked(true);
     }
 
     private void showHideSetting() {
@@ -467,7 +489,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == requestSource) {
-                mPresenter.initSearchEngineS();
+                initMenu();
+                mPresenter.initSearchEngineS(group);
             }
         }
     }

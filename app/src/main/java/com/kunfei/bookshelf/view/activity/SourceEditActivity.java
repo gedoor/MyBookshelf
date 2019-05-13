@@ -363,7 +363,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setRuleBookLastChapter(trim(tieRuleBookLastChapter.getText()));
         bookSourceBeanN.setSerialNumber(serialNumber);
         bookSourceBeanN.setEnable(cbIsEnable.isChecked());
-        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : "");
+        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : null);
         return bookSourceBeanN;
     }
 

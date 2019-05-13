@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.presenter;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
@@ -227,8 +229,12 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     }
 
     @Override
-    public void initSearchEngineS() {
-        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
+    public void initSearchEngineS(String group) {
+        if (TextUtils.isEmpty(group)) {
+            searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
+        } else {
+            searchBookModel.initSearchEngineS(BookSourceManager.getEnableSourceByGroup(group));
+        }
     }
 
     /**
