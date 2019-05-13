@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -52,6 +53,7 @@ public class NetworkUtil {
      * 获取绝对地址
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
+        if (TextUtils.isEmpty(baseURL)) return relativePath;
         String header = null;
         if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
             header = relativePath.substring(0, relativePath.indexOf("}") + 1);
