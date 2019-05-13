@@ -233,7 +233,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         if (TextUtils.isEmpty(group)) {
             searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
         } else {
-
+            searchBookModel.initSearchEngineS(BookSourceManager.getEnableSourceByGroup(group));
         }
     }
 

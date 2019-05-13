@@ -61,6 +61,14 @@ public class BookSourceManager {
                 .list();
     }
 
+    public static List<BookSourceBean> getEnableSourceByGroup(String group) {
+        return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                .where(BookSourceBeanDao.Properties.BookSourceGroup.like("%" + group + "%"))
+                .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
+                .list();
+    }
+
     @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
         if (url == null) return null;
