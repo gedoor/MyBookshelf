@@ -169,7 +169,12 @@
 						<textarea class="context" id="DebugConsole" placeholder="这里用于输出调试信息"></textarea>
 					</div>
 					<div class="tab3">
-						<div class="titlebar" style="display: none;" tip="这个坑暂时保留,后续考虑是否要做"><button>导入书源文件</button><button>导出书源文件</button><button>删除选中书源</button></div>
+						<div class="titlebar">
+							<button id="Import">导入书源文件</button>
+							<button id="Export">导出书源文件</button>
+							<button id="Delete">删除选中书源</button>
+							<button id="ClrAll">清空当前列表</button>
+						</div>
 						<div class="context" id="RuleList"></div>
 					</div>
 					<div class="tab4">
