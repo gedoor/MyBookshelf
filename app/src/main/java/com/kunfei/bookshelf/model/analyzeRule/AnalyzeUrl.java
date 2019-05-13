@@ -244,6 +244,7 @@ public class AnalyzeUrl {
     private void generateUrlPath(String ruleUrl) {
         url = NetworkUtil.getAbsoluteURL(baseUrl, ruleUrl);
         host = StringUtils.getBaseUrl(ruleUrl);
+        urlPath = url.substring(host.length());
     }
 
     /**
