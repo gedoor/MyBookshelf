@@ -54,7 +54,7 @@ public class AnalyzeUrl {
 
     @SuppressLint("DefaultLocale")
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
-        if (baseUrl != null) {
+        if (!TextUtils.isEmpty(baseUrl)) {
             this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         }
         //解析Header
