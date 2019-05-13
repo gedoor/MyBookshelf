@@ -54,7 +54,9 @@ public class AnalyzeUrl {
 
     @SuppressLint("DefaultLocale")
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
-        this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
+        if (!TextUtils.isEmpty(baseUrl)) {
+            this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
+        }
         //解析Header
         ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
@@ -243,7 +245,7 @@ public class AnalyzeUrl {
      */
     private void generateUrlPath(String ruleUrl) {
         url = NetworkUtil.getAbsoluteURL(baseUrl, ruleUrl);
-        host = StringUtils.getBaseUrl(ruleUrl);
+        host = StringUtils.getBaseUrl(url);
         urlPath = url.substring(host.length());
     }
 
