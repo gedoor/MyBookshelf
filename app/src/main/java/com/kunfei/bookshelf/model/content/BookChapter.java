@@ -64,7 +64,7 @@ public class BookChapter {
             WebChapterBean webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList, analyzeNextUrl);
             final List<ChapterListBean> chapterList = webChapterBean.getData();
 
-            List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
+            final List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
             if (chapterUrlS.isEmpty() || !analyzeNextUrl) {
                 finish(chapterList, e);
             }
@@ -84,8 +84,9 @@ public class BookChapter {
                         body = response.body();
                         Debug.printLog(tag, "正在解析下一页");
                         webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false);
-                        chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
                         chapterList.addAll(webChapterBean.getData());
+                        chapterUrlS.clear();
+                        chapterUrlS.addAll(webChapterBean.getNextUrlList());
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
                             e.onError(exception);
