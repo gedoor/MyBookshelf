@@ -90,7 +90,7 @@ public class BookChapter {
                 }
                 finish(chapterList, e);
             } else {
-                Debug.printLog(tag, "正在加载其它页");
+                Debug.printLog(tag, "正在加载其它" + chapterUrlS.size() + "页");
                 compositeDisposable = new CompositeDisposable();
                 webChapterBeans = new ArrayList<>();
                 AnalyzeNextUrlTask.Callback callback = new AnalyzeNextUrlTask.Callback() {
