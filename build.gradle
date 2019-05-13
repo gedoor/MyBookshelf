@@ -3,6 +3,10 @@ ext {
 }
 buildscript {
     repositories {
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/google" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/jcenter" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/gradle-plugin" }
         google()
         jcenter()
         mavenCentral()
@@ -11,14 +15,18 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
-        classpath 'com.google.gms:google-services:4.2.0'
-        classpath 'io.fabric.tools:gradle:1.28.1'
+        //classpath 'com.google.gms:google-services:4.2.0'
+        //classpath 'io.fabric.tools:gradle:1.28.1'
         classpath 'net.ricecode:string-similarity:1.0.0'
     }
 }
 
 allprojects {
     repositories {
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/google" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/jcenter" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/gradle-plugin" }
         google()
         jcenter()
         mavenCentral()

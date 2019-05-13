@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 static def releaseTime() {
     return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
@@ -10,12 +10,29 @@ def name = "YueDu"
 def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
+def RELEASE_STORE_FILE = ''
+def RELEASE_KEY_PASSWORD = ''
+def RELEASE_KEY_ALIAS = ''
+def RELEASE_STORE_PASSWORD = ''
+
+Properties properties = new Properties()
+// local.properties file in the root director
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def keystoreFilepath = properties.getProperty("keystore.path")
+
+if (keystoreFilepath) {
+    RELEASE_KEY_PASSWORD = properties.getProperty("keystore.password")
+    RELEASE_KEY_ALIAS = properties.getProperty("keystore.alias")
+    RELEASE_STORE_PASSWORD = properties.getProperty("keystore.alias_password")
+    RELEASE_STORE_FILE = file(keystoreFilepath)
+}
+			
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     signingConfigs {
         myConfig {
-            storeFile file(RELEASE_STORE_FILE)
+            storeFile RELEASE_STORE_FILE
             storePassword RELEASE_KEY_PASSWORD
             keyAlias RELEASE_KEY_ALIAS
             keyPassword RELEASE_STORE_PASSWORD
@@ -23,7 +40,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.gedoor.monkeybook"
+        applicationId "com.nick.monkeybook"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 10000 + gitCommits
@@ -68,8 +85,8 @@ dependencies {
     implementation project(':basemvplib')
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    //implementation 'com.google.firebase:firebase-core:16.0.9'
+    //implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -145,4 +162,4 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'

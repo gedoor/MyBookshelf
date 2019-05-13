@@ -1,3 +1,5 @@
+*.jks
+*.keystore
 *.iml
 /.gradle
 /.idea
