@@ -240,10 +240,10 @@ public class BookChapter {
         }
         Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
         ChapterListBean firstChapter = chapterBeans.get(0);
-        Debug.printLog(tag, "┌获取章节名称");
-        Debug.printLog(tag, "└" + firstChapter.getDurChapterName());
-        Debug.printLog(tag, "┌获取章节网址");
-        Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl());
+        Debug.printLog(tag, "┌获取章节名称", printLog);
+        Debug.printLog(tag, "└" + firstChapter.getDurChapterName(), printLog);
+        Debug.printLog(tag, "┌获取章节网址", printLog);
+        Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl(), printLog);
         return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
     }
 
