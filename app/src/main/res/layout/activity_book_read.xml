@@ -110,7 +110,7 @@
         </LinearLayout>
 
         <com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu
-            android:id="@+id/ll_menu_bottom"
+            android:id="@+id/read_menu_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -134,8 +134,8 @@
             android:id="@+id/moreSettingPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_gravity="bottom" />
 
     </FrameLayout>
 

@@ -3,6 +3,20 @@
 ### 捐赠里点击红包搜索码可开启高级功能!
 ## 更新日志
 
+**2019/05/13**
+* 并行解析多页目录列表,提高解析速度
+* 增加js方法,java.put(key, value) java.get(key)
+* 搜索增加按书源分组
+
+**2019/05/12**
+* 修复bug
+
+**2019/05/11**
+* 添加有声阅读功能,正文内容返回mp3地址可播放
+* 优化解析逻辑,大幅提高解析速度,书源有一些新规则后续会放出说明
+* 感谢大佬mabDc提出的优化方案
+* 修复bug
+
 **2019/05/06**
 * 电量显示放到电池图标内
 * url添加()作为保留字符,不编码
@@ -67,21 +81,7 @@
 * 修复设置夜间模式会多次Recreate的问题
 * WebDav恢复时添加存储权限检查
 * 书源调试添加时间戳
-* 自定义js方法
-```renderscript
-//获取网页内容,url支持搜索url规则
-java.ajax(url)
-//base64解码
-java.base64Decoder(string)
-//设置需解析的内容Object
-java.setContent(html)
-//输入规则String获取文本列表List<String>
-java.getStringList(rule)
-//输入规则String获取文本String
-java.getString(rule)
-//输入规则String获取节点列表List<Object>
-java.getElements(ruleStr)
-```
+* 增加自定义js方法
 
 **2019/04/10**
 * 发现规则支持js生成规则文本, \<js>\</js>

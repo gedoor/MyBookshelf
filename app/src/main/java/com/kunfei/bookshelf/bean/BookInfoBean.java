@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
@@ -237,6 +238,10 @@ public class BookInfoBean implements Cloneable {
 
     public void setBookSourceType(String bookSourceType) {
         this.bookSourceType = bookSourceType;
+    }
+
+    public boolean isAudio() {
+        return Objects.equals(BookType.AUDIO, bookSourceType);
     }
 
 }

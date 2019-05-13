@@ -343,7 +343,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         this.useReplaceRule = useReplaceRule;
     }
 
-    public boolean isMusic() {
-        return Objects.equals(bookInfoBean.getBookSourceType(), BookType.MUSIC);
+    public boolean isAudio() {
+        return Objects.equals(bookInfoBean.getBookSourceType(), BookType.AUDIO);
     }
 }

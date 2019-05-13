@@ -3,9 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.seimicrawler.xpath.JXDocument;
+import org.seimicrawler.xpath.JXNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,24 +16,24 @@ public class AnalyzeByXPath {
         if (doc instanceof Document) {
             jxDocument = JXDocument.create((Document) doc);
         } else {
-            String html = (String) doc;
+            String html = doc.toString();
             // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
             if (html.endsWith("</td>")) {
-                html = "<tr>" + html + "</tr>";
+                html = String.format("<tr>%s</tr>", html);
             }
             if (html.endsWith("</tr>") || html.endsWith("</tbody>")) {
-                html = "<table>" + html + "</table>";
+                html = String.format("<table>%s</table>", html);
             }
             jxDocument = JXDocument.create(html);
         }
         return this;
     }
 
-    Elements getElements(String xPath) {
+    List<JXNode> getElements(String xPath) {
         if (TextUtils.isEmpty(xPath)) {
             return null;
         }
-        Elements elements = new Elements();
+        List<JXNode> jxNodes = new ArrayList<>();
         String elementsType;
         String[] rules;
         if (xPath.contains("&&")) {
@@ -48,21 +47,11 @@ public class AnalyzeByXPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            try {
-                List<Object> objects = jxDocument.sel(rules[0]);
-                for (Object object : objects) {
-                    if (object instanceof Element) {
-                        elements.add((Element) object);
-                    }
-                }
-                return elements;
-            } catch (Exception e) {
-                return null;
-            }
+            return jxDocument.selN(rules[0]);
         } else {
-            List<Elements> results = new ArrayList<>();
+            List<List<JXNode>> results = new ArrayList<>();
             for (String rl : rules) {
-                Elements temp = getElements(rl);
+                List<JXNode> temp = getElements(rl);
                 if (temp != null && !temp.isEmpty()) {
                     results.add(temp);
                     if (temp.size() > 0 && elementsType.equals("|")) {
@@ -73,20 +62,20 @@ public class AnalyzeByXPath {
             if (results.size() > 0) {
                 if ("%".equals(elementsType)) {
                     for (int i = 0; i < results.get(0).size(); i++) {
-                        for (Elements temp : results) {
+                        for (List<JXNode> temp : results) {
                             if (i < temp.size()) {
-                                elements.add(temp.get(i));
+                                jxNodes.add(temp.get(i));
                             }
                         }
                     }
                 } else {
-                    for (Elements temp : results) {
-                        elements.addAll(temp);
+                    for (List<JXNode> temp: results) {
+                        jxNodes.addAll(temp);
                     }
                 }
             }
         }
-        return elements;
+        return jxNodes;
     }
 
     List<String> getStringList(String xPath) {
@@ -104,11 +93,12 @@ public class AnalyzeByXPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            List<Object> objects = jxDocument.sel(xPath);
-            for (Object object : objects) {
-                if (object instanceof String) {
-                    result.add((String) object);
-                }
+            List<JXNode> jxNodes = jxDocument.selN(xPath);
+            for (JXNode jxNode : jxNodes) {
+                /*if(jxNode.isString()){
+                    result.add(String.valueOf(jxNode));
+                }*/
+                result.add(String.valueOf(jxNode));
             }
             return result;
         } else {
@@ -142,7 +132,6 @@ public class AnalyzeByXPath {
     }
 
     public String getString(String rule) {
-        String result;
         String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
@@ -153,9 +142,11 @@ public class AnalyzeByXPath {
             elementsType = "|";
         }
         if (rules.length == 1) {
-            Object object = jxDocument.selOne(rule);
-            result = object instanceof Element ? ((Element) object).html() : (String) object;
-            return result;
+            /*Object object = jxDocument.selOne(rule);
+            result = object instanceof Element ? ((Element) object).html() : (String) object;*/
+            List<JXNode> jxNodes = jxDocument.selN(rule);
+            if(jxNodes == null) return null;
+            return TextUtils.join(",", jxNodes);
         } else {
             StringBuilder sb = new StringBuilder();
             for (String rl : rules) {

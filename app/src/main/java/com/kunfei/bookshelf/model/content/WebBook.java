@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.model.content;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
+import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
@@ -113,9 +114,9 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
-        BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
+        BookChapter bookChapter = new BookChapter(tag, bookSourceBean, true);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, bookShelfBean.getNoteUrl());
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
@@ -127,15 +128,16 @@ public class WebBook extends BaseModelImpl {
     /**
      * 获取正文
      */
-    public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(final BaseChapterBean chapterBean, final BookInfoBean infoBean) {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(chapterBean.getTag()));
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, infoBean.getChapterUrl());
             String contentRule = bookSourceBean.getRuleBookContent();
             if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
+                //动态网页第一个js放到webView里执行
                 contentRule = contentRule.substring(1);
                 String js = null;
                 Matcher jsMatcher = JS_PATTERN.matcher(contentRule);

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
@@ -101,11 +102,29 @@ public class BookshelfHelp {
     }
 
     public static boolean isChapterCached(BookInfoBean book, BaseChapterBean chapter) {
+        if (book.isAudio()) {
+            BookContentBean contentBean = DbHelper.getDaoSession().getBookContentBeanDao().load(chapter.getDurChapterUrl());
+            if (contentBean == null) return false;
+            if (contentBean.outTime()) {
+                DbHelper.getDaoSession().getBookContentBeanDao().delete(contentBean);
+                return false;
+            }
+            return !TextUtils.isEmpty(contentBean.getDurChapterContent());
+        }
         final String path = getCachePathName(book);
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
     public static String getChapterCache(BookShelfBean bookShelfBean, ChapterListBean chapter) {
+        if (bookShelfBean.isAudio()) {
+            BookContentBean contentBean = DbHelper.getDaoSession().getBookContentBeanDao().load(chapter.getDurChapterUrl());
+            if (contentBean == null) return null;
+            if (contentBean.outTime()) {
+                DbHelper.getDaoSession().getBookContentBeanDao().delete(contentBean);
+                return null;
+            }
+            return contentBean.getDurChapterContent();
+        }
         @SuppressLint("DefaultLocale")
         File file = getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());

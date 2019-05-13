@@ -231,9 +231,7 @@ dQuery('.menu').addEventListener('click', e => {
 			break;
 		case 'debug':
 			showTab('调试书源');
-			let wsOrigin = (hashParam('domain') || location.origin).replace(/^.*?:/, '');
-			let wsHost = wsOrigin.replace(/\d+$/, '');
-			let wsPort = parseInt(wsOrigin.match(/\d+$/)[0]) + 1;
+			let wsOrigin = (hashParam('domain') || location.origin).replace(/^.*?:/, 'ws:').replace(/\d+$/, (port) => (parseInt(port) + 1));
 			let DebugInfos = dQuery('#DebugConsole');
 			function DebugPrint(msg) { DebugInfos.value += `\n${msg}`; DebugInfos.scrollTop = DebugInfos.scrollHeight; }
 			let saveRule = [rule2json()];
@@ -241,7 +239,7 @@ dQuery('.menu').addEventListener('click', e => {
 				if (sResult.isSuccess) {
 					let sKey = DebugKey.value ? DebugKey.value : '我的';
 					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
-					let ws = new WebSocket(`ws:${wsHost}${wsPort}/sourceDebug`);
+					let ws = new WebSocket(`${wsOrigin}/sourceDebug`);
 					ws.onopen = () => {
 						ws.send(`{"tag":"${saveRule[0].bookSourceUrl}", "key":"${sKey}"}`);
 					};

@@ -114,7 +114,7 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapter(chapterIndex)))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {
@@ -187,8 +187,7 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean noChapterData(ChapterListBean chapter) {
-        return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
-                chapter.getDurChapterIndex(), chapter.getDurChapterName());
+        return !BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapter);
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {

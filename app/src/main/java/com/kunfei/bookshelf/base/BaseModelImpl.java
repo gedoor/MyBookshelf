@@ -130,7 +130,7 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String sourceUrl, String js) {
+    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String tag, String js) {
         final Web web = new Web("加载超时");
         if (!TextUtils.isEmpty(js)) {
             web.js = js;
@@ -172,7 +172,7 @@ public class BaseModelImpl {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
-                                .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
+                                .insertOrReplace(new CookieBean(tag, cookieManager.getCookie(webView.getUrl())));
                         handler.postDelayed(retryRunnable, 1000);
                     }
                 });

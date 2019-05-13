@@ -36,6 +36,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.kunfei.bookshelf.widget.views.ATECheckBox
+                    android:id="@+id/cb_is_enable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/is_enable" />
+
+                <com.kunfei.bookshelf.widget.views.ATECheckBox
+                    android:id="@+id/cb_is_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/audio" />
+
+            </LinearLayout>
+
             <com.kunfei.bookshelf.widget.views.ATETextInputLayout
                 android:id="@+id/til_book_source_url"
                 android:layout_width="match_parent"
@@ -371,6 +392,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/source_user_agent" />
             </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 
