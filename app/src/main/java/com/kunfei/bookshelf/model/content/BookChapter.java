@@ -67,10 +67,13 @@ public class BookChapter {
             List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
             if (chapterUrlS.isEmpty() || !analyzeNextUrl) {
                 finish(chapterList, e);
-            } else if (chapterUrlS.size() == 1) {
+            }
+            //下一页为单页
+            else if (chapterUrlS.size() == 1) {
                 List<String> usedUrl = new ArrayList<>();
                 usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
-                while (!usedUrl.contains(chapterUrlS.get(0))) {
+                //循环获取直到下一页为空
+                while (!chapterUrlS.isEmpty() && !usedUrl.contains(chapterUrlS.get(0))) {
                     Debug.printLog(tag, "正在加载下一页");
                     usedUrl.add(chapterUrlS.get(0));
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(0), headerMap, tag);
@@ -81,6 +84,7 @@ public class BookChapter {
                         body = response.body();
                         Debug.printLog(tag, "正在解析下一页");
                         webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false);
+                        chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
                         chapterList.addAll(webChapterBean.getData());
                     } catch (Exception exception) {
                         if (!e.isDisposed()) {
@@ -89,7 +93,9 @@ public class BookChapter {
                     }
                 }
                 finish(chapterList, e);
-            } else {
+            }
+            //下一页为多页
+            else {
                 Debug.printLog(tag, "正在加载其它" + chapterUrlS.size() + "页");
                 compositeDisposable = new CompositeDisposable();
                 webChapterBeans = new ArrayList<>();
