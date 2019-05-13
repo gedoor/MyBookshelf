@@ -52,7 +52,7 @@ public class WebBookModel {
      */
     public Observable<BookContentBean> getBookContent(BookInfoBean infoBean, BaseChapterBean chapterBean) {
         return WebBook.getInstance(chapterBean.getTag())
-                .getBookContent(chapterBean)
+                .getBookContent(chapterBean, infoBean)
                 .flatMap((bookContentBean -> saveContent(infoBean, chapterBean, bookContentBean)))
                 .timeout(60, TimeUnit.SECONDS);
     }

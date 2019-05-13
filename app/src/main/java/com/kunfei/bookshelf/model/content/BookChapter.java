@@ -229,8 +229,8 @@ public class BookChapter {
                 analyzer.setContent(object, chapterUrl);
                 chapterBeans.add(new ChapterListBean(
                         tag,
-                        analyzer.getString(nameRule, false),
-                        analyzer.getString(linkRule, true)
+                        analyzer.getString(nameRule),
+                        analyzer.getString(linkRule)
                 ));
             }
         }
