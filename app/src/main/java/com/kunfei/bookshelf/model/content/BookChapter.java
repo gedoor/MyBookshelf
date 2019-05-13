@@ -159,21 +159,6 @@ public class BookChapter {
         emitter.onComplete();
     }
 
-    // 纯java模式正则表达式获取目录列表
-    private List<ChapterListBean> Reger(String str, String[] regex, int index, int s1, int s2, List<ChapterListBean> chapterBeans) {
-        Matcher m = Pattern.compile(regex[index]).matcher(str);
-        if (index + 1 == regex.length) {
-            while (m.find()) {
-                chapterBeans.add(new ChapterListBean(tag, m.group(s1), m.group(s2)));
-            }
-            return chapterBeans;
-        } else {
-            StringBuilder result = new StringBuilder();
-            while (m.find()) result.append(m.group());
-            return Reger(result.toString(), regex, ++index, s1, s2, chapterBeans);
-        }
-    }
-
     private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
         List<String> nextUrlList = new ArrayList<>();
         analyzer.setContent(s, chapterUrl);
@@ -192,7 +177,7 @@ public class BookChapter {
         // 仅使用java正则表达式提取目录列表
         if (ruleChapterList.startsWith("J$")) {
             ruleChapterList = ruleChapterList.substring(2);
-            chapterBeans = Reger(s, ruleChapterList.split("&&"), 0,
+            chapterBeans = regexChapter(s, ruleChapterList.split("&&"), 0,
                     Integer.parseInt(bookSourceBean.getRuleChapterName()),
                     Integer.parseInt(bookSourceBean.getRuleContentUrl()),
                     chapterBeans
@@ -252,4 +237,18 @@ public class BookChapter {
         return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
     }
 
+    // 纯java模式正则表达式获取目录列表
+    private List<ChapterListBean> regexChapter(String str, String[] regex, int index, int s1, int s2, List<ChapterListBean> chapterBeans) {
+        Matcher m = Pattern.compile(regex[index]).matcher(str);
+        if (index + 1 == regex.length) {
+            while (m.find()) {
+                chapterBeans.add(new ChapterListBean(tag, m.group(s1), m.group(s2)));
+            }
+            return chapterBeans;
+        } else {
+            StringBuilder result = new StringBuilder();
+            while (m.find()) result.append(m.group());
+            return regexChapter(result.toString(), regex, ++index, s1, s2, chapterBeans);
+        }
+    }
 }
