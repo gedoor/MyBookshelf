@@ -29,7 +29,7 @@ public interface SearchBookContract {
 
         void stopSearch();
 
-        void initSearchEngineS();
+        void initSearchEngineS(String group);
     }
 
     interface View extends IView {

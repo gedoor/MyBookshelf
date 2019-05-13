@@ -8,11 +8,6 @@
         android:title="@string/book_source_manage"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/groupAll"
-        android:title="@string/allSource"
-        app:showAsAction="never" />
-
     <group android:id="@+id/source_group">
 
     </group>
