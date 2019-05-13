@@ -51,8 +51,8 @@ public class BookChapter {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error) + bookShelfBean.getBookInfoBean().getChapterUrl()));
                 return;
             } else {
-                Debug.printLog(tag, "┌成功获取目录页");
-                Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl());
+                Debug.printLog(tag, "┌成功获取目录页", analyzeNextUrl);
+                Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl(), analyzeNextUrl);
             }
             bookShelfBean.setTag(tag);
             analyzer = new AnalyzeRule(bookShelfBean);
