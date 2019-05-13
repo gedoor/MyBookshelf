@@ -112,11 +112,13 @@ public class BookChapter {
                         e.onError(throwable);
                     }
                 };
-                for (int i = 0; i < chapterUrlS.size(); i++) {
-                    final WebChapterBean bean = new WebChapterBean();
+                for (String url : chapterUrlS) {
+                    final WebChapterBean bean = new WebChapterBean(url);
                     webChapterBeans.add(bean);
+                }
+                for (WebChapterBean bean : webChapterBeans) {
                     BookChapter bookChapter = new BookChapter(tag, bookSourceBean, false);
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(i), headerMap, tag);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(bean.getUrl(), headerMap, tag);
                     new AnalyzeNextUrlTask(bookChapter, bean, bookShelfBean, headerMap)
                             .setCallback(callback)
                             .analyzeUrl(analyzeUrl);

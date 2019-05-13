@@ -4,12 +4,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class WebChapterBean {
+    private String url;
+
     private List<ChapterListBean> data;
 
     private LinkedHashSet<String> nextUrlList;
 
-    public WebChapterBean() {
-
+    public WebChapterBean(String url) {
+        this.url = url;
     }
 
     public WebChapterBean(List<ChapterListBean> data, LinkedHashSet<String> nextUrlList) {
@@ -29,8 +31,8 @@ public class WebChapterBean {
         return nextUrlList;
     }
 
-    public void setNextUrlList(LinkedHashSet<String> nextUrlList) {
-        this.nextUrlList = nextUrlList;
+    public String getUrl() {
+        return url;
     }
 
     public boolean noData() {
