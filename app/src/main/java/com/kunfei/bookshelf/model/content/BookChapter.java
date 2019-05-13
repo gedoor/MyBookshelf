@@ -11,7 +11,6 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
-import com.kunfei.bookshelf.utils.NetworkUtil;
 
 import org.jsoup.nodes.Element;
 import org.mozilla.javascript.NativeObject;
@@ -26,11 +25,10 @@ import java.util.regex.Pattern;
 
 import io.reactivex.Emitter;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
-
-import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
 
 class BookChapter {
     private String tag;
@@ -39,6 +37,7 @@ class BookChapter {
     private List<WebChapterBean> webChapterBeans;
     private boolean dx = false;
     private boolean analyzeNextUrl;
+    private CompositeDisposable compositeDisposable;
 
     BookChapter(String tag, BookSourceBean bookSourceBean, boolean analyzeNextUrl) {
         this.tag = tag;
@@ -89,6 +88,7 @@ class BookChapter {
                 }
                 finish(chapterList, e);
             } else {
+                compositeDisposable = new CompositeDisposable();
                 webChapterBeans = new ArrayList<>();
                 for (int i = 0; i < chapterUrlS.size(); i++) {
                     final WebChapterBean bean = new WebChapterBean();
@@ -102,14 +102,24 @@ class BookChapter {
                             .observeOn(Schedulers.io())
                             .subscribe(new MyObserver<List<ChapterListBean>>() {
                                 @Override
+                                public void onSubscribe(Disposable d) {
+                                    compositeDisposable.add(d);
+                                }
+
+                                @Override
                                 public void onNext(List<ChapterListBean> chapterListBeans) {
-                                    bean.data = chapterListBeans;
-                                    if (nextUrlFinish()) {
+                                    if (nextUrlFinish(bean, chapterListBeans)) {
                                         for (WebChapterBean chapterBean : webChapterBeans) {
                                             chapterList.addAll(chapterBean.data);
                                         }
                                         finish(chapterList, e);
                                     }
+                                }
+
+                                @Override
+                                public void onError(Throwable throwable) {
+                                    compositeDisposable.dispose();
+                                    e.onError(throwable);
                                 }
                             });
                 }
@@ -117,7 +127,8 @@ class BookChapter {
         });
     }
 
-    private synchronized boolean nextUrlFinish() {
+    private synchronized boolean nextUrlFinish(WebChapterBean webChapterBean, List<ChapterListBean> chapterListBeans) {
+        webChapterBean.data = chapterListBeans;
         for (WebChapterBean bean : webChapterBeans) {
             if (bean.data == null) return false;
         }
@@ -138,7 +149,7 @@ class BookChapter {
     }
 
     // 纯java模式正则表达式获取目录列表
-    public List<ChapterListBean> Reger(String str,String[] regex,int index,int s1,int s2,List<ChapterListBean> chapterBeans)
+    private List<ChapterListBean> Reger(String str, String[] regex, int index, int s1, int s2, List<ChapterListBean> chapterBeans)
     {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if(index + 1 == regex.length){
@@ -148,9 +159,9 @@ class BookChapter {
             return chapterBeans;
         }
         else{
-            String result = "";
-            while(m.find()) result += m.group(0);
-            return Reger(result,regex,++index,s1,s2,chapterBeans);
+            StringBuilder result = new StringBuilder();
+            while (m.find()) result.append(m.group());
+            return Reger(result.toString(), regex, ++index, s1, s2, chapterBeans);
         }
     }
 
