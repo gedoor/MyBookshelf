@@ -303,7 +303,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         if (menu == null) return;
         menu.removeGroup(R.id.source_group);
         menu.add(R.id.source_group, Menu.NONE, Menu.NONE, R.string.all_source);
-        List<String> groupList = BookSourceManager.getGroupList();
+        List<String> groupList = BookSourceManager.getEnableGroupList();
         for (String groupName : groupList) {
             menu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
         }

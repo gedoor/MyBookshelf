@@ -125,6 +125,26 @@ public class BookSourceManager {
         }).compose(RxUtils::toSimpleSingle);
     }
 
+    public static List<String> getEnableGroupList() {
+        List<String> groupList = new ArrayList<>();
+        String sql = "SELECT DISTINCT "
+                + BookSourceBeanDao.Properties.BookSourceGroup.columnName
+                + " FROM " + BookSourceBeanDao.TABLENAME
+                + " WHERE " + BookSourceBeanDao.Properties.Enable.name + " = 1";
+        Cursor cursor = DbHelper.getDaoSession().getDatabase().rawQuery(sql, null);
+        if (!cursor.moveToFirst()) return groupList;
+        do {
+            String group = cursor.getString(0);
+            if (TextUtils.isEmpty(group) || TextUtils.isEmpty(group.trim())) continue;
+            for (String item : group.split("\\s*[,;，；]\\s*")) {
+                if (TextUtils.isEmpty(item) || groupList.contains(item)) continue;
+                groupList.add(item);
+            }
+        } while (cursor.moveToNext());
+        Collections.sort(groupList);
+        return groupList;
+    }
+
     public static List<String> getGroupList() {
         List<String> groupList = new ArrayList<>();
         String sql = "SELECT DISTINCT " + BookSourceBeanDao.Properties.BookSourceGroup.columnName + " FROM " + BookSourceBeanDao.TABLENAME;
