@@ -246,22 +246,35 @@ public class BookChapter {
                                                List<ChapterListBean> chapterBeans) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
+            String baseUrl = "";
             int vipGroup = 0, nameGroup = 0, linkGroup = 0;
-            linkGroup = Integer.parseInt(linkRule);
-            if(nameRule.contains("?")){
-                String[] nameGroups = nameRule.split("\\?");
-                vipGroup = Integer.parseInt(nameGroups[0]);
-                nameGroup = Integer.parseInt(nameGroups[1]);
+            // 分离标题正则参数
+            Matcher nameMatcher = Pattern.compile("((?<=\\$)\\d)?\\$(\\d$)").matcher(nameRule);
+            while (nameMatcher.find()){
+                vipGroup = nameMatcher.group(1) == null ? 0 : Integer.parseInt(nameMatcher.group(1));
+                nameGroup = Integer.parseInt(nameMatcher.group(2));
+            }
+            // 分离网址正则参数
+            Matcher linkMatcher = Pattern.compile("(.*?)\\$(\\d$)").matcher(linkRule);
+            while (linkMatcher.find()){
+                baseUrl = analyzer.replaceGet(linkMatcher.group(1));
+                linkGroup = Integer.parseInt(linkMatcher.group(2));
+            }
+            // 提取目录信息
+            if (vipGroup == 0){
                 while (m.find()) {
                     addChapter(chapterBeans,
-                            ((m.group(vipGroup)==null?"":"\uD83D\uDD12") + m.group(nameGroup)),
-                            m.group(linkGroup));
+                            m.group(nameGroup),
+                            baseUrl+m.group(linkGroup)
+                    );
                 }
             }
             else{
-                nameGroup = Integer.parseInt(nameRule);
                 while (m.find()) {
-                    addChapter(chapterBeans, m.group(nameGroup), m.group(linkGroup));
+                    addChapter(chapterBeans,
+                            (m.group(vipGroup)==null?"":"\uD83D\uDD12") + m.group(nameGroup),
+                            baseUrl+m.group(linkGroup)
+                    );
                 }
             }
             return chapterBeans;
