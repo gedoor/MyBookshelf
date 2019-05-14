@@ -17,7 +17,6 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 
 import java.text.DateFormat;
@@ -51,27 +50,16 @@ public class Debug {
         }
     }
 
-    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull Callback callback) {
-        if (TextUtils.isEmpty(tag)) {
-            callback.printError("书源url不能为空");
-            return;
-        }
-        key = StringUtils.trim(key);
-        if (TextUtils.isEmpty(key)) {
-            callback.printError("关键字不能为空");
-            return;
-        }
-        new Debug(tag, key, compositeDisposable, callback);
+    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable) {
+        new Debug(tag, key, compositeDisposable);
     }
 
-    private Callback callback;
     private CompositeDisposable compositeDisposable;
 
-    private Debug(String tag, String key, CompositeDisposable compositeDisposable, Callback callback) {
+    private Debug(String tag, String key, CompositeDisposable compositeDisposable) {
         UpLastChapterModel.destroy();
         startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
-        this.callback = callback;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtil.isUrl(key)) {
             printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
@@ -207,28 +195,16 @@ public class Debug {
     }
 
     private void printLog(String log) {
-        if (callback != null) {
-            callback.printLog(log);
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, log);
     }
 
     private void printError(String msg) {
-        if (callback != null) {
-            callback.printError(String.format("%s └%s", getDoTime(), msg));
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
+        finish();
     }
 
     private void finish() {
-        if (callback != null) {
-            callback.finish();
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, "finish");
     }
 
-    public interface Callback {
-        void printLog(String msg);
-
-        void printError(String msg);
-
-        void finish();
-    }
 }

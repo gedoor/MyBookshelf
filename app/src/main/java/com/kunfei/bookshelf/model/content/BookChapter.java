@@ -236,6 +236,7 @@ public class BookChapter {
     }
 
     private void addChapter(final List<ChapterListBean> chapterBeans, String name, String link) {
+        if (TextUtils.isEmpty(name)) return;
         if (TextUtils.isEmpty(link)) link = chapterListUrl;
         chapterBeans.add(new ChapterListBean(tag, name, link));
     }

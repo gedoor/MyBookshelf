@@ -1,12 +1,14 @@
 package com.kunfei.bookshelf.web.controller;
 
-import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
@@ -68,42 +70,15 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         Map<String, String> debugBean = new Gson().fromJson(message.getTextPayload(), MAP_STRING);
         String tag = debugBean.get("tag");
         String key = debugBean.get("key");
-        Debug.newDebug(tag, key, compositeDisposable, new Debug.Callback() {
-            @Override
-            public void printLog(String msg) {
-                AsyncTask.execute(() -> {
-                    try {
-                        send(msg);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+        if (TextUtils.isEmpty(tag) || TextUtils.isEmpty(key)) {
+            try {
+                send(MApplication.getInstance().getString(R.string.cannot_empty));
+                close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
+            } catch (IOException ignored) {
             }
-
-            @Override
-            public void printError(String msg) {
-                AsyncTask.execute(() -> {
-                    try {
-                        send(msg);
-                        close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
-                    } catch (IOException ignored) {
-                    }
-                    Debug.SOURCE_DEBUG_TAG = null;
-                });
-            }
-
-            @Override
-            public void finish() {
-                AsyncTask.execute(() -> {
-                    try {
-                        send("finish");
-                        close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
-                    } catch (IOException ignored) {
-                    }
-                    Debug.SOURCE_DEBUG_TAG = null;
-                });
-            }
-        });
+            return;
+        }
+        Debug.newDebug(tag, key, compositeDisposable);
     }
 
     @Override
@@ -116,13 +91,18 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         Debug.SOURCE_DEBUG_TAG = null;
     }
 
-    @Subscribe(thread = EventThread.IO, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
+    @Subscribe(thread = EventThread.EXECUTOR, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
         try {
             send(msg);
+            if (msg.equals("finish")) {
+                close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
+                Debug.SOURCE_DEBUG_TAG = null;
+            }
         } catch (IOException e) {
             Debug.SOURCE_DEBUG_TAG = null;
         }
+
     }
 
 }

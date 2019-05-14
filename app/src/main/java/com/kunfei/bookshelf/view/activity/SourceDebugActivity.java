@@ -132,29 +132,17 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
+        if (TextUtils.isEmpty(sourceTag) || TextUtils.isEmpty(key)) {
+            toast(R.string.cannot_empty);
+            return;
+        }
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
         adapter.clear();
-        Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.Callback() {
-            @Override
-            public void printLog(String msg) {
-                printDebugLog(msg);
-            }
-
-            @Override
-            public void printError(String msg) {
-                loading.stop();
-                printDebugLog(msg);
-            }
-
-            @Override
-            public void finish() {
-                loading.stop();
-            }
-        });
+        Debug.newDebug(sourceTag, key, compositeDisposable);
     }
 
     //设置ToolBar
@@ -207,12 +195,10 @@ public class SourceDebugActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
-//        if (TextUtils.isEmpty(tvContent.getText().toString())) {
-//            tvContent.setText(msg);
-//        } else {
-//            tvContent.setText(String.format("%s\n%s", tvContent.getText(), msg));
-//        }
         adapter.add(msg);
+        if (msg.equals("finish")) {
+            loading.stop();
+        }
     }
 
 }
