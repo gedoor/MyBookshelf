@@ -270,6 +270,7 @@ public class ReadAloudService extends Service {
         mediaPlayer.setOnCompletionListener(mp -> {
             handler.removeCallbacks(mpRunnable);
             mp.reset();
+            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.NEXT);
         });
     }
 
