@@ -78,11 +78,10 @@ class BookInfo {
             Debug.printLog(tag, "└" + bookInfoBean.getCoverUrl());
             Debug.printLog(tag, "┌获取目录网址");
             result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), true);
-            if (!isEmpty(result)) {
-                bookInfoBean.setChapterUrl(result);
-            }else{
+            if (isEmpty(result)) result = bookShelfBean.getNoteUrl();
+            bookInfoBean.setChapterUrl(result);
+            if (result.equals(bookShelfBean.getNoteUrl())) {
                 bookInfoBean.setChapterListHtml(s);
-                bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
             }
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             bookInfoBean.setOrigin(name);
