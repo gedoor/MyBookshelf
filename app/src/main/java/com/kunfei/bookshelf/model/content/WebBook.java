@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.model.content;
 
+import android.text.TextUtils;
+
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
@@ -97,6 +99,9 @@ public class WebBook extends BaseModelImpl {
             return Observable.error(new NoSourceThrowable(tag));
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
+        if (!TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getBookInfoHtml())) {
+            return bookInfo.analyzeBookInfo(bookShelfBean.getBookInfoBean().getBookInfoHtml(), bookShelfBean);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), headerMap, tag);
             return getResponseO(analyzeUrl)
@@ -114,12 +119,15 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
-        BookChapter bookChapter = new BookChapter(tag, bookSourceBean, true);
+        BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, true);
+        if (!TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterListHtml())) {
+            return bookChapterList.analyzeChapterList(bookShelfBean.getBookInfoBean().getChapterListHtml(), bookShelfBean, headerMap);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, bookShelfBean.getNoteUrl());
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
-                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
+                    .flatMap(response -> bookChapterList.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
         }

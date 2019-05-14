@@ -44,8 +44,8 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     @Override
     public void initData(Intent intent) {
         openFrom = intent.getIntExtra("openFrom", FROM_BOOKSHELF);
+        String key = intent.getStringExtra("data_key");
         if (openFrom == FROM_BOOKSHELF) {
-            String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             if (bookShelf == null) {
                 String noteUrl = intent.getStringExtra("noteUrl");
@@ -61,7 +61,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             searchBook.setNoteUrl(bookShelf.getNoteUrl());
             searchBook.setTag(bookShelf.getTag());
         } else {
-            initBookFormSearch(intent.getParcelableExtra("data"));
+            initBookFormSearch((SearchBookBean) BitIntentDataManager.getInstance().getData(key));
         }
     }
 
@@ -94,16 +94,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
 
     @Override
     public void getBookShelfInfo() {
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            BookShelfBean bookShelfBean = BookshelfHelp.getBook(bookShelf.getNoteUrl());
-            if (bookShelfBean != null) {
-                inBookShelf = true;
-                bookShelf = bookShelfBean;
-            }
-            e.onNext(bookShelf);
-            e.onComplete();
-        })
-                .flatMap(bookShelfBean -> WebBookModel.getInstance().getBookInfo(bookShelfBean))
+        WebBookModel.getInstance().getBookInfo(bookShelf)
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookShelfBean>() {
