@@ -5,17 +5,18 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 
 import java.text.DateFormat;
@@ -30,7 +31,6 @@ import io.reactivex.disposables.Disposable;
 
 public class Debug {
     public static String SOURCE_DEBUG_TAG;
-    public static Callback CALLBACK;
     @SuppressLint("ConstantLocale")
     private static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
     private static long startTime;
@@ -45,32 +45,21 @@ public class Debug {
 
     static void printLog(String tag, String msg, boolean print) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
-            if (CALLBACK != null) {
-                CALLBACK.printLog(String.format("%s %s", getDoTime(), msg));
-            }
+            msg = String.format("%s %s", getDoTime(), msg);
+            RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }
     }
 
-    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull Callback callback) {
-        if (TextUtils.isEmpty(tag)) {
-            callback.printError("书源url不能为空");
-            return;
-        }
-        key = StringUtils.trim(key);
-        if (TextUtils.isEmpty(key)) {
-            callback.printError("关键字不能为空");
-            return;
-        }
-        new Debug(tag, key, compositeDisposable, callback);
+    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable) {
+        new Debug(tag, key, compositeDisposable);
     }
 
     private CompositeDisposable compositeDisposable;
 
-    private Debug(String tag, String key, CompositeDisposable compositeDisposable, Callback callback) {
+    private Debug(String tag, String key, CompositeDisposable compositeDisposable) {
         UpLastChapterModel.destroy();
         startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
-        Debug.CALLBACK = callback;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtil.isUrl(key)) {
             printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
@@ -206,30 +195,16 @@ public class Debug {
     }
 
     private void printLog(String log) {
-        if (CALLBACK != null) {
-            CALLBACK.printLog(log);
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, log);
     }
 
     private void printError(String msg) {
-        if (CALLBACK != null) {
-            CALLBACK.printError(String.format("%s └%s", getDoTime(), msg));
-            CALLBACK = null;
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
+        finish();
     }
 
     private void finish() {
-        if (CALLBACK != null) {
-            CALLBACK.finish();
-            CALLBACK = null;
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, "finish");
     }
 
-    public interface Callback {
-        void printLog(String msg);
-
-        void printError(String msg);
-
-        void finish();
-    }
 }

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -15,9 +16,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -71,7 +76,6 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void onDestroy() {
         Debug.SOURCE_DEBUG_TAG = null;
-        Debug.CALLBACK = null;
         RxBus.get().unregister(this);
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
@@ -129,29 +133,17 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
+        if (TextUtils.isEmpty(sourceTag) || TextUtils.isEmpty(key)) {
+            Toast.makeText(this, "书源和关键字不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
         adapter.clear();
-        Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.Callback() {
-            @Override
-            public void printLog(String msg) {
-                adapter.add(msg);
-            }
-
-            @Override
-            public void printError(String msg) {
-                loading.stop();
-                adapter.add(msg);
-            }
-
-            @Override
-            public void finish() {
-                loading.stop();
-            }
-        });
+        Debug.newDebug(sourceTag, key, compositeDisposable);
     }
 
     //设置ToolBar
@@ -200,6 +192,11 @@ public class SourceDebugActivity extends MBaseActivity {
                 }
             }
         }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
+    public void printDebugLog(String msg) {
+        adapter.add(msg);
     }
 
 }
