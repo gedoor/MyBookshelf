@@ -423,4 +423,5 @@
     <string name="music">音乐</string>
     <string name="audio">音频</string>
     <string name="is_enable">启用</string>
+    <string name="all_source">全部书源</string>
 </resources>

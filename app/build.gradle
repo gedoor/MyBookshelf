@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.google.android:flexbox:1.1.0'
 
     //J_SOUP
-    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'org.jsoup:jsoup:1.12.1'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
 

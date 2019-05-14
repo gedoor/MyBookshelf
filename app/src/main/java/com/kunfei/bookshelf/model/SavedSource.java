@@ -5,11 +5,11 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 public class SavedSource {
     public static SavedSource Instance = new SavedSource();
 
-    String bookName;
-    long saveTime;
-    BookSourceBean bookSource;
+    private String bookName;
+    private long saveTime;
+    private BookSourceBean bookSource;
 
-    SavedSource() {
+    private SavedSource() {
         this.bookName = "";
         saveTime = 0;
     }
