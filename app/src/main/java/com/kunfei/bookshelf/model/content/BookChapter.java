@@ -177,8 +177,8 @@ public class BookChapter {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         Debug.printLog(tag, "┌解析目录列表", printLog);
         // 仅使用java正则表达式提取目录列表
-        if (ruleChapterList.startsWith("J$")) {
-            ruleChapterList = ruleChapterList.substring(2);
+        if (ruleChapterList.startsWith(":")) {
+            ruleChapterList = ruleChapterList.substring(1);
             chapterBeans = regexChapter(s, ruleChapterList.split("&&"), 0,
                     bookSourceBean.getRuleChapterName(),
                     bookSourceBean.getRuleContentUrl(),
