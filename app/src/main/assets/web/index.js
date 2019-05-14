@@ -2,11 +2,18 @@
 // 读写Hash值(val未赋值时为读取)
 function hashParam(key, val) {
 	let hashstr = decodeURIComponent(window.location.hash);
-	let regKey = new RegExp(`${key}=(.*?&|.*$)`);
-	let getVal = regKey.test(hashstr) ? hashstr.match(regKey)[1].replace('&', '') : null;
+	let regKey = new RegExp(`${key}=([^&]*)`);
+	let getVal = regKey.test(hashstr) ? hashstr.match(regKey)[1] : null;
 	if (val == undefined) return getVal;
-	if (hashstr == '') window.location.hash = `#${key}=${val}`;
-	window.location.hash = getVal ? hashstr.replace(getVal, val) : `${hashstr.replace(`&${key}=`)}&${key}=${val}`;
+	if (hashstr == '' || hashstr == '#') {
+		window.location.hash = `#${key}=${val}`;
+	}
+	else {
+		if (getVal) window.location.hash = hashstr.replace(getVal, val);
+		else {
+			window.location.hash = hashstr.indexOf(key) > -1 ? hashstr.replace(regKey, `${key}=${val}`) : `${hashstr}&${key}=${val}`;
+		}
+	}
 }
 function addRule(rule) {
 	return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><div>${rule.bookSourceName}<br>${rule.bookSourceUrl}</div></label>`;
