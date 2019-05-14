@@ -369,7 +369,7 @@ public class BookshelfHelp {
         bookShelfBean.setDurChapter(0);
         bookShelfBean.setDurChapterPage(0);
         bookShelfBean.setVariable(searchBookBean.getVariable());
-        BookInfoBean bookInfo = new BookInfoBean();
+        BookInfoBean bookInfo = bookShelfBean.getBookInfoBean();
         bookInfo.setNoteUrl(searchBookBean.getNoteUrl());
         bookInfo.setAuthor(searchBookBean.getAuthor());
         bookInfo.setCoverUrl(searchBookBean.getCoverUrl());
@@ -378,7 +378,7 @@ public class BookshelfHelp {
         bookInfo.setOrigin(searchBookBean.getOrigin());
         bookInfo.setIntroduce(searchBookBean.getIntroduce());
         bookInfo.setChapterUrl(searchBookBean.getChapterUrl());
-        bookShelfBean.setBookInfoBean(bookInfo);
+        bookInfo.setBookInfoHtml(searchBookBean.getBookInfoHtml());
         bookShelfBean.setVariable(searchBookBean.getVariable());
         return bookShelfBean;
     }

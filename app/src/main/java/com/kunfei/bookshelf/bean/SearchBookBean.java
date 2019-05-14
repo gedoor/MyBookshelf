@@ -1,9 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
@@ -20,7 +17,7 @@ import java.util.Map;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 @Entity
-public class SearchBookBean implements Parcelable, BaseBookBean {
+public class SearchBookBean implements BaseBookBean {
     @Id
     private String noteUrl;
     private String coverUrl;//封面URL
@@ -51,28 +48,11 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     private LinkedHashSet<String> originUrls;
     @Transient
     private Map<String, String> variableMap;
+    @Transient
+    private String bookInfoHtml;
 
     public SearchBookBean(){
 
-    }
-
-    protected SearchBookBean(Parcel in) {
-        noteUrl = in.readString();
-        coverUrl = in.readString();
-        name = in.readString();
-        author = in.readString();
-        lastChapter = in.readString();
-        isCurrentSource = in.readByte() != 0;
-        tag = in.readString();
-        kind = in.readString();
-        origin = in.readString();
-        desc = in.readString();
-        originNum = in.readInt();
-        introduce = in.readString();
-        chapterUrl = in.readString();
-        addTime = in.readLong();
-        upTime = in.readLong();
-        variable = in.readString();
     }
 
     @Generated(hash = 1344440211)
@@ -94,44 +74,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.upTime = upTime;
         this.variable = variable;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeString(coverUrl);
-        dest.writeString(name);
-        dest.writeString(author);
-        dest.writeString(lastChapter);
-        dest.writeByte((byte)(isCurrentSource ?1:0));
-        dest.writeString(tag);
-        dest.writeString(kind);
-        dest.writeString(origin);
-        dest.writeString(desc);
-        dest.writeInt(originNum);
-        dest.writeString(introduce);
-        dest.writeString(chapterUrl);
-        dest.writeLong(addTime);
-        dest.writeLong(upTime);
-        dest.writeString(variable);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<SearchBookBean> CREATOR = new Creator<SearchBookBean>() {
-        @Override
-        public SearchBookBean createFromParcel(Parcel in) {
-            return new SearchBookBean(in);
-        }
-
-        @Override
-        public SearchBookBean[] newArray(int size) {
-            return new SearchBookBean[size];
-        }
-    };
-
 
     @Override
     public String getVariable() {
@@ -317,4 +259,11 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.upTime = upTime;
     }
 
+    public String getBookInfoHtml() {
+        return bookInfoHtml;
+    }
+
+    public void setBookInfoHtml(String bookInfoHtml) {
+        this.bookInfoHtml = bookInfoHtml;
+    }
 }

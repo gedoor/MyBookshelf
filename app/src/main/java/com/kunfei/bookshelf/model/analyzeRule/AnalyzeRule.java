@@ -284,7 +284,7 @@ public class AnalyzeRule {
     /**
      * 替换@get
      */
-    private String replaceGet(String ruleStr) {
+    public String replaceGet(String ruleStr) {
         Matcher getMatcher = getPattern.matcher(ruleStr);
         while (getMatcher.find()) {
             String value = "";
