@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.bean.BookContentBean;
+import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -16,7 +17,6 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 
 import java.text.DateFormat;
@@ -50,27 +50,16 @@ public class Debug {
         }
     }
 
-    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable, @NonNull Callback callback) {
-        if (TextUtils.isEmpty(tag)) {
-            callback.printError("书源url不能为空");
-            return;
-        }
-        key = StringUtils.trim(key);
-        if (TextUtils.isEmpty(key)) {
-            callback.printError("关键字不能为空");
-            return;
-        }
-        new Debug(tag, key, compositeDisposable, callback);
+    public static void newDebug(String tag, String key, @NonNull CompositeDisposable compositeDisposable) {
+        new Debug(tag, key, compositeDisposable);
     }
 
-    private Callback callback;
     private CompositeDisposable compositeDisposable;
 
-    private Debug(String tag, String key, CompositeDisposable compositeDisposable, Callback callback) {
+    private Debug(String tag, String key, CompositeDisposable compositeDisposable) {
         UpLastChapterModel.destroy();
         startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
-        this.callback = callback;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtil.isUrl(key)) {
             printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
@@ -160,7 +149,7 @@ public class Debug {
                     public void onNext(BookShelfBean bookShelfBean) {
                         if (bookShelfBean.getChapterList().size() > 0) {
                             ChapterListBean chapterListBean = bookShelfBean.getChapter(0);
-                            bookContentDebug(chapterListBean);
+                            bookContentDebug(bookShelfBean.getBookInfoBean(), chapterListBean);
                         } else {
                             printError("获取到的目录为空");
                         }
@@ -178,9 +167,9 @@ public class Debug {
                 });
     }
 
-    private void bookContentDebug(ChapterListBean chapterListBean) {
+    private void bookContentDebug(BookInfoBean infoBean, ChapterListBean chapterListBean) {
         printLog(String.format("\n%s ≡开始获取正文页", getDoTime()));
-        WebBookModel.getInstance().getBookContent(chapterListBean)
+        WebBookModel.getInstance().getBookContent(infoBean, chapterListBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override
@@ -206,28 +195,16 @@ public class Debug {
     }
 
     private void printLog(String log) {
-        if (callback != null) {
-            callback.printLog(log);
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, log);
     }
 
     private void printError(String msg) {
-        if (callback != null) {
-            callback.printError(String.format("%s └%s", getDoTime(), msg));
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
+        finish();
     }
 
     private void finish() {
-        if (callback != null) {
-            callback.finish();
-        }
+        RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, "finish");
     }
 
-    public interface Callback {
-        void printLog(String msg);
-
-        void printError(String msg);
-
-        void finish();
-    }
 }

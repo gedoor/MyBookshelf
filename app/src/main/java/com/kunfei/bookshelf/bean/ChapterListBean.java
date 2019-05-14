@@ -41,6 +41,12 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
         this.end = end;
     }
 
+    public ChapterListBean(String tag, String durChapterName, String durChapterUrl) {
+        this.tag = tag;
+        this.durChapterName = durChapterName;
+        this.durChapterUrl = durChapterUrl;
+    }
+
     @Generated(hash = 1096893365)
     public ChapterListBean() {
     }
@@ -67,6 +73,9 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
 
     @Override
     public int hashCode() {
+        if (durChapterUrl == null) {
+            return 0;
+        }
         return durChapterUrl.hashCode();
     }
 
@@ -152,4 +161,5 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
     public Boolean getHasCache(BookInfoBean bookInfoBean) {
         return BookshelfHelp.isChapterCached(bookInfoBean, this);
     }
+
 }

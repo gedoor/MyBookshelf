@@ -206,6 +206,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     ScrollView scrollView;
     @BindView(R.id.cb_is_audio)
     ATECheckBox cbIsAudio;
+    @BindView(R.id.cb_is_enable)
+    ATECheckBox cbIsEnable;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -289,8 +291,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-
-        setHint();
         setText(bookSourceBean);
         mSoftKeyboardTool = new KeyboardToolPop(this, this::insertTextToEditText);
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
@@ -359,9 +359,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setRuleBookUrlPattern(trim(tieRuleBookUrlPattern.getText()));
         bookSourceBeanN.setRuleBookKind(trim(tieRuleBookKind.getText()));
         bookSourceBeanN.setRuleBookLastChapter(trim(tieRuleBookLastChapter.getText()));
-        bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
-        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : "");
+        bookSourceBeanN.setEnable(cbIsEnable.isChecked());
+        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : null);
         return bookSourceBeanN;
     }
 
@@ -399,37 +399,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieRuleBookKind.setText(StringUtils.trim(bookSourceBean.getRuleBookKind()));
         tieRuleBookLastChapter.setText(StringUtils.trim(bookSourceBean.getRuleBookLastChapter()));
         cbIsAudio.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.AUDIO));
-    }
-
-    private void setHint() {
-        tilBookSourceName.setHint(getString(R.string.book_source_name));
-        tilBookSourceUrl.setHint(getString(R.string.book_source_url));
-        tilBookSourceGroup.setHint(getString(R.string.book_source_group));
-        tilLoginUrl.setHint(getString(R.string.book_source_login_url));
-        tilRuleBookAuthor.setHint(getString(R.string.rule_book_author));
-        tilRuleBookContent.setHint(getString(R.string.rule_book_content));
-        tilRuleBookName.setHint(getString(R.string.rule_book_name));
-        tilRuleChapterList.setHint(getString(R.string.rule_chapter_list));
-        tilRuleChapterName.setHint(getString(R.string.rule_chapter_name));
-        tilRuleChapterListUrl.setHint(getString(R.string.rule_chapter_list_url));
-        tilRuleChapterListUrlNext.setHint(getString(R.string.rule_chapter_list_url_next));
-        tilRuleContentUrl.setHint(getString(R.string.rule_content_url));
-        tilRuleCoverUrl.setHint(getString(R.string.rule_cover_url));
-        tilRuleIntroduce.setHint(getString(R.string.rule_introduce));
-        tilRuleSearchAuthor.setHint(getString(R.string.rule_search_author));
-        tilRuleSearchCoverUrl.setHint(getString(R.string.rule_search_cover_url));
-        tilRuleSearchKind.setHint(getString(R.string.rule_search_kind));
-        tilRuleSearchLastChapter.setHint(getString(R.string.rule_search_last_chapter));
-        tilRuleSearchList.setHint(getString(R.string.rule_search_list));
-        tilRuleSearchName.setHint(getString(R.string.rule_search_name));
-        tilRuleSearchNoteUrl.setHint(getString(R.string.rule_search_note_url));
-        tilRuleSearchUrl.setHint(getString(R.string.rule_search_url));
-        tilHttpUserAgent.setHint(getString(R.string.source_user_agent));
-        tilRuleFindUrl.setHint(getString(R.string.rule_find_url));
-        tilRuleContentUrlNext.setHint(getString(R.string.rule_content_url_next));
-        tilRuleBookUrlPattern.setHint(getString(R.string.book_url_pattern));
-        tilRuleBookKind.setHint(getString(R.string.rule_book_kind));
-        tilRuleBookLastChapter.setHint(getString(R.string.rule_book_last_chapter));
+        cbIsEnable.setChecked(bookSourceBean.getEnable());
     }
 
     @SuppressLint("SetWorldReadable")

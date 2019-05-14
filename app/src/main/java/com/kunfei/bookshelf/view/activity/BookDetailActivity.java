@@ -243,6 +243,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvLoading.setVisibility(View.VISIBLE);
         tvLoading.setText(R.string.loading);
         tvLoading.setOnClickListener(null);
+        mPresenter.getBookShelf().getBookInfoBean().setBookInfoHtml(null);
+        mPresenter.getBookShelf().getBookInfoBean().setChapterListHtml(null);
         mPresenter.getBookShelfInfo();
     }
 
@@ -250,19 +252,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     protected void bindEvent() {
         ivBlurCover.setOnClickListener(null);
-        vwContent.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (getStart_share_ele()) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                    overridePendingTransition(0, android.R.anim.fade_out);
-                }
-            } else {
-                finish();
-                overridePendingTransition(0, android.R.anim.fade_out);
-            }
-        });
+        vwContent.setOnClickListener(v -> finish());
 
         tvChangeOrigin.setOnClickListener(view ->
                 ChangeSourceDialog.builder(BookDetailActivity.this, mPresenter.getBookShelf())
@@ -391,6 +381,12 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         if (mo) return true;
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, android.R.anim.fade_out);
     }
 
     @Override

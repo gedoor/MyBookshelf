@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.Keep;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
 
@@ -32,10 +33,10 @@ import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
  */
 @Keep
 public class AnalyzeUrl {
-    private static final Pattern pagePattern = Pattern.compile("\\{.*?\\}");
-
+    private static final Pattern pagePattern = Pattern.compile("\\{(.*?)\\}");
+    private String baseUrl;
     private String url;
-    private String hostUrl;
+    private String host;
     private String urlPath;
     private String queryStr;
     private Map<String, String> queryMap = new HashMap<>();
@@ -53,7 +54,9 @@ public class AnalyzeUrl {
 
     @SuppressLint("DefaultLocale")
     public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMapF, String baseUrl) throws Exception {
-        this.hostUrl = baseUrl;
+        if (!TextUtils.isEmpty(baseUrl)) {
+            this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
+        }
         //解析Header
         ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
@@ -143,7 +146,7 @@ public class AnalyzeUrl {
         if (searchPage == null) return ruleUrl;
         Matcher matcher = pagePattern.matcher(ruleUrl);
         while (matcher.find()) {
-            String[] pages = matcher.group().substring(1, matcher.group().length() - 1).split(",");
+            String[] pages = matcher.group(1).split(",");
             if (searchPage <= pages.length) {
                 ruleUrl = ruleUrl.replace(matcher.group(), pages[searchPage - 1].trim());
             } else {
@@ -241,15 +244,9 @@ public class AnalyzeUrl {
      * 分解URL
      */
     private void generateUrlPath(String ruleUrl) {
-        String baseUrl = StringUtils.getBaseUrl(ruleUrl);
-        if (baseUrl == null && hostUrl != null) {
-            url = hostUrl + ruleUrl;
-            urlPath = ruleUrl;
-        } else {
-            url = ruleUrl;
-            hostUrl = StringUtils.getBaseUrl(ruleUrl);
-            urlPath = ruleUrl.substring(hostUrl.length());
-        }
+        url = NetworkUtil.getAbsoluteURL(baseUrl, ruleUrl);
+        host = StringUtils.getBaseUrl(url);
+        urlPath = url.substring(host.length());
     }
 
     /**
@@ -262,7 +259,7 @@ public class AnalyzeUrl {
     }
 
     public String getHost() {
-        return hostUrl;
+        return host;
     }
 
     public String getPath() {

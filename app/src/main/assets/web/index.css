@@ -105,6 +105,13 @@ textarea {
 .tabbody>.this {
 	display: flex;
 }
+.tabbody>*>.titlebar{
+	display: flex;
+}
+.tabbody>*>.titlebar>*{
+	flex: 1;
+	margin: 1px 1px 1px 1px;
+}
 .tabbody>*>.context {
 	flex: 1;
 	flex-flow: column;
@@ -128,6 +135,7 @@ textarea {
 	background: #eee;
 	padding-left: 3px;
 	margin: 2px 0;
+	cursor: pointer;
 }
 #RuleList input[type=radio] {
 	display: none;

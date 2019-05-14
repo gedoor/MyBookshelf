@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.seimicrawler.xpath.JXNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,13 @@ public class AnalyzeByJSoup {
     public AnalyzeByJSoup parse(Object doc) {
         if (doc instanceof Element) {
             element = (Element) doc;
+        } else if (doc instanceof JXNode) {
+            JXNode jxNode = (JXNode) doc;
+            if (jxNode.isElement()) {
+                element = jxNode.asElement();
+            } else {
+                element = Jsoup.parse(jxNode.value().toString());
+            }
         } else {
             element = Jsoup.parse(doc.toString());
         }

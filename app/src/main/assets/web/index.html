@@ -169,7 +169,12 @@
 						<textarea class="context" id="DebugConsole" placeholder="这里用于输出调试信息"></textarea>
 					</div>
 					<div class="tab3">
-						<div class="titlebar" style="display: none;" tip="这个坑暂时保留,后续考虑是否要做"><button>导入书源文件</button><button>导出书源文件</button><button>删除选中书源</button></div>
+						<div class="titlebar">
+							<button id="Import">导入书源文件</button>
+							<button id="Export">导出书源文件</button>
+							<button id="Delete">删除选中书源</button>
+							<button id="ClrAll">清空当前列表</button>
+						</div>
 						<div class="context" id="RuleList"></div>
 					</div>
 					<div class="tab4">
@@ -177,6 +182,13 @@
 							<a target="_blank" href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
 							<a target="_blank" href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
 							<a target="_blank" href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
+							<a target="_blank" href="https://www.w3cschool.cn/regex_rmjc/?">正则表达式教程</a>
+							<a target="_blank" href="https://www.regextester.com/">正则表达式在线验证工具</a>
+							<div>^$()[]{}.?+*| 这些是Java正则特殊符号,匹配需转义
+								<br>(?s) 前缀表示跨行解析
+								<br>(?m) 前缀表示逐行匹配
+								<br>(?i) 前缀表示忽略大小写
+							</div>
 						</div>
 					</div>
 				</div>
