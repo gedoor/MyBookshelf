@@ -38,6 +38,7 @@ public class BookChapter {
     private boolean dx = false;
     private boolean analyzeNextUrl;
     private CompositeDisposable compositeDisposable;
+    private String chapterListUrl;
 
     BookChapter(String tag, BookSourceBean bookSourceBean, boolean analyzeNextUrl) {
         this.tag = tag;
@@ -61,7 +62,8 @@ public class BookChapter {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
-            WebChapterBean webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList, analyzeNextUrl);
+            chapterListUrl = bookShelfBean.getBookInfoBean().getChapterUrl();
+            WebChapterBean webChapterBean = analyzeChapterList(s, chapterListUrl, ruleChapterList, analyzeNextUrl);
             final List<ChapterListBean> chapterList = webChapterBean.getData();
 
             final List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
@@ -153,6 +155,7 @@ public class BookChapter {
         }
         LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
         chapterList = new ArrayList<>(lh);
+        chapterList.get(chapterList.indexOf(new ChapterListBean())).setDurChapterUrl(chapterListUrl);
         Collections.reverse(chapterList);
         Debug.printLog(tag, "-目录解析完成", analyzeNextUrl);
         emitter.onNext(chapterList);
