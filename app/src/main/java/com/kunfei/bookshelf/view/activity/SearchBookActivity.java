@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
@@ -132,9 +133,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 refreshErrorView);
 
         searchBookAdapter.setItemClickListener((view, position) -> {
+            String dataKey = String.valueOf(System.currentTimeMillis());
             Intent intent = new Intent(SearchBookActivity.this, BookDetailActivity.class);
             intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
-            intent.putExtra("data", searchBookAdapter.getItemData(position));
+            intent.putExtra("data_key", dataKey);
+            BitIntentDataManager.getInstance().putData(dataKey, searchBookAdapter.getItemData(position));
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
         });
 

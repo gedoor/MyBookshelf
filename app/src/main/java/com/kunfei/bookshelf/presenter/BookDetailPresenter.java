@@ -44,8 +44,8 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     @Override
     public void initData(Intent intent) {
         openFrom = intent.getIntExtra("openFrom", FROM_BOOKSHELF);
+        String key = intent.getStringExtra("data_key");
         if (openFrom == FROM_BOOKSHELF) {
-            String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             if (bookShelf == null) {
                 String noteUrl = intent.getStringExtra("noteUrl");
@@ -61,7 +61,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             searchBook.setNoteUrl(bookShelf.getNoteUrl());
             searchBook.setTag(bookShelf.getTag());
         } else {
-            initBookFormSearch(intent.getParcelableExtra("data"));
+            initBookFormSearch((SearchBookBean) BitIntentDataManager.getInstance().getData(key));
         }
     }
 

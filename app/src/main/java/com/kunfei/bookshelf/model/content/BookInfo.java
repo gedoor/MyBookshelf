@@ -81,6 +81,7 @@ class BookInfo {
             if (!isEmpty(result)) {
                 bookInfoBean.setChapterUrl(result);
             }else{
+                bookInfoBean.setChapterListHtml(s);
                 bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
             }
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());

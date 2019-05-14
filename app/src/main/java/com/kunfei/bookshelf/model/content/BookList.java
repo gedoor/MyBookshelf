@@ -49,7 +49,8 @@ class BookList {
             }
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
-            analyzer.setContent(response.body(), baseUrl);
+            String body = response.body();
+            analyzer.setContent(body, baseUrl);
 
             String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
@@ -61,6 +62,7 @@ class BookList {
                 Debug.printLog(tag, ">搜索结果为详情页");
                 SearchBookBean item = getItem(analyzer, baseUrl);
                 if (item != null) {
+                    item.setBookInfoHtml(body);
                     books.add(item);
                 }
             } else {
@@ -86,6 +88,7 @@ class BookList {
                     Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
                     SearchBookBean item = getItem(analyzer, baseUrl);
                     if (item != null) {
+                        item.setBookInfoHtml(body);
                         books.add(item);
                     }
                 } else {

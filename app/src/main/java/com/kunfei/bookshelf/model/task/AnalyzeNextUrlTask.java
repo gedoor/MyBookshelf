@@ -6,7 +6,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.WebChapterBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
-import com.kunfei.bookshelf.model.content.BookChapter;
+import com.kunfei.bookshelf.model.content.BookChapterList;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,10 @@ public class AnalyzeNextUrlTask {
     private Callback callback;
     private BookShelfBean bookShelfBean;
     private Map<String, String> headerMap;
-    private BookChapter bookChapter;
+    private BookChapterList bookChapterList;
 
-    public AnalyzeNextUrlTask(BookChapter bookChapter, WebChapterBean webChapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
-        this.bookChapter = bookChapter;
+    public AnalyzeNextUrlTask(BookChapterList bookChapterList, WebChapterBean webChapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
+        this.bookChapterList = bookChapterList;
         this.webChapterBean = webChapterBean;
         this.bookShelfBean = bookShelfBean;
         this.headerMap = headerMap;
@@ -36,7 +36,7 @@ public class AnalyzeNextUrlTask {
     public void analyzeUrl(AnalyzeUrl analyzeUrl) {
         BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                 .flatMap(stringResponse ->
-                        bookChapter.analyzeChapterList(stringResponse.body(), bookShelfBean, headerMap))
+                        bookChapterList.analyzeChapterList(stringResponse.body(), bookShelfBean, headerMap))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(new MyObserver<List<ChapterListBean>>() {

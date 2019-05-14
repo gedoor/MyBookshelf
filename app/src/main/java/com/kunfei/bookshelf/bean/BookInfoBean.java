@@ -44,7 +44,10 @@ public class BookInfoBean implements Cloneable {
     private String origin; //来源
     private String charset;//编码
     private String bookSourceType;
-
+    @Transient
+    private String bookInfoHtml;
+    @Transient
+    private String chapterListHtml;
     @Transient
     private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
     @Transient
@@ -244,4 +247,27 @@ public class BookInfoBean implements Cloneable {
         return Objects.equals(BookType.AUDIO, bookSourceType);
     }
 
+    public String getBookInfoHtml() {
+        return bookInfoHtml;
+    }
+
+    public void setBookInfoHtml(String bookInfoHtml) {
+        this.bookInfoHtml = bookInfoHtml;
+    }
+
+    public static String getCoverPath() {
+        return coverPath;
+    }
+
+    public static void setCoverPath(String coverPath) {
+        BookInfoBean.coverPath = coverPath;
+    }
+
+    public String getChapterListHtml() {
+        return chapterListHtml;
+    }
+
+    public void setChapterListHtml(String chapterListHtml) {
+        this.chapterListHtml = chapterListHtml;
+    }
 }
