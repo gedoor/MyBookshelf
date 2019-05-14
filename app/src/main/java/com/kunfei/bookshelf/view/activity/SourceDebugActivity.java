@@ -197,6 +197,9 @@ public class SourceDebugActivity extends MBaseActivity {
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
         adapter.add(msg);
+        if (msg.equals("finish")) {
+            loading.stop();
+        }
     }
 
 }
