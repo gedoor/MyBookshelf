@@ -178,8 +178,8 @@ public class BookChapter {
         if (ruleChapterList.startsWith("J$")) {
             ruleChapterList = ruleChapterList.substring(2);
             chapterBeans = regexChapter(s, ruleChapterList.split("&&"), 0,
-                    Integer.parseInt(bookSourceBean.getRuleChapterName()),
-                    Integer.parseInt(bookSourceBean.getRuleContentUrl()),
+                    bookSourceBean.getRuleChapterName(),
+                    bookSourceBean.getRuleContentUrl(),
                     chapterBeans
             );
             if (chapterBeans.size() == 0) {
@@ -238,17 +238,36 @@ public class BookChapter {
     }
 
     // 纯java模式正则表达式获取目录列表
-    private List<ChapterListBean> regexChapter(String str, String[] regex, int index, int s1, int s2, List<ChapterListBean> chapterBeans) {
+    private List<ChapterListBean> regexChapter(String str, String[] regex, int index,
+                                               String nameRule, String linkRule,
+                                               List<ChapterListBean> chapterBeans) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
-            while (m.find()) {
-                chapterBeans.add(new ChapterListBean(tag, m.group(s1), m.group(s2)));
+            int vipGroup = 0, nameGroup = 0, linkGroup = 0;
+            linkGroup = Integer.parseInt(linkRule);
+            if(nameRule.contains("?")){
+                String[] nameGroups = nameRule.split("\\?");
+                vipGroup = Integer.parseInt(nameGroups[0]);
+                nameGroup = Integer.parseInt(nameGroups[1]);
+                while (m.find()) {
+                    chapterBeans.add(new ChapterListBean(tag,
+                            ((m.group(vipGroup)==null?"":"\uD83D\uDD12") + m.group(nameGroup)),
+                            m.group(linkGroup)));
+                }
+            }
+            else{
+                nameGroup = Integer.parseInt(nameRule);
+                while (m.find()) {
+                    chapterBeans.add(new ChapterListBean(tag,
+                            m.group(nameGroup),
+                            m.group(linkGroup)));
+                }
             }
             return chapterBeans;
         } else {
             StringBuilder result = new StringBuilder();
             while (m.find()) result.append(m.group());
-            return regexChapter(result.toString(), regex, ++index, s1, s2, chapterBeans);
+            return regexChapter(result.toString(), regex, ++index, nameRule, linkRule, chapterBeans);
         }
     }
 }
