@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -134,7 +133,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private void startDebug(String key) {
         if (TextUtils.isEmpty(sourceTag) || TextUtils.isEmpty(key)) {
-            Toast.makeText(this, "书源和关键字不能为空", Toast.LENGTH_SHORT).show();
+            toast(R.string.cannot_empty);
             return;
         }
         if (compositeDisposable != null) {

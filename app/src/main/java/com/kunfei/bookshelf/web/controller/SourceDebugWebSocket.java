@@ -7,6 +7,8 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
@@ -70,7 +72,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         String key = debugBean.get("key");
         if (TextUtils.isEmpty(tag) || TextUtils.isEmpty(key)) {
             try {
-                send("书源和关键字不能为空");
+                send(MApplication.getInstance().getString(R.string.cannot_empty));
                 close(NanoWSD.WebSocketFrame.CloseCode.NormalClosure, "调试结束", false);
             } catch (IOException ignored) {
             }
