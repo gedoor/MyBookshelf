@@ -51,7 +51,7 @@ public class BookshelfController {
         }
         String content = BookshelfHelp.getChapterCache(bookShelfBean, chapter);
         if (!TextUtils.isEmpty(content)) {
-            return returnData.setData(chapter);
+            return returnData.setData(content);
         }
         try {
             BookContentBean bookContentBean = WebBookModel.getInstance().getBookContent(bookShelfBean.getBookInfoBean(), chapter).blockingFirst();
