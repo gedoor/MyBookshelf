@@ -73,6 +73,9 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
 
     @Override
     public int hashCode() {
+        if (durChapterUrl == null) {
+            return 0;
+        }
         return durChapterUrl.hashCode();
     }
 
