@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -47,14 +46,6 @@ public class ReplaceRuleDialog {
         View llContent = view.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
 
-        TextInputLayout tilReplaceSummary = view.findViewById(R.id.til_replace_summary);
-        tilReplaceSummary.setHint(context.getString(R.string.replace_rule_summary));
-        TextInputLayout tilReplaceRule = view.findViewById(R.id.til_replace_rule);
-        tilReplaceRule.setHint(context.getString(R.string.replace_rule));
-        TextInputLayout tilReplaceTo = view.findViewById(R.id.til_replace_to);
-        tilReplaceTo.setHint(context.getString(R.string.replace_to));
-        TextInputLayout tilUseTo = view.findViewById(R.id.til_use_to);
-        tilUseTo.setHint(context.getString(R.string.use_to));
         tieReplaceRule = view.findViewById(R.id.tie_replace_rule);
         tieReplaceSummary = view.findViewById(R.id.tie_replace_summary);
         tieReplaceTo = view.findViewById(R.id.tie_replace_to);
