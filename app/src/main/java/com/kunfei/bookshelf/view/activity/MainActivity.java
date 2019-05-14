@@ -36,6 +36,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -44,6 +45,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.LauncherIcon;
+import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
@@ -658,7 +660,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (!Objects.equals(MApplication.downloadPath, FileHelp.getFilesPath())) {
             requestPermission();
         }
-        handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
+        handler.postDelayed(() -> {
+            UpLastChapterModel.getInstance().startUpdate();
+            if (BuildConfig.DEBUG) {
+                ProcessTextHelp.setProcessTextEnable(false);
+            }
+        }, 60 * 1000);
     }
 
     @Override
