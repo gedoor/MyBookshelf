@@ -43,11 +43,6 @@
             android:title="@string/about"
             app:tint="@color/tv_text_default" />
 
-        <item
-            android:id="@+id/action_donate"
-            android:icon="@drawable/ic_donate"
-            android:title="@string/donate"
-            app:tint="@color/tv_text_default" />
     </group>
 
     <group android:id="@+id/drawer_menu_backup">

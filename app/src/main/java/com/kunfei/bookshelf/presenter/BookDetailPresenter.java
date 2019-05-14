@@ -31,6 +31,9 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
     public final static int FROM_SEARCH = 2;
@@ -92,12 +95,49 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         return bookShelf;
     }
 
+
     @Override
-    public void getBookShelfInfo() {
-        WebBookModel.getInstance().getBookInfo(bookShelf)
-                .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
+    public void loadBookShelfInfo(boolean refresh) {
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            BookShelfBean bookShelfBean;
+            if (openFrom == FROM_BOOKSHELF) {
+                bookShelfBean = BookshelfHelp.getBook(bookShelf.getNoteUrl());
+            } else {//来自搜索页面
+                bookShelfBean = BookshelfHelp.getBook(searchBook.getNoteUrl());
+            }
+
+            if (bookShelfBean != null) {
+                inBookShelf = true;
+                bookShelf = bookShelfBean;
+            }
+            e.onNext(bookShelf);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(bookShelfBean -> {
+                    bookShelf = bookShelfBean;
+                    mView.updateView();//false
+                })
+                .observeOn(Schedulers.io())
+                .flatMap(bookShelfBean -> WebBookModel.getInstance().getBookInfo(bookShelfBean))
+                .flatMap(bookShelfBean -> {
+                    if (refresh && inBookShelf) {
+                        return WebBookModel.getInstance().getChapterList(bookShelfBean);
+                    }
+                    return Observable.just(bookShelfBean);
+                })
+                .doAfterNext(bookShelfBean -> {
+                    if (inBookShelf) {
+                        Schedulers.single().createWorker().schedule(() -> {
+                            BookshelfHelp.saveBookToShelf(bookShelfBean);
+                            RxBus.get().post("update_book_progress", bookShelfBean);
+                        });
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<BookShelfBean>() {
+
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
@@ -105,26 +145,15 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
 
                     @Override
                     public void onNext(BookShelfBean bookShelfResult) {
-                        if (openFrom == FROM_BOOKSHELF && bookShelf != null) {
-                            int durChapter = bookShelf.getDurChapter();
-                            bookShelf = bookShelfResult;
-                            bookShelf.setDurChapter(durChapter);
-                        } else {
-                            bookShelf = bookShelfResult;
-                        }
-                        mView.updateView();
+                        bookShelf = bookShelfResult;
+                        mView.updateView();//true
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.toast(e.getLocalizedMessage());
-                        mView.getBookShelfError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                        mView.getBookShelfError(refresh);
                     }
                 });
     }

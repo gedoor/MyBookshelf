@@ -200,13 +200,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     }
 
     @Override
-    public void getBookShelfError() {
+    public void getBookShelfError(boolean refresh) {
         tvLoading.setVisibility(View.VISIBLE);
         tvLoading.setText(R.string.load_error_retry);
         tvLoading.setOnClickListener(v -> {
             tvLoading.setText(R.string.loading);
             tvLoading.setOnClickListener(null);
-            mPresenter.getBookShelfInfo();
+            mPresenter.loadBookShelfInfo(refresh);
         });
     }
 
@@ -217,23 +217,23 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         coverPath = path;
         if (coverPath.startsWith("http")) {
             Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .apply(new RequestOptions().dontAnimate().placeholder(R.drawable.img_cover_default).diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .error(R.drawable.img_cover_default))
                     .into(ivCover);
             Glide.with(this).load(coverPath)
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                            .placeholder(R.drawable.img_cover_gs).error(R.drawable.img_cover_gs))
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         } else {
             File file = new File(coverPath);
             Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .apply(new RequestOptions().dontAnimate().placeholder(R.drawable.img_cover_default).diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .error(R.drawable.img_cover_default))
                     .into(ivCover);
             Glide.with(this).load(file)
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                            .placeholder(R.drawable.img_cover_gs).error(R.drawable.img_cover_gs))
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         }
@@ -245,7 +245,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvLoading.setOnClickListener(null);
         mPresenter.getBookShelf().getBookInfoBean().setBookInfoHtml(null);
         mPresenter.getBookShelf().getBookInfoBean().setChapterListHtml(null);
-        mPresenter.getBookShelfInfo();
+        mPresenter.loadBookShelfInfo(true);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -265,7 +265,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                                 mPresenter.changeBookSource(searchBookBean);
                             } else {
                                 mPresenter.initBookFormSearch(searchBookBean);
-                                mPresenter.getBookShelfInfo();
+                                mPresenter.loadBookShelfInfo(true);
                             }
                         }).show());
 
@@ -361,7 +361,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         super.firstRequest();
         if (mPresenter.getOpenFrom() == BookDetailPresenter.FROM_SEARCH) {
             //网络请求
-            mPresenter.getBookShelfInfo();
+            mPresenter.loadBookShelfInfo(false);
         }
     }
 

@@ -21,7 +21,7 @@ public interface BookDetailContract {
 
         void initBookFormSearch(SearchBookBean searchBookBean);
 
-        void getBookShelfInfo();
+        void loadBookShelfInfo(boolean refresh);
 
         void addToBookShelf();
 
@@ -39,7 +39,7 @@ public interface BookDetailContract {
         /**
          * 数据获取失败
          */
-        void getBookShelfError();
+        void getBookShelfError(boolean refresh);
 
         void finish();
 
