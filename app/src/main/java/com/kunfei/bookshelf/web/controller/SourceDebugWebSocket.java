@@ -4,11 +4,7 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.bookshelf.base.observer.MyObserver;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -60,6 +56,7 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
         RxBus.get().unregister(this);
         compositeDisposable.dispose();
         Debug.SOURCE_DEBUG_TAG = null;
+        Debug.CALLBACK = null;
     }
 
     @Override
@@ -114,15 +111,6 @@ public class SourceDebugWebSocket extends NanoWSD.WebSocket {
     @Override
     protected void onException(IOException exception) {
         Debug.SOURCE_DEBUG_TAG = null;
-    }
-
-    @Subscribe(thread = EventThread.IO, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
-    public void printDebugLog(String msg) {
-        try {
-            send(msg);
-        } catch (IOException e) {
-            Debug.SOURCE_DEBUG_TAG = null;
-        }
     }
 
 }

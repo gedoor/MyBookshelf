@@ -15,13 +15,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -75,6 +71,7 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void onDestroy() {
         Debug.SOURCE_DEBUG_TAG = null;
+        Debug.CALLBACK = null;
         RxBus.get().unregister(this);
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
@@ -141,13 +138,13 @@ public class SourceDebugActivity extends MBaseActivity {
         Debug.newDebug(sourceTag, key, compositeDisposable, new Debug.Callback() {
             @Override
             public void printLog(String msg) {
-                printDebugLog(msg);
+                adapter.add(msg);
             }
 
             @Override
             public void printError(String msg) {
                 loading.stop();
-                printDebugLog(msg);
+                adapter.add(msg);
             }
 
             @Override
@@ -203,16 +200,6 @@ public class SourceDebugActivity extends MBaseActivity {
                 }
             }
         }
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
-    public void printDebugLog(String msg) {
-//        if (TextUtils.isEmpty(tvContent.getText().toString())) {
-//            tvContent.setText(msg);
-//        } else {
-//            tvContent.setText(String.format("%s\n%s", tvContent.getText(), msg));
-//        }
-        adapter.add(msg);
     }
 
 }

@@ -5,13 +5,11 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
@@ -32,6 +30,7 @@ import io.reactivex.disposables.Disposable;
 
 public class Debug {
     public static String SOURCE_DEBUG_TAG;
+    public static Callback CALLBACK;
     @SuppressLint("ConstantLocale")
     private static final DateFormat DEBUG_TIME_FORMAT = new SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault());
     private static long startTime;
@@ -46,8 +45,9 @@ public class Debug {
 
     static void printLog(String tag, String msg, boolean print) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
-            msg = String.format("%s %s", getDoTime(), msg);
-            RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
+            if (CALLBACK != null) {
+                CALLBACK.printLog(String.format("%s %s", getDoTime(), msg));
+            }
         }
     }
 
@@ -64,14 +64,13 @@ public class Debug {
         new Debug(tag, key, compositeDisposable, callback);
     }
 
-    private Callback callback;
     private CompositeDisposable compositeDisposable;
 
     private Debug(String tag, String key, CompositeDisposable compositeDisposable, Callback callback) {
         UpLastChapterModel.destroy();
         startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
-        this.callback = callback;
+        Debug.CALLBACK = callback;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtil.isUrl(key)) {
             printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
@@ -207,20 +206,22 @@ public class Debug {
     }
 
     private void printLog(String log) {
-        if (callback != null) {
-            callback.printLog(log);
+        if (CALLBACK != null) {
+            CALLBACK.printLog(log);
         }
     }
 
     private void printError(String msg) {
-        if (callback != null) {
-            callback.printError(String.format("%s └%s", getDoTime(), msg));
+        if (CALLBACK != null) {
+            CALLBACK.printError(String.format("%s └%s", getDoTime(), msg));
+            CALLBACK = null;
         }
     }
 
     private void finish() {
-        if (callback != null) {
-            callback.finish();
+        if (CALLBACK != null) {
+            CALLBACK.finish();
+            CALLBACK = null;
         }
     }
 
