@@ -72,13 +72,14 @@ var init = () => {
                                         <p>　　简介：${book.bookInfoBean.introduce.trim().replace(/\n/g, "<br>")}</p>`;
                     window.location.hash = "";
                     window.location.hash = "#info";
-                    $("#content").innerHTML = "章节加载中";
+                    $("#content").innerHTML = "章节列表加载中...";
                     $("#chapter").innerHTML = "";
                     fetch(apiAddress("getChapterList", book.noteUrl), { mode: "cors" })
                         .then(res => res.json())
                         .then(data => {
                             if (!data.isSuccess) {
                                 alert(data.errorMsg);
+                                $("#content").innerHTML = "章节列表加载失败！";
                                 return;
                             }
 
@@ -90,7 +91,7 @@ var init = () => {
                                 $("#chapter").appendChild(ch);
                             });
                             $('#chapter').scrollTop = 0;
-                            $("#content").innerHTML = "章节加载完成";
+                            $("#content").innerHTML = "章节列表加载完成！";
                         });
 
                 }));
@@ -132,7 +133,7 @@ $('#chapter').addEventListener("click", (e) => {
         if (!url) {
             alert("未取得章节地址");
         }
-        $("#content").innerHTML = "<p>" + name + " 加载中</p>";
+        $("#content").innerHTML = "<p>" + name + " 加载中...</p>";
         fetch(apiAddress("getBookContent", url), { mode: "cors" })
             .then(res => res.json())
             .then(data => {
