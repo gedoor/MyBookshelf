@@ -33,7 +33,7 @@ public class WebBook extends BaseModelImpl {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private Map<String, String> headerMap = AnalyzeHeaders.getMap(null);
+    private Map<String, String> headerMap;
 
     public static WebBook getInstance(String tag) {
         return new WebBook(tag);

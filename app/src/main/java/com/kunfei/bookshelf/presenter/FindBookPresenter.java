@@ -39,7 +39,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
     @Override
     public void initData() {
         if (disposable != null) return;
-        ACache aCache = ACache.get(mView.getContext());
+        ACache aCache = ACache.get(mView.getContext(), "findCache");
         Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getConfigPreferences().getBoolean("showAllFind", true);
