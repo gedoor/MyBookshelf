@@ -6,15 +6,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 横向动画的模板
  */
 
 public abstract class HorizonPageAnim extends PageAnimation {
     private static final String TAG = "HorizonPageAnim";
-    Bitmap mPreBitmap;
-    Bitmap mCurBitmap;
-    Bitmap mNextBitmap;
+    List<Bitmap> bitmapList = new ArrayList<>();
     //是否取消翻页
     boolean isCancel = false;
     private boolean touchInit = false;
@@ -32,9 +34,9 @@ public abstract class HorizonPageAnim extends PageAnimation {
     HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
         //创建图片
-        mPreBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
-        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
-        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
+        for (int i = 0; i < 3; i++) {
+            bitmapList.add(Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888));
+        }
     }
 
     /**
@@ -45,20 +47,12 @@ public abstract class HorizonPageAnim extends PageAnimation {
         if (isCancel) return false;
         switch (mDirection) {
             case NEXT:
-                mPreBitmap.recycle();
-                mPreBitmap = null;
-                mPreBitmap = mCurBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                mCurBitmap.recycle();
-                mCurBitmap = null;
-                mCurBitmap = mNextBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                Collections.swap(bitmapList, 0, 1);
+                Collections.swap(bitmapList, 1, 2);
                 break;
             case PREV:
-                mNextBitmap.recycle();
-                mNextBitmap = null;
-                mNextBitmap = mCurBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                mCurBitmap.recycle();
-                mCurBitmap = null;
-                mCurBitmap = mPreBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                Collections.swap(bitmapList, 1, 2);
+                Collections.swap(bitmapList, 0, 1);
                 break;
             default:
                 return false;
@@ -199,7 +193,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
         if (isRunning && !noNext) {
             drawMove(canvas);
         } else {
-            canvas.drawBitmap(mCurBitmap, 0, 0, null);
+            canvas.drawBitmap(getBgBitmap(0), 0, 0, null);
             isCancel = true;
         }
     }
@@ -217,11 +211,11 @@ public abstract class HorizonPageAnim extends PageAnimation {
     @Override
     public Bitmap getBgBitmap(int pageOnCur) {
         if (pageOnCur < 0) {
-            return mPreBitmap;
+            return bitmapList.get(0);
         } else if (pageOnCur > 0) {
-            return mNextBitmap;
+            return bitmapList.get(2);
         }
-        return mCurBitmap;
+        return bitmapList.get(1);
     }
 
     public void setCancel(boolean cancel) {
