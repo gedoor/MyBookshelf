@@ -25,6 +25,15 @@ class BookList {
     private String name;
     private BookSourceBean bookSourceBean;
     private boolean isFind;
+    //规则
+    private String ruleList;
+    private String ruleName;
+    private String ruleAuthor;
+    private String ruleKind;
+    private String ruleIntroduce;
+    private String ruleLastChapter;
+    private String ruleCoverUrl;
+    private String ruleNoteUrl;
 
     BookList(String tag, String name, BookSourceBean bookSourceBean, boolean isFind) {
         this.tag = tag;
