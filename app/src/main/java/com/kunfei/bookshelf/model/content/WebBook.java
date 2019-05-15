@@ -61,7 +61,7 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(tag));
         }
-        BookList bookList = new BookList(tag, name, bookSourceBean);
+        BookList bookList = new BookList(tag, name, bookSourceBean, true);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, null, page, headerMap, tag);
             return getResponseO(analyzeUrl)
@@ -81,7 +81,7 @@ public class WebBook extends BaseModelImpl {
                 emitter.onComplete();
             });
         }
-        BookList bookList = new BookList(tag, name, bookSourceBean);
+        BookList bookList = new BookList(tag, name, bookSourceBean, false);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap, tag);
             return getResponseO(analyzeUrl)
