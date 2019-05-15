@@ -25,6 +25,7 @@ class BookList {
     private String name;
     private BookSourceBean bookSourceBean;
     private boolean isFind;
+    private String body;
     //规则
     private String ruleList;
     private String ruleName;
@@ -60,7 +61,7 @@ class BookList {
             }
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
-            String body = response.body();
+            body = response.body();
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
             if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())
@@ -244,7 +245,12 @@ class BookList {
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = analyzer.getString(ruleNoteUrl, true);
-            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            if (isEmpty(resultUrl)) {
+                //详情页等于搜索页
+                resultUrl = baseUrl;
+                item.setBookInfoHtml(body);
+            }
+            item.setNoteUrl(resultUrl);
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
