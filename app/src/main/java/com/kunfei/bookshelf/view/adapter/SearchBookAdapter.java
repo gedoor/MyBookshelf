@@ -176,14 +176,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                                 break;
                             }
                         }
-                    } else if (temp.getName().contains(keyWord) || temp.getAuthor().contains(keyWord)) {
-                        for (int i = 0; i < copyDataS.size(); i++) {
-                            SearchBookBean searchBook = copyDataS.get(i);
-                            if (!TextUtils.equals(keyWord, searchBook.getName()) && !TextUtils.equals(keyWord, searchBook.getAuthor())) {
-                                copyDataS.add(i, temp);
-                                break;
-                            }
-                        }
                     } else {
                         copyDataS.add(temp);
                     }
