@@ -28,7 +28,7 @@ var apiAddress = (apiName, url) => {
         address += ":1122";
     }
     localStorage.setItem('address', address);
-    return address + apiMap[apiName] + (url ? "?url=" + url : "");
+    return address + apiMap[apiName] + (url ? "?url=" + encodeURIComponent(url) : "");
 };
 
 var init = () => {
