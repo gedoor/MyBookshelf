@@ -24,11 +24,13 @@ class BookList {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
+    private boolean isFind;
 
-    BookList(String tag, String name, BookSourceBean bookSourceBean) {
+    BookList(String tag, String name, BookSourceBean bookSourceBean, boolean isFind) {
         this.tag = tag;
         this.name = name;
         this.bookSourceBean = bookSourceBean;
+        this.isFind = isFind;
     }
 
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
@@ -58,7 +60,7 @@ class BookList {
             }
             //如果符合详情页url规则
             if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
-                    && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
+                    && !isEmpty(bookSourceBean.getRuleBookName())) {
                 Debug.printLog(tag, ">搜索结果为详情页");
                 SearchBookBean item = getItem(analyzer, baseUrl);
                 if (item != null) {
@@ -67,15 +69,17 @@ class BookList {
                 }
             } else {
                 List<Object> collections;
-                boolean reverse;
+                boolean reverse = false;
                 boolean allInOne = false;
                 String ruleSearchList;
-                if (bookSourceBean.getRuleSearchList().startsWith("-")) {
-                    reverse = true;
-                    ruleSearchList = bookSourceBean.getRuleSearchList().substring(1);
+                if (isFind && !TextUtils.isEmpty(bookSourceBean.getRuleFindList())) {
+                    ruleSearchList = bookSourceBean.getRuleFindList();
                 } else {
-                    reverse = false;
                     ruleSearchList = bookSourceBean.getRuleSearchList();
+                }
+                if (ruleSearchList.startsWith("-")) {
+                    reverse = true;
+                    ruleSearchList = ruleSearchList.substring(1);
                 }
                 if (ruleSearchList.startsWith("+")) {
                     allInOne = true;
