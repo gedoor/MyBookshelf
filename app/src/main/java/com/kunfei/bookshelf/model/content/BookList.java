@@ -211,7 +211,12 @@ class BookList {
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = String.valueOf(nativeObject.get(ruleNoteUrl));
-            item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+            if (isEmpty(resultUrl)) {
+                //详情页等于搜索页
+                resultUrl = baseUrl;
+                item.setBookInfoHtml(body);
+            }
+            item.setNoteUrl(resultUrl);
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
