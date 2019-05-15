@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
@@ -141,6 +142,9 @@ public class WebBook extends BaseModelImpl {
             return Observable.error(new NoSourceThrowable(chapterBean.getTag()));
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
+        if (Objects.equals(chapterBean.getDurChapterUrl(), infoBean.getChapterUrl()) && !TextUtils.isEmpty(infoBean.getChapterListHtml())) {
+            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, headerMap);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, infoBean.getChapterUrl());
             String contentRule = bookSourceBean.getRuleBookContent();
