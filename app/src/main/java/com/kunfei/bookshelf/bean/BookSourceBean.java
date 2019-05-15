@@ -136,6 +136,7 @@ public class BookSourceBean implements Cloneable {
             BookSourceBean bs = (BookSourceBean) obj;
             return stringEquals(bookSourceUrl, bs.bookSourceUrl)
                     && stringEquals(bookSourceName, bs.bookSourceName)
+                    && stringEquals(bookSourceType, bs.bookSourceType)
                     && stringEquals(loginUrl, bs.loginUrl)
                     && stringEquals(bookSourceGroup, bs.bookSourceGroup)
                     && stringEquals(ruleBookName, bs.ruleBookName)
