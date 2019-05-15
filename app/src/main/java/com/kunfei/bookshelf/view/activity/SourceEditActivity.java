@@ -584,6 +584,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 break;
             case android.R.id.home:
                 SoftInputUtil.hideIMM(getCurrentFocus());
+                if (back()) {
+                    return true;
+                }
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -624,21 +628,28 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (bookSourceBean == null) {
-                bookSourceBean = new BookSourceBean();
-            }
-            if (!getBookSource().equals(bookSourceBean)) {
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.exit))
-                        .setMessage(getString(R.string.exit_no_save))
-                        .setPositiveButton("是", (DialogInterface dialogInterface, int which) -> {
-                        })
-                        .setNegativeButton("否", (DialogInterface dialogInterface, int which) -> finish())
-                        .show();
+            if (back()) {
                 return true;
             }
         }
         return super.onKeyDown(keyCode, keyEvent);
+    }
+
+    private boolean back() {
+        if (bookSourceBean == null) {
+            bookSourceBean = new BookSourceBean();
+        }
+        if (!getBookSource().equals(bookSourceBean)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.exit))
+                    .setMessage(getString(R.string.exit_no_save))
+                    .setPositiveButton("是", (DialogInterface dialogInterface, int which) -> {
+                    })
+                    .setNegativeButton("否", (DialogInterface dialogInterface, int which) -> finish())
+                    .show();
+            return true;
+        }
+        return false;
     }
 
     private void insertTextToEditText(String txt) {
@@ -707,7 +718,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         private String value;
         private int hint;
 
-        public SourceEdit(String key, String value, int hint) {
+        SourceEdit(String key, String value, int hint) {
             this.key = key;
             this.value = value;
             this.hint = hint;
@@ -731,10 +742,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
         public int getHint() {
             return hint;
-        }
-
-        public void setHint(int hint) {
-            this.hint = hint;
         }
     }
 
