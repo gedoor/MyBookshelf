@@ -62,13 +62,9 @@ class BookList {
             AnalyzeRule analyzer = new AnalyzeRule(null);
             String body = response.body();
             analyzer.setContent(body, baseUrl);
-
-            String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
-            if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
-                bookUrlPattern += ".*";
-            }
             //如果符合详情页url规则
-            if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
+            if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())
+                    && baseUrl.matches(bookSourceBean.getRuleBookUrlPattern())
                     && !isEmpty(bookSourceBean.getRuleBookName())) {
                 Debug.printLog(tag, ">搜索结果为详情页");
                 SearchBookBean item = getItem(analyzer, baseUrl);
