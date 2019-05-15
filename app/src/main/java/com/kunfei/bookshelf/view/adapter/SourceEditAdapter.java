@@ -1,12 +1,13 @@
 package com.kunfei.bookshelf.view.adapter;
 
 import android.content.Context;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
@@ -43,7 +44,8 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
         holder.textInputLayout.setHint(context.getString(data.get(position).getHint()));
         holder.editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                data.get(position).setValue(holder.editText.getText().toString());
+                Editable editable = holder.editText.getText();
+                data.get(position).setValue(editable == null ? null : editable.toString());
             }
         });
     }
@@ -57,7 +59,7 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextInputLayout textInputLayout;
-        EditText editText;
+        AppCompatEditText editText;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
