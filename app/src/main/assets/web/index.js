@@ -46,12 +46,21 @@ var RuleJSON = {
 	"bookSourceUrl": "",
 	"loginUrl": "",
 	"ruleFindUrl": "",
+	"ruleFindList": "",
+	"ruleFindName": "",
+	"ruleFindAuthor": "",
+	"ruleFindKind": "",
+	"ruleFindLastChapter": "",
+	"ruleFindIntroduce": "",
+	"ruleFindCoverUrl": "",
+	"ruleFindNoteUrl": "",
 	"ruleSearchUrl": "",
 	"ruleSearchList": "",
 	"ruleSearchName": "",
 	"ruleSearchAuthor": "",
 	"ruleSearchKind": "",
 	"ruleSearchLastChapter": "",
+	"ruleSearchIntroduce": "",
 	"ruleSearchCoverUrl": "",
 	"ruleSearchNoteUrl": "",
 	"ruleBookUrlPattern": "",
@@ -99,7 +108,9 @@ function rule2json() {
 }
 // 将书源对象填充到书源表单
 function json2rule(RuleEditor) {
-	Object.keys(RuleJSON).forEach((key) => { dQuery("#" + key).value = RuleEditor[key] });
+	Object.keys(RuleJSON).forEach((key) => {
+		dQuery("#" + key).value = RuleEditor[key] ? RuleEditor[key] : '';
+	});
 }
 // 缓存规则列表
 var ruleSources = [];
