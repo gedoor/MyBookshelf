@@ -1,4 +1,6 @@
-
+// 简化js原生选择器
+function $(selector) { return document.querySelector(selector); }
+function $$(selector) { return document.querySelectorAll(selector); }
 // 读写Hash值(val未赋值时为读取)
 function hashParam(key, val) {
 	let hashstr = decodeURIComponent(window.location.hash);
@@ -15,73 +17,43 @@ function hashParam(key, val) {
 		}
 	}
 }
-function addRule(rule) {
-	return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><div>${rule.bookSourceName}<br>${rule.bookSourceUrl}</div></label>`;
-}
-function dQuery(selector) {
-	return document.querySelector(selector)
-}
-function dQueryAll(selector) {
-	return document.querySelectorAll(selector)
-}
+// 创建书源规则容器对象
+const RuleJSON = (() => {
+	let ruleJson = {};
+	$$('.rules textarea').forEach(item => ruleJson[item.id] = '');
+//	for (let item of $$('.rules textarea')) ruleJson[item.id] = '';
+	ruleJson.serialNumber = 0;
+	ruleJson.weight = 0;
+	ruleJson.enable = true;
+	return ruleJson;
+})();
+// 选项卡Tab切换事件处理
 function showTab(tabName) {
-	dQueryAll('.tabtitle>*').forEach(node => { node.className = node.className.replace(' this', ''); });
-	dQueryAll('.tabbody>*').forEach(node => { node.className = node.className.replace(' this', ''); });
-	dQuery(`.tabbody>.${dQuery(`.tabtitle>*[name=${tabName}]`).className}`).className += ' this';
-	dQuery(`.tabtitle>*[name=${tabName}]`).className += ' this';
+	$$('.tabtitle>*').forEach(node => { node.className = node.className.replace(' this', ''); });
+	$$('.tabbody>*').forEach(node => { node.className = node.className.replace(' this', ''); });
+	$(`.tabbody>.${$(`.tabtitle>*[name=${tabName}]`).className}`).className += ' this';
+	$(`.tabtitle>*[name=${tabName}]`).className += ' this';
 	hashParam('tab', tabName);
 }
+// 书源列表列表标签构造函数
+function newRule(rule) {
+	return `<label for="${rule.bookSourceUrl}"><input type="radio" name="rule" id="${rule.bookSourceUrl}"><div>${rule.bookSourceName}<br>${rule.bookSourceUrl}</div></label>`;
+}
+// 缓存规则列表
+var RuleSources = [];
+if (localStorage.getItem('RuleSources')) {
+	RuleSources = JSON.parse(localStorage.getItem('RuleSources'));
+	RuleSources.forEach(item => $('#RuleList').innerHTML += newRule(item));
+}
+// 页面加载完成事件
 window.onload = () => {
-	dQueryAll('.tabtitle>*').forEach(item => {
+	$$('.tabtitle>*').forEach(item => {
 		item.addEventListener('click', () => {
 			showTab(item.innerHTML);
 		});
 	});
 	if (hashParam('tab')) showTab(hashParam('tab'));
 }
-// 定义规则对象
-var RuleJSON = {
-	"bookSourceName": "",
-	"bookSourceGroup": "",
-	"bookSourceUrl": "",
-	"loginUrl": "",
-	"ruleFindUrl": "",
-	"ruleFindList": "",
-	"ruleFindName": "",
-	"ruleFindAuthor": "",
-	"ruleFindKind": "",
-	"ruleFindLastChapter": "",
-	"ruleFindIntroduce": "",
-	"ruleFindCoverUrl": "",
-	"ruleFindNoteUrl": "",
-	"ruleSearchUrl": "",
-	"ruleSearchList": "",
-	"ruleSearchName": "",
-	"ruleSearchAuthor": "",
-	"ruleSearchKind": "",
-	"ruleSearchLastChapter": "",
-	"ruleSearchIntroduce": "",
-	"ruleSearchCoverUrl": "",
-	"ruleSearchNoteUrl": "",
-	"ruleBookUrlPattern": "",
-	"ruleBookName": "",
-	"ruleBookAuthor": "",
-	"ruleBookKind": "",
-	"ruleBookLastChapter": "",
-	"ruleIntroduce": "",
-	"ruleCoverUrl": "",
-	"ruleChapterUrl": "",
-	"ruleChapterList": "",
-	"ruleChapterUrlNext": "",
-	"ruleChapterName": "",
-	"ruleContentUrl": "",
-	"ruleBookContent": "",
-	"ruleContentUrlNext": "",
-	"httpUserAgent": "",
-	"serialNumber": 0,
-	"weight": 0,
-	"enable": true
-};
 // 获取数据
 function HttpGet(url) {
 	return fetch(hashParam('domain') ? hashParam('domain') + url : url)
@@ -100,7 +72,7 @@ function HttpPost(url, data) {
 }
 // 将书源表单转化为书源对象
 function rule2json() {
-	Object.keys(RuleJSON).forEach((key) => { RuleJSON[key] = dQuery('#' + key).value; });
+	Object.keys(RuleJSON).forEach((key) => RuleJSON[key] = $('#' + key).value);
 	RuleJSON.serialNumber = RuleJSON.serialNumber == '' ? 0 : parseInt(RuleJSON.serialNumber);
 	RuleJSON.weight = RuleJSON.weight == '' ? 0 : parseInt(RuleJSON.weight);
 	RuleJSON.enable = RuleJSON.enable == '' || RuleJSON.enable.toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
@@ -108,17 +80,7 @@ function rule2json() {
 }
 // 将书源对象填充到书源表单
 function json2rule(RuleEditor) {
-	Object.keys(RuleJSON).forEach((key) => {
-		dQuery("#" + key).value = RuleEditor[key] ? RuleEditor[key] : '';
-	});
-}
-// 缓存规则列表
-var ruleSources = [];
-if (localStorage.getItem('ruleSources')) {
-	ruleSources = JSON.parse(localStorage.getItem('ruleSources'));
-	ruleSources.forEach(item => {
-		dQuery('#RuleList').innerHTML += addRule(item);
-	});
+	Object.keys(RuleJSON).forEach((key) => $("#" + key).value = RuleEditor[key] ? RuleEditor[key] : '');
 }
 // 记录操作过程
 var course = { "old": [], "now": {}, "new": [] };
@@ -156,19 +118,19 @@ function redo() {
 	}
 }
 function setRule(editRule) {
-	let checkRule = ruleSources.find(x => x.bookSourceUrl == editRule.bookSourceUrl);
-	if (dQuery(`input[id="${editRule.bookSourceUrl}"]`)) {
+	let checkRule = RuleSources.find(x => x.bookSourceUrl == editRule.bookSourceUrl);
+	if ($(`input[id="${editRule.bookSourceUrl}"]`)) {
 		Object.keys(checkRule).forEach(key => { checkRule[key] = editRule[key]; });
-		dQuery(`input[id="${editRule.bookSourceUrl}"]+*`).innerHTML = `${editRule.bookSourceName}<br>${editRule.bookSourceUrl}`;
+		$(`input[id="${editRule.bookSourceUrl}"]+*`).innerHTML = `${editRule.bookSourceName}<br>${editRule.bookSourceUrl}`;
 	} else {
-		ruleSources.push(editRule);
-		dQuery('#RuleList').innerHTML += addRule(editRule);
+		RuleSources.push(editRule);
+		$('#RuleList').innerHTML += newRule(editRule);
 	}
 }
-dQueryAll('input').forEach((item) => { item.addEventListener('change', () => { todo() }) });
-dQueryAll('textarea').forEach((item) => { item.addEventListener('change', () => { todo() }) });
+$$('input').forEach((item) => { item.addEventListener('change', () => { todo() }) });
+$$('textarea').forEach((item) => { item.addEventListener('change', () => { todo() }) });
 // 处理按钮点击事件
-dQuery('.menu').addEventListener('click', e => {
+$('.menu').addEventListener('click', e => {
 	let thisNode = e.target;
 	thisNode = thisNode.parentNode.nodeName == 'svg' ? thisNode.parentNode.querySelector('rect') :
 		thisNode.nodeName == 'svg' ? thisNode.querySelector('rect') : null;
@@ -177,24 +139,24 @@ dQuery('.menu').addEventListener('click', e => {
 	thisNode.setAttribute('class', 'busy');
 	switch (thisNode.id) {
 		case 'push':
-			dQueryAll('#RuleList>label>div').forEach(item => { item.className = ''; });
+			$$('#RuleList>label>div').forEach(item => { item.className = ''; });
 			(async () => {
-				await HttpPost(`/saveSources`, ruleSources).then(json => {
+				await HttpPost(`/saveSources`, RuleSources).then(json => {
 					if (json.isSuccess) {
 						let okData = json.data;
 						if (Array.isArray(okData)) {
 							let failMsg = ``;
-							if (ruleSources.length > okData.length) {
-								ruleSources.forEach(item => {
+							if (RuleSources.length > okData.length) {
+								RuleSources.forEach(item => {
 									if (okData.find(x => x.bookSourceUrl == item.bookSourceUrl)) { }
-									else { dQuery(`#RuleList #${item.bookSourceUrl}+*`).className += 'isError'; }
+									else { $(`#RuleList #${item.bookSourceUrl}+*`).className += 'isError'; }
 								});
 								failMsg = '\n推送失败的书源将用红色字体标注!';
 							}
-							alert(`批量推送书源到「阅读APP」\n共计: ${ruleSources.length} 条\n成功: ${okData.length} 条\n失败: ${ruleSources.length - okData.length} 条${failMsg}`);
+							alert(`批量推送书源到「阅读APP」\n共计: ${RuleSources.length} 条\n成功: ${okData.length} 条\n失败: ${RuleSources.length - okData.length} 条${failMsg}`);
 						}
 						else {
-							alert(`批量推送书源到「阅读APP」成功!\n共计: ${ruleSources.length} 条`);
+							alert(`批量推送书源到「阅读APP」成功!\n共计: ${RuleSources.length} 条`);
 						}
 					}
 					else {
@@ -209,12 +171,12 @@ dQuery('.menu').addEventListener('click', e => {
 			(async () => {
 				await HttpGet(`/getSources`).then(json => {
 					if (json.isSuccess) {
-						dQuery('#RuleList').innerHTML = ''
-						localStorage.setItem('ruleSources', JSON.stringify(ruleSources = json.data));
-						ruleSources.forEach(item => {
-							dQuery('#RuleList').innerHTML += addRule(item);
+						$('#RuleList').innerHTML = ''
+						localStorage.setItem('RuleSources', JSON.stringify(RuleSources = json.data));
+						RuleSources.forEach(item => {
+							$('#RuleList').innerHTML += newRule(item);
 						});
-						alert(`成功拉取 ${ruleSources.length} 条书源`);
+						alert(`成功拉取 ${RuleSources.length} 条书源`);
 					}
 					else {
 						alert(`批量拉取书源失败!\nErrorMsg: ${json.errorMsg}`);
@@ -224,9 +186,9 @@ dQuery('.menu').addEventListener('click', e => {
 			})();
 			return;
 		case 'editor':
-			if (dQuery('#RuleJsonString').value == '') break;
+			if ($('#RuleJsonString').value == '') break;
 			try {
-				json2rule(JSON.parse(dQuery('#RuleJsonString').value));
+				json2rule(JSON.parse($('#RuleJsonString').value));
 				todo();
 			} catch (error) {
 				console.log(error);
@@ -235,10 +197,10 @@ dQuery('.menu').addEventListener('click', e => {
 			break;
 		case 'conver':
 			showTab('编辑书源');
-			dQuery('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);
+			$('#RuleJsonString').value = JSON.stringify(rule2json(), null, 4);
 			break;
 		case 'initial':
-			dQueryAll('.rules textarea').forEach(item => { item.value = '' });
+			$$('.rules textarea').forEach(item => { item.value = '' });
 			todo();
 			break;
 		case 'undo':
@@ -250,13 +212,13 @@ dQuery('.menu').addEventListener('click', e => {
 		case 'debug':
 			showTab('调试书源');
 			let wsOrigin = (hashParam('domain') || location.origin).replace(/^.*?:/, 'ws:').replace(/\d+$/, (port) => (parseInt(port) + 1));
-			let DebugInfos = dQuery('#DebugConsole');
+			let DebugInfos = $('#DebugConsole');
 			function DebugPrint(msg) { DebugInfos.value += `\n${msg}`; DebugInfos.scrollTop = DebugInfos.scrollHeight; }
 			let saveRule = [rule2json()];
 			HttpPost(`/saveSources`, saveRule).then(sResult => {
 				if (sResult.isSuccess) {
 					let sKey = DebugKey.value ? DebugKey.value : '我的';
-					dQuery('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
+					$('#DebugConsole').value = `书源《${saveRule[0].bookSourceName}》保存成功！使用搜索关键字“${sKey}”开始调试...`;
 					let ws = new WebSocket(`${wsOrigin}/sourceDebug`);
 					ws.onopen = () => {
 						ws.send(`{"tag":"${saveRule[0].bookSourceUrl}", "key":"${sKey}"}`);
@@ -291,28 +253,28 @@ dQuery('.menu').addEventListener('click', e => {
 	}
 	setTimeout(() => { thisNode.setAttribute('class', ''); }, 500);
 });
-dQuery('#DebugKey').addEventListener('keydown', e => {
+$('#DebugKey').addEventListener('keydown', e => {
 	if (e.keyCode == 13) {
 		let clickEvent = document.createEvent('MouseEvents');
 		clickEvent.initEvent("click", true, false);
-		dQuery('#debug').dispatchEvent(clickEvent);
+		$('#debug').dispatchEvent(clickEvent);
 	}
 });
 
 // 列表规则更改事件
-dQuery('#RuleList').addEventListener('click', e => {
+$('#RuleList').addEventListener('click', e => {
 	let editRule = null;
 	if (e.target && e.target.getAttribute('name') == 'rule') {
 		editRule = rule2json();
-		json2rule(ruleSources.find(x => x.bookSourceUrl == e.target.id));
+		json2rule(RuleSources.find(x => x.bookSourceUrl == e.target.id));
 	} else return;
 	if (editRule.bookSourceUrl == '') return;
 	if (editRule.bookSourceName == '') editRule.bookSourceName = editRule.bookSourceUrl.replace(/.*?\/\/|\/.*/g, '');
 	setRule(editRule);
-	localStorage.setItem('ruleSources', JSON.stringify(ruleSources));
+	localStorage.setItem('RuleSources', JSON.stringify(RuleSources));
 });
 // 处理列表按钮事件
-dQuery('.tab3>.titlebar').addEventListener('click', e => {
+$('.tab3>.titlebar').addEventListener('click', e => {
 	let thisNode = e.target;
 	if (thisNode.nodeName != 'BUTTON') return;
 	switch (thisNode.id) {
@@ -331,18 +293,18 @@ dQuery('.tab3>.titlebar').addEventListener('click', e => {
 							let newSources = [];
 							newSources.push(...fileJson);
 							if (window.confirm(`如何处理导入的书源?\n"确定": 覆盖当前列表(不会删除APP源)\n"取消": 插入列表尾部(自动忽略重复源)`)) {
-								localStorage.setItem('ruleSources', JSON.stringify(ruleSources = newSources));
-								dQuery('#RuleList').innerHTML = ''
-								ruleSources.forEach(item => {
-									dQuery('#RuleList').innerHTML += addRule(item);
+								localStorage.setItem('RuleSources', JSON.stringify(RuleSources = newSources));
+								$('#RuleList').innerHTML = ''
+								RuleSources.forEach(item => {
+									$('#RuleList').innerHTML += newRule(item);
 								});
 							}
 							else {
-								newSources = newSources.filter(item => !JSON.stringify(ruleSources).includes(item.bookSourceUrl));
-								ruleSources.push(...newSources);
-								localStorage.setItem('ruleSources', JSON.stringify(ruleSources));
+								newSources = newSources.filter(item => !JSON.stringify(RuleSources).includes(item.bookSourceUrl));
+								RuleSources.push(...newSources);
+								localStorage.setItem('RuleSources', JSON.stringify(RuleSources));
 								newSources.forEach(item => {
-									dQuery('#RuleList').innerHTML += addRule(item);
+									$('#RuleList').innerHTML += newRule(item);
 								});
 							}
 							alert(`成功导入 ${newSources.length} 条书源`);
@@ -359,27 +321,27 @@ dQuery('.tab3>.titlebar').addEventListener('click', e => {
 		case 'Export':
 			let fileExport = document.createElement('a');
 			fileExport.download = `Rules${Date().replace(/.*?\s(\d+)\s(\d+)\s(\d+:\d+:\d+).*/, '$2$1$3').replace(/:/g, '')}.json`;
-			let myBlob = new Blob([JSON.stringify(ruleSources, null, 4)], { type: "application/json" });
+			let myBlob = new Blob([JSON.stringify(RuleSources, null, 4)], { type: "application/json" });
 			fileExport.href = window.URL.createObjectURL(myBlob);
 			fileExport.click();
 			break;
 		case 'Delete':
-			let selectRule = dQuery('#RuleList input:checked');
+			let selectRule = $('#RuleList input:checked');
 			if (!selectRule) {
 				alert(`没有书源被选中!`);
 				return;
 			}
 			if (confirm(`确定要删除选定书源吗?\n(同时删除APP内书源)`)) {
 				let selectRuleUrl = selectRule.id;
-				let deleteSources = ruleSources.filter(item => item.bookSourceUrl == selectRuleUrl); // 提取待删除的书源
-				let laveSources = ruleSources.filter(item => !(item.bookSourceUrl == selectRuleUrl));  // 提取待留下的书源
+				let deleteSources = RuleSources.filter(item => item.bookSourceUrl == selectRuleUrl); // 提取待删除的书源
+				let laveSources = RuleSources.filter(item => !(item.bookSourceUrl == selectRuleUrl));  // 提取待留下的书源
 				HttpPost(`/deleteSources`, deleteSources).then(json => {
 					if (json.isSuccess) {
 						let selectNode = document.getElementById(selectRuleUrl).parentNode;
 						selectNode.parentNode.removeChild(selectNode);
-						localStorage.setItem('ruleSources', JSON.stringify(ruleSources = laveSources));
-						if (dQuery('#bookSourceUrl').value == selectRuleUrl) {
-							dQueryAll('.rules textarea').forEach(item => { item.value = '' });
+						localStorage.setItem('RuleSources', JSON.stringify(RuleSources = laveSources));
+						if ($('#bookSourceUrl').value == selectRuleUrl) {
+							$$('.rules textarea').forEach(item => { item.value = '' });
 							todo();
 						}
 						console.log(deleteSources);
@@ -390,8 +352,8 @@ dQuery('.tab3>.titlebar').addEventListener('click', e => {
 			break;
 		case 'ClrAll':
 			if (confirm(`确定要清空当前书源列表吗?\n(不会删除APP内书源)`)) {
-				localStorage.setItem('ruleSources', JSON.stringify(ruleSources = []));
-				dQuery('#RuleList').innerHTML = ''
+				localStorage.setItem('RuleSources', JSON.stringify(RuleSources = []));
+				$('#RuleList').innerHTML = ''
 			}
 			break;
 		default:
