@@ -268,7 +268,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         sourceEditList.add(new SourceEdit("ruleChapterName", bookSourceBean.getRuleChapterName(), R.string.rule_chapter_name));
         sourceEditList.add(new SourceEdit("ruleContentUrl", bookSourceBean.getRuleContentUrl(), R.string.rule_content_url));
         //正文页
-        sourceEditList.add(new SourceEdit("ruleContentUrlNext", bookSourceBean.getRuleChapterUrlNext(), R.string.rule_content_url_next));
+        sourceEditList.add(new SourceEdit("ruleContentUrlNext", bookSourceBean.getRuleContentUrlNext(), R.string.rule_content_url_next));
         sourceEditList.add(new SourceEdit("ruleBookContent", bookSourceBean.getRuleBookContent(), R.string.rule_book_content));
         sourceEditList.add(new SourceEdit("httpUserAgent", bookSourceBean.getHttpUserAgent(), R.string.source_user_agent));
 
