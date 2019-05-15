@@ -8,5 +8,6 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textIsSelectable="true"
         android:hint="@string/book_source_name" />
 </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
