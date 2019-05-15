@@ -64,8 +64,7 @@ class BookList {
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
             if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())
-                    && baseUrl.matches(bookSourceBean.getRuleBookUrlPattern())
-                    && !isEmpty(bookSourceBean.getRuleBookName())) {
+                    && baseUrl.matches(bookSourceBean.getRuleBookUrlPattern())) {
                 Debug.printLog(tag, ">搜索结果为详情页");
                 SearchBookBean item = getItem(analyzer, baseUrl);
                 if (item != null) {
