@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 
@@ -48,8 +47,6 @@ public class BookmarkDialog {
     }
 
     private void bindView(View view) {
-        TextInputLayout tilReplaceTo = view.findViewById(R.id.til_content);
-        tilReplaceTo.setHint(context.getString(R.string.content));
         tvChapterName = view.findViewById(R.id.tvChapterName);
         tvContent = view.findViewById(R.id.tie_content);
         tvOk = view.findViewById(R.id.tv_ok);

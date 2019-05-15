@@ -95,16 +95,16 @@ public class SimulationPageAnim extends HorizonPageAnim {
     public void drawMove(Canvas canvas) {
         if (mDirection == Direction.NEXT) {
             calcPoints();
-            drawCurrentPageArea(canvas, mCurBitmap, mPath0);//绘制翻页时的正面页
-            drawNextPageAreaAndShadow(canvas, mNextBitmap);
+            drawCurrentPageArea(canvas, bitmapList.get(1), mPath0);//绘制翻页时的正面页
+            drawNextPageAreaAndShadow(canvas, bitmapList.get(2));
             drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, blurBackImage ? blurCurBitmap : mCurBitmap);
+            drawCurrentBackArea(canvas, blurBackImage ? blurCurBitmap : bitmapList.get(1));
         } else {
             calcPoints();
-            drawCurrentPageArea(canvas, mPreBitmap, mPath0);
-            drawNextPageAreaAndShadow(canvas, mCurBitmap);
+            drawCurrentPageArea(canvas, bitmapList.get(0), mPath0);
+            drawNextPageAreaAndShadow(canvas, bitmapList.get(1));
             drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, blurBackImage ? blurPreBitmap : mPreBitmap);
+            drawCurrentBackArea(canvas, blurBackImage ? blurPreBitmap : bitmapList.get(0));
         }
     }
 
@@ -423,17 +423,17 @@ public class SimulationPageAnim extends HorizonPageAnim {
             case NEXT:
                 if (blurCurBitmap != null) {
                     blurPreBitmap = blurCurBitmap;
-                    blurCurBitmap = BitmapUtil.stackBlur(mCurBitmap);
+                    blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
                 } else {
-                    AsyncTask.execute(() -> blurCurBitmap = BitmapUtil.stackBlur(mCurBitmap));
-                    AsyncTask.execute(() -> blurPreBitmap = BitmapUtil.stackBlur(mPreBitmap));
+                    AsyncTask.execute(() -> blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1)));
+                    AsyncTask.execute(() -> blurPreBitmap = BitmapUtil.stackBlur(bitmapList.get(0)));
                 }
                 break;
             case PREV:
                 if (blurPreBitmap != null) {
                     blurCurBitmap = blurPreBitmap;
                 } else {
-                    blurCurBitmap = BitmapUtil.stackBlur(mCurBitmap);
+                    blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
                 }
                 break;
         }
@@ -445,9 +445,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
             return;
         AsyncTask.execute(() -> {
             if (pageOnCur < 0) {
-                blurPreBitmap = BitmapUtil.stackBlur(mPreBitmap);
+                blurPreBitmap = BitmapUtil.stackBlur(bitmapList.get(0));
             } else if (pageOnCur == 0) {
-                blurCurBitmap = BitmapUtil.stackBlur(mCurBitmap);
+                blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
             }
         });
     }

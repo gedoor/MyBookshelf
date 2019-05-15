@@ -80,6 +80,7 @@ class BookInfo {
             result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), true);
             if (isEmpty(result)) result = bookShelfBean.getNoteUrl();
             bookInfoBean.setChapterUrl(result);
+            //如果目录页和详情页相同,暂存页面内容供获取目录用
             if (result.equals(bookShelfBean.getNoteUrl())) {
                 bookInfoBean.setChapterListHtml(s);
             }
