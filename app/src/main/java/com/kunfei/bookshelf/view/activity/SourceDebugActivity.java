@@ -97,7 +97,7 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void initData() {
         sourceTag = getIntent().getStringExtra("sourceUrl");
-        adapter = new ArrayAdapter<>(this, R.layout.item_text_view, R.id.tv);
+        adapter = new ArrayAdapter<>(this, R.layout.item_debug_text_view, R.id.tv);
     }
 
     @Override

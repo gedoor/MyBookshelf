@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import static android.text.TextUtils.isEmpty;
@@ -65,16 +64,11 @@ public class EncodingDetect {
                         charsetStr = content.substring(content.toLowerCase().indexOf(";") + 1);
                     }
                     if (!isEmpty(charsetStr)) {
-                        try {
-                            return charsetStr;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        return charsetStr;
                     }
                 }
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return getJavaEncode(bytes);
     }
