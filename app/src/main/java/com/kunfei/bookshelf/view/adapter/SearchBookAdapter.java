@@ -27,7 +27,6 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
@@ -141,7 +140,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
                 copyDataS.addAll(newDataS);
-                sortSearchBooks(copyDataS, keyWord);
             } else {
                 //存在
                 for (SearchBookBean temp : newDataS) {
@@ -200,27 +198,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     private void saveData(List<SearchBookBean> data) {
         AsyncTask.execute(() -> DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
-    }
-
-    private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {
-        try {
-            Collections.sort(searchBookBeans, (o1, o2) -> {
-                if (TextUtils.equals(keyWord, o1.getName())
-                        || TextUtils.equals(keyWord, o1.getAuthor())) {
-                    return -1;
-                } else if (TextUtils.equals(keyWord, o2.getName())
-                        || TextUtils.equals(keyWord, o2.getAuthor())) {
-                    return 1;
-                } else if (o1.getName().contains(keyWord) || o1.getAuthor().contains(keyWord)) {
-                    return -1;
-                } else if (o2.getName().contains(keyWord) || o2.getAuthor().contains(keyWord)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-        } catch (Exception ignored) {
-        }
     }
 
     public SearchBookBean getItemData(int pos) {
