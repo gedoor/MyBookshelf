@@ -47,6 +47,8 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
                 public void onViewAttachedToWindow(View v) {
                     holder.editText.setCursorVisible(false);
                     holder.editText.setCursorVisible(true);
+                    holder.editText.setFocusable(true);
+                    holder.editText.setFocusableInTouchMode(true);
                 }
 
                 @Override
