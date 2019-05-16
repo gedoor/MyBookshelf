@@ -311,25 +311,26 @@ class BookList {
             }
             // 提取书籍列表信息
             do{
+                // 新建书籍节点
+                SearchBookBean item = new SearchBookBean(tag, name);
+                analyzer.setBook(item);
                 String[] tmpList = ruleList.clone();
                 for(int i=0, len = tmpList.length; i<len; ++i){
                     for(Integer valKey : ruleKeys.get(i)){
-                        tmpList[i]=tmpList[i].replaceFirst(valReg, resM.group(valKey));
+                        tmpList[i]=tmpList[i].replaceFirst(valReg, regTrim(resM.group(valKey)));
                     }
+                    tmpList[i] = checkKeys(tmpList[i]);
                 }
-                // 处理当前节点的书籍信息
-                SearchBookBean item = new SearchBookBean();
-                analyzer.setBook(item);
-                item.setTag(tag);
-                item.setOrigin(name);
-                item.setName(checkKeys(regTrim(tmpList[0]))); // 保存书名
-                item.setAuthor(checkKeys(regTrim(tmpList[1]))); // 保存作者
-                item.setKind(checkKeys(regTrim(tmpList[2]))); // 保存分类
-                item.setLastChapter(checkKeys(regTrim(tmpList[3]))); // 保存终章
-                item.setIntroduce(checkKeys(regTrim(tmpList[4]))); // 保存简介
-                item.setCoverUrl(checkKeys(regTrim(tmpList[5]))); // 保存封面
-                item.setNoteUrl(checkKeys(regTrim(tmpList[6]))); // 保存详情
                 // 保存当前节点的书籍信息
+                item.setSearchInfo(
+                    tmpList[0], // 保存书名
+                    tmpList[1], // 保存作者
+                    tmpList[2], // 保存分类
+                    tmpList[3], // 保存终章
+                    tmpList[4], // 保存简介
+                    tmpList[5], // 保存封面
+                    tmpList[6]  // 保存详情
+                );
                 books.add(item);
                 // 判断搜索结果是否为详情页
                 if(books.size() == 1 && (isEmpty(tmpList[6]) || tmpList[6].equals(baseUrl)))
@@ -373,7 +374,6 @@ class BookList {
             while (putMatcher.find()){
                 str = str.replace(putMatcher.group(0), "");
                 analyzer.put(putMatcher.group(1), putMatcher.group(2));
-                //book.putVariable(putMatcher.group(1), putMatcher.group(2));
             }
         }
         if(str.contains("@get:{")){
