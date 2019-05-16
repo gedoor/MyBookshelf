@@ -85,12 +85,11 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
             myViewHolder.tvState.setText(bookKindBean.getState());
         }
-        if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0)
+        if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0) {
             myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());
-        else if (searchBooks.get(position).getDesc() != null && searchBooks.get(position).getDesc().length() > 0) {
-            myViewHolder.tvLasted.setText(searchBooks.get(position).getDesc());
-        } else
+        } else {
             myViewHolder.tvLasted.setText("");
+        }
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
             myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
@@ -182,7 +181,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 }
             }
             Activity activity = activityRef.get();
-            if(activity != null) {
+            if (activity != null) {
                 activity.runOnUiThread(() -> upData(DataAction.ADD, copyDataS));
             }
         }
