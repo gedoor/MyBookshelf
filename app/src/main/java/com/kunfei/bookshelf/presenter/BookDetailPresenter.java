@@ -104,6 +104,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 bookShelfBean = BookshelfHelp.getBook(bookShelf.getNoteUrl());
             } else {//来自搜索页面
                 bookShelfBean = BookshelfHelp.getBook(searchBook.getNoteUrl());
+                //bookShelfBean = bookShelf;
             }
 
             if (bookShelfBean != null) {
