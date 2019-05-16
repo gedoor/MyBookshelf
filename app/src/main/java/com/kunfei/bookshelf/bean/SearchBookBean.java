@@ -26,7 +26,6 @@ public class SearchBookBean implements BaseBookBean {
     private String tag;
     private String kind;//分类
     private String origin;//来源
-    private String desc;
     private String lastChapter;
     private String introduce; //简介
     private String chapterUrl;//目录URL
@@ -38,8 +37,6 @@ public class SearchBookBean implements BaseBookBean {
     private Boolean isCurrentSource = false;
     @Transient
     private int originNum = 1;
-    @Transient
-    private int weight = -1;
     @Transient
     private int lastChapterNum = -2;
     @Transient
@@ -68,10 +65,10 @@ public class SearchBookBean implements BaseBookBean {
         this.noteUrl = noteUrl;
     }
 
-    @Generated(hash = 1344440211)
-    public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-                          String tag, String kind, String origin, String desc, String lastChapter,
-                          String introduce, String chapterUrl, Long addTime, Long upTime, String variable) {
+    @Generated(hash = 337890066)
+    public SearchBookBean(String noteUrl, String coverUrl, String name, String author, String tag, String kind,
+                          String origin, String lastChapter, String introduce, String chapterUrl, Long addTime, Long upTime,
+                          String variable) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -79,7 +76,6 @@ public class SearchBookBean implements BaseBookBean {
         this.tag = tag;
         this.kind = kind;
         this.origin = origin;
-        this.desc = desc;
         this.lastChapter = lastChapter;
         this.introduce = introduce;
         this.chapterUrl = chapterUrl;
@@ -189,14 +185,6 @@ public class SearchBookBean implements BaseBookBean {
         this.origin = origin;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public Boolean getIsCurrentSource() {
         return this.isCurrentSource;
     }
@@ -246,14 +234,9 @@ public class SearchBookBean implements BaseBookBean {
     public int getWeight() {
         BookSourceBean source = BookSourceManager.getBookSourceByUrl(this.tag);
         if (source != null)
-            this.weight = source.getWeight();
+            return source.getWeight();
         else
-            this.weight = 0;
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
+            return 0;
     }
 
     public int getSearchTime() {

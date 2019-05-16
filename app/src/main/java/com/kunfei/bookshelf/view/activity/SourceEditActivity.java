@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,16 +33,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.BookType;
 import com.kunfei.bookshelf.model.BookSourceManager;
@@ -62,17 +59,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.disposables.Disposable;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -429,38 +424,14 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     @SuppressLint("SetWorldReadable")
-    @SuppressWarnings("unchecked")
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
-            BitMatrix result;
-            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-            try {
-                Hashtable<EncodeHintType, Object> hst = new Hashtable();
-                hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-                hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-                result = multiFormatWriter.encode(getBookSourceStr(), BarcodeFormat.QR_CODE, 600, 600, hst);
-                int[] pixels = new int[600 * 600];
-                for (int y = 0; y < 600; y++) {
-                    for (int x = 0; x < 600; x++) {
-                        if (result.get(x, y)) {
-                            pixels[y * 600 + x] = Color.BLACK;
-                        } else {
-                            pixels[y * 600 + x] = Color.WHITE;
-                        }
-                    }
-                }
-                Bitmap bitmap = Bitmap.createBitmap(600, 600, Bitmap.Config.ARGB_8888);
-                bitmap.setPixels(pixels, 0, 600, 0, 0, 600, 600);
-                emitter.onSuccess(bitmap);
-            } catch (Exception e) {
-                emitter.onError(e);
-            }
+            QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 800);
+            QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            emitter.onSuccess(bitmap);
         }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<Bitmap>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
+                .subscribe(new MySingleObserver<Bitmap>() {
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {

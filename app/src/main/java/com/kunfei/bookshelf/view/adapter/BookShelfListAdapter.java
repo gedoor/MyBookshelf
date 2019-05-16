@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,11 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -92,7 +98,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
         holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
-        BookShelfBean bookShelfBean = books.get(index);
+        final BookShelfBean bookShelfBean = books.get(index);
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
@@ -102,6 +108,19 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                         .into(holder.ivCover);
             } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
                 Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                bookShelfBean.setCustomCoverPath("");
+                                BookshelfHelp.saveBookToShelf(bookShelfBean);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);

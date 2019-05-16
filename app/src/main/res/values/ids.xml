@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item type="id" name="fastscroller" />
+    <item type="id" name="fast_scroller" />
 
     <item type="id" name="tag1" />
 

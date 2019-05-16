@@ -26,7 +26,7 @@ import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.view.adapter.DebugAdapter;
+import com.kunfei.bookshelf.view.adapter.SourceDebugAdapter;
 import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.BindView;
@@ -47,7 +47,7 @@ public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.lv_log)
     RecyclerView recyclerView;
 
-    private DebugAdapter adapter;
+    private SourceDebugAdapter adapter;
     private CompositeDisposable compositeDisposable;
     private String sourceTag;
 
@@ -107,7 +107,7 @@ public class SourceDebugActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initSearchView();
-        adapter = new DebugAdapter(this);
+        adapter = new SourceDebugAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

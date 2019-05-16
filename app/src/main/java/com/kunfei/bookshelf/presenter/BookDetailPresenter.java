@@ -27,7 +27,6 @@ import com.kunfei.bookshelf.utils.RxUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -76,18 +75,22 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         bookShelf = BookshelfHelp.getBookFromSearchBook(searchBookBean);
     }
 
+    @Override
     public Boolean getInBookShelf() {
         return inBookShelf;
     }
 
+    @Override
     public int getOpenFrom() {
         return openFrom;
     }
 
+    @Override
     public SearchBookBean getSearchBook() {
         return searchBook;
     }
 
+    @Override
     public BookShelfBean getBookShelf() {
         return bookShelf;
     }
@@ -97,7 +100,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         WebBookModel.getInstance().getBookInfo(bookShelf)
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
@@ -121,11 +124,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         mView.toast(e.getLocalizedMessage());
                         mView.getBookShelfError();
                     }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
                 });
     }
 
@@ -139,7 +137,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 e.onNext(true);
                 e.onComplete();
             }).compose(RxUtils::toSimpleSingle)
-                    .subscribe(new Observer<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -160,11 +158,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                             e.printStackTrace();
                             mView.toast("放入书架失败!");
                         }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
                     });
         }
     }
@@ -179,7 +172,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 e.onNext(true);
                 e.onComplete();
             }).compose(RxUtils::toSimpleSingle)
-                    .subscribe(new Observer<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -199,11 +192,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             mView.toast("删除书籍失败！");
-                        }
-
-                        @Override
-                        public void onComplete() {
-
                         }
                     });
         }

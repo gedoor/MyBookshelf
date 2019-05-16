@@ -15,11 +15,11 @@ import com.kunfei.bookshelf.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DebugAdapter extends Adapter<DebugAdapter.MyViewHolder> {
+public class SourceDebugAdapter extends Adapter<SourceDebugAdapter.MyViewHolder> {
     private Context context;
     private List<String> data = new ArrayList<>();
 
-    public DebugAdapter(Context context) {
+    public SourceDebugAdapter(Context context) {
         this.context = context;
     }
 
@@ -36,7 +36,7 @@ public class DebugAdapter extends Adapter<DebugAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_debug_text_view, parent, false));
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_source_debug, parent, false));
     }
 
 

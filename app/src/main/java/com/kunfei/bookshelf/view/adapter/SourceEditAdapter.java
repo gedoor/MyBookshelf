@@ -35,7 +35,7 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_edit_source, parent, false));
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_source_edit, parent, false));
     }
 
 
@@ -47,6 +47,8 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
                 public void onViewAttachedToWindow(View v) {
                     holder.editText.setCursorVisible(false);
                     holder.editText.setCursorVisible(true);
+                    holder.editText.setFocusable(true);
+                    holder.editText.setFocusableInTouchMode(true);
                 }
 
                 @Override
