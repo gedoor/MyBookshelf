@@ -41,8 +41,24 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if (holder.editText.getTag() != null && holder.editText.getTag() instanceof TextWatcher) {
-            holder.editText.removeTextChangedListener((TextWatcher) holder.editText.getTag());
+        if (holder.editText.getTag(R.id.tag1) == null) {
+            View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    holder.editText.setCursorVisible(false);
+                    holder.editText.setCursorVisible(true);
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+
+                }
+            };
+            holder.editText.addOnAttachStateChangeListener(listener);
+            holder.editText.setTag(R.id.tag1, listener);
+        }
+        if (holder.editText.getTag(R.id.tag2) != null && holder.editText.getTag(R.id.tag2) instanceof TextWatcher) {
+            holder.editText.removeTextChangedListener((TextWatcher) holder.editText.getTag(R.id.tag2));
         }
         holder.editText.setText(data.get(position).getValue());
         holder.textInputLayout.setHint(context.getString(data.get(position).getHint()));
@@ -63,7 +79,7 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
             }
         };
         holder.editText.addTextChangedListener(textWatcher);
-        holder.editText.setTag(textWatcher);
+        holder.editText.setTag(R.id.tag2, textWatcher);
     }
 
 

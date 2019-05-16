@@ -210,6 +210,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 tvEditFind.setText(R.string.back);
             }
             showFind = !showFind;
+            recyclerView.scrollToPosition(0);
         });
     }
 
