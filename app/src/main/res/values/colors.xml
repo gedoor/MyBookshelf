@@ -19,8 +19,8 @@
 
     <color name="highlight">#d3321b</color>
 
-    <color name="btn_bg_press">#c4c4c4</color>
-    <color name="btn_bg_press_2">#949494</color>
+    <color name="btn_bg_press">#80ACACAC</color>
+    <color name="btn_bg_press_2">#80858585</color>
     <color name="btn_bg_press_tp">#88000000</color>
 
     <color name="tv_btn_normal_black">#737373</color>

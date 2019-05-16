@@ -55,6 +55,19 @@ public class SearchBookBean implements BaseBookBean {
 
     }
 
+    public SearchBookBean(String tag, String origin, String name, String author, String kind,
+                          String lastChapter, String introduce, String coverUrl, String noteUrl){
+        this.tag = tag;
+        this.origin = origin;
+        this.name = name;
+        this.author = author;
+        this.kind = kind;
+        this.lastChapter = lastChapter;
+        this.introduce = introduce;
+        this.coverUrl = coverUrl;
+        this.noteUrl = noteUrl;
+    }
+
     @Generated(hash = 1344440211)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
                           String tag, String kind, String origin, String desc, String lastChapter,
