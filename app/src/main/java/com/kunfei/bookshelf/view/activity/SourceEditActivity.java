@@ -48,7 +48,6 @@ import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceEditAdapter;
@@ -674,14 +673,14 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             boolean preShowing = mIsSoftKeyBoardShowing;
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
+                recyclerView.setPadding(0, 0, 0, 100);
                 showKeyboardTopPopupWindow(SoftInputUtil.getScreenWidth(SourceEditActivity.this) / 2, keyboardHeight);
-                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, keyboardHeight + 100);
             } else {
+                mIsSoftKeyBoardShowing = false;
+                recyclerView.setPadding(0, 0, 0, 0);
                 if (preShowing) {
                     closePopupWindow();
                 }
-                mIsSoftKeyBoardShowing = false;
-                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
             }
         }
     }
