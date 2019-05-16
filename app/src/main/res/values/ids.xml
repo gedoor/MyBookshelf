@@ -3,4 +3,8 @@
 
     <item type="id" name="fastscroller" />
 
+    <item type="id" name="tag1" />
+
+    <item type="id" name="tag2" />
+
 </resources>

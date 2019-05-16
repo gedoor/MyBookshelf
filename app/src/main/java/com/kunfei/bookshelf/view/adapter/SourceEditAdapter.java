@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.adapter;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,14 +41,45 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        if (holder.editText.getTag(R.id.tag1) == null) {
+            View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    holder.editText.setCursorVisible(false);
+                    holder.editText.setCursorVisible(true);
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+
+                }
+            };
+            holder.editText.addOnAttachStateChangeListener(listener);
+            holder.editText.setTag(R.id.tag1, listener);
+        }
+        if (holder.editText.getTag(R.id.tag2) != null && holder.editText.getTag(R.id.tag2) instanceof TextWatcher) {
+            holder.editText.removeTextChangedListener((TextWatcher) holder.editText.getTag(R.id.tag2));
+        }
         holder.editText.setText(data.get(position).getValue());
         holder.textInputLayout.setHint(context.getString(data.get(position).getHint()));
-        holder.editText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                Editable editable = holder.editText.getText();
-                data.get(position).setValue(editable == null ? null : editable.toString());
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
-        });
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                data.get(position).setValue(s == null ? null : s.toString());
+            }
+        };
+        holder.editText.addTextChangedListener(textWatcher);
+        holder.editText.setTag(R.id.tag2, textWatcher);
     }
 
 
