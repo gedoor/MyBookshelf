@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
@@ -26,6 +26,7 @@ import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.view.adapter.DebugAdapter;
 import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.BindView;
@@ -44,9 +45,9 @@ public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
     @BindView(R.id.lv_log)
-    ListView lvLog;
+    RecyclerView recyclerView;
 
-    private ArrayAdapter<String> adapter;
+    private DebugAdapter adapter;
     private CompositeDisposable compositeDisposable;
     private String sourceTag;
 
@@ -97,7 +98,6 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void initData() {
         sourceTag = getIntent().getStringExtra("sourceUrl");
-        adapter = new ArrayAdapter<>(this, R.layout.item_debug_text_view, R.id.tv);
     }
 
     @Override
@@ -107,7 +107,9 @@ public class SourceDebugActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initSearchView();
-        lvLog.setAdapter(adapter);
+        adapter = new DebugAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     private void initSearchView() {
@@ -141,7 +143,7 @@ public class SourceDebugActivity extends MBaseActivity {
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        adapter.clear();
+        adapter.clearData();
         Debug.newDebug(sourceTag, key, compositeDisposable);
     }
 
@@ -195,7 +197,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
     public void printDebugLog(String msg) {
-        adapter.add(msg);
+        adapter.addData(msg);
         if (msg.equals("finish")) {
             loading.stop();
         }
