@@ -52,17 +52,9 @@ public class SearchBookBean implements BaseBookBean {
 
     }
 
-    public SearchBookBean(String tag, String origin, String name, String author, String kind,
-                          String lastChapter, String introduce, String coverUrl, String noteUrl){
+    public SearchBookBean(String tag, String origin){
         this.tag = tag;
         this.origin = origin;
-        this.name = name;
-        this.author = author;
-        this.kind = kind;
-        this.lastChapter = lastChapter;
-        this.introduce = introduce;
-        this.coverUrl = coverUrl;
-        this.noteUrl = noteUrl;
     }
 
     @Generated(hash = 337890066)
@@ -261,5 +253,17 @@ public class SearchBookBean implements BaseBookBean {
 
     public void setBookInfoHtml(String bookInfoHtml) {
         this.bookInfoHtml = bookInfoHtml;
+    }
+
+    // 一次性存入搜索书籍节点信息
+    public void setSearchInfo(String name, String author, String kind, String lastChapter,
+                              String introduce, String coverUrl, String noteUrl){
+        this.name = name;
+        this.author = author;
+        this.kind = kind;
+        this.lastChapter = lastChapter;
+        this.introduce = introduce;
+        this.coverUrl = coverUrl;
+        this.noteUrl = noteUrl;
     }
 }
