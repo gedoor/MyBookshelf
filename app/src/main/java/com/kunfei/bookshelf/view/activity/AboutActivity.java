@@ -159,7 +159,7 @@ public class AboutActivity extends MBaseActivity {
         vwShare.setOnClickListener(view -> {
             String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
             Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
-                QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+                QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
                 Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 600);
                 emitter.onSuccess(bitmap);
             }).compose(RxUtils::toSimpleSingle)
