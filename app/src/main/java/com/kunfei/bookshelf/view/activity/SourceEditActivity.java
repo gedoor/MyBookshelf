@@ -428,6 +428,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 800);
+            QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             emitter.onSuccess(bitmap);
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new MySingleObserver<Bitmap>() {
