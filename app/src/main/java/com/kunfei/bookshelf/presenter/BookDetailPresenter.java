@@ -76,18 +76,22 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         bookShelf = BookshelfHelp.getBookFromSearchBook(searchBookBean);
     }
 
+    @Override
     public Boolean getInBookShelf() {
         return inBookShelf;
     }
 
+    @Override
     public int getOpenFrom() {
         return openFrom;
     }
 
+    @Override
     public SearchBookBean getSearchBook() {
         return searchBook;
     }
 
+    @Override
     public BookShelfBean getBookShelf() {
         return bookShelf;
     }
@@ -97,7 +101,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         WebBookModel.getInstance().getBookInfo(bookShelf)
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
+                .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
@@ -120,11 +124,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         e.printStackTrace();
                         mView.toast(e.getLocalizedMessage());
                         mView.getBookShelfError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
     }
