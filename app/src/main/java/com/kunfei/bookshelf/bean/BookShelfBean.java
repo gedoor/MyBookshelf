@@ -188,11 +188,11 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public boolean getHasUpdate() {
-        return hasUpdate;
+        return hasUpdate == null ? false : hasUpdate;
     }
 
     public int getNewChapters() {
-        return newChapters;
+        return newChapters == null ? 0 : newChapters;
     }
 
     public String getErrorMsg() {

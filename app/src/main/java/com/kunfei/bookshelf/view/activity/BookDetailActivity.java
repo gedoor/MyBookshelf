@@ -183,9 +183,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 ivWeb.setVisibility(View.INVISIBLE);
                 tvOrigin.setVisibility(View.INVISIBLE);
             }
+            SearchBookBean searchBookBean = mPresenter.getSearchBook();
+
             if (!TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 upImageView(bookShelfBean.getCustomCoverPath());
-            } else {
+            } else if(!TextUtils.isEmpty(bookInfoBean.getCoverUrl())){
+                upImageView(searchBookBean.getCoverUrl());
+            }else {
                 upImageView(bookInfoBean.getCoverUrl());
             }
             if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
@@ -197,6 +201,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         }
         tvLoading.setVisibility(View.GONE);
         tvLoading.setOnClickListener(null);
+
     }
 
     @Override
