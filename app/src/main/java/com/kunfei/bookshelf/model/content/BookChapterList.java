@@ -261,7 +261,7 @@ public class BookChapterList {
                 baseUrl = analyzer.replaceGet(linkMatcher.group(1));
                 linkGroup = Integer.parseInt(linkMatcher.group(2));
             }
-            // 提取目录信息
+            // 提取目录列表信息
             if (vipGroup == 0){
                 while (m.find()) {
                     addChapter(chapterBeans,
