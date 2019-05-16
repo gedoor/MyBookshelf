@@ -27,7 +27,6 @@ import com.kunfei.bookshelf.utils.RxUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -138,7 +137,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 e.onNext(true);
                 e.onComplete();
             }).compose(RxUtils::toSimpleSingle)
-                    .subscribe(new Observer<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -159,11 +158,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                             e.printStackTrace();
                             mView.toast("放入书架失败!");
                         }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
                     });
         }
     }
@@ -178,7 +172,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 e.onNext(true);
                 e.onComplete();
             }).compose(RxUtils::toSimpleSingle)
-                    .subscribe(new Observer<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -198,11 +192,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             mView.toast("删除书籍失败！");
-                        }
-
-                        @Override
-                        public void onComplete() {
-
                         }
                     });
         }
