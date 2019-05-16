@@ -640,19 +640,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         }
     }
 
-    private void showKeyboardTopPopupWindow(int x, int y) {
+    private void showKeyboardTopPopupWindow() {
+        if (isFinishing()) return;
         if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
-            updateKeyboardTopPopupWindow(x, y); //可能是输入法切换了输入模式，高度会变化（比如切换为语音输入）
             return;
         }
         if (mSoftKeyboardTool != null & !this.isFinishing()) {
-            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, x, y);
-        }
-    }
-
-    private void updateKeyboardTopPopupWindow(int x, int y) {
-        if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
-            mSoftKeyboardTool.update(x, y, mSoftKeyboardTool.getWidth(), mSoftKeyboardTool.getHeight());
+            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, 0, 0);
         }
     }
 
@@ -674,7 +668,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
                 recyclerView.setPadding(0, 0, 0, 100);
-                showKeyboardTopPopupWindow(SoftInputUtil.getScreenWidth(SourceEditActivity.this) / 2, keyboardHeight);
+                showKeyboardTopPopupWindow();
             } else {
                 mIsSoftKeyBoardShowing = false;
                 recyclerView.setPadding(0, 0, 0, 0);
