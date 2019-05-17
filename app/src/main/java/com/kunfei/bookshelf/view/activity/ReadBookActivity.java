@@ -32,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -180,6 +181,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (mPresenter.getBookShelf() != null) {
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
             outState.putBoolean("isAdd", isAdd);
+            String key = String.valueOf(System.currentTimeMillis());
+            getIntent().putExtra("data_key", key);
+            BitIntentDataManager.getInstance().putData(key, mPresenter.getBookShelf());
         }
     }
 
