@@ -426,7 +426,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 800);
+            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 600);
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             emitter.onSuccess(bitmap);
         }).compose(RxUtils::toSimpleSingle)
@@ -434,6 +434,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {
+                        if (bitmap == null) {
+                            toast("生成二维码失败");
+                            return;
+                        }
                         try {
                             File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
                             FileOutputStream fOut = new FileOutputStream(file);
@@ -451,11 +455,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                         } catch (Exception e) {
                             toast(e.getLocalizedMessage());
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        toast(e.getLocalizedMessage());
                     }
                 });
 
