@@ -49,8 +49,8 @@ public abstract class PageAnimation {
     //上一个触碰点
     float mLastX;
     float mLastY;
+    private boolean isMoving = false;
     boolean isRunning = false;
-    boolean isMoving = false;
 
     PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
         this(w, h, 0, 0, 0, view, listener);

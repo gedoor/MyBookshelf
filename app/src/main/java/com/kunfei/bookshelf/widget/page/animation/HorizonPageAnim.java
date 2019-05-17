@@ -208,7 +208,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
             }
             movingFinish();
             setTouchPoint(mScroller.getFinalX(), mScroller.getFinalY());
-            mView.postInvalidate();
+            mView.invalidate();
         }
     }
 
