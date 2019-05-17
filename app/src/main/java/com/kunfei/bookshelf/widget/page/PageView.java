@@ -177,7 +177,9 @@ public class PageView extends View {
     private void startHorizonPageAnim(PageAnimation.Direction direction) {
         if (mTouchListener == null) return;
         //是否正在执行动画
-        abortAnimation();
+        if (mPageAnim.isRunning()) {
+            return;
+        }
         if (direction == PageAnimation.Direction.NEXT) {
             int x = mViewWidth;
             int y = mViewHeight;
@@ -332,11 +334,6 @@ public class PageView extends View {
             showSnackBar("没有下一页");
             return false;
         }
-    }
-
-    //如果滑动状态没有停止就取消状态，重新设置Anim的触碰点
-    public void abortAnimation() {
-        mPageAnim.abortAnim();
     }
 
     public boolean isRunning() {
