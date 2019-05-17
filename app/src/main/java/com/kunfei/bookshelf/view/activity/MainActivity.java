@@ -36,6 +36,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -44,10 +45,12 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.LauncherIcon;
+import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.service.WebService;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -274,28 +277,37 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add(0, 0, 0, getString(R.string.switch_display_style));
+        popupMenu.getMenu().add(0, 0, 1, getString(R.string.clear_find_cache));
         boolean findTypeIsFlexBox = preferences.getBoolean("findTypeIsFlexBox", true);
         boolean showFindLeftView = preferences.getBoolean("showFindLeftView", true);
         if (findTypeIsFlexBox) {
-            popupMenu.getMenu().add(0, 0, 1, showFindLeftView ? "隐藏左侧栏" : "显示左侧栏");
+            popupMenu.getMenu().add(0, 0, 2, showFindLeftView ? "隐藏左侧栏" : "显示左侧栏");
         }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
-            if (menuItem.getOrder() == 0) {
-                preferences.edit()
-                        .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
-                        .apply();
-                FindBookFragment findBookFragment = getFindFragment();
-                if (findBookFragment != null) {
-                    findBookFragment.upStyle();
-                }
-            } else if (menuItem.getOrder() == 1) {
-                preferences.edit()
-                        .putBoolean("showFindLeftView", !showFindLeftView)
-                        .apply();
-                FindBookFragment findBookFragment = getFindFragment();
-                if (findBookFragment != null) {
-                    findBookFragment.upUI();
-                }
+            FindBookFragment findBookFragment = getFindFragment();
+            switch (menuItem.getOrder()) {
+                case 0:
+                    preferences.edit()
+                            .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
+                            .apply();
+                    if (findBookFragment != null) {
+                        findBookFragment.upStyle();
+                    }
+                    break;
+                case 1:
+                    ACache.get(this, "findCache").clear();
+                    if (findBookFragment != null) {
+                        findBookFragment.refreshData();
+                    }
+                    break;
+                case 2:
+                    preferences.edit()
+                            .putBoolean("showFindLeftView", !showFindLeftView)
+                            .apply();
+                    if (findBookFragment != null) {
+                        findBookFragment.upUI();
+                    }
+                    break;
             }
             return true;
         });
@@ -658,7 +670,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (!Objects.equals(MApplication.downloadPath, FileHelp.getFilesPath())) {
             requestPermission();
         }
-        handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
+        handler.postDelayed(() -> {
+            UpLastChapterModel.getInstance().startUpdate();
+            if (BuildConfig.DEBUG) {
+                ProcessTextHelp.setProcessTextEnable(false);
+            }
+        }, 60 * 1000);
     }
 
     @Override

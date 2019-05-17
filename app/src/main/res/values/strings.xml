@@ -325,17 +325,27 @@
     <string name="rule_content_url">章节URL规则(ruleContentUrl)</string>
     <string name="rule_cover_url">封面规则(ruleCoverUrl)</string>
     <string name="rule_introduce">简介规则(ruleIntroduce)</string>
-    <string name="rule_search_author">搜索结果作者规则(ruleSearchAuthor)</string>
-    <string name="rule_search_cover_url">搜索结果封面规则(ruleSearchCoverUrl)</string>
-    <string name="rule_search_kind">搜索结果分类规则(ruleSearchKind)</string>
-    <string name="rule_search_last_chapter">搜索结果最新章节规则(ruleSearchLastChapter)</string>
-    <string name="rule_search_list">搜索结果列表规则(ruleSearchList)</string>
-    <string name="rule_search_name">搜索结果书名规则(ruleSearchName)</string>
-    <string name="rule_search_note_url">搜索结果书籍URL规则(ruleSearchNoteUrl)</string>
+    <string name="rule_search_author">搜索作者规则(ruleSearchAuthor)</string>
+    <string name="rule_find_author">发现作者规则(ruleFindAuthor)</string>
+    <string name="rule_search_cover_url">搜索封面规则(ruleSearchCoverUrl)</string>
+    <string name="rule_find_cover_url">发现封面规则(ruleFindCoverUrl)</string>
+    <string name="rule_search_kind">搜索分类规则(ruleSearchKind)</string>
+    <string name="rule_find_kind">发现分类规则(ruleFindKind)</string>
+    <string name="rule_search_last_chapter">搜索最新章节规则(ruleSearchLastChapter)</string>
+    <string name="rule_find_last_chapter">发现最新章节规则(ruleFindLastChapter)</string>
+    <string name="rule_search_list">搜索列表规则(ruleSearchList)</string>
+    <string name="rule_find_list">发现列表规则(ruleFindList)</string>
+    <string name="rule_search_name">搜索书名规则(ruleSearchName)</string>
+    <string name="rule_find_name">发现书名规则(ruleFindName)</string>
+    <string name="rule_search_note_url">搜索书籍URL规则(ruleSearchNoteUrl)</string>
+    <string name="rule_find_note_url">发现书籍URL规则(ruleFindNoteUrl)</string>
+    <string name="rule_search_introduce">搜索简介规则(ruleSearchIntroduce)</string>
+    <string name="rule_find_introduce">发现简介规则(ruleFindIntroduce)</string>
     <string name="rule_search_url">搜索地址(ruleSearchUrl)</string>
     <string name="rule_find_url">发现规则(ruleFindUrl)</string>
     <string name="rule_content_url_next">正文下一页URL规则(ruleContentUrlNext)</string>
     <string name="book_url_pattern">书籍详情URL正则(ruleBookUrlPattern)</string>
+    <string name="rule_book_info_init">书籍详情预处理规则(ruleBookInfoInit)</string>
     <string name="rule_book_kind">分类规则(ruleBookKind)</string>
     <string name="rule_book_last_chapter">最新章节规则(ruleBookLastChapter)</string>
     <string name="source_user_agent">HttpUserAgent</string>
@@ -412,7 +422,7 @@
 
     <string name="e_ink_mode">E-Ink 模式</string>
     <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
-    <string name="web_menu">Web写源</string>
+    <string name="web_menu">Web服务</string>
     <string name="web_port_title">web端口</string>
     <string name="web_port_summary">当前端口 %s</string>
     <string name="qr_share">二维码分享</string>
@@ -425,4 +435,6 @@
     <string name="is_enable">启用</string>
     <string name="all_source">全部书源</string>
     <string name="cannot_empty">输入不能为空</string>
+    <string name="clear_find_cache">清空发现缓存</string>
+    <string name="edit_find">编辑发现</string>
 </resources>

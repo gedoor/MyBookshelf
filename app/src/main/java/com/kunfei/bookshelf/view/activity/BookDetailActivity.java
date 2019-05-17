@@ -243,6 +243,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvLoading.setVisibility(View.VISIBLE);
         tvLoading.setText(R.string.loading);
         tvLoading.setOnClickListener(null);
+        mPresenter.getBookShelf().getBookInfoBean().setBookInfoHtml(null);
+        mPresenter.getBookShelf().getBookInfoBean().setChapterListHtml(null);
         mPresenter.getBookShelfInfo();
     }
 

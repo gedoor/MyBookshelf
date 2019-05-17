@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.model.content;
 
+import android.text.TextUtils;
+
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
@@ -17,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
@@ -31,7 +34,7 @@ public class WebBook extends BaseModelImpl {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private Map<String, String> headerMap = AnalyzeHeaders.getMap(null);
+    private Map<String, String> headerMap;
 
     public static WebBook getInstance(String tag) {
         return new WebBook(tag);
@@ -59,7 +62,7 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(tag));
         }
-        BookList bookList = new BookList(tag, name, bookSourceBean);
+        BookList bookList = new BookList(tag, name, bookSourceBean, true);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, null, page, headerMap, tag);
             return getResponseO(analyzeUrl)
@@ -79,7 +82,7 @@ public class WebBook extends BaseModelImpl {
                 emitter.onComplete();
             });
         }
-        BookList bookList = new BookList(tag, name, bookSourceBean);
+        BookList bookList = new BookList(tag, name, bookSourceBean, false);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap, tag);
             return getResponseO(analyzeUrl)
@@ -97,6 +100,9 @@ public class WebBook extends BaseModelImpl {
             return Observable.error(new NoSourceThrowable(tag));
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
+        if (!TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getBookInfoHtml())) {
+            return bookInfo.analyzeBookInfo(bookShelfBean.getBookInfoBean().getBookInfoHtml(), bookShelfBean);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), headerMap, tag);
             return getResponseO(analyzeUrl)
@@ -114,12 +120,15 @@ public class WebBook extends BaseModelImpl {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
-        BookChapter bookChapter = new BookChapter(tag, bookSourceBean, true);
+        BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, true);
+        if (!TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterListHtml())) {
+            return bookChapterList.analyzeChapterList(bookShelfBean.getBookInfoBean().getChapterListHtml(), bookShelfBean, headerMap);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, bookShelfBean.getNoteUrl());
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
-                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean, headerMap));
+                    .flatMap(response -> bookChapterList.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
         }
@@ -133,6 +142,9 @@ public class WebBook extends BaseModelImpl {
             return Observable.error(new NoSourceThrowable(chapterBean.getTag()));
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
+        if (Objects.equals(chapterBean.getDurChapterUrl(), infoBean.getChapterUrl()) && !TextUtils.isEmpty(infoBean.getChapterListHtml())) {
+            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, infoBean, headerMap);
+        }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, infoBean.getChapterUrl());
             String contentRule = bookSourceBean.getRuleBookContent();
@@ -150,11 +162,11 @@ public class WebBook extends BaseModelImpl {
                     }
                 }
                 return getAjaxString(analyzeUrl, tag, js)
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
                         .flatMap(response -> setCookie(response, tag))
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));

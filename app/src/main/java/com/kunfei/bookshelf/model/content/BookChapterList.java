@@ -30,7 +30,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
-public class BookChapter {
+public class BookChapterList {
     private String tag;
     private BookSourceBean bookSourceBean;
     private AnalyzeRule analyzer;
@@ -40,7 +40,7 @@ public class BookChapter {
     private CompositeDisposable compositeDisposable;
     private String chapterListUrl;
 
-    BookChapter(String tag, BookSourceBean bookSourceBean, boolean analyzeNextUrl) {
+    BookChapterList(String tag, BookSourceBean bookSourceBean, boolean analyzeNextUrl) {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
         this.analyzeNextUrl = analyzeNextUrl;
@@ -130,9 +130,9 @@ public class BookChapter {
                     webChapterBeans.add(bean);
                 }
                 for (WebChapterBean bean : webChapterBeans) {
-                    BookChapter bookChapter = new BookChapter(tag, bookSourceBean, false);
+                    BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, false);
                     AnalyzeUrl analyzeUrl = new AnalyzeUrl(bean.getUrl(), headerMap, tag);
-                    new AnalyzeNextUrlTask(bookChapter, bean, bookShelfBean, headerMap)
+                    new AnalyzeNextUrlTask(bookChapterList, bean, bookShelfBean, headerMap)
                             .setCallback(callback)
                             .analyzeUrl(analyzeUrl);
                 }
@@ -261,7 +261,7 @@ public class BookChapter {
                 baseUrl = analyzer.replaceGet(linkMatcher.group(1));
                 linkGroup = Integer.parseInt(linkMatcher.group(2));
             }
-            // 提取目录信息
+            // 提取目录列表信息
             if (vipGroup == 0){
                 while (m.find()) {
                     addChapter(chapterBeans,

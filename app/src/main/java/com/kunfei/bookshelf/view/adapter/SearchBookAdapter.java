@@ -27,7 +27,6 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
@@ -86,12 +85,11 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
             myViewHolder.tvState.setText(bookKindBean.getState());
         }
-        if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0)
+        if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0) {
             myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());
-        else if (searchBooks.get(position).getDesc() != null && searchBooks.get(position).getDesc().length() > 0) {
-            myViewHolder.tvLasted.setText(searchBooks.get(position).getDesc());
-        } else
+        } else {
             myViewHolder.tvLasted.setText("");
+        }
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
             myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
@@ -141,7 +139,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
                 copyDataS.addAll(newDataS);
-                sortSearchBooks(copyDataS, keyWord);
             } else {
                 //存在
                 for (SearchBookBean temp : newDataS) {
@@ -178,21 +175,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                                 break;
                             }
                         }
-                    } else if (temp.getName().contains(keyWord) || temp.getAuthor().contains(keyWord)) {
-                        for (int i = 0; i < copyDataS.size(); i++) {
-                            SearchBookBean searchBook = copyDataS.get(i);
-                            if (!TextUtils.equals(keyWord, searchBook.getName()) && !TextUtils.equals(keyWord, searchBook.getAuthor())) {
-                                copyDataS.add(i, temp);
-                                break;
-                            }
-                        }
                     } else {
                         copyDataS.add(temp);
                     }
                 }
             }
             Activity activity = activityRef.get();
-            if(activity != null) {
+            if (activity != null) {
                 activity.runOnUiThread(() -> upData(DataAction.ADD, copyDataS));
             }
         }
@@ -200,27 +189,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     private void saveData(List<SearchBookBean> data) {
         AsyncTask.execute(() -> DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(data));
-    }
-
-    private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {
-        try {
-            Collections.sort(searchBookBeans, (o1, o2) -> {
-                if (TextUtils.equals(keyWord, o1.getName())
-                        || TextUtils.equals(keyWord, o1.getAuthor())) {
-                    return -1;
-                } else if (TextUtils.equals(keyWord, o2.getName())
-                        || TextUtils.equals(keyWord, o2.getAuthor())) {
-                    return 1;
-                } else if (o1.getName().contains(keyWord) || o1.getAuthor().contains(keyWord)) {
-                    return -1;
-                } else if (o2.getName().contains(keyWord) || o2.getAuthor().contains(keyWord)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-        } catch (Exception ignored) {
-        }
     }
 
     public SearchBookBean getItemData(int pos) {
