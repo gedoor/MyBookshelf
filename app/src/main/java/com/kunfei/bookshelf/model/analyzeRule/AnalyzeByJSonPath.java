@@ -143,6 +143,10 @@ public class AnalyzeByJSonPath {
         }
     }
 
+    Object getObject(String rule) {
+        return ctx.read(rule);
+    }
+
     List<Object> getList(String rule) {
         List<Object> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
