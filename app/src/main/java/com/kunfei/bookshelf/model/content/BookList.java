@@ -365,7 +365,7 @@ class BookList {
     }
     // 使用正则表达式去除字符串前后的空字符串
     private String regTrim(String str){
-        return str.replaceAll("^[\\n\\s]*|[\\n\\s]*$","");
+        return str.replaceAll("^[\\n\\s]*|[\\n\\s\\\\]*$","");
     }
     // 存取字符串中的put&get参数
     private String checkKeys(String str){
