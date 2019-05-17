@@ -133,7 +133,7 @@ public class WebService extends Service {
      */
     private void updateNotification(String content) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdWeb)
-                .setSmallIcon(R.drawable.ic_speaker_phone_black_24dp)
+                .setSmallIcon(R.drawable.ic_web_service_phone)
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.web_service))
                 .setContentText(content);
