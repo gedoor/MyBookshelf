@@ -174,9 +174,9 @@ public class PageView extends View {
         }
     }
 
-    private void startHorizonPageAnim(PageAnimation.Direction direction) {
+    private synchronized void startHorizonPageAnim(PageAnimation.Direction direction) {
         if (mTouchListener == null) return;
-        //是否正在执行动画
+        //结束动画
         mPageAnim.abortAnim();
         if (direction == PageAnimation.Direction.NEXT) {
             int x = mViewWidth;
@@ -193,7 +193,7 @@ public class PageView extends View {
                 ((HorizonPageAnim) mPageAnim).setNoNext(true);
                 return;
             }
-        } else {
+        } else if (direction == PageAnimation.Direction.PREV) {
             int x = 0;
             int y = mViewHeight;
             //初始化动画
@@ -207,6 +207,8 @@ public class PageView extends View {
                 ((HorizonPageAnim) mPageAnim).setNoNext(true);
                 return;
             }
+        } else {
+            return;
         }
         ((HorizonPageAnim) mPageAnim).setNoNext(false);
         ((HorizonPageAnim) mPageAnim).setCancel(false);
