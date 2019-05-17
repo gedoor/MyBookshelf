@@ -100,7 +100,7 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
-    private void movingFinish() {
+    void movingFinish() {
         isMoving = false;
         isRunning = false;
     }

@@ -177,9 +177,7 @@ public class PageView extends View {
     private void startHorizonPageAnim(PageAnimation.Direction direction) {
         if (mTouchListener == null) return;
         //是否正在执行动画
-        if (mPageAnim.isRunning()) {
-            return;
-        }
+        mPageAnim.abortAnim();
         if (direction == PageAnimation.Direction.NEXT) {
             int x = mViewWidth;
             int y = mViewHeight;
