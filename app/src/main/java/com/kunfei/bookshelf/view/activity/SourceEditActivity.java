@@ -48,7 +48,6 @@ import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceEditAdapter;
@@ -427,7 +426,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 800);
+            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 600);
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             emitter.onSuccess(bitmap);
         }).compose(RxUtils::toSimpleSingle)
@@ -435,6 +434,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {
+                        if (bitmap == null) {
+                            toast("书源文字太多,生成二维码失败");
+                            return;
+                        }
                         try {
                             File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
                             FileOutputStream fOut = new FileOutputStream(file);
@@ -452,11 +455,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                         } catch (Exception e) {
                             toast(e.getLocalizedMessage());
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        toast(e.getLocalizedMessage());
                     }
                 });
 
@@ -641,19 +639,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         }
     }
 
-    private void showKeyboardTopPopupWindow(int x, int y) {
+    private void showKeyboardTopPopupWindow() {
+        if (isFinishing()) return;
         if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
-            updateKeyboardTopPopupWindow(x, y); //可能是输入法切换了输入模式，高度会变化（比如切换为语音输入）
             return;
         }
         if (mSoftKeyboardTool != null & !this.isFinishing()) {
-            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, x, y);
-        }
-    }
-
-    private void updateKeyboardTopPopupWindow(int x, int y) {
-        if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
-            mSoftKeyboardTool.update(x, y, mSoftKeyboardTool.getWidth(), mSoftKeyboardTool.getHeight());
+            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, 0, 0);
         }
     }
 
@@ -674,14 +666,14 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             boolean preShowing = mIsSoftKeyBoardShowing;
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
-                showKeyboardTopPopupWindow(SoftInputUtil.getScreenWidth(SourceEditActivity.this) / 2, keyboardHeight);
-                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, keyboardHeight + 100);
+                recyclerView.setPadding(0, 0, 0, 100);
+                showKeyboardTopPopupWindow();
             } else {
+                mIsSoftKeyBoardShowing = false;
+                recyclerView.setPadding(0, 0, 0, 0);
                 if (preShowing) {
                     closePopupWindow();
                 }
-                mIsSoftKeyBoardShowing = false;
-                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
             }
         }
     }
