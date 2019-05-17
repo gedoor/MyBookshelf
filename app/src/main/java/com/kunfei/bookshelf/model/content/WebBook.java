@@ -143,7 +143,7 @@ public class WebBook extends BaseModelImpl {
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         if (Objects.equals(chapterBean.getDurChapterUrl(), infoBean.getChapterUrl()) && !TextUtils.isEmpty(infoBean.getChapterListHtml())) {
-            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, headerMap);
+            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, infoBean, headerMap);
         }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, infoBean.getChapterUrl());
@@ -162,11 +162,11 @@ public class WebBook extends BaseModelImpl {
                     }
                 }
                 return getAjaxString(analyzeUrl, tag, js)
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
                         .flatMap(response -> setCookie(response, tag))
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
