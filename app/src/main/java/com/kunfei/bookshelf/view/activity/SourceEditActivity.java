@@ -435,7 +435,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                     @Override
                     public void onSuccess(Bitmap bitmap) {
                         if (bitmap == null) {
-                            toast("生成二维码失败");
+                            toast("书源文字太多,生成二维码失败");
                             return;
                         }
                         try {
