@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.annotation.SuppressLint;
 
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
@@ -55,7 +56,7 @@ public class PageLoaderNet extends PageLoader {
         } else {
             WebBookModel.getInstance().getChapterList(bookShelfBean)
                     .compose(RxUtils::toSimpleSingle)
-                    .subscribe(new Observer<BookShelfBean>() {
+                    .subscribe(new MyObserver<BookShelfBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -64,12 +65,10 @@ public class PageLoaderNet extends PageLoader {
                         @Override
                         public void onNext(BookShelfBean bookShelfBean) {
                             isChapterListPrepare = true;
-
                             // 目录加载完成
                             if (mPageChangeListener != null) {
                                 mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
                             }
-
                             // 加载并显示当前章节
                             skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
                         }
@@ -81,11 +80,6 @@ public class PageLoaderNet extends PageLoader {
                             } else {
                                 chapterError(e.getMessage());
                             }
-                        }
-
-                        @Override
-                        public void onComplete() {
-
                         }
                     });
         }
