@@ -74,7 +74,7 @@ public class CheckSourceTask {
     private void checkFind() {
         if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
             Observable.create((ObservableOnSubscribe<String>) emitter -> {
-                String kindA[];
+                String[] kindA;
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
                         String jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
