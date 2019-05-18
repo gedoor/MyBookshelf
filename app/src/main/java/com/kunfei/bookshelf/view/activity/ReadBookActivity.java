@@ -1561,7 +1561,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mPageLoader.updateTime();
             }
         }
-        mPresenter.loadBook(getIntent());
     }
 
     @Override
