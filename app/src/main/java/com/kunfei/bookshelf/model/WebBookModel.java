@@ -97,7 +97,6 @@ public class WebBookModel {
                 bookShelfBean.getBookInfoBean().setChapterList(chapterList);
                 bookShelfBean.upDurChapterName();
                 bookShelfBean.upLastChapterName();
-                BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
             }
             e.onNext(bookShelfBean);
             e.onComplete();

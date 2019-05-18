@@ -191,8 +191,10 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
      */
     private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            BookshelfHelp.saveBookToShelf(bookShelfBean);
-            bookShelfBean.getBookInfoBean().setChapterList(null);
+            if (!bookShelfBean.getChapterList().isEmpty()) {
+                BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
+                BookshelfHelp.saveBookToShelf(bookShelfBean);
+            }
             e.onNext(bookShelfBean);
             e.onComplete();
         });

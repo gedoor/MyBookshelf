@@ -43,14 +43,8 @@ public class PageLoaderNet extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        if (bookShelfBean.getChapterList().size() > 0) {
+        if (!bookShelfBean.getChapterList().isEmpty()) {
             isChapterListPrepare = true;
-
-            // 目录加载完成，执行回调操作。
-            if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
-            }
-
             // 打开章节
             skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
         } else {
@@ -66,7 +60,8 @@ public class PageLoaderNet extends PageLoader {
                         public void onNext(BookShelfBean bookShelfBean) {
                             isChapterListPrepare = true;
                             // 目录加载完成
-                            if (mPageChangeListener != null) {
+                            if (mPageChangeListener != null && !bookShelfBean.getChapterList().isEmpty()) {
+                                BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
                                 mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
                             }
                             // 加载并显示当前章节
