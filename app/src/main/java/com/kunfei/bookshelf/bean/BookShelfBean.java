@@ -291,7 +291,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public int getChapterListSize() {
-        if (getChapterList().size() == 0) {
+        if (getChapterList().isEmpty()) {
             return this.chapterListSize == null ? 0 : this.chapterListSize;
         }
         return getChapterList().size();
