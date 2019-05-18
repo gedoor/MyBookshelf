@@ -764,7 +764,7 @@ public abstract class PageLoader {
      */
     synchronized void drawPage(Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
-        TxtPage txtPage;
+        TxtPage txtPage = null;
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
         }
@@ -776,18 +776,28 @@ public abstract class PageLoader {
                 txtChapter = curChapter().txtChapter;
                 txtPage = txtChapter.getPage(mCurPagePos - 1);
             } else {
-                if (prevChapter().txtChapter == null) return;
-                txtChapter = prevChapter().txtChapter;
-                txtPage = txtChapter.getPage(txtChapter.getPageSize() - 1);
+                if (prevChapter().txtChapter == null) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("未加载完成");
+                } else {
+                    txtChapter = prevChapter().txtChapter;
+                    txtPage = txtChapter.getPage(txtChapter.getPageSize() - 1);
+                }
             }
         } else { //下一页
             if (mCurPagePos + 1 < curChapter().txtChapter.getPageSize()) {
                 txtChapter = curChapter().txtChapter;
                 txtPage = txtChapter.getPage(mCurPagePos + 1);
             } else {
-                if (nextChapter().txtChapter == null) return;
-                txtChapter = nextChapter().txtChapter;
-                txtPage = txtChapter.getPage(0);
+                if (nextChapter().txtChapter == null) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("未加载完成");
+                } else {
+                    txtChapter = nextChapter().txtChapter;
+                    txtPage = txtChapter.getPage(0);
+                }
             }
         }
         if (bitmap != null)
