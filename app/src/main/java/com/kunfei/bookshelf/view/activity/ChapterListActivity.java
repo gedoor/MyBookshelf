@@ -18,6 +18,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
@@ -44,12 +45,17 @@ public class ChapterListActivity extends BaseTabActivity {
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private SearchView searchView;
     private BookShelfBean bookShelf;
+    private List<BookChapterBean> chapterBeanList;
 
-    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf) {
+    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf, List<BookChapterBean> chapterBeanList) {
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
-        intent.putExtra("data_key", key);
-        BitIntentDataManager.getInstance().putData(key, bookShelf.clone());
+        String bookKey = "book" + key;
+        intent.putExtra("bookKey", bookKey);
+        BitIntentDataManager.getInstance().putData(bookKey, bookShelf.clone());
+        String chapterListKey = "chapterList" + key;
+        intent.putExtra("chapterListKey", chapterListKey);
+        BitIntentDataManager.getInstance().putData(chapterListKey, chapterBeanList);
         activity.startActivity(intent);
     }
 
@@ -70,8 +76,12 @@ public class ChapterListActivity extends BaseTabActivity {
         super.onSaveInstanceState(outState);
         if (bookShelf != null) {
             String key = String.valueOf(System.currentTimeMillis());
-            getIntent().putExtra("data_key", key);
-            BitIntentDataManager.getInstance().putData(key, bookShelf);
+            String bookKey = "book" + key;
+            getIntent().putExtra("bookKey", bookKey);
+            BitIntentDataManager.getInstance().putData(bookKey, bookShelf.clone());
+            String chapterListKey = "chapterList" + key;
+            getIntent().putExtra("chapterListKey", chapterListKey);
+            BitIntentDataManager.getInstance().putData(chapterListKey, chapterBeanList);
         }
     }
 
@@ -92,10 +102,13 @@ public class ChapterListActivity extends BaseTabActivity {
                 ThemeStore.accentColor(this));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        String key = getIntent().getStringExtra("data_key");
-        bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
+        String bookKey = getIntent().getStringExtra("bookKey");
+        bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(bookKey);
+        String chapterListKey = getIntent().getStringExtra("chapterListKey");
+        chapterBeanList = (List<BookChapterBean>) BitIntentDataManager.getInstance().getData(chapterListKey);
     }
 
     /**************abstract***********/
@@ -171,6 +184,10 @@ public class ChapterListActivity extends BaseTabActivity {
 
     public BookShelfBean getBookShelf() {
         return bookShelf;
+    }
+
+    public List<BookChapterBean> getChapterBeanList() {
+        return chapterBeanList;
     }
 
     public void searchViewCollapsed() {

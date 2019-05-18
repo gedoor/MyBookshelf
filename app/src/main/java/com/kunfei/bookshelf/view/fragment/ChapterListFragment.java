@@ -21,7 +21,6 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.ChapterListAdapter;
 import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
@@ -84,7 +83,7 @@ public class ChapterListFragment extends MBaseFragment {
         super.initData();
         if (getFatherActivity() != null) {
             bookShelf = getFatherActivity().getBookShelf();
-            chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
+            chapterBeanList = getFatherActivity().getChapterBeanList();
         }
         isChapterReverse = preferences.getBoolean("isChapterReverse", false);
     }

@@ -482,7 +482,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 初始化播放界面
      */
     private void initMediaPlayer() {
-        mediaPlayerPop.setIvChapterClickListener(v -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf()));
+        mediaPlayerPop.setIvChapterClickListener(v -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf(), mPresenter.getChapterList()));
         mediaPlayerPop.setIvTimerClickListener(v -> ReadAloudService.setTimer(getContext(), 10));
         mediaPlayerPop.setIvCoverBgClickListener(v -> {
             flMenu.setVisibility(View.VISIBLE);
@@ -557,7 +557,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void openChapterList() {
                 ReadBookActivity.this.popMenuOut();
                 if (!mPresenter.getChapterList().isEmpty()) {
-                    mHandler.postDelayed(() -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf()), menuTopOut.getDuration());
+                    mHandler.postDelayed(() -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf(), mPresenter.getChapterList()), menuTopOut.getDuration());
                 }
             }
 
