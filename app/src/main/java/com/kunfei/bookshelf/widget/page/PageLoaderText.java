@@ -49,6 +49,161 @@ public class PageLoaderText extends PageLoader {
         super(pageView, bookShelfBean);
     }
 
+    @Override
+    public void refreshChapterList() {
+        Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
+            // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
+            mBookFile = new File(bookShelfBean.getNoteUrl());
+            //获取文件编码
+            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
+                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
+            }
+            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
+
+            Long lastModified = mBookFile.lastModified();
+            if (bookShelfBean.getFinalRefreshData() < lastModified) {
+                bookShelfBean.setFinalRefreshData(lastModified);
+                bookShelfBean.setHasUpdate(true);
+            }
+            if (bookShelfBean.getHasUpdate() || bookShelfBean.getChapterList().size() == 0) {
+                bookShelfBean.setChapterList(loadChapters());
+                bookShelfBean.setHasUpdate(false);
+            }
+            e.onSuccess(bookShelfBean.getChapterList());
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<BookChapterBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<BookChapterBean> bookChapterBeans) {
+                        isChapterListPrepare = true;
+
+                        // 目录加载完成，执行回调操作。
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(bookChapterBeans);
+                        }
+
+                        // 打开章节
+                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
+    }
+
+    @Override
+    protected String getChapterContent(BookChapterBean chapter) {
+        //从文件中获取数据
+        byte[] content = getChapterContentByte(chapter);
+        return new String(content, mCharset);
+    }
+
+    @Override
+    protected boolean noChapterData(BookChapterBean chapter) {
+        return false;
+    }
+
+    @Override
+    public void updateChapter() {
+        mPageView.getActivity().toast("目录更新中");
+        Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
+            BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
+            //获取文件编码
+            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
+                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
+            }
+            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
+            e.onSuccess(loadChapters());
+        })
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<BookChapterBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<BookChapterBean> value) {
+                        isChapterListPrepare = true;
+                        mPageView.getActivity().toast("更新完成");
+                        bookShelfBean.setHasUpdate(false);
+
+                        // 提示目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(value);
+                        }
+
+                        // 加载并显示当前章节
+                        openChapter(bookShelfBean.getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * 从文件中提取一章的内容
+     */
+    private byte[] getChapterContentByte(BookChapterBean chapter) {
+        RandomAccessFile bookStream = null;
+        try {
+            bookStream = new RandomAccessFile(mBookFile, "r");
+            bookStream.seek(chapter.getStart());
+            int extent = (int) (chapter.getEnd() - chapter.getStart());
+            byte[] content = new byte[extent];
+            bookStream.read(content, 0, extent);
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.close(bookStream);
+        }
+        return new byte[0];
+    }
+
+    /**
+     * 1. 检查文件中是否存在章节名
+     * 2. 判断文件中使用的章节名类型的正则表达式
+     *
+     * @return 是否存在章节名
+     */
+    private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
+        chapterPatterns.clear();
+        if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
+            chapterPatterns.addAll(TxtChapterRuleManager.enabledRuleList());
+        } else {
+            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
+        }
+        //首先获取128k的数据
+        byte[] buffer = new byte[BUFFER_SIZE / 4];
+        int length = bookStream.read(buffer, 0, buffer.length);
+        //进行章节匹配
+        for (String str : chapterPatterns) {
+            Pattern pattern = Pattern.compile(str, Pattern.MULTILINE);
+            Matcher matcher = pattern.matcher(new String(buffer, 0, length, mCharset));
+            //如果匹配存在，那么就表示当前章节使用这种匹配方式
+            if (matcher.find()) {
+                mChapterPattern = pattern;
+                //重置指针位置
+                bookStream.seek(0);
+                return true;
+            }
+        }
+
+        //重置指针位置
+        bookStream.seek(0);
+        return false;
+    }
+
     /**
      * 未完成的部分:
      * 1. 序章的添加
@@ -218,158 +373,4 @@ public class PageLoaderText extends PageLoader {
         return mChapterList;
     }
 
-    /**
-     * 1. 检查文件中是否存在章节名
-     * 2. 判断文件中使用的章节名类型的正则表达式
-     *
-     * @return 是否存在章节名
-     */
-    private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
-        chapterPatterns.clear();
-        if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
-            chapterPatterns.addAll(TxtChapterRuleManager.enabledRuleList());
-        } else {
-            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
-        }
-        //首先获取128k的数据
-        byte[] buffer = new byte[BUFFER_SIZE / 4];
-        int length = bookStream.read(buffer, 0, buffer.length);
-        //进行章节匹配
-        for (String str : chapterPatterns) {
-            Pattern pattern = Pattern.compile(str, Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(new String(buffer, 0, length, mCharset));
-            //如果匹配存在，那么就表示当前章节使用这种匹配方式
-            if (matcher.find()) {
-                mChapterPattern = pattern;
-                //重置指针位置
-                bookStream.seek(0);
-                return true;
-            }
-        }
-
-        //重置指针位置
-        bookStream.seek(0);
-        return false;
-    }
-
-    @Override
-    public void refreshChapterList() {
-        Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
-            // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-            mBookFile = new File(bookShelfBean.getNoteUrl());
-            //获取文件编码
-            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
-            }
-            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
-
-            Long lastModified = mBookFile.lastModified();
-            if (bookShelfBean.getFinalRefreshData() < lastModified) {
-                bookShelfBean.setFinalRefreshData(lastModified);
-                bookShelfBean.setHasUpdate(true);
-            }
-            if (bookShelfBean.getHasUpdate() || bookShelfBean.getChapterList().size() == 0) {
-                bookShelfBean.setChapterList(loadChapters());
-                bookShelfBean.setHasUpdate(false);
-            }
-            e.onSuccess(bookShelfBean.getChapterList());
-        }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<BookChapterBean>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(List<BookChapterBean> bookChapterBeans) {
-                        isChapterListPrepare = true;
-
-                        // 目录加载完成，执行回调操作。
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(bookChapterBeans);
-                        }
-
-                        // 打开章节
-                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
-                });
-    }
-
-    @Override
-    protected String getChapterContent(BookChapterBean chapter) {
-        //从文件中获取数据
-        byte[] content = getChapterContentByte(chapter);
-        return new String(content, mCharset);
-    }
-
-    /**
-     * 从文件中提取一章的内容
-     */
-    private byte[] getChapterContentByte(BookChapterBean chapter) {
-        RandomAccessFile bookStream = null;
-        try {
-            bookStream = new RandomAccessFile(mBookFile, "r");
-            bookStream.seek(chapter.getStart());
-            int extent = (int) (chapter.getEnd() - chapter.getStart());
-            byte[] content = new byte[extent];
-            bookStream.read(content, 0, extent);
-            return content;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.close(bookStream);
-        }
-        return new byte[0];
-    }
-
-    @Override
-    protected boolean noChapterData(BookChapterBean chapter) {
-        return false;
-    }
-
-    @Override
-    public void updateChapter() {
-        mPageView.getActivity().toast("目录更新中");
-        Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
-            BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
-            //获取文件编码
-            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
-            }
-            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
-            e.onSuccess(loadChapters());
-        })
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<BookChapterBean>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(List<BookChapterBean> value) {
-                        isChapterListPrepare = true;
-                        mPageView.getActivity().toast("更新完成");
-                        bookShelfBean.setHasUpdate(false);
-
-                        // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(value);
-                        }
-
-                        // 加载并显示当前章节
-                        openChapter(bookShelfBean.getDurChapterPage());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
-                });
-    }
 }
