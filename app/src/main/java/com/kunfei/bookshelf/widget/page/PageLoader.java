@@ -790,7 +790,11 @@ public abstract class PageLoader {
                 txtChapter = curChapter().txtChapter;
                 txtPage = txtChapter.getPage(mCurPagePos + 1);
             } else {
-                if (nextChapter().txtChapter == null) {
+                if (mCurChapterPos + 1 >= callback.getChapterList().size()) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("没有下一页");
+                } else if (nextChapter().txtChapter == null) {
                     txtChapter = new TxtChapter(mCurChapterPos + 1);
                     txtChapter.setStatus(TxtChapter.Status.ERROR);
                     txtChapter.setMsg("未加载完成");
@@ -837,7 +841,7 @@ public abstract class PageLoader {
     private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
         if (!callback.getChapterList().isEmpty()) {
-            String title = isChapterListPrepare ? callback.getChapterList().get(txtChapter.getPosition()).getDurChapterName() : "";
+            String title = callback.getChapterList().size() > txtChapter.getPosition() ? callback.getChapterList().get(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(book.getBookInfoBean().getName(), book.getTag(), title);
             String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
                     : String.format("%d/%d", txtPage.getPosition() + 1, txtChapter.getPageSize());
