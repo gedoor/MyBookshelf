@@ -65,11 +65,13 @@ public class PageLoaderText extends PageLoader {
                 book.setFinalRefreshData(lastModified);
                 book.setHasUpdate(true);
             }
-            if (book.getHasUpdate() || book.getChapterList().size() == 0) {
-                book.getBookInfoBean().setChapterList(loadChapters());
+            if (book.getHasUpdate() || callback.getChapterList().size() == 0) {
+                List<BookChapterBean> chapterBeanList = loadChapters();
                 book.setHasUpdate(false);
+                e.onSuccess(chapterBeanList);
+            } else {
+                e.onSuccess(new ArrayList<>());
             }
-            e.onSuccess(book.getChapterList());
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<List<BookChapterBean>>() {
                     @Override
@@ -80,10 +82,10 @@ public class PageLoaderText extends PageLoader {
                     @Override
                     public void onSuccess(List<BookChapterBean> bookChapterBeans) {
                         isChapterListPrepare = true;
-
                         // 目录加载完成，执行回调操作。
-                        callback.onCategoryFinish(bookChapterBeans);
-
+                        if (!bookChapterBeans.isEmpty()) {
+                            callback.onCategoryFinish(bookChapterBeans);
+                        }
                         // 打开章节
                         skipToChapter(book.getDurChapter(), book.getDurChapterPage());
                     }

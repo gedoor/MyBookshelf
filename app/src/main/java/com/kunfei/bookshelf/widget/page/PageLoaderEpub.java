@@ -204,17 +204,14 @@ public class PageLoaderEpub extends PageLoader {
                 e.onComplete();
             })
                     .flatMap(chapterList -> {
-                        collBook.getBookInfoBean().setChapterList(chapterList);
                         collBook.setChapterListSize(chapterList.size());
+                        callback.onCategoryFinish(chapterList);
                         return Observable.just(collBook);
                     })
                     .doOnNext(bookShelfBean -> {
                         // 存储章节到数据库
                         bookShelfBean.setHasUpdate(false);
                         bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
-                        if (BookshelfHelp.isInBookShelf(bookShelfBean.getNoteUrl())) {
-                            BookshelfHelp.saveBookToShelf(bookShelfBean);
-                        }
                     });
         }
     }
@@ -276,7 +273,6 @@ public class PageLoaderEpub extends PageLoader {
         BookShelfBean bookShelf = book;
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
-            bookShelf.getBookInfoBean().setChapterList(null);
             BookshelfHelp.delChapterList(bookShelf.getNoteUrl());
             if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
                 bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
