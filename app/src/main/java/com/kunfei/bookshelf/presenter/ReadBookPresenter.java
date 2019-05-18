@@ -47,7 +47,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
@@ -57,7 +56,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     private BookShelfBean bookShelf;
     private BookSourceBean bookSourceBean;
     private ChangeSourceHelp changeSourceHelp;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private List<BookChapterBean> chapterBeanList = new ArrayList<>();
 
     @Override
@@ -418,7 +416,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             changeSourceHelp.stopSearch();
         }
         RxBus.get().unregister(this);
-        compositeDisposable.dispose();
     }
 
     /////////////////////RxBus////////////////////////
