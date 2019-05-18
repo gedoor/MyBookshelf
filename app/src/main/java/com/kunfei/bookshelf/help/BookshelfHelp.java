@@ -10,7 +10,6 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.DownloadChapterBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.dao.BookChapterBeanDao;
@@ -67,12 +66,8 @@ public class BookshelfHelp {
         return temp;
     }
 
-    public static String getCachePathName(DownloadChapterBean chapter) {
-        return formatFolderName(chapter.getBookName() + "-" + chapter.getTag());
-    }
-
-    public static String getCachePathName(BookInfoBean book) {
-        return formatFolderName(book.getName() + "-" + book.getTag());
+    public static String getCachePathName(String bookName, String tag) {
+        return formatFolderName(bookName + "-" + tag);
     }
 
     public static String getCacheFileName(int chapterIndex, String chapterName) {
@@ -111,7 +106,7 @@ public class BookshelfHelp {
             }
             return !TextUtils.isEmpty(contentBean.getDurChapterContent());
         }
-        final String path = getCachePathName(book);
+        final String path = getCachePathName(book.getName(), book.getTag());
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
@@ -126,7 +121,7 @@ public class BookshelfHelp {
             return contentBean.getDurChapterContent();
         }
         @SuppressLint("DefaultLocale")
-        File file = getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
+        File file = getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());
         if (!file.exists()) return null;
 
@@ -309,8 +304,8 @@ public class BookshelfHelp {
             long bookNum = DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.Name.eq(bookName)).count();
             if (bookNum > 0) {
-                FileHelp.deleteFile(AppConstant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
-                chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+                FileHelp.deleteFile(AppConstant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()));
+                chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()));
                 return;
             }
             // 没有同名书籍，删除本书所有的缓存

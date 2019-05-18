@@ -95,8 +95,8 @@ public class WebBookModel {
                 bookShelfBean.setChapterListSize(chapterList.size());
                 bookShelfBean.setDurChapter(Math.min(bookShelfBean.getDurChapter(), bookShelfBean.getChapterListSize() - 1));
                 bookShelfBean.getBookInfoBean().setChapterList(chapterList);
-                bookShelfBean.upDurChapterName();
-                bookShelfBean.upLastChapterName();
+                bookShelfBean.setDurChapterName(chapterList.get(bookShelfBean.getDurChapter()).getDurChapterName());
+                bookShelfBean.setLastChapterName(chapterList.get(chapterList.size() - 1).getDurChapterName());
             }
             e.onNext(bookShelfBean);
             e.onComplete();

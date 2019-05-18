@@ -29,20 +29,22 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     private BookShelfBean bookShelfBean;
     private OnItemClickListener itemClickListener;
+    private List<BookChapterBean> allChapter;
     private List<BookChapterBean> bookChapterBeans = new ArrayList<>();
     private int index = 0;
     private boolean isSearch = false;
     private int normalColor;
     private int highlightColor;
 
-    public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull OnItemClickListener itemClickListener) {
+    public ChapterListAdapter(BookShelfBean bookShelfBean, List<BookChapterBean> allChapter, @NonNull OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
+        this.allChapter = allChapter;
         this.itemClickListener = itemClickListener;
         highlightColor = ThemeStore.accentColor(MApplication.getInstance());
     }
 
     public void upChapter(int index) {
-        if (bookShelfBean.getChapterListSize() > index) {
+        if (allChapter.size() > index) {
             notifyItemChanged(index, 0);
         }
     }
@@ -54,7 +56,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             notifyDataSetChanged();
         } else {
             Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-                for (BookChapterBean bookChapterBean : bookShelfBean.getChapterList()) {
+                for (BookChapterBean bookChapterBean : allChapter) {
                     if (bookChapterBean.getDurChapterName().contains(key)) {
                         bookChapterBeans.add(bookChapterBean);
                         }
@@ -103,7 +105,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 holder.tvName.getPaint().setFakeBoldText(true);
                 return;
             }
-        BookChapterBean bookChapterBean = isSearch ? bookChapterBeans.get(realPosition) : bookShelfBean.getChapter(realPosition);
+        BookChapterBean bookChapterBean = isSearch ? bookChapterBeans.get(realPosition) : allChapter.get(realPosition);
         if (bookChapterBean.getDurChapterIndex() == index) {
                 holder.tvName.setTextColor(highlightColor);
             } else {
@@ -133,7 +135,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             if (isSearch) {
                 return bookChapterBeans.size();
             }
-            return bookShelfBean.getChapterListSize();
+            return allChapter.size();
         }
     }
 

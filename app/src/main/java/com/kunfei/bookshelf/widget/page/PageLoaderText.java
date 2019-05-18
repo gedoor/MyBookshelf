@@ -45,31 +45,31 @@ public class PageLoaderText extends PageLoader {
     //编码类型
     private Charset mCharset;
 
-    PageLoaderText(PageView pageView, BookShelfBean bookShelfBean) {
-        super(pageView, bookShelfBean);
+    PageLoaderText(PageView pageView, BookShelfBean bookShelfBean, Callback callback) {
+        super(pageView, bookShelfBean, callback);
     }
 
     @Override
     public void refreshChapterList() {
         Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-            mBookFile = new File(bookShelfBean.getNoteUrl());
+            mBookFile = new File(book.getNoteUrl());
             //获取文件编码
-            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
+            if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
+                book.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
             }
-            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
+            mCharset = Charset.forName(book.getBookInfoBean().getCharset());
 
             Long lastModified = mBookFile.lastModified();
-            if (bookShelfBean.getFinalRefreshData() < lastModified) {
-                bookShelfBean.setFinalRefreshData(lastModified);
-                bookShelfBean.setHasUpdate(true);
+            if (book.getFinalRefreshData() < lastModified) {
+                book.setFinalRefreshData(lastModified);
+                book.setHasUpdate(true);
             }
-            if (bookShelfBean.getHasUpdate() || bookShelfBean.getChapterList().size() == 0) {
-                bookShelfBean.getBookInfoBean().setChapterList(loadChapters());
-                bookShelfBean.setHasUpdate(false);
+            if (book.getHasUpdate() || book.getChapterList().size() == 0) {
+                book.getBookInfoBean().setChapterList(loadChapters());
+                book.setHasUpdate(false);
             }
-            e.onSuccess(bookShelfBean.getChapterList());
+            e.onSuccess(book.getChapterList());
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<List<BookChapterBean>>() {
                     @Override
@@ -82,12 +82,10 @@ public class PageLoaderText extends PageLoader {
                         isChapterListPrepare = true;
 
                         // 目录加载完成，执行回调操作。
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(bookChapterBeans);
-                        }
+                        callback.onCategoryFinish(bookChapterBeans);
 
                         // 打开章节
-                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                        skipToChapter(book.getDurChapter(), book.getDurChapterPage());
                     }
 
                     @Override
@@ -113,12 +111,12 @@ public class PageLoaderText extends PageLoader {
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
         Single.create((SingleOnSubscribe<List<BookChapterBean>>) e -> {
-            BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
+            BookshelfHelp.delChapterList(book.getNoteUrl());
             //获取文件编码
-            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getCharset())) {
-                bookShelfBean.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
+            if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
+                book.getBookInfoBean().setCharset(EncodingDetect.getJavaEncode(mBookFile));
             }
-            mCharset = Charset.forName(bookShelfBean.getBookInfoBean().getCharset());
+            mCharset = Charset.forName(book.getBookInfoBean().getCharset());
             e.onSuccess(loadChapters());
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -132,15 +130,15 @@ public class PageLoaderText extends PageLoader {
                     public void onSuccess(List<BookChapterBean> value) {
                         isChapterListPrepare = true;
                         mPageView.getActivity().toast("更新完成");
-                        bookShelfBean.setHasUpdate(false);
+                        book.setHasUpdate(false);
 
                         // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(value);
+                        if (callback != null) {
+                            callback.onCategoryFinish(value);
                         }
 
                         // 加载并显示当前章节
-                        openChapter(bookShelfBean.getDurChapterPage());
+                        openChapter(book.getDurChapterPage());
                     }
 
                     @Override
@@ -178,10 +176,10 @@ public class PageLoaderText extends PageLoader {
      */
     private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
         chapterPatterns.clear();
-        if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
+        if (TextUtils.isEmpty(book.getBookInfoBean().getChapterUrl())) {
             chapterPatterns.addAll(TxtChapterRuleManager.enabledRuleList());
         } else {
-            chapterPatterns.add(bookShelfBean.getBookInfoBean().getChapterUrl());
+            chapterPatterns.add(book.getBookInfoBean().getChapterUrl());
         }
         //首先获取128k的数据
         byte[] buffer = new byte[BUFFER_SIZE / 4];
@@ -258,7 +256,7 @@ public class PageLoaderText extends PageLoader {
 
                         if (mChapterList.size() == 0) { //如果当前没有章节，那么就是序章
                             //加入简介
-                            bookShelfBean.getBookInfoBean().setIntroduce(chapterContent);
+                            book.getBookInfoBean().setIntroduce(chapterContent);
 
                             //创建当前章节
                             BookChapterBean curChapter = new BookChapterBean();
@@ -362,7 +360,7 @@ public class PageLoaderText extends PageLoader {
         for (int i = 0; i < mChapterList.size(); i++) {
             BookChapterBean bean = mChapterList.get(i);
             bean.setDurChapterIndex(i);
-            bean.setNoteUrl(bookShelfBean.getNoteUrl());
+            bean.setNoteUrl(book.getNoteUrl());
             bean.setDurChapterUrl(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + i + bean.getDurChapterName()));
         }
         IOUtils.close(bookStream);

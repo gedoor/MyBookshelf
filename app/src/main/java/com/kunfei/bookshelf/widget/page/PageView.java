@@ -32,8 +32,6 @@ import static com.kunfei.bookshelf.utils.ScreenUtils.getDisplayMetrics;
  */
 public class PageView extends View {
 
-    private final static String TAG = PageView.class.getSimpleName();
-
     private ReadBookActivity activity;
 
     private int mViewWidth = 0; // 当前View的宽
@@ -360,7 +358,7 @@ public class PageView extends View {
     /**
      * 获取 PageLoader
      */
-    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean bookShelfBean) {
+    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean bookShelfBean, PageLoader.Callback callback) {
         this.activity = activity;
         this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
@@ -369,13 +367,13 @@ public class PageView extends View {
         }
         // 根据书籍类型，获取具体的加载器
         if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-            mPageLoader = new PageLoaderNet(this, bookShelfBean);
+            mPageLoader = new PageLoaderNet(this, bookShelfBean, callback);
         } else {
             String fileSuffix = FileHelp.getFileSuffix(bookShelfBean.getNoteUrl());
             if (fileSuffix.equalsIgnoreCase(FileHelp.SUFFIX_EPUB)) {
-                mPageLoader = new PageLoaderEpub(this, bookShelfBean);
+                mPageLoader = new PageLoaderEpub(this, bookShelfBean, callback);
             } else {
-                mPageLoader = new PageLoaderText(this, bookShelfBean);
+                mPageLoader = new PageLoaderText(this, bookShelfBean, callback);
             }
         }
         // 判断是否 PageView 已经初始化完成

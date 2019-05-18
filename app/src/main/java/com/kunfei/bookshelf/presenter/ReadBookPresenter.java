@@ -41,11 +41,13 @@ import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
@@ -55,6 +57,8 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     private BookShelfBean bookShelf;
     private BookSourceBean bookSourceBean;
     private ChangeSourceHelp changeSourceHelp;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private List<BookChapterBean> chapterBeanList = new ArrayList<>();
 
     @Override
     public void initData(Activity activity) {
@@ -85,8 +89,8 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                     bookShelf = beans.get(0);
                 }
             }
-            if (bookShelf != null && bookShelf.realChapterListEmpty()) {
-                bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
+            if (bookShelf != null && chapterBeanList.isEmpty()) {
+                chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
             }
             if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
@@ -148,7 +152,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         if (bookShelf != null) {
             AsyncTask.execute(() -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
-                bookShelf.upDurChapterName();
                 bookShelf.setHasUpdate(false);
                 DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
                 RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
@@ -321,6 +324,17 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
+    public List<BookChapterBean> getChapterList() {
+        return chapterBeanList;
+    }
+
+    @Override
+    public void setChapterList(List<BookChapterBean> chapterList) {
+        this.chapterBeanList = chapterList;
+        AsyncTask.execute(() -> DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterList));
+    }
+
+    @Override
     public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
             AsyncTask.execute(() -> {
@@ -404,6 +418,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             changeSourceHelp.stopSearch();
         }
         RxBus.get().unregister(this);
+        compositeDisposable.dispose();
     }
 
     /////////////////////RxBus////////////////////////

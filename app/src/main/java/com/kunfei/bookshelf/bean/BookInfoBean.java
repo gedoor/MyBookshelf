@@ -50,12 +50,11 @@ public class BookInfoBean implements Cloneable {
     @Transient
     private String chapterListHtml;
     @Transient
-    private List<BookChapterBean> chapterList = new ArrayList<>();    //章节列表
+    private List<BookChapterBean> chapterList;    //章节列表
     @Transient
-    private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
+    private List<BookmarkBean> bookmarkList;    //书签列表
 
     public BookInfoBean() {
-
     }
 
     @Generated(hash = 906814482)

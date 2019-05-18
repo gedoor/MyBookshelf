@@ -125,6 +125,8 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     public BookChapterBean getChapter(int index) {
         if (realChapterListEmpty()) {
             BookChapterBean bookChapterBean = new BookChapterBean();
+            bookChapterBean.setTag(tag);
+            bookChapterBean.setDurChapterIndex(index);
             bookChapterBean.setDurChapterName("暂无");
             bookChapterBean.setDurChapterUrl("暂无");
             return bookChapterBean;
@@ -265,24 +267,12 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         this.durChapterName = durChapterName;
     }
 
-    public void upDurChapterName() {
-        if (getChapterList().size() > durChapter) {
-            durChapterName = getChapterList().get(durChapter).getDurChapterName();
-        }
-    }
-
     public String getLastChapterName() {
         return this.lastChapterName;
     }
 
     public void setLastChapterName(String lastChapterName) {
         this.lastChapterName = lastChapterName;
-    }
-
-    public void upLastChapterName() {
-        if (getChapterList().size() > 0) {
-            lastChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
-        }
     }
 
     public int getUnreadChapterNum() {
