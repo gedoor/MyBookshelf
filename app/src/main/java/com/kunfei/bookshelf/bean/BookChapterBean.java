@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -16,27 +17,30 @@ import java.util.regex.Matcher;
  */
 @Entity
 public class BookChapterBean implements Cloneable, BaseChapterBean {
-
+    private String tag;
     private String noteUrl; //对应BookInfoBean noteUrl;
 
     private int durChapterIndex;  //当前章节数
     @Id
     private String durChapterUrl;  //当前章节对应的文章地址
     private String durChapterName;  //当前章节名称
-    private String tag;
+
     //章节内容在文章中的起始位置(本地)
     private Long start;
     //章节内容在文章中的终止位置(本地)
     private Long end;
 
-    @Generated(hash = 435151612)
-    public BookChapterBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
+    public BookChapterBean() {
+    }
+
+    @Generated(hash = 304828234)
+    public BookChapterBean(String tag, String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName,
                            Long start, Long end) {
+        this.tag = tag;
         this.noteUrl = noteUrl;
         this.durChapterIndex = durChapterIndex;
         this.durChapterUrl = durChapterUrl;
         this.durChapterName = durChapterName;
-        this.tag = tag;
         this.start = start;
         this.end = end;
     }
@@ -47,18 +51,15 @@ public class BookChapterBean implements Cloneable, BaseChapterBean {
         this.durChapterUrl = durChapterUrl;
     }
 
-    @Generated(hash = 853839616)
-    public BookChapterBean() {
-    }
-
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        BookChapterBean bookChapterBean = (BookChapterBean) super.clone();
-        bookChapterBean.noteUrl = noteUrl;
-        bookChapterBean.durChapterUrl = durChapterUrl;
-        bookChapterBean.durChapterName = durChapterName;
-        bookChapterBean.tag = tag;
-        return bookChapterBean;
+    protected Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookChapterBean.class);
+        } catch (Exception ignored) {
+        }
+        return this;
     }
 
     @Override
