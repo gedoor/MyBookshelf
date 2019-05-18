@@ -767,9 +767,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     public void onCategoryFinish(List<BookChapterBean> chapters) {
                         mPresenter.setChapterList(chapters);
                         mPresenter.getBookShelf().setChapterListSize(chapters.size());
-                        mPresenter.saveBook();
-                        mPresenter.getBookShelf().setDurChapterName(mPresenter.getChapterList().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
-                        mPresenter.getBookShelf().setLastChapterName(mPresenter.getChapterList().get(mPresenter.getChapterList().size() - 1).getDurChapterName());
+                        mPresenter.getBookShelf().setDurChapterName(chapters.get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
+                        mPresenter.getBookShelf().setLastChapterName(chapters.get(mPresenter.getChapterList().size() - 1).getDurChapterName());
                         mPresenter.saveProgress();
                     }
 

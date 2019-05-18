@@ -88,7 +88,11 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 }
             }
             if (bookShelf != null && chapterBeanList.isEmpty()) {
-                chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
+                if (!bookShelf.getChapterList().isEmpty()) {
+                    chapterBeanList = bookShelf.getChapterList();
+                } else {
+                    chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
+                }
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
             }
             if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {

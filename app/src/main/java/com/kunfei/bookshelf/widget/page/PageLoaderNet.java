@@ -60,7 +60,7 @@ public class PageLoaderNet extends PageLoader {
                         public void onNext(BookShelfBean bookShelfBean) {
                             isChapterListPrepare = true;
                             // 目录加载完成
-                            if (!callback.getChapterList().isEmpty()) {
+                            if (!bookShelfBean.getChapterList().isEmpty()) {
                                 BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
                                 callback.onCategoryFinish(bookShelfBean.getChapterList());
                             }
@@ -86,6 +86,7 @@ public class PageLoaderNet extends PageLoader {
             super.changeSourceFinish(null);
         } else {
             this.book = book;
+            callback.onCategoryFinish(book.getChapterList());
             refreshChapterList();
         }
     }
