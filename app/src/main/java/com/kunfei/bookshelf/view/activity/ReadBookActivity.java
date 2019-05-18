@@ -1561,10 +1561,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mPageLoader.updateTime();
             }
         }
-        if (showCheckPermission && mPresenter.getOpen_from() == ReadBookPresenter.OPEN_FROM_OTHER && PermissionUtils.checkMorePermissions(this, MApplication.PerList).isEmpty()) {
-            showCheckPermission = true;
-            mPresenter.openBookFromOther(this);
-        }
+        mPresenter.loadBook(getIntent());
     }
 
     @Override

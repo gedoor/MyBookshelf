@@ -79,20 +79,20 @@ public class BookshelfHelp {
         return formatFileName(chapterIndex, chapterName);
     }
 
-    public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
+    private static void setChapterIsCached(String bookPathName, Integer index, boolean cached) {
         bookPathName = formatFolderName(bookPathName);
         if (!chapterCaches.containsKey(bookPathName))
             chapterCaches.put(bookPathName, new HashSet<>());
-        if (cached)
-            return chapterCaches.get(bookPathName).add(index);
-        else
-            return chapterCaches.get(bookPathName).remove(index);
+        if (cached) {
+            chapterCaches.get(bookPathName).add(index);
+        } else {
+            chapterCaches.get(bookPathName).remove(index);
+        }
     }
 
     /**
      * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存过)
      */
-    // be careful to use this method, the storage path (folderName) has been changed
     public static boolean isChapterCached(String folderName, int index, String fileName) {
         File file = new File(AppConstant.BOOK_CACHE_PATH + folderName
                 + File.separator + formatFileName(index, fileName) + FileHelp.SUFFIX_NB);

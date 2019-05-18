@@ -70,7 +70,8 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         }
     }
 
-    private void loadBook(Intent intent) {
+    @Override
+    public void loadBook(Intent intent) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
@@ -85,13 +86,15 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                     bookShelf = beans.get(0);
                 }
             }
-            if (bookShelf != null) {
+            if (bookShelf != null && bookShelf.realChapterListEmpty()) {
                 bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
+            }
+            if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
+                bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+            }
+            if (bookShelf != null) {
                 mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
-                if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                    bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
-                }
             }
             e.onNext(bookShelf);
             e.onComplete();
