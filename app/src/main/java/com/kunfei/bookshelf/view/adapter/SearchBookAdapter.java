@@ -29,6 +29,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.text.TextUtils.isEmpty;
+
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private WeakReference<Activity> activityRef;
     private List<SearchBookBean> searchBooks;
@@ -67,34 +69,44 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         }
         myViewHolder.tvName.setText(String.format("%s (%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
         BookKindBean bookKindBean = new BookKindBean(searchBooks.get(position).getKind());
-        if (TextUtils.isEmpty(bookKindBean.getKind())) {
+        if (isEmpty(bookKindBean.getKind())) {
             myViewHolder.tvKind.setVisibility(View.GONE);
         } else {
             myViewHolder.tvKind.setVisibility(View.VISIBLE);
             myViewHolder.tvKind.setText(bookKindBean.getKind());
         }
-        if (TextUtils.isEmpty(bookKindBean.getWordsS())) {
+        if (isEmpty(bookKindBean.getWordsS())) {
             myViewHolder.tvWords.setVisibility(View.GONE);
         } else {
             myViewHolder.tvWords.setVisibility(View.VISIBLE);
             myViewHolder.tvWords.setText(bookKindBean.getWordsS());
         }
-        if (TextUtils.isEmpty(bookKindBean.getState())) {
+        if (isEmpty(bookKindBean.getState())) {
             myViewHolder.tvState.setVisibility(View.GONE);
         } else {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
             myViewHolder.tvState.setText(bookKindBean.getState());
         }
-        if (searchBooks.get(position).getLastChapter() != null && searchBooks.get(position).getLastChapter().length() > 0) {
-            myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());
+        //来源
+        if (isEmpty(searchBooks.get(position).getOrigin())) {
+            myViewHolder.tvOrigin.setVisibility(View.GONE);
         } else {
-            myViewHolder.tvLasted.setText("");
-        }
-        if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
             myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
+        }
+        //最新章节
+        if (isEmpty(searchBooks.get(position).getLastChapter())) {
+            myViewHolder.tvLasted.setVisibility(View.GONE);
         } else {
-            myViewHolder.tvOrigin.setVisibility(View.GONE);
+            myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());
+            myViewHolder.tvLasted.setVisibility(View.VISIBLE);
+        }
+        //简介
+        if (isEmpty(searchBooks.get(position).getIntroduce())) {
+            myViewHolder.tvIntroduce.setVisibility(View.GONE);
+        } else {
+            myViewHolder.tvIntroduce.setText(searchBooks.get(position).getIntroduce());
+            myViewHolder.tvIntroduce.setVisibility(View.VISIBLE);
         }
         myViewHolder.tvOriginNum.setText(String.format("共%d个源", searchBooks.get(position).getOriginNum()));
     }
@@ -205,6 +217,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         TextView tvLasted;
         TextView tvOrigin;
         TextView tvOriginNum;
+        TextView tvIntroduce;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -217,6 +230,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             tvKind = itemView.findViewById(R.id.tv_kind);
             tvOrigin = itemView.findViewById(R.id.tv_origin);
             tvOriginNum = itemView.findViewById(R.id.tv_origin_num);
+            tvIntroduce = itemView.findViewById(R.id.tv_introduce);
         }
     }
 
