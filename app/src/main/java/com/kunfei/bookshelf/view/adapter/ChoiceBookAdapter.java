@@ -27,7 +27,7 @@ import static android.text.TextUtils.isEmpty;
 public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
     private List<SearchBookBean> searchBooks;
-    private OnItemClickListener itemClickListener;
+    private Callback callback;
 
     public ChoiceBookAdapter(Activity activity) {
         super(true);
@@ -99,17 +99,9 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvIntroduce.setVisibility(View.VISIBLE);
         }
 
-        myViewHolder.tvAddShelf.setText("搜索");
-        myViewHolder.tvAddShelf.setVisibility(View.VISIBLE);
-        myViewHolder.tvAddShelf.setEnabled(true);
-
         myViewHolder.flContent.setOnClickListener(v -> {
-            if (itemClickListener != null)
-                itemClickListener.clickItem(myViewHolder.ivCover, position, searchBooks.get(position));
-        });
-        myViewHolder.tvAddShelf.setOnClickListener(v -> {
-            if (itemClickListener != null)
-                itemClickListener.clickAddShelf(myViewHolder.tvAddShelf, position, searchBooks.get(position));
+            if (callback != null)
+                callback.clickItem(myViewHolder.ivCover, position, searchBooks.get(position));
         });
     }
 
@@ -123,8 +115,8 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks.size();
     }
 
-    public void setItemClickListener(OnItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
+    public void setCallback(Callback callback) {
+        this.callback = callback;
     }
 
     public void addAll(List<SearchBookBean> newData) {
@@ -146,9 +138,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         notifyDataSetChanged();
     }
 
-    public interface OnItemClickListener {
-        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
-
+    public interface Callback {
         void clickItem(View animView, int position, SearchBookBean searchBookBean);
     }
 
@@ -160,7 +150,6 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         TextView tvWords;
         TextView tvKind;
         TextView tvLasted;
-        TextView tvAddShelf;
         TextView tvOrigin;
         TextView tvIntroduce;
 
@@ -172,7 +161,6 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             tvState = itemView.findViewById(R.id.tv_state);
             tvWords = itemView.findViewById(R.id.tv_words);
             tvLasted = itemView.findViewById(R.id.tv_lasted);
-            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
             tvKind = itemView.findViewById(R.id.tv_kind);
             tvOrigin = itemView.findViewById(R.id.tv_origin);
             tvIntroduce = itemView.findViewById(R.id.tv_introduce);
