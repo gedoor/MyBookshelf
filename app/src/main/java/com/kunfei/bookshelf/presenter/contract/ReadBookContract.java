@@ -58,8 +58,6 @@ public interface ReadBookContract {
 
         void loadBook(Intent intent);
 
-        int getOpen_from();
-
         BookShelfBean getBookShelf();
 
         void saveBook();

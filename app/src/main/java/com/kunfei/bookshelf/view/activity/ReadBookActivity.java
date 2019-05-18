@@ -146,7 +146,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private ThisBatInfoReceiver batInfoReceiver;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
-    private Boolean showCheckPermission = false;
     private boolean autoPage = false;
     private boolean aloudNextPage;
 

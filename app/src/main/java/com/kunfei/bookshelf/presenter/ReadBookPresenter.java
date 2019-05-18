@@ -52,7 +52,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
-    private int open_from;
     private BookShelfBean bookShelf;
     private BookSourceBean bookSourceBean;
     private ChangeSourceHelp changeSourceHelp;
@@ -60,7 +59,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Override
     public void initData(Activity activity) {
         Intent intent = activity.getIntent();
-        open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
+        int open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
         open_from = intent.getIntExtra("openFrom", open_from);
         if (open_from == OPEN_FROM_APP) {
             loadBook(intent);
@@ -314,11 +313,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-    }
-
-    @Override
-    public int getOpen_from() {
-        return open_from;
     }
 
     @Override
