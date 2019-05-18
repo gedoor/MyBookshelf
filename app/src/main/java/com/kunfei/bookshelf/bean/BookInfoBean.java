@@ -54,9 +54,6 @@ public class BookInfoBean implements Cloneable {
     @Transient
     private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
 
-    @Transient
-    private static String coverPath = FileHelp.getCachePath() + "/cover/";
-
     public BookInfoBean() {
 
     }
@@ -141,12 +138,7 @@ public class BookInfoBean implements Cloneable {
 
     public String getCoverUrl() {
         if (isEpub() && (TextUtils.isEmpty(coverUrl) || !(new File(coverUrl)).exists())) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    extractEpubCoverImage();
-                }
-            });
+            extractEpubCoverImage();
             return "";
         }
         return coverUrl;
@@ -200,18 +192,23 @@ public class BookInfoBean implements Cloneable {
     }
 
     private void extractEpubCoverImage() {
-        try {
-            FileHelp.createFolderIfNotExists(coverPath);
-            Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
-            String md5Path = coverPath + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
-            FileOutputStream out = new FileOutputStream(new File(md5Path));
-            cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            setCoverUrl(md5Path);
-            DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(this);
-        } catch (Exception ignored) {
-        }
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FileHelp.createFolderIfNotExists(coverUrl);
+                    Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
+                    String md5Path = FileHelp.getCachePath() + File.separator + "cover" + File.separator + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
+                    FileOutputStream out = new FileOutputStream(new File(md5Path));
+                    cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    setCoverUrl(md5Path);
+                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(BookInfoBean.this);
+                } catch (Exception ignored) {
+                }
+            }
+        });
     }
 
     private boolean isEpub() {
@@ -236,14 +233,6 @@ public class BookInfoBean implements Cloneable {
 
     public void setBookInfoHtml(String bookInfoHtml) {
         this.bookInfoHtml = bookInfoHtml;
-    }
-
-    public static String getCoverPath() {
-        return coverPath;
-    }
-
-    public static void setCoverPath(String coverPath) {
-        BookInfoBean.coverPath = coverPath;
     }
 
     public String getChapterListHtml() {
