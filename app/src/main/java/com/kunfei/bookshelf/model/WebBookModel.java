@@ -6,10 +6,10 @@ import android.annotation.SuppressLint;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
@@ -78,10 +78,10 @@ public class WebBookModel {
     /**
      * 更新目录
      */
-    private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
+    private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<BookChapterBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
-                ChapterListBean chapter = chapterList.get(i);
+                BookChapterBean chapter = chapterList.get(i);
                 chapter.setDurChapterIndex(i);
                 chapter.setTag(bookShelfBean.getTag());
                 chapter.setNoteUrl(bookShelfBean.getNoteUrl());

@@ -3,9 +3,9 @@ package com.kunfei.bookshelf.widget.page;
 import android.annotation.SuppressLint;
 
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
@@ -169,13 +169,13 @@ public class PageLoaderNet extends PageLoader {
     }
 
     @Override
-    protected String getChapterContent(ChapterListBean chapter) {
+    protected String getChapterContent(BookChapterBean chapter) {
         return BookshelfHelp.getChapterCache(bookShelfBean, chapter);
     }
 
     @SuppressLint("DefaultLocale")
     @Override
-    protected boolean noChapterData(ChapterListBean chapter) {
+    protected boolean noChapterData(BookChapterBean chapter) {
         return !BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapter);
     }
 

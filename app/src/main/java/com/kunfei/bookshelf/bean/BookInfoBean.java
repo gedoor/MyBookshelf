@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.BookType;
@@ -49,7 +50,7 @@ public class BookInfoBean implements Cloneable {
     @Transient
     private String chapterListHtml;
     @Transient
-    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
+    private List<BookChapterBean> chapterList = new ArrayList<>();    //章节列表
     @Transient
     private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
 
@@ -77,32 +78,14 @@ public class BookInfoBean implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        BookInfoBean bookInfoBean = (BookInfoBean) super.clone();
-        bookInfoBean.name = name;
-        bookInfoBean.tag = tag;
-        bookInfoBean.noteUrl = noteUrl;
-        bookInfoBean.chapterUrl = chapterUrl;
-        bookInfoBean.coverUrl = coverUrl;
-        bookInfoBean.author = author;
-        bookInfoBean.introduce = introduce;
-        bookInfoBean.origin = origin;
-        bookInfoBean.charset = charset;
-        if (chapterList != null) {
-            List<ChapterListBean> newListC = new ArrayList<>();
-            for (ChapterListBean chapterListBean : chapterList) {
-                newListC.add((ChapterListBean) chapterListBean.clone());
-            }
-            bookInfoBean.setChapterList(newListC);
+    protected Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookInfoBean.class);
+        } catch (Exception ignored) {
         }
-        if (bookmarkList != null) {
-            List<BookmarkBean> newListM = new ArrayList<>();
-            for (BookmarkBean bookmarkBean : bookmarkList) {
-                newListM.add((BookmarkBean) bookmarkBean.clone());
-            }
-            bookInfoBean.setBookmarkList(newListM);
-        }
-        return bookInfoBean;
+        return this;
     }
 
     public String getName() {
@@ -137,14 +120,14 @@ public class BookInfoBean implements Cloneable {
         this.chapterUrl = chapterUrl;
     }
 
-    public List<ChapterListBean> getChapterList() {
+    public List<BookChapterBean> getChapterList() {
         if (chapterList == null) {
             chapterList = new ArrayList<>();
         }
         return chapterList;
     }
 
-    public void setChapterList(List<ChapterListBean> chapterList) {
+    public void setChapterList(List<BookChapterBean> chapterList) {
         this.chapterList = chapterList;
     }
 

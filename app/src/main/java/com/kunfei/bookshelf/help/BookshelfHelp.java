@@ -5,18 +5,18 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.AppConstant;
+import com.kunfei.bookshelf.dao.BookChapterBeanDao;
 import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.BookShelfBeanDao;
 import com.kunfei.bookshelf.dao.BookmarkBeanDao;
-import com.kunfei.bookshelf.dao.ChapterListBeanDao;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import net.ricecode.similarity.JaroWinklerStrategy;
@@ -115,7 +115,7 @@ public class BookshelfHelp {
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
-    public static String getChapterCache(BookShelfBean bookShelfBean, ChapterListBean chapter) {
+    public static String getChapterCache(BookShelfBean bookShelfBean, BookChapterBean chapter) {
         if (bookShelfBean.isAudio()) {
             BookContentBean contentBean = DbHelper.getDaoSession().getBookContentBeanDao().load(chapter.getDurChapterUrl());
             if (contentBean == null) return null;
@@ -139,7 +139,7 @@ public class BookshelfHelp {
         FileHelp.getFolder(AppConstant.BOOK_CACHE_PATH);
         chapterCaches.clear();
         if (clearChapterList)
-            DbHelper.getDaoSession().getChapterListBeanDao().deleteAll();
+            DbHelper.getDaoSession().getBookChapterBeanDao().deleteAll();
     }
 
     /**
@@ -352,7 +352,7 @@ public class BookshelfHelp {
      */
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
         if (bookShelfBean.getErrorMsg() == null) {
-            DbHelper.getDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
+            DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
             DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
             DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
         }
@@ -383,17 +383,17 @@ public class BookshelfHelp {
         return bookShelfBean;
     }
 
-    public static List<ChapterListBean> getChapterList(String noteUrl) {
-        return DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
-                .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
-                .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
+    public static List<BookChapterBean> getChapterList(String noteUrl) {
+        return DbHelper.getDaoSession().getBookChapterBeanDao().queryBuilder()
+                .where(BookChapterBeanDao.Properties.NoteUrl.eq(noteUrl))
+                .orderAsc(BookChapterBeanDao.Properties.DurChapterIndex)
                 .build()
                 .list();
     }
 
     public static void delChapterList(String noteUrl) {
-        DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
-                .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
+        DbHelper.getDaoSession().getBookChapterBeanDao().queryBuilder()
+                .where(BookChapterBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
@@ -474,7 +474,7 @@ public class BookshelfHelp {
     public static void clearBookshelf() {
         DbHelper.getDaoSession().getBookShelfBeanDao().deleteAll();
         DbHelper.getDaoSession().getBookInfoBeanDao().deleteAll();
-        DbHelper.getDaoSession().getChapterListBeanDao().deleteAll();
+        DbHelper.getDaoSession().getBookChapterBeanDao().deleteAll();
     }
 
 }

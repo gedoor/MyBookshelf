@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
+import com.kunfei.bookshelf.dao.BookChapterBeanDao;
 import com.kunfei.bookshelf.dao.BookInfoBeanDao;
 import com.kunfei.bookshelf.dao.BookShelfBeanDao;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.BookmarkBeanDao;
-import com.kunfei.bookshelf.dao.ChapterListBeanDao;
 import com.kunfei.bookshelf.dao.CookieBeanDao;
 import com.kunfei.bookshelf.dao.DaoMaster;
 import com.kunfei.bookshelf.dao.DaoSession;
@@ -72,7 +72,7 @@ public class DbHelper {
                             DaoMaster.dropAllTables(db, ifExists);
                         }
                     },
-                    BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class,
+                    BookShelfBeanDao.class, BookInfoBeanDao.class, BookChapterBeanDao.class,
                     SearchHistoryBeanDao.class, BookSourceBeanDao.class,
                     ReplaceRuleBeanDao.class, BookmarkBeanDao.class, CookieBeanDao.class,
                     TxtChapterRuleBeanDao.class

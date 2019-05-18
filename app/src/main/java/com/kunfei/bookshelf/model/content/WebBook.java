@@ -4,11 +4,11 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
@@ -116,7 +116,7 @@ public class WebBook extends BaseModelImpl {
     /**
      * 获取目录
      */
-    public Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean) {
+    public Observable<List<BookChapterBean>> getChapterList(final BookShelfBean bookShelfBean) {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }

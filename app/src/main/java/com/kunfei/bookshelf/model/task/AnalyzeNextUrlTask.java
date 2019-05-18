@@ -2,8 +2,8 @@ package com.kunfei.bookshelf.model.task;
 
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.WebChapterBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.content.BookChapterList;
@@ -39,15 +39,15 @@ public class AnalyzeNextUrlTask {
                         bookChapterList.analyzeChapterList(stringResponse.body(), bookShelfBean, headerMap))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new MyObserver<List<ChapterListBean>>() {
+                .subscribe(new MyObserver<List<BookChapterBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         callback.addDisposable(d);
                     }
 
                     @Override
-                    public void onNext(List<ChapterListBean> chapterListBeans) {
-                        callback.analyzeFinish(webChapterBean, chapterListBeans);
+                    public void onNext(List<BookChapterBean> bookChapterBeans) {
+                        callback.analyzeFinish(webChapterBean, bookChapterBeans);
                     }
 
                     @Override
@@ -60,7 +60,7 @@ public class AnalyzeNextUrlTask {
     public interface Callback {
         void addDisposable(Disposable disposable);
 
-        void analyzeFinish(WebChapterBean bean, List<ChapterListBean> chapterListBeans);
+        void analyzeFinish(WebChapterBean bean, List<BookChapterBean> bookChapterBeans);
 
         void onError(Throwable throwable);
     }

@@ -16,8 +16,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
@@ -657,12 +657,12 @@ public abstract class PageLoader {
     /**
      * 获取章节的文本
      */
-    protected abstract String getChapterContent(ChapterListBean chapter) throws Exception;
+    protected abstract String getChapterContent(BookChapterBean chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      */
-    protected abstract boolean noChapterData(ChapterListBean chapter);
+    protected abstract boolean noChapterData(BookChapterBean chapter);
 
     /**
      * 打开当前章节指定页
@@ -1607,7 +1607,7 @@ public abstract class PageLoader {
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<ChapterListBean> chapters);
+        void onCategoryFinish(List<BookChapterBean> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

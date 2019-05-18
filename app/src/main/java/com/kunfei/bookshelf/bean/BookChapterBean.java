@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
  * 章节列表
  */
 @Entity
-public class ChapterListBean implements Cloneable, BaseChapterBean {
+public class BookChapterBean implements Cloneable, BaseChapterBean {
 
     private String noteUrl; //对应BookInfoBean noteUrl;
 
@@ -29,8 +29,8 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
     //章节内容在文章中的终止位置(本地)
     private Long end;
 
-    @Generated(hash = 1504053071)
-    public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
+    @Generated(hash = 435151612)
+    public BookChapterBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
                            Long start, Long end) {
         this.noteUrl = noteUrl;
         this.durChapterIndex = durChapterIndex;
@@ -41,31 +41,31 @@ public class ChapterListBean implements Cloneable, BaseChapterBean {
         this.end = end;
     }
 
-    public ChapterListBean(String tag, String durChapterName, String durChapterUrl) {
+    public BookChapterBean(String tag, String durChapterName, String durChapterUrl) {
         this.tag = tag;
         this.durChapterName = durChapterName;
         this.durChapterUrl = durChapterUrl;
     }
 
-    @Generated(hash = 1096893365)
-    public ChapterListBean() {
+    @Generated(hash = 853839616)
+    public BookChapterBean() {
     }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        ChapterListBean chapterListBean = (ChapterListBean) super.clone();
-        chapterListBean.noteUrl = noteUrl;
-        chapterListBean.durChapterUrl = durChapterUrl;
-        chapterListBean.durChapterName = durChapterName;
-        chapterListBean.tag = tag;
-        return chapterListBean;
+        BookChapterBean bookChapterBean = (BookChapterBean) super.clone();
+        bookChapterBean.noteUrl = noteUrl;
+        bookChapterBean.durChapterUrl = durChapterUrl;
+        bookChapterBean.durChapterName = durChapterName;
+        bookChapterBean.tag = tag;
+        return bookChapterBean;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ChapterListBean) {
-            ChapterListBean chapterListBean = (ChapterListBean) obj;
-            return Objects.equals(chapterListBean.durChapterUrl, durChapterUrl);
+        if (obj instanceof BookChapterBean) {
+            BookChapterBean bookChapterBean = (BookChapterBean) obj;
+            return Objects.equals(bookChapterBean.durChapterUrl, durChapterUrl);
         } else {
             return false;
         }

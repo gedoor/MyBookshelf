@@ -50,12 +50,7 @@ public class ChapterListActivity extends BaseTabActivity {
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
         intent.putExtra("data_key", key);
-        try {
-            BitIntentDataManager.getInstance().putData(key, bookShelf.clone());
-        } catch (CloneNotSupportedException e) {
-            BitIntentDataManager.getInstance().putData(key, bookShelf);
-            e.printStackTrace();
-        }
+        BitIntentDataManager.getInstance().putData(key, bookShelf.clone());
         activity.startActivity(intent);
     }
 

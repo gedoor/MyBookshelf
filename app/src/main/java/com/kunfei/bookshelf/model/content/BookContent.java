@@ -7,11 +7,11 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
-import com.kunfei.bookshelf.dao.ChapterListBeanDao;
+import com.kunfei.bookshelf.dao.BookChapterBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.NetworkUtil;
@@ -86,8 +86,8 @@ class BookContent {
             if (!TextUtils.isEmpty(webContentBean.nextUrl)) {
                 List<String> usedUrlList = new ArrayList<>();
                 usedUrlList.add(chapterBean.getDurChapterUrl());
-                ChapterListBean nextChapter = DbHelper.getDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), ChapterListBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
+                BookChapterBean nextChapter = DbHelper.getDaoSession().getBookChapterBeanDao().queryBuilder()
+                        .where(BookChapterBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), BookChapterBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
                         .build().unique();
                 while (!TextUtils.isEmpty(webContentBean.nextUrl) && !usedUrlList.contains(webContentBean.nextUrl)) {
                     usedUrlList.add(webContentBean.nextUrl);

@@ -6,8 +6,8 @@ import android.graphics.Canvas;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -48,7 +48,7 @@ public class PageLoaderEpub extends PageLoader {
 
     private Book book;
 
-    private List<ChapterListBean> chapterList;
+    private List<BookChapterBean> chapterList;
 
     PageLoaderEpub(PageView pageView, BookShelfBean bookShelfBean) {
         super(pageView, bookShelfBean);
@@ -98,7 +98,7 @@ public class PageLoaderEpub extends PageLoader {
         canvas.drawBitmap(cover, left, top, mTextPaint);
     }
 
-    private List<ChapterListBean> loadChapters() {
+    private List<BookChapterBean> loadChapters() {
         BookShelfBean bookShelf = bookShelfBean;
         Metadata metadata = book.getMetadata();
         bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
@@ -127,7 +127,7 @@ public class PageLoaderEpub extends PageLoader {
                         e.printStackTrace();
                     }
                 }
-                ChapterListBean bean = new ChapterListBean();
+                BookChapterBean bean = new BookChapterBean();
                 bean.setDurChapterIndex(i);
                 bean.setNoteUrl(bookShelf.getNoteUrl());
                 bean.setDurChapterUrl(resource.getHref());
@@ -152,11 +152,11 @@ public class PageLoaderEpub extends PageLoader {
         if (refs == null) return;
         for (TOCReference ref : refs) {
             if (ref.getResource() != null) {
-                ChapterListBean chapterListBean = new ChapterListBean();
-                chapterListBean.setNoteUrl(bookShelfBean.getNoteUrl());
-                chapterListBean.setDurChapterName(ref.getTitle());
-                chapterListBean.setDurChapterUrl(ref.getCompleteHref());
-                chapterList.add(chapterListBean);
+                BookChapterBean bookChapterBean = new BookChapterBean();
+                bookChapterBean.setNoteUrl(bookShelfBean.getNoteUrl());
+                bookChapterBean.setDurChapterName(ref.getTitle());
+                bookChapterBean.setDurChapterUrl(ref.getCompleteHref());
+                chapterList.add(bookChapterBean);
             }
             if (ref.getChildren() != null && !ref.getChildren().isEmpty()) {
                 parseMenu(ref.getChildren(), level + 1);
@@ -165,7 +165,7 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     @Override
-    protected String getChapterContent(ChapterListBean chapter) throws Exception {
+    protected String getChapterContent(BookChapterBean chapter) throws Exception {
         Resource resource = book.getResources().getByHref(chapter.getDurChapterUrl());
         StringBuilder content = new StringBuilder();
         Document doc = Jsoup.parse(new String(resource.getData(), mCharset));
@@ -194,8 +194,8 @@ public class PageLoaderEpub extends PageLoader {
         if (!collBook.getHasUpdate() && !collBook.realChapterListEmpty()) {
             return Observable.just(collBook);
         } else {
-            return Observable.create((ObservableOnSubscribe<List<ChapterListBean>>) e -> {
-                List<ChapterListBean> chapterList = loadChapters();
+            return Observable.create((ObservableOnSubscribe<List<BookChapterBean>>) e -> {
+                List<BookChapterBean> chapterList = loadChapters();
                 if (!chapterList.isEmpty()) {
                     e.onNext(chapterList);
                 } else {
@@ -269,7 +269,7 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     @Override
-    protected boolean noChapterData(ChapterListBean chapter) {
+    protected boolean noChapterData(BookChapterBean chapter) {
         return false;
     }
 

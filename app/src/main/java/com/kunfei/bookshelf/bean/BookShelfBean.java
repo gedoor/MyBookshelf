@@ -85,12 +85,14 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        BookShelfBean bookShelfBean = (BookShelfBean) super.clone();
-        bookShelfBean.noteUrl = noteUrl;
-        bookShelfBean.tag = tag;
-        bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
-        return bookShelfBean;
+    public Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookShelfBean.class);
+        } catch (Exception ignored) {
+        }
+        return this;
     }
 
     @Override
@@ -120,12 +122,12 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return variableMap;
     }
 
-    public ChapterListBean getChapter(int index) {
+    public BookChapterBean getChapter(int index) {
         if (realChapterListEmpty()) {
-            ChapterListBean chapterListBean = new ChapterListBean();
-            chapterListBean.setDurChapterName("暂无");
-            chapterListBean.setDurChapterUrl("暂无");
-            return chapterListBean;
+            BookChapterBean bookChapterBean = new BookChapterBean();
+            bookChapterBean.setDurChapterName("暂无");
+            bookChapterBean.setDurChapterUrl("暂无");
+            return bookChapterBean;
         } else if (0 <= index && index < getChapterList().size()) {
             return getChapterList().get(index);
         } else {
@@ -158,7 +160,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return durChapter < 0 ? 0 : durChapter;
     }
 
-    public List<ChapterListBean> getChapterList() {
+    public List<BookChapterBean> getChapterList() {
         return bookInfoBean.getChapterList();
     }
 
@@ -319,7 +321,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return getChapterList().isEmpty();
     }
 
-    public void setChapterList(List<ChapterListBean> chapterList) {
+    public void setChapterList(List<BookChapterBean> chapterList) {
         this.bookInfoBean.setChapterList(chapterList);
     }
 

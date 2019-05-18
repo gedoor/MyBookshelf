@@ -5,7 +5,7 @@ import android.text.StaticLayout;
 
 import androidx.annotation.NonNull;
 
-import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 
@@ -20,7 +20,7 @@ class ChapterProvider {
         this.pageLoader = pageLoader;
     }
 
-    TxtChapter dealLoadPageList(ChapterListBean chapter, boolean isPrepare) {
+    TxtChapter dealLoadPageList(BookChapterBean chapter, boolean isPrepare) {
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         // 判断章节是否存在
         if (!isPrepare || pageLoader.noChapterData(chapter)) {
@@ -52,7 +52,7 @@ class ChapterProvider {
      * @param chapter：章节信息
      * @param content：章节的文本
      */
-    private TxtChapter loadPageList(ChapterListBean chapter, @NonNull String content) {
+    private TxtChapter loadPageList(BookChapterBean chapter, @NonNull String content) {
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         if (pageLoader.bookShelfBean.isAudio()) {
