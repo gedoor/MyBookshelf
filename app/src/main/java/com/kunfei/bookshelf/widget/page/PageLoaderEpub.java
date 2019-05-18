@@ -204,7 +204,7 @@ public class PageLoaderEpub extends PageLoader {
                 e.onComplete();
             })
                     .flatMap(chapterList -> {
-                        collBook.setChapterList(chapterList);
+                        collBook.getBookInfoBean().setChapterList(chapterList);
                         collBook.setChapterListSize(chapterList.size());
                         return Observable.just(collBook);
                     })
@@ -278,7 +278,7 @@ public class PageLoaderEpub extends PageLoader {
         BookShelfBean bookShelf = bookShelfBean;
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
-            bookShelf.setChapterList(null);
+            bookShelf.getBookInfoBean().setChapterList(null);
             BookshelfHelp.delChapterList(bookShelf.getNoteUrl());
             if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
                 bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(book.getCoverPage().getData()));

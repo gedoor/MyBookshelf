@@ -321,10 +321,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return getChapterList().isEmpty();
     }
 
-    public void setChapterList(List<BookChapterBean> chapterList) {
-        this.bookInfoBean.setChapterList(chapterList);
-    }
-
     public boolean realBookmarkListEmpty() {
         return getBookmarkList().isEmpty();
     }

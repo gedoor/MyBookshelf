@@ -66,7 +66,7 @@ public class PageLoaderText extends PageLoader {
                 bookShelfBean.setHasUpdate(true);
             }
             if (bookShelfBean.getHasUpdate() || bookShelfBean.getChapterList().size() == 0) {
-                bookShelfBean.setChapterList(loadChapters());
+                bookShelfBean.getBookInfoBean().setChapterList(loadChapters());
                 bookShelfBean.setHasUpdate(false);
             }
             e.onSuccess(bookShelfBean.getChapterList());
