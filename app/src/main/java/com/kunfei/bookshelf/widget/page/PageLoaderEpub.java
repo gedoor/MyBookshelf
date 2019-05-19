@@ -265,11 +265,12 @@ public class PageLoaderEpub extends PageLoader {
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
-            BookshelfHelp.delChapterList(book.getNoteUrl());
             if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
                 book.getBookInfoBean().setCharset("UTF-8");
             }
             mCharset = Charset.forName(book.getBookInfoBean().getCharset());
+            //清除原目录
+            BookshelfHelp.delChapterList(book.getNoteUrl());
             callback.getChapterList().clear();
             e.onNext(book);
             e.onComplete();
