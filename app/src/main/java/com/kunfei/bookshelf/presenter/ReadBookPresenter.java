@@ -79,11 +79,14 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (bookShelf == null) {
                 String bookKey = intent.getStringExtra("bookKey");
-                if (!isEmpty(bookKey))
+                if (!isEmpty(bookKey)) {
                     bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(bookKey);
+                }
                 String chapterListKey = intent.getStringExtra("chapterListKey");
-                if (!isEmpty(chapterListKey))
+                if (!isEmpty(chapterListKey)) {
                     chapterBeanList = (List<BookChapterBean>) BitIntentDataManager.getInstance().getData(chapterListKey);
+                    if (chapterBeanList == null) chapterBeanList = new ArrayList<>();
+                }
             }
             if (bookShelf == null && !isEmpty(mView.getNoteUrl())) {
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());
