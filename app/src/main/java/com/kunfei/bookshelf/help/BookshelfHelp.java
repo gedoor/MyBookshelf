@@ -283,7 +283,6 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(bookUrl);
             if (bookInfoBean != null) {
                 bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
-                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfBean.setBookInfoBean(bookInfoBean);
                 return bookShelfBean;
             }

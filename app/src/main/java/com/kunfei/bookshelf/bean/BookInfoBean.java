@@ -51,8 +51,6 @@ public class BookInfoBean implements Cloneable {
     private String chapterListHtml;
     @Transient
     private List<BookChapterBean> chapterList;    //章节列表
-    @Transient
-    private List<BookmarkBean> bookmarkList;    //书签列表
 
     public BookInfoBean() {
     }
@@ -169,17 +167,6 @@ public class BookInfoBean implements Cloneable {
 
     public void setOrigin(String origin) {
         this.origin = origin;
-    }
-
-    public List<BookmarkBean> getBookmarkList() {
-        if (bookmarkList == null) {
-            return new ArrayList<>();
-        }
-        return bookmarkList;
-    }
-
-    public void setBookmarkList(List<BookmarkBean> bookmarkList) {
-        this.bookmarkList = bookmarkList;
     }
 
     public String getCharset() {

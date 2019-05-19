@@ -93,7 +93,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 } else {
                     chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
                 }
-                bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
             }
             if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
                 bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
@@ -298,7 +297,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public void saveBookmark(BookmarkBean bookmarkBean) {
         Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
             BookshelfHelp.saveBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
             e.onNext(bookmarkBean);
             e.onComplete();
         })
@@ -311,7 +309,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public void delBookmark(BookmarkBean bookmarkBean) {
         Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
             BookshelfHelp.delBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
             e.onNext(bookmarkBean);
             e.onComplete();
         })

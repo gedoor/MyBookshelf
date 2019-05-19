@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -46,6 +47,7 @@ public class ChapterListActivity extends BaseTabActivity {
     private SearchView searchView;
     private BookShelfBean bookShelf;
     private List<BookChapterBean> chapterBeanList;
+    private List<BookmarkBean> bookmarkBeanList;
 
     public static void startThis(MBaseActivity activity, BookShelfBean bookShelf, List<BookChapterBean> chapterBeanList) {
         Intent intent = new Intent(activity, ChapterListActivity.class);

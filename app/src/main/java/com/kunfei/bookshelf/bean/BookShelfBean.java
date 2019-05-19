@@ -138,16 +138,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         }
     }
 
-    public BookmarkBean getBookmark(int index) {
-        if (realBookmarkListEmpty() || index < 0) {
-            return null;
-        } else if (index < getBookmarkList().size()) {
-            return getBookmarkList().get(index);
-        } else {
-            return getBookmarkList().get(getChapterList().size() - 1);
-        }
-    }
-
     @Override
     public String getNoteUrl() {
         return noteUrl;
@@ -309,18 +299,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public boolean realChapterListEmpty() {
         return getChapterList().isEmpty();
-    }
-
-    public boolean realBookmarkListEmpty() {
-        return getBookmarkList().isEmpty();
-    }
-
-    public List<BookmarkBean> getBookmarkList() {
-        return this.bookInfoBean.getBookmarkList();
-    }
-
-    public int getBookmarkListSize() {
-        return getBookmarkList().size();
     }
 
     public Boolean getUseReplaceRule() {
