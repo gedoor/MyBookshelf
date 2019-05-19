@@ -273,8 +273,12 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
             String key = String.valueOf(System.currentTimeMillis());
-            intent.putExtra("data_key", key);
-            BitIntentDataManager.getInstance().putData(key, mPresenter.getBookShelf().clone());
+            String bookKey = "book" + key;
+            intent.putExtra("bookKey", bookKey);
+            BitIntentDataManager.getInstance().putData(bookKey, mPresenter.getBookShelf().clone());
+            String chapterListKey = "chapterList" + key;
+            intent.putExtra("chapterListKey", chapterListKey);
+            BitIntentDataManager.getInstance().putData(chapterListKey, mPresenter.getChapterList());
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

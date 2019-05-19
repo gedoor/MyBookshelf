@@ -40,7 +40,7 @@ public class WebBookModel {
      * 网络解析图书目录
      * return BookShelfBean
      */
-    public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
+    public Observable<List<BookChapterBean>> getChapterList(final BookShelfBean bookShelfBean) {
         return WebBook.getInstance(bookShelfBean.getTag())
                 .getChapterList(bookShelfBean)
                 .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList))
@@ -78,7 +78,7 @@ public class WebBookModel {
     /**
      * 更新目录
      */
-    private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<BookChapterBean> chapterList) {
+    private Observable<List<BookChapterBean>> upChapterList(BookShelfBean bookShelfBean, List<BookChapterBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
                 BookChapterBean chapter = chapterList.get(i);
@@ -94,11 +94,10 @@ public class WebBookModel {
             if (!chapterList.isEmpty()) {
                 bookShelfBean.setChapterListSize(chapterList.size());
                 bookShelfBean.setDurChapter(Math.min(bookShelfBean.getDurChapter(), bookShelfBean.getChapterListSize() - 1));
-                bookShelfBean.getBookInfoBean().setChapterList(chapterList);
                 bookShelfBean.setDurChapterName(chapterList.get(bookShelfBean.getDurChapter()).getDurChapterName());
                 bookShelfBean.setLastChapterName(chapterList.get(chapterList.size() - 1).getDurChapterName());
             }
-            e.onNext(bookShelfBean);
+            e.onNext(chapterList);
             e.onComplete();
         });
     }

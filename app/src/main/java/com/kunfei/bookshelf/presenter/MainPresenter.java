@@ -14,6 +14,7 @@ import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -161,7 +162,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         WebBookModel.getInstance()
                 .getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
-                .flatMap(this::saveBookToShelfO)
+                .flatMap(chapterBeanList -> saveBookToShelfO(bookShelfBean, chapterBeanList))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BookShelfBean>() {
@@ -186,9 +187,10 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     /**
      * 保存数据
      */
-    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList) {
         return Observable.create(e -> {
             BookshelfHelp.saveBookToShelf(bookShelfBean);
+            DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
             e.onNext(bookShelfBean);
             e.onComplete();
         });

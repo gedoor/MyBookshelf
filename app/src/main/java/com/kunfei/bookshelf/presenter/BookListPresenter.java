@@ -12,8 +12,10 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -92,9 +94,9 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
-                    bookShelfBean.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl()));
+                    List<BookChapterBean> chapterBeanList = BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl());
                     for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if (!bookShelfBean.getChapter(start).getHasCache(bookShelfBean.getBookInfoBean())
+                        if (!chapterBeanList.get(start).getHasCache(bookShelfBean.getBookInfoBean())
                                 && start < chapterNum - 1) {
                             DownloadBookBean downloadBook = new DownloadBookBean();
                             downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
@@ -104,7 +106,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1);
                             downloadBook.setFinalDate(System.currentTimeMillis());
                             DownloadService.addDownload(mView.getContext(), downloadBook);
-                            bookShelfBean.getBookInfoBean().setChapterList(null);
                             break;
                         }
                     }
@@ -134,7 +135,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
                 WebBookModel.getInstance().getChapterList(bookShelfBean)
-                        .flatMap(this::saveBookToShelfO)
+                        .flatMap(chapterBeanList -> saveBookToShelfO(bookShelfBean, chapterBeanList))
                         .compose(RxUtils::toSimpleSingle)
                         .subscribe(new Observer<BookShelfBean>() {
                             @Override
@@ -189,11 +190,12 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
     /**
      * 保存数据
      */
-    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList) {
         return Observable.create(e -> {
-            if (!bookShelfBean.getChapterList().isEmpty()) {
+            if (!chapterBeanList.isEmpty()) {
                 BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
                 BookshelfHelp.saveBookToShelf(bookShelfBean);
+                DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
             }
             e.onNext(bookShelfBean);
             e.onComplete();

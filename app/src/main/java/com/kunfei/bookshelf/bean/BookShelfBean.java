@@ -12,7 +12,6 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -122,22 +121,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return variableMap;
     }
 
-    public BookChapterBean getChapter(int index) {
-        if (realChapterListEmpty()) {
-            BookChapterBean bookChapterBean = new BookChapterBean();
-            bookChapterBean.setTag(tag);
-            bookChapterBean.setDurChapterIndex(index);
-            bookChapterBean.setDurChapterName("暂无");
-            bookChapterBean.setDurChapterUrl("暂无");
-            return bookChapterBean;
-        } else if (0 <= index && index < getChapterList().size()) {
-            return getChapterList().get(index);
-        } else {
-            durChapter = getChapterList().size() - 1;
-            return getChapterList().get(durChapter);
-        }
-    }
-
     @Override
     public String getNoteUrl() {
         return noteUrl;
@@ -150,10 +133,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public int getDurChapter() {
         return durChapter < 0 ? 0 : durChapter;
-    }
-
-    public List<BookChapterBean> getChapterList() {
-        return bookInfoBean.getChapterList();
     }
 
     public int getDurChapterPage() {
@@ -271,10 +250,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public int getChapterListSize() {
-        if (getChapterList().isEmpty()) {
-            return this.chapterListSize == null ? 0 : this.chapterListSize;
-        }
-        return getChapterList().size();
+        return this.chapterListSize == null ? 0 : this.chapterListSize;
     }
 
     public void setChapterListSize(Integer chapterListSize) {
@@ -295,10 +271,6 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public void setAllowUpdate(Boolean allowUpdate) {
         this.allowUpdate = allowUpdate;
-    }
-
-    public boolean realChapterListEmpty() {
-        return getChapterList().isEmpty();
     }
 
     public Boolean getUseReplaceRule() {

@@ -155,9 +155,6 @@ public class DataBackup {
     private void backupBookShelf(String file) {
         List<BookShelfBean> bookShelfList = BookshelfHelp.getAllBook();
         if (bookShelfList != null && bookShelfList.size() > 0) {
-            for (BookShelfBean bookshelf : bookShelfList) {
-                bookshelf.getBookInfoBean().setChapterList(null);
-            }
             Gson gson = new GsonBuilder()
                     .disableHtmlEscaping()
                     .setPrettyPrinting()
@@ -168,7 +165,6 @@ public class DataBackup {
                 DocumentHelper.writeString(bookshelf, docFile);
             }
         }
-        BookshelfHelp.getAllBook();
     }
 
     private void backupBookSource(String file) {

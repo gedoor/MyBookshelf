@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -186,7 +187,7 @@ public class UpLastChapterModel {
         });
     }
 
-    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
+    private Observable<List<BookChapterBean>> getChapterList(BookShelfBean bookShelfBean) {
         if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
             return WebBookModel.getInstance().getBookInfo(bookShelfBean)
                     .flatMap(bookShelf -> WebBookModel.getInstance().getChapterList(bookShelf));
@@ -195,13 +196,14 @@ public class UpLastChapterModel {
         }
     }
 
-    private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
+    private Observable<SearchBookBean> saveSearchBookBean(List<BookChapterBean> chapterBeanList) {
         return Observable.create(e -> {
+            BookChapterBean chapterBean = chapterBeanList.get(chapterBeanList.size() - 1);
             SearchBookBean searchBookBean = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
-                    .where(SearchBookBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
+                    .where(SearchBookBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()))
                     .unique();
             if (searchBookBean != null) {
-                searchBookBean.setLastChapter(bookShelfBean.getLastChapterName());
+                searchBookBean.setLastChapter(chapterBean.getDurChapterName());
                 searchBookBean.setAddTime(System.currentTimeMillis());
                 DbHelper.getDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                 e.onNext(searchBookBean);

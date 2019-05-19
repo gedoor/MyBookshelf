@@ -3,14 +3,12 @@ package com.kunfei.bookshelf.bean;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
 
 /**
  * 章节列表
@@ -98,24 +96,6 @@ public class BookChapterBean implements Cloneable, BaseChapterBean {
         this.durChapterName = durChapterName;
     }
 
-    public String getPureChapterName() {
-        return durChapterName == null ? ""
-                : StringUtils.fullToHalf(durChapterName).replaceAll("\\s", "")
-                .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-        // 所有非字母数字中日韩文字 CJK区+扩展A-F区
-    }
-
-    public int getChapterNum() {
-        if (durChapterName != null) {
-            Matcher matcher = BookshelfHelp.chapterNamePattern.matcher(durChapterName);
-            if (matcher.find()) {
-                return StringUtils.stringToInt(matcher.group(2));
-            }
-        }
-        return -1;
-    }
-
     @Override
     public String getDurChapterUrl() {
         return this.durChapterUrl;
@@ -160,7 +140,7 @@ public class BookChapterBean implements Cloneable, BaseChapterBean {
     }
 
     public Boolean getHasCache(BookInfoBean bookInfoBean) {
-        return BookshelfHelp.isChapterCached(bookInfoBean, this);
+        return BookshelfHelp.isChapterCached(bookInfoBean.getName(), tag, this, bookInfoBean.isAudio());
     }
 
 }

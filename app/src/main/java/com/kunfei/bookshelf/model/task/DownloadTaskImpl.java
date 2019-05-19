@@ -5,9 +5,9 @@ import android.text.TextUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
-import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -46,26 +46,22 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         disposables = new CompositeDisposable();
 
         Observable.create((ObservableOnSubscribe<DownloadBookBean>) emitter -> {
-            BookShelfBean book = BookshelfHelp.getBook(downloadBook.getNoteUrl());
-            if (book != null) {
-                if (!book.realChapterListEmpty()) {
-                    for (int i = downloadBook.getStart(); i <= downloadBook.getEnd(); i++) {
-                        DownloadChapterBean chapter = new DownloadChapterBean();
-                        chapter.setBookName(book.getBookInfoBean().getName());
-                        chapter.setDurChapterIndex(book.getChapter(i).getDurChapterIndex());
-                        chapter.setDurChapterName(book.getChapter(i).getDurChapterName());
-                        chapter.setDurChapterUrl(book.getChapter(i).getDurChapterUrl());
-                        chapter.setNoteUrl(book.getNoteUrl());
-                        chapter.setTag(book.getTag());
-                        if (!BookshelfHelp.isChapterCached(book.getBookInfoBean(), chapter)) {
-                            downloadChapters.add(chapter);
-                        }
+            List<BookChapterBean> chapterList = BookshelfHelp.getChapterList(downloadBook.getNoteUrl());
+            if (!chapterList.isEmpty()) {
+                for (int i = downloadBook.getStart(); i <= downloadBook.getEnd(); i++) {
+                    DownloadChapterBean chapter = new DownloadChapterBean();
+                    chapter.setBookName(downloadBook.getName());
+                    chapter.setDurChapterIndex(chapterList.get(i).getDurChapterIndex());
+                    chapter.setDurChapterName(chapterList.get(i).getDurChapterName());
+                    chapter.setDurChapterUrl(chapterList.get(i).getDurChapterUrl());
+                    chapter.setNoteUrl(chapterList.get(i).getNoteUrl());
+                    chapter.setTag(chapterList.get(i).getTag());
+                    if (!BookshelfHelp.isChapterCached(chapter.getBookName(), chapter.getTag(), chapter, false)) {
+                        downloadChapters.add(chapter);
                     }
                 }
-                downloadBook.setDownloadCount(downloadChapters.size());
-            } else {
-                downloadBook.setValid(false);
             }
+            downloadBook.setDownloadCount(downloadChapters.size());
             emitter.onNext(downloadBook);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
