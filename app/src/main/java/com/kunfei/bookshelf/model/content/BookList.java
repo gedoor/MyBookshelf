@@ -274,6 +274,7 @@ class BookList {
         return null;
     }
 
+    // region 纯Java代码解析文本内容,模块代码
     // 纯java模式正则表达式获取书籍列表
     private List<SearchBookBean> getItemsOfRegex(String res, String[] regs, int index, String baseUrl){
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
@@ -304,7 +305,7 @@ class BookList {
             List<String[]> ruleGroups = new ArrayList<>();
             // 提取规则信息
             for(String rule:ruleList){
-                ruleGroups.add(rule.split("(?<=\\$\\d\\d)|(?<=\\$\\d)(?!\\d)|(?=\\$\\d)"));
+                ruleGroups.add(splitRegexRule(rule));
                 hasVars.add(rule.contains("@put") || rule.contains("@get"));
             }
             // 提取书籍列表信息
@@ -373,6 +374,29 @@ class BookList {
             return getItemsOfRegex(result.toString(), regs, ++index, baseUrl);
         }
     }
+    // 拆分正则表达式替换规则(如:$\d和$\d\d) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
+    private static String[] splitRegexRule(String str){
+        int start = 0,index = 0, len = str.length();
+        List<String> arr= new ArrayList<>();
+        while (start<len){
+            if((str.charAt(start)=='$') && (str.charAt(start+1)>='0') && (str.charAt(start+1)<='9')){
+                if(start>index) arr.add(str.substring(index, start));
+                if((start+2<len) && (str.charAt(start+2)>='0') && (str.charAt(start+2)<='9')){
+                    arr.add(str.substring(start, start+3));
+                    index = start += 3;
+                }
+                else{
+                    arr.add(str.substring(start, start+2));
+                    index = start += 2;
+                }
+            }
+            else{
+                ++start;
+            }
+        }
+        if(start>index) arr.add(str.substring(index, start));
+        return arr.toArray(new String[arr.size()]);
+    }
     // 存取字符串中的put&get参数
     private String checkKeys(String str){
         if(str.contains("@put:{")){
@@ -390,7 +414,7 @@ class BookList {
         }
         return str;
     }
-    // string转int数字的高效方法(利用ASCII值判断)
+    // String数字转int数字的高效方法(利用ASCII值判断)
     private static int string2Int(String s) {
         int r = 0;
         char n;
@@ -416,4 +440,5 @@ class BookList {
         if(end<len) ++end;
         return ((start>0) || (end<len)) ? s.substring(start,end) : s;
     }
+    // endregion
 }
