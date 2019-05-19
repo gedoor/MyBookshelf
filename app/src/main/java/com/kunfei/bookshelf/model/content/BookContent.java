@@ -66,7 +66,7 @@ class BookContent {
                 return;
             }
             Debug.printLog(tag, "┌成功获取正文页");
-            Debug.printLog(tag, "└" + chapterBean.getDurChapterUrl());
+            Debug.printLog(tag, "└" + baseUrl);
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
