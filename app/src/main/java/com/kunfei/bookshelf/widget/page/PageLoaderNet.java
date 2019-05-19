@@ -9,7 +9,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -190,7 +190,7 @@ public class PageLoaderNet extends PageLoader {
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return NetworkUtil.isNetWorkAvailable() && noChapterData(callback.getChapterList().get(chapterIndex));
+        return NetworkUtils.isNetWorkAvailable() && noChapterData(callback.getChapterList().get(chapterIndex));
     }
 
     // 装载上一章节的内容

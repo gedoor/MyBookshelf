@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.Keep;
 
 import com.google.gson.Gson;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
 
@@ -25,7 +25,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
-import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
+import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
 
 /**
  * Created by GKF on 2018/1/24.
@@ -244,7 +244,7 @@ public class AnalyzeUrl {
      * 分解URL
      */
     private void generateUrlPath(String ruleUrl) {
-        url = NetworkUtil.getAbsoluteURL(baseUrl, ruleUrl);
+        url = NetworkUtils.getAbsoluteURL(baseUrl, ruleUrl);
         host = StringUtils.getBaseUrl(url);
         urlPath = url.substring(host.length());
     }

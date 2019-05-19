@@ -14,7 +14,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookChapterBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -47,12 +47,7 @@ class BookContent {
     }
 
     Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, BookInfoBean bookInfoBean, Map<String, String> headerMap) {
-        okhttp3.Response networkResponse = response.raw().networkResponse();
-        if (networkResponse != null) {
-            baseUrl = networkResponse.request().url().toString();
-        } else {
-            baseUrl = response.raw().request().url().toString();
-        }
+        baseUrl = NetworkUtils.getUrl(response);
         return analyzeBookContent(response.body(), chapterBean, bookInfoBean, headerMap);
     }
 
@@ -63,7 +58,7 @@ class BookContent {
                 return;
             }
             if (TextUtils.isEmpty(baseUrl)) {
-                baseUrl = NetworkUtil.getAbsoluteURL(bookInfoBean.getChapterUrl(), chapterBean.getDurChapterUrl());
+                baseUrl = NetworkUtils.getAbsoluteURL(bookInfoBean.getChapterUrl(), chapterBean.getDurChapterUrl());
             }
             if (StringUtils.isJsonType(s) && !MApplication.getInstance().getDonateHb()) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
@@ -120,7 +115,7 @@ class BookContent {
         WebContentBean webContentBean = new WebContentBean();
 
         AnalyzeRule analyzer = new AnalyzeRule(null);
-        analyzer.setContent(s, NetworkUtil.getAbsoluteURL(baseUrl, chapterUrl));
+        analyzer.setContent(s, NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
         Debug.printLog(tag, "┌解析正文内容", printLog);
         webContentBean.content = analyzer.getString(ruleBookContent);
         Debug.printLog(tag, "└" + webContentBean.content, printLog);

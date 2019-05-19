@@ -7,6 +7,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.mozilla.javascript.NativeObject;
@@ -49,12 +50,7 @@ class BookList {
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             String baseUrl;
-            okhttp3.Response networkResponse = response.raw().networkResponse();
-            if (networkResponse != null) {
-                baseUrl = networkResponse.request().url().toString();
-            } else {
-                baseUrl = response.raw().request().url().toString();
-            }
+            baseUrl = NetworkUtils.getUrl(response);
             if (TextUtils.isEmpty(response.body())) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_web_content_error, baseUrl)));
                 return;

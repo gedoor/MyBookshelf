@@ -50,7 +50,7 @@ import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.BatteryUtil;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
@@ -740,7 +740,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                             tvChapterName.setText(mPresenter.getChapterList().get(pos).getDurChapterName());
-                            tvUrl.setText(NetworkUtil.getAbsoluteURL(mPresenter.getBookShelf().getBookInfoBean().getChapterUrl(),
+                            tvUrl.setText(NetworkUtils.getAbsoluteURL(mPresenter.getBookShelf().getBookInfoBean().getChapterUrl(),
                                     mPresenter.getChapterList().get(pos).getDurChapterUrl()));
                         } else {
                             tvChapterName.setText("");
@@ -942,7 +942,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 刷新当前章节
      */
     private void refreshDurChapter() {
-        if (!NetworkUtil.isNetWorkAvailable()) {
+        if (!NetworkUtils.isNetWorkAvailable()) {
             toast("网络不可用，无法刷新当前章节!");
             return;
         }
@@ -1010,7 +1010,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 换源
      */
     private void changeSource() {
-        if (!NetworkUtil.isNetWorkAvailable()) {
+        if (!NetworkUtils.isNetWorkAvailable()) {
             toast(R.string.network_connection_unavailable);
             return;
         }
@@ -1032,7 +1032,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 下载
      */
     private void download() {
-        if (!NetworkUtil.isNetWorkAvailable()) {
+        if (!NetworkUtils.isNetWorkAvailable()) {
             toast(R.string.network_connection_unavailable);
             return;
         }

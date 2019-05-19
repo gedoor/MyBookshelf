@@ -24,7 +24,7 @@ import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.content.WebBook;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.service.DownloadService;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                         if (null != value) {
                             bookShelfBeans = value;
                             mView.refreshBookShelf(bookShelfBeans);
-                            if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
+                            if (needRefresh && NetworkUtils.isNetWorkAvailable()) {
                                 startRefreshBook();
                             }
                         }
@@ -81,7 +81,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
+                        mView.refreshError(NetworkUtils.getErrorTip(NetworkUtils.ERROR_CODE_ANALY));
                     }
                 });
     }

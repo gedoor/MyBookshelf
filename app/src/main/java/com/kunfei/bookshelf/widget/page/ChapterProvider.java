@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ class ChapterProvider {
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         // 判断章节是否存在
         if (!isPrepare || pageLoader.noChapterData(chapter)) {
-            if (pageLoader instanceof PageLoaderNet && !NetworkUtil.isNetWorkAvailable()) {
+            if (pageLoader instanceof PageLoaderNet && !NetworkUtils.isNetWorkAvailable()) {
                 txtChapter.setStatus(TxtChapter.Status.ERROR);
                 txtChapter.setMsg("网络连接不可用");
             }

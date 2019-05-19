@@ -68,7 +68,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.kunfei.bookshelf.utils.NetworkUtil.isNetWorkAvailable;
+import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallbackValue {
     private static final int BACKUP_RESULT = 11;
