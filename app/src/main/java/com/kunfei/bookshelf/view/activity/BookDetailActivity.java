@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
@@ -108,6 +109,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         mPresenter.initData(getIntent());
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String dataKey = String.valueOf(System.currentTimeMillis());
+        getIntent().putExtra("openFrom", FROM_BOOKSHELF);
+        getIntent().putExtra("data_key", dataKey);
+        BitIntentDataManager.getInstance().putData(dataKey, mPresenter.getBookShelf());
+    }
 
     @Override
     protected void bindView() {
