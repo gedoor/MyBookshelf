@@ -93,20 +93,20 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         AsyncTask.execute(() -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
-                    int chapterNum = bookShelfBean.getChapterListSize();
                     List<BookChapterBean> chapterBeanList = BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl());
-                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if (!chapterBeanList.get(start).getHasCache(bookShelfBean.getBookInfoBean())
-                                && start < chapterNum - 1) {
-                            DownloadBookBean downloadBook = new DownloadBookBean();
-                            downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
-                            downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
-                            downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
-                            downloadBook.setStart(start);
-                            downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1);
-                            downloadBook.setFinalDate(System.currentTimeMillis());
-                            DownloadService.addDownload(mView.getContext(), downloadBook);
-                            break;
+                    if (chapterBeanList.size() >= bookShelfBean.getDurChapter()) {
+                        for (int start = bookShelfBean.getDurChapter(); start < chapterBeanList.size(); start++) {
+                            if (!chapterBeanList.get(start).getHasCache(bookShelfBean.getBookInfoBean())) {
+                                DownloadBookBean downloadBook = new DownloadBookBean();
+                                downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
+                                downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
+                                downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
+                                downloadBook.setStart(start);
+                                downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterBeanList.size() - 1, start + downloadNum - 1) : chapterBeanList.size() - 1);
+                                downloadBook.setFinalDate(System.currentTimeMillis());
+                                DownloadService.addDownload(mView.getContext(), downloadBook);
+                                break;
+                            }
                         }
                     }
                 }

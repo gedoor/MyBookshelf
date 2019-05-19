@@ -161,7 +161,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public boolean getHasUpdate() {
-        return hasUpdate;
+        return hasUpdate && !isAudio();
     }
 
     public int getNewChapters() {
