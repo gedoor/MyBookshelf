@@ -7,4 +7,12 @@
 
     <item type="id" name="tag2" />
 
+    <item type="id" name="menu_refresh" />
+
+    <item type="id" name="menu_disable_update" />
+
+    <item type="id" name="menu_allow_update" />
+
+    <item type="id" name="menu_edit_book_source" />
+
 </resources>
