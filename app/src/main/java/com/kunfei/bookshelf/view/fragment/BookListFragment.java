@@ -142,11 +142,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             @Override
             public void onClick(View view, int index) {
                 BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
-                String key = String.valueOf(System.currentTimeMillis());
-                BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
-                Intent intent = new Intent(getActivity(), ReadBookActivity.class);
+                Intent intent = new Intent(getContext(), ReadBookActivity.class);
                 intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
-                intent.putExtra("data_key", key);
+                String key = String.valueOf(System.currentTimeMillis());
+                String bookKey = "book" + key;
+                intent.putExtra("bookKey", bookKey);
+                BitIntentDataManager.getInstance().putData(bookKey, bookShelfBean.clone());
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
 

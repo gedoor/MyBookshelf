@@ -4,8 +4,11 @@ import android.content.Intent;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+
+import java.util.List;
 
 public interface BookDetailContract {
     interface Presenter extends IPresenter {
@@ -16,6 +19,8 @@ public interface BookDetailContract {
         SearchBookBean getSearchBook();
 
         BookShelfBean getBookShelf();
+
+        List<BookChapterBean> getChapterList();
 
         Boolean getInBookShelf();
 

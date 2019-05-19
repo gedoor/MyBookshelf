@@ -1,7 +1,10 @@
 package com.kunfei.bookshelf.help;
 
+import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.bean.TwoDataBean;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -72,7 +75,18 @@ public class ChangeSourceHelp {
                 if (Objects.equals(searchBookBean.getAuthor(), bookShelfBean.getBookInfoBean().getAuthor())) {
                     if (changeSourceListener != null) {
                         finish = true;
-                        changeSourceListener.finish(changeBookSource(searchBookBean, bookShelfBean));
+                        changeBookSource(searchBookBean, bookShelfBean)
+                                .subscribe(new MyObserver<TwoDataBean<BookShelfBean, List<BookChapterBean>>>() {
+                                    @Override
+                                    public void onNext(TwoDataBean<BookShelfBean, List<BookChapterBean>> twoData) {
+                                        changeSourceListener.finish(twoData.getData1(), twoData.getData2());
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        changeSourceListener.error(e);
+                                    }
+                                });
                     }
                     searchBookModel.onDestroy();
                     break;
@@ -89,7 +103,7 @@ public class ChangeSourceHelp {
         }
     }
 
-    public static Observable<BookShelfBean> changeBookSource(SearchBookBean searchBook, BookShelfBean oldBook) {
+    public static Observable<TwoDataBean<BookShelfBean, List<BookChapterBean>>> changeBookSource(SearchBookBean searchBook, BookShelfBean oldBook) {
         BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBook);
         bookShelfBean.setSerialNumber(oldBook.getSerialNumber());
         bookShelfBean.setLastChapterName(oldBook.getLastChapterName());
@@ -98,29 +112,30 @@ public class ChangeSourceHelp {
         bookShelfBean.setDurChapterPage(oldBook.getDurChapterPage());
         return WebBookModel.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(book -> WebBookModel.getInstance().getChapterList(book))
-                .flatMap(book -> saveChangedBook(book, oldBook))
+                .flatMap(chapterBeanList -> saveChangedBook(bookShelfBean, oldBook, chapterBeanList))
                 .compose(RxUtils::toSimpleSingle);
     }
 
-    private static Observable<BookShelfBean> saveChangedBook(BookShelfBean newBook, BookShelfBean oldBook) {
+    private static Observable<TwoDataBean<BookShelfBean, List<BookChapterBean>>> saveChangedBook(BookShelfBean newBook, BookShelfBean oldBook, List<BookChapterBean> chapterBeanList) {
         return Observable.create(e -> {
             if (newBook.getChapterListSize() <= oldBook.getChapterListSize()) {
                 newBook.setHasUpdate(false);
             }
             newBook.setCustomCoverPath(oldBook.getCustomCoverPath());
-            newBook.setDurChapter(BookshelfHelp.getDurChapter(oldBook, newBook));
-            newBook.setDurChapterName(newBook.getChapter(newBook.getDurChapter()).getDurChapterName());
+            newBook.setDurChapter(BookshelfHelp.getDurChapter(oldBook.getDurChapter(), oldBook.getChapterListSize(), oldBook.getDurChapterName(), chapterBeanList));
+            newBook.setDurChapterName(chapterBeanList.get(newBook.getDurChapter()).getDurChapterName());
             newBook.setGroup(oldBook.getGroup());
             BookshelfHelp.removeFromBookShelf(oldBook);
             BookshelfHelp.saveBookToShelf(newBook);
-            e.onNext(newBook);
+            e.onNext(new TwoDataBean<>(newBook, chapterBeanList));
             e.onComplete();
         });
     }
 
     public interface ChangeSourceListener {
-        void finish(Observable<BookShelfBean> bookShelfBeanO);
+        void finish(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList);
 
         void error(Throwable throwable);
     }
+
 }

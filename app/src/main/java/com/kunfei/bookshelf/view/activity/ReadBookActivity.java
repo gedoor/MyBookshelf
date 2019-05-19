@@ -182,8 +182,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
             outState.putBoolean("isAdd", isAdd);
             String key = String.valueOf(System.currentTimeMillis());
-            getIntent().putExtra("data_key", key);
-            BitIntentDataManager.getInstance().putData(key, mPresenter.getBookShelf());
+            String bookKey = "book" + key;
+            getIntent().putExtra("bookKey", bookKey);
+            BitIntentDataManager.getInstance().putData(bookKey, mPresenter.getBookShelf().clone());
+            String chapterListKey = "chapterList" + key;
+            getIntent().putExtra("chapterListKey", chapterListKey);
+            BitIntentDataManager.getInstance().putData(chapterListKey, mPresenter.getChapterList());
         }
     }
 
@@ -1200,7 +1204,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (isAdd || mPresenter.getBookShelf() == null
                 || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
             return true;
-        } else if (mPresenter.getBookShelf().realChapterListEmpty()) {
+        } else if (mPresenter.getChapterList().isEmpty()) {
             mPresenter.removeFromShelf();
             return true;
         } else {
@@ -1605,8 +1609,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void changeSourceFinish(BookShelfBean book) {
-        if (mPageLoader != null) {
-            mPageLoader.changeSourceFinish(book);
+        if (mPageLoader != null && mPageLoader instanceof PageLoaderNet) {
+            ((PageLoaderNet) mPageLoader).changeSourceFinish(book);
         }
     }
 

@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -30,6 +29,7 @@ import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.bean.TwoDataBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChangeSourceHelp;
@@ -49,8 +49,10 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.text.TextUtils.isEmpty;
+
 public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
-    public final static int OPEN_FROM_OTHER = 0;
+    private final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
     private BookShelfBean bookShelf;
@@ -71,14 +73,22 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void loadBook(Intent intent) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (bookShelf == null) {
-                String key = intent.getStringExtra("data_key");
-                bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
+                String bookKey = intent.getStringExtra("bookKey");
+                if (!isEmpty(bookKey)) {
+                    bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(bookKey);
+                }
+                String chapterListKey = intent.getStringExtra("chapterListKey");
+                if (!isEmpty(chapterListKey)) {
+                    chapterBeanList = (List<BookChapterBean>) BitIntentDataManager.getInstance().getData(chapterListKey);
+                    if (chapterBeanList == null) chapterBeanList = new ArrayList<>();
+                }
             }
-            if (bookShelf == null && !TextUtils.isEmpty(mView.getNoteUrl())) {
+            if (bookShelf == null && !isEmpty(mView.getNoteUrl())) {
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());
             }
             if (bookShelf == null) {
@@ -88,11 +98,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 }
             }
             if (bookShelf != null && chapterBeanList.isEmpty()) {
-                if (!bookShelf.getChapterList().isEmpty()) {
-                    chapterBeanList = bookShelf.getChapterList();
-                } else {
-                    chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
-                }
+                chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
             }
             if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
                 bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
@@ -107,7 +113,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
+                        if (bookShelf == null || isEmpty(bookShelf.getBookInfoBean().getName())) {
                             mView.finish();
                         } else {
                             mView.startLoadingBook();
@@ -224,12 +230,13 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
         ChangeSourceHelp.changeBookSource(searchBook, bookShelf)
-                .subscribe(new MyObserver<BookShelfBean>() {
+                .subscribe(new MyObserver<TwoDataBean<BookShelfBean, List<BookChapterBean>>>() {
                     @Override
-                    public void onNext(BookShelfBean value) {
+                    public void onNext(TwoDataBean<BookShelfBean, List<BookChapterBean>> value) {
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
-                        bookShelf = value;
+                        bookShelf = value.getData1();
+                        chapterBeanList = value.getData2();
                         mView.changeSourceFinish(bookShelf);
                         String tag = bookShelf.getTag();
                         try {
@@ -266,23 +273,18 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             changeSourceHelp = new ChangeSourceHelp();
         }
         changeSourceHelp.autoChange(bookShelf, new ChangeSourceHelp.ChangeSourceListener() {
-            @Override
-            public void finish(Observable<BookShelfBean> bookShelfBeanO) {
-                bookShelfBeanO.subscribe(new MyObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
-                        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
-                        bookShelf = bookShelfBean;
-                        mView.changeSourceFinish(bookShelf);
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast(e.getMessage());
-                        mView.changeSourceFinish(null);
-                    }
-                });
+            @Override
+            public void finish(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList) {
+                if (!chapterBeanList.isEmpty()) {
+                    RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                    RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
+                    bookShelf = bookShelfBean;
+                    ReadBookPresenter.this.chapterBeanList = chapterBeanList;
+                    mView.changeSourceFinish(bookShelf);
+                } else {
+                    mView.changeSourceFinish(null);
+                }
             }
 
             @Override
@@ -471,7 +473,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
     public void upAudioSize(Integer audioSize) {
         mView.upAudioSize(audioSize);
-        BookChapterBean bean = bookShelf.getChapter(bookShelf.getDurChapter());
+        BookChapterBean bean = chapterBeanList.get(bookShelf.getDurChapter());
         bean.setEnd(Long.valueOf(audioSize));
         DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplace(bean);
     }

@@ -354,13 +354,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 换源结束
-     */
-    public void changeSourceFinish(BookShelfBean book) {
-        openChapter(mCurPagePos);
-    }
-
-    /**
      * 跳转到上一章
      */
     public void skipPreChapter() {

@@ -50,22 +50,22 @@ public class PageLoaderNet extends PageLoader {
         } else {
             WebBookModel.getInstance().getChapterList(book)
                     .compose(RxUtils::toSimpleSingle)
-                    .subscribe(new MyObserver<BookShelfBean>() {
+                    .subscribe(new MyObserver<List<BookChapterBean>>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
                         }
 
                         @Override
-                        public void onNext(BookShelfBean bookShelfBean) {
+                        public void onNext(List<BookChapterBean> chapterBeanList) {
                             isChapterListPrepare = true;
                             // 目录加载完成
-                            if (!bookShelfBean.getChapterList().isEmpty()) {
-                                BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
-                                callback.onCategoryFinish(bookShelfBean.getChapterList());
+                            if (!chapterBeanList.isEmpty()) {
+                                BookshelfHelp.delChapterList(book.getNoteUrl());
+                                callback.onCategoryFinish(chapterBeanList);
                             }
                             // 加载并显示当前章节
-                            skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                            skipToChapter(book.getDurChapter(), book.getDurChapterPage());
                         }
 
                         @Override
@@ -80,13 +80,12 @@ public class PageLoaderNet extends PageLoader {
         }
     }
 
-    @Override
-    public void changeSourceFinish(BookShelfBean book) {
-        if (book == null) {
-            super.changeSourceFinish(null);
+
+    public void changeSourceFinish(BookShelfBean bookShelfBean) {
+        if (bookShelfBean == null) {
+            openChapter(book.getDurChapter());
         } else {
-            this.book = book;
-            callback.onCategoryFinish(book.getChapterList());
+            this.book = bookShelfBean;
             refreshChapterList();
         }
     }
@@ -187,7 +186,7 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean noChapterData(BookChapterBean chapter) {
-        return !BookshelfHelp.isChapterCached(book.getBookInfoBean(), chapter);
+        return !BookshelfHelp.isChapterCached(book.getBookInfoBean().getName(), book.getTag(), chapter, book.getBookInfoBean().isAudio());
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
@@ -227,25 +226,25 @@ public class PageLoaderNet extends PageLoader {
         WebBookModel.getInstance().getChapterList(book)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BookShelfBean>() {
+                .subscribe(new Observer<List<BookChapterBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
+                    public void onNext(List<BookChapterBean> chapterBeanList) {
                         isChapterListPrepare = true;
 
-                        if (bookShelfBean.getChapterList().size() > callback.getChapterList().size()) {
+                        if (chapterBeanList.size() > callback.getChapterList().size()) {
                             mPageView.getActivity().toast("更新完成,有新章节");
-                            callback.onCategoryFinish(bookShelfBean.getChapterList());
+                            callback.onCategoryFinish(chapterBeanList);
                         } else {
                             mPageView.getActivity().toast("更新完成,无新章节");
                         }
 
                         // 加载并显示当前章节
-                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                        skipToChapter(book.getDurChapter(), book.getDurChapterPage());
                     }
 
                     @Override

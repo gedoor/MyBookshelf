@@ -138,7 +138,7 @@ public class Debug {
         printLog(String.format("\n%s ≡开始获取目录页", getDoTime()));
         WebBookModel.getInstance().getChapterList(bookShelfBean)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
+                .subscribe(new Observer<List<BookChapterBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
@@ -146,10 +146,9 @@ public class Debug {
 
                     @SuppressLint("DefaultLocale")
                     @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean.getChapterList().size() > 0) {
-                            BookChapterBean bookChapterBean = bookShelfBean.getChapter(0);
-                            bookContentDebug(bookShelfBean.getBookInfoBean(), bookChapterBean);
+                    public void onNext(List<BookChapterBean> chapterBeanList) {
+                        if (chapterBeanList.size() > 0) {
+                            bookContentDebug(bookShelfBean.getBookInfoBean(), chapterBeanList.get(0));
                         } else {
                             printError("获取到的目录为空");
                         }

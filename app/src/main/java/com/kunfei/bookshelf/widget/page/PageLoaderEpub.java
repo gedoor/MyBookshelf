@@ -54,6 +54,49 @@ public class PageLoaderEpub extends PageLoader {
         super(pageView, bookShelfBean, callback);
     }
 
+    @Override
+    public void refreshChapterList() {
+        BookShelfBean bookShelf = book;
+        if (bookShelf == null) return;
+
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            File bookFile = new File(bookShelf.getNoteUrl());
+            epubBook = readBook(bookFile);
+
+            if (epubBook == null) {
+                e.onError(new Exception("文件解析失败"));
+                return;
+            }
+            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
+                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
+            }
+            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
+
+            e.onNext(bookShelf);
+            e.onComplete();
+        }).subscribeOn(Schedulers.single())
+                .flatMap(this::checkChapterList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        isChapterListPrepare = true;
+                        // 加载并显示当前章节
+                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
+    }
+
     public static Book readBook(File file) {
         try {
             EpubReader epubReader = new EpubReader();
@@ -191,7 +234,7 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private Observable<BookShelfBean> checkChapterList(BookShelfBean collBook) {
-        if (!collBook.getHasUpdate() && !collBook.realChapterListEmpty()) {
+        if (!collBook.getHasUpdate() && !callback.getChapterList().isEmpty()) {
             return Observable.just(collBook);
         } else {
             return Observable.create((ObservableOnSubscribe<List<BookChapterBean>>) e -> {
@@ -214,53 +257,6 @@ public class PageLoaderEpub extends PageLoader {
                         bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                     });
         }
-    }
-
-    @Override
-    public void refreshChapterList() {
-        BookShelfBean bookShelf = book;
-        if (bookShelf == null) return;
-
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            File bookFile = new File(bookShelf.getNoteUrl());
-            epubBook = readBook(bookFile);
-
-            if (epubBook == null) {
-                e.onError(new Exception("文件解析失败"));
-                return;
-            }
-            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
-                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
-            }
-            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
-
-            e.onNext(bookShelf);
-            e.onComplete();
-        }).subscribeOn(Schedulers.single())
-                .flatMap(this::checkChapterList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<BookShelfBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        isChapterListPrepare = true;
-
-                        //提示目录加载完成
-                        callback.onCategoryFinish(bookShelfBean.getChapterList());
-
-                        // 加载并显示当前章节
-                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
-                });
     }
 
     @Override
@@ -292,10 +288,6 @@ public class PageLoaderEpub extends PageLoader {
                     public void onNext(BookShelfBean bookShelfBean) {
                         mPageView.getActivity().toast("更新完成");
                         isChapterListPrepare = true;
-
-                        //提示目录加载完成
-                        callback.onCategoryFinish(bookShelfBean.getChapterList());
-
                         // 加载并显示当前章节
                         skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
                     }
