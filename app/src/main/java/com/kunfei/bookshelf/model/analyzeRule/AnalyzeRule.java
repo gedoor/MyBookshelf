@@ -229,6 +229,32 @@ public class AnalyzeRule {
     }
 
     /**
+     * 获取Element
+     */
+    public Object getElement(String ruleStr) throws Exception {
+        if (TextUtils.isEmpty(ruleStr)) return null;
+        Object result = null;
+        List<SourceRule> ruleList = splitSourceRule(ruleStr);
+        for (SourceRule rule : ruleList) {
+            switch (rule.mode) {
+                case Js:
+                    if (result == null) result = object;
+                    result = evalJS(rule.rule, result);
+                    break;
+                case JSon:
+                    result = getAnalyzeByJSonPath(result).getObject(rule.rule);
+                    break;
+                case XPath:
+                    result = getAnalyzeByXPath(result).getElements(rule.rule);
+                    break;
+                default:
+                    result = getAnalyzeByJSoup(result).getElements(rule.rule);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 获取列表
      */
     @SuppressWarnings("unchecked")

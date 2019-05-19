@@ -85,7 +85,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public void onTouchEvent(MotionEvent event) {
-        if (isMoving) return;
+        abortAnim();
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         //获取点击位置
         int x = (int) event.getX();
@@ -202,9 +202,13 @@ public abstract class HorizonPageAnim extends PageAnimation {
     public void abortAnim() {
         if (!mScroller.isFinished()) {
             mScroller.abortAnimation();
-            isRunning = false;
+            if (changePage()) {
+                mListener.changePage(mDirection);
+                setDirection(PageAnimation.Direction.NONE);
+            }
+            movingFinish();
             setTouchPoint(mScroller.getFinalX(), mScroller.getFinalY());
-            mView.postInvalidate();
+            mView.invalidate();
         }
     }
 

@@ -5,7 +5,7 @@ import android.text.StaticLayout;
 
 import androidx.annotation.NonNull;
 
-import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 
@@ -20,7 +20,7 @@ class ChapterProvider {
         this.pageLoader = pageLoader;
     }
 
-    TxtChapter dealLoadPageList(ChapterListBean chapter, boolean isPrepare) {
+    TxtChapter dealLoadPageList(BookChapterBean chapter, boolean isPrepare) {
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         // 判断章节是否存在
         if (!isPrepare || pageLoader.noChapterData(chapter)) {
@@ -52,10 +52,10 @@ class ChapterProvider {
      * @param chapter：章节信息
      * @param content：章节的文本
      */
-    private TxtChapter loadPageList(ChapterListBean chapter, @NonNull String content) {
+    private TxtChapter loadPageList(BookChapterBean chapter, @NonNull String content) {
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
-        if (pageLoader.bookShelfBean.isAudio()) {
+        if (pageLoader.book.isAudio()) {
             txtChapter.setStatus(TxtChapter.Status.FINISH);
             txtChapter.setMsg(content);
             TxtPage page = new TxtPage(txtChapter.getTxtPageList().size());
@@ -68,7 +68,7 @@ class ChapterProvider {
             txtChapter.addPage(page);
             return txtChapter;
         }
-        content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
+        content = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), content);
         String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
@@ -76,7 +76,7 @@ class ChapterProvider {
         boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
         String paragraph = null;
         if (showTitle) {
-            paragraph = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), chapter.getDurChapterName());
+            paragraph = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), chapter.getDurChapterName());
             paragraph = paragraph.trim() + "\n";
         }
         int i = 1;

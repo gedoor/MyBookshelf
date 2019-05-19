@@ -22,10 +22,10 @@ import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
@@ -41,6 +41,7 @@ import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -52,15 +53,15 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
-    private int open_from;
     private BookShelfBean bookShelf;
     private BookSourceBean bookSourceBean;
     private ChangeSourceHelp changeSourceHelp;
+    private List<BookChapterBean> chapterBeanList = new ArrayList<>();
 
     @Override
     public void initData(Activity activity) {
         Intent intent = activity.getIntent();
-        open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
+        int open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
         open_from = intent.getIntExtra("openFrom", open_from);
         if (open_from == OPEN_FROM_APP) {
             loadBook(intent);
@@ -70,7 +71,8 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         }
     }
 
-    private void loadBook(Intent intent) {
+    @Override
+    public void loadBook(Intent intent) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
@@ -85,13 +87,18 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                     bookShelf = beans.get(0);
                 }
             }
-            if (bookShelf != null) {
-                bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
-                bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
-                mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
-                if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                    bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+            if (bookShelf != null && chapterBeanList.isEmpty()) {
+                if (!bookShelf.getChapterList().isEmpty()) {
+                    chapterBeanList = bookShelf.getChapterList();
+                } else {
+                    chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
                 }
+            }
+            if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
+                bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+            }
+            if (bookShelf != null) {
+                mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
             }
             e.onNext(bookShelf);
             e.onComplete();
@@ -146,7 +153,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         if (bookShelf != null) {
             AsyncTask.execute(() -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
-                bookShelf.upDurChapterName();
                 bookShelf.setHasUpdate(false);
                 DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
                 RxBus.get().post(RxBusTag.UPDATE_BOOK_PROGRESS, bookShelf);
@@ -291,7 +297,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public void saveBookmark(BookmarkBean bookmarkBean) {
         Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
             BookshelfHelp.saveBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
             e.onNext(bookmarkBean);
             e.onComplete();
         })
@@ -304,7 +309,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public void delBookmark(BookmarkBean bookmarkBean) {
         Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
             BookshelfHelp.delBookmark(bookmarkBean);
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
             e.onNext(bookmarkBean);
             e.onComplete();
         })
@@ -314,13 +318,19 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
-    public int getOpen_from() {
-        return open_from;
+    public BookShelfBean getBookShelf() {
+        return bookShelf;
     }
 
     @Override
-    public BookShelfBean getBookShelf() {
-        return bookShelf;
+    public List<BookChapterBean> getChapterList() {
+        return chapterBeanList;
+    }
+
+    @Override
+    public void setChapterList(List<BookChapterBean> chapterList) {
+        this.chapterBeanList = chapterList;
+        AsyncTask.execute(() -> DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterList));
     }
 
     @Override
@@ -461,9 +471,9 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_SIZE)})
     public void upAudioSize(Integer audioSize) {
         mView.upAudioSize(audioSize);
-        ChapterListBean bean = bookShelf.getChapter(bookShelf.getDurChapter());
+        BookChapterBean bean = bookShelf.getChapter(bookShelf.getDurChapter());
         bean.setEnd(Long.valueOf(audioSize));
-        DbHelper.getDaoSession().getChapterListBeanDao().insertOrReplace(bean);
+        DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplace(bean);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.AUDIO_DUR)})

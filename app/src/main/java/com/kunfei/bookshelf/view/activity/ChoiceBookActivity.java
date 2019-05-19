@@ -106,21 +106,13 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     protected void bindEvent() {
-        searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
-            @Override
-            public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
-                SearchBookActivity.startByKey(ChoiceBookActivity.this, searchBookBean.getName());
-            }
-
-            @Override
-            public void clickItem(View animView, int position, SearchBookBean searchBookBean) {
-                String dataKey = String.valueOf(System.currentTimeMillis());
-                Intent intent = new Intent(ChoiceBookActivity.this, BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
-                intent.putExtra("data_key", dataKey);
-                BitIntentDataManager.getInstance().putData(dataKey, searchBookBean);
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        searchBookAdapter.setCallback((animView, position, searchBookBean) -> {
+            String dataKey = String.valueOf(System.currentTimeMillis());
+            Intent intent = new Intent(ChoiceBookActivity.this, BookDetailActivity.class);
+            intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
+            intent.putExtra("data_key", dataKey);
+            BitIntentDataManager.getInstance().putData(dataKey, searchBookBean);
+            startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         rfRvSearchBooks.setBaseRefreshListener(() -> {

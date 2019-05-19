@@ -6,7 +6,7 @@ import java.util.List;
 public class WebChapterBean {
     private String url;
 
-    private List<ChapterListBean> data;
+    private List<BookChapterBean> data;
 
     private LinkedHashSet<String> nextUrlList;
 
@@ -14,16 +14,16 @@ public class WebChapterBean {
         this.url = url;
     }
 
-    public WebChapterBean(List<ChapterListBean> data, LinkedHashSet<String> nextUrlList) {
+    public WebChapterBean(List<BookChapterBean> data, LinkedHashSet<String> nextUrlList) {
         this.data = data;
         this.nextUrlList = nextUrlList;
     }
 
-    public List<ChapterListBean> getData() {
+    public List<BookChapterBean> getData() {
         return data;
     }
 
-    public void setData(List<ChapterListBean> data) {
+    public void setData(List<BookChapterBean> data) {
         this.data = data;
     }
 

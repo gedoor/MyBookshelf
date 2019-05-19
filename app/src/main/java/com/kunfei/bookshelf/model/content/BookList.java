@@ -11,7 +11,9 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.mozilla.javascript.NativeObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -221,12 +223,12 @@ class BookList {
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = String.valueOf(nativeObject.get(ruleNoteUrl));
-            if (isEmpty(resultUrl)) {
-                //详情页等于搜索页
-                resultUrl = baseUrl;
+            if (isEmpty(resultUrl)) resultUrl = baseUrl;
+            item.setNoteUrl(resultUrl);
+            //如果网址相同则缓存
+            if (baseUrl.equals(resultUrl)) {
                 item.setBookInfoHtml(body);
             }
-            item.setNoteUrl(resultUrl);
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
@@ -260,12 +262,12 @@ class BookList {
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = analyzer.getString(ruleNoteUrl, true);
-            if (isEmpty(resultUrl)) {
-                //详情页等于搜索页
-                resultUrl = baseUrl;
+            if (isEmpty(resultUrl)) resultUrl = baseUrl;
+            item.setNoteUrl(resultUrl);
+            //如果网址相同则缓存
+            if (baseUrl.equals(resultUrl)) {
                 item.setBookInfoHtml(body);
             }
-            item.setNoteUrl(resultUrl);
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }

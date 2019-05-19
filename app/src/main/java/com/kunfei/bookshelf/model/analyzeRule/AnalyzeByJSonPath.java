@@ -44,7 +44,7 @@ public class AnalyzeByJSonPath {
                         for (Object o : (List) object) {
                             builder.append(o).append("\n");
                         }
-                        result = builder.toString();
+                        result = builder.toString().replaceAll("\\n$", "");
                     } else {
                         result = String.valueOf(object);
                     }
@@ -141,6 +141,10 @@ public class AnalyzeByJSonPath {
             }
             return result;
         }
+    }
+
+    Object getObject(String rule) {
+        return ctx.read(rule);
     }
 
     List<Object> getList(String rule) {

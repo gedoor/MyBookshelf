@@ -4,11 +4,11 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
@@ -116,7 +116,7 @@ public class WebBook extends BaseModelImpl {
     /**
      * 获取目录
      */
-    public Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean) {
+    public Observable<List<BookChapterBean>> getChapterList(final BookShelfBean bookShelfBean) {
         if (bookSourceBean == null) {
             return Observable.error(new NoSourceThrowable(bookShelfBean.getBookInfoBean().getName()));
         }
@@ -143,7 +143,7 @@ public class WebBook extends BaseModelImpl {
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         if (Objects.equals(chapterBean.getDurChapterUrl(), infoBean.getChapterUrl()) && !TextUtils.isEmpty(infoBean.getChapterListHtml())) {
-            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, headerMap);
+            return bookContent.analyzeBookContent(infoBean.getChapterListHtml(), chapterBean, infoBean, headerMap);
         }
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, infoBean.getChapterUrl());
@@ -162,11 +162,11 @@ public class WebBook extends BaseModelImpl {
                     }
                 }
                 return getAjaxString(analyzeUrl, tag, js)
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             } else {
                 return getResponseO(analyzeUrl)
                         .flatMap(response -> setCookie(response, tag))
-                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, headerMap));
+                        .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, infoBean, headerMap));
             }
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));

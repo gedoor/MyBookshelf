@@ -10,12 +10,10 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Region;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.view.View;
 
 import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.utils.BitmapUtil;
 
 /**
  * 仿真翻页
@@ -61,8 +59,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private GradientDrawable mFrontShadowDrawableVRL;
 
     private Paint mPaint;
-    private Bitmap blurCurBitmap;
-    private Bitmap blurPreBitmap;
     private boolean blurBackImage;
 
 
@@ -98,13 +94,13 @@ public class SimulationPageAnim extends HorizonPageAnim {
             drawCurrentPageArea(canvas, bitmapList.get(1), mPath0);//绘制翻页时的正面页
             drawNextPageAreaAndShadow(canvas, bitmapList.get(2));
             drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, blurBackImage ? blurCurBitmap : bitmapList.get(1));
+            drawCurrentBackArea(canvas, bitmapList.get(1));
         } else {
             calcPoints();
             drawCurrentPageArea(canvas, bitmapList.get(0), mPath0);
             drawNextPageAreaAndShadow(canvas, bitmapList.get(1));
             drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, blurBackImage ? blurPreBitmap : bitmapList.get(0));
+            drawCurrentBackArea(canvas, bitmapList.get(0));
         }
     }
 
@@ -412,44 +408,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         mCurrentPageShadow.draw(canvas);
         canvas.restore();
-    }
-
-    @Override
-    public boolean changePage() {
-        if (!blurBackImage)
-            return super.changePage();
-
-        switch (mDirection) {
-            case NEXT:
-                if (blurCurBitmap != null) {
-                    blurPreBitmap = blurCurBitmap;
-                    blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
-                } else {
-                    AsyncTask.execute(() -> blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1)));
-                    AsyncTask.execute(() -> blurPreBitmap = BitmapUtil.stackBlur(bitmapList.get(0)));
-                }
-                break;
-            case PREV:
-                if (blurPreBitmap != null) {
-                    blurCurBitmap = blurPreBitmap;
-                } else {
-                    blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
-                }
-                break;
-        }
-        return super.changePage();
-    }
-
-    public void onPageDrawn(int pageOnCur) {
-        if (!blurBackImage)
-            return;
-        AsyncTask.execute(() -> {
-            if (pageOnCur < 0) {
-                blurPreBitmap = BitmapUtil.stackBlur(bitmapList.get(0));
-            } else if (pageOnCur == 0) {
-                blurCurBitmap = BitmapUtil.stackBlur(bitmapList.get(1));
-            }
-        });
     }
 
     private void drawNextPageAreaAndShadow(Canvas canvas, Bitmap bitmap) {

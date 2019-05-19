@@ -47,7 +47,7 @@
 
     <item
         android:id="@+id/action_web_start"
-        android:icon="@drawable/ic_speaker_phone_black_24dp"
+        android:icon="@drawable/ic_web_service_phone"
         android:title="@string/web_menu"
         app:showAsAction="never" />
 </menu>

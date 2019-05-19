@@ -46,15 +46,20 @@ class BookInfo {
             AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
             analyzer.setContent(s, bookShelfBean.getNoteUrl());
 
+            Object object = analyzer.getElement(bookSourceBean.getRuleBookInfoInit());
+            if (object != null) {
+                analyzer.setContent(object);
+            }
+
             Debug.printLog(tag, "┌获取书名");
-            if (isEmpty(bookInfoBean.getName())) {
-                result = analyzer.getString(bookSourceBean.getRuleBookName());
+            result = analyzer.getString(bookSourceBean.getRuleBookName());
+            if (!isEmpty(result)) {
                 bookInfoBean.setName(result);
             }
             Debug.printLog(tag, "└" + bookInfoBean.getName());
             Debug.printLog(tag, "┌获取作者");
-            if (isEmpty(bookInfoBean.getAuthor())) {
-                result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
+            result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
+            if (!isEmpty(result)) {
                 bookInfoBean.setAuthor(result);
             }
             Debug.printLog(tag, "└" + bookInfoBean.getAuthor());

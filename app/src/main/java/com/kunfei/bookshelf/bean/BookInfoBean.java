@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.BookType;
@@ -49,15 +50,9 @@ public class BookInfoBean implements Cloneable {
     @Transient
     private String chapterListHtml;
     @Transient
-    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
-    @Transient
-    private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
-
-    @Transient
-    private static String coverPath = FileHelp.getCachePath() + "/cover/";
+    private List<BookChapterBean> chapterList;    //章节列表
 
     public BookInfoBean() {
-
     }
 
     @Generated(hash = 906814482)
@@ -77,32 +72,14 @@ public class BookInfoBean implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        BookInfoBean bookInfoBean = (BookInfoBean) super.clone();
-        bookInfoBean.name = name;
-        bookInfoBean.tag = tag;
-        bookInfoBean.noteUrl = noteUrl;
-        bookInfoBean.chapterUrl = chapterUrl;
-        bookInfoBean.coverUrl = coverUrl;
-        bookInfoBean.author = author;
-        bookInfoBean.introduce = introduce;
-        bookInfoBean.origin = origin;
-        bookInfoBean.charset = charset;
-        if (chapterList != null) {
-            List<ChapterListBean> newListC = new ArrayList<>();
-            for (ChapterListBean chapterListBean : chapterList) {
-                newListC.add((ChapterListBean) chapterListBean.clone());
-            }
-            bookInfoBean.setChapterList(newListC);
+    protected Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookInfoBean.class);
+        } catch (Exception ignored) {
         }
-        if (bookmarkList != null) {
-            List<BookmarkBean> newListM = new ArrayList<>();
-            for (BookmarkBean bookmarkBean : bookmarkList) {
-                newListM.add((BookmarkBean) bookmarkBean.clone());
-            }
-            bookInfoBean.setBookmarkList(newListM);
-        }
-        return bookInfoBean;
+        return this;
     }
 
     public String getName() {
@@ -137,14 +114,14 @@ public class BookInfoBean implements Cloneable {
         this.chapterUrl = chapterUrl;
     }
 
-    public List<ChapterListBean> getChapterList() {
+    public List<BookChapterBean> getChapterList() {
         if (chapterList == null) {
             chapterList = new ArrayList<>();
         }
         return chapterList;
     }
 
-    public void setChapterList(List<ChapterListBean> chapterList) {
+    public void setChapterList(List<BookChapterBean> chapterList) {
         this.chapterList = chapterList;
     }
 
@@ -158,12 +135,7 @@ public class BookInfoBean implements Cloneable {
 
     public String getCoverUrl() {
         if (isEpub() && (TextUtils.isEmpty(coverUrl) || !(new File(coverUrl)).exists())) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    extractEpubCoverImage();
-                }
-            });
+            extractEpubCoverImage();
             return "";
         }
         return coverUrl;
@@ -197,17 +169,6 @@ public class BookInfoBean implements Cloneable {
         this.origin = origin;
     }
 
-    public List<BookmarkBean> getBookmarkList() {
-        if (bookmarkList == null) {
-            return new ArrayList<>();
-        }
-        return bookmarkList;
-    }
-
-    public void setBookmarkList(List<BookmarkBean> bookmarkList) {
-        this.bookmarkList = bookmarkList;
-    }
-
     public String getCharset() {
         return this.charset;
     }
@@ -217,18 +178,23 @@ public class BookInfoBean implements Cloneable {
     }
 
     private void extractEpubCoverImage() {
-        try {
-            FileHelp.createFolderIfNotExists(coverPath);
-            Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
-            String md5Path = coverPath + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
-            FileOutputStream out = new FileOutputStream(new File(md5Path));
-            cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            setCoverUrl(md5Path);
-            DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(this);
-        } catch (Exception ignored) {
-        }
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FileHelp.createFolderIfNotExists(coverUrl);
+                    Bitmap cover = BitmapFactory.decodeStream(Objects.requireNonNull(PageLoaderEpub.readBook(new File(noteUrl))).getCoverImage().getInputStream());
+                    String md5Path = FileHelp.getCachePath() + File.separator + "cover" + File.separator + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
+                    FileOutputStream out = new FileOutputStream(new File(md5Path));
+                    cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    setCoverUrl(md5Path);
+                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(BookInfoBean.this);
+                } catch (Exception ignored) {
+                }
+            }
+        });
     }
 
     private boolean isEpub() {
@@ -253,14 +219,6 @@ public class BookInfoBean implements Cloneable {
 
     public void setBookInfoHtml(String bookInfoHtml) {
         this.bookInfoHtml = bookInfoHtml;
-    }
-
-    public static String getCoverPath() {
-        return coverPath;
-    }
-
-    public static void setCoverPath(String coverPath) {
-        BookInfoBean.coverPath = coverPath;
     }
 
     public String getChapterListHtml() {

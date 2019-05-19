@@ -3,9 +3,9 @@ package com.kunfei.bookshelf.web.controller;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.GsonUtils;
@@ -31,7 +31,7 @@ public class BookshelfController {
         if (strings == null) {
             return returnData.setErrorMsg("参数url不能为空，请指定书籍地址");
         }
-        List<ChapterListBean> chapterList = BookshelfHelp.getChapterList(strings.get(0));
+        List<BookChapterBean> chapterList = BookshelfHelp.getChapterList(strings.get(0));
         return returnData.setData(chapterList);
     }
 
@@ -41,7 +41,7 @@ public class BookshelfController {
         if (strings == null) {
             return returnData.setErrorMsg("参数url不能为空，请指定内容地址");
         }
-        ChapterListBean chapter = DbHelper.getDaoSession().getChapterListBeanDao().load(strings.get(0));
+        BookChapterBean chapter = DbHelper.getDaoSession().getBookChapterBeanDao().load(strings.get(0));
         if (chapter == null) {
             return returnData.setErrorMsg("未找到");
         }

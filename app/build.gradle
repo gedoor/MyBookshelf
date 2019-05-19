@@ -140,7 +140,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 61
+    schemaVersion 63
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }

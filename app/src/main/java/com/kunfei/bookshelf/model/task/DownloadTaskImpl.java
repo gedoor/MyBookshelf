@@ -177,7 +177,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             List<DownloadChapterBean> temp = new ArrayList<>(downloadChapters);
             for (DownloadChapterBean data : temp) {
                 boolean cached = BookshelfHelp.isChapterCached(
-                        BookshelfHelp.getCachePathName(data), data.getDurChapterIndex(),
+                        BookshelfHelp.getCachePathName(data.getBookName(), data.getTag()), data.getDurChapterIndex(),
                         BookshelfHelp.getCacheFileName(data.getDurChapterIndex(), data.getDurChapterName()));
                 if (cached) {
                     removeFromDownloadList(data);
@@ -198,7 +198,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         BookInfoBean infoBean = DbHelper.getDaoSession().getBookInfoBeanDao().load(chapter.getNoteUrl());
         Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
             if (!BookshelfHelp.isChapterCached(
-                    BookshelfHelp.getCachePathName(chapter), chapter.getDurChapterIndex(),
+                    BookshelfHelp.getCachePathName(chapter.getBookName(), chapter.getTag()), chapter.getDurChapterIndex(),
                     BookshelfHelp.getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName())
             )) {
                 e.onNext(chapter);

@@ -10,28 +10,33 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.BookmarkAdapter;
 import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 public class BookmarkFragment extends MBaseFragment {
     @BindView(R.id.rv_list)
     FastScrollRecyclerView rvList;
 
     private Unbinder unbinder;
-    public MoDialogHUD moDialogHUD;
     private BookShelfBean bookShelf;
+    private List<BookmarkBean> bookmarkBeanList;
     private BookmarkAdapter adapter;
 
     @Override
@@ -59,7 +64,6 @@ public class BookmarkFragment extends MBaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        moDialogHUD = new MoDialogHUD(getActivity());
         if (getFatherActivity() != null) {
             bookShelf = getFatherActivity().getBookShelf();
         }
@@ -96,6 +100,26 @@ public class BookmarkFragment extends MBaseFragment {
         rvList.setAdapter(adapter);
     }
 
+    @Override
+    protected void firstRequest() {
+        super.firstRequest();
+        Single.create((SingleOnSubscribe<Boolean>) emitter -> {
+            if (bookShelf != null) {
+                bookmarkBeanList = BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName());
+                emitter.onSuccess(true);
+            } else {
+                emitter.onSuccess(false);
+            }
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new MySingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        if (aBoolean) {
+                            adapter.setAllBookmark(bookmarkBeanList);
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onDestroyView() {
@@ -114,14 +138,12 @@ public class BookmarkFragment extends MBaseFragment {
                     @Override
                     public void saveBookmark(BookmarkBean bookmarkBean) {
                         DbHelper.getDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
-                        bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                         adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void delBookmark(BookmarkBean bookmarkBean) {
                         DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
-                        bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                         adapter.notifyDataSetChanged();
                     }
 

@@ -16,8 +16,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.constant.AppConstant;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
@@ -53,9 +53,9 @@ public abstract class PageLoader {
     private static final float MAX_SCROLL_OFFSET = 100;
     private static final int TIP_ALPHA = 180;
     // 监听器
-    OnPageChangeListener mPageChangeListener;
+    Callback callback;
     private Context mContext;
-    BookShelfBean bookShelfBean;
+    BookShelfBean book;
     // 页面显示类
     PageView mPageView;
     private List<ChapterContainer> chapterContainers = new ArrayList<>();
@@ -141,15 +141,16 @@ public abstract class PageLoader {
     private long skipPageTime = 0;
 
     /*****************************init params*******************************/
-    PageLoader(PageView pageView, BookShelfBean bookShelfBean) {
+    PageLoader(PageView pageView, BookShelfBean book, Callback callback) {
         mPageView = pageView;
-        this.bookShelfBean = bookShelfBean;
+        this.book = book;
+        this.callback = callback;
         for (int i = 0; i < 3; i++) {
             chapterContainers.add(new ChapterContainer());
         }
         mContext = pageView.getContext();
-        mCurChapterPos = bookShelfBean.getDurChapter();
-        mCurPagePos = bookShelfBean.getDurChapterPage();
+        mCurChapterPos = book.getDurChapter();
+        mCurPagePos = book.getDurChapterPage();
         compositeDisposable = new CompositeDisposable();
         oneSpPx = ScreenUtils.spToPx(1);
         // 初始化数据
@@ -343,17 +344,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 设置页面切换监听
-     */
-    public void setOnPageChangeListener(OnPageChangeListener listener) {
-        mPageChangeListener = listener;
-        // 如果目录加载完之后才设置监听器，那么会默认回调
-        if (isChapterListPrepare) {
-            mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
-        }
-    }
-
-    /**
      * 刷新界面
      */
     public void refreshUi() {
@@ -361,16 +351,6 @@ public abstract class PageLoader {
         initPaint();
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
         skipToChapter(mCurChapterPos, mCurPagePos);
-    }
-
-    /**
-     * 刷新当前章节
-     */
-    @SuppressLint("DefaultLocale")
-    public void refreshDurChapter() {
-        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
-                mCurChapterPos, bookShelfBean.getChapter(mCurChapterPos).getDurChapterName());
-        skipToChapter(mCurChapterPos, 0);
     }
 
     /**
@@ -405,7 +385,7 @@ public abstract class PageLoader {
      * 跳转到下一章
      */
     public boolean skipNextChapter() {
-        if (mCurChapterPos + 1 >= bookShelfBean.getChapterListSize()) {
+        if (mCurChapterPos + 1 >= book.getChapterListSize()) {
             return false;
         }
 
@@ -581,7 +561,7 @@ public abstract class PageLoader {
      */
     public String getUnReadContent() {
         if (curChapter().txtChapter == null) return null;
-        if (bookShelfBean.isAudio()) return curChapter().txtChapter.getMsg();
+        if (book.isAudio()) return curChapter().txtChapter.getMsg();
         if (curChapter().txtChapter.getTxtPageList() == null) return null;
         StringBuilder s = new StringBuilder();
         String content = getContent();
@@ -657,12 +637,12 @@ public abstract class PageLoader {
     /**
      * 获取章节的文本
      */
-    protected abstract String getChapterContent(ChapterListBean chapter) throws Exception;
+    protected abstract String getChapterContent(BookChapterBean chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      */
-    protected abstract boolean noChapterData(ChapterListBean chapter);
+    protected abstract boolean noChapterData(BookChapterBean chapter);
 
     /**
      * 打开当前章节指定页
@@ -692,7 +672,7 @@ public abstract class PageLoader {
         }
 
         // 如果获取到的章节目录为空
-        if (bookShelfBean.getChapterList().isEmpty()) {
+        if (callback.getChapterList().isEmpty()) {
             curChapter().txtChapter.setStatus(TxtChapter.Status.CATEGORY_EMPTY);
             reSetPage();
             mPageView.invalidate();
@@ -724,7 +704,7 @@ public abstract class PageLoader {
             if (mCurPagePos > 0 || curChapter().txtChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
             }
-            if (mCurPagePos < curChapter().txtChapter.getPageSize() - 1 || curChapter().txtChapter.getPosition() < bookShelfBean.getChapterList().size() - 1) {
+            if (mCurPagePos < curChapter().txtChapter.getPageSize() - 1 || curChapter().txtChapter.getPosition() < callback.getChapterList().size() - 1) {
                 mPageView.drawPage(1);
             }
         }
@@ -741,7 +721,7 @@ public abstract class PageLoader {
             case NEXT:
                 if (mCurPagePos < curChapter().txtChapter.getPageSize() - 1) {
                     mCurPagePos = mCurPagePos + 1;
-                } else if (mCurChapterPos < bookShelfBean.getChapterListSize() - 1) {
+                } else if (mCurChapterPos < book.getChapterListSize() - 1) {
                     mCurChapterPos = mCurChapterPos + 1;
                     mCurPagePos = 0;
                     Collections.swap(chapterContainers, 0, 1);
@@ -772,9 +752,9 @@ public abstract class PageLoader {
                 break;
         }
         mPageView.setContentDescription(getContent());
-        bookShelfBean.setDurChapter(mCurChapterPos);
-        bookShelfBean.setDurChapterPage(mCurPagePos);
-        mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos(), resetReadAloud);
+        book.setDurChapter(mCurChapterPos);
+        book.setDurChapterPage(mCurPagePos);
+        callback.onPageChange(mCurChapterPos, getCurPagePos(), resetReadAloud);
         resetReadAloud = true;
     }
 
@@ -784,7 +764,7 @@ public abstract class PageLoader {
      */
     synchronized void drawPage(Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
-        TxtPage txtPage;
+        TxtPage txtPage = null;
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
         }
@@ -796,18 +776,32 @@ public abstract class PageLoader {
                 txtChapter = curChapter().txtChapter;
                 txtPage = txtChapter.getPage(mCurPagePos - 1);
             } else {
-                if (prevChapter().txtChapter == null) return;
-                txtChapter = prevChapter().txtChapter;
-                txtPage = txtChapter.getPage(txtChapter.getPageSize() - 1);
+                if (prevChapter().txtChapter == null) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("未加载完成");
+                } else {
+                    txtChapter = prevChapter().txtChapter;
+                    txtPage = txtChapter.getPage(txtChapter.getPageSize() - 1);
+                }
             }
         } else { //下一页
             if (mCurPagePos + 1 < curChapter().txtChapter.getPageSize()) {
                 txtChapter = curChapter().txtChapter;
                 txtPage = txtChapter.getPage(mCurPagePos + 1);
             } else {
-                if (nextChapter().txtChapter == null) return;
-                txtChapter = nextChapter().txtChapter;
-                txtPage = txtChapter.getPage(0);
+                if (mCurChapterPos + 1 >= callback.getChapterList().size()) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("没有下一页");
+                } else if (nextChapter().txtChapter == null) {
+                    txtChapter = new TxtChapter(mCurChapterPos + 1);
+                    txtChapter.setStatus(TxtChapter.Status.ERROR);
+                    txtChapter.setMsg("未加载完成");
+                } else {
+                    txtChapter = nextChapter().txtChapter;
+                    txtPage = txtChapter.getPage(0);
+                }
             }
         }
         if (bitmap != null)
@@ -846,13 +840,13 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
-        if (!bookShelfBean.getChapterList().isEmpty()) {
-            String title = isChapterListPrepare ? bookShelfBean.getChapter(txtChapter.getPosition()).getDurChapterName() : "";
-            title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
+        if (!callback.getChapterList().isEmpty()) {
+            String title = callback.getChapterList().size() > txtChapter.getPosition() ? callback.getChapterList().get(txtChapter.getPosition()).getDurChapterName() : "";
+            title = ChapterContentHelp.getInstance().replaceContent(book.getBookInfoBean().getName(), book.getTag(), title);
             String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
                     : String.format("%d/%d", txtPage.getPosition() + 1, txtChapter.getPageSize());
             String progress = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
-                    : BookshelfHelp.getReadProgress(mCurChapterPos, bookShelfBean.getChapterListSize(), mCurPagePos, curChapter().txtChapter.getPageSize());
+                    : BookshelfHelp.getReadProgress(mCurChapterPos, book.getChapterListSize(), mCurPagePos, curChapter().txtChapter.getPageSize());
 
             float tipBottom;
             float tipLeft;
@@ -1172,7 +1166,7 @@ public abstract class PageLoader {
             if (top > totalHeight) break;
             if (pagePos == chapter.getPageSize() - 1) {
                 String sign = "\u23af \u23af";
-                if (chapterPos == bookShelfBean.getChapterListSize() - 1) {
+                if (chapterPos == book.getChapterListSize() - 1) {
                     bookEnd = pagePos == mCurPagePos;
                     str = sign + " 所有章节已读完 " + sign;
                 } else {
@@ -1215,7 +1209,7 @@ public abstract class PageLoader {
             case 1:
                 if (mCurPagePos < curChapter().txtChapter.getPageSize() - 1) {
                     mCurPagePos = mCurPagePos + 1;
-                } else if (mCurChapterPos < bookShelfBean.getChapterListSize() - 1) {
+                } else if (mCurChapterPos < book.getChapterListSize() - 1) {
                     mCurChapterPos = mCurChapterPos + 1;
                     Collections.swap(chapterContainers, 0, 1);
                     Collections.swap(chapterContainers, 1, 2);
@@ -1363,17 +1357,17 @@ public abstract class PageLoader {
                 return true;
             }
         }
-        return mCurChapterPos + 1 < bookShelfBean.getChapterListSize();
+        return mCurChapterPos + 1 < book.getChapterListSize();
     }
 
     /**
-     * 解析数据
+     * 解析当前页数据
      */
     void parseCurChapter() {
         if (curChapter().txtChapter.getStatus() != TxtChapter.Status.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 ChapterProvider chapterProvider = new ChapterProvider(this);
-                TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos), mPageView.isPrepare());
+                TxtChapter txtChapter = chapterProvider.dealLoadPageList(callback.getChapterList().get(mCurChapterPos), mPageView.isPrepare());
                 e.onSuccess(txtChapter);
             })
                     .compose(RxUtils::toSimpleSingle)
@@ -1418,7 +1412,7 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(prevChapterPos), mPageView.isPrepare());
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(callback.getChapterList().get(prevChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -1449,7 +1443,7 @@ public abstract class PageLoader {
      */
     void parseNextChapter() {
         final int nextChapterPos = mCurChapterPos + 1;
-        if (nextChapterPos >= bookShelfBean.getChapterList().size()) {
+        if (nextChapterPos >= callback.getChapterList().size()) {
             nextChapter().txtChapter = null;
             return;
         }
@@ -1460,7 +1454,7 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(nextChapterPos), mPageView.isPrepare());
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(callback.getChapterList().get(nextChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -1540,10 +1534,10 @@ public abstract class PageLoader {
     }
 
     private void chapterChangeCallback() {
-        if (mPageChangeListener != null) {
+        if (callback != null) {
             readAloudParagraph = -1;
-            mPageChangeListener.onChapterChange(mCurChapterPos);
-            mPageChangeListener.onPageCountChange(curChapter().txtChapter != null ? curChapter().txtChapter.getPageSize() : 0);
+            callback.onChapterChange(mCurChapterPos);
+            callback.onPageCountChange(curChapter().txtChapter != null ? curChapter().txtChapter.getPageSize() : 0);
         }
     }
 
@@ -1594,7 +1588,8 @@ public abstract class PageLoader {
         TxtChapter txtChapter;
     }
 
-    public interface OnPageChangeListener {
+    public interface Callback {
+        List<BookChapterBean> getChapterList();
         /**
          * 作用：章节切换的时候进行回调
          *
@@ -1607,7 +1602,7 @@ public abstract class PageLoader {
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<ChapterListBean> chapters);
+        void onCategoryFinish(List<BookChapterBean> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

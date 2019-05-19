@@ -2,6 +2,8 @@ package com.kunfei.bookshelf.bean;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -171,8 +173,14 @@ public class BookSourceBean implements Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookSourceBean.class);
+        } catch (Exception ignored) {
+        }
+        return this;
     }
 
     public String getBookSourceName() {

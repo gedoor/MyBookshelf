@@ -6,10 +6,10 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
@@ -148,8 +148,8 @@ public class Debug {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         if (bookShelfBean.getChapterList().size() > 0) {
-                            ChapterListBean chapterListBean = bookShelfBean.getChapter(0);
-                            bookContentDebug(bookShelfBean.getBookInfoBean(), chapterListBean);
+                            BookChapterBean bookChapterBean = bookShelfBean.getChapter(0);
+                            bookContentDebug(bookShelfBean.getBookInfoBean(), bookChapterBean);
                         } else {
                             printError("获取到的目录为空");
                         }
@@ -167,9 +167,9 @@ public class Debug {
                 });
     }
 
-    private void bookContentDebug(BookInfoBean infoBean, ChapterListBean chapterListBean) {
+    private void bookContentDebug(BookInfoBean infoBean, BookChapterBean bookChapterBean) {
         printLog(String.format("\n%s ≡开始获取正文页", getDoTime()));
-        WebBookModel.getInstance().getBookContent(infoBean, chapterListBean)
+        WebBookModel.getInstance().getBookContent(infoBean, bookChapterBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

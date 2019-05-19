@@ -51,12 +51,7 @@ public class SourceLoginActivity extends MBaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String key = String.valueOf(System.currentTimeMillis());
         intent.putExtra("data_key", key);
-        try {
-            BitIntentDataManager.getInstance().putData(key, bookSourceBean.clone());
-        } catch (CloneNotSupportedException e) {
-            BitIntentDataManager.getInstance().putData(key, bookSourceBean);
-            e.printStackTrace();
-        }
+        BitIntentDataManager.getInstance().putData(key, bookSourceBean.clone());
         context.startActivity(intent);
     }
 
