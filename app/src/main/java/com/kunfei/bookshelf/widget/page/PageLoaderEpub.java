@@ -9,7 +9,6 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -268,9 +267,10 @@ public class PageLoaderEpub extends PageLoader {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
             BookshelfHelp.delChapterList(book.getNoteUrl());
             if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
-                book.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
+                book.getBookInfoBean().setCharset("UTF-8");
             }
             mCharset = Charset.forName(book.getBookInfoBean().getCharset());
+            callback.getChapterList().clear();
             e.onNext(book);
             e.onComplete();
         }).flatMap(this::checkChapterList)
