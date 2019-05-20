@@ -225,6 +225,7 @@ $('.menu').addEventListener('click', e => {
 					};
 					ws.onmessage = (msg) => {
 						DebugPrint(msg.data == 'finish' ? `\n[${Date().split(' ')[4]}] 调试任务已完成!` : msg.data);
+						if (msg.data == 'finish') setRule(saveRule[0]);
 					};
 					ws.onerror = (err) => {
 						throw `${err.data}`;
