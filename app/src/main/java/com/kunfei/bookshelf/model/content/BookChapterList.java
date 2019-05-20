@@ -33,7 +33,6 @@ import retrofit2.Response;
 public class BookChapterList {
     private String tag;
     private BookSourceBean bookSourceBean;
-    private AnalyzeRule analyzer;
     private List<WebChapterBean> webChapterBeans;
     private boolean dx = false;
     private boolean analyzeNextUrl;
@@ -56,14 +55,14 @@ public class BookChapterList {
                 Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl(), analyzeNextUrl);
             }
             bookShelfBean.setTag(tag);
-            analyzer = new AnalyzeRule(bookShelfBean);
+            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
             String ruleChapterList = bookSourceBean.getRuleChapterList();
             if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
             chapterListUrl = bookShelfBean.getBookInfoBean().getChapterUrl();
-            WebChapterBean webChapterBean = analyzeChapterList(s, chapterListUrl, ruleChapterList, analyzeNextUrl);
+            WebChapterBean webChapterBean = analyzeChapterList(s, chapterListUrl, ruleChapterList, analyzeNextUrl, analyzer);
             final List<BookChapterBean> chapterList = webChapterBean.getData();
 
             final List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
@@ -84,7 +83,7 @@ public class BookChapterList {
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
-                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false);
+                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false, analyzer);
                         chapterList.addAll(webChapterBean.getData());
                         chapterUrlS.clear();
                         chapterUrlS.addAll(webChapterBean.getNextUrlList());
@@ -161,7 +160,8 @@ public class BookChapterList {
         emitter.onComplete();
     }
 
-    private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList, boolean printLog) throws Exception {
+    private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList,
+                                              boolean printLog, AnalyzeRule analyzer) throws Exception {
         List<String> nextUrlList = new ArrayList<>();
         analyzer.setContent(s, chapterUrl);
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext()) && analyzeNextUrl) {
@@ -179,11 +179,7 @@ public class BookChapterList {
         // 仅使用java正则表达式提取目录列表
         if (ruleChapterList.startsWith(":")) {
             ruleChapterList = ruleChapterList.substring(1);
-            chapterBeans = regexChapter(s, ruleChapterList.split("&&"), 0,
-                    bookSourceBean.getRuleChapterName(),
-                    bookSourceBean.getRuleContentUrl(),
-                    chapterBeans
-            );
+            chapterBeans = regexChapter(s, ruleChapterList.split("&&"), 0, analyzer);
             if (chapterBeans.size() == 0) {
                 Debug.printLog(tag, "└找到 0 个章节", printLog);
                 return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
@@ -242,13 +238,14 @@ public class BookChapterList {
     }
 
     // 纯java模式正则表达式获取目录列表
-    private List<BookChapterBean> regexChapter(String str, String[] regex, int index,
-                                               String nameRule, String linkRule,
-                                               List<BookChapterBean> chapterBeans) {
+    private List<BookChapterBean> regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
-            String baseUrl = "";
             int vipGroup = 0, nameGroup = 0, linkGroup = 0;
+            String baseUrl = "";
+            List<BookChapterBean> chapterBeans = new ArrayList<>();
+            String nameRule = bookSourceBean.getRuleChapterName();
+            String linkRule = bookSourceBean.getRuleContentUrl();
             // 分离标题正则参数
             Matcher nameMatcher = Pattern.compile("((?<=\\$)\\d)?\\$(\\d$)").matcher(nameRule);
             while (nameMatcher.find()){
@@ -282,7 +279,7 @@ public class BookChapterList {
         } else {
             StringBuilder result = new StringBuilder();
             while (m.find()) result.append(m.group());
-            return regexChapter(result.toString(), regex, ++index, nameRule, linkRule, chapterBeans);
+            return regexChapter(result.toString(), regex, ++index, analyzer);
         }
     }
 }

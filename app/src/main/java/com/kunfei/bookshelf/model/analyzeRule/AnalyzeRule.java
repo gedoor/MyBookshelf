@@ -75,6 +75,10 @@ public class AnalyzeRule {
         return this;
     }
 
+    public String getBaseUrl(){
+        return this.baseUrl;
+    }
+
     /**
      * 获取XPath解析类
      */

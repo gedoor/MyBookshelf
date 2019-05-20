@@ -38,7 +38,6 @@ class BookList {
     private String ruleLastChapter;
     private String ruleCoverUrl;
     private String ruleNoteUrl;
-    private AnalyzeRule analyzer;
 
     BookList(String tag, String name, BookSourceBean bookSourceBean, boolean isFind) {
         this.tag = tag;
@@ -60,7 +59,7 @@ class BookList {
             }
             List<SearchBookBean> books = new ArrayList<>();
             body = response.body();
-            analyzer = new AnalyzeRule(null);
+            AnalyzeRule analyzer = new AnalyzeRule(null);
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
             if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())
@@ -84,7 +83,7 @@ class BookList {
                 if (ruleList.startsWith(":")){
                     ruleList = ruleList.substring(1);
                     Debug.printLog(tag, "┌解析搜索列表");
-                    books = getItemsOfRegex(body, ruleList.split("&&"), 0, baseUrl);
+                    books = getBooksOfRegex(body, ruleList.split("&&"), 0, analyzer);
                 }
                 else {
                     // 使用AllInOne规则模式提取目录列表
@@ -272,8 +271,9 @@ class BookList {
 
     // region 纯Java代码解析文本内容,模块代码
     // 纯java模式正则表达式获取书籍列表
-    private List<SearchBookBean> getItemsOfRegex(String res, String[] regs, int index, String baseUrl){
+    private List<SearchBookBean> getBooksOfRegex(String res, String[] regs, int index, AnalyzeRule analyzer){
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
+        String baseUrl = analyzer.getBaseUrl();
         // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
         if (!resM.find()){
             List<SearchBookBean> books = new ArrayList<>();
@@ -287,13 +287,13 @@ class BookList {
             List<SearchBookBean> books = new ArrayList<>();
             // 获取规则列表
             String[] ruleList = new String[]{
-                ruleName,       // 获取书名规则
-                ruleAuthor,     // 获取作者规则
-                ruleKind,       // 获取分类规则
-                ruleLastChapter,// 获取终章规则
-                ruleIntroduce,  // 获取简介规则
-                ruleCoverUrl,   // 获取封面规则
-                ruleNoteUrl     // 获取详情规则
+                    ruleName,       // 获取书名规则
+                    ruleAuthor,     // 获取作者规则
+                    ruleKind,       // 获取分类规则
+                    ruleLastChapter,// 获取终章规则
+                    ruleIntroduce,  // 获取简介规则
+                    ruleCoverUrl,   // 获取封面规则
+                    ruleNoteUrl     // 获取详情规则
             };
             // 创建put&get参数判断容器
             List<Boolean> hasVars = new ArrayList<>();
@@ -326,7 +326,7 @@ class BookList {
                         }
                         infoVal.append(ruleGroup);
                     }
-                    infoList[i] = hasVars.get(i) ? checkKeys(infoVal.toString()) : infoVal.toString();
+                    infoList[i] = hasVars.get(i) ? checkKeys(infoVal.toString(), analyzer) : infoVal.toString();
                 }
                 // 保存当前节点的书籍信息
                 item.setSearchInfo(
@@ -348,17 +348,17 @@ class BookList {
                 }
             }while (resM.find());
             Debug.printLog(tag, "└找到 " + books.size() + " 个匹配的结果");
-            Debug.printLog(tag, "┌获取书名");
+            Debug.printLog(tag, "┌获取书籍名称");
             Debug.printLog(tag, "└" + books.get(0).getName());
-            Debug.printLog(tag, "┌获取作者");
+            Debug.printLog(tag, "┌获取作者名称");
             Debug.printLog(tag, "└" + books.get(0).getAuthor());
-            Debug.printLog(tag, "┌获取分类");
+            Debug.printLog(tag, "┌获取分类信息");
             Debug.printLog(tag, "└" + books.get(0).getKind());
             Debug.printLog(tag, "┌获取最新章节");
             Debug.printLog(tag, "└" + books.get(0).getLastChapter());
-            Debug.printLog(tag, "┌获取简介");
+            Debug.printLog(tag, "┌获取简介内容");
             Debug.printLog(tag, "└" + books.get(0).getIntroduce());
-            Debug.printLog(tag, "┌获取封面");
+            Debug.printLog(tag, "┌获取封面网址");
             Debug.printLog(tag, "└" + books.get(0).getCoverUrl());
             Debug.printLog(tag, "┌获取书籍网址");
             Debug.printLog(tag, "└" + books.get(0).getNoteUrl());
@@ -367,7 +367,7 @@ class BookList {
         else{
             StringBuilder result = new StringBuilder();
             do{ result.append(resM.group()); }while (resM.find());
-            return getItemsOfRegex(result.toString(), regs, ++index, baseUrl);
+            return getBooksOfRegex(result.toString(), regs, ++index, analyzer);
         }
     }
     // 拆分正则表达式替换规则(如:$\d和$\d\d) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
@@ -394,7 +394,7 @@ class BookList {
         return arr.toArray(new String[arr.size()]);
     }
     // 存取字符串中的put&get参数
-    private String checkKeys(String str){
+    private String checkKeys(String str, AnalyzeRule analyzer){
         if(str.contains("@put:{")){
             Matcher putMatcher = Pattern.compile("@put:\\{([^,]*):([^\\}]*)\\}").matcher(str);
             while (putMatcher.find()){
@@ -427,10 +427,10 @@ class BookList {
         if(isEmpty(s))return "";
         int start=0,len=s.length();
         int end=len-1;
-        while ((start<end) && (s.charAt(start) <= 0x20) && (s.charAt(start) == 0xA0)){
+        while ((start<end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == 0xA0))){
             ++start;
         }
-        while ((start<end) && (s.charAt(end) <= 0x20) && (s.charAt(end) == 0xA0)){
+        while ((start<end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == 0xA0))){
             --end;
         }
         if(end<len) ++end;
