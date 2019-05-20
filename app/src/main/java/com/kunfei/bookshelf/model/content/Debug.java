@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 
 import java.text.DateFormat;
@@ -44,7 +45,14 @@ public class Debug {
     }
 
     static void printLog(String tag, String msg, boolean print) {
+        printLog(tag, msg, print, false);
+    }
+
+    static void printLog(String tag, String msg, boolean print, boolean formatHtml) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
+            if (formatHtml) {
+                msg = StringUtils.formatHtml(msg);
+            }
             msg = String.format("%s %s", getDoTime(), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
         }

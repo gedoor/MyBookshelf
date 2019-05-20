@@ -191,7 +191,7 @@ class BookList {
             Debug.printLog(tag, "└最新章节:" + item.getLastChapter());
             Debug.printLog(tag, "┌获取简介");
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-            Debug.printLog(tag, "└" + item.getIntroduce());
+            Debug.printLog(tag, "└" + item.getIntroduce(), true, true);
             return item;
         }
         return null;
@@ -218,7 +218,7 @@ class BookList {
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
             item.setIntroduce(String.valueOf(nativeObject.get(ruleIntroduce)));
-            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(String.valueOf(nativeObject.get(ruleCoverUrl)));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
@@ -253,7 +253,7 @@ class BookList {
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
             item.setIntroduce(analyzer.getString(ruleIntroduce));
-            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(analyzer.getString(ruleCoverUrl, true));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
@@ -275,8 +275,10 @@ class BookList {
         // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
         if (!resM.find()) {
             List<SearchBookBean> books = new ArrayList<>();
-            books.get(0).setNoteUrl(baseUrl);
-            books.get(0).setBookInfoHtml(res);
+            SearchBookBean bookBean = new SearchBookBean();
+            bookBean.setNoteUrl(baseUrl);
+            bookBean.setBookInfoHtml(res);
+            books.add(bookBean);
             return books;
         }
         // 判断索引的规则是最后一个规则
@@ -354,7 +356,7 @@ class BookList {
             Debug.printLog(tag, "┌获取最新章节");
             Debug.printLog(tag, "└" + books.get(0).getLastChapter());
             Debug.printLog(tag, "┌获取简介内容");
-            Debug.printLog(tag, "└" + books.get(0).getIntroduce());
+            Debug.printLog(tag, "└" + books.get(0).getIntroduce(), true, true);
             Debug.printLog(tag, "┌获取封面网址");
             Debug.printLog(tag, "└" + books.get(0).getCoverUrl());
             Debug.printLog(tag, "┌获取书籍网址");
@@ -388,7 +390,7 @@ class BookList {
             }
         }
         if (start > index) arr.add(str.substring(index, start));
-        return arr.toArray(new String[arr.size()]);
+        return arr.toArray(new String[0]);
     }
 
     // 存取字符串中的put&get参数

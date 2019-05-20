@@ -226,10 +226,11 @@ public class AnalyzeRule {
                 }
             }
         }
+        if (result == null) return "";
         if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
-            return NetworkUtils.getAbsoluteURL(baseUrl, (String) result);
+            return NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(result));
         }
-        return StringUtils.formatHtml((String) result);
+        return String.valueOf(result);
     }
 
     /**
