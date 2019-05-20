@@ -15,6 +15,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
@@ -34,6 +35,8 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
         getPreferenceManager().setSharedPreferencesName("CONFIG");
         addPreferencesFromResource(R.xml.pref_settings_theme);
         settingActivity = (ThemeSettingActivity) this.getActivity();
+        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        sharedPreferences.edit().putString("launcher_icon", LauncherIcon.getInUseIcon()).apply();
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value) -> {
@@ -74,6 +77,9 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AlertDialog alertDialog;
         switch (key) {
+            case "launcher_icon":
+                LauncherIcon.ChangeIcon(sharedPreferences.getString("launcher_icon", getString(R.string.icon_main)));
+                break;
             case "behaviorMain":
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 break;

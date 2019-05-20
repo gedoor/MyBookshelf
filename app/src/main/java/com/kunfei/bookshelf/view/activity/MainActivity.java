@@ -44,7 +44,6 @@ import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
@@ -458,9 +457,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                         })
                         .show();
-                break;
-            case R.id.action_change_icon:
-                LauncherIcon.Change();
                 break;
             case R.id.action_web_start:
                 WebService.startThis(this);
