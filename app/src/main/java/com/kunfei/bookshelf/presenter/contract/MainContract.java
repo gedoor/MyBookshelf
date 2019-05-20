@@ -35,8 +35,6 @@ public interface MainContract {
         void restoreData();
 
         void addBookUrl(String bookUrl);
-
-        void clearBookshelf();
     }
 
 }

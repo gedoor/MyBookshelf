@@ -109,7 +109,7 @@
     <string name="author">作者</string>
     <string name="analyze_error">站点暂时不支持解析，请反馈</string>
     <string name="aloud_stop">朗读停止</string>
-    <string name="clear_content">清除缓存</string>
+    <string name="clear_cache">清除缓存</string>
     <string name="action_save">保存</string>
     <string name="edit_book_source">编辑书源</string>
     <string name="disable_book_source">禁用书源</string>
@@ -204,7 +204,7 @@
     <string name="load_over_time">加载超时</string>
     <string name="join_group">关注:%s</string>
     <string name="copy_complete">已拷贝</string>
-    <string name="clear_bookshelf">清空书架</string>
+    <string name="arrange_bookshelf">清空书架</string>
     <string name="clear_bookshelf_s">这将会删除所有书籍，请谨慎操作。</string>
     <string name="search_book_source">搜索书源</string>
     <string name="search_book_source_num">搜索(共%d个书源)</string>
@@ -437,4 +437,5 @@
     <string name="cannot_empty">输入不能为空</string>
     <string name="clear_find_cache">清空发现缓存</string>
     <string name="edit_find">编辑发现</string>
+    <string name="change_icon_summary">切换软件显示在桌面的图标</string>
 </resources>

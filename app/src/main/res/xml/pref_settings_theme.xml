@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.kunfei.bookshelf.widget.prefs.IconListPreference
+        android:defaultValue="@string/icon_main"
+        android:entries="@array/icon_names"
+        android:entryValues="@array/icons"
+        android:key="launcher_icon"
+        android:summary="@string/change_icon_summary"
+        android:title="@string/change_icon"
+        app:icons="@array/icons" />
+
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="immersionStatusBar"
