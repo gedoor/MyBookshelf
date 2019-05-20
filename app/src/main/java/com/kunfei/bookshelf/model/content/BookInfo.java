@@ -8,6 +8,8 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.utils.NetworkUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +169,7 @@ class BookInfo {
                     if(ruleGroup.startsWith("$")){
                         int groupIndex = string2Int(ruleGroup);
                         if(groupIndex <= resCount){
-                            infoVal.append(charTrim(resM.group(groupIndex)));
+                            infoVal.append(StringUtils.trim(resM.group(groupIndex)));
                             continue;
                         }
                     }
@@ -197,7 +199,8 @@ class BookInfo {
             Debug.printLog(tag, "└" + infoList[4]);
 
             Debug.printLog(tag, "┌获取封面网址");
-            if (!isEmpty(infoList[5])) bookInfoBean.setCoverUrl(infoList[5]);
+            if (!isEmpty(infoList[5]))
+                bookInfoBean.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, infoList[5]));
             Debug.printLog(tag, "└" + infoList[5]);
 
             Debug.printLog(tag, "┌获取目录网址");
@@ -265,20 +268,6 @@ class BookInfo {
             }
         }
         return r;
-    }
-    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
-    private static String charTrim(String s){
-        if(isEmpty(s))return "";
-        int start=0,len=s.length();
-        int end=len-1;
-        while ((start<end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == 0xA0))){
-            ++start;
-        }
-        while ((start<end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == 0xA0))){
-            --end;
-        }
-        if(end<len) ++end;
-        return ((start>0) || (end<len)) ? s.substring(start,end) : s;
     }
     // endregion
 }

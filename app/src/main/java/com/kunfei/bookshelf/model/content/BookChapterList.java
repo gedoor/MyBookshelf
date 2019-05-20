@@ -237,7 +237,7 @@ public class BookChapterList {
         chapterBeans.add(new BookChapterBean(tag, name, link));
     }
 
-    // 纯java模式正则表达式获取目录列表
+    // region 纯java模式正则表达式获取目录列表
     private List<BookChapterBean> regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
@@ -282,4 +282,5 @@ public class BookChapterList {
             return regexChapter(result.toString(), regex, ++index, analyzer);
         }
     }
+    // endregion
 }

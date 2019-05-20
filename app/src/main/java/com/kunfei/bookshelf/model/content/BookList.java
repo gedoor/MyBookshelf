@@ -181,7 +181,7 @@ class BookList {
             item.setAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor()));
             Debug.printLog(tag, "└" + item.getAuthor());
             Debug.printLog(tag, "┌获取封面");
-            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl()));
+            item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
             Debug.printLog(tag, "└" + item.getCoverUrl());
             Debug.printLog(tag, "┌获取分类");
             item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
@@ -220,7 +220,7 @@ class BookList {
             item.setIntroduce(String.valueOf(nativeObject.get(ruleIntroduce)));
             Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
-            item.setCoverUrl(String.valueOf(nativeObject.get(ruleCoverUrl)));
+            item.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(nativeObject.get(ruleCoverUrl))));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = String.valueOf(nativeObject.get(ruleNoteUrl));
@@ -320,7 +320,7 @@ class BookList {
                         if (ruleGroup.startsWith("$")) {
                             int groupIndex = string2Int(ruleGroup);
                             if (groupIndex <= resCount) {
-                                infoVal.append(charTrim(resM.group(groupIndex)));
+                                infoVal.append(StringUtils.trim(resM.group(groupIndex)));
                                 continue;
                             }
                         }
@@ -335,7 +335,7 @@ class BookList {
                         infoList[2], // 保存分类
                         infoList[3], // 保存终章
                         infoList[4], // 保存简介
-                        infoList[5], // 保存封面
+                        NetworkUtils.getAbsoluteURL(baseUrl, infoList[5]), // 保存封面
                         infoList[6]  // 保存详情
                 );
                 books.add(item);
@@ -423,21 +423,5 @@ class BookList {
         }
         return r;
     }
-
-    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
-    private static String charTrim(String s) {
-        if (isEmpty(s)) return "";
-        int start = 0, len = s.length();
-        int end = len - 1;
-        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == 0xA0))) {
-            ++start;
-        }
-        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == 0xA0))) {
-            --end;
-        }
-        if (end < len) ++end;
-        return ((start > 0) || (end < len)) ? s.substring(start, end) : s;
-    }
-
-
+    // endregion
 }
