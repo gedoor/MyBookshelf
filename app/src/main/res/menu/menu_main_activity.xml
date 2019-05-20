@@ -28,6 +28,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_arrange_bookshelf"
+        android:icon="@drawable/ic_arrange"
+        android:title="@string/arrange_bookshelf"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_web_start"
         android:icon="@drawable/ic_web_service_phone"
         android:title="@string/web_menu"
