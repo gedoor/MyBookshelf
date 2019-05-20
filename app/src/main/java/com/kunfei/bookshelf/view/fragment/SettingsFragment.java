@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -107,16 +106,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         } else if (preference.getKey().equals("webDavSetting")) {
             WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
             getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment, "webDavSettings").commit();
-        } else if (preference.getKey().equals("clearBookshelf")) {
+        } else if (preference.getKey().equals("clearCache")) {
             new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.clear_bookshelf)
-                    .setMessage(R.string.clear_bookshelf_s)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> AsyncTask.execute(() -> {
-                        BookshelfHelp.clearBookshelf();
-                        RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
-                    }))
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
+                    .setTitle(R.string.clear_cache)
+                    .setMessage(getString(R.string.sure_del_download_book))
+                    .setPositiveButton(R.string.yes, (dialog, which) -> BookshelfHelp.clearCaches(true))
+                    .setNegativeButton(R.string.no, (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
                     .show();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
