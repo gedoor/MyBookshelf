@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ class BookInfo {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private BookInfoBean bookInfoBean;
 
     BookInfo(String tag, String name, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -44,8 +42,7 @@ class BookInfo {
             }
             bookShelfBean.setTag(tag);
 
-            bookInfoBean = bookShelfBean.getBookInfoBean();
-            if (bookInfoBean == null) bookInfoBean = new BookInfoBean();
+            BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
             bookInfoBean.setNoteUrl(baseUrl);   //id
             bookInfoBean.setTag(tag);
             bookInfoBean.setOrigin(name);
@@ -56,15 +53,22 @@ class BookInfo {
 
             // 获取详情页预处理规则
             String ruleInfoInit = bookSourceBean.getRuleBookInfoInit();
-
-            // 仅使用java正则表达式提取书籍详情
-            if (ruleInfoInit.startsWith(":")){
-                ruleInfoInit = ruleInfoInit.substring(1);
-                Debug.printLog(tag, "┌详情信息预处理");
-                getInfosOfRegex(s, ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer);
+            boolean isRegex = false;
+            if (!isEmpty(ruleInfoInit)) {
+                // 仅使用java正则表达式提取书籍详情
+                if (ruleInfoInit.startsWith(":")) {
+                    isRegex = true;
+                    ruleInfoInit = ruleInfoInit.substring(1);
+                    Debug.printLog(tag, "┌详情信息预处理");
+                    getInfosOfRegex(s, ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer);
+                } else {
+                    Object object = analyzer.getElement(ruleInfoInit);
+                    if (object != null) {
+                        analyzer.setContent(object);
+                    }
+                }
             }
-            // 使用普通规则提取书籍详情
-            else{
+            if (!isRegex) {
                 Debug.printLog(tag, "┌详情信息预处理");
                 Object object = analyzer.getElement(ruleInfoInit);
                 if (object != null) analyzer.setContent(object);
@@ -119,6 +123,7 @@ class BookInfo {
     // 纯java模式正则表达式获取书籍详情信息
     private void getInfosOfRegex(String res, String[] regs, int index,
                                  BookShelfBean bookShelfBean,AnalyzeRule analyzer){
+        BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         String baseUrl = bookShelfBean.getNoteUrl();
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
         // 判断规则是否有效,当搜索列表规则无效时跳过详情页处理
@@ -132,8 +137,6 @@ class BookInfo {
         }
         // 判断索引的规则是最后一个规则
         if (index + 1 == regs.length) {
-            // 创建书籍信息缓存数组
-            List<SearchBookBean> books = new ArrayList<>();
             // 获取规则列表
             String[] ruleList = new String[]{
                     bookSourceBean.getRuleBookName(),       // 获取书名规则
@@ -203,8 +206,6 @@ class BookInfo {
             //如果目录页和详情页相同,暂存页面内容供获取目录用
             if (infoList[6].equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
-
-            bookShelfBean.setBookInfoBean(bookInfoBean);
             Debug.printLog(tag, "-详情页解析完成");
         }
         else{

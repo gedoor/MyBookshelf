@@ -53,7 +53,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     private Map<String, String> variableMap;
 
     @Transient
-    private BookInfoBean bookInfoBean = new BookInfoBean();
+    private BookInfoBean bookInfoBean;
 
     public BookShelfBean() {
 
@@ -153,6 +153,9 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public BookInfoBean getBookInfoBean() {
+        if (bookInfoBean == null) {
+            bookInfoBean = new BookInfoBean();
+        }
         return bookInfoBean;
     }
 
