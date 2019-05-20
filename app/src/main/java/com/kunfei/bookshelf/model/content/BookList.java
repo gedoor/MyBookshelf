@@ -15,8 +15,6 @@ import org.mozilla.javascript.NativeObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -38,7 +36,6 @@ class BookList {
     private String ruleLastChapter;
     private String ruleCoverUrl;
     private String ruleNoteUrl;
-    private AnalyzeRule analyzer;
 
     BookList(String tag, String name, BookSourceBean bookSourceBean, boolean isFind) {
         this.tag = tag;
@@ -59,8 +56,8 @@ class BookList {
                 Debug.printLog(tag, "└" + baseUrl);
             }
             List<SearchBookBean> books = new ArrayList<>();
+            AnalyzeRule analyzer = new AnalyzeRule(null);
             body = response.body();
-            analyzer = new AnalyzeRule(null);
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
             if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())
@@ -80,51 +77,42 @@ class BookList {
                     reverse = true;
                     ruleList = ruleList.substring(1);
                 }
-                // 仅使用java正则表达式提取书籍列表
-                if (ruleList.startsWith(":")){
+                if (ruleList.startsWith("+")) {
+                    allInOne = true;
                     ruleList = ruleList.substring(1);
-                    Debug.printLog(tag, "┌解析搜索列表");
-                    books = getItemsOfRegex(body, ruleList.split("&&"), 0, baseUrl);
                 }
-                else {
-                    // 使用AllInOne规则模式提取目录列表
-                    if (ruleList.startsWith("+")) {
-                        allInOne = true;
-                        ruleList = ruleList.substring(1);
+                //获取列表
+                Debug.printLog(tag, "┌解析搜索列表");
+                collections = analyzer.getElements(ruleList);
+                if (collections.size() == 0) {
+                    Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
+                    SearchBookBean item = getItem(analyzer, baseUrl);
+                    if (item != null) {
+                        item.setBookInfoHtml(body);
+                        books.add(item);
                     }
-                    //获取列表
-                    Debug.printLog(tag, "┌解析搜索列表");
-                    collections = analyzer.getElements(ruleList);
-                    if (collections.size() == 0) {
-                        Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
-                        SearchBookBean item = getItem(analyzer, baseUrl);
-                        if (item != null) {
-                            item.setBookInfoHtml(body);
-                            books.add(item);
+                } else {
+                    Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
+                    if (allInOne) {
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
+                            }
                         }
                     } else {
-                        Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
-                        if (allInOne) {
-                            for (int i = 0; i < collections.size(); i++) {
-                                Object object = collections.get(i);
-                                SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
-                                if (item != null) {
-                                    books.add(item);
-                                }
-                            }
-                        } else {
-                            for (int i = 0; i < collections.size(); i++) {
-                                Object object = collections.get(i);
-                                analyzer.setContent(object, baseUrl);
-                                SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
-                                if (item != null) {
-                                    books.add(item);
-                                }
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            analyzer.setContent(object, baseUrl);
+                            SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
                             }
                         }
-                        if (books.size() > 1 && reverse) {
-                            Collections.reverse(books);
-                        }
+                    }
+                    if (books.size() > 1 && reverse) {
+                        Collections.reverse(books);
                     }
                 }
             }
@@ -269,172 +257,4 @@ class BookList {
         }
         return null;
     }
-
-    // region 纯Java代码解析文本内容,模块代码
-    // 纯java模式正则表达式获取书籍列表
-    private List<SearchBookBean> getItemsOfRegex(String res, String[] regs, int index, String baseUrl){
-        Matcher resM = Pattern.compile(regs[index]).matcher(res);
-        // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
-        if (!resM.find()){
-            List<SearchBookBean> books = new ArrayList<>();
-            books.get(0).setNoteUrl(baseUrl);
-            books.get(0).setBookInfoHtml(res);
-            return books;
-        }
-        // 判断索引的规则是最后一个规则
-        if (index + 1 == regs.length) {
-            // 创建书籍信息缓存数组
-            List<SearchBookBean> books = new ArrayList<>();
-            // 获取规则列表
-            String[] ruleList = new String[]{
-                ruleName,       // 获取书名规则
-                ruleAuthor,     // 获取作者规则
-                ruleKind,       // 获取分类规则
-                ruleLastChapter,// 获取终章规则
-                ruleIntroduce,  // 获取简介规则
-                ruleCoverUrl,   // 获取封面规则
-                ruleNoteUrl     // 获取详情规则
-            };
-            // 创建put&get参数判断容器
-            List<Boolean> hasVars = new ArrayList<>();
-            // 创建拆分规则容器
-            List<String[]> ruleGroups = new ArrayList<>();
-            // 提取规则信息
-            for(String rule:ruleList){
-                ruleGroups.add(splitRegexRule(rule));
-                hasVars.add(rule.contains("@put") || rule.contains("@get"));
-            }
-            // 提取书籍列表信息
-            do{
-                // 获取列表规则分组数
-                int resCount = resM.groupCount();
-                // 新建书籍容器
-                SearchBookBean item = new SearchBookBean(tag, name);
-                analyzer.setBook(item);
-                // 新建规则结果容器
-                String[] infoList = new String[ruleList.length];
-                // 合并规则结果内容
-                for(int i=0; i<infoList.length; i++){
-                    StringBuilder infoVal = new StringBuilder();
-                    for(String ruleGroup:ruleGroups.get(i)) {
-                        if(ruleGroup.startsWith("$")){
-                            int groupIndex = string2Int(ruleGroup);
-                            if(groupIndex <= resCount){
-                                infoVal.append(charTrim(resM.group(groupIndex)));
-                                continue;
-                            }
-                        }
-                        infoVal.append(ruleGroup);
-                    }
-                    infoList[i] = hasVars.get(i) ? checkKeys(infoVal.toString()) : infoVal.toString();
-                }
-                // 保存当前节点的书籍信息
-                item.setSearchInfo(
-                        infoList[0], // 保存书名
-                        infoList[1], // 保存作者
-                        infoList[2], // 保存分类
-                        infoList[3], // 保存终章
-                        infoList[4], // 保存简介
-                        infoList[5], // 保存封面
-                        infoList[6]  // 保存详情
-                );
-                books.add(item);
-                // 判断搜索结果是否为详情页
-                if(books.size() == 1 && (isEmpty(infoList[6]) || infoList[6].equals(baseUrl)))
-                {
-                    books.get(0).setNoteUrl(baseUrl);
-                    books.get(0).setBookInfoHtml(res);
-                    return books;
-                }
-            }while (resM.find());
-            Debug.printLog(tag, "└找到 " + books.size() + " 个匹配的结果");
-            Debug.printLog(tag, "┌获取书名");
-            Debug.printLog(tag, "└" + books.get(0).getName());
-            Debug.printLog(tag, "┌获取作者");
-            Debug.printLog(tag, "└" + books.get(0).getAuthor());
-            Debug.printLog(tag, "┌获取分类");
-            Debug.printLog(tag, "└" + books.get(0).getKind());
-            Debug.printLog(tag, "┌获取最新章节");
-            Debug.printLog(tag, "└" + books.get(0).getLastChapter());
-            Debug.printLog(tag, "┌获取简介");
-            Debug.printLog(tag, "└" + books.get(0).getIntroduce());
-            Debug.printLog(tag, "┌获取封面");
-            Debug.printLog(tag, "└" + books.get(0).getCoverUrl());
-            Debug.printLog(tag, "┌获取书籍网址");
-            Debug.printLog(tag, "└" + books.get(0).getNoteUrl());
-            return books;
-        }
-        else{
-            StringBuilder result = new StringBuilder();
-            do{ result.append(resM.group()); }while (resM.find());
-            return getItemsOfRegex(result.toString(), regs, ++index, baseUrl);
-        }
-    }
-    // 拆分正则表达式替换规则(如:$\d和$\d\d) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
-    private static String[] splitRegexRule(String str){
-        int start = 0,index = 0, len = str.length();
-        List<String> arr= new ArrayList<>();
-        while (start<len){
-            if((str.charAt(start)=='$') && (str.charAt(start+1)>='0') && (str.charAt(start+1)<='9')){
-                if(start>index) arr.add(str.substring(index, start));
-                if((start+2<len) && (str.charAt(start+2)>='0') && (str.charAt(start+2)<='9')){
-                    arr.add(str.substring(start, start+3));
-                    index = start += 3;
-                }
-                else{
-                    arr.add(str.substring(start, start+2));
-                    index = start += 2;
-                }
-            }
-            else{
-                ++start;
-            }
-        }
-        if(start>index) arr.add(str.substring(index, start));
-        return arr.toArray(new String[arr.size()]);
-    }
-    // 存取字符串中的put&get参数
-    private String checkKeys(String str){
-        if(str.contains("@put:{")){
-            Matcher putMatcher = Pattern.compile("@put:\\{([^,]*):([^\\}]*)\\}").matcher(str);
-            while (putMatcher.find()){
-                str = str.replace(putMatcher.group(0), "");
-                analyzer.put(putMatcher.group(1), putMatcher.group(2));
-            }
-        }
-        if(str.contains("@get:{")){
-            Matcher getMatcher = Pattern.compile("@get:\\{([^\\}]*)\\}").matcher(str);
-            while (getMatcher.find()){
-                str = str.replace(getMatcher.group(), analyzer.get(getMatcher.group(1)));
-            }
-        }
-        return str;
-    }
-    // String数字转int数字的高效方法(利用ASCII值判断)
-    private static int string2Int(String s) {
-        int r = 0;
-        char n;
-        for (int i = 0,l=s.length(); i < l; i++) {
-            n = s.charAt(i);
-            if (n >= '0' && n <= '9') {
-                r = r * 10 + (n - 0x30); //'0-9'的ASCII值为0x30-0x39
-            }
-        }
-        return r;
-    }
-    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
-    private static String charTrim(String s){
-        if(isEmpty(s))return "";
-        int start=0,len=s.length();
-        int end=len-1;
-        while ((start<end) && (s.charAt(start) <= 0x20) && (s.charAt(start) == 0xA0)){
-            ++start;
-        }
-        while ((start<end) && (s.charAt(end) <= 0x20) && (s.charAt(end) == 0xA0)){
-            --end;
-        }
-        if(end<len) ++end;
-        return ((start>0) || (end<len)) ? s.substring(start,end) : s;
-    }
-    // endregion
 }
