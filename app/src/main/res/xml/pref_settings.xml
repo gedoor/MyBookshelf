@@ -40,6 +40,10 @@
             android:summary="@string/ps_show_all_find"
             android:title="@string/pt_show_all_find" />
 
+        <Preference
+            android:key="clearBookshelf"
+            android:title="@string/clear_bookshelf" />
+
     </com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory>
 
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="其它设置">

@@ -449,15 +449,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .setNegativeButton(R.string.no, (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
                         .show();
                 break;
-            case R.id.action_clearBookshelf:
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.clear_bookshelf)
-                        .setMessage(R.string.clear_bookshelf_s)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
-                        .show();
-                break;
             case R.id.action_web_start:
                 WebService.startThis(this);
                 break;

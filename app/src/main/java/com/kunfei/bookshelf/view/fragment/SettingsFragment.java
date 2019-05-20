@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -10,10 +11,13 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.service.WebService;
@@ -103,6 +107,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         } else if (preference.getKey().equals("webDavSetting")) {
             WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
             getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment, "webDavSettings").commit();
+        } else if (preference.getKey().equals("clearBookshelf")) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.clear_bookshelf)
+                    .setMessage(R.string.clear_bookshelf_s)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> AsyncTask.execute(() -> {
+                        BookshelfHelp.clearBookshelf();
+                        RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
+                    }))
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
+                    .show();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

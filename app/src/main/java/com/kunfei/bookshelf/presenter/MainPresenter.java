@@ -137,27 +137,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         });
     }
 
-    @Override
-    public void clearBookshelf() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            BookshelfHelp.clearBookshelf();
-            e.onNext(true);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast(e.getMessage());
-                    }
-                });
-    }
-
     private void getBook(BookShelfBean bookShelfBean) {
         WebBookModel.getInstance()
                 .getBookInfo(bookShelfBean)
