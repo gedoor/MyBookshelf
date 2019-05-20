@@ -19,6 +19,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.text.TextUtils.isEmpty;
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     private static final String TAG = "StringUtils";
@@ -346,11 +348,19 @@ public class StringUtils {
         return url.substring(0, index);
     }
 
-    public static String trim(String string) {
-        if (string == null) {
-            return null;
+    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
+    public static String trim(String s) {
+        if (isEmpty(s)) return "";
+        int start = 0, len = s.length();
+        int end = len - 1;
+        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == 0xA0))) {
+            ++start;
         }
-        return string.replaceAll("(^\\s+|\\s+$)", "");
+        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == 0xA0))) {
+            --end;
+        }
+        if (end < len) ++end;
+        return ((start > 0) || (end < len)) ? s.substring(start, end) : s;
     }
 
     public static String repeat(String str, int n) {
