@@ -28,7 +28,6 @@ class BookList {
     private String name;
     private BookSourceBean bookSourceBean;
     private boolean isFind;
-    private String body;
     //规则
     private String ruleList;
     private String ruleName;
@@ -57,7 +56,7 @@ class BookList {
                 Debug.printLog(tag, "┌成功获取搜索结果");
                 Debug.printLog(tag, "└" + baseUrl);
             }
-            body = response.body();
+            String body = response.body();
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
             analyzer.setContent(body, baseUrl);
@@ -102,6 +101,10 @@ class BookList {
                             Object object = collections.get(i);
                             SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
                             if (item != null) {
+                                //如果网址相同则缓存
+                                if (baseUrl.equals(item.getNoteUrl())) {
+                                    item.setBookInfoHtml(body);
+                                }
                                 books.add(item);
                             }
                         }
@@ -111,6 +114,10 @@ class BookList {
                             analyzer.setContent(object, baseUrl);
                             SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
                             if (item != null) {
+                                //如果网址相同则缓存
+                                if (baseUrl.equals(item.getNoteUrl())) {
+                                    item.setBookInfoHtml(body);
+                                }
                                 books.add(item);
                             }
                         }
@@ -213,10 +220,6 @@ class BookList {
             String resultUrl = String.valueOf(nativeObject.get(ruleNoteUrl));
             if (isEmpty(resultUrl)) resultUrl = baseUrl;
             item.setNoteUrl(resultUrl);
-            //如果网址相同则缓存
-            if (baseUrl.equals(resultUrl)) {
-                item.setBookInfoHtml(body);
-            }
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
@@ -252,10 +255,6 @@ class BookList {
             String resultUrl = analyzer.getString(ruleNoteUrl, true);
             if (isEmpty(resultUrl)) resultUrl = baseUrl;
             item.setNoteUrl(resultUrl);
-            //如果网址相同则缓存
-            if (baseUrl.equals(resultUrl)) {
-                item.setBookInfoHtml(body);
-            }
             Debug.printLog(tag, "└" + item.getNoteUrl(), printLog);
             return item;
         }
