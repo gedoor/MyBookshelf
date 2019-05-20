@@ -269,5 +269,5 @@ class BookInfo {
         }
         return r;
     }
-
+    // endregion
 }
