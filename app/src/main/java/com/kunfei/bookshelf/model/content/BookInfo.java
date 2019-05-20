@@ -8,7 +8,6 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +94,7 @@ class BookInfo {
                 Debug.printLog(tag, "└" + bookLastChapter);
 
                 Debug.printLog(tag, "┌获取简介");
-                String bookIntroduce = StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+                String bookIntroduce = analyzer.getString(bookSourceBean.getRuleIntroduce());
                 if (!isEmpty(bookIntroduce)) bookInfoBean.setIntroduce(bookIntroduce);
                 Debug.printLog(tag, "└" + bookIntroduce);
 
