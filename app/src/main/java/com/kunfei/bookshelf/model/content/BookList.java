@@ -15,6 +15,8 @@ import org.mozilla.javascript.NativeObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -55,6 +57,7 @@ class BookList {
                 Debug.printLog(tag, "┌成功获取搜索结果");
                 Debug.printLog(tag, "└" + baseUrl);
             }
+            body = response.body();
             List<SearchBookBean> books = new ArrayList<>();
             AnalyzeRule analyzer = new AnalyzeRule(null);
             analyzer.setContent(body, baseUrl);
@@ -426,5 +429,6 @@ class BookList {
         if(end<len) ++end;
         return ((start>0) || (end<len)) ? s.substring(start,end) : s;
     }
-    // endregion
+
+
 }
