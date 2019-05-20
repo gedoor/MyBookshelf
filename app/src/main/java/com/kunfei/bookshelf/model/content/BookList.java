@@ -275,8 +275,10 @@ class BookList {
         // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
         if (!resM.find()) {
             List<SearchBookBean> books = new ArrayList<>();
-            books.get(0).setNoteUrl(baseUrl);
-            books.get(0).setBookInfoHtml(res);
+            SearchBookBean bookBean = new SearchBookBean();
+            bookBean.setNoteUrl(baseUrl);
+            bookBean.setBookInfoHtml(res);
+            books.add(bookBean);
             return books;
         }
         // 判断索引的规则是最后一个规则
@@ -388,7 +390,7 @@ class BookList {
             }
         }
         if (start > index) arr.add(str.substring(index, start));
-        return arr.toArray(new String[arr.size()]);
+        return arr.toArray(new String[0]);
     }
 
     // 存取字符串中的put&get参数
