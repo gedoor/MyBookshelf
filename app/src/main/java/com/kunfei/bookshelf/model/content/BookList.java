@@ -191,7 +191,7 @@ class BookList {
             Debug.printLog(tag, "└最新章节:" + item.getLastChapter());
             Debug.printLog(tag, "┌获取简介");
             item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
-            Debug.printLog(tag, "└" + item.getIntroduce());
+            Debug.printLog(tag, "└" + item.getIntroduce(), true, true);
             return item;
         }
         return null;
@@ -218,7 +218,7 @@ class BookList {
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
             item.setIntroduce(String.valueOf(nativeObject.get(ruleIntroduce)));
-            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(String.valueOf(nativeObject.get(ruleCoverUrl)));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
@@ -253,7 +253,7 @@ class BookList {
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
             item.setIntroduce(analyzer.getString(ruleIntroduce));
-            Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
+            Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(analyzer.getString(ruleCoverUrl, true));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
@@ -356,7 +356,7 @@ class BookList {
             Debug.printLog(tag, "┌获取最新章节");
             Debug.printLog(tag, "└" + books.get(0).getLastChapter());
             Debug.printLog(tag, "┌获取简介内容");
-            Debug.printLog(tag, "└" + books.get(0).getIntroduce());
+            Debug.printLog(tag, "└" + books.get(0).getIntroduce(), true, true);
             Debug.printLog(tag, "┌获取封面网址");
             Debug.printLog(tag, "└" + books.get(0).getCoverUrl());
             Debug.printLog(tag, "┌获取书籍网址");

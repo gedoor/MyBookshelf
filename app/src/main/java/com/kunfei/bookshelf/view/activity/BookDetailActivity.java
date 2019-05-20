@@ -38,6 +38,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -137,7 +138,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             String origin = TextUtils.isEmpty(searchBookBean.getOrigin()) ? "未知" : searchBookBean.getOrigin();
             tvOrigin.setText(origin);
             tvChapter.setText(searchBookBean.getLastChapter());  // newest
-            tvIntro.setText(searchBookBean.getIntroduce());
+            tvIntro.setText(StringUtils.formatHtml(searchBookBean.getIntroduce()));
             tvShelf.setText(R.string.add_to_shelf);
             tvRead.setText(R.string.start_read);
             tvRead.setOnClickListener(v -> {
@@ -184,9 +185,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     mPresenter.addToBookShelf();
                 });
             }
-            if (bookInfoBean.getIntroduce() != null) {
-                tvIntro.setText(bookInfoBean.getIntroduce());
-            }
+            tvIntro.setText(StringUtils.formatHtml(bookInfoBean.getIntroduce()));
             if (tvIntro.getVisibility() != View.VISIBLE) {
                 tvIntro.setVisibility(View.VISIBLE);
             }

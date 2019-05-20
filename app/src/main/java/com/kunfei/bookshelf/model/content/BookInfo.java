@@ -96,7 +96,7 @@ class BookInfo {
                 Debug.printLog(tag, "┌获取简介");
                 String bookIntroduce = analyzer.getString(bookSourceBean.getRuleIntroduce());
                 if (!isEmpty(bookIntroduce)) bookInfoBean.setIntroduce(bookIntroduce);
-                Debug.printLog(tag, "└" + bookIntroduce);
+                Debug.printLog(tag, "└" + bookIntroduce, true, true);
 
                 Debug.printLog(tag, "┌获取封面");
                 String bookCoverUrl = analyzer.getString(bookSourceBean.getRuleCoverUrl(), true);
