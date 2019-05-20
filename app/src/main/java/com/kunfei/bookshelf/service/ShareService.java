@@ -19,7 +19,7 @@ import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.web.ShareServer;
 
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class ShareService extends Service {
             shareServer.stop();
         }
         shareServer = new ShareServer(65501, () -> bookSourceBeans);
-        InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
+        InetAddress inetAddress = NetworkUtils.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 shareServer.start();

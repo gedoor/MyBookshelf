@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.web.HttpServer;
 import com.kunfei.bookshelf.web.WebSocketServer;
 
@@ -78,7 +78,7 @@ public class WebService extends Service {
         int port = getPort();
         httpServer = new HttpServer(port);
         webSocketServer = new WebSocketServer(port + 1);
-        InetAddress inetAddress = NetworkUtil.getLocalIPAddress();
+        InetAddress inetAddress = NetworkUtils.getLocalIPAddress();
         if (inetAddress != null) {
             try {
                 httpServer.start();

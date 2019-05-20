@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 public class ReadAssets {
 
@@ -19,7 +20,7 @@ public class ReadAssets {
             is.close();
             // Convert the buffer into a string.
             // Finally stick the string into the text view.
-            return new String(buffer, "utf-8");
+            return new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
             // Should never happen!
             e.printStackTrace();

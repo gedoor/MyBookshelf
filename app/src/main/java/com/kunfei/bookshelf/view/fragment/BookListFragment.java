@@ -26,7 +26,7 @@ import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.BookListPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookDetailActivity;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
@@ -105,7 +105,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     protected void firstRequest() {
         group = preferences.getInt("bookshelfGroup", 0);
         if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false)
-                && !isRecreate && NetworkUtil.isNetWorkAvailable() && group != 2) {
+                && !isRecreate && NetworkUtils.isNetWorkAvailable() && group != 2) {
             mPresenter.queryBookShelf(true, group);
         } else {
             mPresenter.queryBookShelf(false, group);
@@ -115,8 +115,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     protected void bindEvent() {
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
-            if (!NetworkUtil.isNetWorkAvailable()) {
+            mPresenter.queryBookShelf(NetworkUtils.isNetWorkAvailable(), group);
+            if (!NetworkUtils.isNetWorkAvailable()) {
                 Toast.makeText(getContext(), R.string.network_connection_unavailable, Toast.LENGTH_SHORT).show();
             }
             refreshLayout.setRefreshing(false);

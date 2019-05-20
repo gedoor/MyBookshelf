@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -154,6 +155,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         bookShelfBean = mPresenter.getBookShelf();
         BookInfoBean bookInfoBean;
         if (null != bookShelfBean) {
+            if (BookShelfBean.LOCAL_TAG.equals(bookShelfBean.getTag())) {
+                ivMenu.setVisibility(View.GONE);
+            } else {
+                ivMenu.setVisibility(View.VISIBLE);
+            }
             bookInfoBean = bookShelfBean.getBookInfoBean();
             tvName.setText(bookInfoBean.getName());
             author = bookInfoBean.getAuthor();
@@ -305,31 +311,38 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         ivMenu.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(this, view, Gravity.END);
-            popupMenu.getMenu().add(R.string.refresh);
+            if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                popupMenu.getMenu().add(Menu.NONE, R.id.menu_refresh, Menu.NONE, R.string.refresh);
+            }
             if (mPresenter.getInBookShelf() && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 if (mPresenter.getBookShelf().getAllowUpdate()) {
-                    popupMenu.getMenu().add(R.string.disable_update);
+                    popupMenu.getMenu().add(Menu.NONE, R.id.menu_disable_update, Menu.NONE, R.string.disable_update);
                 } else {
-                    popupMenu.getMenu().add(R.string.allow_update);
+                    popupMenu.getMenu().add(Menu.NONE, R.id.menu_allow_update, Menu.NONE, R.string.allow_update);
                 }
             }
             if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                popupMenu.getMenu().add(R.string.edit_book_source);
+                popupMenu.getMenu().add(Menu.NONE, R.id.menu_edit_book_source, Menu.NONE, R.string.edit_book_source);
             }
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                if (menuItem.getTitle().toString().equals(getString(R.string.refresh))) {
-                    refresh();
-                } else if (menuItem.getTitle().toString().equals(getString(R.string.allow_update))) {
-                    mPresenter.getBookShelf().setAllowUpdate(true);
-                    mPresenter.addToBookShelf();
-                } else if (menuItem.getTitle().toString().equals(getString(R.string.disable_update))) {
-                    mPresenter.getBookShelf().setAllowUpdate(false);
-                    mPresenter.addToBookShelf();
-                } else if (menuItem.getTitle().toString().equals(getString(R.string.edit_book_source))) {
-                    BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
-                    if (sourceBean != null) {
-                        SourceEditActivity.startThis(this, sourceBean);
-                    }
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_refresh:
+                        refresh();
+                        break;
+                    case R.id.menu_allow_update:
+                        mPresenter.getBookShelf().setAllowUpdate(true);
+                        mPresenter.addToBookShelf();
+                        break;
+                    case R.id.menu_disable_update:
+                        mPresenter.getBookShelf().setAllowUpdate(false);
+                        mPresenter.addToBookShelf();
+                        break;
+                    case R.id.menu_edit_book_source:
+                        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
+                        if (sourceBean != null) {
+                            SourceEditActivity.startThis(this, sourceBean);
+                        }
+                        break;
                 }
                 return true;
             });

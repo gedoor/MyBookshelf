@@ -8,7 +8,7 @@ import androidx.annotation.Keep;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
-import static com.kunfei.bookshelf.utils.NetworkUtil.headerPattern;
+import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
 
 
 /**
@@ -171,7 +171,7 @@ public class AnalyzeRule {
         if (isUrl && !TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
             for (Object url : (List<Object>) result) {
-                String absoluteURL = NetworkUtil.getAbsoluteURL(baseUrl, String.valueOf(url));
+                String absoluteURL = NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(url));
                 if (!urlList.contains(absoluteURL)) {
                     urlList.add(absoluteURL);
                 }
@@ -223,7 +223,7 @@ public class AnalyzeRule {
             }
         }
         if (isUrl && !StringUtils.isTrimEmpty(baseUrl)) {
-            return NetworkUtil.getAbsoluteURL(baseUrl, (String) result);
+            return NetworkUtils.getAbsoluteURL(baseUrl, (String) result);
         }
         return StringUtils.formatHtml((String) result);
     }

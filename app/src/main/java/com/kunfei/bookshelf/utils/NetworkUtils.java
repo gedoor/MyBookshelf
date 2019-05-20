@@ -19,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class NetworkUtil {
+import retrofit2.Response;
+
+public class NetworkUtils {
     public static final Pattern headerPattern = Pattern.compile("@Header:\\{.+?\\}", Pattern.CASE_INSENSITIVE);
     public static final int SUCCESS = 10000;
     public static final int ERROR_CODE_NONET = 10001;
@@ -46,6 +48,15 @@ public class NetworkUtil {
             return info != null && info.isConnected();
         } else {
             return false;
+        }
+    }
+
+    public static String getUrl(Response response) {
+        okhttp3.Response networkResponse = response.raw().networkResponse();
+        if (networkResponse != null) {
+            return networkResponse.request().url().toString();
+        } else {
+            return response.raw().request().url().toString();
         }
     }
 

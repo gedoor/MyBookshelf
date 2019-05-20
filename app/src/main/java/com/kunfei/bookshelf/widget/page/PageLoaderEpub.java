@@ -9,7 +9,6 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.utils.EncodingDetect;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -56,23 +55,22 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        BookShelfBean bookShelf = book;
-        if (bookShelf == null) return;
+        if (book == null) return;
 
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            File bookFile = new File(bookShelf.getNoteUrl());
+            File bookFile = new File(book.getNoteUrl());
             epubBook = readBook(bookFile);
 
             if (epubBook == null) {
                 e.onError(new Exception("文件解析失败"));
                 return;
             }
-            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
-                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
+            if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
+                book.getBookInfoBean().setCharset("UTF-8");
             }
-            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
+            mCharset = Charset.forName(book.getBookInfoBean().getCharset());
 
-            e.onNext(bookShelf);
+            e.onNext(book);
             e.onComplete();
         }).subscribeOn(Schedulers.single())
                 .flatMap(this::checkChapterList)
@@ -142,15 +140,14 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private List<BookChapterBean> loadChapters() {
-        BookShelfBean bookShelf = book;
         Metadata metadata = epubBook.getMetadata();
-        bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
+        book.getBookInfoBean().setName(metadata.getFirstTitle());
         if (metadata.getAuthors().size() > 0) {
             String author = metadata.getAuthors().get(0).toString().replaceAll("^, |, $", "");
-            bookShelf.getBookInfoBean().setAuthor(author);
+            book.getBookInfoBean().setAuthor(author);
         }
         if (metadata.getDescriptions().size() > 0) {
-            bookShelf.getBookInfoBean().setIntroduce(Jsoup.parse(metadata.getDescriptions().get(0)).text());
+            book.getBookInfoBean().setIntroduce(Jsoup.parse(metadata.getDescriptions().get(0)).text());
         }
         chapterList = new ArrayList<>();
         List<TOCReference> refs = epubBook.getTableOfContents().getTocReferences();
@@ -172,7 +169,7 @@ public class PageLoaderEpub extends PageLoader {
                 }
                 BookChapterBean bean = new BookChapterBean();
                 bean.setDurChapterIndex(i);
-                bean.setNoteUrl(bookShelf.getNoteUrl());
+                bean.setNoteUrl(bean.getNoteUrl());
                 bean.setDurChapterUrl(resource.getHref());
                 if (i == 0 && title.isEmpty()) {
                     bean.setDurChapterName("封面");
@@ -266,15 +263,16 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void updateChapter() {
-        BookShelfBean bookShelf = book;
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
-            BookshelfHelp.delChapterList(bookShelf.getNoteUrl());
-            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
-                bookShelf.getBookInfoBean().setCharset(EncodingDetect.getEncodeInHtml(epubBook.getCoverPage().getData()));
+            if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
+                book.getBookInfoBean().setCharset("UTF-8");
             }
-            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
-            e.onNext(bookShelf);
+            mCharset = Charset.forName(book.getBookInfoBean().getCharset());
+            //清除原目录
+            BookshelfHelp.delChapterList(book.getNoteUrl());
+            callback.getChapterList().clear();
+            e.onNext(book);
             e.onComplete();
         }).flatMap(this::checkChapterList)
                 .compose(RxUtils::toSimpleSingle)

@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.model.WebBookModel;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 
@@ -61,7 +61,7 @@ public class Debug {
         startTime = System.currentTimeMillis();
         SOURCE_DEBUG_TAG = tag;
         this.compositeDisposable = compositeDisposable;
-        if (NetworkUtil.isUrl(key)) {
+        if (NetworkUtils.isUrl(key)) {
             printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
             BookShelfBean bookShelfBean = new BookShelfBean();
             bookShelfBean.setTag(Debug.SOURCE_DEBUG_TAG);
