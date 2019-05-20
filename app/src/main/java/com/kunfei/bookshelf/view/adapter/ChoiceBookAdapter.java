@@ -16,13 +16,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.widget.CoverImageView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.utils.StringUtils.isTrimEmpty;
 
 public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
@@ -59,43 +60,43 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             title = String.format("%s (%s)", title, author);
         myViewHolder.tvName.setText(title);
         BookKindBean bookKindBean = new BookKindBean(searchBooks.get(position).getKind());
-        if (isEmpty(bookKindBean.getKind())) {
+        if (isTrimEmpty(bookKindBean.getKind())) {
             myViewHolder.tvKind.setVisibility(View.GONE);
         } else {
             myViewHolder.tvKind.setVisibility(View.VISIBLE);
             myViewHolder.tvKind.setText(bookKindBean.getKind());
         }
-        if (isEmpty(bookKindBean.getWordsS())) {
+        if (isTrimEmpty(bookKindBean.getWordsS())) {
             myViewHolder.tvWords.setVisibility(View.GONE);
         } else {
             myViewHolder.tvWords.setVisibility(View.VISIBLE);
             myViewHolder.tvWords.setText(bookKindBean.getWordsS());
         }
-        if (isEmpty(bookKindBean.getState())) {
+        if (isTrimEmpty(bookKindBean.getState())) {
             myViewHolder.tvState.setVisibility(View.GONE);
         } else {
             myViewHolder.tvState.setVisibility(View.VISIBLE);
             myViewHolder.tvState.setText(bookKindBean.getState());
         }
         //来源
-        if (isEmpty(searchBooks.get(position).getOrigin())) {
+        if (isTrimEmpty(searchBooks.get(position).getOrigin())) {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         } else {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
             myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
         }
         //最新章节
-        if (isEmpty(searchBooks.get(position).getLastChapter())) {
+        if (isTrimEmpty(searchBooks.get(position).getLastChapter())) {
             myViewHolder.tvLasted.setVisibility(View.GONE);
         } else {
             myViewHolder.tvLasted.setText(searchBooks.get(position).getLastChapter());
             myViewHolder.tvLasted.setVisibility(View.VISIBLE);
         }
         //简介
-        if (isEmpty(searchBooks.get(position).getIntroduce())) {
+        if (isTrimEmpty(searchBooks.get(position).getIntroduce())) {
             myViewHolder.tvIntroduce.setVisibility(View.GONE);
         } else {
-            myViewHolder.tvIntroduce.setText(searchBooks.get(position).getIntroduce());
+            myViewHolder.tvIntroduce.setText(StringUtils.formatHtml(searchBooks.get(position).getIntroduce()));
             myViewHolder.tvIntroduce.setVisibility(View.VISIBLE);
         }
 
