@@ -943,7 +943,7 @@ public abstract class PageLoader {
      */
     private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
-
+        if (txtPage == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (mPageMode == PageAnimation.Mode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
