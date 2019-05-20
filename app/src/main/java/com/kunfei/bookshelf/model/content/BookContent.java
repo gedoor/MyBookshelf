@@ -117,7 +117,7 @@ class BookContent {
         AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s, NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
         Debug.printLog(tag, "┌解析正文内容", printLog);
-        webContentBean.content = analyzer.getString(ruleBookContent);
+        webContentBean.content = StringUtils.formatHtml(analyzer.getString(ruleBookContent));
         Debug.printLog(tag, "└" + webContentBean.content, printLog);
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {

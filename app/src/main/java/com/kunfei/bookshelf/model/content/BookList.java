@@ -190,7 +190,7 @@ class BookList {
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
             Debug.printLog(tag, "└最新章节:" + item.getLastChapter());
             Debug.printLog(tag, "┌获取简介");
-            item.setIntroduce(analyzer.getString(bookSourceBean.getRuleIntroduce()));
+            item.setIntroduce(StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleIntroduce())));
             Debug.printLog(tag, "└" + item.getIntroduce());
             return item;
         }
@@ -217,7 +217,7 @@ class BookList {
             item.setLastChapter(String.valueOf(nativeObject.get(ruleLastChapter)));
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
-            item.setIntroduce(String.valueOf(nativeObject.get(ruleIntroduce)));
+            item.setIntroduce(StringUtils.formatHtml(String.valueOf(nativeObject.get(ruleIntroduce))));
             Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(String.valueOf(nativeObject.get(ruleCoverUrl)));
@@ -252,7 +252,7 @@ class BookList {
             item.setLastChapter(analyzer.getString(ruleLastChapter));
             Debug.printLog(tag, "└" + item.getLastChapter(), printLog);
             Debug.printLog(tag, "┌获取简介", printLog);
-            item.setIntroduce(analyzer.getString(ruleIntroduce));
+            item.setIntroduce(StringUtils.formatHtml(analyzer.getString(ruleIntroduce)));
             Debug.printLog(tag, "└" + item.getIntroduce(), printLog);
             Debug.printLog(tag, "┌获取封面", printLog);
             item.setCoverUrl(analyzer.getString(ruleCoverUrl, true));
