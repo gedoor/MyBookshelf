@@ -8,6 +8,7 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -198,7 +199,8 @@ class BookInfo {
             Debug.printLog(tag, "└" + infoList[4]);
 
             Debug.printLog(tag, "┌获取封面网址");
-            if (!isEmpty(infoList[5])) bookInfoBean.setCoverUrl(infoList[5]);
+            if (!isEmpty(infoList[5]))
+                bookInfoBean.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, infoList[5]));
             Debug.printLog(tag, "└" + infoList[5]);
 
             Debug.printLog(tag, "┌获取目录网址");
