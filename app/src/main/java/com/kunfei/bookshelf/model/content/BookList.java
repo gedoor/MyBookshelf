@@ -15,8 +15,6 @@ import org.mozilla.javascript.NativeObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -58,7 +56,6 @@ class BookList {
                 Debug.printLog(tag, "└" + baseUrl);
             }
             List<SearchBookBean> books = new ArrayList<>();
-            body = response.body();
             AnalyzeRule analyzer = new AnalyzeRule(null);
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
@@ -79,51 +76,44 @@ class BookList {
                     reverse = true;
                     ruleList = ruleList.substring(1);
                 }
-                // 仅使用java正则表达式提取书籍列表
-                if (ruleList.startsWith(":")){
+                if (ruleList.startsWith("+")) {
+                    allInOne = true;
                     ruleList = ruleList.substring(1);
                     Debug.printLog(tag, "┌解析搜索列表");
                     books = getBooksOfRegex(body, ruleList.split("&&"), 0, analyzer);
                 }
-                else {
-                    // 使用AllInOne规则模式提取目录列表
-                    if (ruleList.startsWith("+")) {
-                        allInOne = true;
-                        ruleList = ruleList.substring(1);
+                //获取列表
+                Debug.printLog(tag, "┌解析搜索列表");
+                collections = analyzer.getElements(ruleList);
+                if (collections.size() == 0) {
+                    Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
+                    SearchBookBean item = getItem(analyzer, baseUrl);
+                    if (item != null) {
+                        item.setBookInfoHtml(body);
+                        books.add(item);
                     }
-                    //获取列表
-                    Debug.printLog(tag, "┌解析搜索列表");
-                    collections = analyzer.getElements(ruleList);
-                    if (collections.size() == 0) {
-                        Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
-                        SearchBookBean item = getItem(analyzer, baseUrl);
-                        if (item != null) {
-                            item.setBookInfoHtml(body);
-                            books.add(item);
+                } else {
+                    Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
+                    if (allInOne) {
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
+                            }
                         }
                     } else {
-                        Debug.printLog(tag, "└找到 " + collections.size() + " 个匹配的结果");
-                        if (allInOne) {
-                            for (int i = 0; i < collections.size(); i++) {
-                                Object object = collections.get(i);
-                                SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
-                                if (item != null) {
-                                    books.add(item);
-                                }
-                            }
-                        } else {
-                            for (int i = 0; i < collections.size(); i++) {
-                                Object object = collections.get(i);
-                                analyzer.setContent(object, baseUrl);
-                                SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
-                                if (item != null) {
-                                    books.add(item);
-                                }
+                        for (int i = 0; i < collections.size(); i++) {
+                            Object object = collections.get(i);
+                            analyzer.setContent(object, baseUrl);
+                            SearchBookBean item = getItemInList(analyzer, baseUrl, i == 0);
+                            if (item != null) {
+                                books.add(item);
                             }
                         }
-                        if (books.size() > 1 && reverse) {
-                            Collections.reverse(books);
-                        }
+                    }
+                    if (books.size() > 1 && reverse) {
+                        Collections.reverse(books);
                     }
                 }
             }
