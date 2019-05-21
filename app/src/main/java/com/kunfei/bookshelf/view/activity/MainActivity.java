@@ -29,6 +29,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -443,8 +444,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
             case R.id.action_list_grid:
-                editor.putBoolean("bookshelfIsList", !viewIsList);
-                editor.apply();
+                editor.putBoolean("bookshelfIsList", !viewIsList).apply();
                 recreate();
                 break;
             case R.id.action_arrange_bookshelf:
@@ -760,6 +760,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else {
             finish();
         }
+    }
+
+    @Override
+    public void recreate() {
+        try {//避免重启太快恢复
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            for (Fragment fragment : mFragmentList) {
+                fragmentTransaction.remove(fragment);
+            }
+            fragmentTransaction.commitAllowingStateLoss();
+        } catch (Exception ignored) {
+        }
+        super.recreate();
     }
 
     @Override
