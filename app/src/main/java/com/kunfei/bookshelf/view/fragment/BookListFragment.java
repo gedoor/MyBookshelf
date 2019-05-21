@@ -290,6 +290,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             for (String noteUrl : bookShelfAdapter.getSelected()) {
                 BookshelfHelp.removeFromBookShelf(BookshelfHelp.getBook(noteUrl));
             }
+            bookShelfAdapter.getSelected().clear();
             emitter.onSuccess(true);
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new MySingleObserver<Boolean>() {

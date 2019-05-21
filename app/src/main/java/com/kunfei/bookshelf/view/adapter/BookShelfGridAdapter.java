@@ -211,6 +211,9 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             books.clear();
         }
         notifyDataSetChanged();
+        if (isArrange) {
+            itemClickListener.onClick(null, 0);
+        }
     }
 
     @Override
