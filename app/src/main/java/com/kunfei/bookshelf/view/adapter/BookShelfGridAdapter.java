@@ -30,6 +30,7 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
     private Activity activity;
-    private List<String> selectList = new ArrayList<>();
+    private HashSet<String> selectList = new HashSet<>();
 
     private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
@@ -74,6 +75,19 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         selectList.clear();
         this.isArrange = isArrange;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void selectAll() {
+        if (selectList.size() == books.size()) {
+            selectList.clear();
+        } else {
+            for (BookShelfBean bean : books) {
+                selectList.add(bean.getNoteUrl());
+            }
+        }
+        notifyDataSetChanged();
+        itemClickListener.onClick(null, 0);
     }
 
     @Override
@@ -120,6 +134,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
                     selectList.add(bookShelfBean.getNoteUrl());
                     holder.vwSelect.setBackgroundResource(R.color.ate_button_disabled_light);
                 }
+                itemClickListener.onClick(v, index);
             });
         } else {
             holder.vwSelect.setVisibility(View.GONE);
@@ -201,6 +216,11 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     @Override
     public List<BookShelfBean> getBooks() {
         return books;
+    }
+
+    @Override
+    public HashSet<String> getSelected() {
+        return selectList;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

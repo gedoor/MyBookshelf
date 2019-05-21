@@ -4,11 +4,14 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 
+import java.util.HashSet;
 import java.util.List;
 
 public interface BookShelfAdapter {
 
     void setArrange(boolean isArrange);
+
+    void selectAll();
 
     ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener();
 
@@ -19,4 +22,7 @@ public interface BookShelfAdapter {
     void refreshBook(String noteUrl);
 
     void setItemClickListener(OnItemClickListenerTwo itemClickListener);
+
+    HashSet<String> getSelected();
+
 }

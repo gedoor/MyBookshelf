@@ -378,6 +378,7 @@
     <string name="network_connection_unavailable">网络连接不可用</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="sure_del_all_book">是否删除全部书籍？</string>
     <string name="sure_del_download_book">是否同时删除已下载的书籍目录？</string>
     <string name="qr_per">扫描二维码需相机权限</string>
     <string name="aloud_can_not_auto_page">朗读正在运行,不能自动翻页</string>
