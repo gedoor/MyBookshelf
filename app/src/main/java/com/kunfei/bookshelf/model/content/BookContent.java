@@ -71,8 +71,8 @@ class BookContent {
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
             bookContentBean.setTag(tag);
-
-            WebContentBean webContentBean = analyzeBookContent(s, chapterBean.getDurChapterUrl(), true, baseUrl);
+            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
+            WebContentBean webContentBean = analyzeBookContent(analyzer, s, chapterBean.getDurChapterUrl(), true, baseUrl);
             bookContentBean.setDurChapterContent(webContentBean.content);
 
             /*
@@ -95,7 +95,7 @@ class BookContent {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();
                         body = response.body();
-                        webContentBean = analyzeBookContent(body, webContentBean.nextUrl, false, baseUrl);
+                        webContentBean = analyzeBookContent(analyzer, body, webContentBean.nextUrl, false, baseUrl);
                         if (!TextUtils.isEmpty(webContentBean.content)) {
                             bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
                         }
@@ -111,10 +111,9 @@ class BookContent {
         });
     }
 
-    private WebContentBean analyzeBookContent(final String s, final String chapterUrl, boolean printLog, String baseUrl) throws Exception {
+    private WebContentBean analyzeBookContent(AnalyzeRule analyzer, final String s, final String chapterUrl, boolean printLog, String baseUrl) throws Exception {
         WebContentBean webContentBean = new WebContentBean();
 
-        AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s, NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
         Debug.printLog(tag, "┌解析正文内容", printLog);
         webContentBean.content = StringUtils.formatHtml(analyzer.getString(ruleBookContent));
