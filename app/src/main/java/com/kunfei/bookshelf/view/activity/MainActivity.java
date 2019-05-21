@@ -324,9 +324,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (customView == null) return;
         ImageView im = customView.findViewById(R.id.tabicon);
         if (showMenu) {
-            im.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_up);
         } else {
-            im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_down);
         }
     }
 
@@ -350,8 +350,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
         im.setVisibility(View.VISIBLE);
-        im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        im.setImageResource(R.drawable.ic_arrow_drop_down);
         return tabView;
+    }
+
+    public TabLayout getTabLayout() {
+        return mTlIndicator;
     }
 
     public ViewPager getViewPager() {
@@ -558,7 +562,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void upThemeVw() {
         if (isNightTheme()) {
-            vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            vwNightTheme.setImageResource(R.drawable.ic_daytime);
             vwNightTheme.setContentDescription(getString(R.string.click_to_day));
         } else {
             vwNightTheme.setImageResource(R.drawable.ic_brightness);

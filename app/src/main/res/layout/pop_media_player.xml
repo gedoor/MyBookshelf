@@ -98,7 +98,7 @@
                 android:layout_height="36dp"
                 android:background="@drawable/bg_ib_pre_round"
                 android:contentDescription="@string/skip_previous"
-                android:src="@drawable/ic_skip_previous_black_24dp" />
+                android:src="@drawable/ic_skip_previous" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_play_stop"
@@ -119,7 +119,7 @@
                 android:layout_height="36dp"
                 android:background="@drawable/bg_ib_pre_round"
                 android:contentDescription="@string/skip_next"
-                android:src="@drawable/ic_skip_next_black_24dp" />
+                android:src="@drawable/ic_skip_next" />
 
             <View
                 android:layout_width="0dp"

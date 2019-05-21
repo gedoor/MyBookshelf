@@ -73,6 +73,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void setArrange(boolean isArrange) {
+        selectList.clear();
         this.isArrange = isArrange;
         notifyDataSetChanged();
     }

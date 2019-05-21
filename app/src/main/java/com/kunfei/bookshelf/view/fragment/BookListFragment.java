@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -34,6 +36,7 @@ import com.kunfei.bookshelf.view.adapter.BookShelfAdapter;
 import com.kunfei.bookshelf.view.adapter.BookShelfGridAdapter;
 import com.kunfei.bookshelf.view.adapter.BookShelfListAdapter;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
+import com.kunfei.bookshelf.view.popupwindow.BookshelfToolPop;
 
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     private int group;
 
     private BookShelfAdapter bookShelfAdapter;
+    private BookshelfToolPop bookshelfToolPop;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -232,6 +236,22 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     public void setArrange(boolean isArrange) {
         if (bookShelfAdapter != null) {
             bookShelfAdapter.setArrange(isArrange);
+            if (bookshelfToolPop == null) {
+                bookshelfToolPop = new BookshelfToolPop(getActivity(), new BookshelfToolPop.OnClickListener() {
+                    @Override
+                    public void click(String text) {
+
+                    }
+
+                    @Override
+                    public void unArrange() {
+                        bookShelfAdapter.setArrange(false);
+                    }
+                });
+            }
+            int[] outLocation = new int[]{0, 0};
+            callbackValue.getTabLayout().getLocationOnScreen(outLocation);
+            bookshelfToolPop.showAtLocation(rvBookshelf, Gravity.TOP, 0, outLocation[1]);
         }
     }
 
@@ -241,6 +261,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         int getGroup();
 
         ViewPager getViewPager();
+
+        TabLayout getTabLayout();
     }
 
 }

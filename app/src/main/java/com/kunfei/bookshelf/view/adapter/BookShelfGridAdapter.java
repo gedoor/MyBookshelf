@@ -71,6 +71,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
 
     @Override
     public void setArrange(boolean isArrange) {
+        selectList.clear();
         this.isArrange = isArrange;
         notifyDataSetChanged();
     }

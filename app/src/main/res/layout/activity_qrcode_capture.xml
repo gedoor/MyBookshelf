@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:contentDescription="@string/read_aloud"
-            android:src="@drawable/ic_daytime_24dp"
+            android:src="@drawable/ic_daytime"
             android:tint="@color/tv_text_default"
             app:backgroundTint="@color/background_menu"
             app:elevation="2dp"

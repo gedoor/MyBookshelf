@@ -212,7 +212,7 @@ public class ReadBottomMenu extends FrameLayout {
 
     public void setFabNightTheme(boolean isNightTheme) {
         if (isNightTheme) {
-            fabNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            fabNightTheme.setImageResource(R.drawable.ic_daytime);
         } else {
             fabNightTheme.setImageResource(R.drawable.ic_brightness);
         }

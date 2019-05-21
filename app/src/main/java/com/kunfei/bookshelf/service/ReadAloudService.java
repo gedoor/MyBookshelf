@@ -468,7 +468,7 @@ public class ReadAloudService extends Service {
         nTitle += ": " + title;
         RxBus.get().post(RxBusTag.ALOUD_TIMER, nTitle);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
-                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
+                .setSmallIcon(R.drawable.ic_volume_up)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_read_book))
                 .setOngoing(true)
                 .setContentTitle(nTitle)

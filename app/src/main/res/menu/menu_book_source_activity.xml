@@ -29,7 +29,7 @@
 
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/ic_format_line_spacing_black_24dp"
+        android:icon="@drawable/ic_format_line_spacing"
         android:title="@string/sort"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">

@@ -18,7 +18,7 @@
         android:id="@+id/iv_checked"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_check_black_24dp"
+        android:src="@drawable/ic_check"
         android:visibility="invisible"
         app:tint="@color/tv_text_default" />
 

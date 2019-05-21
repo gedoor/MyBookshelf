@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_check"
         android:title="@string/success"
-        android:icon="@drawable/ic_check_black_24dp"
+        android:icon="@drawable/ic_check"
         app:showAsAction="always" />
 
 </menu>

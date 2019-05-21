@@ -60,7 +60,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/author"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_author_black_24dp"
+                    android:src="@drawable/ic_author"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
@@ -89,7 +89,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/read_dur_progress"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_history_black_24dp"
+                    android:src="@drawable/ic_history"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
@@ -115,7 +115,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/book_search_last"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_book_last_24dp"
+                    android:src="@drawable/ic_book_last"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
