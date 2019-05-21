@@ -104,7 +104,7 @@ class BookList {
                         if (allInOne) {
                             for (int i = 0; i < collections.size(); i++) {
                                 Object object = collections.get(i);
-                                SearchBookBean item = getItemAllInOne(object, baseUrl, i == 0);
+                                SearchBookBean item = getItemAllInOne(analyzer, object, baseUrl, i == 0);
                                 if (item != null) {
                                     //如果网址相同则缓存
                                     if (baseUrl.equals(item.getNoteUrl())) {
@@ -197,8 +197,9 @@ class BookList {
         return null;
     }
 
-    private SearchBookBean getItemAllInOne(Object object, String baseUrl, boolean printLog) {
+    private SearchBookBean getItemAllInOne(AnalyzeRule analyzer, Object object, String baseUrl, boolean printLog) {
         SearchBookBean item = new SearchBookBean();
+        analyzer.setBook(item);
         NativeObject nativeObject = (NativeObject) object;
         Debug.printLog(tag, "┌获取书名", printLog);
         String bookName = String.valueOf(nativeObject.get(ruleName));

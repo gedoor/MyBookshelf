@@ -50,10 +50,10 @@ public class WebBookModel {
     /**
      * 章节缓存
      */
-    public Observable<BookContentBean> getBookContent(BookInfoBean infoBean, BaseChapterBean chapterBean) {
+    public Observable<BookContentBean> getBookContent(BookShelfBean bookShelfBean, BaseChapterBean chapterBean) {
         return WebBook.getInstance(chapterBean.getTag())
-                .getBookContent(chapterBean, infoBean)
-                .flatMap((bookContentBean -> saveContent(infoBean, chapterBean, bookContentBean)))
+                .getBookContent(chapterBean, bookShelfBean)
+                .flatMap((bookContentBean -> saveContent(bookShelfBean.getBookInfoBean(), chapterBean, bookContentBean)))
                 .timeout(60, TimeUnit.SECONDS);
     }
 

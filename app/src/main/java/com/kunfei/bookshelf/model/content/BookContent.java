@@ -9,7 +9,7 @@ import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
-import com.kunfei.bookshelf.bean.BookInfoBean;
+import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookChapterBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
@@ -46,19 +46,19 @@ class BookContent {
         }
     }
 
-    Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, BookInfoBean bookInfoBean, Map<String, String> headerMap) {
+    Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         baseUrl = NetworkUtils.getUrl(response);
-        return analyzeBookContent(response.body(), chapterBean, bookInfoBean, headerMap);
+        return analyzeBookContent(response.body(), chapterBean, bookShelfBean, headerMap);
     }
 
-    Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, BookInfoBean bookInfoBean, Map<String, String> headerMap) {
+    Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error) + chapterBean.getDurChapterUrl()));
                 return;
             }
             if (TextUtils.isEmpty(baseUrl)) {
-                baseUrl = NetworkUtils.getAbsoluteURL(bookInfoBean.getChapterUrl(), chapterBean.getDurChapterUrl());
+                baseUrl = NetworkUtils.getAbsoluteURL(bookShelfBean.getBookInfoBean().getChapterUrl(), chapterBean.getDurChapterUrl());
             }
             if (StringUtils.isJsonType(s) && !MApplication.getInstance().getDonateHb()) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
