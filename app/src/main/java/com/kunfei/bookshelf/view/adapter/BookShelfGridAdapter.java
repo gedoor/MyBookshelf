@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdapter.MyViewHolder> implements BookShelfAdapter {
-
+    private boolean isArrange;
     private List<BookShelfBean> books;
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
@@ -66,6 +66,12 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     public BookShelfGridAdapter(Activity activity) {
         this.activity = activity;
         books = new ArrayList<>();
+    }
+
+    @Override
+    public void setArrange(boolean isArrange) {
+        this.isArrange = isArrange;
+        notifyDataSetChanged();
     }
 
     @Override

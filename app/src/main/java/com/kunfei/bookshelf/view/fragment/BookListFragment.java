@@ -215,7 +215,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     public void refreshError(String error) {
-
+        toast(error);
     }
 
     @Override
@@ -227,6 +227,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void setArrange(boolean isArrange) {
+        if (bookShelfAdapter != null) {
+            bookShelfAdapter.setArrange(isArrange);
+        }
     }
 
     public interface CallbackValue {

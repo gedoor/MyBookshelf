@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -42,11 +43,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> implements BookShelfAdapter {
-
+    private boolean isArrange;
     private Activity activity;
     private List<BookShelfBean> books;
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
+    private List<String> selectList = new ArrayList<>();
 
     private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
@@ -67,6 +69,12 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     @Override
     public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
+    }
+
+    @Override
+    public void setArrange(boolean isArrange) {
+        this.isArrange = isArrange;
+        notifyDataSetChanged();
     }
 
     public BookShelfListAdapter(Activity activity) {
@@ -97,8 +105,27 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
-        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         final BookShelfBean bookShelfBean = books.get(index);
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
+        if (isArrange) {
+            if (selectList.contains(bookShelfBean.getNoteUrl())) {
+                holder.vwSelect.setBackgroundResource(R.color.ate_button_disabled_light);
+            } else {
+                holder.vwSelect.setBackgroundColor(Color.TRANSPARENT);
+            }
+            holder.vwSelect.setVisibility(View.VISIBLE);
+            holder.vwSelect.setOnClickListener(v -> {
+                if (selectList.contains(bookShelfBean.getNoteUrl())) {
+                    selectList.remove(bookShelfBean.getNoteUrl());
+                    holder.vwSelect.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                    selectList.add(bookShelfBean.getNoteUrl());
+                    holder.vwSelect.setBackgroundResource(R.color.ate_button_disabled_light);
+                }
+            });
+        } else {
+            holder.vwSelect.setVisibility(View.GONE);
+        }
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
@@ -210,6 +237,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         TextView tvRead;
         TextView tvLast;
         RotateLoading rotateLoading;
+        View vwSelect;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -222,6 +250,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvAuthor = itemView.findViewById(R.id.tv_author);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
             rotateLoading.setLoadingColor(ThemeStore.accentColor(itemView.getContext()));
+            vwSelect = itemView.findViewById(R.id.vw_select);
         }
     }
 

@@ -7,6 +7,9 @@ import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import java.util.List;
 
 public interface BookShelfAdapter {
+
+    void setArrange(boolean isArrange);
+
     ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener();
 
     List<BookShelfBean> getBooks();
