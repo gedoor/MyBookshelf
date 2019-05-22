@@ -122,12 +122,10 @@ public class PageLoaderNet extends PageLoader {
                         @Override
                         public void onError(Throwable e) {
                             DownloadingList(listHandle.REMOVE, callback.getChapterList().get(chapterIndex).getDurChapterUrl());
-                            if (chapterIndex == mCurChapterPos) {
-                                if (e instanceof WebBook.NoSourceThrowable) {
-                                    mPageView.autoChangeSource();
-                                } else {
-                                    chapterError(e.getMessage());
-                                }
+                            if (e instanceof WebBook.NoSourceThrowable) {
+                                mPageView.autoChangeSource();
+                            } else {
+                                chapterError(e.getMessage());
                             }
                         }
 
