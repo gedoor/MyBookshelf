@@ -106,7 +106,7 @@ public class PageLoaderNet extends PageLoader {
                     .flatMap(index -> WebBookModel.getInstance().getBookContent(book, callback.getChapterList().get(chapterIndex)))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BookContentBean>() {
+                    .subscribe(new MyObserver<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -127,10 +127,6 @@ public class PageLoaderNet extends PageLoader {
                             } else {
                                 chapterError(e.getMessage());
                             }
-                        }
-
-                        @Override
-                        public void onComplete() {
                         }
                     });
         }
