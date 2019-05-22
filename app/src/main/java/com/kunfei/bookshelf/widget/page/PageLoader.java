@@ -516,6 +516,7 @@ public abstract class PageLoader {
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
         }
+        if (curChapter().txtChapter.getStatus() == TxtChapter.Status.FINISH) return;
         curChapter().txtChapter.setStatus(TxtChapter.Status.ERROR);
         curChapter().txtChapter.setMsg(msg);
         if (mPageMode != PageAnimation.Mode.SCROLL) {
