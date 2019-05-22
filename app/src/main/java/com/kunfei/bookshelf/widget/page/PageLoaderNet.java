@@ -73,7 +73,7 @@ public class PageLoaderNet extends PageLoader {
                             if (e instanceof WebBook.NoSourceThrowable) {
                                 mPageView.autoChangeSource();
                             } else {
-                                chapterError(e.getMessage());
+                                durDhapterError(e.getMessage());
                             }
                         }
                     });
@@ -122,10 +122,12 @@ public class PageLoaderNet extends PageLoader {
                         @Override
                         public void onError(Throwable e) {
                             DownloadingList(listHandle.REMOVE, callback.getChapterList().get(chapterIndex).getDurChapterUrl());
-                            if (e instanceof WebBook.NoSourceThrowable) {
-                                mPageView.autoChangeSource();
-                            } else {
-                                chapterError(e.getMessage());
+                            if (chapterIndex == book.getDurChapter()) {
+                                if (e instanceof WebBook.NoSourceThrowable) {
+                                    mPageView.autoChangeSource();
+                                } else {
+                                    durDhapterError(e.getMessage());
+                                }
                             }
                         }
                     });
@@ -250,7 +252,7 @@ public class PageLoaderNet extends PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        chapterError(e.getMessage());
+                        durDhapterError(e.getMessage());
                     }
 
                     @Override

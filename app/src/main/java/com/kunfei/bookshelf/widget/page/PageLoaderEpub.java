@@ -90,7 +90,7 @@ public class PageLoaderEpub extends PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        chapterError(e.getMessage());
+                        durDhapterError(e.getMessage());
                     }
                 });
     }
@@ -292,7 +292,7 @@ public class PageLoaderEpub extends PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        chapterError(e.getMessage());
+                        durDhapterError(e.getMessage());
                     }
 
                     @Override

@@ -512,7 +512,7 @@ public abstract class PageLoader {
     /**
      * 加载错误
      */
-    void chapterError(String msg) {
+    void durDhapterError(String msg) {
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
         }
@@ -944,7 +944,6 @@ public abstract class PageLoader {
      */
     private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
-        if (txtPage == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (mPageMode == PageAnimation.Mode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
