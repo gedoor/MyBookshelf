@@ -173,6 +173,13 @@ public class PageLoaderNet extends PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
+        if (callback.getChapterList().isEmpty()) {
+            updateChapter();
+            return;
+        }
+        if (callback.getChapterList().size() - 1 < mCurChapterPos) {
+            mCurChapterPos = callback.getChapterList().size() - 1;
+        }
         BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(book.getBookInfoBean().getName(), book.getTag()),
                 mCurChapterPos, callback.getChapterList().get(mCurChapterPos).getDurChapterName());
         skipToChapter(mCurChapterPos, 0);
