@@ -8,25 +8,15 @@ static def releaseTime() {
 
 def name = "YueDu"
 def version = "2." + releaseTime()
-def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
-    signingConfigs {
-        myConfig {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_KEY_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_STORE_PASSWORD
-        }
-    }
-
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 10000 + gitCommits
+        versionCode 10000
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
         multiDexEnabled true
@@ -38,21 +28,12 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.myConfig
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.myConfig
-            applicationIdSuffix '.debug'
-            versionNameSuffix 'debug'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        android.applicationVariants.all { variant ->
-            variant.outputs.all {
-                outputFileName = "${name}_${defaultConfig.versionName}.apk"
-            }
         }
     }
     compileOptions {

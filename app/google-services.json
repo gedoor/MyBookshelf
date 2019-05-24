@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "213649250159",
+    "firebase_url": "https://zhoumybookshelf.firebaseio.com",
+    "project_id": "zhoumybookshelf",
+    "storage_bucket": "zhoumybookshelf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213649250159:android:bad4ad168e32f634",
+        "android_client_info": {
+          "package_name": "com.gedoor.monkeybook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213649250159-h5ggpkl3unomhkpe2n8cqf6atrpr4gi4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO8LIjDxCKrCKctaMfEpgHijHVfrdHVsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213649250159-h5ggpkl3unomhkpe2n8cqf6atrpr4gi4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
