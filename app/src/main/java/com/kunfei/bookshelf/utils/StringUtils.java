@@ -353,10 +353,10 @@ public class StringUtils {
         if (isEmpty(s)) return "";
         int start = 0, len = s.length();
         int end = len - 1;
-        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == 0xA0))) {
+        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == '　'))) {
             ++start;
         }
-        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == 0xA0))) {
+        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == '　'))) {
             --end;
         }
         if (end < len) ++end;

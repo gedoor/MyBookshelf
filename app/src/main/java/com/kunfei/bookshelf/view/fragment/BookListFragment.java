@@ -1,14 +1,18 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,13 +24,17 @@ import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.BookListPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.utils.NetworkUtils;
+import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookDetailActivity;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
@@ -40,6 +48,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 public class BookListFragment extends MBaseFragment<BookListContract.Presenter> implements BookListContract.View {
 
@@ -51,6 +61,16 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     TextView tvEmpty;
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.action_bar)
+    LinearLayout actionBar;
+    @BindView(R.id.tv_select_count)
+    TextView tvSelectCount;
+    @BindView(R.id.iv_del)
+    ImageView ivDel;
+    @BindView(R.id.iv_select_all)
+    ImageView ivSelectAll;
 
     private CallbackValue callbackValue;
     private Unbinder unbinder;
@@ -135,12 +155,31 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         }
         bookShelfAdapter.setItemClickListener(getAdapterListener());
         itemTouchCallback.setOnItemTouchCallbackListener(bookShelfAdapter.getItemTouchCallbackListener());
+        ivBack.setOnClickListener(v -> setArrange(false));
+        ivDel.setOnClickListener(v -> {
+            if (bookShelfAdapter.getSelected().size() == bookShelfAdapter.getBooks().size()) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.delete)
+                        .setMessage(getString(R.string.sure_del_all_book))
+                        .setPositiveButton(R.string.yes, (dialog, which) -> delSelect())
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                ATH.setAlertDialogTint(alertDialog);
+            } else {
+                delSelect();
+            }
+        });
+        ivSelectAll.setOnClickListener(v -> bookShelfAdapter.selectAll());
     }
 
     private OnItemClickListenerTwo getAdapterListener() {
         return new OnItemClickListenerTwo() {
             @Override
             public void onClick(View view, int index) {
+                if (actionBar.getVisibility() == View.VISIBLE) {
+                    upSelectCount();
+                    return;
+                }
                 BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
                 Intent intent = new Intent(getContext(), ReadBookActivity.class);
                 intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
@@ -215,7 +254,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     public void refreshError(String error) {
-
+        toast(error);
     }
 
     @Override
@@ -227,6 +266,39 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void setArrange(boolean isArrange) {
+        if (bookShelfAdapter != null) {
+            bookShelfAdapter.setArrange(isArrange);
+            if (isArrange) {
+                actionBar.setVisibility(View.VISIBLE);
+                upSelectCount();
+            } else {
+                actionBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void upSelectCount() {
+        tvSelectCount.setText(String.format("%d/%d", bookShelfAdapter.getSelected().size(), bookShelfAdapter.getBooks().size()));
+    }
+
+    private void delSelect() {
+        Single.create((SingleOnSubscribe<Boolean>) emitter -> {
+            for (String noteUrl : bookShelfAdapter.getSelected()) {
+                BookshelfHelp.removeFromBookShelf(BookshelfHelp.getBook(noteUrl));
+            }
+            bookShelfAdapter.getSelected().clear();
+            emitter.onSuccess(true);
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new MySingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        mPresenter.queryBookShelf(false, group);
+                    }
+                });
     }
 
     public interface CallbackValue {

@@ -36,8 +36,8 @@ import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
 @Keep
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AnalyzeRule {
-    private static final Pattern putPattern = Pattern.compile("@put:(\\{.+?\\})", Pattern.CASE_INSENSITIVE);
-    private static final Pattern getPattern = Pattern.compile("@get:\\{(.+?)\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern putPattern = Pattern.compile("@put:(\\{[^}]+?\\})", Pattern.CASE_INSENSITIVE);
+    private static final Pattern getPattern = Pattern.compile("@get:\\{([^}]+?)\\}", Pattern.CASE_INSENSITIVE);
 
     private BaseBookBean book;
     private Object object;

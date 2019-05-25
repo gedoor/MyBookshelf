@@ -84,6 +84,26 @@ public class NetworkUtils {
         return relativePath;
     }
 
+    public static String getAbsoluteURL(URL baseURL, String relativePath) {
+        if (baseURL == null) return relativePath;
+        String header = null;
+        if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
+            header = relativePath.substring(0, relativePath.indexOf("}") + 1);
+            relativePath = relativePath.substring(header.length());
+        }
+        try {
+            URL parseUrl = new URL(baseURL, relativePath);
+            relativePath = parseUrl.toString();
+            if (header != null) {
+                relativePath = header + relativePath;
+            }
+            return relativePath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return relativePath;
+    }
+
     public static boolean isUrl(String urlStr) {
         String regex = "^(https?)://.+$";//设置正则表达式
         return urlStr.matches(regex);

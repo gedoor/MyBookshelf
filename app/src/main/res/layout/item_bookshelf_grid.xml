@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:layout_height="160dp"
     android:padding="5dp">
 
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:clickable="true"
         android:focusable="true"
@@ -45,15 +43,22 @@
             app:loading_width="2dp"
             tools:ignore="RtlHardcoded" />
 
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textColor="@color/tv_text_default"
+            android:textSize="15sp" />
+
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="@string/app_name"
-        android:textColor="@color/tv_text_default"
-        android:textSize="15sp" />
+    <View
+        android:id="@+id/vw_select"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
-</LinearLayout>
+</FrameLayout>

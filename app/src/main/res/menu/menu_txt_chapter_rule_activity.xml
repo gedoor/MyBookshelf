@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black"
+        android:icon="@drawable/ic_select_all"
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
 

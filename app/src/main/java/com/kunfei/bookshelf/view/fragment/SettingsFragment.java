@@ -22,6 +22,7 @@ import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
 
 import java.util.Objects;
@@ -107,12 +108,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
             getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment, "webDavSettings").commit();
         } else if (preference.getKey().equals("clearCache")) {
-            new AlertDialog.Builder(getActivity())
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.clear_cache)
                     .setMessage(getString(R.string.sure_del_download_book))
                     .setPositiveButton(R.string.yes, (dialog, which) -> BookshelfHelp.clearCaches(true))
                     .setNegativeButton(R.string.no, (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
                     .show();
+            ATH.setAlertDialogTint(alertDialog);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

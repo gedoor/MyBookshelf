@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -60,7 +60,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/author"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_author_black_24dp"
+                    android:src="@drawable/ic_author"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
@@ -89,7 +89,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/read_dur_progress"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_history_black_24dp"
+                    android:src="@drawable/ic_history"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
@@ -115,7 +115,7 @@
                     android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/book_search_last"
                     android:paddingEnd="2dp"
-                    android:src="@drawable/ic_book_last_24dp"
+                    android:src="@drawable/ic_book_last"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
@@ -157,6 +157,12 @@
         </FrameLayout>
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/vw_select"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

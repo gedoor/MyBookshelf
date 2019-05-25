@@ -19,7 +19,7 @@
             android:scaleType="center"
             android:visibility="gone"
             app:tint="@color/tv_text_default"
-            tools:src="@drawable/ic_folder_black_24dp" />
+            tools:src="@drawable/ic_folder" />
         <!--选择是否添加文件-->
         <com.kunfei.bookshelf.widget.views.ATECheckBox
             android:id="@+id/file_cb_select"

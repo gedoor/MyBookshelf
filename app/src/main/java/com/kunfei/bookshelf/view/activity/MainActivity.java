@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -30,6 +29,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -324,9 +324,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (customView == null) return;
         ImageView im = customView.findViewById(R.id.tabicon);
         if (showMenu) {
-            im.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_up);
         } else {
-            im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_down);
         }
     }
 
@@ -350,12 +350,20 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
         im.setVisibility(View.VISIBLE);
-        im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        im.setImageResource(R.drawable.ic_arrow_drop_down);
         return tabView;
     }
 
     public ViewPager getViewPager() {
         return mVp;
+    }
+
+    public BookListFragment getBookListFragment() {
+        try {
+            return (BookListFragment) mFragmentList.get(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public FindBookFragment getFindFragment() {
@@ -436,9 +444,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
             case R.id.action_list_grid:
-                editor.putBoolean("bookshelfIsList", !viewIsList);
-                editor.apply();
+                editor.putBoolean("bookshelfIsList", !viewIsList).apply();
                 recreate();
+                break;
+            case R.id.action_arrange_bookshelf:
+                if (getBookListFragment() != null) {
+                    getBookListFragment().setArrange(true);
+                }
                 break;
             case R.id.action_web_start:
                 WebService.startThis(this);
@@ -546,7 +558,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void upThemeVw() {
         if (isNightTheme()) {
-            vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            vwNightTheme.setImageResource(R.drawable.ic_daytime);
             vwNightTheme.setContentDescription(getString(R.string.click_to_day));
         } else {
             vwNightTheme.setImageResource(R.drawable.ic_brightness);
@@ -566,8 +578,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .setTitle(R.string.backup_confirmation)
                         .setMessage(R.string.backup_message)
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
                 ATH.setAlertDialogTint(alertDialog);
             }
@@ -596,8 +607,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .setTitle(R.string.restore_confirmation)
                         .setMessage(R.string.restore_message)
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
                 ATH.setAlertDialogTint(alertDialog);
             }
@@ -643,7 +653,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     protected void firstRequest() {
         if (!isRecreate) {
             versionUpRun();
-            handler.postDelayed(this::preloadReader, 200);
         }
         if (!Objects.equals(MApplication.downloadPath, FileHelp.getFilesPath())) {
             requestPermission();
@@ -752,6 +761,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     @Override
+    public void recreate() {
+        try {//避免重启太快恢复
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            for (Fragment fragment : mFragmentList) {
+                fragmentTransaction.remove(fragment);
+            }
+            fragmentTransaction.commitAllowingStateLoss();
+        } catch (Exception ignored) {
+        }
+        super.recreate();
+    }
+
+    @Override
     protected void onDestroy() {
         UpLastChapterModel.destroy();
         DbHelper.getDaoSession().getBookContentBeanDao().deleteAll();
@@ -769,12 +791,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
             }
         }
-    }
-
-    private void preloadReader() {
-        AsyncTask.execute(() -> {
-
-        });
     }
 
 }

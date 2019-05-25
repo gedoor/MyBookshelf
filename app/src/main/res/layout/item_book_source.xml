@@ -47,7 +47,7 @@
                 android:background="@drawable/bg_ib_pre_round"
                 android:contentDescription="@string/to_top"
                 android:padding="8dp"
-                android:src="@drawable/ic_top_source_black_24dp"
+                android:src="@drawable/ic_top_source"
                 app:tint="@color/tv_text_default" />
 
             <ImageView

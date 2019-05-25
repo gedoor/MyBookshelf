@@ -73,7 +73,7 @@ public class PageLoaderNet extends PageLoader {
                             if (e instanceof WebBook.NoSourceThrowable) {
                                 mPageView.autoChangeSource();
                             } else {
-                                chapterError(e.getMessage());
+                                durDhapterError(e.getMessage());
                             }
                         }
                     });
@@ -103,10 +103,10 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(book.getBookInfoBean(), callback.getChapterList().get(chapterIndex)))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(book, callback.getChapterList().get(chapterIndex)))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BookContentBean>() {
+                    .subscribe(new MyObserver<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
@@ -122,17 +122,13 @@ public class PageLoaderNet extends PageLoader {
                         @Override
                         public void onError(Throwable e) {
                             DownloadingList(listHandle.REMOVE, callback.getChapterList().get(chapterIndex).getDurChapterUrl());
-                            if (chapterIndex == mCurChapterPos) {
+                            if (chapterIndex == book.getDurChapter()) {
                                 if (e instanceof WebBook.NoSourceThrowable) {
                                     mPageView.autoChangeSource();
                                 } else {
-                                    chapterError(e.getMessage());
+                                    durDhapterError(e.getMessage());
                                 }
                             }
-                        }
-
-                        @Override
-                        public void onComplete() {
                         }
                     });
         }
@@ -173,6 +169,13 @@ public class PageLoaderNet extends PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
+        if (callback.getChapterList().isEmpty()) {
+            updateChapter();
+            return;
+        }
+        if (callback.getChapterList().size() - 1 < mCurChapterPos) {
+            mCurChapterPos = callback.getChapterList().size() - 1;
+        }
         BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(book.getBookInfoBean().getName(), book.getTag()),
                 mCurChapterPos, callback.getChapterList().get(mCurChapterPos).getDurChapterName());
         skipToChapter(mCurChapterPos, 0);
@@ -249,7 +252,7 @@ public class PageLoaderNet extends PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        chapterError(e.getMessage());
+                        durDhapterError(e.getMessage());
                     }
 
                     @Override

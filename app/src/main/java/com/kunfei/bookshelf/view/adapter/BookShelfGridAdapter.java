@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -30,15 +30,17 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
 public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdapter.MyViewHolder> implements BookShelfAdapter {
-
+    private boolean isArrange;
     private List<BookShelfBean> books;
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
     private Activity activity;
+    private HashSet<String> selectList = new HashSet<>();
 
     private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
@@ -66,6 +68,26 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     public BookShelfGridAdapter(Activity activity) {
         this.activity = activity;
         books = new ArrayList<>();
+    }
+
+    @Override
+    public void setArrange(boolean isArrange) {
+        selectList.clear();
+        this.isArrange = isArrange;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void selectAll() {
+        if (selectList.size() == books.size()) {
+            selectList.clear();
+        } else {
+            for (BookShelfBean bean : books) {
+                selectList.add(bean.getNoteUrl());
+            }
+        }
+        notifyDataSetChanged();
+        itemClickListener.onClick(null, 0);
     }
 
     @Override
@@ -97,12 +119,31 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
         BookShelfBean bookShelfBean = books.get(index);
-        BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-        holder.tvName.setText(bookInfoBean.getName());
+        if (isArrange) {
+            if (selectList.contains(bookShelfBean.getNoteUrl())) {
+                holder.vwSelect.setBackgroundResource(R.color.ate_button_disabled_light);
+            } else {
+                holder.vwSelect.setBackgroundColor(Color.TRANSPARENT);
+            }
+            holder.vwSelect.setVisibility(View.VISIBLE);
+            holder.vwSelect.setOnClickListener(v -> {
+                if (selectList.contains(bookShelfBean.getNoteUrl())) {
+                    selectList.remove(bookShelfBean.getNoteUrl());
+                    holder.vwSelect.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                    selectList.add(bookShelfBean.getNoteUrl());
+                    holder.vwSelect.setBackgroundResource(R.color.ate_button_disabled_light);
+                }
+                itemClickListener.onClick(v, index);
+            });
+        } else {
+            holder.vwSelect.setVisibility(View.GONE);
+        }
+        holder.tvName.setText(bookShelfBean.getBookInfoBean().getName());
         holder.tvName.setBackgroundColor(ThemeStore.backgroundColor(activity));
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
-                Glide.with(activity).load(bookInfoBean.getCoverUrl())
+                Glide.with(activity).load(bookShelfBean.getBookInfoBean().getCoverUrl())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);
@@ -170,11 +211,19 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             books.clear();
         }
         notifyDataSetChanged();
+        if (isArrange) {
+            itemClickListener.onClick(null, 0);
+        }
     }
 
     @Override
     public List<BookShelfBean> getBooks() {
         return books;
+    }
+
+    @Override
+    public HashSet<String> getSelected() {
+        return selectList;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -183,6 +232,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         TextView tvName;
         BadgeView bvUnread;
         RotateLoading rotateLoading;
+        View vwSelect;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -192,6 +242,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             bvUnread = itemView.findViewById(R.id.bv_unread);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
             rotateLoading.setLoadingColor(ThemeStore.accentColor(itemView.getContext()));
+            vwSelect = itemView.findViewById(R.id.vw_select);
         }
     }
 }
