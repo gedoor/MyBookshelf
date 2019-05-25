@@ -232,6 +232,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     @Override
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
+        selectList.clear();
         if (null != newDataS && newDataS.size() > 0) {
             BookshelfHelp.order(newDataS, bookshelfPx);
             books = newDataS;
