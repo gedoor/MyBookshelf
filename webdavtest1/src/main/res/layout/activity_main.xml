@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="wrap_content" >
 
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/b1"
-        android:text="b1"
+        android:text="list and download"
         android:onClick="b1Click"
         android:layout_height="wrap_content" />
 
-</FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/b2"
+        android:text="upload"
+        android:onClick="b2Click"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="delete"
+        android:onClick="b3Click"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="copy"
+        android:onClick="b4Click"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="move"
+        android:onClick="b5Click"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

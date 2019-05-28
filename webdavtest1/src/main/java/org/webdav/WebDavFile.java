@@ -1,13 +1,15 @@
 package org.webdav;
 
-import com.kunfei.bookshelf.utils.web_dav.http.Handler;
-import com.kunfei.bookshelf.utils.web_dav.http.HttpAuth;
-import com.kunfei.bookshelf.utils.web_dav.http.OkHttp;
+import com.example.webdavtest1.A;
+import com.example.webdavtest1.T;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.webdav.http.Handler;
+import org.webdav.http.HttpAuth;
+import org.webdav.http.OkHttp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,8 +20,12 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -50,6 +56,8 @@ public class WebDavFile {
     private boolean exists = false;
     private String parent = "";
     private String urlName = "";
+    public int code;
+    public String responseText;
 
     private OkHttpClient okHttpClient;
 
@@ -83,7 +91,7 @@ public class WebDavFile {
      * @return 远程文件是否存在
      */
     public boolean indexFileInfo() throws IOException {
-        Response response = propFindResponse(new ArrayList<>());
+        Response response = propFindResponse(new ArrayList<String>());
         String s = "";
         try {
             if (response == null || !response.isSuccessful()) {
@@ -105,7 +113,7 @@ public class WebDavFile {
      * @return 文件列表
      */
     public List<WebDavFile> listFiles() throws IOException {
-        return listFiles(new ArrayList<>());
+        return listFiles(new ArrayList<String>());
     }
 
     /**
@@ -115,14 +123,18 @@ public class WebDavFile {
      * @return 文件列表
      */
     public List<WebDavFile> listFiles(ArrayList<String> propsList) throws IOException {
-        Response response = propFindResponse(propsList);
         try {
-            assert response != null;
+            Response response = propFindResponse(propsList);
+            A.log("responese code: " + response.code());
+            A.log("responese msg: " + response.message());
+            A.log("responese: " + response.toString());
+            code = response.code();
+            responseText = response.toString();
             if (response.isSuccessful()) {
                 return parseDir(response.body().string());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            A.error(e);
         }
         return new ArrayList<>();
     }
@@ -162,22 +174,48 @@ public class WebDavFile {
         Document document = Jsoup.parse(s);
         Elements elements = document.getElementsByTag("d:response");
         String baseUrl = getUrl().endsWith("/") ? getUrl() : getUrl() + "/";
+        String domainUrl = baseUrl.substring(0, baseUrl.indexOf("/", 10));
         for (Element element : elements) {
             String href = element.getElementsByTag("d:href").get(0).text();
-            if (!href.endsWith("/")) {
+            if (!baseUrl.endsWith(href))
+            try {
                 String fileName = href.substring(href.lastIndexOf("/") + 1);
+                if (fileName.length() > 0)
+                    fileName = baseUrl + fileName;
+                else if (href.startsWith("/"))
+                    fileName = domainUrl + href;
+
+                String display = element.getElementsByTag("d:displayname").get(0).text();
+                String lastModified = element.getElementsByTag("d:getlastmodified").get(0).text();
+                String size = element.getElementsByTag("d:getcontentlength").get(0).text();
+                String type = element.getElementsByTag("d:resourcetype").toString();
+
                 WebDavFile webDavFile;
-                try {
-                    webDavFile = new WebDavFile(baseUrl + fileName);
-                    webDavFile.setDisplayName(fileName);
-                    webDavFile.setUrlName(href);
-                    list.add(webDavFile);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                webDavFile = new WebDavFile(fileName);
+                webDavFile.setDisplayName(display);
+                webDavFile.setUrlName(href);
+                webDavFile.setSize(T.string2Int(size));
+//                webDavFile.setIsDirectory(type.equals("httpd/unix-directory"));
+                webDavFile.setIsDirectory(type.contains("collection"));
+                webDavFile.setLastModified(lastModifiedToLong(lastModified));
+                list.add(webDavFile);
+            } catch (Exception e) {
+                A.error(e);
             }
         }
         return list;
+    }
+
+    private long lastModifiedToLong(String input) { //Mon, 27 May 2019 09:00:38 GMT
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat
+                    ("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+            Date date = inputFormat.parse(input);
+            return date.getTime();
+        } catch (Exception e) {
+            A.error(e);
+            return 0;
+        }
     }
 
     public InputStream getInputStream() {
@@ -211,6 +249,27 @@ public class WebDavFile {
         return execRequest(request);
     }
 
+    public boolean delete() throws IOException {
+        Request.Builder request = new Request.Builder()
+                .url(getUrl())
+                .method("DELETE", null);
+        return execRequest(request);
+    }
+
+    public boolean copy(String toFile) throws IOException {
+        Request.Builder request = new Request.Builder()
+                .url(getUrl())
+                .method("COPY", RequestBody.create(null, toFile));
+        return execRequest(request);
+    }
+
+    public boolean move(String toFile) throws IOException {
+        Request.Builder request = new Request.Builder()
+                .url(getUrl())
+                .method("MOVE", RequestBody.create(null, toFile));
+        return execRequest(request);
+    }
+
     /**
      * 下载到本地
      *
@@ -231,11 +290,14 @@ public class WebDavFile {
         FileOutputStream out = null;
         try {
             file.createNewFile();
+            long downloaded = 0;
             out = new FileOutputStream(file);
             byte[] buffer = new byte[1024 * 8];
             int byteRead;
             while ((byteRead = in.read(buffer)) != -1) {
                 out.write(buffer, 0, byteRead);
+                downloaded += byteRead;
+                A.log(downloaded, getSize());
             }
             out.flush();
             return true;
@@ -287,6 +349,7 @@ public class WebDavFile {
         }
 
         Response response = okHttpClient.newCall(requestBuilder.build()).execute();
+        A.log("execResponse", response.code(), response);
         return response.isSuccessful();
     }
 

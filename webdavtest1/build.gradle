@@ -32,4 +32,17 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //Retrofit
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.5.0'
+
+    //J_SOUP
+    implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
+    implementation 'com.jayway.jsonpath:json-path:2.4.0'
+
+
+
 }
