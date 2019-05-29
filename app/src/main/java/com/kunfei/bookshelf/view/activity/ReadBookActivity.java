@@ -736,6 +736,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                      */
                     @Override
                     public void onChapterChange(int pos) {
+                        if (mPresenter.getChapterList().isEmpty()) return;
+                        if (mPresenter.getChapterList().size() - 1 < pos) return;
                         mPresenter.getBookShelf().setDurChapterName(mPresenter.getChapterList().get(pos).getDurChapterName());
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
