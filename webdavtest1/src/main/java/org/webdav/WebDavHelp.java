@@ -1,6 +1,6 @@
 package org.webdav;
 
-import org.webdav.http.HttpAuth;
+import org.webdav.http.WAuth;
 
 public class WebDavHelp {
 
@@ -11,7 +11,9 @@ public class WebDavHelp {
             url = url + "/";
         }
         return url;*/
-        return "https://dav.jianguoyun.com/dav/";
+//        return "https://dav.jianguoyun.com/dav";
+        return "https://dav.box.com/dav";
+//        return "https://d.docs.live.net/E7D70445555B5ACB";
     }
 
     public static boolean initWebDav() {
@@ -19,13 +21,12 @@ public class WebDavHelp {
 //        String password = MApplication.getConfigPreferences().getString("web_dav_password", "");
 //        if (!StringUtils.isTrimEmpty(account) && !StringUtils.isTrimEmpty(password)) {
 //            HttpAuth.setAuth(account, password);
-            HttpAuth.setAuth("1872079@qq.com", "aaaaaa");
+//            WAuth.setAuth("1872079@qq.com", "aaaaaa");
+            WAuth.setAuth("moonplusreader@gmail.com", "aa111111");
+//            WAuth.setAuth("1872079@qq.com", "th123456");
             return true;
 //        }
 //        return false;
     }
 
-    private WebDavHelp() {
-
-    }
 }

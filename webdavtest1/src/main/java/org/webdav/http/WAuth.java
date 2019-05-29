@@ -1,10 +1,10 @@
 package org.webdav.http;
 
-public class HttpAuth {
+public class WAuth {
 
     private static Auth auth;
 
-    private HttpAuth() {
+    private WAuth() {
     }
 
     public static void setAuth(String user, String password) {

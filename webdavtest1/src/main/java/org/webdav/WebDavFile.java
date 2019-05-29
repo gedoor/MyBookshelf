@@ -1,5 +1,7 @@
 package org.webdav;
 
+import android.net.Uri;
+
 import com.example.webdavtest1.A;
 import com.example.webdavtest1.T;
 
@@ -7,10 +9,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.webdav.http.Handler;
-import org.webdav.http.HttpAuth;
-import org.webdav.http.OkHttp;
+import org.webdav.http.WHandler;
+import org.webdav.http.WAuth;
+import org.webdav.http.WHttp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -46,6 +48,7 @@ public class WebDavFile {
             "</a:propfind>";
 
     private URL url;
+    private String url_Str;
     private String httpUrl;
 
     private String displayName;
@@ -53,7 +56,6 @@ public class WebDavFile {
     private long lastModified;
     private long size;
     private boolean isDirectory = true;
-    private boolean exists = false;
     private String parent = "";
     private String urlName = "";
     public int code;
@@ -62,8 +64,9 @@ public class WebDavFile {
     private OkHttpClient okHttpClient;
 
     public WebDavFile(String url) throws MalformedURLException {
-        this.url = new URL(null, url, Handler.HANDLER);
-        okHttpClient = OkHttp.getInstance().client();
+        url_Str = url;
+        this.url = new URL(null, url, WHandler.HANDLER);
+        okHttpClient = WHttp.getInstance().client();
     }
 
     public String getUrl() {
@@ -75,7 +78,7 @@ public class WebDavFile {
                         .replaceAll("%3A", ":")
                         .replaceAll("%2F", "/");
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                A.error(e);
             }
         }
         return httpUrl;
@@ -85,26 +88,30 @@ public class WebDavFile {
         return url.toString();
     }
 
-    /**
-     * 填充文件信息。实例化WebDAVFile对象时，并没有将远程文件的信息填充到实例中。需要手动填充！
-     *
-     * @return 远程文件是否存在
-     */
-    public boolean indexFileInfo() throws IOException {
-        Response response = propFindResponse(new ArrayList<String>());
-        String s = "";
+    private Boolean exists;
+    public boolean exists(){
+        if (exists == null)
         try {
-            if (response == null || !response.isSuccessful()) {
-                this.exists = false;
-                return false;
+            Response response = propFindResponse(new ArrayList<String>());
+            exists = response != null && response.isSuccessful();
+            if (exists){
+                String body = response.body().string();
+                setIsDirectory(body.contains("d:collection"));
+                if (!isDirectory) {
+                    List<WebDavFile> wdFiles = parseDir(body);
+                    if (wdFiles.size() == 1) {
+                        setLastModified(wdFiles.get(0).getLastModified());
+                        setSize(wdFiles.get(0).getSize());
+                        setDisplayName(wdFiles.get(0).getDisplayName());
+                    }
+                }
             }
-            s = response.body().string();
+            A.log(T.getFilename(getUrl()), "exits", exists, "isFolder", isDirectory, "size", getSize());
         } catch (Exception e) {
-            e.printStackTrace();
+            A.error(e);
+            return false;
         }
-
-
-        return false;
+        return exists;
     }
 
     /**
@@ -125,14 +132,12 @@ public class WebDavFile {
     public List<WebDavFile> listFiles(ArrayList<String> propsList) throws IOException {
         try {
             Response response = propFindResponse(propsList);
-            A.log("responese code: " + response.code());
-            A.log("responese msg: " + response.message());
-            A.log("responese: " + response.toString());
             code = response.code();
+            A.log("responese code: " + code, response.toString());
             responseText = response.toString();
             if (response.isSuccessful()) {
                 return parseDir(response.body().string());
-            }
+            }//else A.log("failed", response.body().string());
         } catch (Exception e) {
             A.error(e);
         }
@@ -160,7 +165,7 @@ public class WebDavFile {
                 // 注意：尽量手动指定需要返回的属性。若返回全部属性，可能后由于Prop.java里没有该属性名，而崩溃。
                 .method("PROPFIND", RequestBody.create(MediaType.parse("text/plain"), requestPropsStr));
 
-        HttpAuth.Auth auth = HttpAuth.getAuth();
+        WAuth.Auth auth = WAuth.getAuth();
         if (auth != null) {
             request.header("Authorization", Credentials.basic(auth.getUser(), auth.getPass()));
         }
@@ -190,13 +195,18 @@ public class WebDavFile {
                 String size = element.getElementsByTag("d:getcontentlength").get(0).text();
                 String type = element.getElementsByTag("d:resourcetype").toString();
 
+                if (T.isNull(display)){
+                    String tmp = fileName.endsWith("/")? T.getFilePath(fileName) : fileName;
+                    display = Uri.decode(T.getFilename(tmp));
+                }
+
                 WebDavFile webDavFile;
                 webDavFile = new WebDavFile(fileName);
                 webDavFile.setDisplayName(display);
                 webDavFile.setUrlName(href);
                 webDavFile.setSize(T.string2Int(size));
 //                webDavFile.setIsDirectory(type.equals("httpd/unix-directory"));
-                webDavFile.setIsDirectory(type.contains("collection"));
+                webDavFile.setIsDirectory(type.contains("d:collection"));
                 webDavFile.setLastModified(lastModifiedToLong(lastModified));
                 list.add(webDavFile);
             } catch (Exception e) {
@@ -206,7 +216,9 @@ public class WebDavFile {
         return list;
     }
 
-    private long lastModifiedToLong(String input) { //Mon, 27 May 2019 09:00:38 GMT
+    private long lastModifiedToLong(String input) {
+        //坚果云 Mon, 27 May 2019 09:00:38 GMT
+        //box   Wed, 29 May 2019 05:17:26 GMT
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat
                     ("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US);
@@ -222,7 +234,7 @@ public class WebDavFile {
         Request.Builder request = new Request.Builder()
                 .url(getUrl());
 
-        HttpAuth.Auth auth = HttpAuth.getAuth();
+        WAuth.Auth auth = WAuth.getAuth();
 
         if (auth != null) {
             request.header("Authorization", Credentials.basic(auth.getUser(), auth.getPass()));
@@ -230,9 +242,10 @@ public class WebDavFile {
 
         try {
             Response response = okHttpClient.newCall(request.build()).execute();
+            code = response.code();
             return response.body().byteStream();
         } catch (IOException | IllegalArgumentException e) {
-            e.printStackTrace();
+            A.error(e);
         }
         return null;
     }
@@ -242,7 +255,15 @@ public class WebDavFile {
      *
      * @return 是否创建成功
      */
-    public boolean makeAsDir() throws IOException {
+    public boolean markDirs() throws IOException {
+        if (exists())
+            return true;
+
+        WebDavFile parent = new WebDavFile(T.getFilePath(url_Str));
+        if (!parent.exists())
+            if (!parent.markDirs())
+                return false;
+
         Request.Builder request = new Request.Builder()
                 .url(getUrl())
                 .method("MKCOL", null);
@@ -259,14 +280,16 @@ public class WebDavFile {
     public boolean copy(String toFile) throws IOException {
         Request.Builder request = new Request.Builder()
                 .url(getUrl())
-                .method("COPY", RequestBody.create(null, toFile));
+                .method("COPY", null);
+        request.header("destination", toFile);
         return execRequest(request);
     }
 
     public boolean move(String toFile) throws IOException {
         Request.Builder request = new Request.Builder()
                 .url(getUrl())
-                .method("MOVE", RequestBody.create(null, toFile));
+                .method("MOVE", null);
+        request.header("destination", toFile);
         return execRequest(request);
     }
 
@@ -302,15 +325,40 @@ public class WebDavFile {
             out.flush();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            A.error(e);
         } finally {
             try {
                 if (out != null) out.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                A.error(e);
             }
         }
         return false;
+    }
+
+    public ByteArrayOutputStream download() {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        InputStream in = getInputStream();
+        try {
+            long downloaded = 0;
+            byte[] buffer = new byte[1024 * 8];
+            int byteRead;
+            while ((byteRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, byteRead);
+                downloaded += byteRead;
+                A.log(downloaded, getSize());
+            }
+            return out;
+        } catch (Exception e) {
+            A.error(e);
+        } finally {
+            try {
+                if (out != null) out.close();
+            } catch (Exception e) {
+                A.error(e);
+            }
+        }
+        return null;
     }
 
     /**
@@ -336,6 +384,15 @@ public class WebDavFile {
         return execRequest(request);
     }
 
+    public boolean upload(InputStream is) throws IOException {
+        RequestBody fileBody = RequestBody.create(null, T.InputStream2Byte(is));
+        Request.Builder request = new Request.Builder()
+                .url(getUrl())
+                .put(fileBody);
+
+        return execRequest(request);
+    }
+
     /**
      * 执行请求，获取响应结果
      *
@@ -343,13 +400,14 @@ public class WebDavFile {
      * @return 请求执行的结果
      */
     private boolean execRequest(Request.Builder requestBuilder) throws IOException {
-        HttpAuth.Auth auth = HttpAuth.getAuth();
+        WAuth.Auth auth = WAuth.getAuth();
         if (auth != null) {
             requestBuilder.header("Authorization", Credentials.basic(auth.getUser(), auth.getPass()));
         }
 
         Response response = okHttpClient.newCall(requestBuilder.build()).execute();
-        A.log("execResponse", response.code(), response);
+        code = response.code();
+        A.log("execResponse", code, response);
         return response.isSuccessful();
     }
 
@@ -369,7 +427,7 @@ public class WebDavFile {
                 System.out.println(field + " --> " + f.get(o));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            A.error(e);
         }
         return null;
     }
@@ -432,14 +490,6 @@ public class WebDavFile {
 
     public boolean canWrite() {
         return false;
-    }
-
-    public boolean exists() {
-        return exists;
-    }
-
-    public void exists(boolean exists) {
-        this.exists = exists;
     }
 
     public String getParent() {

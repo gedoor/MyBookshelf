@@ -4,9 +4,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
-public class Handler extends URLStreamHandler {
+public class WHandler extends URLStreamHandler {
 
-    public static final URLStreamHandler HANDLER = new Handler();
+    public static final URLStreamHandler HANDLER = new WHandler();
 
     protected int getDefaultPort() {
         return 80;

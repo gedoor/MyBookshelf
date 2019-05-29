@@ -32,7 +32,7 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:text="move"
+        android:text="move or other test"
         android:onClick="b5Click"
         android:layout_height="wrap_content" />
 

@@ -2,14 +2,14 @@ package org.webdav.http;
 
 import okhttp3.OkHttpClient;
 
-public class OkHttp {
+public class WHttp {
 
     private OkHttpClient okHttpClient;
 
-    private OkHttp() {
+    private WHttp() {
     }
 
-    public static OkHttp getInstance() {
+    public static WHttp getInstance() {
         return SingletonHelper.INSTANCE;
     }
 
@@ -21,7 +21,7 @@ public class OkHttp {
     }
 
     private static class SingletonHelper {
-        private final static OkHttp INSTANCE = new OkHttp();
+        private final static WHttp INSTANCE = new WHttp();
     }
 
 }
