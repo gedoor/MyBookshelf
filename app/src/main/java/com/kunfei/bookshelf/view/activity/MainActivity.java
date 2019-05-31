@@ -29,7 +29,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -174,8 +173,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected List<Fragment> createTabFragments() {
-        BookListFragment bookListFragment = new BookListFragment();
-        FindBookFragment findBookFragment = new FindBookFragment();
+        BookListFragment bookListFragment = null;
+        FindBookFragment findBookFragment = null;
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BookListFragment) {
+                bookListFragment = (BookListFragment) fragment;
+            } else if (fragment instanceof FindBookFragment) {
+                findBookFragment = (FindBookFragment) fragment;
+            }
+        }
+        if (bookListFragment == null)
+            bookListFragment = new BookListFragment();
+        if (findBookFragment == null)
+            findBookFragment = new FindBookFragment();
         return Arrays.asList(bookListFragment, findBookFragment);
     }
 
@@ -763,14 +773,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public void recreate() {
-        try {//避免重启太快恢复
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            for (Fragment fragment : mFragmentList) {
-                fragmentTransaction.remove(fragment);
-            }
-            fragmentTransaction.commitAllowingStateLoss();
-        } catch (Exception ignored) {
-        }
         super.recreate();
     }
 
