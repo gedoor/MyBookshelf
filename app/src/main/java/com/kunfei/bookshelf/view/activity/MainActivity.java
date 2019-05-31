@@ -487,7 +487,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     //初始化侧边栏
     private void initDrawer() {
-        navigationView.setBackgroundColor(ThemeStore.backgroundColor(this));
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerToggle.syncState();
         drawer.addDrawerListener(mDrawerToggle);
@@ -520,10 +519,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 侧边栏按钮
      */
     private void setUpNavigationView() {
+        navigationView.setBackgroundColor(ThemeStore.backgroundColor(this));
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.disableScrollbar(navigationView);
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        AppCompatImageView imageView = headerView.findViewById(R.id.iv_read);
+        imageView.setColorFilter(ThemeStore.accentColor(this));
         navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         vwNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.iv_theme_day_night);
