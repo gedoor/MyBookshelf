@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -123,7 +125,6 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
                             .setNegativeButton(R.string.cancel, (dialogInterface, i) -> upTheme(true))
                             .show();
                     ATH.setAlertDialogTint(alertDialog);
-
                 } else {
                     upTheme(true);
                 }
@@ -135,9 +136,11 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
         if (settingActivity.isNightTheme() == isNightTheme) {
             MApplication.getInstance().upThemeStore();
             RxBus.get().post(RxBusTag.RECREATE, true);
-            if (getActivity() != null) {
-                getActivity().recreate();
-            }
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (getActivity() != null) {
+                    getActivity().recreate();
+                }
+            }, 300);
         }
     }
 
