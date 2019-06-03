@@ -14,4 +14,19 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void useAppContext() {
+        // Context of the app under test.
+        log("a1");
+        log("a2");
+        String s = null;
+        s = "xx";
+        log("a3"+ s.equals("xx"));
+        log("a4");
+    }
+
+    public static void log(String s) {
+        System.out.println(s);
+    }
 }
