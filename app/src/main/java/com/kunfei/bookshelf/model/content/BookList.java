@@ -92,7 +92,7 @@ class BookList {
                     //获取列表
                     Debug.printLog(tag, "┌解析搜索列表");
                     collections = analyzer.getElements(ruleList);
-                    if (collections.size() == 0) {
+                    if (collections.size() == 0 && isEmpty(bookSourceBean.getRuleBookUrlPattern())) {
                         Debug.printLog(tag, "└搜索列表为空,当做详情页处理");
                         SearchBookBean item = getItem(analyzer, baseUrl);
                         if (item != null) {
