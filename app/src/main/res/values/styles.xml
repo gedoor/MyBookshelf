@@ -36,14 +36,7 @@
         <item name="android:listPreferredItemHeightSmall">44dp</item>
     </style>
 
-    <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/background_card</item>
-        <item name="android:textColor">@color/tv_text_default</item>
-        <item name="android:textColorPrimary">@color/tv_text_default</item>
-        <item name="textColorAlertDialogListItem">@color/tv_text_default</item>
-
-    </style>
+    <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert" />
 
     <style name="MenuItemTextStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/menu_color_default</item>
