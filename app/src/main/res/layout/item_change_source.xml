@@ -23,17 +23,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_checked"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_check"
-            android:visibility="invisible"
-            app:tint="@color/tv_text_default" />
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -59,6 +52,13 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_checked"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            android:visibility="invisible"
+            app:tint="@color/tv_text_default" />
     </LinearLayout>
 
 </LinearLayout>
