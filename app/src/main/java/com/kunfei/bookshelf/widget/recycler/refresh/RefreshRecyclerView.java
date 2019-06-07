@@ -140,6 +140,10 @@ public class RefreshRecyclerView extends FrameLayout {
         addView(view);
     }
 
+    public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        recyclerView.addItemDecoration(decor);
+    }
+
     public void setBaseRefreshListener(BaseRefreshListener baseRefreshListener) {
         this.baseRefreshListener = baseRefreshListener;
     }

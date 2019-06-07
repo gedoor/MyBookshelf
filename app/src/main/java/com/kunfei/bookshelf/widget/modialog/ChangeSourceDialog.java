@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hwangjr.rxbus.RxBus;
@@ -91,6 +93,7 @@ public class ChangeSourceDialog {
         rvSource = view.findViewById(R.id.rf_rv_change_source);
         ibtStop.setVisibility(View.INVISIBLE);
 
+        rvSource.addItemDecoration(new DividerItemDecoration(context, LinearLayout.VERTICAL));
         rvSource.setBaseRefreshListener(this::reSearchBook);
         ibtStop.setOnClickListener(v -> stopChangeSource());
         searchView.onActionViewExpanded();
