@@ -9,6 +9,7 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
+    android:gravity="center_vertical"
     tools:ignore="UnusedAttribute">
 
     <LinearLayout
@@ -44,6 +45,7 @@
         android:id="@+id/iv_checked"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_margin="16dp"
         android:src="@drawable/ic_check"
         android:visibility="invisible"
         app:tint="@color/tv_text_default" />
