@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:divider="@null" />
 
-        <com.victor.loading.rotate.RotateLoading
+        <com.kunfei.bookshelf.widget.RotateLoading
             android:id="@+id/loading"
             android:layout_width="36dp"
             android:layout_height="36dp"
