@@ -124,12 +124,12 @@ class BookInfo {
     // region 纯Java代码解析文本内容,模块代码
     // 纯java模式正则表达式获取书籍详情信息
     private void getInfosOfRegex(String res, String[] regs, int index,
-                                 BookShelfBean bookShelfBean,AnalyzeRule analyzer){
+                                 BookShelfBean bookShelfBean, AnalyzeRule analyzer) {
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         String baseUrl = bookShelfBean.getNoteUrl();
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
         // 判断规则是否有效,当搜索列表规则无效时跳过详情页处理
-        if (!resM.find()){
+        if (!resM.find()) {
             Debug.printLog(tag, "└详情预处理失败,跳过详情页解析");
             Debug.printLog(tag, "┌获取目录网址");
             bookInfoBean.setChapterUrl(baseUrl);
@@ -154,7 +154,7 @@ class BookInfo {
             // 创建拆分规则容器
             List<String[]> ruleGroups = new ArrayList<>();
             // 提取规则信息
-            for(String rule:ruleList){
+            for (String rule : ruleList) {
                 ruleGroups.add(splitRegexRule(rule));
                 hasVars.add(rule.contains("@put") || rule.contains("@get"));
             }
@@ -163,12 +163,12 @@ class BookInfo {
             // 新建规则结果容器
             String[] infoList = new String[ruleList.length];
             // 合并规则结果内容
-            for(int i=0; i<infoList.length; i++){
+            for (int i = 0; i < infoList.length; i++) {
                 StringBuilder infoVal = new StringBuilder();
-                for(String ruleGroup:ruleGroups.get(i)) {
-                    if(ruleGroup.startsWith("$")){
+                for (String ruleGroup : ruleGroups.get(i)) {
+                    if (ruleGroup.startsWith("$")) {
                         int groupIndex = string2Int(ruleGroup);
-                        if(groupIndex <= resCount){
+                        if (groupIndex <= resCount) {
                             infoVal.append(StringUtils.trim(resM.group(groupIndex)));
                             continue;
                         }
@@ -210,58 +210,60 @@ class BookInfo {
             if (infoList[6].equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             Debug.printLog(tag, "-详情页解析完成");
-        }
-        else{
+        } else {
             StringBuilder result = new StringBuilder();
-            do{ result.append(resM.group()); }while (resM.find());
+            do {
+                result.append(resM.group());
+            } while (resM.find());
             getInfosOfRegex(result.toString(), regs, ++index, bookShelfBean, analyzer);
         }
     }
+
     // 拆分正则表达式替换规则(如:$\d和$\d\d) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
-    private static String[] splitRegexRule(String str){
-        int start = 0,index = 0, len = str.length();
-        List<String> arr= new ArrayList<>();
-        while (start<len){
-            if((str.charAt(start)=='$') && (str.charAt(start+1)>='0') && (str.charAt(start+1)<='9')){
-                if(start>index) arr.add(str.substring(index, start));
-                if((start+2<len) && (str.charAt(start+2)>='0') && (str.charAt(start+2)<='9')){
-                    arr.add(str.substring(start, start+3));
+    private static String[] splitRegexRule(String str) {
+        int start = 0, index = 0, len = str.length();
+        List<String> arr = new ArrayList<>();
+        while (start < len) {
+            if ((str.charAt(start) == '$') && (str.charAt(start + 1) >= '0') && (str.charAt(start + 1) <= '9')) {
+                if (start > index) arr.add(str.substring(index, start));
+                if ((start + 2 < len) && (str.charAt(start + 2) >= '0') && (str.charAt(start + 2) <= '9')) {
+                    arr.add(str.substring(start, start + 3));
                     index = start += 3;
-                }
-                else{
-                    arr.add(str.substring(start, start+2));
+                } else {
+                    arr.add(str.substring(start, start + 2));
                     index = start += 2;
                 }
-            }
-            else{
+            } else {
                 ++start;
             }
         }
-        if(start>index) arr.add(str.substring(index, start));
+        if (start > index) arr.add(str.substring(index, start));
         return arr.toArray(new String[arr.size()]);
     }
+
     // 存取字符串中的put&get参数
-    private String checkKeys(String str, AnalyzeRule analyzer){
-        if(str.contains("@put:{")){
+    private String checkKeys(String str, AnalyzeRule analyzer) {
+        if (str.contains("@put:{")) {
             Matcher putMatcher = Pattern.compile("@put:\\{([^,]*):([^\\}]*)\\}").matcher(str);
-            while (putMatcher.find()){
+            while (putMatcher.find()) {
                 str = str.replace(putMatcher.group(0), "");
                 analyzer.put(putMatcher.group(1), putMatcher.group(2));
             }
         }
-        if(str.contains("@get:{")){
+        if (str.contains("@get:{")) {
             Matcher getMatcher = Pattern.compile("@get:\\{([^\\}]*)\\}").matcher(str);
-            while (getMatcher.find()){
+            while (getMatcher.find()) {
                 str = str.replace(getMatcher.group(), analyzer.get(getMatcher.group(1)));
             }
         }
         return str;
     }
+
     // String数字转int数字的高效方法(利用ASCII值判断)
     private static int string2Int(String s) {
         int r = 0;
         char n;
-        for (int i = 0,l=s.length(); i < l; i++) {
+        for (int i = 0, l = s.length(); i < l; i++) {
             n = s.charAt(i);
             if (n >= '0' && n <= '9') {
                 r = r * 10 + (n - 0x30); //'0-9'的ASCII值为0x30-0x39

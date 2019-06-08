@@ -18,12 +18,6 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.ColorUtil;
-
-import java.lang.reflect.Field;
-
 import androidx.annotation.CheckResult;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -33,6 +27,12 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
+
+import java.lang.reflect.Field;
 
 /**
  * @author afollestad, plusCubed

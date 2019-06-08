@@ -84,7 +84,7 @@ public class UpdateManager {
                     String thisVersion = MApplication.getVersionName().split("\\s")[0];
                     updateInfo.setUrl(url);
                     updateInfo.setLastVersion(lastVersion);
-                    updateInfo.setDetail("# "+lastVersion +"\n"+ detail);
+                    updateInfo.setDetail("# " + lastVersion + "\n" + detail);
                     if (Integer.valueOf(lastVersion.split("\\.")[2]) > Integer.valueOf(thisVersion.split("\\.")[2])) {
                         updateInfo.setUpDate(true);
                     } else {

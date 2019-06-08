@@ -3,10 +3,10 @@ package com.kunfei.bookshelf.widget.views;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatCheckBox;
+
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
-import androidx.appcompat.widget.AppCompatCheckBox;
 
 /**
  * @author Aidan Follestad (afollestad)

@@ -75,7 +75,7 @@ public class AnalyzeRule {
         return this;
     }
 
-    public String getBaseUrl(){
+    public String getBaseUrl() {
         return this.baseUrl;
     }
 

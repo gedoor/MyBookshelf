@@ -206,8 +206,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         editFrame.setLayoutParams(params);
         closeButton.setScaleX(0.9f);
         closeButton.setScaleY(0.9f);
-        closeButton.setPadding(0,0,0,0);
-        goButton.setPadding(0,0,0,0);
+        closeButton.setPadding(0, 0, 0, 0);
+        goButton.setPadding(0, 0, 0, 0);
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

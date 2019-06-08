@@ -31,7 +31,7 @@ public class SSLSocketClient {
     public static X509TrustManager createTrustAllManager() {
         X509TrustManager tm = null;
         try {
-            tm =   new X509TrustManager() {
+            tm = new X509TrustManager() {
                 @SuppressLint("TrustAllX509TrustManager")
                 public void checkClientTrusted(X509Certificate[] chain, String authType) {
                     //do nothing，接受任意客户端证书

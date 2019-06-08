@@ -69,7 +69,7 @@ public class AnalyzeByXPath {
                         }
                     }
                 } else {
-                    for (List<JXNode> temp: results) {
+                    for (List<JXNode> temp : results) {
                         jxNodes.addAll(temp);
                     }
                 }
@@ -145,7 +145,7 @@ public class AnalyzeByXPath {
             /*Object object = jxDocument.selOne(rule);
             result = object instanceof Element ? ((Element) object).html() : (String) object;*/
             List<JXNode> jxNodes = jxDocument.selN(rule);
-            if(jxNodes == null) return null;
+            if (jxNodes == null) return null;
             return TextUtils.join(",", jxNodes);
         } else {
             StringBuilder sb = new StringBuilder();

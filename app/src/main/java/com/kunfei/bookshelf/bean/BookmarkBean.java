@@ -19,7 +19,7 @@ public class BookmarkBean implements Cloneable {
 
     @Generated(hash = 1176037419)
     public BookmarkBean(Long id, String noteUrl, String bookName, String chapterName,
-            Integer chapterIndex, Integer pageIndex, String content) {
+                        Integer chapterIndex, Integer pageIndex, String content) {
         this.id = id;
         this.noteUrl = noteUrl;
         this.bookName = bookName;

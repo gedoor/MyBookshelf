@@ -163,25 +163,23 @@ public class AnalyzeUrl {
      */
     @SuppressLint("DefaultLocale")
     private String replaceJs(String ruleUrl, String baseUrl, Integer searchPage, String searchKey) throws Exception {
-        if(ruleUrl.contains("{{") && ruleUrl.contains("}}")){
+        if (ruleUrl.contains("{{") && ruleUrl.contains("}}")) {
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleUrl.length());
-            SimpleBindings simpleBindings = new SimpleBindings(){{
+            SimpleBindings simpleBindings = new SimpleBindings() {{
                 this.put("baseUrl", baseUrl);
                 this.put("searchPage", searchPage);
                 this.put("searchKey", searchKey);
             }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleUrl);
-            while (expMatcher.find()){
-                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1),simpleBindings);
-                if(jsEval instanceof String){
-                    expMatcher.appendReplacement(sb,(String) jsEval);
-                }
-                else if(jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0){
-                    expMatcher.appendReplacement(sb,String.format("%.0f",(Double) jsEval));
-                }
-                else {
-                    expMatcher.appendReplacement(sb,String.valueOf(jsEval));
+            while (expMatcher.find()) {
+                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1), simpleBindings);
+                if (jsEval instanceof String) {
+                    expMatcher.appendReplacement(sb, (String) jsEval);
+                } else if (jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0) {
+                    expMatcher.appendReplacement(sb, String.format("%.0f", (Double) jsEval));
+                } else {
+                    expMatcher.appendReplacement(sb, String.valueOf(jsEval));
                 }
             }
             expMatcher.appendTail(sb);

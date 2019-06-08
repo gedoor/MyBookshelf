@@ -50,6 +50,7 @@ public class ItemTouchCallback extends ItemTouchHelper.Callback {
 
     /**
      * 设置是否可以被拖拽
+     *
      * @param canDrag 是true，否false
      */
     public void setDragEnable(boolean canDrag) {
@@ -58,6 +59,7 @@ public class ItemTouchCallback extends ItemTouchHelper.Callback {
 
     /**
      * 设置是否可以被滑动
+     *
      * @param canSwipe 是true，否false
      */
     public void setSwipeEnable(boolean canSwipe) {

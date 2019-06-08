@@ -35,17 +35,17 @@ public class BookSourceManager {
 
     public static List<BookSourceBean> getSelectedBookSource() {
         return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.Enable.eq(true))
-                    .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
-                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                    .list();
+                .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
     }
 
     public static List<BookSourceBean> getAllBookSource() {
         return DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .orderRaw(getBookSourceSort())
-                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                    .list();
+                .orderRaw(getBookSourceSort())
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
     }
 
     public static List<BookSourceBean> getSelectedBookSourceBySerialNumber() {

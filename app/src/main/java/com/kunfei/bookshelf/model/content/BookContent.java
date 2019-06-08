@@ -90,7 +90,7 @@ class BookContent {
                     if (nextChapter != null && webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl())) {
                         break;
                     }
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webContentBean.nextUrl, headerMap, tag );
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webContentBean.nextUrl, headerMap, tag);
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();

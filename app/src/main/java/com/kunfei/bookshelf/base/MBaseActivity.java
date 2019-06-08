@@ -246,7 +246,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     public void startActivity(Intent intent) {
         super.startActivity(intent);
         if (MApplication.isEInkMode) {
-            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
         }
     }
 
@@ -254,7 +254,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
         if (MApplication.isEInkMode) {
-            overridePendingTransition(R.anim.anim_none,R.anim.anim_none);
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
         }
     }
 

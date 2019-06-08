@@ -26,7 +26,7 @@ public class HttpServer extends NanoHTTPD {
         String uri = session.getUri();
 
         try {
-            switch (session.getMethod().name()){
+            switch (session.getMethod().name()) {
                 case "OPTIONS":
                     Response response = newFixedLengthResponse("");
                     response.addHeader("Access-Control-Allow-Methods", "POST");
@@ -45,7 +45,7 @@ public class HttpServer extends NanoHTTPD {
                             returnData = new SourceController().saveSource(postData);
                             break;
                         case "/saveSources":
-                            returnData =  new SourceController().saveSources(postData);
+                            returnData = new SourceController().saveSources(postData);
                             break;
                         case "/saveBook":
                             returnData = new BookshelfController().saveBook(postData);
@@ -56,7 +56,7 @@ public class HttpServer extends NanoHTTPD {
                     break;
 
                 case "GET":
-                    Map<String,List<String>> parameters = session.getParameters();
+                    Map<String, List<String>> parameters = session.getParameters();
 
                     switch (uri) {
                         case "/getSource":
@@ -78,7 +78,7 @@ public class HttpServer extends NanoHTTPD {
                     break;
             }
 
-            if(returnData == null){
+            if (returnData == null) {
                 if (uri.endsWith("/")) {
                     uri = uri + "index.html";
                 }

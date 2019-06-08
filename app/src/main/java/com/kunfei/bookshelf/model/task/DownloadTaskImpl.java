@@ -222,9 +222,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
                     @Override
                     public void onError(Throwable e) {
                         removeFromDownloadList(chapter);
-                        if(TextUtils.equals(e.getMessage(), "cached")){
+                        if (TextUtils.equals(e.getMessage(), "cached")) {
                             whenNext(scheduler, false);
-                        }else {
+                        } else {
                             whenError(scheduler);
                         }
                     }
@@ -243,7 +243,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             return;
         }
 
-        if(success) {
+        if (success) {
             downloadBook.successCountAdd();
         }
         if (isFinishing()) {
@@ -262,9 +262,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
 
         if (isFinishing()) {
             stopDownload();
-            if(downloadBook.getSuccessCount() == 0) {
+            if (downloadBook.getSuccessCount() == 0) {
                 onDownloadError(downloadBook);
-            }else {
+            } else {
                 onDownloadComplete(downloadBook);
             }
         } else {

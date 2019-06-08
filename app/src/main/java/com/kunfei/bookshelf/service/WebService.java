@@ -82,7 +82,7 @@ public class WebService extends Service {
         if (inetAddress != null) {
             try {
                 httpServer.start();
-                webSocketServer.start(1000*30); // 通信超时设置
+                webSocketServer.start(1000 * 30); // 通信超时设置
                 isRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {

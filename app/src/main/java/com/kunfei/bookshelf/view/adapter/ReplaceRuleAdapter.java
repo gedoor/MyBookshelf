@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
@@ -15,9 +18,6 @@ import com.kunfei.bookshelf.view.activity.ReplaceRuleActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by GKF on 2017/12/22.

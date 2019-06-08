@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils.download;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -70,7 +71,7 @@ public class DownloadUtils {
 
             int len;
             while ((len = inputString.read(b)) != -1) {
-                fos.write(b,0,len);
+                fos.write(b, 0, len);
             }
             inputString.close();
             fos.close();

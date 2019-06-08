@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 
 
 public class CoverImageView extends androidx.appcompat.widget.AppCompatImageView {
-    float width,height;
+    float width, height;
 
     public CoverImageView(Context context) {
         super(context);
