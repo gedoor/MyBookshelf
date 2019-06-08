@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -256,7 +255,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
+        ViewGroup flContent;
         ImageView ivCover;
         BadgeView bvUnread;
         TextView tvName;
