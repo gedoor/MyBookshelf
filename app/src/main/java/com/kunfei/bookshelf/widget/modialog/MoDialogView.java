@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ReadAssets;
-import com.victor.loading.rotate.RotateLoading;
+import com.kunfei.bookshelf.widget.RotateLoading;
 
-import androidx.cardview.widget.CardView;
 import ru.noties.markwon.Markwon;
 
 /**

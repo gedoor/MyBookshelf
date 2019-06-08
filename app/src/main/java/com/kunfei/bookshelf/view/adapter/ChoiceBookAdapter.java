@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -144,7 +143,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
+        ViewGroup flContent;
         CoverImageView ivCover;
         TextView tvName;
         TextView tvState;
