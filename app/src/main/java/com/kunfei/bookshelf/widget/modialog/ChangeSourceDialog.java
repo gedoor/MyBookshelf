@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -32,6 +33,7 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
+import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.view.adapter.ChangeSourceAdapter;
@@ -230,6 +232,14 @@ public class ChangeSourceDialog extends BaseDialog {
     public ChangeSourceDialog setCallback(Callback callback) {
         this.callback = callback;
         return this;
+    }
+
+    public void show() {
+        super.show();
+        WindowManager.LayoutParams params = Objects.requireNonNull(getWindow()).getAttributes();
+        params.height = ScreenUtils.getAppSize()[1] - 60;
+        params.width = ScreenUtils.getAppSize()[0] - 60;
+        getWindow().setAttributes(params);
     }
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {
