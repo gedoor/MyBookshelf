@@ -231,23 +231,27 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         coverPath = path;
         if (coverPath.startsWith("http")) {
             Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(ivCover);
             Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_gs)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         } else {
             File file = new File(coverPath);
             Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(ivCover);
             Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_gs)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         }

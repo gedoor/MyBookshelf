@@ -17,7 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -191,16 +190,22 @@ public class BookInfoEditActivity extends MBaseActivity {
         if (!this.isFinishing() && book != null) {
             if (TextUtils.isEmpty(book.getCustomCoverPath())) {
                 Glide.with(this).load(book.getBookInfoBean().getCoverUrl())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
+                        .into(ivCover);
             } else if (book.getCustomCoverPath().startsWith("http")) {
                 Glide.with(this).load(book.getCustomCoverPath())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
+                        .into(ivCover);
             } else {
                 Glide.with(this).load(new File(book.getCustomCoverPath()))
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
+                        .into(ivCover);
             }
         }
     }

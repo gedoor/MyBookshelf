@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -144,18 +143,24 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 Glide.with(activity).load(bookShelfBean.getBookInfoBean().getCoverUrl())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
                         .into(holder.ivCover);
             } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
                 Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
                         .into(holder.ivCover);
             } else {
                 Glide.with(activity).load(new File(bookShelfBean.getCustomCoverPath()))
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
                         .into(holder.ivCover);
             }
         }

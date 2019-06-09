@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
@@ -61,11 +60,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
-                    .apply(new RequestOptions()
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(myViewHolder.ivCover);
         }
         myViewHolder.tvName.setText(String.format("%s (%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
