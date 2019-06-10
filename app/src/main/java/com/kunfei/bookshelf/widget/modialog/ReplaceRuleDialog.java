@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 
-public class ReplaceRuleDialog {
+public class ReplaceRuleDialog extends BaseDialog {
     private Context context;
     private AppCompatEditText tieReplaceSummary;
     private AppCompatEditText tieReplaceRule;
@@ -24,7 +24,6 @@ public class ReplaceRuleDialog {
     private CheckBox cbUseRegex;
     private TextView tvOk;
 
-    private BaseDialog dialog;
     private ReplaceRuleBean replaceRuleBean;
     private BookShelfBean bookShelfBean;
 
@@ -33,13 +32,14 @@ public class ReplaceRuleDialog {
     }
 
     private ReplaceRuleDialog(Context context, ReplaceRuleBean replaceRuleBean, BookShelfBean bookShelfBean) {
+        super(context, R.style.alertDialogTheme);
         this.context = context;
         this.replaceRuleBean = replaceRuleBean;
         this.bookShelfBean = bookShelfBean;
-        dialog = new BaseDialog(context, R.style.alertDialogTheme);
+
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_replace_rule, null);
         bindView(view);
-        dialog.setContentView(view);
+        setContentView(view);
     }
 
     private void bindView(View view) {
@@ -76,7 +76,7 @@ public class ReplaceRuleDialog {
             replaceRuleBean.setReplacement(getEditableText(tieReplaceTo.getText()));
             replaceRuleBean.setUseTo(getEditableText(tieUseTo.getText()));
             callback.onPositiveButton(replaceRuleBean);
-            dialog.dismiss();
+            dismiss();
         });
         return this;
     }
@@ -86,11 +86,6 @@ public class ReplaceRuleDialog {
             return "";
         }
         return editable.toString();
-    }
-
-    public ReplaceRuleDialog show() {
-        dialog.show();
-        return this;
     }
 
     public interface Callback {
