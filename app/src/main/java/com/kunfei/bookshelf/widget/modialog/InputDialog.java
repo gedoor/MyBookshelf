@@ -13,24 +13,23 @@ import com.kunfei.bookshelf.widget.views.ATEAutoCompleteTextView;
 /**
  * 输入框
  */
-public class InputDialog {
+public class InputDialog extends BaseDialog {
     private TextView tvTitle;
     private ATEAutoCompleteTextView etInput;
     private TextView tvOk;
 
     private Context context;
-    private BaseDialog dialog;
 
     public static InputDialog builder(Context context) {
         return new InputDialog(context);
     }
 
     private InputDialog(Context context) {
+        super(context, R.style.alertDialogTheme);
         this.context = context;
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_input, null);
+        setContentView(view);
         bindView(view);
-        dialog = new BaseDialog(context, R.style.alertDialogTheme);
-        dialog.setContentView(view);
     }
 
     public InputDialog setDefaultValue(String defaultValue) {
@@ -66,13 +65,9 @@ public class InputDialog {
     public InputDialog setCallback(Callback callback) {
         tvOk.setOnClickListener(view -> {
             callback.setInputText(etInput.getText().toString());
-            dialog.dismiss();
+            dismiss();
         });
         return this;
-    }
-
-    public void show() {
-        dialog.show();
     }
 
     /**
