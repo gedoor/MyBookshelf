@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -97,7 +98,7 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
         PermissionUtils.checkMorePermissions(this, cameraPer, new PermissionUtils.PermissionCheckCallback() {
             @Override
             public void onHasPermission() {
-                zxingview.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
+                zxingview.setVisibility(View.VISIBLE);
                 zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
             }
 
