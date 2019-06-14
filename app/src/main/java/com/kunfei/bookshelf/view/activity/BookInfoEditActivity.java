@@ -20,14 +20,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
@@ -37,6 +37,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 
 public class BookInfoEditActivity extends MBaseActivity {
     private final int ResultSelectCover = 103;
@@ -164,26 +165,17 @@ public class BookInfoEditActivity extends MBaseActivity {
     }
 
     private void selectCover() {
-        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, ResultSelectCover);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookInfoEditActivity.this.toast(R.string.bg_image_per);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookInfoEditActivity.this.toast(R.string.bg_image_per);
-                PermissionUtils.requestMorePermissions(BookInfoEditActivity.this, permission, MApplication.RESULT__PERMS);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.bg_image_per)
+                .onGranted((requestCode) -> {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, ResultSelectCover);
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     private void initCover() {
@@ -267,28 +259,6 @@ public class BookInfoEditActivity extends MBaseActivity {
     public void onDestroy() {
         moDialogHUD.dismiss();
         super.onDestroy();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(BookInfoEditActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                selectCover();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookInfoEditActivity.this.toast(R.string.bg_image_per);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookInfoEditActivity.this.toast(R.string.bg_image_per);
-                PermissionUtils.toAppSetting(BookInfoEditActivity.this);
-            }
-        });
     }
 
     @Override

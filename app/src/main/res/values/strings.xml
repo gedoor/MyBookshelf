@@ -24,7 +24,11 @@
 
     <string name="navigation_drawer_open">打开侧边栏</string>
     <string name="navigation_drawer_close">关闭侧边栏</string>
-
+    <string name="dialog_title">提示</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_setting">去设置</string>
+    <string name="tip_cannot_jump_setting_page">无法跳转至设置界面</string>
     <string name="local">本地</string>
     <string name="search">搜索</string>
     <string name="net_error_10001">没有网络</string>

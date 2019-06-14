@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
@@ -133,6 +135,13 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'xmlpull'
     }
+    compile "androidx.core:core-ktx:1.0.2"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //anko
+    def anko_version = '0.10.8'
+    implementation "org.jetbrains.anko:anko-sdk27:$anko_version"
+    implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
 }
 
@@ -143,3 +152,6 @@ greendao {
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

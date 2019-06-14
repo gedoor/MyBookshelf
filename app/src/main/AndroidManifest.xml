@@ -180,7 +180,9 @@
             android:name=".view.activity.TxtChapterRuleActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
-
+        <activity
+            android:name=".help.permission.PermissionActivity"
+            android:theme="@style/Activity.Permission" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />

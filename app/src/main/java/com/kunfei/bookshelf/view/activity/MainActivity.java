@@ -43,12 +43,13 @@ import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.ACache;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
@@ -64,6 +65,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 
 import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
@@ -421,23 +423,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_local:
-                PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-                    @Override
-                    public void onHasPermission() {
-                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
-                    }
-
-                    @Override
-                    public void onUserHasAlreadyTurnedDown(String... permission) {
-                        MainActivity.this.toast(R.string.import_per);
-                    }
-
-                    @Override
-                    public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                        MainActivity.this.toast(R.string.please_grant_storage_permission);
-                        PermissionUtils.requestMorePermissions(MainActivity.this, permission, FILE_SELECT_RESULT);
-                    }
-                });
+                new PermissionsCompat.Builder(this)
+                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                        .rationale(R.string.import_per)
+                        .onGranted((requestCode) -> {
+                            startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
+                            return Unit.INSTANCE;
+                        })
+                        .request();
                 break;
             case R.id.action_add_url:
                 InputDialog.builder(this)
@@ -584,57 +577,38 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 备份
      */
     private void backup() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.backup_confirmation)
-                        .setMessage(R.string.backup_message)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-                ATH.setAlertDialogTint(alertDialog);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                MainActivity.this.toast(R.string.backup_permission);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                MainActivity.this.toast(R.string.backup_permission);
-                PermissionUtils.requestMorePermissions(MainActivity.this, permission, BACKUP_RESULT);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.backup_permission)
+                .onGranted((requestCode) -> {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(R.string.backup_confirmation)
+                            .setMessage(R.string.backup_message)
+                            .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    ATH.setAlertDialogTint(alertDialog);
+                    return Unit.INSTANCE;
+                }).request();
     }
 
     /**
      * 恢复
      */
     private void restore() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.restore_confirmation)
-                        .setMessage(R.string.restore_message)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-                ATH.setAlertDialogTint(alertDialog);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                MainActivity.this.toast(R.string.restore_permission);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(MainActivity.this, permission, RESTORE_RESULT);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.restore_permission)
+                .onGranted((requestCode) -> {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(R.string.restore_confirmation)
+                            .setMessage(R.string.restore_message)
+                            .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    ATH.setAlertDialogTint(alertDialog);
+                    return Unit.INSTANCE;
+                }).request();
     }
 
     /**
@@ -651,24 +625,16 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
-    /**
-     * 获取权限
-     */
-    private void requestPermission() {
-        List<String> per = PermissionUtils.checkMorePermissions(this, MApplication.PerList);
-        if (per.size() > 0) {
-            toast(R.string.get_storage_per);
-            PermissionUtils.requestMorePermissions(this, per, MApplication.RESULT__PERMS);
-        }
-    }
-
     @Override
     protected void firstRequest() {
         if (!isRecreate) {
             versionUpRun();
         }
         if (!Objects.equals(MApplication.downloadPath, FileHelp.getFilesPath())) {
-            requestPermission();
+            new PermissionsCompat.Builder(this)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.get_storage_per)
+                    .request();
         }
         handler.postDelayed(() -> {
             UpLastChapterModel.getInstance().startUpdate();
@@ -685,58 +651,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     public void onRestore(String msg) {
         moDialogHUD.showLoading(msg);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
-                        break;
-                    case BACKUP_RESULT:
-                        backup();
-                        break;
-                    case RESTORE_RESULT:
-                        restore();
-                        break;
-                }
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        MainActivity.this.toast(R.string.import_book_per);
-                        break;
-                    case BACKUP_RESULT:
-                        MainActivity.this.toast(R.string.backup_permission);
-                        break;
-                    case RESTORE_RESULT:
-                        MainActivity.this.toast(R.string.restore_permission);
-                        break;
-                }
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        MainActivity.this.toast(R.string.import_book_per);
-                        break;
-                    case BACKUP_RESULT:
-                        MainActivity.this.toast(R.string.backup_permission);
-                        break;
-                    case RESTORE_RESULT:
-                        MainActivity.this.toast(R.string.restore_permission);
-                        break;
-                }
-                PermissionUtils.toAppSetting(MainActivity.this);
-            }
-        });
     }
 
     @SuppressLint("RtlHardcoded")

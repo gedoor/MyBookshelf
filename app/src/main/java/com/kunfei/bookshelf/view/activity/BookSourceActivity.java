@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -21,19 +20,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kunfei.bookshelf.DbHelper;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -46,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.FilePicker;
+import kotlin.Unit;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -365,34 +365,24 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void selectBookSourceFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                FilePicker filePicker = new FilePicker(BookSourceActivity.this, FilePicker.FILE);
-                filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-                filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
-                filePicker.show();
-                filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-                filePicker.getSubmitButton().setOnClickListener(view -> {
-                    filePicker.dismiss();
-                    selectFileSys();
-                });
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.please_grant_storage_permission)
+                .onGranted((requestCode) -> {
+                    FilePicker filePicker = new FilePicker(BookSourceActivity.this, FilePicker.FILE);
+                    filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                    filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
+                    filePicker.show();
+                    filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                    filePicker.getSubmitButton().setOnClickListener(view -> {
+                        filePicker.dismiss();
+                        selectFileSys();
+                    });
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     private void importBookSourceOnLine() {
@@ -413,29 +403,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/*");//设置类型
         startActivityForResult(intent, IMPORT_SOURCE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                selectBookSourceFile();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                BookSourceActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.toAppSetting(BookSourceActivity.this);
-            }
-        });
     }
 
     @Override
