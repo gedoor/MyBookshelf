@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 
+import static android.text.TextUtils.isEmpty;
+
 public class WebBookModel {
 
     public static WebBookModel getInstance() {
@@ -109,7 +111,7 @@ public class WebBookModel {
     private Observable<BookContentBean> saveContent(BookInfoBean infoBean, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
-            if (bookContentBean.getDurChapterContent() == null) {
+            if (isEmpty(bookContentBean.getDurChapterContent())) {
                 e.onError(new Throwable("下载章节出错"));
             } else if (infoBean.isAudio()) {
                 bookContentBean.setTimeMillis(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
