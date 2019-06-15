@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import okhttp3.MediaType;
+
 public class AppConstant {
 
     public static final String ActionStartService = "startService";
@@ -32,4 +34,5 @@ public class AppConstant {
 
     public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
 
+    public static final MediaType jsonMediaType = MediaType.parse("Content-Type, application/json");
 }
