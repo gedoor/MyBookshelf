@@ -31,7 +31,7 @@ dependencies {
 
     //support
     api 'androidx.core:core:1.2.0-alpha01'
-    api 'androidx.appcompat:appcompat:1.1.0-alpha05'
+    api 'androidx.appcompat:appcompat:1.1.0-beta01'
 
     //RxAndroid
     api 'io.reactivex.rxjava2:rxjava:2.2.8'
