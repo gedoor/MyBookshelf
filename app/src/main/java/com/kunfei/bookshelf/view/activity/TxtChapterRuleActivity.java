@@ -25,11 +25,11 @@ import com.kunfei.bookshelf.presenter.contract.TxtChapterRuleContract;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.TxtChapterRuleAdapter;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 import com.kunfei.bookshelf.widget.modialog.TxtChapterRuleDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.picker.FilePicker;
 import kotlin.Unit;
 
 public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract.Presenter> implements TxtChapterRuleContract.View {

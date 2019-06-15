@@ -24,10 +24,10 @@ import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.util.Objects;
 
-import cn.qqtheme.framework.picker.FilePicker;
 import kotlin.Unit;
 
 /**

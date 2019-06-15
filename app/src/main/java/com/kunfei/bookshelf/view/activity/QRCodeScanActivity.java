@@ -18,12 +18,12 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
-import cn.qqtheme.framework.picker.FilePicker;
 import kotlin.Unit;
 
 /**
