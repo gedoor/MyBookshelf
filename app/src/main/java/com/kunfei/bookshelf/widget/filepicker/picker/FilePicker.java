@@ -173,8 +173,7 @@ public class FilePicker extends ConfirmPopup<LinearLayout> implements FileAdapte
 
     @Override
     protected void onSubmit() {
-        if (mode == FILE) {
-        } else {
+        if (mode != FILE) {
             String currentPath = adapter.getCurrentPath();
             if (onFilePickListener != null) {
                 onFilePickListener.onFilePicked(currentPath);
@@ -209,8 +208,7 @@ public class FilePicker extends ConfirmPopup<LinearLayout> implements FileAdapte
             refreshCurrentDirPath(fileItem.getPath());
         } else {
             String clickPath = fileItem.getPath();
-            if (mode == DIRECTORY) {
-            } else {
+            if (mode != DIRECTORY) {
                 dismiss();
                 if (onFilePickListener != null) {
                     onFilePickListener.onFilePicked(clickPath);
