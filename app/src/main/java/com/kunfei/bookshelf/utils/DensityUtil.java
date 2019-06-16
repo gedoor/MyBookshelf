@@ -11,13 +11,10 @@ import android.view.WindowManager;
 
 import java.lang.reflect.Method;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class DensityUtil {
     /**
      * dp转px
-     *
-     * @param context
-     * @param
-     * @return
      */
     public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -26,10 +23,6 @@ public class DensityUtil {
 
     /**
      * sp转px
-     *
-     * @param context
-     * @param
-     * @return
      */
     public static int sp2px(Context context, float spVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
@@ -38,10 +31,6 @@ public class DensityUtil {
 
     /**
      * px转dp
-     *
-     * @param context
-     * @param pxVal
-     * @return
      */
     public static float px2dp(Context context, float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -50,10 +39,6 @@ public class DensityUtil {
 
     /**
      * px转sp
-     *
-     * @param
-     * @param pxVal
-     * @return
      */
     public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
@@ -82,7 +67,6 @@ public class DensityUtil {
     public static int getWindowWidth(Context context) {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth();
-        return width;
+        return wm.getDefaultDisplay().getWidth();
     }
 }

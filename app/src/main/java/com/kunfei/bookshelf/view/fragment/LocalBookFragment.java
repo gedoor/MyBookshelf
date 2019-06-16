@@ -1,17 +1,15 @@
 package com.kunfei.bookshelf.view.fragment;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.media.MediaStoreHelper;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
-import com.kunfei.bookshelf.widget.refreshview.RefreshLayout;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +50,11 @@ public class LocalBookFragment extends BaseFileFragment {
 
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
-        mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
-        mRvContent.setAdapter(mAdapter);
+        if (getContext() != null) {
+            mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
+            mRvContent.setAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -82,19 +82,21 @@ public class LocalBookFragment extends BaseFileFragment {
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        MediaStoreHelper.getAllBookFile(getActivity(),
-                (files) -> {
-                    if (files.isEmpty()) {
-                        mRlRefresh.showEmpty();
-                    } else {
-                        mAdapter.refreshItems(files);
-                        mRlRefresh.showFinish();
-                        //反馈
-                        if (mListener != null) {
-                            mListener.onCategoryChanged();
+        if (getActivity() != null) {
+            MediaStoreHelper.getAllBookFile(getActivity(),
+                    (files) -> {
+                        if (files.isEmpty()) {
+                            mRlRefresh.showEmpty();
+                        } else {
+                            mAdapter.refreshItems(files);
+                            mRlRefresh.showFinish();
+                            //反馈
+                            if (mListener != null) {
+                                mListener.onCategoryChanged();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ import io.reactivex.Single;
  * Created by newbiechen on 17-5-11.
  */
 
+@SuppressWarnings("ALL")
 public class FileHelp {
     public static final byte BLANK = 0x0a;
     //采用自己的格式去设置文件，防止文件被系统文件查询到
@@ -50,9 +51,23 @@ public class FileHelp {
                 file.createNewFile();
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return file;
+    }
+
+    //获取Cache文件夹
+    public static String getFilesPath() {
+        if (isSdCardExist()) {
+            try {
+                return MApplication.getInstance()
+                        .getExternalFilesDir(null)
+                        .getAbsolutePath();
+            } catch (Exception ignored) {
+            }
+        }
+        return MApplication.getInstance()
+                .getFilesDir()
+                .getAbsolutePath();
     }
 
     //获取Cache文件夹
@@ -121,9 +136,7 @@ public class FileHelp {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             IOUtils.close(reader);
         }

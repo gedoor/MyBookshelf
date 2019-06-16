@@ -21,7 +21,7 @@ public class ScrollPageAnim extends PageAnimation {
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
         mListener.resetScroll();
-        mBgBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
+        mBgBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
     }
 
     @Override
@@ -57,31 +57,34 @@ public class ScrollPageAnim extends PageAnimation {
                 // 进行刷新
                 mView.postInvalidate();
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
+                    if (mCenterRect.contains(x, y)) {
+                        mListener.clickCenter();
+                        return;
+                    }
+
+                    if (!readBookControl.getCanClickTurn() || readBookControl.disableScrollClickTurn()) {
+                        return;
+                    }
+
                     //是否翻阅下一页。true表示翻到下一页，false表示上一页。
                     boolean isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
                     if (isNext) {
                         startAnim(Direction.NEXT);
                     } else {
-                        startAnim(Direction.PRE);
+                        startAnim(Direction.PREV);
                     }
                 } else {
                     // 开启动画
                     startAnim();
                 }
                 // 删除检测器
-                mVelocity.recycle();
-                mVelocity = null;
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-                try {
-                    mVelocity.recycle(); // if velocityTracker won't be used should be recycled
+                if (mVelocity != null) {
+                    mVelocity.recycle();
                     mVelocity = null;
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
                 break;
         }
@@ -123,7 +126,7 @@ public class ScrollPageAnim extends PageAnimation {
                 super.startAnim();
                 mScroller.startScroll(0, 0, 0, -mViewHeight + 300, animationSpeed);
                 break;
-            case PRE:
+            case PREV:
                 super.startAnim();
                 mScroller.startScroll(0, 0, 0, mViewHeight - 300, animationSpeed);
                 break;
@@ -139,17 +142,13 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     @Override
-    public void changePageEnd() {
+    public boolean changePage() {
+        return false;
     }
 
     @Override
     public Bitmap getBgBitmap(int pageOnCur) {
         return mBgBitmap;
-    }
-
-    @Override
-    public Bitmap getContentBitmap(int pageOnCur) {
-        return null;
     }
 
 }

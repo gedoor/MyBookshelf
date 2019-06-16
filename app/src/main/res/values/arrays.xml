@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="indent">
+        <item>@string/indent_0</item>
+        <item>@string/indent_1</item>
+        <item>@string/indent_2</item>
+        <item>@string/indent_3</item>
+        <item>@string/indent_4</item>
+    </string-array>
+
     <string-array name="book_group_array">
         <item>@string/all_book</item>
         <item>@string/pursue_more_book</item>
@@ -20,7 +28,7 @@
         <item>@string/jf_convert_f</item>
     </string-array>
 
-    <string-array name="NavbarColors">
+    <string-array name="NavBarColors">
         <item>自动</item>
         <item>黑色</item>
         <item>白色</item>
@@ -70,5 +78,15 @@
         <attr name="batteryColor" format="color"/>
         <attr name="batteryPower" format="integer"/>
     </declare-styleable>
+
+    <string-array name="icon_names">
+        <item>icon1</item>
+        <item>icon2</item>
+    </string-array>
+
+    <string-array name="icons">
+        <item>@string/icon_main</item>
+        <item>@string/icon_book</item>
+    </string-array>
     
 </resources>

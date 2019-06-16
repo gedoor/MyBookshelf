@@ -6,14 +6,14 @@
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black"
+        android:icon="@drawable/ic_select_all"
         android:title="@string/select_all"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_group"
-        android:icon="@drawable/ic_group"
+        android:icon="@drawable/ic_groups"
         android:title="@string/menu_action_group"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">
@@ -29,7 +29,7 @@
 
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/ic_format_line_spacing_black_24dp"
+        android:icon="@drawable/ic_format_line_spacing"
         android:title="@string/sort"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">
@@ -74,6 +74,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_import_book_source_rwm"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_by_qr_code"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_revert_selection"
         android:icon="@drawable/ic_swap_outline_24dp"
         android:title="@string/revert_selection"
@@ -88,7 +94,13 @@
     <item
         android:id="@+id/action_check_book_source"
         android:icon="@drawable/ic_check_source"
-        android:title="@string/check_book_source"
+        android:title="@string/check_select_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_wifi"
+        android:icon="@drawable/ic_share"
+        android:title="@string/wifi_share"
         app:showAsAction="never" />
 
 </menu>

@@ -1,7 +1,8 @@
 package com.kunfei.bookshelf.presenter;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -9,14 +10,14 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.dao.DbHelper;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.SearchHistoryBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
@@ -34,19 +35,17 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     private long startThisSearchTime;
     private String durSearchKey;
-
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
-
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenter(Context context) {
+    public SearchBookPresenter() {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         bookShelfS.addAll(value);
@@ -76,19 +75,13 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
 
             @Override
-            public Boolean checkIsExist(SearchBookBean value) {
-                return false;
-            }
-
-            @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 mView.loadMoreSearchBook(value);
             }
 
             @Override
-            public void searchBookError(Boolean value) {
-                mView.searchBookError(value);
-                searchBookModel.stopSearch();
+            public void searchBookError(Throwable throwable) {
+                mView.searchBookError(throwable);
             }
 
             @Override
@@ -97,14 +90,17 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(context, onSearchListener);
+        searchBookModel = new SearchBookModel(onSearchListener);
     }
 
+    /**
+     * 插入搜索历史
+     */
     public void insertSearchHistory() {
         final int type = SearchBookPresenter.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
         Observable.create((ObservableOnSubscribe<SearchHistoryBean>) e -> {
-            List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+            List<SearchHistoryBean> data = DbHelper.getDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()
                     .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.eq(content))
                     .limit(1)
@@ -113,15 +109,15 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             if (null != data && data.size() > 0) {
                 searchHistoryBean = data.get(0);
                 searchHistoryBean.setDate(System.currentTimeMillis());
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
             } else {
                 searchHistoryBean = new SearchHistoryBean(type, content, System.currentTimeMillis());
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
+                DbHelper.getDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
             }
             e.onNext(searchHistoryBean);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<SearchHistoryBean>() {
+                .subscribe(new MyObserver<SearchHistoryBean>() {
                     @Override
                     public void onNext(SearchHistoryBean value) {
                         mView.insertSearchHistorySuccess(value);
@@ -138,13 +134,13 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     public void cleanSearchHistory() {
         final String content = mView.getEdtContent().getText().toString().trim();
         Observable.create((ObservableOnSubscribe<Integer>) e -> {
-            int a = DbHelper.getInstance().getDb().delete(SearchHistoryBeanDao.TABLENAME,
+            int a = DbHelper.getDb().delete(SearchHistoryBeanDao.TABLENAME,
                     SearchHistoryBeanDao.Properties.Type.columnName + "=? and " + SearchHistoryBeanDao.Properties.Content.columnName + " like ?",
                     new String[]{String.valueOf(SearchBookPresenter.BOOK), "%" + content + "%"});
             e.onNext(a);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Integer>() {
+                .subscribe(new MyObserver<Integer>() {
                     @Override
                     public void onNext(Integer value) {
                         if (value > 0) {
@@ -162,12 +158,12 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void cleanSearchHistory(SearchHistoryBean searchHistoryBean) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().delete(searchHistoryBean);
+            DbHelper.getDaoSession().getSearchHistoryBeanDao().delete(searchHistoryBean);
             e.onNext(true);
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new MyObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
@@ -185,7 +181,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void querySearchHistory(String content) {
         Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
-            List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+            List<SearchHistoryBean> data = DbHelper.getDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()
                     .where(SearchHistoryBeanDao.Properties.Type.eq(SearchBookPresenter.BOOK), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
                     .orderDesc(SearchHistoryBeanDao.Properties.Date)
@@ -194,7 +190,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             e.onNext(data);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<SearchHistoryBean>>() {
+                .subscribe(new MyObserver<List<SearchHistoryBean>>() {
                     @Override
                     public void onNext(List<SearchHistoryBean> value) {
                         if (null != value)
@@ -218,6 +214,9 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.setPage(0);
     }
 
+    /**
+     * 搜索
+     */
     @Override
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
@@ -229,14 +228,22 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void initSearchEngineS(String group) {
+        if (TextUtils.isEmpty(group)) {
+            searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
+        } else {
+            searchBookModel.initSearchEngineS(BookSourceManager.getEnableSourceByGroup(group));
+        }
+    }
 
+    /**
+     * 停止搜索
+     */
     @Override
     public void stopSearch() {
         searchBookModel.stopSearch();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void attachView(@NonNull IView iView) {
@@ -253,12 +260,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
     public void searchBook(String searchKey) {
         mView.searchBook(searchKey);
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
-    public void sourceListChange(Boolean change) {
-
-        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
 }

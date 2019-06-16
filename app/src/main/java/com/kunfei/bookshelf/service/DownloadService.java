@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.service;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -10,12 +11,12 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -43,7 +44,6 @@ public class DownloadService extends Service {
     public static final String finishDownloadAction = "finishDownloadAction";
     private int notificationId = 19901122;
     private int downloadTaskId = 0;
-    private NotificationManagerCompat managerCompat;
     private long currentTime;
 
     public static boolean isRunning = false;
@@ -67,8 +67,8 @@ public class DownloadService extends Service {
                 .setContentTitle(getString(R.string.download_offline_t))
                 .setContentText(getString(R.string.download_offline_s));
         //发送通知
-        managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(notificationId, builder.build());
+        Notification notification = builder.build();
+        startForeground(notificationId, notification);
 
         SharedPreferences preferences = getSharedPreferences("CONFIG", 0);
         threadsNum = preferences.getInt(this.getString(R.string.pk_threads_num), 4);
@@ -81,7 +81,7 @@ public class DownloadService extends Service {
         cancelDownload();
         isRunning = false;
         executor.shutdown();
-        managerCompat.cancelAll();
+        stopForeground(true);
         super.onDestroy();
     }
 
@@ -150,7 +150,6 @@ public class DownloadService extends Service {
             @Override
             public void onDownloadError(DownloadBookBean downloadBook) {
                 if (downloadTasks.indexOfValue(this) >= 0) {
-                    managerCompat.cancel(getId());
                     downloadTasks.remove(getId());
                 }
 
@@ -162,7 +161,6 @@ public class DownloadService extends Service {
             @Override
             public void onDownloadComplete(DownloadBookBean downloadBook) {
                 if (downloadTasks.indexOfValue(this) >= 0) {
-                    managerCompat.cancel(getId());
                     downloadTasks.remove(getId());
                 }
                 startNextTaskAfterRemove(downloadBook);
@@ -301,7 +299,7 @@ public class DownloadService extends Service {
                 .setContentIntent(mainPendingIntent);
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getChancelPendingIntent());
         //发送通知
-        managerCompat.notify(notificationId, builder.build());
+        startForeground(notificationId, builder.build());
     }
 
     private void finishSelf() {

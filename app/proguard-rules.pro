@@ -71,13 +71,11 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 
-# 保留support下的所有类及其内部类
--keep class android.support.** {*;}
+# 保留androidx下的所有类及其内部类
+-keep class androidx.** {*;}
 
 # 保留继承的
--keep public class * extends android.support.v4.**
--keep public class * extends android.support.v7.**
--keep public class * extends android.support.annotation.**
+-keep public class * extends androidx.**
 
 # 保留R下面的资源
 -keep class **.R$* {*;}
@@ -147,13 +145,18 @@
 # 移除Log类打印各个等级日志的代码，打正式包的时候可以做为禁log使用，这里可以作为禁止log打印的功能使用
 # 记得proguard-android.txt中一定不要加-dontoptimize才起作用
 # 另外的一种实现方案是通过BuildConfig.DEBUG的变量来控制
-#-assumenosideeffects class android.util.Log {
-#    public static int v(...);
-#    public static int i(...);
-#    public static int w(...);
-#    public static int d(...);
-#    public static int e(...);
-#}
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
+
+# 保持js引擎调用的java类
+-keep class **.analyzeRule.**{*;}
+# 保持web类
+-keep class **.web.**{*;}
 
 ### greenDAO 3
 -keep class org.greenrobot.greendao.**{ *; }
@@ -219,10 +222,13 @@ public static java.lang.String TABLENAME;
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
--dontwarn org.xmlpull.v1.**
+-dontwarn org.xmlpull.**
 -keep class nl.siegmann.epublib.**{*;}
 -keep class javax.xml.**{*;}
 -keep class org.xmlpull.**{*;}
+
+-keep class org.simpleframework.xml.**{*;}
+-dontwarn org.simpleframework.xml.**
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);

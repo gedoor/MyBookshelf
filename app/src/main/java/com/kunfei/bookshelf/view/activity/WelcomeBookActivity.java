@@ -10,6 +10,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,12 +28,13 @@ public class WelcomeBookActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         // 避免从桌面启动程序后，会重新实例化入口类的activity
-        if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
+        ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {

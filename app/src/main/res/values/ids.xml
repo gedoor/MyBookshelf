@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item type="id" name="fastscroller" />
+    <item name="fast_scroller" type="id" />
+
+    <item name="tag1" type="id" />
+
+    <item name="tag2" type="id" />
+
+    <item name="menu_refresh" type="id" />
+
+    <item name="menu_disable_update" type="id" />
+
+    <item name="menu_allow_update" type="id" />
+
+    <item name="menu_edit_book_source" type="id" />
+
 
 </resources>

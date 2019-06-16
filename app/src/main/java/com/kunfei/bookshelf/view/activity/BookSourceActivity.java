@@ -1,17 +1,8 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,38 +10,42 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.LinearLayout;
 
-import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-import com.kunfei.bookshelf.MApplication;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
-import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.service.ShareService;
+import com.kunfei.bookshelf.utils.ACache;
+import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.picker.FilePicker;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static com.kunfei.bookshelf.view.activity.SourceEditActivity.EDIT_SOURCE;
+import kotlin.Unit;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -59,6 +54,7 @@ import static com.kunfei.bookshelf.view.activity.SourceEditActivity.EDIT_SOURCE;
 
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     private final int IMPORT_SOURCE = 102;
+    private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -69,18 +65,17 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private MyItemTouchHelpCallback itemTouchHelpCallback;
+    private ItemTouchCallback itemTouchCallback;
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
     private SubMenu sortMenu;
     private BookSourceAdapter adapter;
-    private MoDialogHUD moDialogHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
-    public static void startThis(Context context) {
-        context.startActivity(new Intent(context, BookSourceActivity.class));
+    public static void startThis(Activity activity, int requestCode) {
+        activity.startActivityForResult(new Intent(activity, BookSourceActivity.class), requestCode);
     }
 
     @Override
@@ -95,11 +90,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_book_source);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -109,7 +104,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onDestroy() {
-        RxBus.get().post(RxBusTag.SOURCE_LIST_CHANGE, true);
         super.onDestroy();
     }
 
@@ -156,22 +150,22 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        itemTouchHelpCallback = new MyItemTouchHelpCallback();
-        itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+        itemTouchCallback = new ItemTouchCallback();
+        itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        setDragEnable(preferences.getInt("SourceSort", 0));
+        setDragEnable(getSort());
     }
 
     private void setDragEnable(int sort) {
-        if (itemTouchHelpCallback == null) {
+        if (itemTouchCallback == null) {
             return;
         }
         adapter.setSort(sort);
         if (sort == 0) {
-            itemTouchHelpCallback.setDragEnable(true);
+            itemTouchCallback.setDragEnable(true);
         } else {
-            itemTouchHelpCallback.setDragEnable(false);
+            itemTouchCallback.setDragEnable(false);
         }
     }
 
@@ -192,6 +186,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     private void revertSelection() {
@@ -200,6 +195,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         adapter.notifyDataSetChanged();
         saveDate(adapter.getDataList());
+        setResult(RESULT_OK);
     }
 
     public void upSearchView(int size) {
@@ -210,7 +206,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void refreshBookSource() {
         if (isSearch) {
             String term = "%" + searchView.getQuery() + "%";
-            List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+            List<BookSourceBean> sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
@@ -225,14 +221,17 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(BookSourceBean date) {
         mPresenter.saveData(date);
+        setResult(RESULT_OK);
     }
 
     public void saveDate(List<BookSourceBean> date) {
         mPresenter.saveData(date);
+        setResult(RESULT_OK);
     }
 
     //设置ToolBar
@@ -278,14 +277,17 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_import_book_source_onLine:
                 importBookSourceOnLine();
                 break;
+            case R.id.action_import_book_source_rwm:
+                scanBookSource();
+                break;
             case R.id.action_revert_selection:
                 revertSelection();
                 break;
             case R.id.action_del_select:
-                mPresenter.delData(adapter.getSelectDataList());
+                deleteDialog();
                 break;
             case R.id.action_check_book_source:
-                mPresenter.checkBookSource();
+                mPresenter.checkBookSource(adapter.getSelectDataList());
                 break;
             case R.id.sort_manual:
                 upSourceSort(0);
@@ -295,6 +297,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
             case R.id.sort_pin_yin:
                 upSourceSort(2);
+                break;
+            case R.id.action_share_wifi:
+                ShareService.startThis(this, adapter.getSelectDataList());
                 break;
             case android.R.id.home:
                 finish();
@@ -309,11 +314,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void upGroupMenu() {
         if (groupMenu == null) return;
         groupMenu.removeGroup(R.id.source_group);
-        if (BookSourceManager.groupList.size() == 0) {
+        List<String> groupList = BookSourceManager.getGroupList();
+        if (groupList.size() == 0) {
             groupItem.setVisible(false);
         } else {
             groupItem.setVisible(true);
-            for (String groupName : new ArrayList<>(BookSourceManager.groupList)) {
+            for (String groupName : new ArrayList<>(groupList)) {
                 groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
             }
         }
@@ -323,17 +329,23 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         sortMenu.getItem(0).setChecked(false);
         sortMenu.getItem(1).setChecked(false);
         sortMenu.getItem(2).setChecked(false);
-        sortMenu.getItem(preferences.getInt("SourceSort", 0)).setChecked(true);
+        sortMenu.getItem(getSort()).setChecked(true);
     }
 
     private void upSourceSort(int sort) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("SourceSort", sort);
-        editor.apply();
+        preferences.edit().putInt("SourceSort", sort).apply();
         upSortMenu();
         setDragEnable(sort);
-        BookSourceManager.refreshBookSource();
         refreshBookSource();
+    }
+
+    public int getSort() {
+        return preferences.getInt("SourceSort", 0);
+    }
+
+    private void scanBookSource() {
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
+        startActivityForResult(intent, REQUEST_QR);
     }
 
     private void addBookSource() {
@@ -341,34 +353,49 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         startActivityForResult(intent, SourceEditActivity.EDIT_SOURCE);
     }
 
+    private void deleteDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.del_msg)
+                .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.delData(adapter.getSelectDataList()))
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                })
+                .show();
+        ATH.setAlertDialogTint(alertDialog);
+    }
+
     private void selectBookSourceFile() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
-            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-            filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
-            filePicker.show();
-            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-            filePicker.getSubmitButton().setOnClickListener(view -> {
-                filePicker.dismiss();
-                selectFileSys();
-            });
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    MApplication.RESULT__PERMS, MApplication.PerList);
-        }
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.please_grant_storage_permission)
+                .onGranted((requestCode) -> {
+                    FilePicker filePicker = new FilePicker(BookSourceActivity.this, FilePicker.FILE);
+                    filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                    filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
+                    filePicker.show();
+                    filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                    filePicker.getSubmitButton().setOnClickListener(view -> {
+                        filePicker.dismiss();
+                        selectFileSys();
+                    });
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-        moDialogHUD.showInputBox("输入书源网址",
-                cacheUrl,
-                new String[]{cacheUrl},
-                inputText -> {
+        InputDialog.builder(this)
+                .setDefaultValue(cacheUrl)
+                .setTitle(getString(R.string.input_book_source_url))
+                .setAdapterValues(new String[]{cacheUrl})
+                .setCallback(inputText -> {
+                    inputText = StringUtils.trim(inputText);
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
-                });
+                }).show();
     }
 
     private void selectFileSys() {
@@ -378,19 +405,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         startActivityForResult(intent, IMPORT_SOURCE);
     }
 
-    @AfterPermissionGranted(MApplication.RESULT__PERMS)
-    private void resultImportPerms() {
-        selectBookSourceFile();
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -398,10 +412,17 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             switch (requestCode) {
                 case SourceEditActivity.EDIT_SOURCE:
                     refreshBookSource();
+                    setResult(RESULT_OK);
                     break;
                 case IMPORT_SOURCE:
+                    if (data != null && data.getData() != null) {
+                        mPresenter.importBookSourceLocal(FileUtils.getPath(this, data.getData()));
+                    }
+                    break;
+                case REQUEST_QR:
                     if (data != null) {
-                        mPresenter.importBookSourceLocal(FileUtil.getPath(this, data.getData()));
+                        String result = data.getStringExtra("result");
+                        mPresenter.importBookSource(result);
                     }
                     break;
             }

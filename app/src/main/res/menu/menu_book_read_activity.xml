@@ -30,13 +30,21 @@
 
     </group>
 
+    <group android:id="@+id/menu_text">
+        <item
+            android:id="@+id/action_set_regex"
+            android:icon="@drawable/ic_exchange"
+            android:title="@string/txt_chapter_regex"
+            app:showAsAction="always" />
+    </group>
+
     <group android:id="@+id/menuLocal">
 
         <item
             android:id="@+id/action_set_charset"
-            android:icon="@drawable/ic_translate_black_24dp"
+            android:icon="@drawable/ic_translate"
             android:title="@string/set_charset"
-            app:showAsAction="never" />
+            app:showAsAction="ifRoom" />
 
     </group>
 
@@ -55,7 +63,7 @@
 
         <item
             android:id="@+id/update_chapter_list"
-            android:icon="@drawable/ic_update_black_24dp"
+            android:icon="@drawable/ic_update"
             android:title="@string/update_chapter"
             app:showAsAction="never" />
 
@@ -66,19 +74,19 @@
             app:showAsAction="never" />
     </group>
 
-    <group android:id="@+id/menu_text">
-        <item
-            android:id="@+id/action_set_regex"
-            android:icon="@drawable/ic_toc"
-            android:title="@string/txt_chapter_regex"
-            app:showAsAction="never" />
-    </group>
-
     <group android:id="@+id/menu_login">
         <item
             android:id="@+id/action_login"
             android:icon="@drawable/ic_toc"
             android:title="@string/login"
             app:showAsAction="never" />
+    </group>
+
+    <group android:id="@+id/menu_get_zfb_hb">
+        <item
+            android:id="@+id/action_get_hb"
+            android:icon="@drawable/ic_donate"
+            android:title="@string/get_ali_pay_hb"
+            app:showAsAction="ifRoom" />
     </group>
 </menu>

@@ -15,6 +15,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        android {
+        }
     }
 
     compileOptions {
@@ -24,32 +26,23 @@ android {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13-beta-3'
     api fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
 
     //support
-    api "com.android.support:appcompat-v7:$support_library_version"
+    api 'androidx.core:core:1.2.0-alpha01'
+    api 'androidx.appcompat:appcompat:1.1.0-beta01'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxjava:2.2.4'
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
-
-    //Rx_lifecycle
-    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
-    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2'  // If you want to bind to Android-specific lifecycles
-    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'  // If you want pre-written Activities and Fragments you can subclass as providers
-
-    //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.5.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.5.0'
+    api 'io.reactivex.rxjava2:rxjava:2.2.8'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //RxBus
-    api 'com.hwangjr.rxbus:rxbus:2.0.0'
+    api 'com.hwangjr.rxbus:rxbus:2.0.1'
 
-    //J_SOUP
-    api 'org.jsoup:jsoup:1.11.3'
-    api 'cn.wanghaomiao:JsoupXpath:2.2'
-    api 'com.jayway.jsonpath:json-path:2.4.0'
-    api 'io.apisense:rhino-android:1.0'
+    //Retrofit
+    api 'com.squareup.retrofit2:retrofit:2.6.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.6.0'
+
 }

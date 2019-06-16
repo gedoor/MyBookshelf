@@ -41,4 +41,5 @@ public class FindKindBean {
     public void setGroup(String group) {
         this.group = group;
     }
+
 }

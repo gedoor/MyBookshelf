@@ -15,13 +15,12 @@ public class NonePageAnim extends HorizonPageAnim {
 
     @Override
     public void drawMove(Canvas canvas) {
-        canvas.drawBitmap(mCurBitmap, 0, 0, null);
+        canvas.drawBitmap(bitmapList.get(1), 0, 0, null);
     }
 
     @Override
     public void startAnim() {
         super.startAnim();
         isRunning = false;
-        changePage = true;
     }
 }

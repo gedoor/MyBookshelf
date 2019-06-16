@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kunfei.bookshelf.view.activity.ReadStyleActivity">
@@ -39,7 +38,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <Switch
+            <com.kunfei.bookshelf.widget.views.ATESwitch
                 android:id="@+id/sw_darkStatusIcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,20 +47,13 @@
                 android:text="@string/darkStatusIcon" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:text="@string/long_click_input_color"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -69,14 +61,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="文字颜色"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -84,14 +75,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="背景颜色"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgImage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -99,14 +89,13 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="背景图片"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                 android:id="@+id/tvDefault"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,7 +103,6 @@
                 android:layout_margin="6dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="恢复默认"
@@ -122,18 +110,18 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="?attr/actionBarStyle">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/background_menu"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
     </LinearLayout>
 </FrameLayout>

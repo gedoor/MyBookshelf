@@ -3,14 +3,16 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -20,10 +22,10 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
-import com.monke.mprogressbar.MHorProgressBar;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.io.File;
 
@@ -43,8 +45,8 @@ public class UpdateActivity extends MBaseActivity {
     TextView tvDownloadProgress;
     @BindView(R.id.ll_download)
     LinearLayout llDownload;
-    @BindView(R.id.hpb_download_progress)
-    MHorProgressBar hpbDownloadProgress;
+    @BindView(R.id.pb_download)
+    ProgressBar progressBar;
     @BindView(R.id.tv_install_update)
     TextView tvInstallUpdate;
 
@@ -77,6 +79,7 @@ public class UpdateActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_update);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
@@ -87,7 +90,7 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
         if (updateInfo != null) {
-            Markwon.setMarkdown(tvMarkdown, updateInfo.getDetail());
+            Markwon.create(this).setMarkdown(tvMarkdown, updateInfo.getDetail());
         }
     }
 
@@ -104,7 +107,7 @@ public class UpdateActivity extends MBaseActivity {
                 File apkFile = new File(UpdateManager.getSavePath(fileName));
                 UpdateManager.getInstance(this).installApk(apkFile);
             } else {
-                Toast.makeText(this, "没有获取到更新地址", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.non_update_url, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -158,17 +161,17 @@ public class UpdateActivity extends MBaseActivity {
             if (UpdateService.isRunning) {
                 menuItemDownload.setTitle("取消下载");
                 llDownload.setVisibility(View.VISIBLE);
-                hpbDownloadProgress.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 tvInstallUpdate.setVisibility(View.GONE);
             } else if (apkFile.exists()) {
                 menuItemDownload.setTitle("重新下载");
                 llDownload.setVisibility(View.GONE);
-                hpbDownloadProgress.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 tvInstallUpdate.setVisibility(View.VISIBLE);
             } else {
                 menuItemDownload.setTitle("下载更新");
                 llDownload.setVisibility(View.GONE);
-                hpbDownloadProgress.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 tvInstallUpdate.setVisibility(View.GONE);
             }
         }
@@ -178,9 +181,8 @@ public class UpdateActivity extends MBaseActivity {
     public void updateState(Integer state) {
         upMenu();
         if (state > 0) {
+            progressBar.setProgress(state);
             tvDownloadProgress.setText(getString(R.string.progress_show, state, 100));
-            hpbDownloadProgress.setMaxProgress(100);
-            hpbDownloadProgress.setDurProgress(state);
         }
     }
 }

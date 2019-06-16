@@ -7,32 +7,33 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.help.UpdateManager;
+import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-
-import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -96,10 +97,11 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String qq = "701903217 788025059";
+    private String[] allQQ = new String[]{"(公众号)开源阅读软件", "(QQ群)701903217", "(QQ群)805192012", "(QQ群)773736122", "(QQ群)981838750"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -115,6 +117,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_about);
     }
 
@@ -129,7 +132,6 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
-        tvQq.setText(getString(R.string.qq_group, qq));
     }
 
     @Override
@@ -142,27 +144,82 @@ public class AboutActivity extends MBaseActivity {
         vwUpdate.setOnClickListener(view -> UpdateManager.getInstance(this).checkUpdate(true));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {
-            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, qq);
-            if (clipboard != null) {
-                clipboard.setPrimaryClip(clipData);
-                toast(R.string.copy_complete);
+            PopupMenu popupMenu = new PopupMenu(AboutActivity.this, view);
+            for (String qq : allQQ) {
+                popupMenu.getMenu().add(qq);
             }
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                joinGroup(menuItem.getTitle().toString());
+                return true;
+            });
+            popupMenu.show();
         });
         vwUpdateLog.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("updateLog.md"));
-        vwFaq.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("faq.md"));
+        vwFaq.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://mp.weixin.qq.com/s?__biz=MzU2NjU0NjM1Mg==&mid=100000032&idx=1&sn=53e52168caf1ad9e507ab56381c45f1f&chksm=7cab9bff4bdc12e925e282effc1d4993a8652c248abc6169bd31d6fac133628fad54cf516043&mpshare=1&scene=1&srcid=0321CjdEk21qy8WjDgZ0I6sW&key=08039a5457341b11b054342370cc5462829ae3b54e4b265c42e28361773a6fa0e3105d706160d75b097b3ae41148dda265e2416b88f6b6a2391c1f33ec9f0bc62ea9edc86b75344494b598842ad620ac&ascene=1&uin=NzUwMTUxNzIx&devicetype=Windows+10&version=62060739&lang=zh_CN&pass_ticket=%2FD6keuc%2Fx%2Ba8YhupUUvefch8Gm07zVHa34Df5m1waxWQuCOohBN70NNcDEJsKE%2BV"));
         vwShare.setOnClickListener(view -> {
             String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
-            Bitmap bitmap = encodeAsBitmap(url);
-            if (bitmap != null) {
-                moDialogHUD.showImageText(bitmap, url);
-            }
+            Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
+                QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+                Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 600);
+                emitter.onSuccess(bitmap);
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new MySingleObserver<Bitmap>() {
+                        @Override
+                        public void onSuccess(Bitmap bitmap) {
+                            if (bitmap != null) {
+                                moDialogHUD.showImageText(bitmap, url);
+                            }
+                        }
+                    });
         });
     }
 
-    @Override
-    protected void firstRequest() {
+    private void joinGroup(String name) {
+        String key;
+        if (name.equals(allQQ[1])) {
+            key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[2])) {
+            key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[3])) {
+            key = "5Bm5w6OgLupXnICbYvbgzpPUgf0UlsJF";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else if (name.equals(allQQ[4])) {
+            key = "g_Sgmp2nQPKqcZQ5qPcKLHziwX_mpps9";
+            if (joinQQGroupError(key)) {
+                copyName(name.substring(5));
+            }
+        } else {
+            copyName(name.substring(5));
+        }
+    }
 
+    private void copyName(String name) {
+        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(null, name);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clipData);
+            toast(R.string.copy_complete);
+        }
+    }
+
+    private boolean joinQQGroupError(String key) {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     void openIntent(String intentName, String address) {
@@ -171,7 +228,6 @@ public class AboutActivity extends MBaseActivity {
             intent.setData(Uri.parse(address));
             startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
             toast(R.string.can_not_open, ERROR);
         }
     }
@@ -203,22 +259,4 @@ public class AboutActivity extends MBaseActivity {
         return mo || super.onKeyDown(keyCode, event);
     }
 
-    public Bitmap encodeAsBitmap(String str) {
-        Bitmap bitmap = null;
-        BitMatrix result;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            Hashtable<EncodeHintType, Object> hst = new Hashtable();
-            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600, hst);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.createBitmap(result);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException iae) { // ?
-            return null;
-        }
-        return bitmap;
-    }
 }

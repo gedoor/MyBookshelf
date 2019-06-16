@@ -4,9 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.loader.content.CursorLoader;
 
 import java.io.File;
 import java.sql.Blob;

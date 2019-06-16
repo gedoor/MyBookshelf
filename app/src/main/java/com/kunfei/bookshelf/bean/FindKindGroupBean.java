@@ -2,7 +2,7 @@ package com.kunfei.bookshelf.bean;
 
 public class FindKindGroupBean {
     private String groupName;
-    private int childrenCount;
+    private String groupTag;
 
     public String getGroupName() {
         return groupName;
@@ -12,12 +12,12 @@ public class FindKindGroupBean {
         this.groupName = groupName;
     }
 
-    public int getChildrenCount() {
-        return childrenCount;
+    public String getGroupTag() {
+        return groupTag;
     }
 
-    public void setChildrenCount(int childrenCount) {
-        this.childrenCount = childrenCount;
+    public void setGroupTag(String groupTag) {
+        this.groupTag = groupTag;
     }
 
 }

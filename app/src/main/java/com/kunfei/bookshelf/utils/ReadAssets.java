@@ -4,9 +4,11 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 public class ReadAssets {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static String getText(Context context, String fileName) {
         try {
             //Return an AssetManager instance for your application's package
@@ -17,9 +19,8 @@ public class ReadAssets {
             is.read(buffer);
             is.close();
             // Convert the buffer into a string.
-            String text = new String(buffer, "utf-8");
             // Finally stick the string into the text view.
-            return text;
+            return new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
             // Should never happen!
             e.printStackTrace();

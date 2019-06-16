@@ -2,6 +2,7 @@
 package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -9,29 +10,36 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
+import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.bar.ImmersionBar;
+import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
-    public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
+    private static final String TAG = MBaseActivity.class.getSimpleName();
+    public final SharedPreferences preferences = MApplication.getConfigPreferences();
     protected ImmersionBar mImmersionBar;
     private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        initNightTheme();
+        initTheme();
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
@@ -40,6 +48,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         initImmersionBar();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -64,20 +73,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        if (menu != null) {
-            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
-                try {
-                    @SuppressLint("PrivateApi")
-                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-                    method.setAccessible(true);
-                    method.invoke(menu, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+    public void setSupportActionBar(@Nullable androidx.appcompat.widget.Toolbar toolbar) {
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
         }
-        return super.onMenuOpened(featureId, menu);
+        super.setSupportActionBar(toolbar);
     }
 
     /**
@@ -85,13 +85,45 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int primaryTextColor = MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this)));
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
+                drawable.mutate();
+                drawable.setColorFilter(primaryTextColor, PorterDuff.Mode.SRC_ATOP);
             }
         }
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @SuppressLint("PrivateApi")
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if (menu != null) {
+            //展开菜单显示图标
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+                try {
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
+                    method = menu.getClass().getDeclaredMethod("getNonActionItems");
+                    ArrayList<MenuItem> menuItems = (ArrayList<MenuItem>) method.invoke(menu);
+                    if (!menuItems.isEmpty()) {
+                        for (MenuItem menuItem : menuItems) {
+                            Drawable drawable = menuItem.getIcon();
+                            if (drawable != null) {
+                                drawable.mutate();
+                                drawable.setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+
+        }
+        return super.onMenuOpened(featureId, menu);
     }
 
     /**
@@ -99,42 +131,43 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     protected void initImmersionBar() {
         try {
+            View actionBar = findViewById(R.id.action_bar);
             if (isImmersionBarEnabled()) {
-                if (getSupportActionBar() != null && isNightTheme() && findViewById(R.id.action_bar) != null) {
-                    mImmersionBar.statusBarColor(R.color.colorPrimary);
+                if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
+                    mImmersionBar.statusBarColorInt(ThemeStore.primaryColor(this));
                 } else {
                     mImmersionBar.transparentStatusBar();
                 }
             } else {
-                if (getSupportActionBar() != null && isNightTheme())
-                    mImmersionBar.statusBarColor(R.color.colorPrimaryDark);
-                else
+                if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
+                    mImmersionBar.statusBarColorInt(ThemeStore.statusBarColor(this));
+                } else {
                     mImmersionBar.statusBarColor(R.color.status_bar_bag);
+                }
             }
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage());
+        } catch (Exception ignored) {
         }
         try {
-            if (isImmersionBarEnabled() && !isNightTheme()) {
+            if (isImmersionBarEnabled() && ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
+            } else if (ColorUtil.isColorLight(ThemeStore.primaryColorDark(this))) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
-            if (ImmersionBar.canNavigationBarDarkFont()) {
-                mImmersionBar.navigationBarColor(R.color.background);
-                if (isNightTheme()) {
-                    mImmersionBar.navigationBarDarkFont(false);
-                } else {
-                    mImmersionBar.navigationBarDarkFont(true);
-                }
-            }
             if (!preferences.getBoolean("navigationBarColorChange", false)) {
                 mImmersionBar.navigationBarColor(R.color.black);
                 mImmersionBar.navigationBarDarkFont(false);
+            } else if (ImmersionBar.canNavigationBarDarkFont()) {
+                mImmersionBar.navigationBarColorInt(ThemeStore.primaryColorDark(this));
+                if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+                    mImmersionBar.navigationBarDarkFont(true);
+                } else {
+                    mImmersionBar.navigationBarDarkFont(false);
+                }
             }
             mImmersionBar.init();
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -146,19 +179,8 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     /**
-     * @return 是否夜间模式
+     * 设置屏幕方向
      */
-    protected boolean isNightTheme() {
-        return preferences.getBoolean("nightTheme", false);
-    }
-
-    protected void setNightTheme(boolean isNightTheme) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("nightTheme", isNightTheme);
-        editor.apply();
-        initNightTheme();
-    }
-
     public void setOrientation(int screenDirection) {
         switch (screenDirection) {
             case 0:
@@ -176,11 +198,27 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
-    public void initNightTheme() {
-        if (isNightTheme()) {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    /**
+     * @return 是否夜间模式
+     */
+    public boolean isNightTheme() {
+        return MApplication.getInstance().isNightTheme();
+    }
+
+    protected void setNightTheme(boolean isNightTheme) {
+        preferences.edit()
+                .putBoolean("nightTheme", isNightTheme)
+                .apply();
+        MApplication.getInstance().initNightTheme();
+        MApplication.getInstance().upThemeStore();
+        RxBus.get().post(RxBusTag.RECREATE, true);
+    }
+
+    protected void initTheme() {
+        if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+            setTheme(R.style.CAppTheme);
         } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.CAppThemeBarDark);
         }
     }
 
@@ -201,6 +239,30 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     public void hideSnackBar() {
         if (snackbar != null) {
             snackbar.dismiss();
+        }
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
         }
     }
 }

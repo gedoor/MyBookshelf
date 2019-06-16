@@ -7,9 +7,6 @@ import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
-import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 
 import java.util.List;
 
@@ -31,6 +28,8 @@ public interface SearchBookContract {
         void toSearchBooks(String key, Boolean fromError);
 
         void stopSearch();
+
+        void initSearchEngineS(String group);
     }
 
     interface View extends IView {
@@ -70,7 +69,7 @@ public interface SearchBookContract {
         /**
          * 搜索失败
          */
-        void searchBookError(Boolean isRefresh);
+        void searchBookError(Throwable throwable);
 
         /**
          * 获取搜索内容EditText

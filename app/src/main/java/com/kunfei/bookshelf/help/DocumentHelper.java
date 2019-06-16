@@ -2,8 +2,8 @@ package com.kunfei.bookshelf.help;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.provider.DocumentFile;
-import android.text.TextUtils;
+
+import androidx.documentfile.provider.DocumentFile;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.DocumentUtil;
@@ -32,9 +32,6 @@ public class DocumentHelper {
     }
 
     public static DocumentFile createFileIfNotExist(String fileName, String path, String... subDirs) {
-        Logger.d("FileHelper", "fileName:" + fileName);
-        Logger.d("FileHelper", "path:" + path);
-        Logger.d("FileHelper", Uri.decode(TextUtils.join("/", subDirs)));
         if (!path.startsWith("content://"))
             path = "file://" + Uri.decode(path);
         return DocumentUtil.createFileIfNotExist(MApplication.getInstance(), fileName, path, subDirs);
@@ -131,6 +128,7 @@ public class DocumentHelper {
     public static void saveBitmapToFile(Bitmap bitmap, Uri fileUri) throws IOException {
         OutputStream out = MApplication.getInstance().getContentResolver().openOutputStream(fileUri);
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        assert out != null;
         out.flush();
         out.close();
     }

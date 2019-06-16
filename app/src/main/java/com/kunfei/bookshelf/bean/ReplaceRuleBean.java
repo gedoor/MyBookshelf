@@ -36,7 +36,7 @@ public class ReplaceRuleBean implements Parcelable {
     private int serialNumber;
 
     private ReplaceRuleBean(Parcel in) {
-        id  = in.readLong();
+        id = in.readLong();
         regex = in.readString();
         replacement = in.readString();
         replaceSummary = in.readString();
@@ -48,7 +48,7 @@ public class ReplaceRuleBean implements Parcelable {
 
     @Generated(hash = 1896663649)
     public ReplaceRuleBean(Long id, String replaceSummary, String regex, String replacement,
-            String useTo, Boolean enable, Boolean isRegex, int serialNumber) {
+                           String useTo, Boolean enable, Boolean isRegex, int serialNumber) {
         this.id = id;
         this.replaceSummary = replaceSummary;
         this.regex = regex;

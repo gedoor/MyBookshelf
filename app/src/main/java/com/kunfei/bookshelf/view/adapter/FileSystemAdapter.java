@@ -4,10 +4,6 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.view.adapter.base.IViewHolder;
 import com.kunfei.bookshelf.view.adapter.view.FileHolder;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
-import com.kunfei.bookshelf.view.adapter.base.IViewHolder;
-import com.kunfei.bookshelf.view.adapter.view.FileHolder;
 
 import java.io.File;
 import java.util.ArrayList;

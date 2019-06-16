@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_gravity="center"
@@ -71,9 +71,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="3dp"
-                            android:paddingBottom="3dp">
+                            android:paddingBottom="3dp"
+                            tools:ignore="UseCompoundDrawables">
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:id="@+id/tv_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -85,15 +86,14 @@
                                 android:text="@string/book_name"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                app:minTextSize="14sp"
                                 tools:ignore="RtlHardcoded" />
 
-                            <android.support.v7.widget.AppCompatImageView
+                            <ImageView
                                 android:id="@+id/iv_menu"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:contentDescription="@string/menu"
-                                android:src="@drawable/ic_more_vert_black_24dp"
+                                android:src="@drawable/ic_more_vert"
                                 app:tint="@android:color/white" />
 
                         </LinearLayout>
@@ -106,12 +106,12 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp">
 
-                            <android.support.v7.widget.AppCompatImageView
+                            <ImageView
                                 android:layout_width="18sp"
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/author"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_author_black_24dp"
+                                android:src="@drawable/ic_author"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -145,13 +145,13 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp">
 
-                            <android.support.v7.widget.AppCompatImageView
+                            <ImageView
                                 android:id="@+id/iv_web"
                                 android:layout_width="18sp"
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/origin"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_web_outline_24dp"
+                                android:src="@drawable/ic_web_outline"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -169,11 +169,10 @@
                                 android:textSize="13sp"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-                            <TextView
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                                 android:id="@+id/tv_change_origin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_tv_first_button"
                                 android:includeFontPadding="false"
                                 android:paddingStart="4dp"
                                 android:paddingTop="1dp"
@@ -181,7 +180,6 @@
                                 android:paddingBottom="1dp"
                                 android:singleLine="true"
                                 android:text="@string/change_origin"
-                                android:textColor="#ffffff"
                                 android:textSize="13sp" />
 
                         </LinearLayout>
@@ -194,13 +192,13 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp">
 
-                            <android.support.v7.widget.AppCompatImageView
+                            <ImageView
                                 android:id="@+id/iv_last"
                                 android:layout_width="18sp"
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/last_read"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_book_last_24dp"
+                                android:src="@drawable/ic_book_last"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -235,12 +233,11 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp">
 
-                            <RadioButton
+                            <com.kunfei.bookshelf.widget.views.ATERadioNoButton
                                 android:id="@+id/rb_zg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="4dp"
-                                android:background="@drawable/selector_radio_book_group"
                                 android:button="@null"
                                 android:checked="true"
                                 android:includeFontPadding="false"
@@ -254,12 +251,11 @@
                                 android:textSize="13sp"
                                 tools:ignore="RtlHardcoded" />
 
-                            <RadioButton
+                            <com.kunfei.bookshelf.widget.views.ATERadioNoButton
                                 android:id="@+id/rb_yf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="4dp"
-                                android:background="@drawable/selector_radio_book_group"
                                 android:button="@null"
                                 android:includeFontPadding="false"
                                 android:paddingStart="4dp"
@@ -272,12 +268,11 @@
                                 android:textSize="13sp"
                                 tools:ignore="RtlHardcoded" />
 
-                            <RadioButton
+                            <com.kunfei.bookshelf.widget.views.ATERadioNoButton
                                 android:id="@+id/rb_wj"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="4dp"
-                                android:background="@drawable/selector_radio_book_group"
                                 android:button="@null"
                                 android:includeFontPadding="false"
                                 android:paddingStart="4dp"
@@ -290,11 +285,10 @@
                                 android:textSize="13sp"
                                 tools:ignore="RtlHardcoded" />
 
-                            <RadioButton
+                            <com.kunfei.bookshelf.widget.views.ATERadioNoButton
                                 android:id="@+id/rb_bd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_radio_book_group"
                                 android:button="@null"
                                 android:includeFontPadding="false"
                                 android:paddingStart="4dp"
@@ -400,7 +394,7 @@
                 </FrameLayout>
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <Space
             android:layout_width="match_parent"

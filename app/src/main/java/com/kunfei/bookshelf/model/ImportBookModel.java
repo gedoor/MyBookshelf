@@ -1,16 +1,13 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.model;
 
-import com.kunfei.basemvplib.BaseModelImpl;
-import com.kunfei.bookshelf.bean.LocBookShelfBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.FormatWebText;
 
 import java.io.File;
 
@@ -50,7 +47,7 @@ public class ImportBookModel extends BaseModelImpl {
                     fileName = fileName.substring(0, lastDotIndex);
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
-                    bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
+                    bookInfoBean.setAuthor(fileName.substring(authorIndex));
                     fileName = fileName.substring(0, authorIndex).trim();
                 } else {
                     bookInfoBean.setAuthor("");
@@ -68,8 +65,8 @@ public class ImportBookModel extends BaseModelImpl {
                 bookInfoBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookInfoBean.setOrigin(getString(R.string.local));
 
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+                DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
+                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
             e.onNext(new LocBookShelfBean(isNew, bookShelfBean));
             e.onComplete();

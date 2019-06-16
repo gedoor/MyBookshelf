@@ -1,22 +1,28 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+import com.kunfei.bookshelf.constant.BookType;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
  * 书架item Bean
  */
 
 @Entity
-public class BookShelfBean implements Parcelable, Cloneable {
+public class BookShelfBean implements Cloneable, BaseBookBean {
     @Transient
     public static final String LOCAL_TAG = "loc_book";
     @Transient
@@ -41,50 +47,23 @@ public class BookShelfBean implements Parcelable, Cloneable {
     private String customCoverPath;
     private Boolean allowUpdate = true;
     private Boolean useReplaceRule = true;
+    private String variable;
 
     @Transient
-    private BookInfoBean bookInfoBean = new BookInfoBean();
+    private Map<String, String> variableMap;
+
+    @Transient
+    private BookInfoBean bookInfoBean;
 
     public BookShelfBean() {
 
     }
 
-    @Transient
-    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
-        @Override
-        public BookShelfBean createFromParcel(Parcel in) {
-            return new BookShelfBean(in);
-        }
-
-        @Override
-        public BookShelfBean[] newArray(int size) {
-            return new BookShelfBean[size];
-        }
-    };
-
-    protected BookShelfBean(Parcel in) {
-        noteUrl = in.readString();
-        durChapter = in.readInt();
-        durChapterPage = in.readInt();
-        finalDate = in.readLong();
-        tag = in.readString();
-        bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
-        serialNumber = in.readInt();
-        finalRefreshData = in.readLong();
-        group = in.readInt();
-        durChapterName = in.readString();
-        lastChapterName = in.readString();
-        chapterListSize = in.readInt();
-        customCoverPath = in.readString();
-        allowUpdate = in.readByte() != 0 && !tag.equals(LOCAL_TAG);
-        useReplaceRule = in.readByte() != 0;
-    }
-
-    @Generated(hash = 2111310267)
-    public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
-                         Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData,
-                         Integer group, String durChapterName, String lastChapterName, Integer chapterListSize,
-                         String customCoverPath, Boolean allowUpdate, Boolean useReplaceRule) {
+    @Generated(hash = 63205856)
+    public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate, Boolean hasUpdate,
+                         Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData, Integer group,
+                         String durChapterName, String lastChapterName, Integer chapterListSize, String customCoverPath,
+                         Boolean allowUpdate, Boolean useReplaceRule, String variable) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -101,80 +80,59 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.customCoverPath = customCoverPath;
         this.allowUpdate = allowUpdate;
         this.useReplaceRule = useReplaceRule;
+        this.variable = variable;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeInt(group);
-        dest.writeInt(durChapter);
-        dest.writeInt(durChapterPage);
-        dest.writeLong(finalDate);
-        dest.writeString(tag);
-        dest.writeParcelable(bookInfoBean, flags);
-        dest.writeInt(serialNumber);
-        dest.writeLong(finalRefreshData);
-        dest.writeString(durChapterName);
-        dest.writeString(lastChapterName);
-        dest.writeInt(chapterListSize);
-        dest.writeString(customCoverPath);
-        dest.writeByte((byte) (allowUpdate ? 1 : 0));
-        dest.writeByte((byte) (useReplaceRule ? 1 : 0));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        BookShelfBean bookShelfBean = (BookShelfBean) super.clone();
-        bookShelfBean.noteUrl = noteUrl;
-        bookShelfBean.tag = tag;
-        bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
-        return bookShelfBean;
-    }
-
-
-    public ChapterListBean getChapter(int index) {
-        if (realChapterListEmpty() || index < 0) {
-            ChapterListBean chapterListBean = new ChapterListBean();
-            chapterListBean.setDurChapterName("暂无");
-            chapterListBean.setDurChapterUrl("暂无");
-            return chapterListBean;
-        } else if (index < getChapterList().size()) {
-            return getChapterList().get(index);
-        } else {
-            durChapter = getChapterList().size() - 1;
-            return getChapterList().get(durChapter);
+    public Object clone() {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            return gson.fromJson(json, BookShelfBean.class);
+        } catch (Exception ignored) {
         }
+        return this;
     }
 
-    public BookmarkBean getBookmark(int index) {
-        if (realBookmarkListEmpty() || index < 0) {
-            return null;
-        } else if (index < getBookmarkList().size()) {
-            return getBookmarkList().get(index);
-        } else {
-            return getBookmarkList().get(getChapterList().size() - 1);
+    @Override
+    public String getVariable() {
+        return this.variable;
+    }
+
+    @Override
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    @Override
+    public void putVariable(String key, String value) {
+        if (variableMap == null) {
+            variableMap = new HashMap<>();
         }
+        variableMap.put(key, value);
+        variable = new Gson().toJson(variableMap);
     }
 
+    @Override
+    public Map<String, String> getVariableMap() {
+        if (variableMap == null && !TextUtils.isEmpty(variable)) {
+            variableMap = new Gson().fromJson(variable, MAP_STRING);
+        }
+        return variableMap;
+    }
+
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }
 
+    @Override
     public void setNoteUrl(String noteUrl) {
         this.noteUrl = noteUrl;
     }
 
     public int getDurChapter() {
         return durChapter < 0 ? 0 : durChapter;
-    }
-
-    public List<ChapterListBean> getChapterList() {
-        return getBookInfoBean().getChapterList();
     }
 
     public int getDurChapterPage() {
@@ -185,6 +143,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         return finalDate;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }
@@ -194,6 +153,9 @@ public class BookShelfBean implements Parcelable, Cloneable {
     }
 
     public BookInfoBean getBookInfoBean() {
+        if (bookInfoBean == null) {
+            bookInfoBean = new BookInfoBean();
+        }
         return bookInfoBean;
     }
 
@@ -202,7 +164,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
     }
 
     public boolean getHasUpdate() {
-        return hasUpdate;
+        return hasUpdate && !isAudio();
     }
 
     public int getNewChapters() {
@@ -277,12 +239,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.durChapterName = durChapterName;
     }
 
-    public void upDurChapterName() {
-        if (getChapterList().size() > durChapter) {
-            durChapterName = getChapterList().get(durChapter).getDurChapterName();
-        }
-    }
-
     public String getLastChapterName() {
         return this.lastChapterName;
     }
@@ -291,22 +247,13 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.lastChapterName = lastChapterName;
     }
 
-    public void upLastChapterName() {
-        if (getChapterList().size() > 0) {
-            lastChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
-        }
-    }
-
     public int getUnreadChapterNum() {
         int num = getChapterListSize() - getDurChapter() - 1;
         return num < 0 ? 0 : num;
     }
 
     public int getChapterListSize() {
-        if (getChapterList().size() == 0) {
-            return this.chapterListSize == null ? 0 : this.chapterListSize;
-        }
-        return getChapterList().size();
+        return this.chapterListSize == null ? 0 : this.chapterListSize;
     }
 
     public void setChapterListSize(Integer chapterListSize) {
@@ -329,26 +276,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.allowUpdate = allowUpdate;
     }
 
-    public boolean realChapterListEmpty() {
-        return getChapterList().isEmpty();
-    }
-
-    public void setChapterList(List<ChapterListBean> chapterList) {
-        this.bookInfoBean.setChapterList(chapterList);
-    }
-
-    public boolean realBookmarkListEmpty() {
-        return getBookmarkList().isEmpty();
-    }
-
-    public List<BookmarkBean> getBookmarkList() {
-        return this.bookInfoBean.getBookmarkList();
-    }
-
-    public int getBookmarkListSize() {
-        return getBookmarkList().size();
-    }
-
     public Boolean getUseReplaceRule() {
         return this.useReplaceRule;
     }
@@ -357,5 +284,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.useReplaceRule = useReplaceRule;
     }
 
-
+    public boolean isAudio() {
+        return Objects.equals(bookInfoBean.getBookSourceType(), BookType.AUDIO);
+    }
 }

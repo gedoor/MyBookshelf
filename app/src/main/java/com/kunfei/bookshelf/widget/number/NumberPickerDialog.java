@@ -2,12 +2,15 @@ package com.kunfei.bookshelf.widget.number;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.theme.ATH;
 
 public class NumberPickerDialog {
     private AlertDialog.Builder builder;
@@ -47,6 +50,8 @@ public class NumberPickerDialog {
 
     public NumberPickerDialog setListener(OnClickListener onClickListener) {
         builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            numberPicker.clearFocus();
+            SoftInputUtil.hideIMM(numberPicker);
             if (onClickListener != null) {
                 onClickListener.setNumber(numberPicker.getValue());
             }
@@ -56,7 +61,8 @@ public class NumberPickerDialog {
     }
 
     public void show() {
-        builder.show();
+        AlertDialog dialog = builder.show();
+        ATH.setAlertDialogTint(dialog);
     }
 
     public interface OnClickListener {

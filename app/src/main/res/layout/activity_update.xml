@@ -5,26 +5,25 @@
     android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?attr/actionBarStyle"
         android:transitionName="sharedView"
         tools:ignore="UnusedAttribute">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/ll_download"
@@ -55,24 +54,22 @@
 
     </LinearLayout>
 
-    <com.monke.mprogressbar.MHorProgressBar
-        android:id="@+id/hpb_download_progress"
+    <ProgressBar
+        android:id="@+id/pb_download"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:visibility="invisible"
         android:layout_margin="5dp"
-        app:bgdrawable="@color/btn_bg_press"
-        app:cantouch="false"
-        app:fontdrawable="?attr/colorAccent" />
+        android:max="100"
+        style="@android:style/Widget.ProgressBar.Horizontal" />
 
-    <TextView
+    <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
         android:id="@+id/tv_install_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="5dp"
         android:layout_margin="5dp"
-        android:background="@drawable/selector_pop_font_bg"
         android:gravity="center"
         android:text="安装更新"
         android:textSize="14sp" />

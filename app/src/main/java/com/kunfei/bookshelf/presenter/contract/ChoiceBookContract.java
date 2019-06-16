@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.presenter.contract;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.view.adapter.ChoiceBookAdapter;
 
 import java.util.List;
 
@@ -15,8 +14,6 @@ public interface ChoiceBookContract {
         void initPage();
 
         void toSearchBooks(String key);
-
-        void addBookToShelf(final SearchBookBean searchBookBean);
 
         String getTitle();
     }
@@ -31,15 +28,9 @@ public interface ChoiceBookContract {
 
         void loadMoreFinish(Boolean isAll);
 
-        void searchBookError();
-
-        void addBookShelfSuccess(List<SearchBookBean> searchBooks);
+        void searchBookError(String msg);
 
         void addBookShelfFailed(String massage);
-
-        ChoiceBookAdapter getSearchBookAdapter();
-
-        void updateSearchItem(int index);
 
         void startRefreshAnim();
     }

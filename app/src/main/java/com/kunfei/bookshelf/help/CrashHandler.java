@@ -1,10 +1,13 @@
 package com.kunfei.bookshelf.help;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
@@ -104,16 +107,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         collectDeviceInfo(mContext);
         //添加自定义信息
         addCustomInfo();
-        //使用Toast来显示异常信息
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                //在此处处理出现异常的情况
-                Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
-                Looper.loop();
+        try {
+            //复制错误报告到剪贴板
+            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, ex.getMessage());
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
             }
-        }.start();
+            //使用Toast来显示异常信息
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show());
+        } catch (Exception ignored) {
+        }
         //保存日志文件
         saveCrashInfo2File(ex);
         return false;
@@ -191,7 +195,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
             FileOutputStream fos = new FileOutputStream(path + fileName);
             fos.write(sb.toString().getBytes());
-            Log.i(TAG, "saveCrashInfo2File: "+sb.toString());
+            Log.i(TAG, "saveCrashInfo2File: " + sb.toString());
             fos.close();
         } catch (Exception e) {
             Log.e(TAG, "an error occured while writing file...", e);

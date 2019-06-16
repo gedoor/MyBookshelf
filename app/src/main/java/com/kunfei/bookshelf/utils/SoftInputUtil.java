@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.kunfei.bookshelf.MApplication;
+
 public class SoftInputUtil {
 
     //隐藏输入法
-    public static void hideIMM(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void hideIMM(View view) {
+        InputMethodManager imm = (InputMethodManager) MApplication.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null && view != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
@@ -39,10 +41,17 @@ public class SoftInputUtil {
         });
     }
 
-    private static int getScreenHeight(Activity activity) {
+    public static int getScreenHeight(Activity activity) {
         WindowManager manager = (activity).getWindowManager();
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.heightPixels;
+    }
+
+    public static int getScreenWidth(Activity activity) {
+        WindowManager manager = (activity).getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
     }
 }

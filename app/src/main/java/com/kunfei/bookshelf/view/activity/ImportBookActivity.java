@@ -1,20 +1,20 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
-import com.kunfei.bookshelf.presenter.ImportBookPresenter;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.presenter.ImportBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ImportBookContract;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BaseFileFragment;
 import com.kunfei.bookshelf.view.fragment.FileCategoryFragment;
 import com.kunfei.bookshelf.view.fragment.LocalBookFragment;
@@ -36,9 +36,9 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     @BindView(R.id.file_system_cb_selected_all)
     CheckBox mCbSelectAll;
     @BindView(R.id.file_system_btn_delete)
-    Button mBtnDelete;
+    TextView mBtnDelete;
     @BindView(R.id.file_system_btn_add_book)
-    Button mBtnAddBook;
+    TextView mBtnAddBook;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -72,15 +72,18 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_import_book);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setupActionBar();
+
     }
 
     @Override
     protected void initData() {
-
+        mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
+        mTlIndicator.setTabTextColors(getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
     }
 
     @Override
@@ -92,7 +95,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected List<String> createTabTitles() {
-        return Arrays.asList("手机目录", "智能导入");
+        return Arrays.asList(getString(R.string.files_tree), getString(R.string.intelligent_import));
     }
 
     @Override
@@ -139,13 +142,13 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                 (v) -> {
                     //弹出，确定删除文件吗。
                     new AlertDialog.Builder(this)
-                            .setTitle("删除文件")
-                            .setMessage("确定删除文件吗?")
+                            .setTitle(getString(R.string.del_file))
+                            .setMessage(getString(R.string.sure_del_file))
                             .setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
                                 //删除选中的文件
                                 mCurFragment.deleteCheckedFiles();
                                 //提示删除文件成功
-                                toast("删除文件成功");
+                                toast(R.string.del_file_success);
                             })
                             .setNegativeButton(getResources().getString(R.string.cancel), null)
                             .show();
@@ -170,31 +173,15 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
         }
     }
 
-    // 添加菜单
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book_import, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    //菜单状态
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     /**
      * 改变底部选择栏的状态
@@ -233,9 +220,9 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
         //重置全选的文字
         if (mCurFragment.isCheckedAll()) {
-            mCbSelectAll.setText("取消");
+            mCbSelectAll.setText(R.string.cancel);
         } else {
-            mCbSelectAll.setText("全选");
+            mCbSelectAll.setText(getString(R.string.select_all));
         }
 
     }

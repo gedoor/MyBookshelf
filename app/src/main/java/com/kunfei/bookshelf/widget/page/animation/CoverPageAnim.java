@@ -27,31 +27,28 @@ public class CoverPageAnim extends HorizonPageAnim {
     @Override
     public void drawMove(Canvas canvas) {
         int dis;
-        switch (mDirection) {
-            case NEXT:
-                dis = (int) (mViewWidth - mStartX + mTouchX);
-                if (dis > mViewWidth) {
-                    dis = mViewWidth;
-                }
-                //计算bitmap截取的区域
-                mSrcRect.left = mViewWidth - dis;
-                //计算bitmap在canvas显示的区域
-                mDestRect.right = dis;
-                canvas.drawBitmap(mNextBitmap, 0, 0, null);
-                canvas.drawBitmap(mCurBitmap, mSrcRect, mDestRect, null);
-                addShadow(dis, canvas);
-                break;
-            default:
-                dis = (int) (mTouchX - mStartX);
-                if (dis > mViewWidth) {
-                    dis = mViewWidth;
-                }
-                mSrcRect.left = mViewWidth - dis;
-                mDestRect.right = dis;
-                canvas.drawBitmap(mCurBitmap, 0, 0, null);
-                canvas.drawBitmap(mPreBitmap, mSrcRect, mDestRect, null);
-                addShadow(dis, canvas);
-                break;
+        if (mDirection == Direction.NEXT) {
+            dis = (int) (mViewWidth - mStartX + mTouchX);
+            if (dis > mViewWidth) {
+                dis = mViewWidth;
+            }
+            //计算bitmap截取的区域
+            mSrcRect.left = mViewWidth - dis;
+            //计算bitmap在canvas显示的区域
+            mDestRect.right = dis;
+            canvas.drawBitmap(bitmapList.get(2), 0, 0, null);
+            canvas.drawBitmap(bitmapList.get(1), mSrcRect, mDestRect, null);
+            addShadow(dis, canvas);
+        } else {
+            dis = (int) (mTouchX - mStartX);
+            if (dis > mViewWidth) {
+                dis = mViewWidth;
+            }
+            mSrcRect.left = mViewWidth - dis;
+            mDestRect.right = dis;
+            canvas.drawBitmap(bitmapList.get(1), 0, 0, null);
+            canvas.drawBitmap(bitmapList.get(0), mSrcRect, mDestRect, null);
+            addShadow(dis, canvas);
         }
     }
 
@@ -63,31 +60,28 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void startAnim() {
-        super.startAnim();
         int dx;
-        switch (mDirection) {
-            case NEXT:
-                if (isCancel) {
-                    int dis = (int) ((mViewWidth - mStartX) + mTouchX);
-                    if (dis > mViewWidth) {
-                        dis = mViewWidth;
-                    }
-                    dx = mViewWidth - dis;
-                } else {
-                    dx = (int) -(mTouchX + (mViewWidth - mStartX));
+        if (mDirection == Direction.NEXT) {
+            if (isCancel) {
+                int dis = (int) ((mViewWidth - mStartX) + mTouchX);
+                if (dis > mViewWidth) {
+                    dis = mViewWidth;
                 }
-                break;
-            default:
-                if (isCancel) {
-                    dx = (int) -(mTouchX - mStartX);
-                } else {
-                    dx = (int) (mViewWidth - (mTouchX - mStartX));
-                }
-                break;
+                dx = mViewWidth - dis;
+            } else {
+                dx = (int) -(mTouchX + (mViewWidth - mStartX));
+            }
+        } else {
+            if (isCancel) {
+                dx = (int) -(mTouchX - mStartX);
+            } else {
+                dx = (int) (mViewWidth - (mTouchX - mStartX));
+            }
         }
 
         //滑动速度保持一致
         int duration = (animationSpeed * Math.abs(dx)) / mViewWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
+        super.startAnim();
     }
 }

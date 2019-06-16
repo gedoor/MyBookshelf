@@ -2,10 +2,11 @@ package com.kunfei.bookshelf.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 public class ScrollTextView extends AppCompatTextView {
 

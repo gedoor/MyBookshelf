@@ -3,9 +3,11 @@ package com.kunfei.bookshelf.help.media;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -48,19 +50,20 @@ public class MediaStoreHelper {
             mResultCallback = resultCallback;
         }
 
+        @NonNull
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             return LoaderCreator.create(mContext.get(), id, args);
         }
 
         @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
             LocalFileLoader localFileLoader = (LocalFileLoader) loader;
             localFileLoader.parseData(data, mResultCallback);
         }
 
         @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
+        public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         }
     }
 }

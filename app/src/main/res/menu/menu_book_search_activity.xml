@@ -5,20 +5,11 @@
 
     <item
         android:id="@+id/action_book_source_manage"
-        android:icon="@drawable/ic_book_source_manage"
         android:title="@string/book_source_manage"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_donate"
-        android:icon="@drawable/ic_donate"
-        android:title="@string/donate"
-        app:showAsAction="never" />
+    <group android:id="@+id/source_group">
 
-    <item
-        android:id="@+id/action_get_hb"
-        android:icon="@drawable/ic_donate"
-        android:title="领支付宝红包"
-        app:showAsAction="never" />
+    </group>
 
 </menu>

@@ -1,7 +1,5 @@
 package com.kunfei.bookshelf.view.adapter;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +7,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,34 +26,32 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
-    private List<SearchBookBean> searchBookBeans;
+    private List<SearchBookBean> allBookBeans;
     private BaseListAdapter.OnItemClickListener onItemClickListener;
     private BaseListAdapter.OnItemLongClickListener onItemLongClickListener;
-    private Context mContext;
 
-    public ChangeSourceAdapter(Context context, Boolean needLoadMore) {
+    public ChangeSourceAdapter(Boolean needLoadMore) {
         super(needLoadMore);
-        mContext = context;
-        searchBookBeans = new ArrayList<>();
+        allBookBeans = new ArrayList<>();
     }
 
     public void addSourceAdapter(SearchBookBean value) {
-        searchBookBeans.add(value);
+        allBookBeans.add(value);
         notifyDataSetChanged();
     }
 
     public void addAllSourceAdapter(List<SearchBookBean> value) {
-        searchBookBeans.addAll(value);
+        allBookBeans.addAll(value);
         notifyDataSetChanged();
     }
 
     public void reSetSourceAdapter() {
-        searchBookBeans.clear();
-            notifyDataSetChanged();
+        allBookBeans.clear();
+        notifyDataSetChanged();
     }
 
     public void removeData(int pos) {
-        DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBeans.get(pos));
+        DbHelper.getDaoSession().getSearchBookBeanDao().delete(allBookBeans.get(pos));
         getSearchBookBeans().remove(pos);
         notifyItemRemoved(pos);
     }
@@ -67,7 +65,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public List<SearchBookBean> getSearchBookBeans() {
-        return searchBookBeans;
+        return allBookBeans;
     }
 
     @Override
@@ -79,13 +77,13 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     public void onBindIViewHolder(RecyclerView.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
-        if (isEmpty(searchBookBeans.get(position).getLastChapter())) {
+        myViewHolder.tvBookSource.setText(allBookBeans.get(position).getOrigin());
+        if (isEmpty(allBookBeans.get(position).getLastChapter())) {
             myViewHolder.tvLastChapter.setText(R.string.no_last_chapter);
         } else {
-            myViewHolder.tvLastChapter.setText(searchBookBeans.get(position).getLastChapter());
+            myViewHolder.tvLastChapter.setText(allBookBeans.get(position).getLastChapter());
         }
-        if (searchBookBeans.get(position).getIsCurrentSource()) {
+        if (allBookBeans.get(position).getIsCurrentSource()) {
             myViewHolder.ivChecked.setVisibility(View.VISIBLE);
         } else {
             myViewHolder.ivChecked.setVisibility(View.INVISIBLE);
@@ -110,7 +108,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getICount() {
-        return searchBookBeans.size();
+        return allBookBeans.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

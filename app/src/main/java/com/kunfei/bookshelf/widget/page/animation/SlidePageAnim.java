@@ -22,71 +22,64 @@ public class SlidePageAnim extends HorizonPageAnim {
     @Override
     public void drawMove(Canvas canvas) {
         int dis;
-        switch (mDirection) {
-            case NEXT:
-                //左半边的剩余区域
-                dis = (int) (mScreenWidth - mStartX + mTouchX);
-                if (dis > mScreenWidth) {
-                    dis = mScreenWidth;
-                }
-                //计算bitmap截取的区域
-                mSrcRect.left = mScreenWidth - dis;
-                //计算bitmap在canvas显示的区域
-                mDestRect.right = dis;
-                //计算下一页截取的区域
-                mNextSrcRect.right = mScreenWidth - dis;
-                //计算下一页在canvas显示的区域
-                mNextDestRect.left = dis;
+        if (mDirection == Direction.NEXT) {//左半边的剩余区域
+            dis = (int) (mScreenWidth - mStartX + mTouchX);
+            if (dis > mScreenWidth) {
+                dis = mScreenWidth;
+            }
+            //计算bitmap截取的区域
+            mSrcRect.left = mScreenWidth - dis;
+            //计算bitmap在canvas显示的区域
+            mDestRect.right = dis;
+            //计算下一页截取的区域
+            mNextSrcRect.right = mScreenWidth - dis;
+            //计算下一页在canvas显示的区域
+            mNextDestRect.left = dis;
 
-                canvas.drawBitmap(mNextBitmap, mNextSrcRect, mNextDestRect, null);
-                canvas.drawBitmap(mCurBitmap, mSrcRect, mDestRect, null);
-                break;
-            default:
-                dis = (int) (mTouchX - mStartX);
-                if (dis < 0) {
-                    dis = 0;
-                    mStartX = mTouchX;
-                }
-                mSrcRect.left = mScreenWidth - dis;
-                mDestRect.right = dis;
+            canvas.drawBitmap(bitmapList.get(2), mNextSrcRect, mNextDestRect, null);
+            canvas.drawBitmap(bitmapList.get(1), mSrcRect, mDestRect, null);
+        } else {
+            dis = (int) (mTouchX - mStartX);
+            if (dis < 0) {
+                dis = 0;
+                mStartX = mTouchX;
+            }
+            mSrcRect.left = mScreenWidth - dis;
+            mDestRect.right = dis;
 
-                //计算下一页截取的区域
-                mNextSrcRect.right = mScreenWidth - dis;
-                //计算下一页在canvas显示的区域
-                mNextDestRect.left = dis;
+            //计算下一页截取的区域
+            mNextSrcRect.right = mScreenWidth - dis;
+            //计算下一页在canvas显示的区域
+            mNextDestRect.left = dis;
 
-                canvas.drawBitmap(mCurBitmap, mNextSrcRect, mNextDestRect, null);
-                canvas.drawBitmap(mPreBitmap, mSrcRect, mDestRect, null);
-                break;
+            canvas.drawBitmap(bitmapList.get(1), mNextSrcRect, mNextDestRect, null);
+            canvas.drawBitmap(bitmapList.get(0), mSrcRect, mDestRect, null);
         }
     }
 
     @Override
     public void startAnim() {
-        super.startAnim();
         int dx;
-        switch (mDirection) {
-            case NEXT:
-                if (isCancel) {
-                    int dis = (int) ((mScreenWidth - mStartX) + mTouchX);
-                    if (dis > mScreenWidth) {
-                        dis = mScreenWidth;
-                    }
-                    dx = mScreenWidth - dis;
-                } else {
-                    dx = (int) -(mTouchX + (mScreenWidth - mStartX));
+        if (mDirection == Direction.NEXT) {
+            if (isCancel) {
+                int dis = (int) ((mScreenWidth - mStartX) + mTouchX);
+                if (dis > mScreenWidth) {
+                    dis = mScreenWidth;
                 }
-                break;
-            default:
-                if (isCancel) {
-                    dx = (int) -Math.abs(mTouchX - mStartX);
-                } else {
-                    dx = (int) (mScreenWidth - (mTouchX - mStartX));
-                }
-                break;
+                dx = mScreenWidth - dis;
+            } else {
+                dx = (int) -(mTouchX + (mScreenWidth - mStartX));
+            }
+        } else {
+            if (isCancel) {
+                dx = (int) -Math.abs(mTouchX - mStartX);
+            } else {
+                dx = (int) (mScreenWidth - (mTouchX - mStartX));
+            }
         }
         //滑动速度保持一致
         int duration = (animationSpeed * Math.abs(dx)) / mScreenWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
+        super.startAnim();
     }
 }

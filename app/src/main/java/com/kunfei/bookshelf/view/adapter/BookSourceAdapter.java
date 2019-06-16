@@ -1,7 +1,5 @@
 package com.kunfei.bookshelf.view.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.view.activity.SourceEditActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
+import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.model.BookSourceManager;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookSourceActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 
@@ -36,7 +34,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     private int index;
     private int sort;
 
-    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+    private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
         public void onSwiped(int adapterPosition) {
 
@@ -66,7 +64,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         activity.upGroupMenu();
     }
 
-    private void allDataList(List<BookSourceBean> bookSourceBeanList) {
+    private void setAllDataList(List<BookSourceBean> bookSourceBeanList) {
         this.allDataList = bookSourceBeanList;
         notifyDataSetChanged();
         activity.upDateSelectAll();
@@ -86,7 +84,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return selectDataS;
     }
 
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+    public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
@@ -103,6 +101,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
         if (sort != 2) {
             holder.topView.setVisibility(View.VISIBLE);
         } else {
@@ -127,32 +126,24 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             notifyDataSetChanged();
         });
         holder.topView.setOnClickListener(view -> {
-            allDataList(BookSourceManager.getAllBookSource());
+            setAllDataList(BookSourceManager.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
-            if (sort == 0) {
-                moveData.setSerialNumber(0);
-            } else if (sort == 1) {
-                int maxWeight = allDataList.get(0).getWeight();
-                moveData.setWeight(maxWeight + 1);
-                BookshelfHelp.saveBookSource(moveData);
-            }
             dataList.remove(position);
             notifyItemRemoved(position);
             dataList.add(0, moveData);
             notifyItemInserted(0);
-
-            if (dataList.size() != allDataList.size()) {
-                for (int i = 0; i < allDataList.size(); i++) {
-                    if (moveData.equals(allDataList.get(i))) {
-                        index = i;
-                        break;
-                    }
-                }
-                BookSourceBean moveDataA = allDataList.get(index);
-                allDataList.remove(index);
-                allDataList.add(0, moveDataA);
+            if (sort == 1) {
+                int maxWeight = allDataList.get(0).getWeight();
+                moveData.setWeight(maxWeight + 1);
             }
-            activity.saveDate(allDataList);
+            if (dataList.size() != allDataList.size()) {
+                index = allDataList.indexOf(moveData);
+                allDataList.remove(index);
+                allDataList.add(0, moveData);
+                activity.saveDate(allDataList);
+            } else {
+                activity.saveDate(dataList);
+            }
         });
     }
 

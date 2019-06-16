@@ -12,7 +12,7 @@
     <item
         android:id="@+id/action_add_url"
         android:icon="@drawable/ic_add_online"
-        android:title="@string/add_book_url"
+        android:title="@string/add_url"
         app:showAsAction="never" />
 
     <item
@@ -28,21 +28,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_change_icon"
-        android:icon="@drawable/ic_face"
-        android:title="@string/change_icon"
+        android:id="@+id/action_arrange_bookshelf"
+        android:icon="@drawable/ic_arrange"
+        android:title="@string/arrange_bookshelf"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_clear_cache"
-        android:icon="@drawable/ic_clear_cache"
-        android:title="@string/clear_content"
+        android:id="@+id/action_web_start"
+        android:icon="@drawable/ic_web_service_phone"
+        android:title="@string/web_menu"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_clearBookshelf"
-        android:icon="@drawable/ic_clear_all"
-        android:title="@string/clear_bookshelf"
-        app:showAsAction="never" />
-
 </menu>

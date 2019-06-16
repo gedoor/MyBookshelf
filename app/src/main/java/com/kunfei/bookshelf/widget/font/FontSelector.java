@@ -2,22 +2,23 @@ package com.kunfei.bookshelf.widget.font;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.DocumentHelper;
-import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
 
 import java.io.File;
 
 public class FontSelector {
     private AlertDialog.Builder builder;
     private FontAdapter adapter;
-    private Context context;
     private String fontPath;
     private OnThisListener thisListener;
     private AlertDialog alertDialog;
@@ -29,7 +30,7 @@ public class FontSelector {
         builder.setView(view);
         builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
-        fontPath = FileUtil.getSdCardPath() + "/Fonts";
+        fontPath = FileUtils.getSdCardPath() + "/Fonts";
         adapter = new FontAdapter(context, selectPath,
                 new OnThisListener() {
                     @Override
@@ -71,6 +72,7 @@ public class FontSelector {
 
     public void show() {
         alertDialog = builder.show();
+        ATH.setAlertDialogTint(alertDialog);
     }
 
     private File[] getFontFiles() {

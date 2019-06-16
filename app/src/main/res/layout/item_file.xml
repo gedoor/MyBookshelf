@@ -12,16 +12,16 @@
         android:layout_width="60dp"
         android:layout_height="match_parent">
         <!--文件夹标识或已选文件标识-->
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/file_iv_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="center"
             android:visibility="gone"
             app:tint="@color/tv_text_default"
-            tools:src="@drawable/ic_folder_black_24dp" />
+            tools:src="@drawable/ic_folder" />
         <!--选择是否添加文件-->
-        <CheckBox
+        <com.kunfei.bookshelf.widget.views.ATECheckBox
             android:id="@+id/file_cb_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,12 +54,11 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
                 android:id="@+id/file_tv_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/selector_tv_first_button"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:text="TXT"

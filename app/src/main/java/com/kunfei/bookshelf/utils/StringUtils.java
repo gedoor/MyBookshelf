@@ -1,23 +1,27 @@
 package com.kunfei.bookshelf.utils;
 
-import android.support.annotation.StringRes;
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.StringRes;
+
 import com.kunfei.bookshelf.MApplication;
 
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * Created by newbiechen on 17-4-22.
- * 对文字操作的工具类
- */
+import static android.text.TextUtils.isEmpty;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     private static final String TAG = "StringUtils";
     private static final int HOUR_OF_DAY = 24;
@@ -28,13 +32,13 @@ public class StringUtils {
     //将时间转换成日期
     public static String dateConvert(long time, String pattern) {
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
     }
 
     //将日期转换成昨天、今天、明天
     public static String dateConvert(String source, String pattern) {
-        DateFormat format = new SimpleDateFormat(pattern);
+        @SuppressLint("SimpleDateFormat") DateFormat format = new SimpleDateFormat(pattern);
         Calendar calendar = Calendar.getInstance();
         try {
             Date date = format.parse(source);
@@ -54,9 +58,8 @@ public class StringUtils {
                 } else if (difDate < DAY_OF_YESTERDAY) {
                     return "昨天";
                 } else {
-                    DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    String value = convertFormat.format(date);
-                    return value;
+                    @SuppressLint("SimpleDateFormat") DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    return convertFormat.format(date);
                 }
             }
 
@@ -69,9 +72,8 @@ public class StringUtils {
             } else if (difDate < DAY_OF_YESTERDAY) {
                 return "昨天";
             } else {
-                DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String value = convertFormat.format(date);
-                return value;
+                @SuppressLint("SimpleDateFormat") DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
+                return convertFormat.format(date);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -129,22 +131,28 @@ public class StringUtils {
     }
 
     private static HashMap<Character, Integer> getChnMap() {
-        String cnStr = "零一二三四五六七八九十";
         HashMap<Character, Integer> map = new HashMap<>();
+        String cnStr = "零一二三四五六七八九十";
         char[] c = cnStr.toCharArray();
         for (int i = 0; i <= 10; i++) {
             map.put(c[i], i);
         }
-        map.put('〇', 0);
+        cnStr = "〇壹贰叁肆伍陆柒捌玖拾";
+        c = cnStr.toCharArray();
+        for (int i = 0; i <= 10; i++) {
+            map.put(c[i], i);
+        }
         map.put('两', 2);
         map.put('百', 100);
+        map.put('佰', 100);
         map.put('千', 1000);
+        map.put('仟', 1000);
         map.put('万', 10000);
         map.put('亿', 100000000);
         return map;
     }
 
-    // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
+    @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;
         int tmp = 0;
@@ -152,7 +160,7 @@ public class StringUtils {
         char[] cn = chNum.toCharArray();
 
         // "一零二五" 形式
-        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九]$")) {
+        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九壹贰叁肆伍陆柒捌玖]$")) {
             for (int i = 0; i < cn.length; i++) {
                 cn[i] = (char) (48 + ChnMap.get(cn[i]));
             }
@@ -207,7 +215,7 @@ public class StringUtils {
     public static String base64Decode(String str) {
         byte[] bytes = Base64.decode(str, Base64.DEFAULT);
         try {
-            return new String(bytes, "UTF-8");
+            return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return new String(bytes);
         }
@@ -236,7 +244,7 @@ public class StringUtils {
         return tmp.toString();
     }
 
-    public static boolean isJSONType(String str) {
+    public static boolean isJsonType(String str) {
         boolean result = false;
         if (!TextUtils.isEmpty(str)) {
             str = str.trim();
@@ -249,10 +257,139 @@ public class StringUtils {
         return result;
     }
 
-    public static boolean startWithIgnoreCase(String src, String obj) {
-        if (obj.length() > src.length()) {
-            return false;
+    public static boolean isJsonObject(String text) {
+        boolean result = false;
+        if (!TextUtils.isEmpty(text)) {
+            text = text.trim();
+            if (text.startsWith("{") && text.endsWith("}")) {
+                result = true;
+            }
         }
+        return result;
+    }
+
+    public static boolean isJsonArray(String text) {
+        boolean result = false;
+        if (!TextUtils.isEmpty(text)) {
+            text = text.trim();
+            if (text.startsWith("[") && text.endsWith("]")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isTrimEmpty(String text) {
+        if (text == null) return true;
+        if (text.length() == 0) return true;
+        return text.trim().length() == 0;
+    }
+
+    public static boolean startWithIgnoreCase(String src, String obj) {
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
+    }
+
+    public static boolean endWithIgnoreCase(String src, String obj) {
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
+        return src.substring(src.length() - obj.length()).equalsIgnoreCase(obj);
+    }
+
+    /**
+     * delimiter 分隔符
+     * elements 需要连接的字符数组
+     */
+    public static String join(CharSequence delimiter, CharSequence... elements) {
+        // 空指针判断
+        Objects.requireNonNull(delimiter);
+        Objects.requireNonNull(elements);
+
+        // Number of elements not likely worth Arrays.stream overhead.
+        // 此处用到了StringJoiner(JDK 8引入的类）
+        // 先构造一个以参数delimiter为分隔符的StringJoiner对象
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (CharSequence cs : elements) {
+            // 拼接字符
+            joiner.add(cs);
+        }
+        return joiner.toString();
+    }
+
+    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+        if (elements == null) return null;
+        if (delimiter == null) delimiter = ",";
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (CharSequence cs : elements) {
+            joiner.add(cs);
+        }
+        return joiner.toString();
+    }
+
+    public static boolean isContainNumber(String company) {
+        Pattern p = Pattern.compile("[0-9]");
+        Matcher m = p.matcher(company);
+        return m.find();
+    }
+
+    public static boolean isNumeric(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
+    }
+
+    public static String getBaseUrl(String url) {
+        if (url == null || !url.startsWith("http")) return null;
+        int index = url.indexOf("/", 9);
+        if (index == -1) {
+            return url;
+        }
+        return url.substring(0, index);
+    }
+
+    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
+    public static String trim(String s) {
+        if (isEmpty(s)) return "";
+        int start = 0, len = s.length();
+        int end = len - 1;
+        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == '　'))) {
+            ++start;
+        }
+        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == '　'))) {
+            --end;
+        }
+        if (end < len) ++end;
+        return ((start > 0) || (end < len)) ? s.substring(start, end) : s;
+    }
+
+    public static String repeat(String str, int n) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            stringBuilder.append(str);
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String removeUTFCharacters(String data) {
+        if (data == null) return null;
+        Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+        Matcher m = p.matcher(data);
+        StringBuffer buf = new StringBuffer(data.length());
+        while (m.find()) {
+            String ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+            m.appendReplacement(buf, Matcher.quoteReplacement(ch));
+        }
+        m.appendTail(buf);
+        return buf.toString();
+    }
+
+    public static String formatHtml(String html) {
+        if (TextUtils.isEmpty(html)) return "";
+        return html.replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")// 替换特定标签为换行符
+                .replaceAll("<[script>]*.*?>|&nbsp;", "")// 删除script标签对和空格转义符
+                .replaceAll("\\s*\\n+\\s*", "\n　　")// 移除空行,并增加段前缩进2个汉字
+                .replaceAll("^[\\n\\s]+", "　　")//移除开头空行,并增加段前缩进2个汉字
+                .replaceAll("[\\n\\s]+$", "");//移除尾部空行
     }
 }
