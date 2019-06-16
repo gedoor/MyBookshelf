@@ -1,8 +1,8 @@
 package com.kunfei.bookshelf.widget.filepicker.picker;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,32 +72,14 @@ public class FilePicker extends ConfirmPopup<LinearLayout> implements FileAdapte
     @Override
     @NonNull
     protected LinearLayout makeCenterView() {
-        LinearLayout rootLayout = new LinearLayout(activity);
-        rootLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        rootLayout.setOrientation(LinearLayout.VERTICAL);
+        @SuppressLint("InflateParams") LinearLayout rootLayout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.view_file_picker, null);
 
-        RecyclerView recyclerView = new RecyclerView(activity);
+        RecyclerView recyclerView = rootLayout.findViewById(R.id.rv_file);
         recyclerView.addItemDecoration(new DividerItemDecoration(activity, LinearLayout.VERTICAL));
-        recyclerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(adapter);
-        rootLayout.addView(recyclerView);
 
-        emptyView = new TextView(activity);
-        LinearLayout.LayoutParams txtParams = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-        txtParams.gravity = Gravity.CENTER;
-        emptyView.setLayoutParams(txtParams);
-        emptyView.setGravity(Gravity.CENTER);
-        emptyView.setVisibility(View.GONE);
-        rootLayout.addView(emptyView);
-
-        return rootLayout;
-    }
-
-    @Nullable
-    @Override
-    protected View makeFooterView() {
-        View rootLayout = LayoutInflater.from(activity).inflate(R.layout.view_path, null);
+        emptyView = rootLayout.findViewById(R.id.tv_empty);
 
         RecyclerView pathView = rootLayout.findViewById(R.id.rv_path);
         pathView.setLayoutManager(new LinearLayoutManager(activity, LinearLayout.HORIZONTAL, false));
