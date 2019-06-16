@@ -239,17 +239,6 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
         this.backgroundColor = backgroundColor;
     }
 
-    public void setTitleView(View titleView) {
-        this.titleView = titleView;
-    }
-
-    public View getTitleView() {
-        if (null == titleView) {
-            throw new NullPointerException("please call show at first");
-        }
-        return titleView;
-    }
-
     public TextView getCancelButton() {
         if (null == cancelButton) {
             throw new NullPointerException("please call show at first");
@@ -262,14 +251,6 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
             throw new NullPointerException("please call show at first");
         }
         return submitButton;
-    }
-
-    public void setHeaderView(View headerView) {
-        this.headerView = headerView;
-    }
-
-    public void setFooterView(View footerView) {
-        this.footerView = footerView;
     }
 
     /**
@@ -394,12 +375,9 @@ public abstract class ConfirmPopup<V extends View> extends BasicPopup<View> {
         if (submitTextSize != 0) {
             submitButton.setTextSize(submitTextSize);
         }
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                onSubmit();
-            }
+        submitButton.setOnClickListener(v -> {
+            dismiss();
+            onSubmit();
         });
         topButtonLayout.addView(submitButton);
 
