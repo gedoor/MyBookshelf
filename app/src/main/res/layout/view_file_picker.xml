@@ -5,6 +5,17 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_path"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="@color/btn_bg_press_2" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_file"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,15 +28,5 @@
         android:layout_weight="1"
         android:gravity="center"
         android:visibility="gone" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.2dp"
-        android:background="@color/btn_bg_press_2" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_path"
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
 
 </LinearLayout>
