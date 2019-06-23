@@ -296,6 +296,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
+            intent.putExtra("inBookshelf", mPresenter.getInBookShelf());
             String key = String.valueOf(System.currentTimeMillis());
             String bookKey = "book" + key;
             intent.putExtra("bookKey", bookKey);
