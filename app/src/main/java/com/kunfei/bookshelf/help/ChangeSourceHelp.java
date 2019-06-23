@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.help;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -127,6 +128,7 @@ public class ChangeSourceHelp {
             newBook.setGroup(oldBook.getGroup());
             BookshelfHelp.removeFromBookShelf(oldBook);
             BookshelfHelp.saveBookToShelf(newBook);
+            DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
             e.onNext(new TwoDataBean<>(newBook, chapterBeanList));
             e.onComplete();
         });
