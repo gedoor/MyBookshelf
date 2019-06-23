@@ -120,9 +120,9 @@ public class BookshelfHelp {
             }
             return contentBean.getDurChapterContent();
         }
-        @SuppressLint("DefaultLocale")
-        File file = getBookFile(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()),
-                chapter.getDurChapterIndex(), chapter.getDurChapterName());
+        File file = new File(AppConstant.BOOK_CACHE_PATH
+                + formatFolderName(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()))
+                + File.separator + formatFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()) + FileHelp.SUFFIX_NB);
         if (!file.exists()) return null;
 
         byte[] contentByte = DocumentHelper.getBytes(file);
