@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -185,7 +186,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
-        saveDate(adapter.getDataList());
+        AsyncTask.execute(() -> DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(adapter.getDataList()));
         setResult(RESULT_OK);
     }
 
