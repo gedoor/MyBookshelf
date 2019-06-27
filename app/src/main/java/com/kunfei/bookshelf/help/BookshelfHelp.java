@@ -46,8 +46,9 @@ public class BookshelfHelp {
         return formatFolderName(bookName + "-" + tag);
     }
 
+    @SuppressLint("DefaultLocale")
     public static String getCacheFileName(int chapterIndex, String chapterName) {
-        return formatFileName(chapterIndex, chapterName);
+        return String.format("%05d-%s", chapterIndex, formatFolderName(chapterName));
     }
 
     /**
@@ -55,7 +56,7 @@ public class BookshelfHelp {
      */
     public static boolean isChapterCached(String folderName, int index, String fileName) {
         File file = new File(AppConstant.BOOK_CACHE_PATH + folderName
-                + File.separator + formatFileName(index, fileName) + FileHelp.SUFFIX_NB);
+                + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
         return file.exists();
     }
 
@@ -84,7 +85,7 @@ public class BookshelfHelp {
         }
         File file = new File(AppConstant.BOOK_CACHE_PATH
                 + formatFolderName(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag()))
-                + File.separator + formatFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()) + FileHelp.SUFFIX_NB);
+                + File.separator + getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()) + FileHelp.SUFFIX_NB);
         if (!file.exists()) return null;
 
         byte[] contentByte = DocumentHelper.getBytes(file);
@@ -103,7 +104,7 @@ public class BookshelfHelp {
      */
     public static void delChapter(String folderName, int index, String fileName) {
         FileHelp.deleteFile(AppConstant.BOOK_CACHE_PATH + folderName
-                + File.separator + formatFileName(index, fileName) + FileHelp.SUFFIX_NB);
+                + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
     }
 
     /**
@@ -132,12 +133,7 @@ public class BookshelfHelp {
      */
     public static File getBookFile(String folderName, int index, String fileName) {
         return FileHelp.getFile(AppConstant.BOOK_CACHE_PATH + formatFolderName(folderName)
-                + File.separator + formatFileName(index, fileName) + FileHelp.SUFFIX_NB);
-    }
-
-    @SuppressLint("DefaultLocale")
-    private static String formatFileName(int index, String fileName) {
-        return String.format("%05d-%s", index, formatFolderName(fileName));
+                + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
     }
 
     private static String formatFolderName(String folderName) {
