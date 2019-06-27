@@ -51,15 +51,6 @@ public class BookshelfHelp {
         return String.format("%05d-%s", chapterIndex, formatFolderName(chapterName));
     }
 
-    /**
-     * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存过)
-     */
-    public static boolean isChapterCached(String folderName, int index, String fileName) {
-        File file = new File(AppConstant.BOOK_CACHE_PATH + folderName
-                + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
-        return file.exists();
-    }
-
     public static boolean isChapterCached(String bookName, String tag, BaseChapterBean chapter, boolean isAudio) {
         if (isAudio) {
             BookContentBean contentBean = DbHelper.getDaoSession().getBookContentBeanDao().load(chapter.getDurChapterUrl());
@@ -70,7 +61,9 @@ public class BookshelfHelp {
             }
             return !TextUtils.isEmpty(contentBean.getDurChapterContent());
         }
-        return isChapterCached(getCachePathName(bookName, tag), chapter.getDurChapterIndex(), chapter.getDurChapterName());
+        File file = new File(AppConstant.BOOK_CACHE_PATH + getCachePathName(bookName, tag)
+                + File.separator + getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()) + FileHelp.SUFFIX_NB);
+        return file.exists();
     }
 
     public static String getChapterCache(BookShelfBean bookShelfBean, BookChapterBean chapter) {

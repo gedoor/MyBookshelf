@@ -1,9 +1,7 @@
 package com.kunfei.bookshelf.widget.page;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
-import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
@@ -191,18 +189,7 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean noChapterData(BookChapterBean chapter) {
-        if (book.isAudio()) {
-            BookContentBean contentBean = DbHelper.getDaoSession().getBookContentBeanDao().load(chapter.getDurChapterUrl());
-            if (contentBean == null) return false;
-            if (contentBean.outTime()) {
-                DbHelper.getDaoSession().getBookContentBeanDao().delete(contentBean);
-                return false;
-            }
-            return !TextUtils.isEmpty(contentBean.getDurChapterContent());
-        } else {
-            return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(book.getBookInfoBean().getName(), book.getTag()),
-                    chapter.getDurChapterIndex(), chapter.getDurChapterName());
-        }
+        return !BookshelfHelp.isChapterCached(book.getBookInfoBean().getName(), book.getTag(), chapter, book.isAudio());
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
