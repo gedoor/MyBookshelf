@@ -69,7 +69,7 @@ public class BookshelfHelp {
             }
             return !TextUtils.isEmpty(contentBean.getDurChapterContent());
         }
-        return isChapterCached(getCachePathName(bookName, tag), chapter.getDurChapterIndex(), getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()));
+        return isChapterCached(getCachePathName(bookName, tag), chapter.getDurChapterIndex(), chapter.getDurChapterName());
     }
 
     public static String getChapterCache(BookShelfBean bookShelfBean, BookChapterBean chapter) {

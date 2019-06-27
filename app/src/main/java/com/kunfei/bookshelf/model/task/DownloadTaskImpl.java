@@ -194,8 +194,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
             if (!BookshelfHelp.isChapterCached(
                     BookshelfHelp.getCachePathName(chapter.getBookName(), chapter.getTag()), chapter.getDurChapterIndex(),
-                    BookshelfHelp.getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName())
-            )) {
+                    chapter.getDurChapterName())) {
                 e.onNext(chapter);
             } else {
                 e.onError(new Exception("cached"));

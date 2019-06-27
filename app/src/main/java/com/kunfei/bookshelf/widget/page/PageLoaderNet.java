@@ -200,8 +200,8 @@ public class PageLoaderNet extends PageLoader {
             }
             return !TextUtils.isEmpty(contentBean.getDurChapterContent());
         } else {
-            return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(book.getBookInfoBean().getName(), book.getTag()), chapter.getDurChapterIndex(),
-                    BookshelfHelp.getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName()));
+            return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(book.getBookInfoBean().getName(), book.getTag()),
+                    chapter.getDurChapterIndex(), chapter.getDurChapterName());
         }
     }
 
