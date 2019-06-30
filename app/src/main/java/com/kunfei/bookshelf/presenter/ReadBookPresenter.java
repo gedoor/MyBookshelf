@@ -65,6 +65,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         Intent intent = activity.getIntent();
         int open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
         open_from = intent.getIntExtra("openFrom", open_from);
+        mView.setAdd(intent.getBooleanExtra("inBookshelf", true));
         if (open_from == OPEN_FROM_APP) {
             loadBook(intent);
         } else {
@@ -82,11 +83,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 if (!isEmpty(bookKey)) {
                     bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(bookKey);
                 }
-                String chapterListKey = intent.getStringExtra("chapterListKey");
-                if (!isEmpty(chapterListKey)) {
-                    chapterBeanList = (List<BookChapterBean>) BitIntentDataManager.getInstance().getData(chapterListKey);
-                    if (chapterBeanList == null) chapterBeanList = new ArrayList<>();
-                }
             }
             if (bookShelf == null && !isEmpty(mView.getNoteUrl())) {
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());
@@ -102,9 +98,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             }
             if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
                 bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
-            }
-            if (bookShelf != null) {
-                mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
             }
             e.onNext(bookShelf);
             e.onComplete();

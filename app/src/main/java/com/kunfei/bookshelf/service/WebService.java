@@ -54,15 +54,17 @@ public class WebService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action != null) {
-            switch (action) {
-                case ActionStartService:
-                    upServer();
-                    break;
-                case ActionDoneService:
-                    stopSelf();
-                    break;
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ActionStartService:
+                        upServer();
+                        break;
+                    case ActionDoneService:
+                        stopSelf();
+                        break;
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);

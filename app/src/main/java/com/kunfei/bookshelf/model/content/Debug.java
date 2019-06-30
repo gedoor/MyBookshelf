@@ -39,7 +39,7 @@ public class Debug {
         return TimeUtils.millis2String(System.currentTimeMillis() - startTime, DEBUG_TIME_FORMAT);
     }
 
-    static void printLog(String tag, String msg) {
+    public static void printLog(String tag, String msg) {
         printLog(tag, msg, true);
     }
 

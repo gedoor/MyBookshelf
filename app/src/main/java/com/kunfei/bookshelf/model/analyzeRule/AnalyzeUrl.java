@@ -13,6 +13,7 @@ import com.kunfei.bookshelf.utils.UrlEncoderUtils;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class AnalyzeUrl {
     private String host;
     private String urlPath;
     private String queryStr;
-    private Map<String, String> queryMap = new HashMap<>();
+    private Map<String, String> queryMap = new LinkedHashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;

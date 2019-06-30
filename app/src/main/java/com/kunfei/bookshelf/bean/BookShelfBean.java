@@ -155,6 +155,8 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     public BookInfoBean getBookInfoBean() {
         if (bookInfoBean == null) {
             bookInfoBean = new BookInfoBean();
+            bookInfoBean.setNoteUrl(noteUrl);
+            bookInfoBean.setTag(tag);
         }
         return bookInfoBean;
     }

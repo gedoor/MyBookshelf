@@ -7,7 +7,9 @@ import com.kunfei.bookshelf.utils.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
+import org.jsoup.select.Collector;
 import org.jsoup.select.Elements;
+import org.jsoup.select.Evaluator;
 import org.seimicrawler.xpath.JXNode;
 
 import java.util.ArrayList;
@@ -303,7 +305,19 @@ public class AnalyzeByJSoup {
                         }
                         break;
                     case "id":
-                        elements.add(temp.getElementById(rules[1]));
+                        Elements elementsById =Collector.collect(new Evaluator.Id(rules[1]), temp);
+                        if (rules.length == 3) {
+                            int index = Integer.parseInt(rules[2]);
+                            if (index < 0) {
+                                elements.add(elementsById.get(elementsById.size() + index));
+                            } else {
+                                elements.add(elementsById.get(index));
+                            }
+                        } else {
+                            if (needFilterElements)
+                                elementsById = filterElements(elementsById, filterRules);
+                            elements.addAll(elementsById);
+                        }
                         break;
                     case "text":
                         Elements elementsByText = temp.getElementsContainingOwnText(rules[1]);

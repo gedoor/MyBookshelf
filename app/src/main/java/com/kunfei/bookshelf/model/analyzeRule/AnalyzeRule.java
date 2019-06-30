@@ -64,6 +64,10 @@ public class AnalyzeRule {
         return setContent(body, null);
     }
 
+    public Object getContent() {
+        return object;
+    }
+
     public AnalyzeRule setContent(Object body, String baseUrl) {
         if (body == null) throw new AssertionError("Content cannot be null");
         isJSON = StringUtils.isJsonType(String.valueOf(body));
