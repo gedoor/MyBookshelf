@@ -704,9 +704,6 @@ public class ReadBookControl {
     }
 
     public int getPageMode() {
-        if (MApplication.isEInkMode) {
-            return 4;
-        }
         return pageMode;
     }
 
