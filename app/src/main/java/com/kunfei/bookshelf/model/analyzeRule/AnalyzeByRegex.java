@@ -16,7 +16,6 @@ import static android.text.TextUtils.isEmpty;
 
 public class AnalyzeByRegex {
 
-
     // 纯java模式正则表达式获取书籍详情信息
     public static void getInfosOfRegex(String res, String[] regs, int index,
                                        BookShelfBean bookShelfBean, AnalyzeRule analyzer, BookSourceBean bookSourceBean, String tag) {
