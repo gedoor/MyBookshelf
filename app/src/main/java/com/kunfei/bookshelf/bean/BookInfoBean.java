@@ -183,7 +183,7 @@ public class BookInfoBean implements Cloneable {
     }
 
     private boolean isEpub() {
-        return tag.equals(BookShelfBean.LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
+        return Objects.equals(tag, BookShelfBean.LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
     }
 
     public String getBookSourceType() {
