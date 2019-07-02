@@ -135,6 +135,15 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return durChapter < 0 ? 0 : durChapter;
     }
 
+    public int getDurChapter(int chapterListSize) {
+        if (durChapter < 0 | chapterListSize == 0) {
+            return 0;
+        } else if (durChapter >= chapterListSize) {
+            return chapterListSize - 1;
+        }
+        return durChapter;
+    }
+
     public int getDurChapterPage() {
         return durChapterPage < 0 ? 0 : durChapterPage;
     }
