@@ -9,6 +9,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByRegex;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import io.reactivex.Observable;
 
@@ -71,12 +72,12 @@ class BookInfo {
                 Debug.printLog(tag, "└详情预处理完成");
 
                 Debug.printLog(tag, "┌获取书名");
-                String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
+                String bookName = StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleBookName()));
                 if (!isEmpty(bookName)) bookInfoBean.setName(bookName);
                 Debug.printLog(tag, "└" + bookName);
 
                 Debug.printLog(tag, "┌获取作者");
-                String bookAuthor = analyzer.getString(bookSourceBean.getRuleBookAuthor());
+                String bookAuthor = StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleBookAuthor()));
                 if (!isEmpty(bookAuthor)) bookInfoBean.setAuthor(bookAuthor);
                 Debug.printLog(tag, "└" + bookAuthor);
 

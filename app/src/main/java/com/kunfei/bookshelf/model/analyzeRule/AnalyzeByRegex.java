@@ -74,11 +74,11 @@ public class AnalyzeByRegex {
             Debug.printLog(tag, "└详情预处理完成");
 
             Debug.printLog(tag, "┌获取书籍名称");
-            if (!isEmpty(infoList[0])) bookInfoBean.setName(infoList[0]);
+            if (!isEmpty(infoList[0])) bookInfoBean.setName(StringUtils.formatHtml(infoList[0]));
             Debug.printLog(tag, "└" + infoList[0]);
 
             Debug.printLog(tag, "┌获取作者名称");
-            if (!isEmpty(infoList[1])) bookInfoBean.setAuthor(infoList[1]);
+            if (!isEmpty(infoList[1])) bookInfoBean.setAuthor(StringUtils.formatHtml(infoList[1]));
             Debug.printLog(tag, "└" + infoList[1]);
 
             Debug.printLog(tag, "┌获取分类信息");

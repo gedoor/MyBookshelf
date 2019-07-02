@@ -202,12 +202,12 @@ class BookList {
         }
         Debug.printLog(tag, ">书籍网址:" + baseUrl);
         Debug.printLog(tag, "┌获取书名");
-        String bookName = analyzer.getString(bookSourceBean.getRuleBookName());
+        String bookName = StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleBookName()));
         Debug.printLog(tag, "└" + bookName);
         if (!TextUtils.isEmpty(bookName)) {
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者");
-            item.setAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor()));
+            item.setAuthor(StringUtils.formatHtml(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
             Debug.printLog(tag, "└" + item.getAuthor());
             Debug.printLog(tag, "┌获取封面");
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
@@ -231,14 +231,14 @@ class BookList {
         analyzer.setBook(item);
         NativeObject nativeObject = (NativeObject) object;
         Debug.printLog(tag, "┌获取书名", printLog);
-        String bookName = String.valueOf(nativeObject.get(ruleName));
+        String bookName = StringUtils.formatHtml(String.valueOf(nativeObject.get(ruleName)));
         Debug.printLog(tag, "└" + bookName, printLog);
         if (!isEmpty(bookName)) {
             item.setTag(tag);
             item.setOrigin(sourceName);
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者", printLog);
-            item.setAuthor(String.valueOf(nativeObject.get(ruleAuthor)));
+            item.setAuthor(StringUtils.formatHtml(String.valueOf(nativeObject.get(ruleAuthor))));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
             item.setKind(StringUtils.join(",", String.valueOf(nativeObject.get(ruleKind))));
@@ -266,14 +266,14 @@ class BookList {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
         Debug.printLog(tag, "┌获取书名", printLog);
-        String bookName = analyzer.getString(ruleName);
+        String bookName = StringUtils.formatHtml(analyzer.getString(ruleName));
         Debug.printLog(tag, "└" + bookName, printLog);
         if (!TextUtils.isEmpty(bookName)) {
             item.setTag(tag);
             item.setOrigin(sourceName);
             item.setName(bookName);
             Debug.printLog(tag, "┌获取作者", printLog);
-            item.setAuthor(analyzer.getString(ruleAuthor));
+            item.setAuthor(StringUtils.formatHtml(analyzer.getString(ruleAuthor)));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
             item.setKind(StringUtils.join(",", analyzer.getStringList(ruleKind)));
@@ -357,8 +357,8 @@ class BookList {
                 }
                 // 保存当前节点的书籍信息
                 item.setSearchInfo(
-                        infoList[0], // 保存书名
-                        infoList[1], // 保存作者
+                        StringUtils.formatHtml(infoList[0]), // 保存书名
+                        StringUtils.formatHtml(infoList[1]), // 保存作者
                         infoList[2], // 保存分类
                         infoList[3], // 保存终章
                         infoList[4], // 保存简介
