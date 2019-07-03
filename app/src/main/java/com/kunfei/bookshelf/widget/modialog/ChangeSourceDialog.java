@@ -133,8 +133,11 @@ public class ChangeSourceDialog extends BaseDialog {
         adapter = new ChangeSourceAdapter(false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
+            SearchBookBean bookBean = adapter.getSearchBookBeans().get(index);
+            if (!Objects.equals(book.getNoteUrl(), bookBean.getNoteUrl())) {
+                callback.changeSource(adapter.getSearchBookBeans().get(index));
+            }
             dismiss();
-            callback.changeSource(adapter.getSearchBookBeans().get(index));
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
             final String url = adapter.getSearchBookBeans().get(pos).getTag();
