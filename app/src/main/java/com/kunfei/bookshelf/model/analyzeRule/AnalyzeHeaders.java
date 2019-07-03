@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_USER_AGENT;
 
 /**
  * Created by GKF on 2018/3/2.
@@ -38,7 +39,6 @@ public class AnalyzeHeaders {
     }
 
     private static String getDefaultUserAgent() {
-        return preferences.getString(MApplication.getInstance().getString(R.string.pk_user_agent),
-                MApplication.getInstance().getString(R.string.pv_user_agent));
+        return preferences.getString(MApplication.getInstance().getString(R.string.pk_user_agent), DEFAULT_USER_AGENT);
     }
 }
