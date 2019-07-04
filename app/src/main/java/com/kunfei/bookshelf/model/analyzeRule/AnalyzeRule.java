@@ -171,6 +171,9 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
+            if (result instanceof String && rule.replaceRegex != null) {
+                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+            }
         }
         if (result == null) return new ArrayList<>();
         if (result instanceof String) {
@@ -228,6 +231,14 @@ public class AnalyzeRule {
                             result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
+                if (result instanceof String && rule.replaceRegex != null) {
+                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                }
+            } else {
+                if (rule.replaceRegex != null) {
+                    if (result == null) result = object;
+                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                }
             }
         }
         if (result == null) return "";
@@ -259,6 +270,9 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
+            if (result instanceof String && rule.replaceRegex != null) {
+                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+            }
         }
         return result;
     }
@@ -285,10 +299,14 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
+            if (result instanceof String && rule.replaceRegex != null) {
+                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+            }
         }
         if (result == null) {
             return new ArrayList<>();
         }
+        //noinspection ConstantConditions
         return (List<Object>) result;
     }
 
