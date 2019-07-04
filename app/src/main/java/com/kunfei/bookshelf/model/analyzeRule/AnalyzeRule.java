@@ -413,6 +413,8 @@ public class AnalyzeRule {
     public class SourceRule {
         Mode mode;
         String rule;
+        String replaceRegex = "";
+        String replacement = "";
 
         SourceRule(String ruleStr, Mode mainMode) {
             this.mode = mainMode;
@@ -437,6 +439,15 @@ public class AnalyzeRule {
                     rule = ruleStr;
                 } else {
                     rule = ruleStr;
+                }
+                //分离正则表达式
+                String[] ruleStrS = rule.trim().split("##");
+                rule = ruleStrS[0];
+                if (ruleStrS.length > 1) {
+                    replaceRegex = ruleStrS[1];
+                }
+                if (ruleStrS.length > 2) {
+                    replacement = ruleStrS[2];
                 }
             }
         }
