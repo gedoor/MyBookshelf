@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.kunfei.bookshelf.R;
 
 import java.text.DecimalFormat;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class NumberButton extends FrameLayout implements View.OnClickListener {
     public static final int INT = 0;

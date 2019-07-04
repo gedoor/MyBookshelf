@@ -18,19 +18,19 @@ import static android.text.TextUtils.isEmpty;
 public class EncodeConverter extends Converter.Factory {
     private String encode;
 
-    private EncodeConverter(){
+    private EncodeConverter() {
 
     }
 
-    private EncodeConverter(String encode){
+    private EncodeConverter(String encode) {
         this.encode = encode;
     }
 
-    public static EncodeConverter create(){
+    public static EncodeConverter create() {
         return new EncodeConverter();
     }
 
-    public static EncodeConverter create(String en){
+    public static EncodeConverter create(String en) {
         return new EncodeConverter(en);
     }
 

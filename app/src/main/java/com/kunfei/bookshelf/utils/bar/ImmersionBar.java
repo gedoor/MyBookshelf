@@ -378,12 +378,12 @@ public class ImmersionBar {
      *
      * @return the immersion bar
      */
-    public ImmersionBar hideBarDivider(){
+    public ImmersionBar hideBarDivider() {
         mBarParams.navigationBarDivider = false;
         return this;
     }
 
-    public ImmersionBar showBarDivider(){
+    public ImmersionBar showBarDivider() {
         mBarParams.navigationBarDivider = true;
         return this;
     }
@@ -979,7 +979,7 @@ public class ImmersionBar {
      * 导航栏字体深色或亮色
      * Status bar dark font immersion bar.
      *
-     * @param isDarkFont  the is dark font
+     * @param isDarkFont the is dark font
      * @return the immersion bar
      */
     public ImmersionBar navigationBarDarkFont(boolean isDarkFont) {
@@ -1522,7 +1522,7 @@ public class ImmersionBar {
             mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                     mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
             if (Build.VERSION.SDK_INT >= 28 && !mBarParams.navigationBarDivider)
-                    mWindow.setNavigationBarDividerColor(Color.TRANSPARENT);
+                mWindow.setNavigationBarDividerColor(Color.TRANSPARENT);
         }
         return uiFlags;
     }

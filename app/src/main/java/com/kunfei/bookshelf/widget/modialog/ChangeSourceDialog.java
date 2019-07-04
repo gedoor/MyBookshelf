@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hwangjr.rxbus.RxBus;
@@ -49,7 +52,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChangeSourceDialog {
+public class ChangeSourceDialog extends BaseDialog {
     private Context context;
     private TextView atvTitle;
     private ImageButton ibtStop;
@@ -65,20 +68,23 @@ public class ChangeSourceDialog {
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
     private Callback callback;
-    private BaseDialog dialog;
 
     public static ChangeSourceDialog builder(Context context, BookShelfBean bookShelfBean) {
         return new ChangeSourceDialog(context, bookShelfBean);
     }
 
-    private ChangeSourceDialog(Context context, BookShelfBean bookShelf) {
+    private ChangeSourceDialog(@NonNull Context context, BookShelfBean bookShelfBean) {
+        super(context, R.style.alertDialogTheme);
         this.context = context;
+        init(bookShelfBean);
+    }
+
+    private void init(BookShelfBean bookShelf) {
         this.book = bookShelf;
         compositeDisposable = new CompositeDisposable();
-        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_change_source, null);
         bindView(view);
-        dialog.setContentView(view);
+        setContentView(view);
         initData();
     }
 
@@ -91,6 +97,7 @@ public class ChangeSourceDialog {
         rvSource = view.findViewById(R.id.rf_rv_change_source);
         ibtStop.setVisibility(View.INVISIBLE);
 
+        rvSource.addItemDecoration(new DividerItemDecoration(context, LinearLayout.VERTICAL));
         rvSource.setBaseRefreshListener(this::reSearchBook);
         ibtStop.setOnClickListener(v -> stopChangeSource());
         searchView.onActionViewExpanded();
@@ -126,8 +133,11 @@ public class ChangeSourceDialog {
         adapter = new ChangeSourceAdapter(false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
-            dialog.dismiss();
-            callback.changeSource(adapter.getSearchBookBeans().get(index));
+            SearchBookBean bookBean = adapter.getSearchBookBeans().get(index);
+            if (!Objects.equals(book.getNoteUrl(), bookBean.getNoteUrl())) {
+                callback.changeSource(adapter.getSearchBookBeans().get(index));
+            }
+            dismiss();
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
             final String url = adapter.getSearchBookBeans().get(pos).getTag();
@@ -213,7 +223,7 @@ public class ChangeSourceDialog {
         rvSource.startRefresh();
         getSearchBookInDb(book);
         RxBus.get().register(this);
-        dialog.setOnDismissListener(dialog -> {
+        setOnDismissListener(dialog -> {
             RxBus.get().unregister(ChangeSourceDialog.this);
             compositeDisposable.dispose();
             if (searchBookModel != null) {
@@ -227,12 +237,12 @@ public class ChangeSourceDialog {
         return this;
     }
 
-    public ChangeSourceDialog show() {
-        dialog.show();
-        WindowManager.LayoutParams params = Objects.requireNonNull(dialog.getWindow()).getAttributes();
+    public void show() {
+        super.show();
+        WindowManager.LayoutParams params = Objects.requireNonNull(getWindow()).getAttributes();
         params.height = ScreenUtils.getAppSize()[1] - 60;
-        dialog.getWindow().setAttributes(params);
-        return this;
+        params.width = ScreenUtils.getAppSize()[0] - 60;
+        getWindow().setAttributes(params);
     }
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {

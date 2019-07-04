@@ -24,7 +24,11 @@
 
     <string name="navigation_drawer_open">打开侧边栏</string>
     <string name="navigation_drawer_close">关闭侧边栏</string>
-
+    <string name="dialog_title">提示</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_setting">去设置</string>
+    <string name="tip_cannot_jump_setting_page">无法跳转至设置界面</string>
     <string name="local">本地</string>
     <string name="search">搜索</string>
     <string name="net_error_10001">没有网络</string>
@@ -439,4 +443,6 @@
     <string name="clear_find_cache">清空发现缓存</string>
     <string name="edit_find">编辑发现</string>
     <string name="change_icon_summary">切换软件显示在桌面的图标</string>
+    <string name="dsm_start"><![CDATA[<]]></string>
+    <string name="dsm_end"><![CDATA[>]]></string>
 </resources>

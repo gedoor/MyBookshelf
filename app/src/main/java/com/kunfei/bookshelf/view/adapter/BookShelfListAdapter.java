@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +33,7 @@ import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
-import com.victor.loading.rotate.RotateLoading;
+import com.kunfei.bookshelf.widget.RotateLoading;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,8 +147,10 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 Glide.with(activity).load(bookInfoBean.getCoverUrl())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
                         .into(holder.ivCover);
             } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
                 Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
@@ -171,8 +172,10 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                         .into(holder.ivCover);
             } else {
                 Glide.with(activity).load(new File(bookShelfBean.getCustomCoverPath()))
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.img_cover_default)
                         .into(holder.ivCover);
             }
         }
@@ -232,6 +235,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     @Override
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
+        selectList.clear();
         if (null != newDataS && newDataS.size() > 0) {
             BookshelfHelp.order(newDataS, bookshelfPx);
             books = newDataS;
@@ -255,7 +259,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
+        ViewGroup flContent;
         ImageView ivCover;
         BadgeView bvUnread;
         TextView tvName;

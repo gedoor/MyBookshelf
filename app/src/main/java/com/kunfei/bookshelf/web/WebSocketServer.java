@@ -2,8 +2,6 @@ package com.kunfei.bookshelf.web;
 
 import com.kunfei.bookshelf.web.controller.SourceDebugWebSocket;
 
-import java.io.IOException;
-
 import fi.iki.elonen.NanoWSD;
 
 public class WebSocketServer extends NanoWSD {

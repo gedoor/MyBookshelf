@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -14,23 +13,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.TxtChapterRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.TxtChapterRuleContract;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.TxtChapterRuleAdapter;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 import com.kunfei.bookshelf.widget.modialog.TxtChapterRuleDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.picker.FilePicker;
+import kotlin.Unit;
 
 public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract.Presenter> implements TxtChapterRuleContract.View {
     private final int requestImport = 102;
@@ -175,34 +175,25 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     }
 
     private void selectReplaceRuleFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                FilePicker filePicker = new FilePicker(TxtChapterRuleActivity.this, FilePicker.FILE);
-                filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setItemHeight(30);
-                filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-                filePicker.setOnFilePickListener(s -> mPresenter.importDataSLocal(s));
-                filePicker.show();
-                filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-                filePicker.getSubmitButton().setOnClickListener(view -> {
-                    filePicker.dismiss();
-                    selectFileSys();
-                });
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.requestMorePermissions(TxtChapterRuleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.get_storage_per)
+                .onGranted((requestCode) -> {
+                    FilePicker filePicker = new FilePicker(TxtChapterRuleActivity.this, FilePicker.FILE);
+                    filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setItemHeight(30);
+                    filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                    filePicker.setOnFilePickListener(s -> mPresenter.importDataSLocal(s));
+                    filePicker.show();
+                    filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                    filePicker.getSubmitButton().setOnClickListener(view -> {
+                        filePicker.dismiss();
+                        selectFileSys();
+                    });
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     private void selectFileSys() {
@@ -210,28 +201,6 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/*");//设置类型
         startActivityForResult(intent, requestImport);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                selectReplaceRuleFile();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                TxtChapterRuleActivity.this.toast(R.string.please_grant_storage_permission);
-                PermissionUtils.toAppSetting(TxtChapterRuleActivity.this);
-            }
-        });
     }
 
     @Override

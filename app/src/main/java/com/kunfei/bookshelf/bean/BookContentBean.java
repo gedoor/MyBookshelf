@@ -96,5 +96,5 @@ public class BookContentBean {
         }
         return timeMillis < System.currentTimeMillis();
     }
-    
+
 }

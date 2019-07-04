@@ -1,5 +1,8 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
@@ -8,8 +11,6 @@ import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshLayout;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

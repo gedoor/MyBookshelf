@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.kunfei.basemvplib.BaseFragment;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.MApplication;
-
-import androidx.annotation.Nullable;
 
 public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T> implements IView {
     public final SharedPreferences preferences = MApplication.getConfigPreferences();

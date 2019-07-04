@@ -171,9 +171,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             DownloadChapterBean next = null;
             List<DownloadChapterBean> temp = new ArrayList<>(downloadChapters);
             for (DownloadChapterBean data : temp) {
-                boolean cached = BookshelfHelp.isChapterCached(
-                        BookshelfHelp.getCachePathName(data.getBookName(), data.getTag()), data.getDurChapterIndex(),
-                        BookshelfHelp.getCacheFileName(data.getDurChapterIndex(), data.getDurChapterName()));
+                boolean cached = BookshelfHelp.isChapterCached(data.getBookName(), data.getTag(), data, false);
                 if (cached) {
                     removeFromDownloadList(data);
                 } else {
@@ -192,10 +190,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         whenProgress(chapter);
         BookShelfBean bookShelfBean = BookshelfHelp.getBook(chapter.getNoteUrl());
         Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
-            if (!BookshelfHelp.isChapterCached(
-                    BookshelfHelp.getCachePathName(chapter.getBookName(), chapter.getTag()), chapter.getDurChapterIndex(),
-                    BookshelfHelp.getCacheFileName(chapter.getDurChapterIndex(), chapter.getDurChapterName())
-            )) {
+            if (!BookshelfHelp.isChapterCached(chapter.getBookName(), chapter.getTag(), chapter, false)) {
                 e.onNext(chapter);
             } else {
                 e.onError(new Exception("cached"));
@@ -222,9 +217,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
                     @Override
                     public void onError(Throwable e) {
                         removeFromDownloadList(chapter);
-                        if(TextUtils.equals(e.getMessage(), "cached")){
+                        if (TextUtils.equals(e.getMessage(), "cached")) {
                             whenNext(scheduler, false);
-                        }else {
+                        } else {
                             whenError(scheduler);
                         }
                     }
@@ -243,7 +238,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             return;
         }
 
-        if(success) {
+        if (success) {
             downloadBook.successCountAdd();
         }
         if (isFinishing()) {
@@ -262,9 +257,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
 
         if (isFinishing()) {
             stopDownload();
-            if(downloadBook.getSuccessCount() == 0) {
+            if (downloadBook.getSuccessCount() == 0) {
                 onDownloadError(downloadBook);
-            }else {
+            } else {
                 onDownloadComplete(downloadBook);
             }
         } else {

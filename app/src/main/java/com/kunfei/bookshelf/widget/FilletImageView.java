@@ -7,9 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.util.AttributeSet;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.appcompat.widget.AppCompatImageView;
+
+import com.kunfei.bookshelf.R;
 
 public class FilletImageView extends AppCompatImageView {
     float width, height;

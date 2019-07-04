@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import io.reactivex.annotations.Nullable;
 
-public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBean> {
+public class DownloadBookBean implements Parcelable, Comparable<DownloadBookBean> {
     private String name; //小说名
     private String noteUrl;
     private String coverUrl;
@@ -115,12 +115,12 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
         return successCount;
     }
 
-    public int getWaitingCount(){
+    public int getWaitingCount() {
         return this.downloadCount - this.successCount;
     }
 
     public synchronized void successCountAdd() {
-        if(this.successCount < this.downloadCount) {
+        if (this.successCount < this.downloadCount) {
             this.successCount += 1;
         }
     }

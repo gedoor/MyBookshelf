@@ -8,7 +8,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -19,15 +18,17 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.util.Objects;
 
-import cn.qqtheme.framework.picker.FilePicker;
+import kotlin.Unit;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -120,42 +121,33 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void selectDownloadPath(Preference preference) {
-        PermissionUtils.checkMorePermissions(getActivity(), MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-            @Override
-            public void onHasPermission() {
-                FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
-                picker.setBackgroundColor(getResources().getColor(R.color.background));
-                picker.setTopBackgroundColor(getResources().getColor(R.color.background));
-                picker.setRootPath(preference.getSummary().toString());
-                picker.setItemHeight(30);
-                picker.setOnFilePickListener(currentPath -> {
-                    if (!currentPath.contains(FileUtils.getSdCardPath())) {
+        new PermissionsCompat.Builder(settingActivity)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.set_download_per)
+                .onGranted((requestCode) -> {
+                    FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
+                    picker.setBackgroundColor(getResources().getColor(R.color.background));
+                    picker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                    picker.setRootPath(preference.getSummary().toString());
+                    picker.setItemHeight(30);
+                    picker.setOnFilePickListener(currentPath -> {
+                        if (!currentPath.contains(FileUtils.getSdCardPath())) {
+                            MApplication.getInstance().setDownloadPath(null);
+                        } else {
+                            MApplication.getInstance().setDownloadPath(currentPath);
+                        }
+                        preference.setSummary(MApplication.downloadPath);
+                    });
+                    picker.show();
+                    picker.getCancelButton().setText(R.string.restore_default);
+                    picker.getCancelButton().setOnClickListener(view -> {
+                        picker.dismiss();
                         MApplication.getInstance().setDownloadPath(null);
-                    } else {
-                        MApplication.getInstance().setDownloadPath(currentPath);
-                    }
-                    preference.setSummary(MApplication.downloadPath);
-                });
-                picker.show();
-                picker.getCancelButton().setText(R.string.restore_default);
-                picker.getCancelButton().setOnClickListener(view -> {
-                    picker.dismiss();
-                    MApplication.getInstance().setDownloadPath(null);
-                    preference.setSummary(MApplication.downloadPath);
-                });
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(getActivity(), R.string.set_download_per, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                Toast.makeText(getActivity(), R.string.set_download_per, Toast.LENGTH_SHORT).show();
-                PermissionUtils.requestMorePermissions(getActivity(), MApplication.PerList, MApplication.RESULT__PERMS);
-            }
-        });
+                        preference.setSummary(MApplication.downloadPath);
+                    });
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     @Override

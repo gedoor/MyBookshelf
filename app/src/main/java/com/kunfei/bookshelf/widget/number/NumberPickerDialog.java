@@ -2,16 +2,15 @@ package com.kunfei.bookshelf.widget.number;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ATH;
-
-import androidx.appcompat.app.AlertDialog;
 
 public class NumberPickerDialog {
     private AlertDialog.Builder builder;

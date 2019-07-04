@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatRadioButton;
+
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
-import androidx.appcompat.widget.AppCompatRadioButton;
 
 /**
  * @author Aidan Follestad (afollestad)

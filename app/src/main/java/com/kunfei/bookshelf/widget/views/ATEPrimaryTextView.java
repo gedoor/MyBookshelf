@@ -3,9 +3,9 @@ package com.kunfei.bookshelf.widget.views;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
 import androidx.appcompat.widget.AppCompatTextView;
+
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 /**
  * @author Aidan Follestad (afollestad)

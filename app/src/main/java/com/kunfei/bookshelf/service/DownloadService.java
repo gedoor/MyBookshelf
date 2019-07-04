@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
@@ -29,8 +32,6 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 

@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
 import com.kunfei.basemvplib.BitIntentDataManager;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -34,6 +35,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BlurTransformation;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
@@ -231,23 +233,27 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         coverPath = path;
         if (coverPath.startsWith("http")) {
             Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(ivCover);
             Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_gs)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         } else {
             File file = new File(coverPath);
             Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(ivCover);
             Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_gs)
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         }
@@ -284,15 +290,17 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                         }).show());
 
         tvRead.setOnClickListener(v -> {
+            if (!mPresenter.getInBookShelf()) {
+                BookshelfHelp.saveBookToShelf(mPresenter.getBookShelf());
+                DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(mPresenter.getChapterList());
+            }
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
+            intent.putExtra("inBookshelf", mPresenter.getInBookShelf());
             String key = String.valueOf(System.currentTimeMillis());
             String bookKey = "book" + key;
             intent.putExtra("bookKey", bookKey);
             BitIntentDataManager.getInstance().putData(bookKey, mPresenter.getBookShelf().clone());
-            String chapterListKey = "chapterList" + key;
-            intent.putExtra("chapterListKey", chapterListKey);
-            BitIntentDataManager.getInstance().putData(chapterListKey, mPresenter.getChapterList());
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
+import androidx.annotation.RequiresApi;
+
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.util.LinkedList;
-
-import androidx.annotation.RequiresApi;
 
 @SuppressWarnings("unused")
 public class ATESwitchPreference extends SwitchPreference {

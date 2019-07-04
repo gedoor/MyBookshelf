@@ -10,14 +10,15 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.kunfei.bookshelf.R;
-
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.kunfei.bookshelf.R;
+
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,8 +29,6 @@ public class RefreshRecyclerView extends FrameLayout {
     RefreshProgressBar rpb;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    @BindView(R.id.ll_header)
-    LinearLayout llHeader;
 
     private View noDataView;
     private View refreshErrorView;
@@ -141,8 +140,8 @@ public class RefreshRecyclerView extends FrameLayout {
         addView(view);
     }
 
-    public LinearLayout getHeader() {
-        return llHeader;
+    public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        recyclerView.addItemDecoration(decor);
     }
 
     public void setBaseRefreshListener(BaseRefreshListener baseRefreshListener) {

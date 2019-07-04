@@ -59,8 +59,8 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 for (BookChapterBean bookChapterBean : allChapter) {
                     if (bookChapterBean.getDurChapterName().contains(key)) {
                         bookChapterBeans.add(bookChapterBean);
-                        }
                     }
+                }
                 emitter.onNext(true);
                 emitter.onComplete();
             }).subscribeOn(Schedulers.io())
@@ -100,31 +100,31 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             holder.line.setVisibility(View.VISIBLE);
         }
-            if (payloads.size() > 0) {
-                holder.tvName.setSelected(true);
-                holder.tvName.getPaint().setFakeBoldText(true);
-                return;
-            }
+        if (payloads.size() > 0) {
+            holder.tvName.setSelected(true);
+            holder.tvName.getPaint().setFakeBoldText(true);
+            return;
+        }
         BookChapterBean bookChapterBean = isSearch ? bookChapterBeans.get(realPosition) : allChapter.get(realPosition);
         if (bookChapterBean.getDurChapterIndex() == index) {
-                holder.tvName.setTextColor(highlightColor);
-            } else {
-                holder.tvName.setTextColor(normalColor);
-            }
+            holder.tvName.setTextColor(highlightColor);
+        } else {
+            holder.tvName.setTextColor(normalColor);
+        }
 
         holder.tvName.setText(bookChapterBean.getDurChapterName());
         if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || bookChapterBean.getHasCache(bookShelfBean.getBookInfoBean())) {
-                holder.tvName.setSelected(true);
-                holder.tvName.getPaint().setFakeBoldText(true);
-            } else {
-                holder.tvName.setSelected(false);
-                holder.tvName.getPaint().setFakeBoldText(false);
-            }
+            holder.tvName.setSelected(true);
+            holder.tvName.getPaint().setFakeBoldText(true);
+        } else {
+            holder.tvName.setSelected(false);
+            holder.tvName.getPaint().setFakeBoldText(false);
+        }
 
-            holder.llName.setOnClickListener(v -> {
-                setIndex(realPosition);
-                itemClickListener.itemClick(bookChapterBean.getDurChapterIndex(), 0);
-            });
+        holder.llName.setOnClickListener(v -> {
+            setIndex(realPosition);
+            itemClickListener.itemClick(bookChapterBean.getDurChapterIndex(), 0);
+        });
     }
 
     @Override
@@ -144,8 +144,8 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public void setIndex(int index) {
-            this.index = index;
-            notifyItemChanged(this.index, 0);
+        this.index = index;
+        notifyItemChanged(this.index, 0);
     }
 
     static class ThisViewHolder extends RecyclerView.ViewHolder {

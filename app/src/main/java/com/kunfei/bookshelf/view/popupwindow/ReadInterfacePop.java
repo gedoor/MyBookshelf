@@ -9,15 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.activity.ReadStyleActivity;
@@ -25,11 +24,10 @@ import com.kunfei.bookshelf.widget.font.FontSelector;
 import com.kunfei.bookshelf.widget.number.NumberButton;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import kotlin.Unit;
 
 public class ReadInterfacePop extends FrameLayout {
     @BindView(R.id.vw_bg)
@@ -319,26 +317,27 @@ public class ReadInterfacePop extends FrameLayout {
 
         //选择字体
         fl_text_font.setOnClickListener(view -> {
-            List<String> per = PermissionUtils.checkMorePermissions(activity, MApplication.PerList);
-            if (per.isEmpty()) {
-                new FontSelector(activity, readBookControl.getFontPath())
-                        .setListener(new FontSelector.OnThisListener() {
-                            @Override
-                            public void setDefault() {
-                                clearFontPath();
-                            }
+            new PermissionsCompat.Builder(activity)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.get_storage_per)
+                    .onGranted((requestCode) -> {
+                        new FontSelector(activity, readBookControl.getFontPath())
+                                .setListener(new FontSelector.OnThisListener() {
+                                    @Override
+                                    public void setDefault() {
+                                        clearFontPath();
+                                    }
 
-                            @Override
-                            public void setFontPath(String fontPath) {
-                                setReadFonts(fontPath);
-                            }
-                        })
-                        .create()
-                        .show();
-            } else {
-                Toast.makeText(activity, "本软件需要存储权限来存储备份书籍信息", Toast.LENGTH_SHORT).show();
-                PermissionUtils.requestMorePermissions(activity, per, MApplication.RESULT__PERMS);
-            }
+                                    @Override
+                                    public void setFontPath(String fontPath) {
+                                        setReadFonts(fontPath);
+                                    }
+                                })
+                                .create()
+                                .show();
+                        return Unit.INSTANCE;
+                    })
+                    .request();
         });
 
         //长按清除字体

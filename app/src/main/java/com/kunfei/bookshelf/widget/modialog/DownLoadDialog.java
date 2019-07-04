@@ -12,24 +12,23 @@ import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
 
-public class DownLoadDialog {
+public class DownLoadDialog extends BaseDialog {
     private Context context;
     private EditText edtStart;
     private EditText edtEnd;
     private TextView tvCancel;
     private TextView tvDownload;
-    private BaseDialog dialog;
 
     public static DownLoadDialog builder(Context context, int startIndex, int endIndex, final int all) {
         return new DownLoadDialog(context, startIndex, endIndex, all);
     }
 
     private DownLoadDialog(Context context, int startIndex, int endIndex, final int all) {
+        super(context, R.style.alertDialogTheme);
         this.context = context;
-        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_download_choice, null);
         bindView(view, startIndex, endIndex, all);
-        dialog.setContentView(view);
+        setContentView(view);
     }
 
     private void bindView(View view, int startIndex, int endIndex, final int all) {
@@ -101,7 +100,7 @@ public class DownLoadDialog {
                 }
             }
         });
-        tvCancel.setOnClickListener(v -> dialog.dismiss());
+        tvCancel.setOnClickListener(v -> dismiss());
     }
 
     public DownLoadDialog setPositiveButton(Callback callback) {
@@ -112,16 +111,11 @@ public class DownLoadDialog {
                 } else {
                     callback.download(Integer.parseInt(edtStart.getText().toString()) - 1, Integer.parseInt(edtEnd.getText().toString()) - 1);
                 }
-                dialog.dismiss();
+                dismiss();
             } else {
                 Toast.makeText(context, "请输入要离线的章节", Toast.LENGTH_SHORT).show();
             }
         });
-        return this;
-    }
-
-    public DownLoadDialog show() {
-        dialog.show();
         return this;
     }
 

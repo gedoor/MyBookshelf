@@ -30,19 +30,19 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 
     //support
-    api 'androidx.core:core:1.1.0-alpha05'
-    api 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    api 'androidx.core:core:1.2.0-alpha02'
+    api 'androidx.appcompat:appcompat:1.1.0-beta01'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxjava:2.2.8'
+    api 'io.reactivex.rxjava2:rxjava:2.2.10'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //RxBus
     api 'com.hwangjr.rxbus:rxbus:2.0.1'
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.5.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.5.0'
+    api 'com.squareup.retrofit2:retrofit:2.6.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.6.0'
 
 }

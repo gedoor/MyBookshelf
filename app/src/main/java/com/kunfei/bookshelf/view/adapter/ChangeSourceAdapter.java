@@ -47,7 +47,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
 
     public void reSetSourceAdapter() {
         allBookBeans.clear();
-            notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void removeData(int pos) {

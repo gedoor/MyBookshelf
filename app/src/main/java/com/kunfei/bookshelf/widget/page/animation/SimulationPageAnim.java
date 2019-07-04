@@ -267,7 +267,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
             } else {
                 canvas.clipPath(mPath1, Region.Op.INTERSECT);
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         mPaint.setColorFilter(mColorMatrixFilter);
 
@@ -336,7 +337,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
 
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         int leftx;
         int rightx;
@@ -375,7 +377,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
 
             canvas.clipPath(mPath1);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         if (mIsRTandLB) {
             leftx = (int) (mBezierControl2.y);
@@ -442,7 +445,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 canvas.clipPath(mPath1, Region.Op.INTERSECT);
             }
             //canvas.clipPath(mPath1, Region.Op.INTERSECT);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
 
         canvas.drawBitmap(bitmap, 0, 0, null);

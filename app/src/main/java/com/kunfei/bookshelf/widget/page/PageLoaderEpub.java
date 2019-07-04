@@ -264,7 +264,7 @@ public class PageLoaderEpub extends PageLoader {
     @Override
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (TextUtils.isEmpty(book.getBookInfoBean().getCharset())) {
                 book.getBookInfoBean().setCharset("UTF-8");
             }

@@ -1583,6 +1583,7 @@ public abstract class PageLoader {
 
     public interface Callback {
         List<BookChapterBean> getChapterList();
+
         /**
          * 作用：章节切换的时候进行回调
          *
@@ -1607,8 +1608,8 @@ public abstract class PageLoader {
         /**
          * 作用：当页面改变的时候回调
          *
-         * @param chapterIndex 章节序号
-         * @param pageIndex 页数
+         * @param chapterIndex   章节序号
+         * @param pageIndex      页数
          * @param resetReadAloud 是否重置朗读
          */
         void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud);

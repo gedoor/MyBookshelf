@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
-import androidx.appcompat.widget.AppCompatTextView;
 
 public class ATEAccentBgTextView extends AppCompatTextView {
     public ATEAccentBgTextView(Context context) {

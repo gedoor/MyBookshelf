@@ -48,11 +48,11 @@ public class SearchBookBean implements BaseBookBean {
     @Transient
     private String bookInfoHtml;
 
-    public SearchBookBean(){
+    public SearchBookBean() {
 
     }
 
-    public SearchBookBean(String tag, String origin){
+    public SearchBookBean(String tag, String origin) {
         this.tag = tag;
         this.origin = origin;
     }
@@ -138,7 +138,7 @@ public class SearchBookBean implements BaseBookBean {
     }
 
     public String getLastChapter() {
-        return lastChapter==null?"":lastChapter;
+        return lastChapter == null ? "" : lastChapter;
     }
 
     public void setLastChapter(String lastChapter) {
@@ -257,7 +257,7 @@ public class SearchBookBean implements BaseBookBean {
 
     // 一次性存入搜索书籍节点信息
     public void setSearchInfo(String name, String author, String kind, String lastChapter,
-                              String introduce, String coverUrl, String noteUrl){
+                              String introduce, String coverUrl, String noteUrl) {
         this.name = name;
         this.author = author;
         this.kind = kind;

@@ -21,8 +21,9 @@ import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.WebDavHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ZipUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -39,6 +40,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import kotlin.Unit;
 
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 
@@ -130,37 +132,16 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
-            if (!WebDavHelp.initWebDav()) return super.onPreferenceTreeClick(preferenceScreen, preference);
-            PermissionUtils.checkMorePermissions(settingActivity, MApplication.PerList, new PermissionUtils.PermissionCheckCallback() {
-
-                /**
-                 * 用户已授予权限
-                 */
-                @Override
-                public void onHasPermission() {
-                    showRestoreFiles();
-                }
-
-                /**
-                 * 用户已拒绝过权限
-                 *
-                 * @param permission :被拒绝的权限
-                 */
-                @Override
-                public void onUserHasAlreadyTurnedDown(String... permission) {
-                    settingActivity.toast(R.string.backup_permission);
-                }
-
-                /**
-                 * 用户已拒绝过并且已勾选不再询问选项、用户第一次申请权限;
-                 *
-                 * @param permission :被拒绝的权限
-                 */
-                @Override
-                public void onAlreadyTurnedDownAndNoAsk(String... permission) {
-                    PermissionUtils.requestMorePermissions(settingActivity, permission, 1111);
-                }
-            });
+            if (!WebDavHelp.initWebDav())
+                return super.onPreferenceTreeClick(preferenceScreen, preference);
+            new PermissionsCompat.Builder(settingActivity)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.backup_permission)
+                    .onGranted((requestCode) -> {
+                        showRestoreFiles();
+                        return Unit.INSTANCE;
+                    })
+                    .request();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

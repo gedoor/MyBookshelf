@@ -27,7 +27,7 @@ import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceDebugAdapter;
-import com.victor.loading.rotate.RotateLoading;
+import com.kunfei.bookshelf.widget.RotateLoading;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

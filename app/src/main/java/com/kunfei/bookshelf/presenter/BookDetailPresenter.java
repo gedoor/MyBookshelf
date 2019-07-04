@@ -207,6 +207,8 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
      */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
+        searchBookBean.setName(bookShelf.getBookInfoBean().getName());
+        searchBookBean.setAuthor(bookShelf.getBookInfoBean().getAuthor());
         ChangeSourceHelp.changeBookSource(searchBookBean, bookShelf)
                 .subscribe(new MyObserver<TwoDataBean<BookShelfBean, List<BookChapterBean>>>() {
                     @Override

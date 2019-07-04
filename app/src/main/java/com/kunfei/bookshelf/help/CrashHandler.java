@@ -12,8 +12,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.kunfei.bookshelf.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -197,7 +195,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
             FileOutputStream fos = new FileOutputStream(path + fileName);
             fos.write(sb.toString().getBytes());
-            Log.i(TAG, "saveCrashInfo2File: "+sb.toString());
+            Log.i(TAG, "saveCrashInfo2File: " + sb.toString());
             fos.close();
         } catch (Exception e) {
             Log.e(TAG, "an error occured while writing file...", e);

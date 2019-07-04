@@ -75,10 +75,10 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void addBookUrl(String bookUrls) {
-        bookUrls=bookUrls.trim();
+        bookUrls = bookUrls.trim();
         if (TextUtils.isEmpty(bookUrls)) return;
 
-        String[] urls=bookUrls.split("\\n");
+        String[] urls = bookUrls.split("\\n");
 
         Observable.fromArray(urls)
                 .flatMap(this::addBookUrlO)

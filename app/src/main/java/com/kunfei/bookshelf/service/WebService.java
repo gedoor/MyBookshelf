@@ -54,15 +54,17 @@ public class WebService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action != null) {
-            switch (action) {
-                case ActionStartService:
-                    upServer();
-                    break;
-                case ActionDoneService:
-                    stopSelf();
-                    break;
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ActionStartService:
+                        upServer();
+                        break;
+                    case ActionDoneService:
+                        stopSelf();
+                        break;
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -82,7 +84,7 @@ public class WebService extends Service {
         if (inetAddress != null) {
             try {
                 httpServer.start();
-                webSocketServer.start(1000*30); // 通信超时设置
+                webSocketServer.start(1000 * 30); // 通信超时设置
                 isRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {

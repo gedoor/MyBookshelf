@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.widget.modialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,12 @@ import androidx.annotation.NonNull;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 
-public class BookmarkDialog {
+public class BookmarkDialog extends BaseDialog {
     private Context context;
     private TextView tvChapterName;
     private EditText tvContent;
     private View llEdit;
     private View tvOk;
-    private Dialog dialog;
     private BookmarkBean bookmarkBean;
     private View tvSave;
     private View tvDel;
@@ -29,12 +27,12 @@ public class BookmarkDialog {
     }
 
     private BookmarkDialog(Context context, @NonNull BookmarkBean bookmarkBean, boolean isAdd) {
+        super(context, R.style.alertDialogTheme);
         this.context = context;
         this.bookmarkBean = bookmarkBean;
-        dialog = new BaseDialog(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_bookmark, null);
         bindView(view);
-        dialog.setContentView(view);
+        setContentView(view);
         tvChapterName.setText(bookmarkBean.getChapterName());
         tvContent.setText(bookmarkBean.getContent());
         if (isAdd) {
@@ -58,27 +56,22 @@ public class BookmarkDialog {
     public BookmarkDialog setPositiveButton(Callback callback) {
         tvChapterName.setOnClickListener(v -> {
             callback.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
-            dialog.dismiss();
+            dismiss();
         });
         tvOk.setOnClickListener(v -> {
             bookmarkBean.setContent(tvContent.getText().toString());
             callback.saveBookmark(bookmarkBean);
-            dialog.dismiss();
+            dismiss();
         });
         tvSave.setOnClickListener(v -> {
             bookmarkBean.setContent(tvContent.getText().toString());
             callback.saveBookmark(bookmarkBean);
-            dialog.dismiss();
+            dismiss();
         });
         tvDel.setOnClickListener(v -> {
             callback.delBookmark(bookmarkBean);
-            dialog.dismiss();
+            dismiss();
         });
-        return this;
-    }
-
-    public BookmarkDialog show() {
-        dialog.show();
         return this;
     }
 

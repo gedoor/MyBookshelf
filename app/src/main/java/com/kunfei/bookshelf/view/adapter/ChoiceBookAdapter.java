@@ -5,14 +5,12 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookKindBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -47,11 +45,10 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
-                    .apply(new RequestOptions()
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
                     .into(myViewHolder.ivCover);
         }
         String title = searchBooks.get(position).getName();
@@ -144,7 +141,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
+        ViewGroup flContent;
         CoverImageView ivCover;
         TextView tvName;
         TextView tvState;
