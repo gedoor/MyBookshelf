@@ -61,7 +61,7 @@ public class AnalyzeRule {
     }
 
     public AnalyzeRule setContent(Object body) {
-        return setContent(body, null);
+        return setContent(body, baseUrl);
     }
 
     public Object getContent() {
@@ -72,7 +72,9 @@ public class AnalyzeRule {
         if (body == null) throw new AssertionError("Content cannot be null");
         isJSON = StringUtils.isJsonType(String.valueOf(body));
         object = body;
-        this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
+        if (baseUrl != null) {
+            this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
+        }
         objectChangedXP = true;
         objectChangedJS = true;
         objectChangedJP = true;
