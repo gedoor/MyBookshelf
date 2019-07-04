@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.constant;
 
 import com.google.gson.reflect.TypeToken;
+import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.MApplication;
 
 import java.io.File;
@@ -17,6 +18,8 @@ public class AppConstant {
 
     public static final String ActionStartService = "startService";
     public static final String ActionDoneService = "doneService";
+
+    public static final long TIME_OUT = BuildConfig.DEBUG ? 600 : 180;
 
     //Book Date Convert Format
     public static final String FORMAT_TIME = "HH:mm";
