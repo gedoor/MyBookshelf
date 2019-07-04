@@ -425,14 +425,11 @@ public class AnalyzeByJSoup {
             if (StringUtils.startWithIgnoreCase(ruleStr, "@CSS:")) {
                 isCss = true;
                 elementsRule = ruleStr.substring(5).trim();
+                return;
             }
             String[] ruleStrS;
             //分离正则表达式
-            if (isCss) {
-                ruleStrS = ruleStr.trim().split("##");
-            } else {
-                ruleStrS = ruleStr.trim().split("#+");
-            }
+            ruleStrS = ruleStr.trim().split("#+");
             elementsRule = ruleStrS[0];
             if (ruleStrS.length > 1) {
                 replaceRegex = ruleStrS[1];
