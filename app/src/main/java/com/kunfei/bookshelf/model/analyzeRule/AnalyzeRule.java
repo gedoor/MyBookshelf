@@ -87,7 +87,7 @@ public class AnalyzeRule {
      * 获取XPath解析类
      */
     private AnalyzeByXPath getAnalyzeByXPath(Object o) {
-        if (o != null) {
+        if (o != object) {
             return new AnalyzeByXPath().parse(o);
         }
         return getAnalyzeByXPath();
@@ -106,7 +106,7 @@ public class AnalyzeRule {
      * 获取JSOUP解析类
      */
     private AnalyzeByJSoup getAnalyzeByJSoup(Object o) {
-        if (o != null) {
+        if (o != object) {
             return new AnalyzeByJSoup().parse(o);
         }
         return getAnalyzeByJSoup();
@@ -125,7 +125,7 @@ public class AnalyzeRule {
      * 获取JSON解析类
      */
     private AnalyzeByJSonPath getAnalyzeByJSonPath(Object o) {
-        if (o != null) {
+        if (o != object) {
             return new AnalyzeByJSonPath().parse(o);
         }
         return getAnalyzeByJSonPath();
@@ -155,11 +155,10 @@ public class AnalyzeRule {
 
     @SuppressWarnings("unchecked")
     public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
-        Object result = null;
+        Object result = object;
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = object;
                     result = evalJS(rule.rule, result);
                     break;
                 case JSon:
@@ -210,12 +209,11 @@ public class AnalyzeRule {
     }
 
     public String getString(List<SourceRule> ruleList, boolean isUrl) throws Exception {
-        Object result = null;
+        Object result = object;
         for (SourceRule rule : ruleList) {
             if (!StringUtils.isTrimEmpty(rule.rule)) {
                 switch (rule.mode) {
                     case Js:
-                        if (result == null) result = object;
                         result = evalJS(rule.rule, result);
                         break;
                     case JSon:
@@ -232,12 +230,19 @@ public class AnalyzeRule {
                         }
                 }
                 if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                    if (rule.replaceFirst) {
+                        result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                    }
                 }
             } else {
                 if (!isEmpty(rule.replaceRegex)) {
-                    if (result == null) result = object;
-                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                    if (rule.replaceFirst) {
+                        result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                    }
                 }
             }
         }
@@ -252,13 +257,12 @@ public class AnalyzeRule {
      * 获取Element
      */
     public Object getElement(String ruleStr) throws Exception {
-        if (isEmpty(ruleStr)) return null;
+        if (isEmpty(ruleStr)) return object;
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = object;
                     result = evalJS(rule.rule, result);
                     break;
                 case JSon:
@@ -271,7 +275,11 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
             if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                if (rule.replaceFirst) {
+                    result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                } else {
+                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                }
             }
         }
         return result;
@@ -282,12 +290,11 @@ public class AnalyzeRule {
      */
     @SuppressWarnings("unchecked")
     public List<Object> getElements(String ruleStr) throws Exception {
-        Object result = null;
+        Object result = object;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
-                    if (result == null) result = object;
                     result = evalJS(rule.rule, result);
                     break;
                 case JSon:
@@ -300,7 +307,11 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
             if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                if (rule.replaceFirst) {
+                    result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                } else {
+                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                }
             }
         }
         if (result == null) {
@@ -433,6 +444,7 @@ public class AnalyzeRule {
         String rule;
         String replaceRegex = "";
         String replacement = "";
+        boolean replaceFirst = false;
 
         SourceRule(String ruleStr, Mode mainMode) {
             this.mode = mainMode;
@@ -466,6 +478,9 @@ public class AnalyzeRule {
                 }
                 if (ruleStrS.length > 2) {
                     replacement = ruleStrS[2];
+                }
+                if (ruleStrS.length > 3) {
+                    replaceFirst = true;
                 }
             }
         }
