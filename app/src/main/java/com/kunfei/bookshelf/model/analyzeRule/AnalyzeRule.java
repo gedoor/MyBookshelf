@@ -178,6 +178,8 @@ public class AnalyzeRule {
                     Matcher matcher = pattern.matcher(String.valueOf(result));
                     if (matcher.find()) {
                         result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
                     }
                 } else {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
@@ -245,6 +247,8 @@ public class AnalyzeRule {
                         Matcher matcher = pattern.matcher(String.valueOf(result));
                         if (matcher.find()) {
                             result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                        } else {
+                            result = "";
                         }
                     } else {
                         result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
@@ -294,6 +298,8 @@ public class AnalyzeRule {
                     Matcher matcher = pattern.matcher(String.valueOf(result));
                     if (matcher.find()) {
                         result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
                     }
                 } else {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
@@ -330,6 +336,8 @@ public class AnalyzeRule {
                     Matcher matcher = pattern.matcher(String.valueOf(result));
                     if (matcher.find()) {
                         result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
                     }
                 } else {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
