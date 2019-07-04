@@ -429,7 +429,7 @@ public class AnalyzeByJSoup {
             }
             String[] ruleStrS;
             //分离正则表达式
-            ruleStrS = ruleStr.trim().split("#+");
+            ruleStrS = ruleStr.trim().split("#");
             elementsRule = ruleStrS[0];
             if (ruleStrS.length > 1) {
                 replaceRegex = ruleStrS[1];
