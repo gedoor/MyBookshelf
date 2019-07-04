@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import androidx.annotation.Keep;
 
@@ -22,6 +21,7 @@ import javax.script.SimpleBindings;
 
 import retrofit2.Response;
 
+import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
@@ -148,7 +148,7 @@ public class AnalyzeRule {
     }
 
     public List<String> getStringList(String rule, boolean isUrl) throws Exception {
-        if (TextUtils.isEmpty(rule)) return null;
+        if (isEmpty(rule)) return null;
         List<SourceRule> ruleList = splitSourceRule(rule);
         return getStringList(ruleList, isUrl);
     }
@@ -171,7 +171,7 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
-            if (result instanceof String && rule.replaceRegex != null) {
+            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                 result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
             }
         }
@@ -179,7 +179,7 @@ public class AnalyzeRule {
         if (result instanceof String) {
             result = Arrays.asList(StringUtils.formatHtml((String) result).split("\n"));
         }
-        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
+        if (isUrl && !isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
             for (Object url : (List<Object>) result) {
                 String absoluteURL = NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(url));
@@ -200,7 +200,7 @@ public class AnalyzeRule {
     }
 
     public String getString(String ruleStr, boolean isUrl) throws Exception {
-        if (TextUtils.isEmpty(ruleStr)) return null;
+        if (isEmpty(ruleStr)) return null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         return getString(ruleList, isUrl);
     }
@@ -225,17 +225,17 @@ public class AnalyzeRule {
                         result = getAnalyzeByXPath(result).getString(rule.rule);
                         break;
                     case Default:
-                        if (isUrl && !TextUtils.isEmpty(baseUrl)) {
+                        if (isUrl && !isEmpty(baseUrl)) {
                             result = getAnalyzeByJSoup(result).getString0(rule.rule);
                         } else {
                             result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
-                if (result instanceof String && rule.replaceRegex != null) {
+                if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                 }
             } else {
-                if (rule.replaceRegex != null) {
+                if (!isEmpty(rule.replaceRegex)) {
                     if (result == null) result = object;
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                 }
@@ -252,7 +252,7 @@ public class AnalyzeRule {
      * 获取Element
      */
     public Object getElement(String ruleStr) throws Exception {
-        if (TextUtils.isEmpty(ruleStr)) return null;
+        if (isEmpty(ruleStr)) return null;
         Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
         for (SourceRule rule : ruleList) {
@@ -270,7 +270,7 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String && rule.replaceRegex != null) {
+            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                 result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
             }
         }
@@ -299,7 +299,7 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String && rule.replaceRegex != null) {
+            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                 result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
             }
         }
@@ -380,7 +380,7 @@ public class AnalyzeRule {
      */
     public List<SourceRule> splitSourceRule(String ruleStr) throws Exception {
         List<SourceRule> ruleList = new ArrayList<>();
-        if (TextUtils.isEmpty(ruleStr)) return ruleList;
+        if (isEmpty(ruleStr)) return ruleList;
         //检测Mode
         Mode mode;
         if (StringUtils.startWithIgnoreCase(ruleStr, "@XPath:")) {
@@ -409,7 +409,7 @@ public class AnalyzeRule {
         while (jsMatcher.find()) {
             if (jsMatcher.start() > start) {
                 tmp = ruleStr.substring(start, jsMatcher.start()).replaceAll("\n", "").trim();
-                if (!TextUtils.isEmpty(tmp)) {
+                if (!isEmpty(tmp)) {
                     ruleList.add(new SourceRule(tmp, mode));
                 }
             }
@@ -418,7 +418,7 @@ public class AnalyzeRule {
         }
         if (ruleStr.length() > start) {
             tmp = ruleStr.substring(start).replaceAll("\n", "").trim();
-            if (!TextUtils.isEmpty(tmp)) {
+            if (!isEmpty(tmp)) {
                 ruleList.add(new SourceRule(tmp, mode));
             }
         }
