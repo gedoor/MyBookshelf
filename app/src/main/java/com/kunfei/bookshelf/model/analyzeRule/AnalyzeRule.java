@@ -257,7 +257,13 @@ public class AnalyzeRule {
             } else {
                 if (!isEmpty(rule.replaceRegex)) {
                     if (rule.replaceFirst) {
-                        result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                        Pattern pattern = Pattern.compile(rule.replaceRegex);
+                        Matcher matcher = pattern.matcher(String.valueOf(result));
+                        if (matcher.find()) {
+                            result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                        } else {
+                            result = "";
+                        }
                     } else {
                         result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                     }
