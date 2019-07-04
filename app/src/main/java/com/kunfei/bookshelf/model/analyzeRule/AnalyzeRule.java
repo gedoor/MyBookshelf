@@ -157,7 +157,8 @@ public class AnalyzeRule {
 
     @SuppressWarnings("unchecked")
     public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
-        Object result = object;
+        Object result = null;
+        if (!ruleList.isEmpty()) result = object;
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
@@ -221,7 +222,8 @@ public class AnalyzeRule {
     }
 
     public String getString(List<SourceRule> ruleList, boolean isUrl) throws Exception {
-        Object result = object;
+        Object result = null;
+        if (!ruleList.isEmpty()) result = object;
         for (SourceRule rule : ruleList) {
             if (!StringUtils.isTrimEmpty(rule.rule)) {
                 switch (rule.mode) {
@@ -275,9 +277,8 @@ public class AnalyzeRule {
      * 获取Element
      */
     public Object getElement(String ruleStr) throws Exception {
-        if (isEmpty(ruleStr)) return object;
-        Object result = null;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
+        Object result = object;
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
@@ -314,8 +315,9 @@ public class AnalyzeRule {
      */
     @SuppressWarnings("unchecked")
     public List<Object> getElements(String ruleStr) throws Exception {
-        Object result = object;
         List<SourceRule> ruleList = splitSourceRule(ruleStr);
+        Object result = null;
+        if (!ruleList.isEmpty()) result = object;
         for (SourceRule rule : ruleList) {
             switch (rule.mode) {
                 case Js:
