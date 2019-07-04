@@ -173,7 +173,17 @@ public class AnalyzeRule {
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
             if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                if (rule.replaceFirst) {
+                    Pattern pattern = Pattern.compile(rule.replaceRegex);
+                    Matcher matcher = pattern.matcher(String.valueOf(result));
+                    if (matcher.find()) {
+                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
+                    }
+                } else {
+                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+                }
             }
         }
         if (result == null) return new ArrayList<>();
@@ -233,7 +243,13 @@ public class AnalyzeRule {
                 }
                 if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                     if (rule.replaceFirst) {
-                        result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                        Pattern pattern = Pattern.compile(rule.replaceRegex);
+                        Matcher matcher = pattern.matcher(String.valueOf(result));
+                        if (matcher.find()) {
+                            result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                        } else {
+                            result = "";
+                        }
                     } else {
                         result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                     }
@@ -278,7 +294,13 @@ public class AnalyzeRule {
             }
             if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                 if (rule.replaceFirst) {
-                    result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                    Pattern pattern = Pattern.compile(rule.replaceRegex);
+                    Matcher matcher = pattern.matcher(String.valueOf(result));
+                    if (matcher.find()) {
+                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
+                    }
                 } else {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                 }
@@ -310,7 +332,13 @@ public class AnalyzeRule {
             }
             if (result instanceof String && !isEmpty(rule.replaceRegex)) {
                 if (rule.replaceFirst) {
-                    result = String.valueOf(result).replaceFirst(rule.replaceRegex, rule.replacement);
+                    Pattern pattern = Pattern.compile(rule.replaceRegex);
+                    Matcher matcher = pattern.matcher(String.valueOf(result));
+                    if (matcher.find()) {
+                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                    } else {
+                        result = "";
+                    }
                 } else {
                     result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
                 }
