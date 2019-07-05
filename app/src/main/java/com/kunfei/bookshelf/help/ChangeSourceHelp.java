@@ -126,6 +126,8 @@ public class ChangeSourceHelp {
             newBook.setDurChapter(BookshelfHelp.getDurChapter(oldBook.getDurChapter(), oldBook.getChapterListSize(), oldBook.getDurChapterName(), chapterBeanList));
             newBook.setDurChapterName(chapterBeanList.get(newBook.getDurChapter()).getDurChapterName());
             newBook.setGroup(oldBook.getGroup());
+            newBook.getBookInfoBean().setName(oldBook.getBookInfoBean().getName());
+            newBook.getBookInfoBean().setAuthor(oldBook.getBookInfoBean().getAuthor());
             BookshelfHelp.removeFromBookShelf(oldBook);
             BookshelfHelp.saveBookToShelf(newBook);
             DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
