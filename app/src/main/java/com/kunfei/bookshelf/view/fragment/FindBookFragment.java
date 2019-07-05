@@ -243,7 +243,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         popupMenu.getMenu().add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.edit);
         popupMenu.getMenu().add(Menu.NONE, R.id.menu_top, Menu.NONE, R.string.to_top);
         popupMenu.getMenu().add(Menu.NONE, R.id.menu_del, Menu.NONE, R.string.delete);
-        popupMenu.getMenu().add(Menu.NONE, R.id.menu_clear, Menu.NONE, R.string.delete);
+        popupMenu.getMenu().add(Menu.NONE, R.id.menu_clear, Menu.NONE, R.string.clear_cache);
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_edit:
