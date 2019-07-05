@@ -140,7 +140,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             String origin = TextUtils.isEmpty(searchBookBean.getOrigin()) ? "未知" : searchBookBean.getOrigin();
             tvOrigin.setText(origin);
             tvChapter.setText(searchBookBean.getLastChapter());  // newest
-            tvIntro.setText(StringUtils.formatHtml(searchBookBean.getIntroduce()));
+            tvIntro.setText(StringUtils.formatHtml(searchBookBean.getIntroduce() + "\n"));
             tvShelf.setText(R.string.add_to_shelf);
             tvRead.setText(R.string.start_read);
             tvRead.setOnClickListener(v -> {
@@ -187,7 +187,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     mPresenter.addToBookShelf();
                 });
             }
-            tvIntro.setText(StringUtils.formatHtml(bookInfoBean.getIntroduce()));
+            tvIntro.setText(StringUtils.formatHtml(bookInfoBean.getIntroduce() + "\n"));
             if (tvIntro.getVisibility() != View.VISIBLE) {
                 tvIntro.setVisibility(View.VISIBLE);
             }
