@@ -173,14 +173,14 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
-            if (result instanceof String) {
-                result = replaceRegex(String.valueOf(result), rule);
-            } else if (result instanceof List) {
+            if (result instanceof List) {
                 List<String> newList = new ArrayList<>();
                 for (Object item : (List) result) {
                     newList.add(replaceRegex(String.valueOf(item), rule));
                 }
                 result = newList;
+            } else {
+                result = replaceRegex(String.valueOf(result), rule);
             }
         }
         if (result == null) return new ArrayList<>();
