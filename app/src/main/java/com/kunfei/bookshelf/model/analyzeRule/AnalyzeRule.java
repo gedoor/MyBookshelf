@@ -160,27 +160,39 @@ public class AnalyzeRule {
         Object result = null;
         if (!ruleList.isEmpty()) result = object;
         for (SourceRule rule : ruleList) {
-            switch (rule.mode) {
-                case Js:
-                    result = evalJS(rule.rule, result);
-                    break;
-                case JSon:
-                    result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
-                    break;
-                case XPath:
-                    result = getAnalyzeByXPath(result).getStringList(rule.rule);
-                    break;
-                default:
-                    result = getAnalyzeByJSoup(result).getStringList(rule.rule);
-            }
-            if (!isEmpty(rule.replaceRegex) && result instanceof List) {
-                List<String> newList = new ArrayList<>();
-                for (Object item : (List) result) {
-                    newList.add(replaceRegex(String.valueOf(item), rule));
+            if (!isEmpty(rule.rule)) {
+                switch (rule.mode) {
+                    case Js:
+                        result = evalJS(rule.rule, result);
+                        break;
+                    case JSon:
+                        result = getAnalyzeByJSonPath(result).getStringList(rule.rule);
+                        break;
+                    case XPath:
+                        result = getAnalyzeByXPath(result).getStringList(rule.rule);
+                        break;
+                    default:
+                        result = getAnalyzeByJSoup(result).getStringList(rule.rule);
                 }
-                result = newList;
-            } else if (!isEmpty(rule.replaceRegex)) {
-                result = replaceRegex(String.valueOf(result), rule);
+                if (!isEmpty(rule.replaceRegex) && result instanceof List) {
+                    List<String> newList = new ArrayList<>();
+                    for (Object item : (List) result) {
+                        newList.add(replaceRegex(String.valueOf(item), rule));
+                    }
+                    result = newList;
+                } else if (!isEmpty(rule.replaceRegex)) {
+                    result = replaceRegex(String.valueOf(result), rule);
+                }
+            } else {
+                if (!isEmpty(rule.replaceRegex) && result instanceof List) {
+                    List<String> newList = new ArrayList<>();
+                    for (Object item : (List) result) {
+                        newList.add(replaceRegex(String.valueOf(item), rule));
+                    }
+                    result = newList;
+                } else if (!isEmpty(rule.replaceRegex)) {
+                    result = replaceRegex(String.valueOf(result), rule);
+                }
             }
         }
         if (result == null) return new ArrayList<>();
