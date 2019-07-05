@@ -155,7 +155,7 @@ public class AnalyzeRule {
         return getStringList(ruleList, isUrl);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
         Object result = null;
         if (!ruleList.isEmpty()) result = object;
@@ -173,18 +173,14 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
-            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                if (rule.replaceFirst) {
-                    Pattern pattern = Pattern.compile(rule.replaceRegex);
-                    Matcher matcher = pattern.matcher(String.valueOf(result));
-                    if (matcher.find()) {
-                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
-                    } else {
-                        result = "";
-                    }
-                } else {
-                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+            if (result instanceof String) {
+                result = replaceRegex(String.valueOf(result), rule);
+            } else if (result instanceof List) {
+                List<String> newList = new ArrayList<>();
+                for (Object item : (List) result) {
+                    newList.add(replaceRegex(String.valueOf(item), rule));
                 }
+                result = newList;
             }
         }
         if (result == null) return new ArrayList<>();
@@ -193,7 +189,7 @@ public class AnalyzeRule {
         }
         if (isUrl && !isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
-            for (Object url : (List<Object>) result) {
+            for (Object url : (List) result) {
                 String absoluteURL = NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(url));
                 if (!urlList.contains(absoluteURL)) {
                     urlList.add(absoluteURL);
@@ -243,33 +239,11 @@ public class AnalyzeRule {
                             result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
-                if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                    if (rule.replaceFirst) {
-                        Pattern pattern = Pattern.compile(rule.replaceRegex);
-                        Matcher matcher = pattern.matcher(String.valueOf(result));
-                        if (matcher.find()) {
-                            result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
-                        } else {
-                            result = "";
-                        }
-                    } else {
-                        result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
-                    }
+                if (result instanceof String) {
+                    result = replaceRegex(String.valueOf(result), rule);
                 }
             } else {
-                if (!isEmpty(rule.replaceRegex)) {
-                    if (rule.replaceFirst) {
-                        Pattern pattern = Pattern.compile(rule.replaceRegex);
-                        Matcher matcher = pattern.matcher(String.valueOf(result));
-                        if (matcher.find()) {
-                            result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
-                        } else {
-                            result = "";
-                        }
-                    } else {
-                        result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
-                    }
-                }
+                result = replaceRegex(String.valueOf(result), rule);
             }
         }
         if (result == null) return "";
@@ -299,18 +273,8 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                if (rule.replaceFirst) {
-                    Pattern pattern = Pattern.compile(rule.replaceRegex);
-                    Matcher matcher = pattern.matcher(String.valueOf(result));
-                    if (matcher.find()) {
-                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
-                    } else {
-                        result = "";
-                    }
-                } else {
-                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
-                }
+            if (result instanceof String) {
+                result = replaceRegex(String.valueOf(result), rule);
             }
         }
         return result;
@@ -338,18 +302,8 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String && !isEmpty(rule.replaceRegex)) {
-                if (rule.replaceFirst) {
-                    Pattern pattern = Pattern.compile(rule.replaceRegex);
-                    Matcher matcher = pattern.matcher(String.valueOf(result));
-                    if (matcher.find()) {
-                        result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
-                    } else {
-                        result = "";
-                    }
-                } else {
-                    result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
-                }
+            if (result instanceof String) {
+                result = replaceRegex(String.valueOf(result), rule);
             }
         }
         if (result == null) {
@@ -397,6 +351,26 @@ public class AnalyzeRule {
             ruleStr = ruleStr.replace(getMatcher.group(), value);
         }
         return ruleStr;
+    }
+
+    /**
+     * 正则替换
+     */
+    private String replaceRegex(String result, SourceRule rule) {
+        if (!isEmpty(rule.replaceRegex)) {
+            if (rule.replaceFirst) {
+                Pattern pattern = Pattern.compile(rule.replaceRegex);
+                Matcher matcher = pattern.matcher(String.valueOf(result));
+                if (matcher.find()) {
+                    result = matcher.group(0).replaceFirst(rule.replaceRegex, rule.replacement);
+                } else {
+                    result = "";
+                }
+            } else {
+                result = String.valueOf(result).replaceAll(rule.replaceRegex, rule.replacement);
+            }
+        }
+        return result;
     }
 
     /**
