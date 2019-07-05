@@ -90,7 +90,6 @@ class BookList {
                         allInOne = true;
                         ruleList = ruleList.substring(1);
                     }
-                    Debug.printLog(tag, "┌解析搜索列表");
                     //获取列表
                     Debug.printLog(tag, "┌解析搜索列表");
                     collections = analyzer.getElements(ruleList);
