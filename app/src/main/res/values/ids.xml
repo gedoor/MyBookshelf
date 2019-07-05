@@ -21,4 +21,6 @@
 
     <item name="menu_clear" type="id" />
 
+    <item name="menu_disable" type="id" />
+
 </resources>
