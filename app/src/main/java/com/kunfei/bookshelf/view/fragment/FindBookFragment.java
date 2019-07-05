@@ -6,7 +6,6 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -301,8 +300,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
         @Override
         public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-            Log.e("linksu",
-                    "smoothScrollToPosition(ScrollSpeedLinearLayoutManger.java:62)");
             RecyclerView.SmoothScroller smoothScroller = new CenterSmoothScroller(recyclerView.getContext());
             smoothScroller.setTargetPosition(position);
             startSmoothScroll(smoothScroller);
