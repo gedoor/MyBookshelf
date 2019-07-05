@@ -173,13 +173,13 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getStringList(rule.rule);
             }
-            if (result instanceof List) {
+            if (!isEmpty(rule.replaceRegex) && result instanceof List) {
                 List<String> newList = new ArrayList<>();
                 for (Object item : (List) result) {
                     newList.add(replaceRegex(String.valueOf(item), rule));
                 }
                 result = newList;
-            } else {
+            } else if (!isEmpty(rule.replaceRegex)) {
                 result = replaceRegex(String.valueOf(result), rule);
             }
         }
@@ -239,10 +239,10 @@ public class AnalyzeRule {
                             result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
-                if (result instanceof String) {
+                if (!isEmpty(rule.replaceRegex) && result instanceof String) {
                     result = replaceRegex(String.valueOf(result), rule);
                 }
-            } else {
+            } else if (!isEmpty(rule.replaceRegex)) {
                 result = replaceRegex(String.valueOf(result), rule);
             }
         }
@@ -273,7 +273,7 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String) {
+            if (!isEmpty(rule.replaceRegex) && result instanceof String) {
                 result = replaceRegex(String.valueOf(result), rule);
             }
         }
@@ -302,7 +302,7 @@ public class AnalyzeRule {
                 default:
                     result = getAnalyzeByJSoup(result).getElements(rule.rule);
             }
-            if (result instanceof String) {
+            if (!isEmpty(rule.replaceRegex) && result instanceof String) {
                 result = replaceRegex(String.valueOf(result), rule);
             }
         }
