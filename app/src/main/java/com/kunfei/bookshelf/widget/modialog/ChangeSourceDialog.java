@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -151,10 +152,12 @@ public class ChangeSourceDialog extends BaseDialog implements ChangeSourceAdapte
                         sourceBean.setEnable(false);
                         BookSourceManager.addBookSource(sourceBean);
                         adapter.removeData(searchBookBean);
+                        Toast.makeText(context, String.format("%s已禁用", sourceBean.getBookSourceName()), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.menu_del:
                         BookSourceManager.removeBookSource(sourceBean);
                         adapter.removeData(searchBookBean);
+                        Toast.makeText(context, String.format("%s已删除", sourceBean.getBookSourceName()), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.menu_edit:
                         SourceEditActivity.startThis(context, sourceBean);
