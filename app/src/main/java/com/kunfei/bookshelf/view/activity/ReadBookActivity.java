@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -498,7 +499,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initMediaPlayer();
         initReadLongPressPop();
         pageView.setBackground(readBookControl.getTextBackground(this));
-
+        cursorLeft.getDrawable().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
+        cursorRight.getDrawable().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
     }
 
     /**
@@ -926,21 +928,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     //移动过程中要画线
                     pageView.setSelectMode(PageView.SelectMode.SelectMoveForward);
 
-
                     int hh = cursorLeft.getHeight();
                     int ww = cursorLeft.getWidth();
 
                     if (v.getId() == R.id.cursor_left) {
-
-                        pageView.setFirstSelectTxtChar(pageView.getCurrentTxtChar(lastX + ww / 2, lastY + hh));
+                        pageView.setFirstSelectTxtChar(pageView.getCurrentTxtChar(lastX + ww / 2, lastY - hh));
                     } else {
                         pageView.setLastSelectTxtChar(pageView.getCurrentTxtChar(lastX - ww / 2, lastY - hh));
-
                     }
 
-                    //Log.e("sss",lastX +":"+lastY);
-
-                    //Log.e("sss",pageView.getmCurrentMode().toString());
                     pageView.invalidate();
 
                     break;
@@ -967,10 +963,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
 
         //如果太靠上
-        if ((cursorLeft.getY() - ScreenUtils.dpToPx(30)) < 0) {
-            readLongPress.setY(cursorLeft.getY() + ScreenUtils.dpToPx(30));
+        if ((cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()) - ScreenUtils.dpToPx(40)) < 0) {
+            readLongPress.setY(cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()));
         } else {
-            readLongPress.setY(cursorLeft.getY());
+            readLongPress.setY(cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()) - ScreenUtils.dpToPx(40));
         }
 
     }
@@ -998,7 +994,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         int ww = cursorLeft.getWidth();
         if (pageView.getFirstSelectTxtChar() != null) {
             cursorLeft.setX(pageView.getFirstSelectTxtChar().getTopLeftPosition().x - ww / 2);
-            cursorLeft.setY(pageView.getFirstSelectTxtChar().getTopLeftPosition().y - hh);
+            cursorLeft.setY(pageView.getFirstSelectTxtChar().getBottomLeftPosition().y);
             cursorRight.setX(pageView.getFirstSelectTxtChar().getBottomRightPosition().x - ww / 2);
             cursorRight.setY(pageView.getFirstSelectTxtChar().getBottomRightPosition().y);
         }

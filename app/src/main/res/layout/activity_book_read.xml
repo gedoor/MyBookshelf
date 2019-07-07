@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/left_cursor"
+        android:src="@drawable/ic_cursor_left"
         android:visibility="invisible" />
 
     <ImageView
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/right_cursor"
+        android:src="@drawable/ic_cursor_right"
         android:visibility="invisible" />
 
     <com.kunfei.bookshelf.view.popupwindow.ReadLongPressPop

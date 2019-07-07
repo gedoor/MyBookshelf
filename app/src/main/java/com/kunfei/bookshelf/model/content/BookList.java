@@ -249,7 +249,8 @@ class BookList {
             item.setIntroduce(String.valueOf(nativeObject.get(ruleIntroduce)));
             Debug.printLog(tag, "└" + item.getIntroduce(), printLog, true);
             Debug.printLog(tag, "┌获取封面", printLog);
-            item.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(nativeObject.get(ruleCoverUrl))));
+            if (!isEmpty(ruleCoverUrl))
+                item.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(nativeObject.get(ruleCoverUrl))));
             Debug.printLog(tag, "└" + item.getCoverUrl(), printLog);
             Debug.printLog(tag, "┌获取书籍网址", printLog);
             String resultUrl = String.valueOf(nativeObject.get(ruleNoteUrl));
@@ -261,7 +262,8 @@ class BookList {
         return null;
     }
 
-    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl, boolean printLog) throws Exception {
+    private SearchBookBean getItemInList(AnalyzeRule analyzer, String baseUrl, boolean printLog) throws
+            Exception {
         SearchBookBean item = new SearchBookBean();
         analyzer.setBook(item);
         Debug.printLog(tag, "┌获取书名", printLog);
@@ -297,7 +299,8 @@ class BookList {
     }
 
     // 纯java模式正则表达式获取书籍列表
-    private List<SearchBookBean> getBooksOfRegex(String res, String[] regs, int index, AnalyzeRule analyzer) throws Exception {
+    private List<SearchBookBean> getBooksOfRegex(String res, String[] regs,
+                                                 int index, AnalyzeRule analyzer) throws Exception {
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
         String baseUrl = analyzer.getBaseUrl();
         // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
