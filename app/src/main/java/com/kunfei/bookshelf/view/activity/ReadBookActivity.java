@@ -932,9 +932,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     int ww = cursorLeft.getWidth();
 
                     if (v.getId() == R.id.cursor_left) {
-                        pageView.setFirstSelectTxtChar(pageView.getCurrentTxtChar(lastX + ww / 2, lastY - hh));
+                        pageView.setFirstSelectTxtChar(pageView.getCurrentTxtChar(lastX + ww, lastY - hh));
                     } else {
-                        pageView.setLastSelectTxtChar(pageView.getCurrentTxtChar(lastX - ww / 2, lastY - hh));
+                        pageView.setLastSelectTxtChar(pageView.getCurrentTxtChar(lastX - ww, lastY - hh));
                     }
 
                     pageView.invalidate();
