@@ -993,9 +993,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         int hh = cursorLeft.getHeight();
         int ww = cursorLeft.getWidth();
         if (pageView.getFirstSelectTxtChar() != null) {
-            cursorLeft.setX(pageView.getFirstSelectTxtChar().getTopLeftPosition().x - ww / 2);
+            cursorLeft.setX(pageView.getFirstSelectTxtChar().getTopLeftPosition().x - ww);
             cursorLeft.setY(pageView.getFirstSelectTxtChar().getBottomLeftPosition().y);
-            cursorRight.setX(pageView.getFirstSelectTxtChar().getBottomRightPosition().x - ww / 2);
+            cursorRight.setX(pageView.getFirstSelectTxtChar().getBottomRightPosition().x);
             cursorRight.setY(pageView.getFirstSelectTxtChar().getBottomRightPosition().y);
         }
     }
