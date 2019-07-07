@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,11 +17,13 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,9 +41,11 @@ import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
+import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
@@ -47,6 +53,7 @@ import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
+import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
@@ -67,11 +74,13 @@ import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
 import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
+import com.kunfei.bookshelf.view.popupwindow.ReadLongPressPop;
 import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+import com.kunfei.bookshelf.widget.modialog.ReplaceRuleDialog;
 import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageLoaderNet;
 import com.kunfei.bookshelf.widget.page.PageView;
@@ -90,7 +99,7 @@ import kotlin.Unit;
 /**
  * 阅读界面
  */
-public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
+public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View, View.OnTouchListener {
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -126,6 +135,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     ProgressBar progressBarNextPage;
     @BindView(R.id.mediaPlayerPop)
     MediaPlayerPop mediaPlayerPop;
+    @BindView(R.id.cursor_left)
+    ImageView cursorLeft;
+    @BindView(R.id.cursor_right)
+    ImageView cursorRight;
+    @BindView(R.id.readLongPress)
+    ReadLongPressPop readLongPress;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -151,6 +166,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private boolean autoPage = false;
     private boolean aloudNextPage;
+    private int lastX, lastY;
 
     @Override
     protected ReadBookContract.Presenter initInjector() {
@@ -480,6 +496,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initReadAdjustPop();
         initMoreSettingPop();
         initMediaPlayer();
+        initReadLongPressPop();
         pageView.setBackground(readBookControl.getTextBackground(this));
 
     }
@@ -697,6 +714,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bindEvent() {
         //打开URL
@@ -710,6 +728,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 toast(R.string.can_not_open);
             }
         });
+
+        cursorLeft.setOnTouchListener(this);
+        cursorRight.setOnTouchListener(this);
+        flContent.setOnTouchListener(this);
     }
 
     /**
@@ -854,8 +876,186 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 popMenuIn();
             }
 
+            @Override
+            public void onTouchClearCursor() {
+                cursorLeft.setVisibility(View.INVISIBLE);
+                cursorRight.setVisibility(View.INVISIBLE);
+                readLongPress.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLongPress() {
+                if (!pageView.isRunning()) {
+                    selectTextCursorShow();
+                    showAction(cursorLeft);
+                }
+            }
         });
         mPageLoader.refreshChapterList();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        if (v.getId() == R.id.cursor_left || v.getId() == R.id.cursor_right) {
+            int ea = event.getAction();
+            //final int screenWidth = dm.widthPixels;
+            //final int screenHeight = dm.heightPixels;
+            switch (ea) {
+                case MotionEvent.ACTION_DOWN:
+                    lastX = (int) event.getRawX();// 获取触摸事件触摸位置的原始X坐标
+                    lastY = (int) event.getRawY();
+
+                    readLongPress.setVisibility(View.INVISIBLE);
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastX;
+                    int dy = (int) event.getRawY() - lastY;
+                    int l = v.getLeft() + dx;
+                    int b = v.getBottom() + dy;
+                    int r = v.getRight() + dx;
+                    int t = v.getTop() + dy;
+
+                    v.layout(l, t, r, b);
+                    lastX = (int) event.getRawX();
+                    lastY = (int) event.getRawY();
+                    v.postInvalidate();
+
+                    //移动过程中要画线
+                    pageView.setSelectMode(PageView.SelectMode.SelectMoveForward);
+
+
+                    int hh = cursorLeft.getHeight();
+                    int ww = cursorLeft.getWidth();
+
+                    if (v.getId() == R.id.cursor_left) {
+
+                        pageView.setFirstSelectTxtChar(pageView.getCurrentTxtChar(lastX + ww / 2, lastY + hh));
+                    } else {
+                        pageView.setLastSelectTxtChar(pageView.getCurrentTxtChar(lastX - ww / 2, lastY - hh));
+
+                    }
+
+                    //Log.e("sss",lastX +":"+lastY);
+
+                    //Log.e("sss",pageView.getmCurrentMode().toString());
+                    pageView.invalidate();
+
+                    break;
+                case MotionEvent.ACTION_UP:
+                    showAction(v);
+                    //v.layout(l, t, r, b);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return true;
+    }
+
+    public void showAction(View clickView) {
+
+        readLongPress.setVisibility(View.VISIBLE);
+        //如果太靠右，则靠左
+        int[] aa = ScreenUtils.getScreenSize(this);
+        if ((cursorLeft.getX() + ScreenUtils.dpToPx(120)) > aa[0]) {
+            readLongPress.setX(cursorLeft.getX() - ScreenUtils.dpToPx(125));
+        } else {
+            readLongPress.setX(cursorLeft.getX() + cursorLeft.getWidth() + ScreenUtils.dpToPx(5));
+        }
+
+        //如果太靠上
+        if ((cursorLeft.getY() - ScreenUtils.dpToPx(30)) < 0) {
+            readLongPress.setY(cursorLeft.getY() + ScreenUtils.dpToPx(30));
+        } else {
+            readLongPress.setY(cursorLeft.getY());
+        }
+
+    }
+
+    /**
+     * 显示
+     */
+    private void selectTextCursorShow() {
+        if (pageView.getFirstSelectTxtChar() == null || pageView.getLastSelectTxtChar() == null)
+            return;
+        //show Cursor on current position
+        cursorShow();
+        //set current word selected
+        pageView.invalidate();
+
+
+        hideSnackBar();
+    }
+
+    private void cursorShow() {
+
+        cursorLeft.setVisibility(View.VISIBLE);
+        cursorRight.setVisibility(View.VISIBLE);
+        int hh = cursorLeft.getHeight();
+        int ww = cursorLeft.getWidth();
+        if (pageView.getFirstSelectTxtChar() != null) {
+            cursorLeft.setX(pageView.getFirstSelectTxtChar().getTopLeftPosition().x - ww / 2);
+            cursorLeft.setY(pageView.getFirstSelectTxtChar().getTopLeftPosition().y - hh);
+            cursorRight.setX(pageView.getFirstSelectTxtChar().getBottomRightPosition().x - ww / 2);
+            cursorRight.setY(pageView.getFirstSelectTxtChar().getBottomRightPosition().y);
+        }
+    }
+
+    /**
+     * 长按选择按钮
+     */
+    private void initReadLongPressPop() {
+        readLongPress.setListener(new ReadLongPressPop.OnBtnClickListener() {
+            @Override
+            public void copySelect() {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText(null, pageView.getSelectStr());
+                if (clipboard != null) {
+                    clipboard.setPrimaryClip(clipData);
+                    toast("所选内容已经复制到剪贴板");
+                }
+
+                cursorLeft.setVisibility(View.INVISIBLE);
+                cursorRight.setVisibility(View.INVISIBLE);
+                readLongPress.setVisibility(View.INVISIBLE);
+                pageView.clearSelect();
+
+            }
+
+            @Override
+            public void replaceSelect() {
+                ReplaceRuleBean oldRuleBean = new ReplaceRuleBean();
+                oldRuleBean.setReplaceSummary(pageView.getSelectStr().trim());
+                oldRuleBean.setEnable(true);
+                oldRuleBean.setRegex(pageView.getSelectStr().trim());
+                oldRuleBean.setIsRegex(false);
+                oldRuleBean.setReplacement("");
+                oldRuleBean.setSerialNumber(0);
+                oldRuleBean.setUseTo("");
+
+                ReplaceRuleDialog.builder(ReadBookActivity.this, oldRuleBean, mPresenter.getBookShelf())
+                        .setPositiveButton(replaceRuleBean1 ->
+                                ReplaceRuleManager.saveData(replaceRuleBean1)
+                                        .subscribe(new MySingleObserver<Boolean>() {
+                                            @Override
+                                            public void onSuccess(Boolean aBoolean) {
+                                                cursorLeft.setVisibility(View.INVISIBLE);
+                                                cursorRight.setVisibility(View.INVISIBLE);
+                                                readLongPress.setVisibility(View.INVISIBLE);
+
+                                                pageView.setSelectMode(PageView.SelectMode.Normal);
+
+                                                moDialogHUD.dismiss();
+
+                                                refreshDurChapter();
+                                            }
+                                        })).show();
+
+            }
+        });
     }
 
 
