@@ -48,6 +48,18 @@ public abstract class PageAnimation {
     float mLastY;
     private boolean isMoving = false;
     boolean isRunning = false;
+    boolean touchInit = false;
+    //是否取消翻页
+    boolean isCancel = false;
+    //可以使用 mLast代替
+    int mMoveX = 0;
+    int mMoveY = 0;
+    //是否移动了
+    boolean isMove = false;
+    //是否翻阅下一页。true表示翻到下一页，false表示上一页。
+    boolean isNext = false;
+    //是否没下一页或者上一页
+    boolean noNext = false;
 
     PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
         this(w, h, 0, 0, 0, view, listener);
@@ -87,6 +99,31 @@ public abstract class PageAnimation {
 
         mTouchX = x;
         mTouchY = y;
+    }
+
+    public void setTouchInitFalse() {
+        touchInit = false;
+    }
+
+    public void initTouch(int x, int y) {
+        if (!touchInit) {
+            //移动的点击位置
+            mMoveX = 0;
+            mMoveY = 0;
+            //是否移动
+            isMove = false;
+            //是否存在下一章
+            noNext = false;
+            //是下一章还是前一章
+            isNext = false;
+            //是否正在执行动画
+            isRunning = false;
+            //取消
+            isCancel = false;
+            //设置起始位置的触摸点
+            setStartPoint(x, y);
+            touchInit = true;
+        }
     }
 
     public boolean isRunning() {

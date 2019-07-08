@@ -527,7 +527,10 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                     mPageAnim.onTouchEvent(event);
                 }
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                mPageAnim.initTouch(x, y);
+                mPageAnim.setTouchInitFalse();
                 if (!isMove) {
                     if (readBookControl.isCanSelectText()) {
                         removeCallbacks(mLongPressRunnable);
