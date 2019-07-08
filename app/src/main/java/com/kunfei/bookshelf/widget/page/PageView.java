@@ -133,7 +133,9 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
         if (mPageLoader != null) {
             mPageLoader.prepareDisplay(width, height);
         }
-
+        //设置中间区域范围
+        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
+                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
     }
 
     //设置翻页的模式
@@ -375,12 +377,10 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                         }
                     }
                 } else {
-
                     if (c.getIndex() == lastSelectTxtChar.getIndex()) {
                         Ended = true;
                         if (!selectline.getCharsData().contains(c)) {
                             selectline.getCharsData().add(c);
-
                         }
                         break;
                     } else {
@@ -532,11 +532,6 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                     if (readBookControl.isCanSelectText()) {
                         removeCallbacks(mLongPressRunnable);
                     }
-                    //设置中间区域范围
-                    if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 4f, mViewHeight / 4f,
-                                mViewWidth * 3f / 4, mViewHeight * 3f / 4);
-                    }
 
                     //是否点击了中间
                     if (mCenterRect.contains(x, y)) {
@@ -652,13 +647,6 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
     @Override
     public void changePage(PageAnimation.Direction direction) {
         mPageLoader.pagingEnd(direction);
-    }
-
-    @Override
-    public void clickCenter() {
-        if (mTouchListener != null) {
-            mTouchListener.center();
-        }
     }
 
     /**

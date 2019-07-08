@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.widget.page.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -38,8 +37,6 @@ public abstract class PageAnimation {
     //视图的尺寸
     int mViewWidth;
     int mViewHeight;
-    // 唤醒菜单的区域
-    RectF mCenterRect;
     //起始点
     float mStartX;
     float mStartY;
@@ -70,10 +67,6 @@ public abstract class PageAnimation {
         mListener = listener;
 
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
-
-        //设置中间区域范围
-        mCenterRect = new RectF(mViewWidth / 3f, mViewHeight / 3f,
-                mViewWidth * 2f / 3, mViewHeight * 2f / 3);
     }
 
     public Scroller getScroller() {
@@ -237,7 +230,6 @@ public abstract class PageAnimation {
 
         void changePage(Direction direction);
 
-        void clickCenter();
     }
 
 }

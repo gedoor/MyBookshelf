@@ -149,10 +149,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 touchInit = false;
                 isRunning = false;
                 if (!isMove) {
-                    if (mCenterRect.contains(x, y)) {
-                        mListener.clickCenter();
-                        return;
-                    }
 
                     if (!readBookControl.getCanClickTurn()) {
                         return;

@@ -61,10 +61,6 @@ public class ScrollPageAnim extends PageAnimation {
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
-                    if (mCenterRect.contains(x, y)) {
-                        mListener.clickCenter();
-                        return;
-                    }
 
                     if (!readBookControl.getCanClickTurn() || readBookControl.disableScrollClickTurn()) {
                         return;
