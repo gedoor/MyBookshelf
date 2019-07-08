@@ -48,7 +48,7 @@ public abstract class PageAnimation {
     float mLastY;
     private boolean isMoving = false;
     boolean isRunning = false;
-    boolean touchInit = false;
+    private boolean touchInit = false;
     //是否取消翻页
     boolean isCancel = false;
     //可以使用 mLast代替
