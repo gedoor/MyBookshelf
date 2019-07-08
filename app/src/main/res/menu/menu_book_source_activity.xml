@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.BookSourceActivity">
 
-
     <item
         android:id="@+id/action_select_all"
         android:icon="@drawable/ic_select_all"
@@ -31,7 +30,7 @@
         android:id="@+id/action_sort"
         android:icon="@drawable/ic_format_line_spacing"
         android:title="@string/sort"
-        app:showAsAction="always"
+        app:showAsAction="never"
         tools:ignore="AlwaysShowAction">
 
         <menu>
