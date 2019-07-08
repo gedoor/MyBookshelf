@@ -546,8 +546,6 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                                     mSelectTextPath.reset();
                                     invalidate();
                                 }
-
-                                //mTouchListener.onTouchUp();
                             }
                             //清除移动选择状态
                         }
