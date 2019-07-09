@@ -886,7 +886,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                     mHandler.postDelayed(() -> {
                                         ReadBookActivity.this.refreshDurChapter();
                                         moDialogHUD.dismiss();
-                                    }, 2000);
+                                    }, 1000);
                                 },
                                 false);
                     }
