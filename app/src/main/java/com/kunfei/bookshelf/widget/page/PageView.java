@@ -59,7 +59,7 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
     //文字选择画笔
     private Paint mTextSelectPaint = null;
     //文字选择画笔颜色
-    private int TextSelectColor = Color.parseColor("#77fadb08");//todo,其实可以做成配置项，哈哈
+    private int TextSelectColor = Color.parseColor("#77fadb08");
 
     private Path mSelectTextPath = new Path();
 
@@ -699,6 +699,7 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
         void onTouchClearCursor();
 
         void onLongPress();
+
         void center();
     }
 }

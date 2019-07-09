@@ -864,6 +864,32 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         }
                         autoPage();
                     }
+
+                    @Override
+                    public void vipPop() {
+                        moDialogHUD.showTwoButton(ReadBookActivity.this.getString(R.string.donate_s), "领取红包", (v) -> {
+                                    DonateActivity.getZfbHb(ReadBookActivity.this);
+                                    mHandler.postDelayed(() -> {
+                                        ReadBookActivity.this.refreshDurChapter();
+                                        moDialogHUD.dismiss();
+                                    }, 2000);
+                                },
+                                "关注公众号",
+                                (v) -> {
+                                    ClipboardManager clipboard = (ClipboardManager) ReadBookActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clipData = ClipData.newPlainText(null, "开源阅读软件");
+                                    if (clipboard != null) {
+                                        clipboard.setPrimaryClip(clipData);
+                                        toast("[开源阅读软件],已复制成功,可到微信搜索");
+                                    }
+                                    MApplication.getInstance().upDonateHb();
+                                    mHandler.postDelayed(() -> {
+                                        ReadBookActivity.this.refreshDurChapter();
+                                        moDialogHUD.dismiss();
+                                    }, 2000);
+                                },
+                                false);
+                    }
                 }
         );
         mPageLoader.updateBattery(BatteryUtil.getLevel(this));

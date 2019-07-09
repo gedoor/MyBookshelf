@@ -1821,5 +1821,7 @@ public abstract class PageLoader {
          * @param resetReadAloud 是否重置朗读
          */
         void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud);
+
+        void vipPop();
     }
 }
