@@ -529,9 +529,8 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                mPageAnim.initTouch(x, y);
-                mPageAnim.setTouchInitFalse();
                 if (!isMove) {
+                    resetTouchEvent(x, y);
                     if (readBookControl.isCanSelectText()) {
                         removeCallbacks(mLongPressRunnable);
                     }
@@ -577,11 +576,20 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                         invalidate();
                     }
                 }
+                resetTouchEvent(x, y);
                 break;
         }
         return true;
     }
-
+    /**
+     *  touchEvent 重置事件
+     * @param x
+     * @param y
+     */
+    private void resetTouchEvent(int x, int y){
+        mPageAnim.initTouch(x, y);
+        mPageAnim.setTouchInitFalse();
+    }
     /**
      * 判断是否存在上一页
      */
