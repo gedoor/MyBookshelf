@@ -489,6 +489,7 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                mPageAnim.initTouch(x, y);
                 if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
                     actionFromEdge = true;
                     return true;
@@ -513,6 +514,7 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
 
                 break;
             case MotionEvent.ACTION_MOVE:
+                mPageAnim.initTouch(x, y);
                 // 判断是否大于最小滑动值。
                 int slop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
                 if (!isMove) {

@@ -61,10 +61,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                initTouch(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                initTouch(x, y);
                 //判断是否移动了
                 if (!isMove) {
                     isMove = Math.abs(mStartX - x) > slop || Math.abs(mStartY - y) > slop;
