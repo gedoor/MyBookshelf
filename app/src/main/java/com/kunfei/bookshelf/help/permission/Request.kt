@@ -3,13 +3,11 @@ package com.kunfei.bookshelf.help.permission
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.kunfei.bookshelf.MApplication
 import com.kunfei.bookshelf.R
 import org.jetbrains.anko.startActivity
 import java.util.*
@@ -129,7 +127,7 @@ internal class Request : OnRequestPermissionsResultCallback {
     private fun showSettingDialog(rationale: CharSequence, cancel: () -> Unit) {
         rationaleDialog?.dismiss()
         source?.context?.let {
-            try {
+            runCatching {
                 rationaleDialog = AlertDialog.Builder(it)
                         .setTitle(R.string.dialog_title)
                         .setMessage(rationale)
@@ -143,8 +141,6 @@ internal class Request : OnRequestPermissionsResultCallback {
                         }
                         .setNegativeButton(R.string.dialog_cancel) { _, _ -> cancel() }
                         .show()
-            } catch (e: java.lang.Exception) {
-                Toast.makeText(MApplication.getInstance(), "请去设置界面授权", Toast.LENGTH_SHORT).show()
             }
         }
     }
