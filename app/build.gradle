@@ -78,7 +78,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     //androidX
@@ -89,7 +89,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
