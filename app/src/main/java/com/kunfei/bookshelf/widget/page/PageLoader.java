@@ -982,32 +982,33 @@ public abstract class PageLoader {
                 float bottomposition = top + mTitlePaint.getFontMetrics().descent;
                 float TextHeight = Math.abs(fontMetricsForTitle.ascent) + Math.abs(fontMetricsForTitle.descent);
 
+                if (txtPage.getTxtLists() != null) {
+                    for (TxtChar c : txtPage.getTxtLists().get(i).getCharsData()) {
+                        rightposition = leftposition + c.getCharWidth();
+                        Point tlp = new Point();
+                        c.setTopLeftPosition(tlp);
+                        tlp.x = (int) leftposition;
+                        tlp.y = (int) (bottomposition - TextHeight);
 
-                for (TxtChar c : txtPage.getTxtLists().get(i).getCharsData()) {
-                    rightposition = leftposition + c.getCharWidth();
-                    Point tlp = new Point();
-                    c.setTopLeftPosition(tlp);
-                    tlp.x = (int) leftposition;
-                    tlp.y = (int) (bottomposition - TextHeight);
+                        Point blp = new Point();
+                        c.setBottomLeftPosition(blp);
+                        blp.x = (int) leftposition;
+                        blp.y = (int) bottomposition;
 
-                    Point blp = new Point();
-                    c.setBottomLeftPosition(blp);
-                    blp.x = (int) leftposition;
-                    blp.y = (int) bottomposition;
+                        Point trp = new Point();
+                        c.setTopRightPosition(trp);
+                        trp.x = (int) rightposition;
+                        trp.y = (int) (bottomposition - TextHeight);
 
-                    Point trp = new Point();
-                    c.setTopRightPosition(trp);
-                    trp.x = (int) rightposition;
-                    trp.y = (int) (bottomposition - TextHeight);
+                        Point brp = new Point();
+                        c.setBottomRightPosition(brp);
+                        brp.x = (int) rightposition;
+                        brp.y = (int) bottomposition;
+                        ppp++;
+                        c.setIndex(ppp);
 
-                    Point brp = new Point();
-                    c.setBottomRightPosition(brp);
-                    brp.x = (int) rightposition;
-                    brp.y = (int) bottomposition;
-                    ppp++;
-                    c.setIndex(ppp);
-
-                    leftposition = rightposition;
+                        leftposition = rightposition;
+                    }
                 }
 
                 //设置尾部间距
@@ -1048,35 +1049,35 @@ public abstract class PageLoader {
                 float rightposition = 0;
                 float bottomposition = top + mTextPaint.getFontMetrics().descent;
                 float textHeight = Math.abs(fontMetrics.ascent) + Math.abs(fontMetrics.descent);
-//                mTextHeight = textHeight;
 
-                //TxtLine lin =   txtPage.txtLists.get(i);
-                for (TxtChar c : txtPage.getTxtLists().get(i).getCharsData()) {
-                    rightposition = leftposition + c.getCharWidth();
-                    Point tlp = new Point();
-                    c.setTopLeftPosition(tlp);
-                    tlp.x = (int) leftposition;
-                    tlp.y = (int) (bottomposition - textHeight);
+                if (txtPage.getTxtLists() != null) {
+                    for (TxtChar c : txtPage.getTxtLists().get(i).getCharsData()) {
+                        rightposition = leftposition + c.getCharWidth();
+                        Point tlp = new Point();
+                        c.setTopLeftPosition(tlp);
+                        tlp.x = (int) leftposition;
+                        tlp.y = (int) (bottomposition - textHeight);
 
-                    Point blp = new Point();
-                    c.setBottomLeftPosition(blp);
-                    blp.x = (int) leftposition;
-                    blp.y = (int) bottomposition;
+                        Point blp = new Point();
+                        c.setBottomLeftPosition(blp);
+                        blp.x = (int) leftposition;
+                        blp.y = (int) bottomposition;
 
-                    Point trp = new Point();
-                    c.setTopRightPosition(trp);
-                    trp.x = (int) rightposition;
-                    trp.y = (int) (bottomposition - textHeight);
+                        Point trp = new Point();
+                        c.setTopRightPosition(trp);
+                        trp.x = (int) rightposition;
+                        trp.y = (int) (bottomposition - textHeight);
 
-                    Point brp = new Point();
-                    c.setBottomRightPosition(brp);
-                    brp.x = (int) rightposition;
-                    brp.y = (int) bottomposition;
+                        Point brp = new Point();
+                        c.setBottomRightPosition(brp);
+                        brp.x = (int) rightposition;
+                        brp.y = (int) bottomposition;
 
-                    leftposition = rightposition;
+                        leftposition = rightposition;
 
-                    ppp++;
-                    c.setIndex(ppp);
+                        ppp++;
+                        c.setIndex(ppp);
+                    }
                 }
                 //记录文字位置 --结束 pzl
 
@@ -1207,32 +1208,33 @@ public abstract class PageLoader {
                     float bottomposition = top + mTitlePaint.getFontMetrics().descent;
                     float TextHeight = Math.abs(fontMetricsForTitle.ascent) + Math.abs(fontMetricsForTitle.descent);
 
+                    if (page.getTxtLists() != null) {
+                        for (TxtChar c : page.getTxtLists().get(i).getCharsData()) {
+                            rightposition = leftposition + c.getCharWidth();
+                            Point tlp = new Point();
+                            c.setTopLeftPosition(tlp);
+                            tlp.x = (int) leftposition;
+                            tlp.y = (int) (bottomposition - TextHeight);
 
-                    for (TxtChar c : page.getTxtLists().get(i).getCharsData()) {
-                        rightposition = leftposition + c.getCharWidth();
-                        Point tlp = new Point();
-                        c.setTopLeftPosition(tlp);
-                        tlp.x = (int) leftposition;
-                        tlp.y = (int) (bottomposition - TextHeight);
+                            Point blp = new Point();
+                            c.setBottomLeftPosition(blp);
+                            blp.x = (int) leftposition;
+                            blp.y = (int) bottomposition;
 
-                        Point blp = new Point();
-                        c.setBottomLeftPosition(blp);
-                        blp.x = (int) leftposition;
-                        blp.y = (int) bottomposition;
+                            Point trp = new Point();
+                            c.setTopRightPosition(trp);
+                            trp.x = (int) rightposition;
+                            trp.y = (int) (bottomposition - TextHeight);
 
-                        Point trp = new Point();
-                        c.setTopRightPosition(trp);
-                        trp.x = (int) rightposition;
-                        trp.y = (int) (bottomposition - TextHeight);
+                            Point brp = new Point();
+                            c.setBottomRightPosition(brp);
+                            brp.x = (int) rightposition;
+                            brp.y = (int) bottomposition;
+                            ppp++;
+                            c.setIndex(ppp);
 
-                        Point brp = new Point();
-                        c.setBottomRightPosition(brp);
-                        brp.x = (int) rightposition;
-                        brp.y = (int) bottomposition;
-                        ppp++;
-                        c.setIndex(ppp);
-
-                        leftposition = rightposition;
+                            leftposition = rightposition;
+                        }
                     }
                     //pzl
                 }
@@ -1280,36 +1282,35 @@ public abstract class PageLoader {
                     float bottomposition = top + mTextPaint.getFontMetrics().descent;
                     float textHeight = Math.abs(fontMetrics.ascent) + Math.abs(fontMetrics.descent);
 
-//                    mTextHeight = textHeight;
+                    if (page.getTxtLists() != null) {
+                        for (TxtChar c : page.getTxtLists().get(i).getCharsData()) {
 
-                    //TxtLine lin =   txtPage.txtLists.get(i);
-                    for (TxtChar c : page.getTxtLists().get(i).getCharsData()) {
+                            rightposition = leftposition + c.getCharWidth();
+                            Point tlp = new Point();
+                            c.setTopLeftPosition(tlp);
+                            tlp.x = (int) leftposition;
+                            tlp.y = (int) (bottomposition - textHeight);
 
-                        rightposition = leftposition + c.getCharWidth();
-                        Point tlp = new Point();
-                        c.setTopLeftPosition(tlp);
-                        tlp.x = (int) leftposition;
-                        tlp.y = (int) (bottomposition - textHeight);
+                            Point blp = new Point();
+                            c.setBottomLeftPosition(blp);
+                            blp.x = (int) leftposition;
+                            blp.y = (int) bottomposition;
 
-                        Point blp = new Point();
-                        c.setBottomLeftPosition(blp);
-                        blp.x = (int) leftposition;
-                        blp.y = (int) bottomposition;
+                            Point trp = new Point();
+                            c.setTopRightPosition(trp);
+                            trp.x = (int) rightposition;
+                            trp.y = (int) (bottomposition - textHeight);
 
-                        Point trp = new Point();
-                        c.setTopRightPosition(trp);
-                        trp.x = (int) rightposition;
-                        trp.y = (int) (bottomposition - textHeight);
+                            Point brp = new Point();
+                            c.setBottomRightPosition(brp);
+                            brp.x = (int) rightposition;
+                            brp.y = (int) bottomposition;
 
-                        Point brp = new Point();
-                        c.setBottomRightPosition(brp);
-                        brp.x = (int) rightposition;
-                        brp.y = (int) bottomposition;
+                            leftposition = rightposition;
 
-                        leftposition = rightposition;
-
-                        ppp++;
-                        c.setIndex(ppp);
+                            ppp++;
+                            c.setIndex(ppp);
+                        }
                     }
                     //记录文字位置 --结束 pzl
                 }
@@ -1691,7 +1692,9 @@ public abstract class PageLoader {
             //pzl
             x += cw + d;
         }
-        txtLists.set(y, txtList);//pzl
+        if (txtLists != null) {
+            txtLists.set(y, txtList);//pzl
+        }
     }
 
     //判断是不是d'hou
