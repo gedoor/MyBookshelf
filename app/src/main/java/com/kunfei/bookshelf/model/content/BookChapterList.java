@@ -9,6 +9,7 @@ import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.WebChapterBean;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByRegex;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.task.AnalyzeNextUrlTask;
@@ -241,37 +242,78 @@ public class BookChapterList {
     private List<BookChapterBean> regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
-            int vipGroup = 0, nameGroup = 0, linkGroup = 0;
-            String baseUrl = "";
             List<BookChapterBean> chapterBeans = new ArrayList<>();
             String nameRule = bookSourceBean.getRuleChapterName();
             String linkRule = bookSourceBean.getRuleContentUrl();
-            // 分离标题正则参数
-            Matcher nameMatcher = Pattern.compile("((?<=\\$)\\d)?\\$(\\d$)").matcher(nameRule);
-            while (nameMatcher.find()) {
-                vipGroup = nameMatcher.group(1) == null ? 0 : Integer.parseInt(nameMatcher.group(1));
-                nameGroup = Integer.parseInt(nameMatcher.group(2));
+            // 分离规则参数
+            List<String> nameParams = AnalyzeByRegex.splitRegexRule(nameRule);
+            List<String> linkParams = AnalyzeByRegex.splitRegexRule(linkRule);
+            // 提取正则参数
+            List<Integer> nameGroups = new ArrayList<>();
+            List<Integer> linkGroups = new ArrayList<>();
+            for (int i = nameParams.size(); i-- > 0; ) {
+                nameGroups.add(0, nameParams.get(i).charAt(0) == '$' ? AnalyzeByRegex.string2Int(nameParams.get(i)) : -1);
             }
-            // 分离网址正则参数
-            Matcher linkMatcher = Pattern.compile("(.*?)\\$(\\d$)").matcher(linkRule);
-            while (linkMatcher.find()) {
-                baseUrl = analyzer.replaceGet(linkMatcher.group(1));
-                linkGroup = Integer.parseInt(linkMatcher.group(2));
+            for (int i = linkParams.size(); i-- > 0; ) {
+                linkGroups.add(0, linkParams.get(i).charAt(0) == '$' ? AnalyzeByRegex.string2Int(linkParams.get(i)) : -1);
             }
-            // 提取目录列表信息
-            if (vipGroup == 0) {
+            // 是否包含VIP规则(hasVipRule>1 时视为包含vip规则)
+            int hasVipRule = 0;
+            for (int i = nameGroups.size(); i-- > 0; ) if (nameGroups.get(i) != -1) ++hasVipRule;
+            int vipGroup = 0;
+            if ((nameGroups.get(0) != -1) && (hasVipRule > 1)) {
+                vipGroup = nameGroups.get(0);
+                nameGroups.remove(0);
+                nameParams.remove(0);
+            }
+            // 创建结果缓存
+            StringBuilder cName = new StringBuilder();
+            StringBuilder cLink = new StringBuilder();
+            // 提取书籍目录
+            if (vipGroup > 0) {
                 while (m.find()) {
-                    addChapter(chapterBeans,
-                            m.group(nameGroup),
-                            baseUrl + m.group(linkGroup)
-                    );
+                    for (int i = nameParams.size(); i-- > 0; ) {
+                        if (nameGroups.get(i) != -1) {
+                            cName.insert(0, m.group(nameGroups.get(i)));
+                        } else {
+                            cName.insert(0, nameParams.get(i));
+                        }
+                    }
+                    cName.insert(0, m.group(vipGroup) == null ? "" : "\uD83D\uDD12");
+
+                    for (int i = linkParams.size(); i-- > 0; ) {
+                        if (linkGroups.get(i) != -1) {
+                            cLink.insert(0, m.group(linkGroups.get(i)));
+                        } else {
+                            cLink.insert(0, linkParams.get(i));
+                        }
+                    }
+
+                    addChapter(chapterBeans, cName.toString(), cLink.toString());
+                    cName.setLength(0);
+                    cLink.setLength(0);
                 }
             } else {
                 while (m.find()) {
-                    addChapter(chapterBeans,
-                            (m.group(vipGroup) == null ? "" : "\uD83D\uDD12") + m.group(nameGroup),
-                            baseUrl + m.group(linkGroup)
-                    );
+                    for (int i = nameParams.size(); i-- > 0; ) {
+                        if (nameGroups.get(i) != -1) {
+                            cName.insert(0, m.group(nameGroups.get(i)));
+                        } else {
+                            cName.insert(0, nameParams.get(i));
+                        }
+                    }
+
+                    for (int i = linkParams.size(); i-- > 0; ) {
+                        if (linkGroups.get(i) != -1) {
+                            cLink.insert(0, m.group(linkGroups.get(i)));
+                        } else {
+                            cLink.insert(0, linkParams.get(i));
+                        }
+                    }
+
+                    addChapter(chapterBeans, cName.toString(), cLink.toString());
+                    cName.setLength(0);
+                    cLink.setLength(0);
                 }
             }
             return chapterBeans;

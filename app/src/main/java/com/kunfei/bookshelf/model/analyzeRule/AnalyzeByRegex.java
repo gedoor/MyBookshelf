@@ -4,8 +4,6 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.content.Debug;
-import com.kunfei.bookshelf.utils.NetworkUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,65 +41,73 @@ public class AnalyzeByRegex {
                     bookSourceBean.getRuleCoverUrl(),       // 获取封面规则
                     bookSourceBean.getRuleChapterUrl()      // 获取目录规则
             };
-            // 创建put&get参数判断容器
-            List<Boolean> hasVars = new ArrayList<>();
-            // 创建拆分规则容器
-            List<String[]> ruleGroups = new ArrayList<>();
-            // 提取规则信息
-            for (String rule : ruleList) {
-                ruleGroups.add(splitRegexRule(rule));
-                hasVars.add(rule.contains("@put") || rule.contains("@get"));
+            // 分离规则参数
+            List<List<String>> ruleParams = new ArrayList();    // 创建规则参数容器
+            List<Boolean> hasVars = new ArrayList<>();          // 创建put&get参数标志容器
+            for (int i = ruleList.length; i-- > 0; ) {
+                String rule = ruleList[i];
+                ruleParams.add(0, AnalyzeByRegex.splitRegexRule(rule));
+                hasVars.add(0, rule.contains("@put") || rule.contains("@get"));
             }
-            // 获取详情规则分组数
-            int resCount = resM.groupCount();
-            // 新建规则结果容器
-            String[] infoList = new String[ruleList.length];
-            // 合并规则结果内容
-            for (int i = 0; i < infoList.length; i++) {
-                StringBuilder infoVal = new StringBuilder();
-                for (String ruleGroup : ruleGroups.get(i)) {
-                    if (ruleGroup.startsWith("$")) {
-                        int groupIndex = string2Int(ruleGroup);
-                        if (groupIndex <= resCount) {
-                            infoVal.append(StringUtils.trim(resM.group(groupIndex)));
-                            continue;
-                        }
-                    }
-                    infoVal.append(ruleGroup);
+            // 提取正则参数
+            List<List<Integer>> ruleGroups = new ArrayList();
+            for (int i = ruleParams.size(); i-- > 0; ) {
+                List<String> ruleParam = ruleParams.get(i);
+                List<Integer> ruleGroup = new ArrayList();
+                for (int j = ruleParam.size(); j-- > 0; ) {
+                    ruleGroup.add(0, ruleParam.get(j).charAt(0) == '$' ? AnalyzeByRegex.string2Int(ruleParam.get(j)) : -1);
                 }
-                infoList[i] = hasVars.get(i) ? checkKeys(infoVal.toString(), analyzer) : infoVal.toString();
+                ruleGroups.add(0, ruleGroup);
+            }
+            // 创建结果缓存
+            List<String> infoList = new ArrayList();
+            StringBuilder infoVal = new StringBuilder();
+            for (int i = ruleParams.size(); i-- > 0; ) {
+                List<String> ruleParam = ruleParams.get(i);
+                List<Integer> ruleGroup = ruleGroups.get(i);
+                infoVal.setLength(0);
+                for (int j = ruleParam.size(); j-- > 0; ) {
+                    if (ruleGroup.get(j) != -1) {
+                        infoVal.insert(0, resM.group(ruleGroup.get(j)));
+                    } else {
+                        infoVal.insert(0, ruleParam.get(j));
+                    }
+                }
+                infoList.add(0, hasVars.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString());
             }
             Debug.printLog(tag, "└详情预处理完成");
 
             Debug.printLog(tag, "┌获取书籍名称");
-            if (!isEmpty(infoList[0])) bookInfoBean.setName(StringUtils.formatHtml(infoList[0]));
-            Debug.printLog(tag, "└" + infoList[0]);
+            if (!isEmpty(infoList.get(0)))
+                bookInfoBean.setName(infoList.get(0));
+            Debug.printLog(tag, "└" + infoList.get(0));
 
             Debug.printLog(tag, "┌获取作者名称");
-            if (!isEmpty(infoList[1])) bookInfoBean.setAuthor(StringUtils.formatHtml(infoList[1]));
-            Debug.printLog(tag, "└" + infoList[1]);
+            if (!isEmpty(infoList.get(1)))
+                bookInfoBean.setAuthor(infoList.get(1));
+            Debug.printLog(tag, "└" + infoList.get(1));
 
             Debug.printLog(tag, "┌获取分类信息");
-            Debug.printLog(tag, "└" + infoList[2]);
+            Debug.printLog(tag, "└" + infoList.get(2));
 
             Debug.printLog(tag, "┌获取最新章节");
-            if (!isEmpty(infoList[3])) bookShelfBean.setLastChapterName(infoList[3]);
-            Debug.printLog(tag, "└" + infoList[3]);
+            if (!isEmpty(infoList.get(3))) bookShelfBean.setLastChapterName(infoList.get(3));
+            Debug.printLog(tag, "└" + infoList.get(3));
 
             Debug.printLog(tag, "┌获取简介内容");
-            if (!isEmpty(infoList[4])) bookInfoBean.setIntroduce(infoList[4]);
-            Debug.printLog(tag, "└" + infoList[4]);
+            if (!isEmpty(infoList.get(4))) bookInfoBean.setIntroduce(infoList.get(4));
+            Debug.printLog(tag, "└" + infoList.get(4));
 
             Debug.printLog(tag, "┌获取封面网址");
-            if (!isEmpty(infoList[5]))
-                bookInfoBean.setCoverUrl(NetworkUtils.getAbsoluteURL(baseUrl, infoList[5]));
-            Debug.printLog(tag, "└" + infoList[5]);
+            if (!isEmpty(infoList.get(5)))
+                bookInfoBean.setCoverUrl(infoList.get(5));
+            Debug.printLog(tag, "└" + infoList.get(5));
 
             Debug.printLog(tag, "┌获取目录网址");
-            if (isEmpty(infoList[6])) infoList[6] = baseUrl;
-            bookInfoBean.setChapterUrl(infoList[6]);
+            if (isEmpty(infoList.get(6))) infoList.set(6, baseUrl);
+            bookInfoBean.setChapterUrl(infoList.get(6));
             //如果目录页和详情页相同,暂存页面内容供获取目录用
-            if (infoList[6].equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
+            if (infoList.get(6).equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             Debug.printLog(tag, "-详情页解析完成");
         } else {
@@ -114,7 +120,7 @@ public class AnalyzeByRegex {
     }
 
     // 拆分正则表达式替换规则(如:$\d和$\d\d) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
-    public static String[] splitRegexRule(String str) {
+    public static List<String> splitRegexRule(String str) {
         int start = 0, index = 0, len = str.length();
         List<String> arr = new ArrayList<>();
         while (start < len) {
@@ -132,7 +138,7 @@ public class AnalyzeByRegex {
             }
         }
         if (start > index) arr.add(str.substring(index, start));
-        return arr.toArray(new String[arr.size()]);
+        return arr;
     }
 
     // 存取字符串中的put&get参数
