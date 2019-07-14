@@ -64,6 +64,7 @@ public class ReadBookControl {
     private int tipPaddingRight;
     private int tipPaddingBottom;
     private float textLetterSpacing;
+    private boolean canSelectText;
 
     private SharedPreferences preferences;
 
@@ -120,7 +121,7 @@ public class ReadBookControl {
         this.screenDirection = preferences.getInt("screenDirection", 0);
         this.navBarColor = preferences.getInt("navBarColorInt", 0);
         this.textLetterSpacing = preferences.getFloat("textLetterSpacing", 0);
-
+        this.canSelectText = preferences.getBoolean("canSelectText", false);
         initTextDrawableIndex();
     }
 
@@ -667,6 +668,17 @@ public class ReadBookControl {
         this.tipPaddingLeft = tipPaddingLeft;
         preferences.edit()
                 .putInt("tipPaddingLeft", tipPaddingLeft)
+                .apply();
+    }
+
+    public boolean isCanSelectText() {
+        return canSelectText;
+    }
+
+    public void setCanSelectText(boolean canSelectText) {
+        this.canSelectText = canSelectText;
+        preferences.edit()
+                .putBoolean("canSelectText", canSelectText)
                 .apply();
     }
 

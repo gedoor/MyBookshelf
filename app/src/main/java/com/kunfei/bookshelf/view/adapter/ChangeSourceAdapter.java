@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -27,8 +26,7 @@ import static android.text.TextUtils.isEmpty;
 
 public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> allBookBeans;
-    private BaseListAdapter.OnItemClickListener onItemClickListener;
-    private BaseListAdapter.OnItemLongClickListener onItemLongClickListener;
+    private CallBack callBack;
 
     public ChangeSourceAdapter(Boolean needLoadMore) {
         super(needLoadMore);
@@ -50,18 +48,14 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         notifyDataSetChanged();
     }
 
-    public void removeData(int pos) {
-        DbHelper.getDaoSession().getSearchBookBeanDao().delete(allBookBeans.get(pos));
-        getSearchBookBeans().remove(pos);
-        notifyItemRemoved(pos);
+    public void removeData(SearchBookBean searchBookBean) {
+        DbHelper.getDaoSession().getSearchBookBeanDao().delete(searchBookBean);
+        allBookBeans.remove(searchBookBean);
+        notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(BaseListAdapter.OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
-
-    public void setOnItemLongClickListener(BaseListAdapter.OnItemLongClickListener itemLongClickListener) {
-        this.onItemLongClickListener = itemLongClickListener;
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
     }
 
     public List<SearchBookBean> getSearchBookBeans() {
@@ -75,30 +69,8 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public void onBindIViewHolder(RecyclerView.ViewHolder holder, int position) {
-        holder.itemView.setTag(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.tvBookSource.setText(allBookBeans.get(position).getOrigin());
-        if (isEmpty(allBookBeans.get(position).getLastChapter())) {
-            myViewHolder.tvLastChapter.setText(R.string.no_last_chapter);
-        } else {
-            myViewHolder.tvLastChapter.setText(allBookBeans.get(position).getLastChapter());
-        }
-        if (allBookBeans.get(position).getIsCurrentSource()) {
-            myViewHolder.ivChecked.setVisibility(View.VISIBLE);
-        } else {
-            myViewHolder.ivChecked.setVisibility(View.INVISIBLE);
-        }
-        myViewHolder.llContent.setOnClickListener(view -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(view, position);
-            }
-        });
-        myViewHolder.llContent.setOnLongClickListener(view -> {
-            if (onItemLongClickListener != null) {
-                return onItemLongClickListener.onItemLongClick(view, position);
-            }
-            return true;
-        });
+        myViewHolder.bind(allBookBeans.get(position), callBack);
     }
 
     @Override
@@ -124,5 +96,37 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
             tvLastChapter = itemView.findViewById(R.id.tv_lastChapter);
             ivChecked = itemView.findViewById(R.id.iv_checked);
         }
+
+        public void bind(SearchBookBean searchBookBean, CallBack callBack) {
+            tvBookSource.setText(searchBookBean.getOrigin());
+            if (isEmpty(searchBookBean.getLastChapter())) {
+                tvLastChapter.setText(R.string.no_last_chapter);
+            } else {
+                tvLastChapter.setText(searchBookBean.getLastChapter());
+            }
+            if (searchBookBean.getIsCurrentSource()) {
+                ivChecked.setVisibility(View.VISIBLE);
+            } else {
+                ivChecked.setVisibility(View.INVISIBLE);
+            }
+            llContent.setOnClickListener(view -> {
+                if (callBack != null) {
+                    callBack.changeTo(searchBookBean);
+                }
+            });
+            llContent.setOnLongClickListener(view -> {
+                if (callBack != null) {
+                    callBack.showMenu(view, searchBookBean);
+                }
+                return true;
+            });
+        }
     }
+
+    public interface CallBack {
+        void changeTo(SearchBookBean searchBookBean);
+
+        void showMenu(View view, SearchBookBean searchBookBean);
+    }
+
 }

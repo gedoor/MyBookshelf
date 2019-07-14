@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
@@ -238,23 +240,31 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             return;
         }
         PopupMenu popupMenu = new PopupMenu(getContext(), view);
-        popupMenu.getMenu().add(R.string.edit);
-        popupMenu.getMenu().add(R.string.to_top);
-        popupMenu.getMenu().add(R.string.delete);
+        popupMenu.getMenu().add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.edit);
+        popupMenu.getMenu().add(Menu.NONE, R.id.menu_top, Menu.NONE, R.string.to_top);
+        popupMenu.getMenu().add(Menu.NONE, R.id.menu_del, Menu.NONE, R.string.delete);
+        popupMenu.getMenu().add(Menu.NONE, R.id.menu_clear, Menu.NONE, R.string.clear_cache);
         popupMenu.setOnMenuItemClickListener(item -> {
-            if (item.getTitle().equals(getString(R.string.edit))) {
-                SourceEditActivity.startThis(this, sourceBean);
-            } else if (item.getTitle().equals(getString(R.string.to_top))) {
-                BookSourceManager.toTop(sourceBean)
-                        .subscribe(new MySingleObserver<Boolean>() {
-                            @Override
-                            public void onSuccess(Boolean aBoolean) {
-                                refreshData();
-                            }
-                        });
-            } else if (item.getTitle().equals(getString(R.string.delete))) {
-                BookSourceManager.removeBookSource(sourceBean);
-                refreshData();
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    SourceEditActivity.startThis(this, sourceBean);
+                    break;
+                case R.id.menu_top:
+                    BookSourceManager.toTop(sourceBean)
+                            .subscribe(new MySingleObserver<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean aBoolean) {
+                                    refreshData();
+                                }
+                            });
+                    break;
+                case R.id.menu_del:
+                    BookSourceManager.removeBookSource(sourceBean);
+                    refreshData();
+                    break;
+                case R.id.menu_clear:
+                    ACache.get(getActivity(), "findCache").remove(sourceBean.getBookSourceUrl());
+                    break;
             }
             return true;
         });

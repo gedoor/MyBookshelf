@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -52,7 +53,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChangeSourceDialog extends BaseDialog {
+public class ChangeSourceDialog extends BaseDialog implements ChangeSourceAdapter.CallBack {
     private Context context;
     private TextView atvTitle;
     private ImageButton ibtStop;
@@ -128,46 +129,51 @@ public class ChangeSourceDialog extends BaseDialog {
         });
     }
 
+    @Override
+    public void changeTo(SearchBookBean searchBookBean) {
+        if (!Objects.equals(book.getNoteUrl(), searchBookBean.getNoteUrl())) {
+            callback.changeSource(searchBookBean);
+        }
+        dismiss();
+    }
+
+    @Override
+    public void showMenu(View view, SearchBookBean searchBookBean) {
+        final String url = searchBookBean.getTag();
+        final BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.getMenu().add(0, R.id.menu_disable, 1, "禁用书源");
+        popupMenu.getMenu().add(0, R.id.menu_del, 2, "删除书源");
+        popupMenu.getMenu().add(0, R.id.menu_edit, 3, "编辑书源");
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if (sourceBean != null) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_disable:
+                        sourceBean.setEnable(false);
+                        BookSourceManager.addBookSource(sourceBean);
+                        adapter.removeData(searchBookBean);
+                        Toast.makeText(context, String.format("%s已禁用", sourceBean.getBookSourceName()), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.menu_del:
+                        BookSourceManager.removeBookSource(sourceBean);
+                        adapter.removeData(searchBookBean);
+                        Toast.makeText(context, String.format("%s已删除", sourceBean.getBookSourceName()), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.menu_edit:
+                        SourceEditActivity.startThis(context, sourceBean);
+                        break;
+                }
+            }
+            return true;
+        });
+        popupMenu.show();
+    }
+
     @SuppressLint("InflateParams")
     private void initData() {
         adapter = new ChangeSourceAdapter(false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
-        adapter.setOnItemClickListener((view, index) -> {
-            SearchBookBean bookBean = adapter.getSearchBookBeans().get(index);
-            if (!Objects.equals(book.getNoteUrl(), bookBean.getNoteUrl())) {
-                callback.changeSource(adapter.getSearchBookBeans().get(index));
-            }
-            dismiss();
-        });
-        adapter.setOnItemLongClickListener((view, pos) -> {
-            final String url = adapter.getSearchBookBeans().get(pos).getTag();
-            final BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
-            PopupMenu popupMenu = new PopupMenu(context, view);
-            popupMenu.getMenu().add(0, 0, 1, "禁用书源");
-            popupMenu.getMenu().add(0, 0, 2, "删除书源");
-            popupMenu.getMenu().add(0, 0, 3, "编辑书源");
-            popupMenu.setOnMenuItemClickListener(menuItem -> {
-                if (sourceBean != null) {
-                    switch (menuItem.getOrder()) {
-                        case 1:
-                            sourceBean.setEnable(false);
-                            BookSourceManager.addBookSource(sourceBean);
-                            adapter.removeData(pos);
-                            break;
-                        case 2:
-                            BookSourceManager.removeBookSource(sourceBean);
-                            adapter.removeData(pos);
-                            break;
-                        case 3:
-                            SourceEditActivity.startThis(context, sourceBean);
-                            break;
-                    }
-                }
-                return true;
-            });
-            popupMenu.show();
-            return true;
-        });
+        adapter.setCallBack(this);
         View viewRefreshError = LayoutInflater.from(context).inflate(R.layout.view_refresh_error, null);
         viewRefreshError.setBackgroundResource(R.color.background_card);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {

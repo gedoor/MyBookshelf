@@ -16,6 +16,29 @@
         android:focusable="true"
         tools:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/cursor_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_cursor_left"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/cursor_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_cursor_right"
+        android:visibility="invisible" />
+
+    <com.kunfei.bookshelf.view.popupwindow.ReadLongPressPop
+        android:id="@+id/readLongPress"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
     <com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop
         android:id="@+id/mediaPlayerPop"
         android:layout_width="match_parent"
@@ -134,8 +157,8 @@
             android:id="@+id/moreSettingPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:visibility="invisible" />
 
     </FrameLayout>
 

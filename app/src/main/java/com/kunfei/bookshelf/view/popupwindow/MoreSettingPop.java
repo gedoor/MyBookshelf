@@ -77,6 +77,8 @@ public class MoreSettingPop extends FrameLayout {
     ATESwitch sbImmersionStatusBar;
     @BindView(R.id.llImmersionStatusBar)
     LinearLayout llImmersionStatusBar;
+    @BindView(R.id.sb_select_text)
+    Switch switchSelectText;
 
     private Context context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -227,6 +229,11 @@ public class MoreSettingPop extends FrameLayout {
             dialog.show();
             ATH.setAlertDialogTint(dialog);
         });
+        switchSelectText.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                readBookControl.setCanSelectText(isChecked);
+            }
+        });
     }
 
     private void initData() {
@@ -244,6 +251,7 @@ public class MoreSettingPop extends FrameLayout {
         sbShowTitle.setChecked(readBookControl.getShowTitle());
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
+        switchSelectText.setChecked(readBookControl.isCanSelectText());
         upView();
     }
 

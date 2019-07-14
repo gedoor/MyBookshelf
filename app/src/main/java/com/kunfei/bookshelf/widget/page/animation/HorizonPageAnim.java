@@ -17,19 +17,6 @@ import java.util.List;
 public abstract class HorizonPageAnim extends PageAnimation {
     private static final String TAG = "HorizonPageAnim";
     List<Bitmap> bitmapList = new ArrayList<>();
-    //是否取消翻页
-    boolean isCancel = false;
-    private boolean touchInit = false;
-    //可以使用 mLast代替
-    private int mMoveX = 0;
-    private int mMoveY = 0;
-    //是否移动了
-    private boolean isMove = false;
-    //是否翻阅下一页。true表示翻到下一页，false表示上一页。
-    private boolean isNext = false;
-
-    //是否没下一页或者上一页
-    private boolean noNext = false;
 
     HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
@@ -62,27 +49,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     public abstract void drawMove(Canvas canvas);
 
-    private void initTouch(int x, int y) {
-        if (!touchInit) {
-            //移动的点击位置
-            mMoveX = 0;
-            mMoveY = 0;
-            //是否移动
-            isMove = false;
-            //是否存在下一章
-            noNext = false;
-            //是下一章还是前一章
-            isNext = false;
-            //是否正在执行动画
-            isRunning = false;
-            //取消
-            isCancel = false;
-            //设置起始位置的触摸点
-            setStartPoint(x, y);
-            touchInit = true;
-        }
-    }
-
     @Override
     public void onTouchEvent(MotionEvent event) {
         abortAnim();
@@ -95,10 +61,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                initTouch(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                initTouch(x, y);
                 //判断是否移动了
                 if (!isMove) {
                     isMove = Math.abs(mStartX - x) > slop || Math.abs(mStartY - y) > slop;
@@ -145,14 +109,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                initTouch(x, y);
-                touchInit = false;
                 isRunning = false;
                 if (!isMove) {
-                    if (mCenterRect.contains(x, y)) {
-                        mListener.clickCenter();
-                        return;
-                    }
 
                     if (!readBookControl.getCanClickTurn()) {
                         return;

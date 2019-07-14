@@ -15,8 +15,6 @@ public class ScrollPageAnim extends PageAnimation {
     private VelocityTracker mVelocity;
     // 整个Bitmap的背景显示
     private Bitmap mBgBitmap;
-    //是否移动了
-    private boolean isMove = false;
 
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
@@ -61,10 +59,6 @@ public class ScrollPageAnim extends PageAnimation {
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
-                    if (mCenterRect.contains(x, y)) {
-                        mListener.clickCenter();
-                        return;
-                    }
 
                     if (!readBookControl.getCanClickTurn() || readBookControl.disableScrollClickTurn()) {
                         return;

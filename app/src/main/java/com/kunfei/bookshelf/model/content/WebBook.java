@@ -174,7 +174,6 @@ public class WebBook extends BaseModelImpl {
     }
 
     public class NoSourceThrowable extends Throwable {
-
         NoSourceThrowable(String tag) {
             super(String.format("%s没有找到书源配置", tag));
         }

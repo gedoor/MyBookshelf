@@ -13,7 +13,14 @@
 
     <item name="menu_allow_update" type="id" />
 
-    <item name="menu_edit_book_source" type="id" />
+    <item name="menu_edit" type="id" />
 
+    <item name="menu_top" type="id" />
+
+    <item name="menu_del" type="id" />
+
+    <item name="menu_clear" type="id" />
+
+    <item name="menu_disable" type="id" />
 
 </resources>

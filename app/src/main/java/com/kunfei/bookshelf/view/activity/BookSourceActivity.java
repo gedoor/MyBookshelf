@@ -241,7 +241,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.book_source_manage);
         }
     }

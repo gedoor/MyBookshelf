@@ -174,25 +174,15 @@ public class AnalyzeRule {
                     default:
                         result = getAnalyzeByJSoup(result).getStringList(rule.rule);
                 }
-                if (!isEmpty(rule.replaceRegex) && result instanceof List) {
-                    List<String> newList = new ArrayList<>();
-                    for (Object item : (List) result) {
-                        newList.add(replaceRegex(String.valueOf(item), rule));
-                    }
-                    result = newList;
-                } else if (!isEmpty(rule.replaceRegex)) {
-                    result = replaceRegex(String.valueOf(result), rule);
+            }
+            if (!isEmpty(rule.replaceRegex) && result instanceof List) {
+                List<String> newList = new ArrayList<>();
+                for (Object item : (List) result) {
+                    newList.add(replaceRegex(String.valueOf(item), rule));
                 }
-            } else {
-                if (!isEmpty(rule.replaceRegex) && result instanceof List) {
-                    List<String> newList = new ArrayList<>();
-                    for (Object item : (List) result) {
-                        newList.add(replaceRegex(String.valueOf(item), rule));
-                    }
-                    result = newList;
-                } else if (!isEmpty(rule.replaceRegex)) {
-                    result = replaceRegex(String.valueOf(result), rule);
-                }
+                result = newList;
+            } else if (!isEmpty(rule.replaceRegex)) {
+                result = replaceRegex(String.valueOf(result), rule);
             }
         }
         if (result == null) return new ArrayList<>();
@@ -251,10 +241,8 @@ public class AnalyzeRule {
                             result = getAnalyzeByJSoup(result).getString(rule.rule);
                         }
                 }
-                if (!isEmpty(rule.replaceRegex) && result instanceof String) {
-                    result = replaceRegex(String.valueOf(result), rule);
-                }
-            } else if (!isEmpty(rule.replaceRegex)) {
+            }
+            if (!isEmpty(rule.replaceRegex)) {
                 result = replaceRegex(String.valueOf(result), rule);
             }
         }

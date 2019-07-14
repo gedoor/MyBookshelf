@@ -64,6 +64,7 @@ public class NetworkUtils {
      * 获取绝对地址
      */
     public static String getAbsoluteURL(String baseURL, String relativePath) {
+        if (TextUtils.isEmpty(relativePath)) return "";
         if (TextUtils.isEmpty(baseURL)) return relativePath;
         String header = null;
         if (StringUtils.startWithIgnoreCase(relativePath, "@header:")) {
