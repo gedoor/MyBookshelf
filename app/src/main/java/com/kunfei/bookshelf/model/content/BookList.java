@@ -324,57 +324,66 @@ class BookList {
                     ruleCoverUrl,   // 获取封面规则
                     ruleNoteUrl     // 获取详情规则
             };
-            // 创建put&get参数判断容器
-            List<Boolean> hasVars = new ArrayList<>();
-            // 创建拆分规则容器
-            List<String[]> ruleGroups = new ArrayList<>();
-            // 提取规则信息
-            for (String rule : ruleList) {
-                ruleGroups.add(AnalyzeByRegex.splitRegexRule(rule));
-                hasVars.add(rule.contains("@put") || rule.contains("@get"));
+            // 分离规则参数
+            List<List<String>> ruleParams = new ArrayList();    // 创建规则参数容器
+            List<Boolean> hasVars = new ArrayList<>();          // 创建put&get参数标志容器
+            for (int i = ruleList.length; i-- > 0; ) {
+                String rule = ruleList[i];
+                ruleParams.add(0, AnalyzeByRegex.splitRegexRule(rule));
+                hasVars.add(0, rule.contains("@put") || rule.contains("@get"));
             }
-            // 提取书籍列表信息
+            // 提取正则参数
+            List<List<Integer>> ruleGroups = new ArrayList();
+            for (int i = ruleParams.size(); i-- > 0; ) {
+                List<String> ruleParam = ruleParams.get(i);
+                List<Integer> ruleGroup = new ArrayList();
+                for (int j = ruleParam.size(); j-- > 0; ) {
+                    ruleGroup.add(0, ruleParam.get(j).charAt(0) == '$' ? AnalyzeByRegex.string2Int(ruleParam.get(j)) : -1);
+                }
+                ruleGroups.add(0, ruleGroup);
+            }
+            // 创建结果缓存
+            List<String> infoList = new ArrayList();
+            // 提取书籍列表
             do {
-                // 获取列表规则分组数
-                int resCount = resM.groupCount();
                 // 新建书籍容器
                 SearchBookBean item = new SearchBookBean(tag, sourceName);
                 analyzer.setBook(item);
-                // 新建规则结果容器
-                String[] infoList = new String[ruleList.length];
-                // 合并规则结果内容
-                for (int i = 0; i < infoList.length; i++) {
-                    StringBuilder infoVal = new StringBuilder();
-                    for (String ruleGroup : ruleGroups.get(i)) {
-                        if (ruleGroup.startsWith("$")) {
-                            int groupIndex = AnalyzeByRegex.string2Int(ruleGroup);
-                            if (groupIndex <= resCount) {
-                                infoVal.append(StringUtils.trim(resM.group(groupIndex)));
-                                continue;
-                            }
+
+                infoList.clear();
+                StringBuilder infoVal = new StringBuilder();
+                for (int i = ruleParams.size(); i-- > 0; ) {
+                    List<String> ruleParam = ruleParams.get(i);
+                    List<Integer> ruleGroup = ruleGroups.get(i);
+                    infoVal.setLength(0);
+                    for (int j = ruleParam.size(); j-- > 0; ) {
+                        if (ruleGroup.get(j) != -1) {
+                            infoVal.insert(0, resM.group(ruleGroup.get(j)));
+                        } else {
+                            infoVal.insert(0, ruleParam.get(j));
                         }
-                        infoVal.append(ruleGroup);
                     }
-                    infoList[i] = hasVars.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString();
+                    infoList.add(0, hasVars.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString());
                 }
                 // 保存当前节点的书籍信息
                 item.setSearchInfo(
-                        StringUtils.formatHtml(infoList[0]), // 保存书名
-                        StringUtils.formatHtml(infoList[1]), // 保存作者
-                        infoList[2], // 保存分类
-                        infoList[3], // 保存终章
-                        infoList[4], // 保存简介
-                        NetworkUtils.getAbsoluteURL(baseUrl, infoList[5]), // 保存封面
-                        infoList[6]  // 保存详情
+                        infoList.get(0), // 保存书名
+                        infoList.get(1), // 保存作者
+                        infoList.get(2), // 保存分类
+                        infoList.get(3), // 保存终章
+                        infoList.get(4), // 保存简介
+                        infoList.get(5), // 保存封面
+                        infoList.get(6)  // 保存详情
                 );
                 books.add(item);
                 // 判断搜索结果是否为详情页
-                if (books.size() == 1 && (isEmpty(infoList[6]) || infoList[6].equals(baseUrl))) {
+                if (books.size() == 1 && (isEmpty(infoList.get(6)) || infoList.get(6).equals(baseUrl))) {
                     books.get(0).setNoteUrl(baseUrl);
                     books.get(0).setBookInfoHtml(res);
                     return books;
                 }
             } while (resM.find());
+
             Debug.printLog(tag, "└找到 " + books.size() + " 个匹配的结果");
             Debug.printLog(tag, "┌获取书籍名称");
             Debug.printLog(tag, "└" + books.get(0).getName());
@@ -399,5 +408,4 @@ class BookList {
             return getBooksOfRegex(result.toString(), regs, ++index, analyzer);
         }
     }
-
 }
