@@ -242,9 +242,14 @@ public class BookChapterList {
     private List<BookChapterBean> regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer) {
         Matcher m = Pattern.compile(regex[index]).matcher(str);
         if (index + 1 == regex.length) {
+            // 创建目录容器
             List<BookChapterBean> chapterBeans = new ArrayList<>();
+            // 获取目录规则
             String nameRule = bookSourceBean.getRuleChapterName();
             String linkRule = bookSourceBean.getRuleContentUrl();
+            // 替换@get参数
+            nameRule = analyzer.replaceGet(nameRule);
+            linkRule = analyzer.replaceGet(linkRule);
             // 分离规则参数
             List<String> nameParams = AnalyzeByRegex.splitRegexRule(nameRule);
             List<String> linkParams = AnalyzeByRegex.splitRegexRule(linkRule);
