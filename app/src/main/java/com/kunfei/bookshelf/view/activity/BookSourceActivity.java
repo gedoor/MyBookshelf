@@ -71,7 +71,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
-    private SubMenu sortMenu;
     private BookSourceAdapter adapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
@@ -257,7 +256,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public boolean onPrepareOptionsMenu(Menu menu) {
         groupItem = menu.findItem(R.id.action_group);
         groupMenu = groupItem.getSubMenu();
-        sortMenu = menu.findItem(R.id.action_sort).getSubMenu();
         upGroupMenu();
         upSortMenu();
         return super.onPrepareOptionsMenu(menu);
@@ -318,21 +316,16 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         if (groupMenu == null) return;
         groupMenu.removeGroup(R.id.source_group);
         List<String> groupList = BookSourceManager.getGroupList();
-        if (groupList.size() == 0) {
-            groupItem.setVisible(false);
-        } else {
-            groupItem.setVisible(true);
-            for (String groupName : new ArrayList<>(groupList)) {
-                groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
-            }
+        for (String groupName : new ArrayList<>(groupList)) {
+            groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
         }
     }
 
     private void upSortMenu() {
-        sortMenu.getItem(0).setChecked(false);
-        sortMenu.getItem(1).setChecked(false);
-        sortMenu.getItem(2).setChecked(false);
-        sortMenu.getItem(getSort()).setChecked(true);
+        groupMenu.getItem(0).setChecked(false);
+        groupMenu.getItem(1).setChecked(false);
+        groupMenu.getItem(2).setChecked(false);
+        groupMenu.getItem(getSort()).setChecked(true);
     }
 
     private void upSourceSort(int sort) {

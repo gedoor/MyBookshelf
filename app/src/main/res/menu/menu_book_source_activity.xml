@@ -18,37 +18,26 @@
         tools:ignore="AlwaysShowAction">
 
         <menu>
+            <group android:id="@+id/sort">
+                <item
+                    android:id="@+id/sort_manual"
+                    android:checkable="true"
+                    android:title="@string/sort_manual" />
+
+                <item
+                    android:id="@+id/sort_auto"
+                    android:checkable="true"
+                    android:title="@string/sort_auto" />
+
+                <item
+                    android:id="@+id/sort_pin_yin"
+                    android:checkable="true"
+                    android:title="@string/sort_pin_yin" />
+            </group>
+
             <group android:id="@+id/source_group">
 
             </group>
-
-        </menu>
-
-    </item>
-
-    <item
-        android:id="@+id/action_sort"
-        android:icon="@drawable/ic_format_line_spacing"
-        android:title="@string/sort"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction">
-
-        <menu>
-
-            <item
-                android:id="@+id/sort_manual"
-                android:checkable="true"
-                android:title="@string/sort_manual" />
-
-            <item
-                android:id="@+id/sort_auto"
-                android:checkable="true"
-                android:title="@string/sort_auto" />
-
-            <item
-                android:id="@+id/sort_pin_yin"
-                android:checkable="true"
-                android:title="@string/sort_pin_yin" />
 
         </menu>
 
