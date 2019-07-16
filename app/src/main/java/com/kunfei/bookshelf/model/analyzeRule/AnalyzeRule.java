@@ -193,7 +193,7 @@ public class AnalyzeRule {
             List<String> urlList = new ArrayList<>();
             for (Object url : (List) result) {
                 String absoluteURL = NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(url));
-                if (!urlList.contains(absoluteURL)) {
+                if (!urlList.contains(absoluteURL) && !isEmpty(absoluteURL)) {
                     urlList.add(absoluteURL);
                 }
             }
