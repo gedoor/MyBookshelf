@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.model.content;
 
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
@@ -16,6 +17,7 @@ import org.mozilla.javascript.NativeObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +86,7 @@ class BookList {
                 if (ruleList.startsWith(":")) {
                     ruleList = ruleList.substring(1);
                     Debug.printLog(tag, "┌解析搜索列表");
-                    books = getBooksOfRegex(body, ruleList.split("&&"), 0, analyzer);
+                    getBooksOfRegex(body, ruleList.split("&&"), 0, analyzer, books);
                 } else {
                     if (ruleList.startsWith("+")) {
                         allInOne = true;
@@ -299,91 +301,84 @@ class BookList {
     }
 
     // 纯java模式正则表达式获取书籍列表
-    private List<SearchBookBean> getBooksOfRegex(String res, String[] regs,
-                                                 int index, AnalyzeRule analyzer) throws Exception {
+    private void getBooksOfRegex(String res, String[] regs,
+                                 int index, AnalyzeRule analyzer, final List<SearchBookBean> books) throws Exception {
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
         String baseUrl = analyzer.getBaseUrl();
         // 判断规则是否有效,当搜索列表规则无效时当作详情页处理
         if (!resM.find()) {
-            List<SearchBookBean> books = new ArrayList<>();
-            SearchBookBean bookBean = getItem(analyzer, baseUrl);
-            books.add(bookBean);
-            return books;
+            books.add(getItem(analyzer, baseUrl));
+            return;
         }
         // 判断索引的规则是最后一个规则
         if (index + 1 == regs.length) {
-            // 创建书籍信息缓存数组
-            List<SearchBookBean> books = new ArrayList<>();
             // 获取规则列表
-            String[] ruleList = new String[]{
-                    ruleName,       // 获取书名规则
-                    ruleAuthor,     // 获取作者规则
-                    ruleKind,       // 获取分类规则
-                    ruleLastChapter,// 获取终章规则
-                    ruleIntroduce,  // 获取简介规则
-                    ruleCoverUrl,   // 获取封面规则
-                    ruleNoteUrl     // 获取详情规则
-            };
+            HashMap<String, String> ruleMap = new HashMap<>();
+            ruleMap.put("ruleName", ruleName);
+            ruleMap.put("ruleAuthor", ruleAuthor);
+            ruleMap.put("ruleKind", ruleKind);
+            ruleMap.put("ruleLastChapter", ruleLastChapter);
+            ruleMap.put("ruleIntroduce", ruleIntroduce);
+            ruleMap.put("ruleCoverUrl", ruleCoverUrl);
+            ruleMap.put("ruleNoteUrl", ruleNoteUrl);
             // 分离规则参数
-            List<List<String>> ruleParams = new ArrayList();    // 创建规则参数容器
-            List<Boolean> hasVars = new ArrayList<>();          // 创建put&get参数标志容器
-            for (int i = ruleList.length; i-- > 0; ) {
-                String rule = ruleList[i];
-                ruleParams.add(0, AnalyzeByRegex.splitRegexRule(rule));
-                hasVars.add(0, rule.contains("@put") || rule.contains("@get"));
+            List<String> ruleName = new ArrayList<>();
+            List<List<String>> ruleParams = new ArrayList<>();  // 创建规则参数容器
+            List<List<Integer>> ruleTypes = new ArrayList<>();  // 创建规则类型容器
+            List<Boolean> hasVarParams = new ArrayList<>();     // 创建put&get标志容器
+            for (String key : ruleMap.keySet()) {
+                String val = ruleMap.get(key);
+                ruleName.add(key);
+                hasVarParams.add(val.contains("@put") || val.contains("@get"));
+                List<String> ruleParam = new ArrayList<>();
+                List<Integer> ruleType = new ArrayList<>();
+                AnalyzeByRegex.splitRegexRule(val, ruleParam, ruleType);
+                ruleParams.add(ruleParam);
+                ruleTypes.add(ruleType);
             }
-            // 提取正则参数
-            List<List<Integer>> ruleGroups = new ArrayList();
-            for (int i = ruleParams.size(); i-- > 0; ) {
-                List<String> ruleParam = ruleParams.get(i);
-                List<Integer> ruleGroup = new ArrayList();
-                for (int j = ruleParam.size(); j-- > 0; ) {
-                    ruleGroup.add(0, ruleParam.get(j).charAt(0) == '$' ? AnalyzeByRegex.string2Int(ruleParam.get(j)) : -1);
-                }
-                ruleGroups.add(0, ruleGroup);
-            }
-            // 创建结果缓存
-            List<String> infoList = new ArrayList();
             // 提取书籍列表
             do {
                 // 新建书籍容器
                 SearchBookBean item = new SearchBookBean(tag, sourceName);
                 analyzer.setBook(item);
-
-                infoList.clear();
+                // 提取规则内容
+                HashMap<String, String> ruleVal = new HashMap<>();
                 StringBuilder infoVal = new StringBuilder();
                 for (int i = ruleParams.size(); i-- > 0; ) {
                     List<String> ruleParam = ruleParams.get(i);
-                    List<Integer> ruleGroup = ruleGroups.get(i);
+                    List<Integer> ruleType = ruleTypes.get(i);
                     infoVal.setLength(0);
                     for (int j = ruleParam.size(); j-- > 0; ) {
-                        if (ruleGroup.get(j) != -1) {
-                            infoVal.insert(0, resM.group(ruleGroup.get(j)));
+                        int regType = ruleType.get(j);
+                        if (regType > 0) {
+                            infoVal.insert(0, resM.group(regType));
+                        } else if (regType < 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            infoVal.insert(0, resM.group(ruleParam.get(j)));
                         } else {
                             infoVal.insert(0, ruleParam.get(j));
                         }
                     }
-                    infoList.add(0, hasVars.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString());
+                    ruleVal.put(ruleName.get(i), hasVarParams.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString());
                 }
                 // 保存当前节点的书籍信息
                 item.setSearchInfo(
-                        infoList.get(0), // 保存书名
-                        infoList.get(1), // 保存作者
-                        infoList.get(2), // 保存分类
-                        infoList.get(3), // 保存终章
-                        infoList.get(4), // 保存简介
-                        infoList.get(5), // 保存封面
-                        infoList.get(6)  // 保存详情
+                        ruleVal.get("ruleName"),        // 保存书名
+                        ruleVal.get("ruleAuthor"),      // 保存作者
+                        ruleVal.get("ruleKind"),        // 保存分类
+                        ruleVal.get("ruleLastChapter"), // 保存终章
+                        ruleVal.get("ruleIntroduce"),   // 保存简介
+                        ruleVal.get("ruleCoverUrl"),    // 保存封面
+                        ruleVal.get("ruleNoteUrl")      // 保存详情
                 );
                 books.add(item);
                 // 判断搜索结果是否为详情页
-                if (books.size() == 1 && (isEmpty(infoList.get(6)) || infoList.get(6).equals(baseUrl))) {
+                if (books.size() == 1 && (isEmpty(ruleVal.get("ruleNoteUrl")) || ruleVal.get("ruleNoteUrl").equals(baseUrl))) {
                     books.get(0).setNoteUrl(baseUrl);
                     books.get(0).setBookInfoHtml(res);
-                    return books;
+                    return;
                 }
             } while (resM.find());
-
+            // 输出调试信息
             Debug.printLog(tag, "└找到 " + books.size() + " 个匹配的结果");
             Debug.printLog(tag, "┌获取书籍名称");
             Debug.printLog(tag, "└" + books.get(0).getName());
@@ -399,13 +394,12 @@ class BookList {
             Debug.printLog(tag, "└" + books.get(0).getCoverUrl());
             Debug.printLog(tag, "┌获取书籍网址");
             Debug.printLog(tag, "└" + books.get(0).getNoteUrl());
-            return books;
         } else {
             StringBuilder result = new StringBuilder();
             do {
                 result.append(resM.group());
             } while (resM.find());
-            return getBooksOfRegex(result.toString(), regs, ++index, analyzer);
+            getBooksOfRegex(result.toString(), regs, ++index, analyzer, books);
         }
     }
 }
