@@ -274,7 +274,7 @@ public class BookChapterList {
             StringBuilder cLink = new StringBuilder();
             // 提取书籍目录
             if (vipNumGroup != 0) {
-                while (resM.find()) {
+                do {
                     cName.setLength(0);
                     cLink.setLength(0);
                     for (int i = nameParams.size(); i-- > 0; ) {
@@ -305,9 +305,9 @@ public class BookChapterList {
                     }
 
                     addChapter(chapterBeans, cName.toString(), cLink.toString());
-                }
+                } while (resM.find());
             } else {
-                while (resM.find()) {
+                do {
                     cName.setLength(0);
                     cLink.setLength(0);
                     for (int i = nameParams.size(); i-- > 0; ) {
@@ -331,11 +331,13 @@ public class BookChapterList {
                     }
 
                     addChapter(chapterBeans, cName.toString(), cLink.toString());
-                }
+                } while (resM.find());
             }
         } else {
             StringBuilder result = new StringBuilder();
-            while (resM.find()) result.append(resM.group(0));
+            do {
+                result.append(resM.group(0));
+            } while (resM.find());
             regexChapter(result.toString(), regex, ++index, analyzer, chapterBeans);
         }
     }
