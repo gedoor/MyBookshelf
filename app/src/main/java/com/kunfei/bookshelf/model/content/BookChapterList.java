@@ -288,7 +288,7 @@ public class BookChapterList {
                     }
                     if (vipNumGroup > 0) {
                         cName.insert(0, resM.group(vipNumGroup) == null ? "" : "\uD83D\uDD12");
-                    } else if (vipNumGroup < 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         cName.insert(0, resM.group(vipNameGroup) == null ? "" : "\uD83D\uDD12");
                     } else {
                         cName.insert(0, vipNameGroup);
