@@ -1662,7 +1662,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     break;
             }
             if (menu.getItem(i).getItemId() == R.id.enable_replace) {
-                if (mPresenter.getBookShelf().getReplaceEnable()) {
+                if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getReplaceEnable()) {
                     menu.getItem(i).setChecked(true);
                 } else {
                     menu.getItem(i).setChecked(false);
