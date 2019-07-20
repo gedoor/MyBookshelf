@@ -158,9 +158,13 @@ public class AnalyzeByRegex {
                             }
                         } else if (regType < 0) {
                             if (j == 0 && ruleName.get(0) == "ruleChapterName") {
-                                infoVal.insert(0, resM.group(ruleParam.get(j)) == null ? "" : "\uD83D\uDD12");
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    infoVal.insert(0, resM.group(ruleParam.get(j)) == null ? "" : "\uD83D\uDD12");
+                                }
                             } else {
-                                infoVal.insert(0, resM.group(ruleParam.get(j)));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    infoVal.insert(0, resM.group(ruleParam.get(j)));
+                                }
                             }
                         } else {
                             infoVal.insert(0, ruleParam.get(j));
