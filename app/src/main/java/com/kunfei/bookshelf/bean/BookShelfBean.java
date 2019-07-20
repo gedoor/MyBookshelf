@@ -302,7 +302,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public Boolean getReplaceEnable() {
-        return replaceEnable;
+        return replaceEnable == null ? true : replaceEnable;
     }
 
     public void setReplaceEnable(Boolean replaceEnable) {
