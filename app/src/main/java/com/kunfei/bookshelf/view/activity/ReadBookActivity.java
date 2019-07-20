@@ -1114,6 +1114,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.enable_replace:
+                mPresenter.getBookShelf().setReplaceEnable(!mPresenter.getBookShelf().getReplaceEnable());
+                refresh(false);
+                break;
             case R.id.action_change_source:
                 changeSource();
                 break;
@@ -1151,11 +1155,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 break;
             case R.id.action_login:
                 SourceLoginActivity.startThis(this, mPresenter.getBookSource());
-                break;
-            case R.id.action_get_hb:
-                DonateActivity.getZfbHb(this);
-                upMenu();
-                mHandler.postDelayed(this::refreshDurChapter, 2000);
                 break;
             case android.R.id.home:
                 finish();
@@ -1417,7 +1416,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     mPresenter.getBookShelf().getBookInfoBean().getName(),
                     ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(),
                             mPresenter.getBookShelf().getTag(),
-                            mPresenter.getBookShelf().getDurChapterName()),
+                            mPresenter.getBookShelf().getDurChapterName(),
+                            mPresenter.getBookShelf().getReplaceEnable()),
                     mPresenter.getBookShelf().isAudio(),
                     mPresenter.getBookShelf().getDurChapterPage());
         }
@@ -1660,15 +1660,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         menu.getItem(i).setVisible(false);
                     }
                     break;
-                case R.id.menu_get_zfb_hb:
-                    if (MApplication.getInstance().getDonateHb()) {
-                        menu.getItem(i).setVisible(false);
-                    } else {
-                        menu.getItem(i).setVisible(true);
-                    }
-                    break;
             }
-
+            if (menu.getItem(i).getItemId() == R.id.enable_replace) {
+                if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getReplaceEnable()) {
+                    menu.getItem(i).setChecked(true);
+                } else {
+                    menu.getItem(i).setChecked(false);
+                }
+            }
         }
 
     }

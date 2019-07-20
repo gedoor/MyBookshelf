@@ -36,7 +36,8 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public String replaceContent(String bookName, String bookTag, String content) {
+    public String replaceContent(String bookName, String bookTag, String content, Boolean replaceEnable) {
+        if (!replaceEnable) return toTraditional(content);
         if (ReplaceRuleManager.getEnabled().size() == 0) return toTraditional(content);
         //替换
         for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {

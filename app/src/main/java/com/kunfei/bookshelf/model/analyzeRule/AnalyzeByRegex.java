@@ -84,7 +84,9 @@ public class AnalyzeByRegex {
             if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
             if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
             if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
-            if (!isEmpty(ruleVal.get("ChapterUrl"))) bookInfoBean.setChapterUrl(ruleVal.get("ChapterUrl"));
+            if (!isEmpty(ruleVal.get("ChapterUrl")))
+                bookInfoBean.setChapterUrl(ruleVal.get("ChapterUrl"));
+            else bookInfoBean.setChapterUrl(baseUrl);
             //如果目录页和详情页相同,暂存页面内容供获取目录用
             if (ruleVal.get("ChapterUrl").equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             // 输出调试信息
@@ -156,9 +158,13 @@ public class AnalyzeByRegex {
                             }
                         } else if (regType < 0) {
                             if (j == 0 && ruleName.get(0) == "ruleChapterName") {
-                                infoVal.insert(0, resM.group(ruleParam.get(j)) == null ? "" : "\uD83D\uDD12");
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    infoVal.insert(0, resM.group(ruleParam.get(j)) == null ? "" : "\uD83D\uDD12");
+                                }
                             } else {
-                                infoVal.insert(0, resM.group(ruleParam.get(j)));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    infoVal.insert(0, resM.group(ruleParam.get(j)));
+                                }
                             }
                         } else {
                             infoVal.insert(0, ruleParam.get(j));

@@ -68,7 +68,7 @@ class ChapterProvider {
             txtChapter.addPage(page);
             return txtChapter;
         }
-        content = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), content);
+        content = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), content, pageLoader.book.getReplaceEnable());
         String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         List<TxtLine> txtLists = new ArrayList<>();//记录每个字的位置 //pzl
@@ -77,7 +77,7 @@ class ChapterProvider {
         boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
         String paragraph = null;
         if (showTitle) {
-            paragraph = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), chapter.getDurChapterName());
+            paragraph = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), chapter.getDurChapterName(), pageLoader.book.getReplaceEnable());
             paragraph = paragraph.trim() + "\n";
         }
         int i = 1;
