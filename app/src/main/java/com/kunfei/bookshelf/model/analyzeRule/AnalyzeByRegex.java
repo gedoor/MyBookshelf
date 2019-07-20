@@ -84,7 +84,9 @@ public class AnalyzeByRegex {
             if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
             if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
             if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
-            if (!isEmpty(ruleVal.get("ChapterUrl"))) bookInfoBean.setChapterUrl(ruleVal.get("ChapterUrl"));
+            if (!isEmpty(ruleVal.get("ChapterUrl")))
+                bookInfoBean.setChapterUrl(ruleVal.get("ChapterUrl"));
+            else bookInfoBean.setChapterUrl(baseUrl);
             //如果目录页和详情页相同,暂存页面内容供获取目录用
             if (ruleVal.get("ChapterUrl").equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             // 输出调试信息
