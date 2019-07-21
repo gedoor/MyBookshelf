@@ -57,7 +57,7 @@ class BookInfo {
                     isRegex = true;
                     ruleInfoInit = ruleInfoInit.substring(1);
                     Debug.printLog(tag, "┌详情信息预处理");
-                    AnalyzeByRegex.getInfosOfRegex(s, ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer, bookSourceBean, tag);
+                    AnalyzeByRegex.getInfoOfRegex(s, ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer, bookSourceBean, tag);
                 } else {
                     Object object = analyzer.getElement(ruleInfoInit);
                     if (object != null) {
