@@ -127,8 +127,10 @@ public class BookChapterList {
                     }
                 };
                 for (String url : chapterUrlS) {
-                    final WebChapterBean bean = new WebChapterBean(url);
-                    webChapterBeans.add(bean);
+                    if (!chapterUrlS.contains(url)) {
+                        final WebChapterBean bean = new WebChapterBean(url);
+                        webChapterBeans.add(bean);
+                    }
                 }
                 for (WebChapterBean bean : webChapterBeans) {
                     BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, false);
