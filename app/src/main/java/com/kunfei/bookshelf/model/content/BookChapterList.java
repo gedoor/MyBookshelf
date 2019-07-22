@@ -64,7 +64,7 @@ public class BookChapterList {
                 ruleChapterList = ruleChapterList.substring(1);
             }
             chapterListUrl = bookShelfBean.getBookInfoBean().getChapterUrl();
-            WebChapterBean webChapterBean = analyzeChapterList(s, chapterListUrl, ruleChapterList, analyzeNextUrl, analyzer);
+            WebChapterBean webChapterBean = analyzeChapterList(s, chapterListUrl, ruleChapterList, analyzeNextUrl, analyzer, dx);
             final List<BookChapterBean> chapterList = webChapterBean.getData();
 
             final List<String> chapterUrlS = new ArrayList<>(webChapterBean.getNextUrlList());
@@ -85,7 +85,7 @@ public class BookChapterList {
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                                 .blockingFirst();
                         body = response.body();
-                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false, analyzer);
+                        webChapterBean = analyzeChapterList(body, chapterUrlS.get(0), ruleChapterList, false, analyzer, dx);
                         chapterList.addAll(webChapterBean.getData());
                         chapterUrlS.clear();
                         chapterUrlS.addAll(webChapterBean.getNextUrlList());
@@ -165,7 +165,7 @@ public class BookChapterList {
     }
 
     private WebChapterBean analyzeChapterList(String s, String chapterUrl, String ruleChapterList,
-                                              boolean printLog, AnalyzeRule analyzer) throws Exception {
+                                              boolean printLog, AnalyzeRule analyzer, boolean dx) throws Exception {
         List<String> nextUrlList = new ArrayList<>();
         analyzer.setContent(s, chapterUrl);
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext()) && analyzeNextUrl) {
@@ -227,7 +227,13 @@ public class BookChapterList {
             }
         }
         Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
-        BookChapterBean firstChapter = chapterBeans.get(0);
+        BookChapterBean firstChapter;
+        if (dx) {
+            Debug.printLog(tag, "-倒序", printLog);
+            firstChapter = chapterBeans.get(chapterBeans.size() - 1);
+        } else {
+            firstChapter = chapterBeans.get(0);
+        }
         Debug.printLog(tag, "┌获取章节名称", printLog);
         Debug.printLog(tag, "└" + firstChapter.getDurChapterName(), printLog);
         Debug.printLog(tag, "┌获取章节网址", printLog);
