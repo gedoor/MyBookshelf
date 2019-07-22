@@ -292,7 +292,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvRead.setOnClickListener(v -> {
             if (!mPresenter.getInBookShelf()) {
                 BookshelfHelp.saveBookToShelf(mPresenter.getBookShelf());
-                DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(mPresenter.getChapterList());
+                if (mPresenter.getChapterList() != null)
+                    DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(mPresenter.getChapterList());
             }
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
             intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
