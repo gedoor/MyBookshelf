@@ -48,7 +48,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     private Boolean allowUpdate = true;
     private Boolean useReplaceRule = true;
     private String variable;
-    private Boolean replaceEnable = true;
+    private Boolean replaceEnable = false;
 
     @Transient
     private Map<String, String> variableMap;
@@ -302,7 +302,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public Boolean getReplaceEnable() {
-        return replaceEnable == null ? true : replaceEnable;
+        return replaceEnable == null ? false : replaceEnable;
     }
 
     public void setReplaceEnable(Boolean replaceEnable) {
