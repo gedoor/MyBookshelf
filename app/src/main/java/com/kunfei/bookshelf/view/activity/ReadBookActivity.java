@@ -888,7 +888,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         moDialogHUD.dismiss();
                                     }, 1000);
                                 },
-                                false);
+                                true);
                     }
                 }
         );
