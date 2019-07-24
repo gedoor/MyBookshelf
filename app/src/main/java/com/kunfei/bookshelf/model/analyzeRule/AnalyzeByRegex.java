@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.os.Build;
+import android.text.TextUtils;
 
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -53,7 +54,7 @@ public class AnalyzeByRegex {
             for (String key : ruleMap.keySet()) {
                 String val = ruleMap.get(key);
                 ruleName.add(key);
-                hasVarParams.add(val.contains("@put") || val.contains("@get"));
+                hasVarParams.add(!TextUtils.isEmpty(val) && (val.contains("@put") || val.contains("@get")));
                 List<String> ruleParam = new ArrayList<>();
                 List<Integer> ruleType = new ArrayList<>();
                 AnalyzeByRegex.splitRegexRule(val, ruleParam, ruleType);
@@ -81,10 +82,14 @@ public class AnalyzeByRegex {
             }
             // 保存详情信息
             if (!isEmpty(ruleVal.get("BookName"))) bookInfoBean.setName(ruleVal.get("BookName"));
-            if (!isEmpty(ruleVal.get("BookAuthor"))) bookInfoBean.setAuthor(ruleVal.get("BookAuthor"));
-            if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
-            if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
-            if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
+            if (!isEmpty(ruleVal.get("BookAuthor")))
+                bookInfoBean.setAuthor(ruleVal.get("BookAuthor"));
+            if (!isEmpty(ruleVal.get("LastChapter")))
+                bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
+            if (!isEmpty(ruleVal.get("Introduce")))
+                bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
+            if (!isEmpty(ruleVal.get("CoverUrl")))
+                bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
             String chapterUrl = ruleVal.get("ChapterUrl");
             if (!isEmpty(chapterUrl))
                 bookInfoBean.setChapterUrl(NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
@@ -185,6 +190,11 @@ public class AnalyzeByRegex {
 
     // 拆分正则表达式替换规则(如:$\d{1,2}或${name}) /*注意:千万别用正则表达式拆分字符串,效率太低了!*/
     public static void splitRegexRule(String str, final List<String> ruleParam, final List<Integer> ruleType) {
+        if (TextUtils.isEmpty(str)) {
+            ruleParam.add("");
+            ruleType.add(0);
+            return;
+        }
         int index = 0, start = 0, len = str.length();
         while (index < len) {
             if (str.charAt(index) == '$') {

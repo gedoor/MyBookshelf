@@ -329,7 +329,7 @@ class BookList {
             for (String key : ruleMap.keySet()) {
                 String val = ruleMap.get(key);
                 ruleName.add(key);
-                hasVarParams.add(val.contains("@put") || val.contains("@get"));
+                hasVarParams.add(!TextUtils.isEmpty(val) && (val.contains("@put") || val.contains("@get")));
                 List<String> ruleParam = new ArrayList<>();
                 List<Integer> ruleType = new ArrayList<>();
                 AnalyzeByRegex.splitRegexRule(val, ruleParam, ruleType);

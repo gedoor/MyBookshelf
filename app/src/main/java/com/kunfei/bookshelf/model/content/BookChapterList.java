@@ -255,8 +255,12 @@ public class BookChapterList {
         }
         if (index + 1 == regex.length) {
             // 获取解析规则
-            String nameRule = analyzer.replaceGet(bookSourceBean.getRuleChapterName());
-            String linkRule = analyzer.replaceGet(bookSourceBean.getRuleContentUrl());
+            String nameRule = bookSourceBean.getRuleChapterName();
+            String linkRule = bookSourceBean.getRuleContentUrl();
+            if (TextUtils.isEmpty(nameRule) || TextUtils.isEmpty(linkRule)) return;
+            // 替换@get规则
+            nameRule = analyzer.replaceGet(bookSourceBean.getRuleChapterName());
+            linkRule = analyzer.replaceGet(bookSourceBean.getRuleContentUrl());
             // 分离规则参数
             List<String> nameParams = new ArrayList<>();
             List<Integer> nameGroups = new ArrayList<>();
