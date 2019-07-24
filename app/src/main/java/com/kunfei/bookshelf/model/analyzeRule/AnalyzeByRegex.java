@@ -6,6 +6,7 @@ import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.content.Debug;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ import static android.text.TextUtils.isEmpty;
 public class AnalyzeByRegex {
 
     // 纯java模式正则表达式获取书籍详情信息
-    public static void getInfosOfRegex(String res, String[] regs, int index,
-                                       BookShelfBean bookShelfBean, AnalyzeRule analyzer, BookSourceBean bookSourceBean, String tag) {
+    public static void getInfoOfRegex(String res, String[] regs, int index,
+                                      BookShelfBean bookShelfBean, AnalyzeRule analyzer, BookSourceBean bookSourceBean, String tag) {
         Matcher resM = Pattern.compile(regs[index]).matcher(res);
         String baseUrl = bookShelfBean.getNoteUrl();
         // 创建详情信息存储容器
@@ -84,34 +85,33 @@ public class AnalyzeByRegex {
             if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
             if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
             if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
-            if (!isEmpty(ruleVal.get("ChapterUrl")))
-                bookInfoBean.setChapterUrl(ruleVal.get("ChapterUrl"));
+            String chapterUrl = ruleVal.get("ChapterUrl");
+            if (!isEmpty(chapterUrl))
+                bookInfoBean.setChapterUrl(NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
             else bookInfoBean.setChapterUrl(baseUrl);
             //如果目录页和详情页相同,暂存页面内容供获取目录用
             if (ruleVal.get("ChapterUrl").equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             // 输出调试信息
             Debug.printLog(tag, "└详情预处理完成");
             Debug.printLog(tag, "┌获取书籍名称");
-            Debug.printLog(tag, "└" + ruleVal.get("BookName"));
+            Debug.printLog(tag, "└" + bookInfoBean.getName());
             Debug.printLog(tag, "┌获取作者名称");
-            Debug.printLog(tag, "└" + ruleVal.get("BookAuthor"));
-            Debug.printLog(tag, "┌获取分类信息");
-            Debug.printLog(tag, "└" + ruleVal.get("BookKind"));
+            Debug.printLog(tag, "└" + bookInfoBean.getAuthor());
             Debug.printLog(tag, "┌获取最新章节");
-            Debug.printLog(tag, "└" + ruleVal.get("LastChapter"));
+            Debug.printLog(tag, "└" + bookShelfBean.getLastChapterName());
             Debug.printLog(tag, "┌获取简介内容");
-            Debug.printLog(tag, "└" + ruleVal.get("Introduce"));
+            Debug.printLog(tag, "└" + bookInfoBean.getIntroduce());
             Debug.printLog(tag, "┌获取封面网址");
-            Debug.printLog(tag, "└" + ruleVal.get("CoverUrl"));
+            Debug.printLog(tag, "└" + bookInfoBean.getCoverUrl());
             Debug.printLog(tag, "┌获取目录网址");
-            Debug.printLog(tag, "└" + ruleVal.get("ChapterUrl"));
+            Debug.printLog(tag, "└" + bookInfoBean.getChapterUrl());
             Debug.printLog(tag, "-详情页解析完成");
         } else {
             StringBuilder result = new StringBuilder();
             do {
                 result.append(resM.group());
             } while (resM.find());
-            getInfosOfRegex(result.toString(), regs, ++index, bookShelfBean, analyzer, bookSourceBean, tag);
+            getInfoOfRegex(result.toString(), regs, ++index, bookShelfBean, analyzer, bookSourceBean, tag);
         }
     }
 

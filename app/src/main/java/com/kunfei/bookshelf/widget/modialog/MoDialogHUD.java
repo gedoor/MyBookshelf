@@ -244,7 +244,7 @@ public class MoDialogHUD {
         initCenter();
         initAnimation();
         this.canBack = canBack;
-        rootView.setOnClickListener(null);
+        rootView.setOnClickListener(v -> dismiss());
         mSharedView.showTwoButton(msg, b_f, c_f, b_s, c_s);
         if (!isShowing()) {
             onAttached();

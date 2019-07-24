@@ -187,7 +187,7 @@ class BookList {
                 BookShelfBean bookShelfBean = new BookShelfBean();
                 bookShelfBean.setTag(tag);
                 bookShelfBean.setNoteUrl(baseUrl);
-                AnalyzeByRegex.getInfosOfRegex(String.valueOf(analyzer.getContent()), ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer, bookSourceBean, tag);
+                AnalyzeByRegex.getInfoOfRegex(String.valueOf(analyzer.getContent()), ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer, bookSourceBean, tag);
                 item.setName(bookShelfBean.getBookInfoBean().getName());
                 item.setAuthor(bookShelfBean.getBookInfoBean().getAuthor());
                 item.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
@@ -368,7 +368,7 @@ class BookList {
                         ruleVal.get("ruleLastChapter"), // 保存终章
                         ruleVal.get("ruleIntroduce"),   // 保存简介
                         ruleVal.get("ruleCoverUrl"),    // 保存封面
-                        ruleVal.get("ruleNoteUrl")      // 保存详情
+                        NetworkUtils.getAbsoluteURL(baseUrl, ruleVal.get("ruleNoteUrl"))       // 保存详情
                 );
                 books.add(item);
                 // 判断搜索结果是否为详情页
