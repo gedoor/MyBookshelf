@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.os.Build;
 import android.text.TextUtils;
-
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -82,20 +81,14 @@ public class AnalyzeByRegex {
             }
             // 保存详情信息
             if (!isEmpty(ruleVal.get("BookName"))) bookInfoBean.setName(ruleVal.get("BookName"));
-            if (!isEmpty(ruleVal.get("BookAuthor")))
-                bookInfoBean.setAuthor(ruleVal.get("BookAuthor"));
-            if (!isEmpty(ruleVal.get("LastChapter")))
-                bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
-            if (!isEmpty(ruleVal.get("Introduce")))
-                bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
-            if (!isEmpty(ruleVal.get("CoverUrl")))
-                bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
-            String chapterUrl = ruleVal.get("ChapterUrl");
-            if (!isEmpty(chapterUrl))
-                bookInfoBean.setChapterUrl(NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
+            if (!isEmpty(ruleVal.get("BookAuthor"))) bookInfoBean.setAuthor(ruleVal.get("BookAuthor"));
+            if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
+            if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
+            if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
+            if (!isEmpty(ruleVal.get("ChapterUrl"))) bookInfoBean.setChapterUrl(NetworkUtils.getAbsoluteURL(baseUrl, ruleVal.get("ChapterUrl")));
             else bookInfoBean.setChapterUrl(baseUrl);
             //如果目录页和详情页相同,暂存页面内容供获取目录用
-            if (ruleVal.get("ChapterUrl").equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
+            if (bookInfoBean.getChapterUrl().equals(baseUrl)) bookInfoBean.setChapterListHtml(res);
             // 输出调试信息
             Debug.printLog(tag, "└详情预处理完成");
             Debug.printLog(tag, "┌获取书籍名称");
