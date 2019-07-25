@@ -41,7 +41,7 @@ public class AnalyzeByRegex {
             ruleMap.put("BookName", bookSourceBean.getRuleBookName());
             ruleMap.put("BookAuthor", bookSourceBean.getRuleBookAuthor());
             ruleMap.put("BookKind", bookSourceBean.getRuleBookKind());
-            ruleMap.put("BookLastChapter", bookSourceBean.getRuleBookLastChapter());
+            ruleMap.put("LastChapter", bookSourceBean.getRuleBookLastChapter());
             ruleMap.put("Introduce", bookSourceBean.getRuleIntroduce());
             ruleMap.put("CoverUrl", bookSourceBean.getRuleCoverUrl());
             ruleMap.put("ChapterUrl", bookSourceBean.getRuleChapterUrl());
