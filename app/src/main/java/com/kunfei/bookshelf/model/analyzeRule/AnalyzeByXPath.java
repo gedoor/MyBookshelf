@@ -18,6 +18,10 @@ public class AnalyzeByXPath {
     public AnalyzeByXPath parse(Object doc) {
         if (doc instanceof JXNode) {
             jxNode = (JXNode) doc;
+            if (!jxNode.isElement()) {
+                jxDocument = strToJXDocument(doc.toString());
+                jxNode = null;
+            }
         } else if (doc instanceof Document) {
             jxDocument = JXDocument.create((Document) doc);
             jxNode = null;
@@ -28,18 +32,20 @@ public class AnalyzeByXPath {
             jxDocument = JXDocument.create((Elements) doc);
             jxNode = null;
         } else {
-            String html = doc.toString();
-            // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
-            if (html.endsWith("</td>")) {
-                html = String.format("<tr>%s</tr>", html);
-            }
-            if (html.endsWith("</tr>") || html.endsWith("</tbody>")) {
-                html = String.format("<table>%s</table>", html);
-            }
-            jxDocument = JXDocument.create(html);
+            jxDocument = strToJXDocument(doc.toString());
             jxNode = null;
         }
         return this;
+    }
+
+    private JXDocument strToJXDocument(String html) {
+        if (html.endsWith("</td>")) {
+            html = String.format("<tr>%s</tr>", html);
+        }
+        if (html.endsWith("</tr>") || html.endsWith("</tbody>")) {
+            html = String.format("<table>%s</table>", html);
+        }
+        return JXDocument.create(html);
     }
 
     List<JXNode> getElements(String xPath) {
