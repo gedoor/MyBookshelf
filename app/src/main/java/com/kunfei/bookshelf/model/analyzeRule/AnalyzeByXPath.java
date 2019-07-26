@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
 
@@ -15,6 +17,10 @@ public class AnalyzeByXPath {
     public AnalyzeByXPath parse(Object doc) {
         if (doc instanceof Document) {
             jxDocument = JXDocument.create((Document) doc);
+        } else if (doc instanceof Element) {
+            jxDocument = JXDocument.create(new Elements((Element) doc));
+        } else if (doc instanceof Elements) {
+            jxDocument = JXDocument.create((Elements) doc);
         } else {
             String html = doc.toString();
             // 给表格标签添加完整的框架结构,否则会丢失表格标签;html标准不允许表格标签独立在table之外
