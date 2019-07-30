@@ -143,7 +143,6 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 BookshelfHelp.saveBookToShelf(bookShelfBean);
                 if (!chapterBeans.isEmpty()) {
                     BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
-                    BookshelfHelp.saveBookToShelf(bookShelfBean);
                     DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
                 }
             }
