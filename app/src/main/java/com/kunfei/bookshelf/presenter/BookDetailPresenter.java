@@ -145,6 +145,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                     BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
                     DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeans);
                 }
+                RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
             }
             e.onNext(chapterBeans);
             e.onComplete();
