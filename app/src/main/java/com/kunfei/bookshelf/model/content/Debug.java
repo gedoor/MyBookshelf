@@ -40,17 +40,24 @@ public class Debug {
     }
 
     public static void printLog(String tag, String msg) {
-        printLog(tag, msg, true);
+        printLog(tag, 1, msg, true);
     }
 
-    static void printLog(String tag, String msg, boolean print) {
-        printLog(tag, msg, print, false);
+    public static void printLog(String tag, int state, String msg) {
+        printLog(tag, state, msg, true);
     }
 
-    static void printLog(String tag, String msg, boolean print, boolean formatHtml) {
+    static void printLog(String tag, int state, String msg, boolean print) {
+        printLog(tag, state, msg, print, false);
+    }
+
+    static void printLog(String tag, int state, String msg, boolean print, boolean formatHtml) {
         if (print && Objects.equals(SOURCE_DEBUG_TAG, tag)) {
             if (formatHtml) {
                 msg = StringUtils.formatHtml(msg);
+            }
+            if (state == 111) {
+                msg = msg.replace("\n", ",");
             }
             msg = String.format("%s %s", getDoTime(), msg);
             RxBus.get().post(RxBusTag.PRINT_DEBUG_LOG, msg);
