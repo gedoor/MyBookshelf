@@ -82,7 +82,7 @@ class BookInfo {
                 Debug.printLog(tag, "└" + bookAuthor);
 
                 Debug.printLog(tag, "┌获取分类");
-                String bookKind = StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind()));
+                String bookKind = analyzer.getString(bookSourceBean.getRuleBookKind());
                 Debug.printLog(tag, "└" + bookKind);
 
                 Debug.printLog(tag, "┌获取最新章节");
