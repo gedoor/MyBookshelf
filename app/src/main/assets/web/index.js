@@ -73,9 +73,15 @@ function HttpPost(url, data) {
 // 将书源表单转化为书源对象
 function rule2json() {
 	Object.keys(RuleJSON).forEach((key) => RuleJSON[key] = $('#' + key).value);
+	RuleJSON.bookSourceType = RuleJSON.bookSourceType.toUpperCase();
 	RuleJSON.serialNumber = RuleJSON.serialNumber == '' ? 0 : parseInt(RuleJSON.serialNumber);
 	RuleJSON.weight = RuleJSON.weight == '' ? 0 : parseInt(RuleJSON.weight);
 	RuleJSON.enable = RuleJSON.enable == '' || RuleJSON.enable.toLocaleLowerCase().replace(/^\s*|\s*$/g, '') == 'true';
+	let TempRules = RuleSources.filter(item => (item['bookSourceUrl'] == RuleJSON['bookSourceUrl'] ? item : null));
+	if (TempRules.length > 0) {
+		Object.keys(RuleJSON).forEach(key => TempRules[0][key] = RuleJSON[key]);
+		return TempRules[0];
+	}
 	return RuleJSON;
 }
 // 将书源对象填充到书源表单
@@ -143,6 +149,7 @@ $('.menu').addEventListener('click', e => {
 			(async () => {
 				await HttpPost(`/saveSources`, RuleSources).then(json => {
 					if (json.isSuccess) {
+						console.log('批量推送书源:', RuleSources);
 						let okData = json.data;
 						if (Array.isArray(okData)) {
 							let failMsg = ``;
@@ -171,6 +178,7 @@ $('.menu').addEventListener('click', e => {
 			(async () => {
 				await HttpGet(`/getSources`).then(json => {
 					if (json.isSuccess) {
+						console.log('批量拉取书源:', RuleSources);
 						$('#RuleList').innerHTML = ''
 						localStorage.setItem('RuleSources', JSON.stringify(RuleSources = json.data));
 						RuleSources.forEach(item => {
