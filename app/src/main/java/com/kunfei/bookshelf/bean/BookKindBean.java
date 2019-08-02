@@ -13,7 +13,7 @@ public class BookKindBean {
 
     public BookKindBean(String kindS) {
         if (TextUtils.isEmpty(kindS)) return;
-        for (String kind : kindS.split(",")) {
+        for (String kind : kindS.split("[,|\n]")) {
             if (StringUtils.isContainNumber(kind) && TextUtils.isEmpty(wordsS)) {
                 if (StringUtils.isNumeric(kind)) {
                     int words = Integer.valueOf(kind);
