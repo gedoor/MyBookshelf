@@ -12,6 +12,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -110,6 +111,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         if (BookShelfBean.LOCAL_TAG.equals(bookShelf.getTag())) return;
         WebBookModel.getInstance().getBookInfo(bookShelf)
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
+                .flatMap(chapterBeans -> saveBookToShelfO(bookShelf, chapterBeans))
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new MyObserver<List<BookChapterBean>>() {
                     @Override
@@ -130,6 +132,24 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         mView.getBookShelfError();
                     }
                 });
+    }
+
+    /**
+     * 保存数据
+     */
+    private Observable<List<BookChapterBean>> saveBookToShelfO(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeans) {
+        return Observable.create(e -> {
+            if (inBookShelf) {
+                BookshelfHelp.saveBookToShelf(bookShelfBean);
+                if (!chapterBeans.isEmpty()) {
+                    BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
+                    DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeans);
+                }
+                RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
+            }
+            e.onNext(chapterBeans);
+            e.onComplete();
+        });
     }
 
     @Override
