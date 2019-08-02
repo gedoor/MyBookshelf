@@ -214,7 +214,7 @@ class BookList {
             item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), true));
             Debug.printLog(tag, "└" + item.getCoverUrl());
             Debug.printLog(tag, "┌获取分类");
-            item.setKind(StringUtils.join(",", analyzer.getStringList(bookSourceBean.getRuleBookKind())));
+            item.setKind(analyzer.getString(bookSourceBean.getRuleBookKind()));
             Debug.printLog(tag, "└" + item.getKind());
             Debug.printLog(tag, "┌获取最新章节");
             item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
@@ -242,7 +242,7 @@ class BookList {
             item.setAuthor(StringUtils.formatHtml(String.valueOf(nativeObject.get(ruleAuthor))));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
-            item.setKind(StringUtils.join(",", String.valueOf(nativeObject.get(ruleKind))));
+            item.setKind(String.valueOf(nativeObject.get(ruleKind)));
             Debug.printLog(tag, "└" + item.getKind(), printLog);
             Debug.printLog(tag, "┌获取最新章节", printLog);
             item.setLastChapter(String.valueOf(nativeObject.get(ruleLastChapter)));
@@ -279,7 +279,7 @@ class BookList {
             item.setAuthor(StringUtils.formatHtml(analyzer.getString(ruleAuthor)));
             Debug.printLog(tag, "└" + item.getAuthor(), printLog);
             Debug.printLog(tag, "┌获取分类", printLog);
-            item.setKind(StringUtils.join(",", analyzer.getStringList(ruleKind)));
+            item.setKind(analyzer.getString(ruleKind));
             Debug.printLog(tag, "└" + item.getKind(), printLog);
             Debug.printLog(tag, "┌获取最新章节", printLog);
             item.setLastChapter(analyzer.getString(ruleLastChapter));
