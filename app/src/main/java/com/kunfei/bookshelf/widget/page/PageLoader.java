@@ -1203,37 +1203,37 @@ public abstract class PageLoader {
                     //进行绘制
                     canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
                     //pzl
-                    float leftposition = mDisplayWidth / 2;
-                    float rightposition = 0;
-                    float bottomposition = top + mTitlePaint.getFontMetrics().descent;
+                    float leftposition = mDisplayWidth / 2f;
+                    float rightPosition = 0;
+                    float bottomPosition = top + mTitlePaint.getFontMetrics().descent;
                     float TextHeight = Math.abs(fontMetricsForTitle.ascent) + Math.abs(fontMetricsForTitle.descent);
 
                     if (page.getTxtLists() != null) {
                         for (TxtChar c : page.getTxtLists().get(i).getCharsData()) {
-                            rightposition = leftposition + c.getCharWidth();
+                            rightPosition = leftposition + c.getCharWidth();
                             Point tlp = new Point();
                             c.setTopLeftPosition(tlp);
                             tlp.x = (int) leftposition;
-                            tlp.y = (int) (bottomposition - TextHeight);
+                            tlp.y = (int) (bottomPosition - TextHeight);
 
                             Point blp = new Point();
                             c.setBottomLeftPosition(blp);
                             blp.x = (int) leftposition;
-                            blp.y = (int) bottomposition;
+                            blp.y = (int) bottomPosition;
 
                             Point trp = new Point();
                             c.setTopRightPosition(trp);
-                            trp.x = (int) rightposition;
-                            trp.y = (int) (bottomposition - TextHeight);
+                            trp.x = (int) rightPosition;
+                            trp.y = (int) (bottomPosition - TextHeight);
 
                             Point brp = new Point();
                             c.setBottomRightPosition(brp);
-                            brp.x = (int) rightposition;
-                            brp.y = (int) bottomposition;
+                            brp.x = (int) rightPosition;
+                            brp.y = (int) bottomPosition;
                             ppp++;
                             c.setIndex(ppp);
 
-                            leftposition = rightposition;
+                            leftposition = rightPosition;
                         }
                     }
                     //pzl

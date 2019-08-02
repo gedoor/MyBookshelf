@@ -83,7 +83,7 @@ class BookInfo {
 
                 Debug.printLog(tag, "┌获取分类");
                 String bookKind = analyzer.getString(bookSourceBean.getRuleBookKind());
-                Debug.printLog(tag, "└" + bookKind);
+                Debug.printLog(tag, 111, "└" + bookKind);
 
                 Debug.printLog(tag, "┌获取最新章节");
                 String bookLastChapter = analyzer.getString(bookSourceBean.getRuleBookLastChapter());
@@ -93,7 +93,7 @@ class BookInfo {
                 Debug.printLog(tag, "┌获取简介");
                 String bookIntroduce = analyzer.getString(bookSourceBean.getRuleIntroduce());
                 if (!isEmpty(bookIntroduce)) bookInfoBean.setIntroduce(bookIntroduce);
-                Debug.printLog(tag, "└" + bookIntroduce, true, true);
+                Debug.printLog(tag, 1, "└" + bookIntroduce, true, true);
 
                 Debug.printLog(tag, "┌获取封面");
                 String bookCoverUrl = analyzer.getString(bookSourceBean.getRuleCoverUrl(), true);

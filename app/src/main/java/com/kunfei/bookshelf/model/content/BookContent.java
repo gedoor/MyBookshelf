@@ -115,14 +115,14 @@ class BookContent {
         WebContentBean webContentBean = new WebContentBean();
 
         analyzer.setContent(s, NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
-        Debug.printLog(tag, "┌解析正文内容", printLog);
+        Debug.printLog(tag, 1, "┌解析正文内容", printLog);
         webContentBean.content = StringUtils.formatHtml(analyzer.getString(ruleBookContent));
-        Debug.printLog(tag, "└" + webContentBean.content, printLog);
+        Debug.printLog(tag, 1, "└" + webContentBean.content, printLog);
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {
-            Debug.printLog(tag, "┌解析下一页url", printLog);
+            Debug.printLog(tag, 1, "┌解析下一页url", printLog);
             webContentBean.nextUrl = analyzer.getString(nextUrlRule, true);
-            Debug.printLog(tag, "└" + webContentBean.nextUrl, printLog);
+            Debug.printLog(tag, 1, "└" + webContentBean.nextUrl, printLog);
         }
 
         return webContentBean;

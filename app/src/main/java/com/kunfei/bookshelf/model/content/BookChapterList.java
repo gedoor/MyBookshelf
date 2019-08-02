@@ -53,8 +53,8 @@ public class BookChapterList {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_chapter_list_error) + bookShelfBean.getBookInfoBean().getChapterUrl()));
                 return;
             } else {
-                Debug.printLog(tag, "┌成功获取目录页", analyzeNextUrl);
-                Debug.printLog(tag, "└" + bookShelfBean.getBookInfoBean().getChapterUrl(), analyzeNextUrl);
+                Debug.printLog(tag, 1, "┌成功获取目录页", analyzeNextUrl);
+                Debug.printLog(tag, 1, "└" + bookShelfBean.getBookInfoBean().getChapterUrl(), analyzeNextUrl);
             }
             bookShelfBean.setTag(tag);
             AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
@@ -157,7 +157,7 @@ public class BookChapterList {
         LinkedHashSet<BookChapterBean> lh = new LinkedHashSet<>(chapterList);
         chapterList = new ArrayList<>(lh);
         Collections.reverse(chapterList);
-        Debug.printLog(tag, "-目录解析完成", analyzeNextUrl);
+        Debug.printLog(tag, 1, "-目录解析完成", analyzeNextUrl);
         emitter.onNext(chapterList);
         emitter.onComplete();
     }
@@ -167,23 +167,23 @@ public class BookChapterList {
         List<String> nextUrlList = new ArrayList<>();
         analyzer.setContent(s, chapterUrl);
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext()) && analyzeNextUrl) {
-            Debug.printLog(tag, "┌获取目录下一页网址", printLog);
+            Debug.printLog(tag, 1, "┌获取目录下一页网址", printLog);
             nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), true);
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
                 nextUrlList.remove(thisUrlIndex);
             }
-            Debug.printLog(tag, "└" + nextUrlList.toString(), printLog);
+            Debug.printLog(tag, 1, "└" + nextUrlList.toString(), printLog);
         }
 
         List<BookChapterBean> chapterBeans = new ArrayList<>();
-        Debug.printLog(tag, "┌解析目录列表", printLog);
+        Debug.printLog(tag, 1, "┌解析目录列表", printLog);
         // 仅使用java正则表达式提取目录列表
         if (ruleChapterList.startsWith(":")) {
             ruleChapterList = ruleChapterList.substring(1);
             regexChapter(s, ruleChapterList.split("&&"), 0, analyzer, chapterBeans);
             if (chapterBeans.size() == 0) {
-                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                Debug.printLog(tag, 1, "└找到 0 个章节", printLog);
                 return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
             }
         }
@@ -192,7 +192,7 @@ public class BookChapterList {
             ruleChapterList = ruleChapterList.substring(1);
             List<Object> collections = analyzer.getElements(ruleChapterList);
             if (collections.size() == 0) {
-                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                Debug.printLog(tag, 1, "└找到 0 个章节", printLog);
                 return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
             }
             String nameRule = bookSourceBean.getRuleChapterName();
@@ -214,7 +214,7 @@ public class BookChapterList {
         else {
             List<Object> collections = analyzer.getElements(ruleChapterList);
             if (collections.size() == 0) {
-                Debug.printLog(tag, "└找到 0 个章节", printLog);
+                Debug.printLog(tag, 1, "└找到 0 个章节", printLog);
                 return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
             }
             List<AnalyzeRule.SourceRule> nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
@@ -224,18 +224,18 @@ public class BookChapterList {
                 addChapter(chapterBeans, analyzer.getString(nameRule), analyzer.getString(linkRule));
             }
         }
-        Debug.printLog(tag, "└找到 " + chapterBeans.size() + " 个章节", printLog);
+        Debug.printLog(tag, 1, "└找到 " + chapterBeans.size() + " 个章节", printLog);
         BookChapterBean firstChapter;
         if (dx) {
-            Debug.printLog(tag, "-倒序", printLog);
+            Debug.printLog(tag, 1, "-倒序", printLog);
             firstChapter = chapterBeans.get(chapterBeans.size() - 1);
         } else {
             firstChapter = chapterBeans.get(0);
         }
-        Debug.printLog(tag, "┌获取章节名称", printLog);
-        Debug.printLog(tag, "└" + firstChapter.getDurChapterName(), printLog);
-        Debug.printLog(tag, "┌获取章节网址", printLog);
-        Debug.printLog(tag, "└" + firstChapter.getDurChapterUrl(), printLog);
+        Debug.printLog(tag, 1, "┌获取章节名称", printLog);
+        Debug.printLog(tag, 1, "└" + firstChapter.getDurChapterName(), printLog);
+        Debug.printLog(tag, 1, "┌获取章节网址", printLog);
+        Debug.printLog(tag, 1, "└" + firstChapter.getDurChapterUrl(), printLog);
         return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
     }
 
