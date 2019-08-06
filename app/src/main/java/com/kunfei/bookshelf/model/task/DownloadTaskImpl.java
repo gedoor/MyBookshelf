@@ -197,7 +197,9 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             }
             e.onComplete();
         })
-                .flatMap(result -> WebBookModel.getInstance().getBookContent(bookShelfBean, chapter))
+                .flatMap(result -> {
+                    return WebBookModel.getInstance().getBookContent(bookShelfBean, chapter, null);
+                })
                 .subscribeOn(scheduler)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BookContentBean>() {

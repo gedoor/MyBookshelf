@@ -7,7 +7,6 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
-import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -46,12 +45,12 @@ class BookContent {
         }
     }
 
-    Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
+    Observable<BookContentBean> analyzeBookContent(final Response<String> response, final BaseChapterBean chapterBean, final BaseChapterBean nextChapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         baseUrl = NetworkUtils.getUrl(response);
-        return analyzeBookContent(response.body(), chapterBean, bookShelfBean, headerMap);
+        return analyzeBookContent(response.body(), chapterBean, nextChapterBean, bookShelfBean, headerMap);
     }
 
-    Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
+    Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean, final BaseChapterBean nextChapterBean, BookShelfBean bookShelfBean, Map<String, String> headerMap) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.get_content_error) + chapterBean.getDurChapterUrl()));
@@ -81,10 +80,16 @@ class BookContent {
             if (!TextUtils.isEmpty(webContentBean.nextUrl)) {
                 List<String> usedUrlList = new ArrayList<>();
                 usedUrlList.add(chapterBean.getDurChapterUrl());
-                BookChapterBean nextChapter = DbHelper.getDaoSession().getBookChapterBeanDao().queryBuilder()
-                        .where(BookChapterBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()),
-                                BookChapterBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
-                        .build().unique();
+                BaseChapterBean nextChapter;
+                if (nextChapterBean != null) {
+                    nextChapter = nextChapterBean;
+                } else {
+                    nextChapter = DbHelper.getDaoSession().getBookChapterBeanDao().queryBuilder()
+                            .where(BookChapterBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()),
+                                    BookChapterBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
+                            .build().unique();
+                }
+
                 while (!TextUtils.isEmpty(webContentBean.nextUrl) && !usedUrlList.contains(webContentBean.nextUrl)) {
                     usedUrlList.add(webContentBean.nextUrl);
                     if (nextChapter != null && NetworkUtils.getAbsoluteURL(baseUrl, webContentBean.nextUrl).equals(NetworkUtils.getAbsoluteURL(baseUrl, nextChapter.getDurChapterUrl()))) {
