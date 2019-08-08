@@ -207,7 +207,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private boolean canSaveBookSource() {
         SoftInputUtil.hideIMM(recyclerView);
         recyclerView.clearFocus();
-        BookSourceBean bookSourceBean = getBookSource();
+        BookSourceBean bookSourceBean = getBookSource(true);
         if (isEmpty(bookSourceBean.getBookSourceName()) || isEmpty(bookSourceBean.getBookSourceUrl())) {
             toast(R.string.non_null_source_name_url, ERROR);
             return false;
@@ -221,7 +221,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .create();
-        return gson.toJson(getBookSource());
+        return gson.toJson(getBookSource(true));
     }
 
     @Override
@@ -288,7 +288,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         startActivityForResult(intent, REQUEST_QR);
     }
 
-    private BookSourceBean getBookSource() {
+    private BookSourceBean getBookSource(boolean hasFind) {
         BookSourceBean bookSourceBeanN = new BookSourceBean();
         for (SourceEdit sourceEdit : sourceEditList) {
             switch (sourceEdit.getKey()) {
@@ -415,6 +415,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setSerialNumber(serialNumber);
         bookSourceBeanN.setEnable(cbIsEnable.isChecked());
         bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : null);
+        if (!hasFind) {
+            bookSourceBeanN.setRuleFindUrl(null);
+        }
         return bookSourceBeanN;
     }
 
@@ -489,11 +492,11 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         switch (id) {
             case R.id.action_save:
                 if (canSaveBookSource()) {
-                    mPresenter.saveSource(getBookSource(), bookSourceBean)
+                    mPresenter.saveSource(getBookSource(true), bookSourceBean)
                             .subscribe(new MyObserver<Boolean>() {
                                 @Override
                                 public void onNext(Boolean aBoolean) {
-                                    bookSourceBean = getBookSource();
+                                    bookSourceBean = getBookSource(true);
                                     toast("保存成功");
                                     setResult(RESULT_OK);
                                     finish();
@@ -507,14 +510,17 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 }
                 break;
             case R.id.action_login:
-                if (!isEmpty(getBookSource().getLoginUrl())) {
-                    SourceLoginActivity.startThis(this, getBookSource());
+                if (!isEmpty(getBookSource(true).getLoginUrl())) {
+                    SourceLoginActivity.startThis(this, getBookSource(true));
                 } else {
                     toast(R.string.source_no_login);
                 }
                 break;
             case R.id.action_copy_source:
-                mPresenter.copySource(getBookSource());
+                mPresenter.copySource(getBookSource(true));
+                break;
+            case R.id.action_copy_source_no_find:
+                mPresenter.copySource(getBookSource(false));
                 break;
             case R.id.action_paste_source:
                 mPresenter.pasteSource();
@@ -526,20 +532,20 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 shareBookSource();
                 break;
             case R.id.action_share_wifi:
-                ShareService.startThis(this, Collections.singletonList(getBookSource()));
+                ShareService.startThis(this, Collections.singletonList(getBookSource(true)));
                 break;
             case R.id.action_rule_summary:
                 openRuleSummary();
                 break;
             case R.id.action_debug_source:
                 if (canSaveBookSource()) {
-                    mPresenter.saveSource(getBookSource(), bookSourceBean)
+                    mPresenter.saveSource(getBookSource(true), bookSourceBean)
                             .subscribe(new MyObserver<Boolean>() {
                                 @Override
                                 public void onNext(Boolean aBoolean) {
-                                    bookSourceBean = getBookSource();
+                                    bookSourceBean = getBookSource(true);
                                     setResult(RESULT_OK);
-                                    SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource().getBookSourceUrl());
+                                    SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource(true).getBookSourceUrl());
                                 }
 
                                 @Override
@@ -606,7 +612,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         if (bookSourceBean == null) {
             bookSourceBean = new BookSourceBean();
         }
-        if (!getBookSource().equals(bookSourceBean)) {
+        if (!getBookSource(true).equals(bookSourceBean)) {
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.exit))
                     .setMessage(getString(R.string.exit_no_save))

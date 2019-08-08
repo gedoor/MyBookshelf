@@ -25,6 +25,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_copy_source_no_find"
+        android:title="@string/copy_source_no_find"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_paste_source"
         android:title="@string/paste_source"
         app:showAsAction="never" />
