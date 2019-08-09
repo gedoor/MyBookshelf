@@ -246,7 +246,7 @@ public class BookChapterList {
     }
 
     // region 纯java模式正则表达式获取目录列表
-    private void regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer, final List<BookChapterBean> chapterBeans) {
+    private void regexChapter(String str, String[] regex, int index, AnalyzeRule analyzer, final List<BookChapterBean> chapterBeans) throws Exception {
         Matcher resM = Pattern.compile(regex[index]).matcher(str);
         if (!resM.find()) {
             return;

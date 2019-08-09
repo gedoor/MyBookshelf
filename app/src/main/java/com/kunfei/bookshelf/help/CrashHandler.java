@@ -1,8 +1,6 @@
 package com.kunfei.bookshelf.help;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -108,12 +106,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //添加自定义信息
         addCustomInfo();
         try {
-            //复制错误报告到剪贴板
-            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, ex.getMessage());
-            if (clipboard != null) {
-                clipboard.setPrimaryClip(clipData);
-            }
             //使用Toast来显示异常信息
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show());
         } catch (Exception ignored) {

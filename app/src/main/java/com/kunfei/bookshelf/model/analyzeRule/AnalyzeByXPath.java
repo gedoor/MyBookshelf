@@ -2,6 +2,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.utils.StringUtils;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -178,17 +180,17 @@ public class AnalyzeByXPath {
             if (jxNodes == null) return null;
             return TextUtils.join(",", jxNodes);
         } else {
-            StringBuilder sb = new StringBuilder();
+            List<String> textS = new ArrayList<>();
             for (String rl : rules) {
                 String temp = getString(rl);
                 if (!TextUtils.isEmpty(temp)) {
-                    sb.append(temp);
+                    textS.add(temp);
                     if (elementsType.equals("|")) {
                         break;
                     }
                 }
             }
-            return sb.toString();
+            return StringUtils.join(",", textS).trim();
         }
     }
 }

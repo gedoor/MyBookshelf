@@ -188,6 +188,7 @@ class BookList {
                 bookShelfBean.setTag(tag);
                 bookShelfBean.setNoteUrl(baseUrl);
                 AnalyzeByRegex.getInfoOfRegex(String.valueOf(analyzer.getContent()), ruleInfoInit.split("&&"), 0, bookShelfBean, analyzer, bookSourceBean, tag);
+                if (isEmpty(bookShelfBean.getBookInfoBean().getName())) return null;
                 item.setName(bookShelfBean.getBookInfoBean().getName());
                 item.setAuthor(bookShelfBean.getBookInfoBean().getAuthor());
                 item.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
