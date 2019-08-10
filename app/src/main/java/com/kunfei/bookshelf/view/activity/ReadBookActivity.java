@@ -722,7 +722,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void bindEvent() {
         tvChapterName.setOnClickListener(v -> {
-            SourceEditActivity.startThis(this, mPresenter.getBookSource());
+            if (mPresenter.getBookSource() != null) {
+                SourceEditActivity.startThis(this, mPresenter.getBookSource());
+            }
         });
         //打开URL
         tvUrl.setOnClickListener(view -> {
