@@ -111,6 +111,7 @@ public class ChangeSourceHelp {
         bookShelfBean.setDurChapterName(oldBook.getDurChapterName());
         bookShelfBean.setDurChapter(oldBook.getDurChapter());
         bookShelfBean.setDurChapterPage(oldBook.getDurChapterPage());
+        bookShelfBean.setReplaceEnable(oldBook.getReplaceEnable());
         return WebBookModel.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(book -> WebBookModel.getInstance().getChapterList(book))
                 .flatMap(chapterBeanList -> saveChangedBook(bookShelfBean, oldBook, chapterBeanList))
