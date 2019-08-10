@@ -774,12 +774,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapterName(mPresenter.getChapterList().get(pos).getDurChapterName());
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
+                            tvChapterName.setVisibility(View.VISIBLE);
                             tvChapterName.setText(mPresenter.getChapterList().get(pos).getDurChapterName());
+                            tvUrl.setVisibility(View.VISIBLE);
                             tvUrl.setText(NetworkUtils.getAbsoluteURL(mPresenter.getBookShelf().getBookInfoBean().getChapterUrl(),
                                     mPresenter.getChapterList().get(pos).getDurChapterUrl()));
                         } else {
-                            tvChapterName.setText("");
-                            tvUrl.setText("");
+                            tvChapterName.setVisibility(View.GONE);
+                            tvUrl.setVisibility(View.GONE);
                         }
 
                         if (mPresenter.getBookShelf().getChapterListSize() == 1) {
