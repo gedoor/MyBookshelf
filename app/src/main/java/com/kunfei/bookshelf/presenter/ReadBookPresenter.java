@@ -141,6 +141,11 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
+    public void upBookSource() {
+        bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+    }
+
+    @Override
     public void saveBook() {
         if (bookShelf != null) {
             AsyncTask.execute(() -> BookshelfHelp.saveBookToShelf(bookShelf));
