@@ -1,15 +1,15 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.annotation.SuppressLint;
-
 import androidx.annotation.Keep;
-
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
+import retrofit2.Response;
 
+import javax.script.SimpleBindings;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,15 +17,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.SimpleBindings;
-
-import retrofit2.Response;
-
 import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
-import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
-import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
-import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+import static com.kunfei.bookshelf.constant.AppConstant.*;
 import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
 
 
