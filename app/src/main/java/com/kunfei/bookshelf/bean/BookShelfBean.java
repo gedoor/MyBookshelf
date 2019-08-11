@@ -4,6 +4,7 @@ package com.kunfei.bookshelf.bean;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.constant.BookType;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -48,7 +49,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     private Boolean allowUpdate = true;
     private Boolean useReplaceRule = true;
     private String variable;
-    private Boolean replaceEnable = false;
+    private Boolean replaceEnable = MApplication.getConfigPreferences().getBoolean("replaceEnableDefault", true);
 
     @Transient
     private Map<String, String> variableMap;
@@ -302,7 +303,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
     }
 
     public Boolean getReplaceEnable() {
-        return replaceEnable == null ? false : replaceEnable;
+        return replaceEnable == null ? MApplication.getConfigPreferences().getBoolean("replaceEnableDefault", true) : replaceEnable;
     }
 
     public void setReplaceEnable(Boolean replaceEnable) {

@@ -48,6 +48,11 @@
 
     <com.kunfei.bookshelf.widget.prefs.ATEPreferenceCategory android:title="其它设置">
 
+        <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+            android:defaultValue="true"
+            android:key="replaceEnableDefault"
+            android:title="默认启用替换净化" />
+
         <Preference
             android:key="@string/pk_download_path"
             android:title="@string/download_path" />
