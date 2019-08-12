@@ -271,6 +271,16 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bindEvent() {
+        tvName.setOnClickListener(v -> {
+            if (bookShelfBean == null) return;
+            if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getName())) return;
+            if (!AppActivityManager.getInstance().isExist(SearchBookActivity.class)) {
+                SearchBookActivity.startByKey(this, bookShelfBean.getBookInfoBean().getName());
+            } else {
+                RxBus.get().post(RxBusTag.SEARCH_BOOK, bookShelfBean.getBookInfoBean().getName());
+            }
+            finish();
+        });
         ivBlurCover.setOnClickListener(null);
         vwContent.setOnClickListener(v -> finish());
 
