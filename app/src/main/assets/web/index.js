@@ -43,7 +43,11 @@ function newRule(rule) {
 var RuleSources = [];
 if (localStorage.getItem('RuleSources')) {
 	RuleSources = JSON.parse(localStorage.getItem('RuleSources'));
-	RuleSources.forEach(item => $('#RuleList').innerHTML += newRule(item));
+	let ruleListArray = [];
+	RuleSources.forEach(item => { 
+		ruleListArray.push(newRule(item));
+	});
+	$('#RuleList').innerHTML += ruleListArray.join('');
 }
 // 页面加载完成事件
 window.onload = () => {
@@ -181,9 +185,11 @@ $('.menu').addEventListener('click', e => {
 						console.log('批量拉取书源:', RuleSources);
 						$('#RuleList').innerHTML = ''
 						localStorage.setItem('RuleSources', JSON.stringify(RuleSources = json.data));
+						let ruleListArray = [];
 						RuleSources.forEach(item => {
-							$('#RuleList').innerHTML += newRule(item);
+							ruleListArray.push(newRule(item));
 						});
+						$('#RuleList').innerHTML += ruleListArray.join('');
 						alert(`成功拉取 ${RuleSources.length} 条书源`);
 					}
 					else {
@@ -303,19 +309,18 @@ $('.tab3>.titlebar').addEventListener('click', e => {
 							newSources.push(...fileJson);
 							if (window.confirm(`如何处理导入的书源?\n"确定": 覆盖当前列表(不会删除APP源)\n"取消": 插入列表尾部(自动忽略重复源)`)) {
 								localStorage.setItem('RuleSources', JSON.stringify(RuleSources = newSources));
-								$('#RuleList').innerHTML = ''
-								RuleSources.forEach(item => {
-									$('#RuleList').innerHTML += newRule(item);
-								});
+								$('#RuleList').innerHTML = '';
 							}
 							else {
 								newSources = newSources.filter(item => !JSON.stringify(RuleSources).includes(item.bookSourceUrl));
 								RuleSources.push(...newSources);
 								localStorage.setItem('RuleSources', JSON.stringify(RuleSources));
-								newSources.forEach(item => {
-									$('#RuleList').innerHTML += newRule(item);
-								});
 							}
+							let ruleListArray = [];
+							RuleSources.forEach(item => {
+								ruleListArray.push(newRule(item));
+							});
+							$('#RuleList').innerHTML += ruleListArray.join('');
 							alert(`成功导入 ${newSources.length} 条书源`);
 						}
 						catch (err) {
