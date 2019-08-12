@@ -5,16 +5,16 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.kunfei.bookshelf.MApplication;
 
 import java.lang.reflect.Method;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * Created by newbiechen on 17-5-1.
  */
-
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ScreenUtils {
 
     public static int dpToPx(int dp) {

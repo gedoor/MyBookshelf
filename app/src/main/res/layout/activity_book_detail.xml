@@ -93,7 +93,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:contentDescription="@string/menu"
-                                android:src="@drawable/ic_more_vert_black_24dp"
+                                android:src="@drawable/ic_more_vert"
                                 app:tint="@android:color/white" />
 
                         </LinearLayout>
@@ -111,7 +111,7 @@
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/author"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_author_black_24dp"
+                                android:src="@drawable/ic_author"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -151,7 +151,7 @@
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/origin"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_web_outline_24dp"
+                                android:src="@drawable/ic_web_outline"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -198,7 +198,7 @@
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/last_read"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_book_last_24dp"
+                                android:src="@drawable/ic_book_last"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 

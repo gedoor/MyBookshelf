@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
@@ -15,22 +18,20 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyViewHolder> {
     private Context context;
     private int showIndex = 0;
-    private List<RecyclerViewData> datas = new ArrayList<>();
+    private List<RecyclerViewData> data = new ArrayList<>();
     private OnClickListener onClickListener;
 
-    public FindLeftAdapter(OnClickListener onClickListener) {
+    public FindLeftAdapter(Context context, OnClickListener onClickListener) {
+        this.context = context;
         this.onClickListener = onClickListener;
     }
 
-    public void setDatas(List<RecyclerViewData> datas) {
-        this.datas.clear();
-        this.datas.addAll(datas);
+    public void setData(List<RecyclerViewData> data) {
+        this.data.clear();
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -46,20 +47,19 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
         return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_left, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") int i) {
-        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(i).getGroupData();
+        FindKindGroupBean groupBean = (FindKindGroupBean) data.get(i).getGroupData();
         myViewHolder.tvSourceName.setText(groupBean.getGroupName());
         if (i == showIndex) {
-            myViewHolder.findLeft.setBackgroundColor(context.getResources().getColor(R.color.transparent30));
+            myViewHolder.tvSourceName.setBackgroundColor(context.getResources().getColor(R.color.transparent30));
         } else {
-            myViewHolder.findLeft.setBackgroundColor(Color.TRANSPARENT);
+            myViewHolder.tvSourceName.setBackgroundColor(Color.TRANSPARENT);
         }
-        myViewHolder.findLeft.setOnClickListener(v -> {
+        myViewHolder.tvSourceName.setOnClickListener(v -> {
             if (onClickListener != null) {
                 int oldIndex = showIndex;
                 showIndex = i;
@@ -72,16 +72,14 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        View findLeft;
         TextView tvSourceName;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            findLeft = itemView.findViewById(R.id.find_left);
             tvSourceName = itemView.findViewById(R.id.tv_source_name);
         }
     }

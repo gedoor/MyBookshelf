@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.StringRes;
+
 import com.kunfei.bookshelf.MApplication;
 
 import java.nio.charset.StandardCharsets;
@@ -13,17 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.annotation.StringRes;
+import static android.text.TextUtils.isEmpty;
 
-/**
- * Created by newbiechen on 17-4-22.
- * 对文字操作的工具类
- */
-
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     private static final String TAG = "StringUtils";
     private static final int HOUR_OF_DAY = 24;
@@ -154,7 +151,6 @@ public class StringUtils {
         return map;
     }
 
-    // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
     @SuppressWarnings("ConstantConditions")
     public static int chineseNumToInt(String chNum) {
         int result = 0;
@@ -294,34 +290,10 @@ public class StringUtils {
         return src.substring(0, obj.length()).equalsIgnoreCase(obj);
     }
 
-    /**
-     * delimiter 分隔符
-     * elements 需要连接的字符数组
-     */
-    public static String join(CharSequence delimiter, CharSequence... elements) {
-        // 空指针判断
-        Objects.requireNonNull(delimiter);
-        Objects.requireNonNull(elements);
-
-        // Number of elements not likely worth Arrays.stream overhead.
-        // 此处用到了StringJoiner(JDK 8引入的类）
-        // 先构造一个以参数delimiter为分隔符的StringJoiner对象
-        StringJoiner joiner = new StringJoiner(delimiter);
-        for (CharSequence cs: elements) {
-            // 拼接字符
-            joiner.add(cs);
-        }
-        return joiner.toString();
-    }
-
-    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
-        Objects.requireNonNull(delimiter);
-        Objects.requireNonNull(elements);
-        StringJoiner joiner = new StringJoiner(delimiter);
-        for (CharSequence cs: elements) {
-            joiner.add(cs);
-        }
-        return joiner.toString();
+    public static boolean endWithIgnoreCase(String src, String obj) {
+        if (src == null || obj == null) return false;
+        if (obj.length() > src.length()) return false;
+        return src.substring(src.length() - obj.length()).equalsIgnoreCase(obj);
     }
 
     public static boolean isContainNumber(String company) {
@@ -330,14 +302,14 @@ public class StringUtils {
         return m.find();
     }
 
-    public static boolean isNumeric(String str){
+    public static boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();
     }
 
     public static String getBaseUrl(String url) {
-        if (url == null) return null;
+        if (url == null || !url.startsWith("http")) return null;
         int index = url.indexOf("/", 9);
         if (index == -1) {
             return url;
@@ -345,11 +317,19 @@ public class StringUtils {
         return url.substring(0, index);
     }
 
-    public static String trim(String string) {
-        if (string == null) {
-            return null;
+    // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
+    public static String trim(String s) {
+        if (isEmpty(s)) return "";
+        int start = 0, len = s.length();
+        int end = len - 1;
+        while ((start < end) && ((s.charAt(start) <= 0x20) || (s.charAt(start) == '　'))) {
+            ++start;
         }
-        return string.replaceAll("(^\\s+|\\s+$)", "");
+        while ((start < end) && ((s.charAt(end) <= 0x20) || (s.charAt(end) == '　'))) {
+            --end;
+        }
+        if (end < len) ++end;
+        return ((start > 0) || (end < len)) ? s.substring(start, end) : s;
     }
 
     public static String repeat(String str, int n) {
@@ -371,5 +351,14 @@ public class StringUtils {
         }
         m.appendTail(buf);
         return buf.toString();
+    }
+
+    public static String formatHtml(String html) {
+        if (TextUtils.isEmpty(html)) return "";
+        return html.replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")// 替换特定标签为换行符
+                .replaceAll("<[script>]*.*?>|&nbsp;", "")// 删除script标签对和空格转义符
+                .replaceAll("\\s*\\n+\\s*", "\n　　")// 移除空行,并增加段前缩进2个汉字
+                .replaceAll("^[\\n\\s]+", "　　")//移除开头空行,并增加段前缩进2个汉字
+                .replaceAll("[\\n\\s]+$", "");//移除尾部空行
     }
 }

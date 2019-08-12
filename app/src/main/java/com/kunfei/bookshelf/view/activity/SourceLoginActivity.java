@@ -14,18 +14,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.appbar.AppBarLayout;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.CookieBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -50,12 +51,7 @@ public class SourceLoginActivity extends MBaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String key = String.valueOf(System.currentTimeMillis());
         intent.putExtra("data_key", key);
-        try {
-            BitIntentDataManager.getInstance().putData(key, bookSourceBean.clone());
-        } catch (CloneNotSupportedException e) {
-            BitIntentDataManager.getInstance().putData(key, bookSourceBean);
-            e.printStackTrace();
-        }
+        BitIntentDataManager.getInstance().putData(key, bookSourceBean.clone());
         context.startActivity(intent);
     }
 

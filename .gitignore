@@ -8,3 +8,4 @@
 /app/release/
 google-services.json
 
+src/androidTest/

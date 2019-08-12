@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.kunfei.bookshelf.widget.prefs.IconListPreference
+        android:defaultValue="@string/icon_main"
+        android:entries="@array/icon_names"
+        android:entryValues="@array/icons"
+        android:key="launcher_icon"
+        android:summary="@string/change_icon_summary"
+        android:title="@string/change_icon"
+        app:icons="@array/icons" />
+
     <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
         android:defaultValue="false"
         android:key="immersionStatusBar"
@@ -13,6 +22,18 @@
         android:key="navigationBarColorChange"
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
+
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="true"
+        android:key="behaviorMain"
+        android:summary="@string/behavior_main_s"
+        android:title="@string/behavior_main_t" />
+
+    <com.kunfei.bookshelf.widget.prefs.ATESwitchPreference
+        android:defaultValue="false"
+        android:key="E-InkMode"
+        android:summary="@string/e_ink_mode_detail"
+        android:title="@string/e_ink_mode" />
 
     <Preference
         android:key="defaultTheme"

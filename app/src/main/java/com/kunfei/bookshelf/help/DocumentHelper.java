@@ -2,7 +2,8 @@ package com.kunfei.bookshelf.help;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.text.TextUtils;
+
+import androidx.documentfile.provider.DocumentFile;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.DocumentUtil;
@@ -14,8 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import androidx.documentfile.provider.DocumentFile;
 
 
 /**
@@ -129,6 +128,7 @@ public class DocumentHelper {
     public static void saveBitmapToFile(Bitmap bitmap, Uri fileUri) throws IOException {
         OutputStream out = MApplication.getInstance().getContentResolver().openOutputStream(fileUri);
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        assert out != null;
         out.flush();
         out.close();
     }

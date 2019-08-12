@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class BaseActivity<T extends IPresenter> extends AppCompatActivity implements IView {
-    public final static String start_share_ele= "start_with_share_ele";
+    public final static String START_SHEAR_ELE = "start_with_share_ele";
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
     protected Bundle savedInstanceState;
@@ -31,7 +31,7 @@ public abstract class BaseActivity<T extends IPresenter> extends AppCompatActivi
         this.savedInstanceState = savedInstanceState;
         if(getIntent()!=null){
             isRecreate = getIntent().getBooleanExtra("isRecreate", false);
-            startShareAnim = getIntent().getBooleanExtra(start_share_ele,false);
+            startShareAnim = getIntent().getBooleanExtra(START_SHEAR_ELE, false);
         }
         AppActivityManager.getInstance().add(this);
         initSDK();
@@ -154,6 +154,14 @@ public abstract class BaseActivity<T extends IPresenter> extends AppCompatActivi
         toast.show();
     }
 
+    public Context getContext(){
+        return this;
+    }
+
+    public Boolean getStart_share_ele() {
+        return startShareAnim;
+    }
+
     ////////////////////////////////启动Activity转场动画/////////////////////////////////////////////
 
     protected void startActivityForResultByAnim(Intent intent, int requestCode, int animIn, int animExit) {
@@ -168,19 +176,11 @@ public abstract class BaseActivity<T extends IPresenter> extends AppCompatActivi
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.putExtra(start_share_ele,true);
+            intent.putExtra(START_SHEAR_ELE, true);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, view, transitionName);
             startActivity(intent, options.toBundle());
         } else {
             startActivityByAnim(intent, animIn, animExit);
         }
-    }
-
-    public Context getContext(){
-        return this;
-    }
-
-    public Boolean getStart_share_ele() {
-        return startShareAnim;
     }
 }

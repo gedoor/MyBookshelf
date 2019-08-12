@@ -1,20 +1,24 @@
 package com.kunfei.bookshelf.widget.prefs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.preference.SwitchPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
+import androidx.annotation.RequiresApi;
+
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.util.LinkedList;
 
+@SuppressWarnings("unused")
 public class ATESwitchPreference extends SwitchPreference {
-    @SuppressLint("NewApi")
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ATESwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }

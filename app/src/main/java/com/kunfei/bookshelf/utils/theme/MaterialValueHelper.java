@@ -3,10 +3,10 @@ package com.kunfei.bookshelf.utils.theme;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
+
+import com.kunfei.bookshelf.R;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

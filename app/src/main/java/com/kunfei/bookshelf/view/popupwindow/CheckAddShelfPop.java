@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +9,17 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.annotation.NonNull;
+
+import com.kunfei.bookshelf.R;
 
 public class CheckAddShelfPop extends PopupWindow {
     private Context mContext;
     private View view;
     private OnItemClickListener itemClick;
     private String bookName;
+
+    @SuppressLint("InflateParams")
     public CheckAddShelfPop(Context context, @NonNull String bookName, @NonNull OnItemClickListener itemClick) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;

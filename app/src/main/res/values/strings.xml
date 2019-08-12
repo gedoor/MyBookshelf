@@ -24,7 +24,11 @@
 
     <string name="navigation_drawer_open">打开侧边栏</string>
     <string name="navigation_drawer_close">关闭侧边栏</string>
-
+    <string name="dialog_title">提示</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_setting">去设置</string>
+    <string name="tip_cannot_jump_setting_page">无法跳转至设置界面</string>
     <string name="local">本地</string>
     <string name="search">搜索</string>
     <string name="net_error_10001">没有网络</string>
@@ -39,6 +43,9 @@
     <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
+    <string name="web_service">web服务</string>
+    <string name="web_edit_source">web编辑书源</string>
+    <string name="http_ip">http://%s:%d</string>
     <string name="download_offline">离线下载</string>
     <string name="download_offline_t">离线下载</string>
     <string name="download_offline_s">下载选择的章节到本地</string>
@@ -106,7 +113,7 @@
     <string name="author">作者</string>
     <string name="analyze_error">站点暂时不支持解析，请反馈</string>
     <string name="aloud_stop">朗读停止</string>
-    <string name="clear_content">清除缓存</string>
+    <string name="clear_cache">清除缓存</string>
     <string name="action_save">保存</string>
     <string name="edit_book_source">编辑书源</string>
     <string name="disable_book_source">禁用书源</string>
@@ -114,6 +121,7 @@
     <string name="book_file_selector">添加书籍</string>
     <string name="scan_book_source">扫描</string>
     <string name="copy_source">拷贝书源</string>
+    <string name="copy_source_no_find">拷贝书源无发现</string>
     <string name="paste_source">粘贴书源</string>
     <string name="source_rule_s">书源规则说明</string>
     <string name="check_update">检查更新</string>
@@ -182,6 +190,7 @@
     <string name="refresh_default">书源同步</string>
     <string name="no_last_chapter">无最新章节信息</string>
     <string name="showTimeBattery">显示时间和电量</string>
+    <string name="select_text">长按选择文本</string>
     <string name="showLine">显示分隔线</string>
     <string name="darkStatusIcon">深色状态栏图标</string>
     <string name="content">内容</string>
@@ -201,7 +210,7 @@
     <string name="load_over_time">加载超时</string>
     <string name="join_group">关注:%s</string>
     <string name="copy_complete">已拷贝</string>
-    <string name="clear_bookshelf">清空书架</string>
+    <string name="arrange_bookshelf">整理书架</string>
     <string name="clear_bookshelf_s">这将会删除所有书籍，请谨慎操作。</string>
     <string name="search_book_source">搜索书源</string>
     <string name="search_book_source_num">搜索(共%d个书源)</string>
@@ -220,6 +229,7 @@
     <string name="padding_left">左边距</string>
     <string name="padding_right">右边距</string>
     <string name="check_book_source">校验书源</string>
+    <string name="check_select_source">校验所选</string>
     <string name="progress_show">进度 %d/%d</string>
     <string name="tts_fix">请安装并选择中文TTS!</string>
     <string name="tts_init_failed">TTS初始化失败!</string>
@@ -264,11 +274,12 @@
     <string name="allow_update">允许更新</string>
     <string name="revert_selection">反转选择</string>
     <string name="search_book_key">搜索书名、作者</string>
+    <string name="debug_hint">书名、作者、URL</string>
     <string name="faq">常见问题</string>
     <string name="pt_show_all_find">显示所有发现</string>
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>
     <string name="update_chapter">更新目录</string>
-    <string name="txt_chapter_regex">目录正则</string>
+    <string name="txt_chapter_regex">txt目录正则</string>
     <string name="set_charset">设置编码</string>
     <string name="swap_sort">倒序-顺序</string>
     <string name="sort">排序</string>
@@ -297,7 +308,7 @@
     <string name="page_mode_SLIDE">滑动</string>
     <string name="page_mode_SCROLL">滚动</string>
     <string name="page_mode_NONE">无动画</string>
-    <string name="donate_s">此书源使用了高级功能，请到捐赠里点击支付宝红包搜索码领取红包开启。</string>
+    <string name="donate_s">此书源使用了高级功能，复制支付宝红包搜索码领取红包或关注微信公众号[开源阅读软件]开启。</string>
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
     <string name="behavior_main_t">书架ToolBar自动隐藏</string>
@@ -320,17 +331,27 @@
     <string name="rule_content_url">章节URL规则(ruleContentUrl)</string>
     <string name="rule_cover_url">封面规则(ruleCoverUrl)</string>
     <string name="rule_introduce">简介规则(ruleIntroduce)</string>
-    <string name="rule_search_author">搜索结果作者规则(ruleSearchAuthor)</string>
-    <string name="rule_search_cover_url">搜索结果封面规则(ruleSearchCoverUrl)</string>
-    <string name="rule_search_kind">搜索结果分类规则(ruleSearchKind)</string>
-    <string name="rule_search_last_chapter">搜索结果最新章节规则(ruleSearchLastChapter)</string>
-    <string name="rule_search_list">搜索结果列表规则(ruleSearchList)</string>
-    <string name="rule_search_name">搜索结果书名规则(ruleSearchName)</string>
-    <string name="rule_search_note_url">搜索结果书籍URL规则(ruleSearchNoteUrl)</string>
+    <string name="rule_search_author">搜索作者规则(ruleSearchAuthor)</string>
+    <string name="rule_find_author">发现作者规则(ruleFindAuthor)</string>
+    <string name="rule_search_cover_url">搜索封面规则(ruleSearchCoverUrl)</string>
+    <string name="rule_find_cover_url">发现封面规则(ruleFindCoverUrl)</string>
+    <string name="rule_search_kind">搜索分类规则(ruleSearchKind)</string>
+    <string name="rule_find_kind">发现分类规则(ruleFindKind)</string>
+    <string name="rule_search_last_chapter">搜索最新章节规则(ruleSearchLastChapter)</string>
+    <string name="rule_find_last_chapter">发现最新章节规则(ruleFindLastChapter)</string>
+    <string name="rule_search_list">搜索列表规则(ruleSearchList)</string>
+    <string name="rule_find_list">发现列表规则(ruleFindList)</string>
+    <string name="rule_search_name">搜索书名规则(ruleSearchName)</string>
+    <string name="rule_find_name">发现书名规则(ruleFindName)</string>
+    <string name="rule_search_note_url">搜索书籍URL规则(ruleSearchNoteUrl)</string>
+    <string name="rule_find_note_url">发现书籍URL规则(ruleFindNoteUrl)</string>
+    <string name="rule_search_introduce">搜索简介规则(ruleSearchIntroduce)</string>
+    <string name="rule_find_introduce">发现简介规则(ruleFindIntroduce)</string>
     <string name="rule_search_url">搜索地址(ruleSearchUrl)</string>
     <string name="rule_find_url">发现规则(ruleFindUrl)</string>
     <string name="rule_content_url_next">正文下一页URL规则(ruleContentUrlNext)</string>
     <string name="book_url_pattern">书籍详情URL正则(ruleBookUrlPattern)</string>
+    <string name="rule_book_info_init">书籍详情预处理规则(ruleBookInfoInit)</string>
     <string name="rule_book_kind">分类规则(ruleBookKind)</string>
     <string name="rule_book_last_chapter">最新章节规则(ruleBookLastChapter)</string>
     <string name="source_user_agent">HttpUserAgent</string>
@@ -363,6 +384,7 @@
     <string name="network_connection_unavailable">网络连接不可用</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="sure_del_all_book">是否删除全部书籍？</string>
     <string name="sure_del_download_book">是否同时删除已下载的书籍目录？</string>
     <string name="qr_per">扫描二维码需相机权限</string>
     <string name="aloud_can_not_auto_page">朗读正在运行,不能自动翻页</string>
@@ -397,5 +419,32 @@
     <string name="restore_default">恢复默认</string>
     <string name="set_download_per">自定义缓存路径需要存储权限</string>
     <string name="black">黑色</string>
+    <string name="content_empty">文章内容为空</string>
+    <string name="on_change_source">正在换源请等待…</string>
+    <string name="chapter_list_empty">目录列表为空</string>
+    <string name="load_error_msg">加载失败\n%s</string>
+    <string name="content_padding">正文边距</string>
+    <string name="tip_padding">Tip边距</string>
+    <string name="text_letter_spacing">字距</string>
 
+    <string name="e_ink_mode">E-Ink 模式</string>
+    <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
+    <string name="web_menu">Web服务</string>
+    <string name="web_port_title">web端口</string>
+    <string name="web_port_summary">当前端口 %s</string>
+    <string name="qr_share">二维码分享</string>
+    <string name="wifi_share">wifi分享</string>
+    <string name="please_grant_storage_permission">请给于存储权限</string>
+    <string name="skip_previous">上一个</string>
+    <string name="skip_next">下一个</string>
+    <string name="music">音乐</string>
+    <string name="audio">音频</string>
+    <string name="is_enable">启用</string>
+    <string name="all_source">全部书源</string>
+    <string name="cannot_empty">输入不能为空</string>
+    <string name="clear_find_cache">清空发现缓存</string>
+    <string name="edit_find">编辑发现</string>
+    <string name="change_icon_summary">切换软件显示在桌面的图标</string>
+    <string name="dsm_start"><![CDATA[<]]></string>
+    <string name="dsm_end"><![CDATA[>]]></string>
 </resources>

@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ReadAssets;
-import com.victor.loading.rotate.RotateLoading;
+import com.kunfei.bookshelf.widget.RotateLoading;
 
-import androidx.cardview.widget.CardView;
 import ru.noties.markwon.Markwon;
 
 /**
@@ -105,7 +106,7 @@ public class MoDialogView extends LinearLayout {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_markdown, this, true);
         TextView tvMarkdown = findViewById(R.id.tv_markdown);
-        Markwon.setMarkdown(tvMarkdown, ReadAssets.getText(context, assetFileName));
+        Markwon.create(tvMarkdown.getContext()).setMarkdown(tvMarkdown, ReadAssets.getText(context, assetFileName));
     }
 
     /**

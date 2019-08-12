@@ -2,11 +2,11 @@ package com.kunfei.bookshelf.utils.theme;
 
 import android.content.res.ColorStateList;
 
-import com.google.android.material.internal.NavigationMenuView;
-import com.google.android.material.navigation.NavigationView;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationView;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -41,6 +41,7 @@ public final class NavigationViewUtil {
 
     /**
      * 去掉navigationView的滚动条
+     *
      * @param navigationView NavigationView
      */
     public static void disableScrollbar(NavigationView navigationView) {

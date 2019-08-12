@@ -1,26 +1,23 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.BookSourceManager;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 @Entity
-public class SearchBookBean implements Parcelable, BaseBookBean {
+public class SearchBookBean implements BaseBookBean {
     @Id
     private String noteUrl;
     private String coverUrl;//封面URL
@@ -29,7 +26,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     private String tag;
     private String kind;//分类
     private String origin;//来源
-    private String desc;
     private String lastChapter;
     private String introduce; //简介
     private String chapterUrl;//目录URL
@@ -42,44 +38,29 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     @Transient
     private int originNum = 1;
     @Transient
-    private int weight = -1;
-    @Transient
     private int lastChapterNum = -2;
     @Transient
     private int searchTime = Integer.MAX_VALUE;
     @Transient
-    private List<String> originUrls;
+    private LinkedHashSet<String> originUrls;
     @Transient
     private Map<String, String> variableMap;
+    @Transient
+    private String bookInfoHtml;
 
-    public SearchBookBean(){
+    public SearchBookBean() {
 
     }
 
-    protected SearchBookBean(Parcel in) {
-        noteUrl = in.readString();
-        coverUrl = in.readString();
-        name = in.readString();
-        author = in.readString();
-        lastChapter = in.readString();
-        isCurrentSource = in.readByte() != 0;
-        tag = in.readString();
-        kind = in.readString();
-        origin = in.readString();
-        desc = in.readString();
-        originNum = in.readInt();
-        introduce = in.readString();
-        chapterUrl = in.readString();
-        addTime = in.readLong();
-        upTime = in.readLong();
-        originUrls = in.createStringArrayList();
-        variable = in.readString();
+    public SearchBookBean(String tag, String origin) {
+        this.tag = tag;
+        this.origin = origin;
     }
 
-    @Generated(hash = 1344440211)
-    public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-                          String tag, String kind, String origin, String desc, String lastChapter,
-                          String introduce, String chapterUrl, Long addTime, Long upTime, String variable) {
+    @Generated(hash = 337890066)
+    public SearchBookBean(String noteUrl, String coverUrl, String name, String author, String tag, String kind,
+                          String origin, String lastChapter, String introduce, String chapterUrl, Long addTime, Long upTime,
+                          String variable) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -87,7 +68,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.tag = tag;
         this.kind = kind;
         this.origin = origin;
-        this.desc = desc;
         this.lastChapter = lastChapter;
         this.introduce = introduce;
         this.chapterUrl = chapterUrl;
@@ -95,45 +75,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.upTime = upTime;
         this.variable = variable;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(noteUrl);
-        dest.writeString(coverUrl);
-        dest.writeString(name);
-        dest.writeString(author);
-        dest.writeString(lastChapter);
-        dest.writeByte((byte)(isCurrentSource ?1:0));
-        dest.writeString(tag);
-        dest.writeString(kind);
-        dest.writeString(origin);
-        dest.writeString(desc);
-        dest.writeInt(originNum);
-        dest.writeString(introduce);
-        dest.writeString(chapterUrl);
-        dest.writeLong(addTime);
-        dest.writeLong(upTime);
-        dest.writeStringList(originUrls);
-        dest.writeString(variable);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<SearchBookBean> CREATOR = new Creator<SearchBookBean>() {
-        @Override
-        public SearchBookBean createFromParcel(Parcel in) {
-            return new SearchBookBean(in);
-        }
-
-        @Override
-        public SearchBookBean[] newArray(int size) {
-            return new SearchBookBean[size];
-        }
-    };
-
 
     @Override
     public String getVariable() {
@@ -193,11 +134,11 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public void setAuthor(String author) {
-        this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
+        this.author = BookshelfHelp.formatAuthor(author);
     }
 
     public String getLastChapter() {
-        return lastChapter==null?"":lastChapter;
+        return lastChapter == null ? "" : lastChapter;
     }
 
     public void setLastChapter(String lastChapter) {
@@ -236,14 +177,6 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
         this.origin = origin;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public Boolean getIsCurrentSource() {
         return this.isCurrentSource;
     }
@@ -254,27 +187,16 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
             this.addTime = System.currentTimeMillis();
     }
 
-    public void originNumAdd() {
-        originNum = originNum + 1;
-    }
-
     public int getOriginNum() {
         return originNum;
     }
 
     public void addOriginUrl(String origin) {
         if (this.originUrls == null) {
-            this.originUrls = new ArrayList<>();
+            this.originUrls = new LinkedHashSet<>();
         }
-
-        if (!this.originUrls.contains(origin)) {
-            this.originUrls.add(origin);
-        }
+        this.originUrls.add(origin);
         originNum = this.originUrls.size();
-    }
-
-    public List<String> getOriginUrls() {
-        return this.originUrls == null ? new ArrayList<String>() : this.originUrls;
     }
 
     public String getIntroduce() {
@@ -302,16 +224,11 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
     }
 
     public int getWeight() {
-        BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
+        BookSourceBean source = BookSourceManager.getBookSourceByUrl(this.tag);
         if (source != null)
-            this.weight = source.getWeight();
+            return source.getWeight();
         else
-            this.weight = 0;
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
+            return 0;
     }
 
     public int getSearchTime() {
@@ -328,5 +245,25 @@ public class SearchBookBean implements Parcelable, BaseBookBean {
 
     public void setUpTime(Long upTime) {
         this.upTime = upTime;
+    }
+
+    public String getBookInfoHtml() {
+        return bookInfoHtml;
+    }
+
+    public void setBookInfoHtml(String bookInfoHtml) {
+        this.bookInfoHtml = bookInfoHtml;
+    }
+
+    // 一次性存入搜索书籍节点信息
+    public void setSearchInfo(String name, String author, String kind, String lastChapter,
+                              String introduce, String coverUrl, String noteUrl) {
+        this.name = name;
+        this.author = author;
+        this.kind = kind;
+        this.lastChapter = lastChapter;
+        this.introduce = introduce;
+        this.coverUrl = coverUrl;
+        this.noteUrl = noteUrl;
     }
 }

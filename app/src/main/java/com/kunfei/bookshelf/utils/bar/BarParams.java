@@ -5,11 +5,11 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.WindowManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 沉浸式参数信息
@@ -23,10 +23,10 @@ public class BarParams implements Cloneable {
     @FloatRange(from = 0f, to = 1f)
     public float statusBarAlpha = 0.0f;           //状态栏透明度
     public boolean fullScreen = false;            //有导航栏的情况，全屏显示
-    public boolean fullScreenTemp = fullScreen;
+    public boolean fullScreenTemp = false;
     public BarHide barHide = BarHide.FLAG_SHOW_BAR;  //隐藏Bar
     public boolean darkFont = false;                 //状态栏字体深色与亮色标志位
-    public boolean navigationBardarkFont = false;    //导航栏字体深色与亮色标志位
+    public boolean navigationBarDarkFont = false;    //导航栏字体深色与亮色标志位
     public boolean statusBarFlag = true;            //是否可以修改状态栏颜色
     @ColorInt
     public int statusBarColorTransform = Color.BLACK;  //状态栏变换后的颜色

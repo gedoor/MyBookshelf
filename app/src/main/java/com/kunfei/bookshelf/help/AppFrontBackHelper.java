@@ -23,10 +23,6 @@ public class AppFrontBackHelper {
         application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
     }
 
-    public void unRegister(Application application) {
-        application.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks);
-    }
-
     private Application.ActivityLifecycleCallbacks activityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
         //打开的Activity数量统计
         private int activityStartCount = 0;

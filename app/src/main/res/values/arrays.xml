@@ -78,5 +78,15 @@
         <attr name="batteryColor" format="color"/>
         <attr name="batteryPower" format="integer"/>
     </declare-styleable>
+
+    <string-array name="icon_names">
+        <item>icon1</item>
+        <item>icon2</item>
+    </string-array>
+
+    <string-array name="icons">
+        <item>@string/icon_main</item>
+        <item>@string/icon_book</item>
+    </string-array>
     
 </resources>

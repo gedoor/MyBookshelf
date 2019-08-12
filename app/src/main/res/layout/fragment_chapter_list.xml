@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_ib_pre_round"
             android:contentDescription="@string/go_to_top"
-            android:src="@drawable/ic_arrow_drop_up_black_24dp"
+            android:src="@drawable/ic_arrow_drop_up"
             app:tint="@color/tv_text_default" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_ib_pre_round"
             android:contentDescription="@string/go_to_bottom"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:src="@drawable/ic_arrow_drop_down"
             app:tint="@color/tv_text_default" />
     </LinearLayout>
 

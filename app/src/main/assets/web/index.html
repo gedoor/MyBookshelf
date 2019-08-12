@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>书源编辑器v3.8</title>
+	<link rel="shortcut icon" type="image/x-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTggKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjNGQjY1ODVFQkM1NDExRTlBQjBCQzMwOUMxOTg4REU0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjNGQjY1ODVGQkM1NDExRTlBQjBCQzMwOUMxOTg4REU0Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6M0ZCNjU4NUNCQzU0MTFFOUFCMEJDMzA5QzE5ODhERTQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0ZCNjU4NURCQzU0MTFFOUFCMEJDMzA5QzE5ODhERTQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz62y91xAAACQFBMVEVPT0/t7e3s7Ozm5ubd3t7W1tfl5uba2tvS0tPNzs7h4uLp6urKysv09PTt7u7w8fGWlpZWVlZOTk739/dQUFB2dnaLi4tra2tgYGBSUlL4+PhRUVFZWVlUVFSIiIhVVVWSkpJ/f39eXl56enpycnJNTU3vxKjkpJLt7OzsuqDor5pvb29XV1dcXFzo6Oh8fHzc3NyEhITCwsJfX19YWFjs6up5eXlkZGTk5OTOzs94eHiRkZFbW1taWlrNzc19fX2fn5+bm5uFhYVmZmbvyK+VlZVpaWni4uKNjY3d3d3Ly8vhnY9UU1Lr5eVWVVPwy6xTU1Ph4eFZWVhYVlWGhobOzs7s6+tSUVHs6Obb29vn5+fJycniopbb29xtbW3pxqjT09Tp6enotaNwcHDsv6lMTEzt6eRsbG1sbGyenp+bmpqgn59JSUns5uRqamrr4uDsv6jmycaOjo6Pj4+BgYHz9PRISEh7e3uCgoLny8nQ0NBubm/Mzc2Dg4PfnJOrq6vo6enq6uqtra3iopXz0bTs5eLl5eXs7e3otaKqqqrs5+Vubm6wsLHs5uOXl5fy8vLExMTr4+Lk5eXlq5u0sa/t6OTr4+Hr6+vgnZSKioq9vr7nyMPhnZBhYWHv8PDPz9DmxsHPtJ61trblrJyZmZmzs7OcnJzZ2dm+vr9LS0vDw8OTk5N3d3dxcXHevqLs5eO/v7+QkJDu7++/wMDr5OPt6eaJiYmpqaqnp6fR0dPmurHW1tadnZ3r4eDb3NwAAAARBksOAAAAwHRSTlP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wAeZvRzAAAB9UlEQVR42mLYTwAwoHGBAKcCEQYEwKKAAQ2gK2BgQDZAGqECSjMIyYjpuuVp6zIwSJjpzC02FhRiQFYA1KCvXGErJ1rEwCC40TyuXlwXZgYDRD8Dg0CtmIrHWgUGBu1y820CVssYGIRUYQrA1gq4Kso7zQQqkMhSFHMVFwCJpaIoMMuW60sGKXDUV3EQVQKJCUEUQBwuYC8gvkfMGqTAxnDHEhuw4EokBXJuspL2AmsYGGQcSqwDlJ3AgqpICiDel2SQFhExhgsIoSmwUjJUElXJCEGIlAEVqCK4zoKKtsrazqIIkRygAkl5QRMTHUFZSeSYCPfxCw6S0RFkACqw2MRbyt/Otm/+5k6PdHkGBtnu1VMWrov3b0ljnB5VBVQwT1iKl5+Pm42LhZ3VsqdafAMz41YXNTU1l6mMjIy7gQr0kBRwcK4IZWJkjEjR1NQs6GVkZLID+QJFAQ8zUF9XkpaWVkcrI1Mj2Jv9wugKcherq6tPnsbIFAhWYIGhYH3MnF3ezfkgG8CRxYuuYMuMBaaz6/YyMUNj0wBdgW+hKWNY5UTGaFiC0UNToKEBIpgMEEmuAVUBGDC5IyfaSRgKoPLwZL8cVQETYyR6xpkVC1fAxMjUZoQl6y2qSdhp6cXMxJToaYQr82Zub5qwaim+3I0JAAIMAJ1AVzrDqwE+AAAAAElFTkSuQmCC" />
+	<link rel="stylesheet" type="text/css" href="/index.css" />
+	<script type="text/javascript" src="/index.js" defer></script>
+</head>
+
+<body>
+	<div class="editor">
+		<div class="setbox">
+			<div class="rules">
+				<div><b>书源基础信息</b></div>
+				<div>
+					<div>书源名称:</div>
+					<textarea rows="1" id="bookSourceName" placeholder="书源名称(bookSourceName) | 会显示在书源列表"></textarea>
+				</div>
+				<div>
+					<div>书源分组:</div>
+					<textarea rows="1" id="bookSourceGroup" placeholder="书源分组(bookSourceGroup) | 描述书源的特征信息"></textarea>
+				</div>
+				<div>
+					<div>书源类型:</div>
+					<textarea rows="1" id="bookSourceType" placeholder="书源类型(bookSourceType) | 有声读物(填写AUDIO)或文本读物(留空)"></textarea>
+				</div>
+				<div>
+					<div>书源域名:</div>
+					<textarea rows="1" id="bookSourceUrl" placeholder="书源URL(bookSourceUrl) | 通常填写网站主页(标头不可省略),例: https://www.qidian.com"></textarea>
+				</div>
+				<div>
+					<div>登录网页:</div>
+					<textarea rows="1" id="loginUrl" placeholder="登录URL(loginUrl) | 填写网站登录网址,仅在需要登录的书源有用"></textarea>
+				</div>
+				<div><b>书籍发现规则</b></div>
+				<div>
+					<div>发现菜单:</div>
+					<textarea rows="5" id="ruleFindUrl" placeholder="发现分类菜单规则(ruleFindUrl),将显示在发现菜单&#10;每行一条发现分类(网址域名可省略):&#10;名称1::网址(Url)1&#10;名称2::网址(Url)2&#10;..."></textarea>
+				</div>
+				<div>
+					<div>结果列表:</div>
+					<textarea rows="1" id="ruleFindList" placeholder="发现页列表规则(ruleFindList) | 选择书籍节点 (规则结果为List&lt;Element&gt;)"></textarea>
+				</div>
+				<div>
+					<div>书籍名称:</div>
+					<textarea rows="1" id="ruleFindName" placeholder="发现页书名规则(ruleFindName) | 选择节点书名 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍作者:</div>
+					<textarea rows="1" id="ruleFindAuthor" placeholder="发现页作者规则(ruleFindAuthor) | 选择节点作者 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍分类:</div>
+					<textarea rows="1" id="ruleFindKind" placeholder="发现页分类规则(ruleFindKind) | 选择节点分类信息 (规则结果为List&lt;String&gt;)"></textarea>
+				</div>
+				<div>
+					<div>最新章节:</div>
+					<textarea rows="1" id="ruleFindLastChapter" placeholder="发现页最新章节规则(ruleFindLastChapter) | 选择节点最新章节 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>简介内容:</div>
+					<textarea rows="1" id="ruleFindIntroduce" placeholder="发现页简介规则(ruleFindIntroduce) | 选择节点书籍简介 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>封面链接:</div>
+					<textarea rows="1" id="ruleFindCoverUrl" placeholder="发现页封面规则(ruleFindCoverUrl) | 选择节点书籍封面 (规则结果为Url)"></textarea>
+				</div>
+				<div>
+					<div>详情链接:</div>
+					<textarea rows="1" id="ruleFindNoteUrl" placeholder="发现页详情规则(ruleFindNoteUrl) | 选择书籍详情页网址 (规则结果为Url)"></textarea>
+				</div>
+				<div><b>书籍搜索规则</b></div>
+				<div>
+					<div>搜索网址:</div>
+					<textarea rows="1" id="ruleSearchUrl" placeholder="搜索网址(ruleSearchUrl) | [域名可省略]/search.php@kw=searchKey|char=utf-8"></textarea>
+				</div>
+				<div>
+					<div>结果验证:</div>
+					<textarea rows="1" id="ruleBookUrlPattern" placeholder="搜索页URL验证(ruleBookUrlPattern) | 正则验证URL是否为详情页,成功则跳过搜索页解析"></textarea>
+				</div>
+				<div>
+					<div>结果列表:</div>
+					<textarea rows="1" id="ruleSearchList" placeholder="搜索页列表规则(ruleSearchList) | 选择书籍节点 (规则结果为List&lt;Element&gt;)"></textarea>
+				</div>
+				<div>
+					<div>书籍名称:</div>
+					<textarea rows="1" id="ruleSearchName" placeholder="搜索页书名规则(ruleSearchName) | 选择节点书名 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍作者:</div>
+					<textarea rows="1" id="ruleSearchAuthor" placeholder="搜索页作者规则(ruleSearchAuthor) | 选择节点作者 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍分类:</div>
+					<textarea rows="1" id="ruleSearchKind" placeholder="搜索页分类规则(ruleSearchKind) | 选择节点分类信息 (规则结果为List&lt;String&gt;)"></textarea>
+				</div>
+				<div>
+					<div>最新章节:</div>
+					<textarea rows="1" id="ruleSearchLastChapter" placeholder="搜索页最新章节规则(ruleSearchLastChapter) | 选择节点最新章节 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>简介内容:</div>
+					<textarea rows="1" id="ruleSearchIntroduce" placeholder="搜索页简介规则(ruleSearchIntroduce) | 选择节点书籍简介 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>封面链接:</div>
+					<textarea rows="1" id="ruleSearchCoverUrl" placeholder="搜索页封面规则(ruleSearchCoverUrl) | 选择节点书籍封面 (规则结果为Url)"></textarea>
+				</div>
+				<div>
+					<div>详情链接:</div>
+					<textarea rows="1" id="ruleSearchNoteUrl" placeholder="搜索页详情规则(ruleSearchNoteUrl) | 选择书籍详情页网址 (规则结果为Url)"></textarea>
+				</div>
+				<div><b>书籍详情规则</b></div>
+				<div>
+					<div>页面处理:</div>
+					<textarea rows="1" id="ruleBookInfoInit" placeholder="详情页信息预处理(ruleBookInfoInit) | 用于加速详情信息检索"></textarea>
+				</div>
+				<div>
+					<div>书籍名称:</div>
+					<textarea rows="1" id="ruleBookName" placeholder="书名规则(ruleBookName) | 选择详情页书名 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍作者:</div>
+					<textarea rows="1" id="ruleBookAuthor" placeholder="作者规则(ruleBookAuthor) | 选择详情页作者 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>书籍分类:</div>
+					<textarea rows="1" id="ruleBookKind" placeholder="分类规则(ruleBookKind) | 选择详情页分类信息 (规则结果为List&lt;String&gt;)"></textarea>
+				</div>
+				<div>
+					<div>最新章节:</div>
+					<textarea rows="1" id="ruleBookLastChapter" placeholder="最新章节规则(ruleBookLastChapter) | 选择详情页最新章节 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>简介内容:</div>
+					<textarea rows="1" id="ruleIntroduce" placeholder="简介规则(ruleIntroduce) | 选择详情页书籍简介 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>封面链接:</div>
+					<textarea rows="1" id="ruleCoverUrl" placeholder="封面规则(ruleCoverUrl) | 选择详情页书籍封面 (规则结果为Url)"></textarea>
+				</div>
+				<div>
+					<div>目录链接:</div>
+					<textarea rows="1" id="ruleChapterUrl" placeholder="目录URL规则(ruleChapterUrl) | 选择目录页网址 (规则结果为Url, 与详情页相同时可省略)"></textarea>
+				</div>
+				<div><b>目录列表规则</b></div>
+				<div>
+					<div>目录翻页:</div>
+					<textarea rows="1" id="ruleChapterUrlNext" placeholder="目录下一页规则(ruleChapterUrlNext) | 选择目录下一页链接 (规则结果为List&lt;Url&gt;)"></textarea>
+				</div>
+				<div>
+					<div>目录列表:</div>
+					<textarea rows="1" id="ruleChapterList" placeholder="目录列表规则(ruleChapterList) | 选择目录列表的章节节点 (规则结果为List&lt;Element&gt;)"></textarea>
+				</div>
+				<div>
+					<div>章节名称:</div>
+					<textarea rows="1" id="ruleChapterName" placeholder="章节名称规则(ruleChapterName) | 选择章节名称 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>章节链接:</div>
+					<textarea rows="1" id="ruleContentUrl" placeholder="章节URL规则(ruleContentUrl) | 选择章节链接 (规则结果为Url)"></textarea>
+				</div>
+				<div><b>正文阅读规则</b></div>
+				<div>
+					<div>章节正文:</div>
+					<textarea rows="1" id="ruleBookContent" placeholder="正文规则(ruleBookContent) | 选择正文内容 (规则结果为String)"></textarea>
+				</div>
+				<div>
+					<div>正文翻页:</div>
+					<textarea rows="1" id="ruleContentUrlNext" placeholder="正文翻页URL规则(ruleContentUrlNext) | 选择下一分页(不是下一章)链接 (规则结果为Url)"></textarea>
+				</div>
+				<div><b>其它规则</b></div>
+				<div>
+					<div>浏览标识:</div>
+					<textarea rows="1" id="httpUserAgent" placeholder="浏览器UA(HttpUserAgent) | 浏览器标识:User-Agent (可选)"></textarea>
+				</div>
+				<div>
+					<div>排序编号:</div>
+					<textarea rows="1" id="serialNumber" placeholder="整数: 0~N (可选,默认0) | 数字越小越靠前"></textarea>
+				</div>
+				<div>
+					<div>搜索权重:</div>
+					<textarea rows="1" id="weight" placeholder="整数: 0~N (可选,默认0) | 数字越大越靠前"></textarea>
+				</div>
+				<div>
+					<div>是否启用:</div>
+					<textarea rows="1" id="enable" placeholder="默认启用=true,手动启用=false (可选,默认true)"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="menu">
+			<svg class="button">
+				<text x="50%" y="55%">⇈推送书源</text>
+				<rect id="push"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">⇊拉取书源</text>
+				<rect id="pull"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">⋘编辑书源</text>
+				<rect id="editor"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">⋙生成书源</text>
+				<rect id="conver"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">✗清空表单</text>
+				<rect id="initial"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">↶撤销操作</text>
+				<rect id="undo"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">↷重做操作</text>
+				<rect id="redo"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">⇏调试书源</text>
+				<rect id="debug"></rect>
+			</svg>
+			<svg class="button">
+				<text x="50%" y="55%">✓保存书源</text>
+				<rect id="accept"></rect>
+			</svg>
+		</div>
+		<div class="outbox">
+			<div class="tabbox">
+				<div class="tabtitle">
+					<div name="编辑书源" class="tab1 this">编辑书源</div>
+					<div name="调试书源" class="tab2">调试书源</div>
+					<div name="书源列表" class="tab3">书源列表</div>
+					<div name="帮助信息" class="tab4">帮助信息</div>
+				</div>
+				<div class="tabbody">
+					<div class="tab1 this">
+						<textarea class="context" id="RuleJsonString" placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"></textarea>
+					</div>
+					<div class="tab2">
+						<input type="text" class="inputbox" id="DebugKey" placeholder="我的">
+						<textarea class="context" id="DebugConsole" placeholder="这里用于输出调试信息"></textarea>
+					</div>
+					<div class="tab3">
+						<div class="titlebar">
+							<button id="Import">导入书源文件</button>
+							<button id="Export">导出书源文件</button>
+							<button id="Delete">删除选中书源</button>
+							<button id="ClrAll">清空当前列表</button>
+						</div>
+						<div class="context" id="RuleList"></div>
+					</div>
+					<div class="tab4">
+						<div class="context link">
+							<a target="_blank" href="https://gedoor.github.io/MyBookshelf/sourcerule.html">官方书源教程</a>
+							<a target="_blank" href="https://zhuanlan.zhihu.com/p/29436838">Xpath基础教程</a>
+							<a target="_blank" href="https://zhuanlan.zhihu.com/p/32187820">Xpath高级教程</a>
+							<a target="_blank" href="https://www.w3cschool.cn/regex_rmjc/?">正则表达式教程</a>
+							<a target="_blank" href="https://regexr.com/">正则表达式在线验证工具</a>
+							<div>^$()[]{}.?+*| 这些是Java正则特殊符号,匹配需转义
+								<br>(?s) 前缀表示跨行解析
+								<br>(?m) 前缀表示逐行匹配
+								<br>(?i) 前缀表示忽略大小写
+							</div>
+							<a target="_blank" href="https://www.beta.browxy.com/">代码在线运行工具</a>
+							<a href="/bookshelf.html">WEB看书 (测试版)</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

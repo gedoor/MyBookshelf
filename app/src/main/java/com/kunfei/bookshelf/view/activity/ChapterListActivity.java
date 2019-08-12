@@ -6,12 +6,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
@@ -24,11 +31,6 @@ import com.kunfei.bookshelf.view.fragment.ChapterListFragment;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -43,18 +45,17 @@ public class ChapterListActivity extends BaseTabActivity {
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private SearchView searchView;
     private BookShelfBean bookShelf;
+    private List<BookChapterBean> chapterBeanList;
 
-    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf) {
-        if (bookShelf.getChapterList().size() == 0) return;
+    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf, List<BookChapterBean> chapterBeanList) {
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
-        intent.putExtra("data_key", key);
-        try {
-            BitIntentDataManager.getInstance().putData(key, bookShelf.clone());
-        } catch (CloneNotSupportedException e) {
-            BitIntentDataManager.getInstance().putData(key, bookShelf);
-            e.printStackTrace();
-        }
+        String bookKey = "book" + key;
+        intent.putExtra("bookKey", bookKey);
+        BitIntentDataManager.getInstance().putData(bookKey, bookShelf.clone());
+        String chapterListKey = "chapterList" + key;
+        intent.putExtra("chapterListKey", chapterListKey);
+        BitIntentDataManager.getInstance().putData(chapterListKey, chapterBeanList);
         activity.startActivity(intent);
     }
 
@@ -75,8 +76,12 @@ public class ChapterListActivity extends BaseTabActivity {
         super.onSaveInstanceState(outState);
         if (bookShelf != null) {
             String key = String.valueOf(System.currentTimeMillis());
-            getIntent().putExtra("data_key", key);
-            BitIntentDataManager.getInstance().putData(key, bookShelf);
+            String bookKey = "book" + key;
+            getIntent().putExtra("bookKey", bookKey);
+            BitIntentDataManager.getInstance().putData(bookKey, bookShelf.clone());
+            String chapterListKey = "chapterList" + key;
+            getIntent().putExtra("chapterListKey", chapterListKey);
+            BitIntentDataManager.getInstance().putData(chapterListKey, chapterBeanList);
         }
     }
 
@@ -97,11 +102,13 @@ public class ChapterListActivity extends BaseTabActivity {
                 ThemeStore.accentColor(this));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        String key = getIntent().getStringExtra("data_key");
-        bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-        BitIntentDataManager.getInstance().cleanData(key);
+        String bookKey = getIntent().getStringExtra("bookKey");
+        bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(bookKey);
+        String chapterListKey = getIntent().getStringExtra("chapterListKey");
+        chapterBeanList = (List<BookChapterBean>) BitIntentDataManager.getInstance().getData(chapterListKey);
     }
 
     /**************abstract***********/
@@ -177,6 +184,10 @@ public class ChapterListActivity extends BaseTabActivity {
 
     public BookShelfBean getBookShelf() {
         return bookShelf;
+    }
+
+    public List<BookChapterBean> getChapterBeanList() {
+        return chapterBeanList;
     }
 
     public void searchViewCollapsed() {

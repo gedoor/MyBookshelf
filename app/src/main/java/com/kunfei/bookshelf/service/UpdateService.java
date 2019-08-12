@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -23,8 +26,6 @@ import com.kunfei.bookshelf.view.activity.UpdateActivity;
 import java.io.File;
 import java.io.InputStream;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -110,8 +111,8 @@ public class UpdateService extends Service {
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.download_update))
                 .setContentText(String.format(getString(R.string.progress_show), state, 100))
-                .setContentIntent(getActivityPendingIntent(""));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(stopDownload));
+                .setContentIntent(getActivityPendingIntent());
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent());
         builder.setProgress(100, state, false);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
@@ -119,16 +120,16 @@ public class UpdateService extends Service {
         startForeground(notificationId, notification);
     }
 
-    private PendingIntent getActivityPendingIntent(String actionStr) {
+    private PendingIntent getActivityPendingIntent() {
         Intent intent = new Intent(this, UpdateActivity.class);
-        intent.setAction(actionStr);
+        intent.setAction("startActivity");
         intent.putExtra("updateInfo", updateInfo);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent getThisServicePendingIntent(String actionStr) {
+    private PendingIntent getThisServicePendingIntent() {
         Intent intent = new Intent(this, this.getClass());
-        intent.setAction(actionStr);
+        intent.setAction(UpdateService.stopDownload);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

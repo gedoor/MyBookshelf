@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,29 +23,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyViewHolder> {
     private DownloadActivity activity;
-    private List<DownloadBookBean> dataS;
+    private List<DownloadBookBean> data;
     private final Object mLock = new Object();
 
     public DownloadAdapter(DownloadActivity activity) {
         this.activity = activity;
-        dataS = new ArrayList<>();
+        data = new ArrayList<>();
     }
 
 
     public void upDataS(List<DownloadBookBean> dataS) {
         synchronized (mLock) {
-            this.dataS.clear();
+            this.data.clear();
             if (dataS != null) {
-                this.dataS.addAll(dataS);
-                Collections.sort(this.dataS);
+                this.data.addAll(dataS);
+                Collections.sort(this.data);
             }
         }
-        if(dataS != null) {
+        if (dataS != null) {
             notifyDataSetChanged();
         }
     }
@@ -50,14 +50,14 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
     public void upData(DownloadBookBean data) {
         int index = -1;
         synchronized (mLock) {
-            if (data != null && !this.dataS.isEmpty()) {
-                index = this.dataS.indexOf(data);
-                if(index >= 0) {
-                    this.dataS.set(index, data);
+            if (data != null && !this.data.isEmpty()) {
+                index = this.data.indexOf(data);
+                if (index >= 0) {
+                    this.data.set(index, data);
                 }
             }
         }
-        if(index >= 0){
+        if (index >= 0) {
             notifyItemChanged(index, data.getWaitingCount());
         }
     }
@@ -65,26 +65,26 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
     public void removeData(DownloadBookBean data) {
         int index = -1;
         synchronized (mLock) {
-            if (data != null && !this.dataS.isEmpty()) {
-                index = this.dataS.indexOf(data);
+            if (data != null && !this.data.isEmpty()) {
+                index = this.data.indexOf(data);
                 if (index >= 0) {
-                    this.dataS.remove(index);
+                    this.data.remove(index);
                 }
             }
         }
-        if(index >=0){
+        if (index >= 0) {
             notifyItemRemoved(index);
         }
     }
 
-    public void addData(DownloadBookBean data){
+    public void addData(DownloadBookBean data) {
         synchronized (mLock) {
             if (data != null) {
-                this.dataS.add(data);
+                this.data.add(data);
             }
         }
-        if(data != null){
-            notifyItemInserted(this.dataS.size() - 1);
+        if (data != null) {
+            notifyItemInserted(this.data.size() - 1);
         }
     }
 
@@ -103,11 +103,11 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull List<Object> payloads) {
-        final DownloadBookBean item = dataS.get(holder.getLayoutPosition());
+        final DownloadBookBean item = data.get(holder.getLayoutPosition());
         if (!payloads.isEmpty()) {
             holder.tvName.setText(String.format(Locale.getDefault(), "%s(正在下载)", item.getName()));
             holder.tvDownload.setText(activity.getString(R.string.un_download, (Integer) payloads.get(0)));
-        }else {
+        } else {
             holder.ivDel.getDrawable().mutate();
             holder.ivDel.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             Glide.with(activity)
@@ -130,7 +130,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return dataS.size();
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

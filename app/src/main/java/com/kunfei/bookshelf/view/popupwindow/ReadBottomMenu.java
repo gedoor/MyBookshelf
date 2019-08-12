@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.view.popupwindow;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -19,7 +18,8 @@ import butterknife.ButterKnife;
 
 public class ReadBottomMenu extends FrameLayout {
 
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.fab_read_aloud_timer)
     FloatingActionButton fabReadAloudTimer;
     @BindView(R.id.tv_read_aloud_timer)
@@ -52,8 +52,10 @@ public class ReadBottomMenu extends FrameLayout {
     LinearLayout llNavigationBar;
     @BindView(R.id.ll_floating_button)
     LinearLayout llFloatingButton;
+    @BindView(R.id.vwNavigationBar)
+    View vwNavigationBar;
 
-    private OnMenuListener menuListener;
+    private Callback callback;
 
     public ReadBottomMenu(Context context) {
         super(context);
@@ -71,25 +73,24 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     private void init(Context context) {
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
+        vwBg.setOnClickListener(null);
+        vwNavigationBar.setOnClickListener(null);
     }
 
-    public void setListener(OnMenuListener menuListener) {
-        this.menuListener = menuListener;
+    public void setNavigationBarHeight(int height) {
+        vwNavigationBar.getLayoutParams().height = height;
+    }
+
+    public void setListener(Callback callback) {
+        this.callback = callback;
         bindEvent();
     }
 
     private void bindEvent() {
-        llReadAloudTimer.setOnClickListener(view -> {
-            menuListener.dismiss();
-        });
-        llFloatingButton.setOnClickListener(view -> {
-            menuListener.dismiss();
-        });
+        llReadAloudTimer.setOnClickListener(view -> callback.dismiss());
+        llFloatingButton.setOnClickListener(view -> callback.dismiss());
 
         //阅读进度
         hpbReadProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -105,7 +106,7 @@ public class ReadBottomMenu extends FrameLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                menuListener.skipToPage(seekBar.getProgress());
+                callback.skipToPage(seekBar.getProgress());
             }
         });
 
@@ -113,56 +114,56 @@ public class ReadBottomMenu extends FrameLayout {
         fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(getContext(), 10));
 
         //朗读
-        fabReadAloud.setOnClickListener(view -> menuListener.onMediaButton());
+        fabReadAloud.setOnClickListener(view -> callback.onMediaButton());
         //长按停止朗读
         fabReadAloud.setOnLongClickListener(view -> {
             if (ReadAloudService.running) {
-                menuListener.toast(R.string.aloud_stop);
+                callback.toast(R.string.aloud_stop);
                 ReadAloudService.stop(getContext());
             } else {
-                menuListener.toast(R.string.read_aloud);
+                callback.toast(R.string.read_aloud);
             }
             return true;
         });
 
         //自动翻页
-        fabAutoPage.setOnClickListener(view -> menuListener.autoPage());
+        fabAutoPage.setOnClickListener(view -> callback.autoPage());
         fabAutoPage.setOnLongClickListener(view -> {
-            menuListener.toast(R.string.auto_next_page);
+            callback.toast(R.string.auto_next_page);
             return true;
         });
 
         //替换
-        fabReplaceRule.setOnClickListener(view -> menuListener.openReplaceRule());
+        fabReplaceRule.setOnClickListener(view -> callback.openReplaceRule());
         fabReplaceRule.setOnLongClickListener(view -> {
-            menuListener.toast(R.string.replace_rule_title);
+            callback.toast(R.string.replace_rule_title);
             return true;
         });
 
         //夜间模式
-        fabNightTheme.setOnClickListener(view -> menuListener.setNightTheme());
+        fabNightTheme.setOnClickListener(view -> callback.setNightTheme());
         fabNightTheme.setOnLongClickListener(view -> {
-            menuListener.toast(R.string.night_theme);
+            callback.toast(R.string.night_theme);
             return true;
         });
 
         //上一章
-        tvPre.setOnClickListener(view -> menuListener.skipPreChapter());
+        tvPre.setOnClickListener(view -> callback.skipPreChapter());
 
         //下一章
-        tvNext.setOnClickListener(view -> menuListener.skipNextChapter());
+        tvNext.setOnClickListener(view -> callback.skipNextChapter());
 
         //目录
-        llCatalog.setOnClickListener(view -> menuListener.openChapterList());
+        llCatalog.setOnClickListener(view -> callback.openChapterList());
 
         //调节
-        llAdjust.setOnClickListener(view -> menuListener.openAdjust());
+        llAdjust.setOnClickListener(view -> callback.openAdjust());
 
         //界面
-        llFont.setOnClickListener(view -> menuListener.openReadInterface());
+        llFont.setOnClickListener(view -> callback.openReadInterface());
 
         //设置
-        llSetting.setOnClickListener(view -> menuListener.openMoreSetting());
+        llSetting.setOnClickListener(view -> callback.openMoreSetting());
 
         tvReadAloudTimer.setOnClickListener(null);
     }
@@ -199,10 +200,6 @@ public class ReadBottomMenu extends FrameLayout {
         tvNext.setEnabled(enable);
     }
 
-    public void setNavigationBar(int nbHeight) {
-        llNavigationBar.setPadding(0, 0, 0, nbHeight);
-    }
-
     public void setAutoPage(boolean autoPage) {
         if (autoPage) {
             fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
@@ -215,13 +212,13 @@ public class ReadBottomMenu extends FrameLayout {
 
     public void setFabNightTheme(boolean isNightTheme) {
         if (isNightTheme) {
-            fabNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            fabNightTheme.setImageResource(R.drawable.ic_daytime);
         } else {
             fabNightTheme.setImageResource(R.drawable.ic_brightness);
         }
     }
 
-    public interface OnMenuListener {
+    public interface Callback {
         void skipToPage(int page);
 
         void onMediaButton();

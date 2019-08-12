@@ -2,6 +2,7 @@
 package com.kunfei.bookshelf.base;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -9,26 +10,27 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.material.snackbar.Snackbar;
+import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     private static final String TAG = MBaseActivity.class.getSimpleName();
@@ -84,10 +86,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int primaryTextColor = MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this)));
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.setColorFilter(MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this))), PorterDuff.Mode.SRC_ATOP);
+                drawable.mutate();
+                drawable.setColorFilter(primaryTextColor, PorterDuff.Mode.SRC_ATOP);
             }
         }
         return super.onCreateOptionsMenu(menu);
@@ -110,12 +114,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                         for (MenuItem menuItem : menuItems) {
                             Drawable drawable = menuItem.getIcon();
                             if (drawable != null) {
+                                drawable.mutate();
                                 drawable.setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
                             }
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
             }
 
@@ -142,8 +146,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                     mImmersionBar.statusBarColor(R.color.status_bar_bag);
                 }
             }
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage());
+        } catch (Exception ignored) {
         }
         try {
             if (isImmersionBarEnabled() && ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
@@ -165,8 +168,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                 }
             }
             mImmersionBar.init();
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -201,15 +203,16 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      * @return 是否夜间模式
      */
     public boolean isNightTheme() {
-        return preferences.getBoolean("nightTheme", false);
+        return MApplication.getInstance().isNightTheme();
     }
 
     protected void setNightTheme(boolean isNightTheme) {
         preferences.edit()
                 .putBoolean("nightTheme", isNightTheme)
                 .apply();
+        MApplication.getInstance().initNightTheme();
         MApplication.getInstance().upThemeStore();
-        initTheme();
+        RxBus.get().post(RxBusTag.RECREATE, true);
     }
 
     protected void initTheme() {
@@ -217,11 +220,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             setTheme(R.style.CAppTheme);
         } else {
             setTheme(R.style.CAppThemeBarDark);
-        }
-        if (isNightTheme()) {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
@@ -245,4 +243,28 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
+
+    @Override
+    public void finish() {
+        SoftInputUtil.hideIMM(getCurrentFocus());
+        super.finish();
+        if (MApplication.isEInkMode) {
+            overridePendingTransition(R.anim.anim_none, R.anim.anim_none);
+        }
+    }
 }

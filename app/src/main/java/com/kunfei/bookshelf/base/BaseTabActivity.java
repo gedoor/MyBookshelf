@@ -1,16 +1,18 @@
 package com.kunfei.bookshelf.base;
 
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
@@ -31,6 +33,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
 
     /**************abstract***********/
     protected abstract List<Fragment> createTabFragments();
+
     protected abstract List<String> createTabTitles();
 
     @Override
@@ -73,6 +76,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);

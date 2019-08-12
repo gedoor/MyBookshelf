@@ -1,40 +1,41 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.bean.BookContentBean;
-import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.ChapterListBean;
-import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.model.WebBookModel;
-import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.victor.loading.rotate.RotateLoading;
-
-import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
+import com.kunfei.basemvplib.impl.IPresenter;
+import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.model.content.Debug;
+import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.view.adapter.SourceDebugAdapter;
+import com.kunfei.bookshelf.widget.RotateLoading;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 public class SourceDebugActivity extends MBaseActivity {
+    private final int REQUEST_QR = 202;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.searchView)
@@ -43,11 +44,12 @@ public class SourceDebugActivity extends MBaseActivity {
     RotateLoading loading;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
-    @BindView(R.id.tv_content)
-    TextView tvContent;
+    @BindView(R.id.lv_log)
+    RecyclerView recyclerView;
 
-    private String sourceUrl;
+    private SourceDebugAdapter adapter;
     private CompositeDisposable compositeDisposable;
+    private String sourceTag;
 
     public static void startThis(Context context, String sourceUrl) {
         if (TextUtils.isEmpty(sourceUrl)) return;
@@ -68,14 +70,17 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RxBus.get().register(this);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        Debug.SOURCE_DEBUG_TAG = null;
+        RxBus.get().unregister(this);
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
+        super.onDestroy();
     }
 
     /**
@@ -85,29 +90,6 @@ public class SourceDebugActivity extends MBaseActivity {
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_source_debug);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
-        setupActionBar();
-    }
-
-    //设置ToolBar
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    //菜单
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -115,12 +97,23 @@ public class SourceDebugActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
-        sourceUrl = getIntent().getStringExtra("sourceUrl");
+        sourceTag = getIntent().getStringExtra("sourceUrl");
+    }
+
+    @Override
+    protected void bindView() {
+        super.bindView();
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         initSearchView();
+        adapter = new SourceDebugAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     private void initSearchView() {
-        searchView.setQueryHint(getString(R.string.search_book_key));
+        searchView.setQueryHint(getString(R.string.debug_hint));
         searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -141,148 +134,73 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
-        if (TextUtils.isEmpty(sourceUrl)) return;
+        if (TextUtils.isEmpty(sourceTag) || TextUtils.isEmpty(key)) {
+            toast(R.string.cannot_empty);
+            return;
+        }
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
         loading.start();
-        WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<List<SearchBookBean>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onNext(List<SearchBookBean> searchBookBeans) {
-                        tvContent.setText(getString(R.string.get_book_list_success, searchBookBeans.size()));
-                        SearchBookBean searchBookBean = searchBookBeans.get(0);
-                        tvContent.setText(String.format("%s\n书名:%s", tvContent.getText(), searchBookBean.getName()));
-                        tvContent.setText(String.format("%s\n作者:%s", tvContent.getText(), searchBookBean.getAuthor()));
-                        tvContent.setText(String.format("%s\n分类:%s", tvContent.getText(), searchBookBean.getKind()));
-                        tvContent.setText(String.format("%s\n简介:%s", tvContent.getText(), searchBookBean.getOrigin()));
-                        tvContent.setText(String.format("%s\n封面地址:%s", tvContent.getText(), searchBookBean.getCoverUrl()));
-                        tvContent.setText(String.format("%s\n最新章节:%s", tvContent.getText(), searchBookBean.getLastChapter()));
-                        tvContent.setText(String.format("%s\n书籍地址:%s", tvContent.getText(), searchBookBean.getNoteUrl()));
-                        if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
-                            bookInfoDebug(BookshelfHelp.getBookFromSearchBook(searchBookBean));
-                        } else {
-                            loading.stop();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        tvContent.setText(e.getMessage());
-                        loading.stop();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
+        adapter.clearData();
+        Debug.newDebug(sourceTag, key, compositeDisposable);
     }
 
-    private void bookInfoDebug(BookShelfBean bookShelfBean) {
-        WebBookModel.getInstance().getBookInfo(bookShelfBean)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        tvContent.setText(String.format("%s\n最新章节:%s", tvContent.getText(), bookShelfBean.getLastChapterName()));
-                        tvContent.setText(String.format("%s\n封面:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getCoverUrl()));
-                        tvContent.setText(String.format("%s\n简介:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getIntroduce()));
-                        tvContent.setText(String.format("%s\n目录地址:%s", tvContent.getText(), bookShelfBean.getBookInfoBean().getChapterUrl()));
-                        bookChapterListDebug(bookShelfBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载书籍信息错误:%s", tvContent.getText(), e.getMessage()));
-                        loading.stop();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
-    private void bookChapterListDebug(BookShelfBean bookShelfBean) {
-        WebBookModel.getInstance().getChapterList(bookShelfBean)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookShelfBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        tvContent.setText(String.format("%s\n获取目录数量:%d", tvContent.getText(), bookShelfBean.getChapterList().size()));
-                        if (bookShelfBean.getChapterList().size() > 0) {
-                            ChapterListBean chapterListBean = bookShelfBean.getChapter(0);
-                            tvContent.setText(String.format("%s\n章节名称:%s", tvContent.getText(), chapterListBean.getDurChapterName()));
-                            tvContent.setText(String.format("%s\n章节地址:%s", tvContent.getText(), chapterListBean.getDurChapterUrl()));
-                            if (!TextUtils.isEmpty(chapterListBean.getDurChapterUrl())) {
-                                bookContentDebug(chapterListBean, bookShelfBean.getBookInfoBean().getName());
-                            } else {
-                                loading.stop();
-                            }
-                        } else {
-                            loading.stop();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载目录错误:%s", tvContent.getText(), e.getMessage()));
-                        loading.stop();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_debug_activity, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
-        WebBookModel.getInstance().getBookContent(chapterListBean, bookName)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<BookContentBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(BookContentBean bookContentBean) {
-                        tvContent.setText(String.format("%s\n正文:%s", tvContent.getText(), bookContentBean.getDurChapterContent()));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        tvContent.setText(String.format("%s\n加载正文错误:%s", tvContent.getText(), e.getMessage()));
-                        loading.stop();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        loading.stop();
-                    }
-                });
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_scan:
+                scan();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
+
+    private void scan() {
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
+        startActivityForResult(intent, REQUEST_QR);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_QR) {
+                String result = data.getStringExtra("result");
+                if (!StringUtils.isTrimEmpty(result)) {
+                    searchView.setQuery(result, true);
+                }
+            }
+        }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PRINT_DEBUG_LOG)})
+    public void printDebugLog(String msg) {
+        adapter.addData(msg);
+        if (msg.equals("finish")) {
+            loading.stop();
+        }
+    }
+
 }

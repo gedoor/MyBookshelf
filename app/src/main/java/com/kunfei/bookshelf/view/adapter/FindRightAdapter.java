@@ -7,55 +7,91 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.flexbox.FlexboxLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
-import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
+import com.kunfei.bookshelf.widget.recycler.sectioned.SectionedRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyViewHolder> {
-    private List<RecyclerViewData> datas = new ArrayList<>();
+public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdapter.HeaderHolder, FindRightAdapter.DescHolder, RecyclerView.ViewHolder> {
+    private List<RecyclerViewData> data = new ArrayList<>();
+    private LayoutInflater inflater;
     private Context context;
     private OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener;
 
-    public FindRightAdapter(OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener) {
+    public FindRightAdapter(Context context, OnRecyclerViewListener.OnItemLongClickListener onItemLongClickListener) {
+        this.context = context;
         this.onItemLongClickListener = onItemLongClickListener;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setDatas(List<RecyclerViewData> datas) {
-        this.datas.clear();
-        this.datas.addAll(datas);
+    public void setData(List<RecyclerViewData> data) {
+        this.data.clear();
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
-    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_find_right, viewGroup, false));
+    protected int getSectionCount() {
+        return data.size();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int pos) {
-        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(pos).getGroupData();
-        myViewHolder.sourceName.setText(groupBean.getGroupName());
-        myViewHolder.flexboxLayout.removeAllViews();
-        TextView tagView;
-        for (Object object : datas.get(pos).getChildList()) {
-            FindKindBean kindBean = (FindKindBean) object;
-            tagView = (TextView) LayoutInflater.from(context).inflate(R.layout.item_search_history, myViewHolder.flexboxLayout, false);
-            tagView.setText(kindBean.getKindName());
-            tagView.setOnClickListener(view -> {
+    protected int getItemCountForSection(int section) {
+        return data.get(section).getChildList().size();
+    }
+
+    @Override
+    protected boolean hasFooterInSection(int section) {
+        return false;
+    }
+
+    @Override
+    protected HeaderHolder onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType) {
+        return new HeaderHolder(inflater.inflate(R.layout.item_find2_header_view, parent, false));
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder onCreateSectionFooterViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    @Override
+    protected DescHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+        return new DescHolder(inflater.inflate(R.layout.item_find2_childer_view, parent, false));
+    }
+
+    @Override
+    protected void onBindSectionHeaderViewHolder(HeaderHolder holder, int section) {
+        RecyclerViewData recyclerViewData = data.get(section);
+        holder.tv_source_name.setText(((FindKindGroupBean) recyclerViewData.getGroupData()).getGroupName());
+        holder.tv_source_name.setOnLongClickListener(v -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onGroupItemLongClick(section, section, holder.tv_source_name);
+            }
+            return true;
+        });
+    }
+
+    @Override
+    protected void onBindSectionFooterViewHolder(RecyclerView.ViewHolder holder, int section) {
+
+    }
+
+    @Override
+    protected void onBindItemViewHolder(DescHolder holder, int section, int position) {
+        try {
+            FindKindBean kindBean = (FindKindBean) data.get(section).getChild(position);
+            holder.tv_item.setHorizontallyScrolling(false);
+            holder.tv_item.setText(kindBean.getKindName());
+            holder.tv_item.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ChoiceBookActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("url", kindBean.getKindUrl());
@@ -63,36 +99,30 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
                 intent.putExtra("tag", kindBean.getTag());
                 context.startActivity(intent);
             });
-            myViewHolder.flexboxLayout.addView(tagView);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        myViewHolder.sourceName.setOnLongClickListener(v -> {
-            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
-            if (sourceBean != null && onItemLongClickListener != null) {
-                onItemLongClickListener.onGroupItemLongClick(pos, pos, v);
-            }
-            return true;
-        });
     }
 
-    @Override
-    public int getItemCount() {
-        return datas.size();
+    public List<RecyclerViewData> getData() {
+        return data;
     }
 
-    public List<RecyclerViewData> getDatas() {
-        return datas;
-    }
+    class HeaderHolder extends RecyclerView.ViewHolder {
+        TextView tv_source_name;
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        View findRight;
-        TextView sourceName;
-        FlexboxLayout flexboxLayout;
-
-        public MyViewHolder(@NonNull View itemView) {
+        HeaderHolder(View itemView) {
             super(itemView);
-            findRight = itemView.findViewById(R.id.find_right);
-            sourceName = itemView.findViewById(R.id.tv_source_name);
-            flexboxLayout = itemView.findViewById(R.id.tfl_find_kind);
+            tv_source_name = itemView.findViewById(R.id.tv_source_name);
+        }
+    }
+
+    class DescHolder extends RecyclerView.ViewHolder {
+        TextView tv_item;
+
+        DescHolder(View view) {
+            super(view);
+            tv_item = view.findViewById(R.id.tv_item);
         }
     }
 }

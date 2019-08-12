@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +15,19 @@ public class AnalyzeByJSonPath {
     private static final Pattern jsonRulePattern = Pattern.compile("(?<=\\{)\\$\\..+?(?=\\})");
     private ReadContext ctx;
 
-    public AnalyzeByJSonPath parse(String json) {
-        ctx = JsonPath.parse(json);
-        return this;
-    }
-
     public AnalyzeByJSonPath parse(Object json) {
-        ctx = JsonPath.parse(json);
+        if (json instanceof String) {
+            ctx = JsonPath.parse((String) json);
+        } else {
+            ctx = JsonPath.parse(json);
+        }
         return this;
     }
 
-    public String read(String rule) {
+    public String getString(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
         String result = "";
-        String rules[];
+        String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
@@ -43,9 +43,9 @@ public class AnalyzeByJSonPath {
                     if (object instanceof List) {
                         StringBuilder builder = new StringBuilder();
                         for (Object o : (List) object) {
-                            builder.append(String.valueOf(o)).append("\n");
+                            builder.append(o).append("\n");
                         }
-                        result = builder.toString();
+                        result = builder.toString().replaceAll("\\n$", "");
                     } else {
                         result = String.valueOf(object);
                     }
@@ -56,33 +56,36 @@ public class AnalyzeByJSonPath {
                 result = rule;
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
+                    result = result.replace(String.format("{%s}", matcher.group()), getString(matcher.group()));
                 }
                 return result;
             }
         } else {
-            StringBuilder sb = new StringBuilder();
+            List<String> textS = new ArrayList<>();
             for (String rl : rules) {
-                String temp = read(rl);
+                String temp = getString(rl);
                 if (!TextUtils.isEmpty(temp)) {
-                    sb.append(temp);
+                    textS.add(temp);
                     if (elementsType.equals("|")) {
                         break;
                     }
                 }
             }
-            return sb.toString();
+            return StringUtils.join(",", textS).trim();
         }
     }
 
-    List<String> readStringList(String rule) {
+    List<String> getStringList(String rule) {
         List<String> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
-        String rules[];
+        String[] rules;
         String elementsType;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
+        } else if (rule.contains("%%")) {
+            rules = rule.split("%%");
+            elementsType = "%";
         } else {
             rules = rule.split("\\|\\|");
             elementsType = "|";
@@ -104,7 +107,7 @@ public class AnalyzeByJSonPath {
             } else {
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
-                    List<String> stringList = readStringList(matcher.group());
+                    List<String> stringList = getStringList(matcher.group());
                     for (String s : stringList) {
                         result.add(rule.replace(String.format("{%s}", matcher.group()), s));
                     }
@@ -112,12 +115,28 @@ public class AnalyzeByJSonPath {
                 return result;
             }
         } else {
+            List<List<String>> results = new ArrayList<>();
             for (String rl : rules) {
-                List<String> temp = readStringList(rl);
-                if (!temp.isEmpty()) {
-                    result.addAll(temp);
-                    if (elementsType.equals("|")) {
+                List<String> temp = getStringList(rl);
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (temp.size() > 0 && elementsType.equals("|")) {
                         break;
+                    }
+                }
+            }
+            if (results.size() > 0) {
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List<String> temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
+                            }
+                        }
+                    }
+                } else {
+                    for (List<String> temp : results) {
+                        result.addAll(temp);
                     }
                 }
             }
@@ -125,11 +144,15 @@ public class AnalyzeByJSonPath {
         }
     }
 
-    List<Object> readList(String rule) {
+    Object getObject(String rule) {
+        return ctx.read(rule);
+    }
+
+    List<Object> getList(String rule) {
         List<Object> result = new ArrayList<>();
         if (TextUtils.isEmpty(rule)) return result;
         String elementsType;
-        String rules[];
+        String[] rules;
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
@@ -149,7 +172,7 @@ public class AnalyzeByJSonPath {
         } else {
             List<List> results = new ArrayList<>();
             for (String rl : rules) {
-                List temp = readList(rl);
+                List temp = getList(rl);
                 if (temp != null && !temp.isEmpty()) {
                     results.add(temp);
                     if (temp.size() > 0 && elementsType.equals("|")) {
@@ -158,20 +181,18 @@ public class AnalyzeByJSonPath {
                 }
             }
             if (results.size() > 0) {
-                switch (elementsType) {
-                    case "%":
-                        for (int i = 0; i < results.get(0).size(); i++) {
-                            for (List temp : results) {
-                                if (i < temp.size()) {
-                                    result.add(temp.get(i));
-                                }
+                if ("%".equals(elementsType)) {
+                    for (int i = 0; i < results.get(0).size(); i++) {
+                        for (List temp : results) {
+                            if (i < temp.size()) {
+                                result.add(temp.get(i));
                             }
                         }
-                        break;
-                    default:
-                        for (List temp : results) {
-                            result.addAll(temp);
-                        }
+                    }
+                } else {
+                    for (List temp : results) {
+                        result.addAll(temp);
+                    }
                 }
             }
         }

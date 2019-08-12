@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -19,34 +18,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.BaseTabActivity;
-import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.LauncherIcon;
-import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.model.UpLastChapterModel;
-import com.kunfei.bookshelf.presenter.MainPresenter;
-import com.kunfei.bookshelf.presenter.contract.MainContract;
-import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.utils.theme.ATH;
-import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.view.fragment.BookListFragment;
-import com.kunfei.bookshelf.view.fragment.FindBookFragment;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -58,15 +29,51 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.BuildConfig;
+import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.FileHelp;
+import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
+import com.kunfei.bookshelf.model.UpLastChapterModel;
+import com.kunfei.bookshelf.presenter.MainPresenter;
+import com.kunfei.bookshelf.presenter.contract.MainContract;
+import com.kunfei.bookshelf.service.WebService;
+import com.kunfei.bookshelf.utils.ACache;
+import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.utils.theme.ATH;
+import com.kunfei.bookshelf.utils.theme.NavigationViewUtil;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.view.fragment.BookListFragment;
+import com.kunfei.bookshelf.view.fragment.FindBookFragment;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
+import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 
-import static com.kunfei.bookshelf.utils.NetworkUtil.isNetWorkAvailable;
+import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
-public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallBackValue {
+public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallbackValue {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
+    private final int requestSource = 14;
     private String[] mTitles;
 
     @BindView(R.id.drawer)
@@ -123,14 +130,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         String shared_url = preferences.getString("shared_url", "");
         assert shared_url != null;
         if (shared_url.length() > 1) {
-            moDialogHUD.showInputBox(getString(R.string.add_book_url),
-                    shared_url,
-                    null,
-                    inputText -> {
+            InputDialog.builder(this)
+                    .setTitle(getString(R.string.add_book_url))
+                    .setDefaultValue(shared_url)
+                    .setCallback(inputText -> {
                         inputText = StringUtils.trim(inputText);
                         mPresenter.addBookUrl(inputText);
-                    });
-
+                    }).show();
             preferences.edit()
                     .putString("shared_url", "")
                     .apply();
@@ -169,8 +175,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected List<Fragment> createTabFragments() {
-        BookListFragment bookListFragment = new BookListFragment();
-        FindBookFragment findBookFragment = new FindBookFragment();
+        BookListFragment bookListFragment = null;
+        FindBookFragment findBookFragment = null;
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BookListFragment) {
+                bookListFragment = (BookListFragment) fragment;
+            } else if (fragment instanceof FindBookFragment) {
+                findBookFragment = (FindBookFragment) fragment;
+            }
+        }
+        if (bookListFragment == null)
+            bookListFragment = new BookListFragment();
+        if (findBookFragment == null)
+            findBookFragment = new FindBookFragment();
         return Arrays.asList(bookListFragment, findBookFragment);
     }
 
@@ -206,11 +223,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab == null) return;
-            if (i == 0) { //设置第一个Item的点击事件(当下标为0时触发)
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            } else {
-                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-            }
+            tab.setCustomView(tab_icon(mTitles[i]));
             View customView = tab.getCustomView();
             if (customView == null) return;
             TextView tv = customView.findViewById(R.id.tabtext);
@@ -274,11 +287,38 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void showFindMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add(0, 0, 0, getString(R.string.switch_display_style));
+        popupMenu.getMenu().add(0, 0, 1, getString(R.string.clear_find_cache));
+        boolean findTypeIsFlexBox = preferences.getBoolean("findTypeIsFlexBox", true);
+        boolean showFindLeftView = preferences.getBoolean("showFindLeftView", true);
+        if (findTypeIsFlexBox) {
+            popupMenu.getMenu().add(0, 0, 2, showFindLeftView ? "隐藏左侧栏" : "显示左侧栏");
+        }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("findTypeIsFlexBox", !preferences.getBoolean("findTypeIsFlexBox", true));
-            editor.apply();
-            RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+            FindBookFragment findBookFragment = getFindFragment();
+            switch (menuItem.getOrder()) {
+                case 0:
+                    preferences.edit()
+                            .putBoolean("findTypeIsFlexBox", !findTypeIsFlexBox)
+                            .apply();
+                    if (findBookFragment != null) {
+                        findBookFragment.upStyle();
+                    }
+                    break;
+                case 1:
+                    ACache.get(this, "findCache").clear();
+                    if (findBookFragment != null) {
+                        findBookFragment.refreshData();
+                    }
+                    break;
+                case 2:
+                    preferences.edit()
+                            .putBoolean("showFindLeftView", !showFindLeftView)
+                            .apply();
+                    if (findBookFragment != null) {
+                        findBookFragment.upUI();
+                    }
+                    break;
+            }
             return true;
         });
         popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(1, false));
@@ -296,9 +336,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (customView == null) return;
         ImageView im = customView.findViewById(R.id.tabicon);
         if (showMenu) {
-            im.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_up);
         } else {
-            im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            im.setImageResource(R.drawable.ic_arrow_drop_down);
         }
     }
 
@@ -315,19 +355,35 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tab.setContentDescription(String.format("%s,%s", tv.getText(), getString(R.string.click_on_selected_show_menu)));
     }
 
-    private View tab_icon(String name, Integer iconID) {
+    private View tab_icon(String name) {
         @SuppressLint("InflateParams")
         View tabView = LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right, null);
         TextView tv = tabView.findViewById(R.id.tabtext);
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
-        if (iconID != null) {
-            im.setVisibility(View.VISIBLE);
-            im.setImageResource(iconID);
-        } else {
-            im.setVisibility(View.GONE);
-        }
+        im.setVisibility(View.VISIBLE);
+        im.setImageResource(R.drawable.ic_arrow_drop_down);
         return tabView;
+    }
+
+    public ViewPager getViewPager() {
+        return mVp;
+    }
+
+    public BookListFragment getBookListFragment() {
+        try {
+            return (BookListFragment) mFragmentList.get(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public FindBookFragment getFindFragment() {
+        try {
+            return (FindBookFragment) mFragmentList.get(1);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -367,31 +423,22 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_local:
-                PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-                    @Override
-                    public void onHasPermission() {
-                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
-                    }
-
-                    @Override
-                    public void onUserHasAlreadyTurnedDown(String... permission) {
-                        MainActivity.this.toast(R.string.import_per);
-                    }
-
-                    @Override
-                    public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                        PermissionUtils.requestMorePermissions(MainActivity.this, permission, FILE_SELECT_RESULT);
-                    }
-                });
+                new PermissionsCompat.Builder(this)
+                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                        .rationale(R.string.import_per)
+                        .onGranted((requestCode) -> {
+                            startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
+                            return Unit.INSTANCE;
+                        })
+                        .request();
                 break;
             case R.id.action_add_url:
-                moDialogHUD.showInputBox(getString(R.string.add_book_url),
-                        null,
-                        null,
-                        inputText -> {
+                InputDialog.builder(this)
+                        .setTitle(getString(R.string.add_book_url))
+                        .setCallback(inputText -> {
                             inputText = StringUtils.trim(inputText);
                             mPresenter.addBookUrl(inputText);
-                        });
+                        }).show();
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
@@ -400,36 +447,23 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
             case R.id.action_list_grid:
-                editor.putBoolean("bookshelfIsList", !viewIsList);
-                editor.apply();
+                editor.putBoolean("bookshelfIsList", !viewIsList).apply();
                 recreate();
                 break;
-            case R.id.action_clear_cache:
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.clear_content)
-                        .setMessage(getString(R.string.sure_del_download_book))
-                        .setPositiveButton(R.string.yes, (dialog, which) -> BookshelfHelp.clearCaches(true))
-                        .setNegativeButton(R.string.no, (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
-                        .show();
+            case R.id.action_arrange_bookshelf:
+                if (getBookListFragment() != null) {
+                    getBookListFragment().setArrange(true);
+                }
                 break;
-            case R.id.action_clearBookshelf:
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.clear_bookshelf)
-                        .setMessage(R.string.clear_bookshelf_s)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
-                        .show();
-                break;
-            case R.id.action_change_icon:
-                LauncherIcon.Change();
+            case R.id.action_web_start:
+                WebService.startThis(this);
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
                 ) {
                     drawer.closeDrawers();
                 } else {
-                    drawer.openDrawer(GravityCompat.START);
+                    drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
                 }
                 break;
         }
@@ -478,23 +512,26 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 侧边栏按钮
      */
     private void setUpNavigationView() {
+        navigationView.setBackgroundColor(ThemeStore.backgroundColor(this));
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.disableScrollbar(navigationView);
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        AppCompatImageView imageView = headerView.findViewById(R.id.iv_read);
+        imageView.setColorFilter(ThemeStore.accentColor(this));
         navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         vwNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.iv_theme_day_night);
         upThemeVw();
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            drawer.closeDrawers();
+            drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
-                    handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
+                    handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
                     break;
                 case R.id.action_replace_rule:
-                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
+                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this, null), 200);
                     break;
                 case R.id.action_download:
                     handler.postDelayed(() -> DownloadActivity.startThis(this), 200);
@@ -527,7 +564,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void upThemeVw() {
         if (isNightTheme()) {
-            vwNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            vwNightTheme.setImageResource(R.drawable.ic_daytime);
             vwNightTheme.setContentDescription(getString(R.string.click_to_day));
         } else {
             vwNightTheme.setImageResource(R.drawable.ic_brightness);
@@ -540,58 +577,38 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 备份
      */
     private void backup() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.backup_confirmation)
-                        .setMessage(R.string.backup_message)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
-                        .show();
-                ATH.setAlertDialogTint(alertDialog);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                MainActivity.this.toast(R.string.backup_permission);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(MainActivity.this, permission, BACKUP_RESULT);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.backup_permission)
+                .onGranted((requestCode) -> {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(R.string.backup_confirmation)
+                            .setMessage(R.string.backup_message)
+                            .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    ATH.setAlertDialogTint(alertDialog);
+                    return Unit.INSTANCE;
+                }).request();
     }
 
     /**
      * 恢复
      */
     private void restore() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.restore_confirmation)
-                        .setMessage(R.string.restore_message)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        })
-                        .show();
-                ATH.setAlertDialogTint(alertDialog);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                MainActivity.this.toast(R.string.restore_permission);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(MainActivity.this, permission, RESTORE_RESULT);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.restore_permission)
+                .onGranted((requestCode) -> {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(R.string.restore_confirmation)
+                            .setMessage(R.string.restore_message)
+                            .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    ATH.setAlertDialogTint(alertDialog);
+                    return Unit.INSTANCE;
+                }).request();
     }
 
     /**
@@ -600,22 +617,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void versionUpRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
             //保存版本号
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("versionCode", MApplication.getVersionCode());
-            editor.apply();
+            preferences.edit()
+                    .putInt("versionCode", MApplication.getVersionCode())
+                    .apply();
             //更新日志
             moDialogHUD.showAssetMarkdown("updateLog.md");
-        }
-    }
-
-    /**
-     * 获取权限
-     */
-    private void requestPermission() {
-        List<String> per = PermissionUtils.checkMorePermissions(this, MApplication.PerList);
-        if (per.size() > 0) {
-            toast(R.string.get_storage_per);
-            PermissionUtils.requestMorePermissions(this, per, MApplication.RESULT__PERMS);
         }
     }
 
@@ -623,10 +629,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     protected void firstRequest() {
         if (!isRecreate) {
             versionUpRun();
-            requestPermission();
-            handler.postDelayed(this::preloadReader, 200);
         }
-        handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
+        if (!Objects.equals(MApplication.downloadPath, FileHelp.getFilesPath())) {
+            new PermissionsCompat.Builder(this)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.get_storage_per)
+                    .request();
+        }
+        handler.postDelayed(() -> {
+            UpLastChapterModel.getInstance().startUpdate();
+            if (BuildConfig.DEBUG) {
+                ProcessTextHelp.setProcessTextEnable(false);
+            }
+        }, 60 * 1000);
     }
 
     @Override
@@ -638,58 +653,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         moDialogHUD.showLoading(msg);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
-                        break;
-                    case BACKUP_RESULT:
-                        backup();
-                        break;
-                    case RESTORE_RESULT:
-                        restore();
-                        break;
-                }
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        MainActivity.this.toast(R.string.import_book_per);
-                        break;
-                    case BACKUP_RESULT:
-                        MainActivity.this.toast(R.string.backup_permission);
-                        break;
-                    case RESTORE_RESULT:
-                        MainActivity.this.toast(R.string.restore_permission);
-                        break;
-                }
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                switch (requestCode) {
-                    case FILE_SELECT_RESULT:
-                        MainActivity.this.toast(R.string.import_book_per);
-                        break;
-                    case BACKUP_RESULT:
-                        MainActivity.this.toast(R.string.backup_permission);
-                        break;
-                    case RESTORE_RESULT:
-                        MainActivity.this.toast(R.string.restore_permission);
-                        break;
-                }
-                PermissionUtils.toAppSetting(MainActivity.this);
-            }
-        });
-    }
-
+    @SuppressLint("RtlHardcoded")
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
@@ -701,7 +665,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawers();
+                    drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
                     return true;
                 }
                 exit();
@@ -724,22 +688,28 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
     protected void onDestroy() {
-        UpLastChapterModel.getInstance().onDestroy();
+        UpLastChapterModel.destroy();
+        DbHelper.getDaoSession().getBookContentBeanDao().deleteAll();
         super.onDestroy();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-    }
-
-    private void preloadReader() {
-        AsyncTask.execute(() -> {
-            ReadBookControl.getInstance();
-            ChapterContentHelp.getInstance();
-        });
+        if (resultCode == RESULT_OK) {
+            if (requestCode == requestSource) {
+                FindBookFragment findBookFragment = getFindFragment();
+                if (findBookFragment != null) {
+                    findBookFragment.refreshData();
+                }
+            }
+        }
     }
 
 }

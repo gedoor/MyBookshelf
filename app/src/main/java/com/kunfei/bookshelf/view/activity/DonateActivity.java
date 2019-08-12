@@ -11,6 +11,10 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -18,9 +22,6 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.Donate;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -145,10 +146,8 @@ public class DonateActivity extends MBaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

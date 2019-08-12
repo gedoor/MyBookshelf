@@ -5,6 +5,7 @@ import android.graphics.Color;
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ColorUtil {
 
     public static String intToString(int intColor) {

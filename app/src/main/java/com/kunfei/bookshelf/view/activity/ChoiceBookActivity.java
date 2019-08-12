@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -20,11 +25,7 @@ import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -72,7 +73,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
-        viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
+        viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             searchBookAdapter.replaceAll(null);
             //刷新失败 ，重试
@@ -80,7 +81,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
             mPresenter.toSearchBooks(null);
             startRefreshAnim();
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
+        rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 viewRefreshError);
     }
 
@@ -97,29 +98,21 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void bindEvent() {
-        searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
-            @Override
-            public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
-                SearchBookActivity.startByKey(ChoiceBookActivity.this, searchBookBean.getName());
-            }
-
-            @Override
-            public void clickItem(View animView, int position, SearchBookBean searchBookBean) {
-                Intent intent = new Intent(ChoiceBookActivity.this, BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
-                intent.putExtra("data", searchBookBean);
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        searchBookAdapter.setCallback((animView, position, searchBookBean) -> {
+            String dataKey = String.valueOf(System.currentTimeMillis());
+            Intent intent = new Intent(ChoiceBookActivity.this, BookDetailActivity.class);
+            intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
+            intent.putExtra("data_key", dataKey);
+            BitIntentDataManager.getInstance().putData(dataKey, searchBookBean);
+            startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         rfRvSearchBooks.setBaseRefreshListener(() -> {
@@ -161,12 +154,6 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
             loadMoreFinish(true);
             return;
         }
-        for (SearchBookBean searchBook : searchBookAdapter.getSearchBooks()) {
-            if (Objects.equals(books.get(0).getName(), searchBook.getName()) && Objects.equals(books.get(0).getAuthor(), searchBook.getAuthor())) {
-                loadMoreFinish(true);
-                return;
-            }
-        }
         searchBookAdapter.addAll(books);
         loadMoreFinish(false);
     }
@@ -174,10 +161,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public void searchBookError(String msg) {
         if (mPresenter.getPage() > 1) {
-            rfRvSearchBooks.loadMoreError();
-            if (msg != null) {
-                toast(msg);
-            }
+            rfRvSearchBooks.finishLoadMore(true, true);
         } else {
             //刷新失败
             rfRvSearchBooks.refreshError();

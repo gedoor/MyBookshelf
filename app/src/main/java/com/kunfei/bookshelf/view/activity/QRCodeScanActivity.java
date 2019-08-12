@@ -1,29 +1,30 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
-import cn.qqtheme.framework.picker.FilePicker;
+import kotlin.Unit;
 
 /**
  * Created by GKF on 2018/1/29.
@@ -41,8 +42,6 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
     FloatingActionButton fabFlashlight;
 
     private final int REQUEST_QR_IMAGE = 202;
-    private final int REQUEST_CAMERA_PER = 303;
-    private final String[] cameraPer = new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean flashlightIsOpen;
 
     @Override
@@ -93,23 +92,15 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
     }
 
     private void startCamera() {
-        PermissionUtils.checkMorePermissions(this, cameraPer, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                zxingview.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
-                zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(QRCodeScanActivity.this, R.string.qr_per, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(QRCodeScanActivity.this, cameraPer, REQUEST_CAMERA_PER);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.CAMERA)
+                .rationale(R.string.qr_per)
+                .onGranted((requestCode) -> {
+                    zxingview.setVisibility(View.VISIBLE);
+                    zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     @Override
@@ -142,27 +133,6 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(QRCodeScanActivity.this, cameraPer, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                startCamera();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                Toast.makeText(QRCodeScanActivity.this, R.string.qr_per, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.toAppSetting(QRCodeScanActivity.this);
-            }
-        });
-    }
-
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -185,7 +155,14 @@ public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Dele
         int id = item.getItemId();
         switch (id) {
             case R.id.action_choose_from_gallery:
-                chooseFromGallery();
+                new PermissionsCompat.Builder(this)
+                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                        .rationale(R.string.get_storage_per)
+                        .onGranted((requestCode) -> {
+                            chooseFromGallery();
+                            return Unit.INSTANCE;
+                        })
+                        .request();
                 break;
             case android.R.id.home:
                 finish();

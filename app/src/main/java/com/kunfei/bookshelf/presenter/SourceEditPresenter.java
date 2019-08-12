@@ -3,19 +3,21 @@ package com.kunfei.bookshelf.presenter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
@@ -28,11 +30,10 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
     @Override
     public Observable<Boolean> saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
         return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (bookSourceOld != null && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
+            if (!TextUtils.isEmpty(bookSourceOld.getBookSourceUrl()) && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
                 DbHelper.getDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
             }
             BookSourceManager.addBookSource(bookSource);
-            BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).compose(RxUtils::toSimpleSingle);
     }

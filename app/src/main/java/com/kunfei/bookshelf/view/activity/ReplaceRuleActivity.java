@@ -3,46 +3,49 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.MApplication;
+import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
+import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.FileUtils;
-import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
+import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+import com.kunfei.bookshelf.widget.modialog.ReplaceRuleDialog;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.picker.FilePicker;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -57,14 +60,19 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.recycler_view)
-    RecyclerView recyclerViewBookSource;
+    RecyclerView recyclerView;
 
+    private BookShelfBean bookShelfBean;
     private MoDialogHUD moDialogHUD;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;
 
-    public static void startThis(Context context) {
-        context.startActivity(new Intent(context, ReplaceRuleActivity.class));
+    public static void startThis(Context context, BookShelfBean shelfBean) {
+        String key = String.valueOf(System.currentTimeMillis());
+        Intent intent = new Intent(context, ReplaceRuleActivity.class);
+        BitIntentDataManager.getInstance().putData(key, shelfBean);
+        intent.putExtra("data_key", key);
+        context.startActivity(intent);
     }
 
     @Override
@@ -84,57 +92,46 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     @Override
-    protected void bindView() {
+    protected void initData() {
+        String dataKey = getIntent().getStringExtra("data_key");
+        if (!TextUtils.isEmpty(dataKey)) {
+            bookShelfBean = (BookShelfBean) BitIntentDataManager.getInstance().getData(dataKey);
+        }
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initRecyclerView();
         moDialogHUD = new MoDialogHUD(this);
-    }
-
-    @Override
-    protected void initData() {
-
+        refresh();
     }
 
     private void initRecyclerView() {
-        recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         adapter = new ReplaceRuleAdapter(this);
-        recyclerViewBookSource.setAdapter(adapter);
-        adapter.resetDataS(ReplaceRuleManager.getAll());
+        recyclerView.setAdapter(adapter);
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
-
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
-        moDialogHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
-            Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-                ReplaceRuleManager.saveData(ruleBean);
-                e.onNext(ReplaceRuleManager.getAll());
-                e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
-                        @Override
-                        public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
-                            adapter.resetDataS(replaceRuleBeans);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-                    });
-        });
+        ReplaceRuleDialog.builder(this, replaceRuleBean, bookShelfBean)
+                .setPositiveButton(replaceRuleBean1 ->
+                        ReplaceRuleManager.saveData(replaceRuleBean1)
+                                .subscribe(new MySingleObserver<Boolean>() {
+                                    @Override
+                                    public void onSuccess(Boolean aBoolean) {
+                                        refresh();
+                                    }
+                                })).show();
     }
 
     public void upDateSelectAll() {
         selectAll = true;
-        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+        for (ReplaceRuleBean replaceRuleBean : adapter.getData()) {
             if (replaceRuleBean.getEnable() == null || !replaceRuleBean.getEnable()) {
                 selectAll = false;
                 break;
@@ -143,12 +140,12 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectAllDataS() {
-        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+        for (ReplaceRuleBean replaceRuleBean : adapter.getData()) {
             replaceRuleBean.setEnable(!selectAll);
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
-        ReplaceRuleManager.addDataS(adapter.getDataList());
+        ReplaceRuleManager.addDataS(adapter.getData());
     }
 
     public void delData(ReplaceRuleBean replaceRuleBean) {
@@ -156,7 +153,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     public void saveDataS() {
-        mPresenter.saveData(adapter.getDataList());
+        mPresenter.saveData(adapter.getData());
     }
 
     //设置ToolBar
@@ -191,17 +188,18 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 break;
             case R.id.action_import_onLine:
                 String cacheUrl = ACache.get(this).getAsString("replaceUrl");
-                moDialogHUD.showInputBox(getString(R.string.input_replace_url),
-                        cacheUrl,
-                        new String[]{cacheUrl},
-                        inputText -> {
+                InputDialog.builder(this)
+                        .setTitle(getString(R.string.input_replace_url))
+                        .setDefaultValue(cacheUrl)
+                        .setAdapterValues(new String[]{cacheUrl})
+                        .setCallback(inputText -> {
                             inputText = StringUtils.trim(inputText);
                             ACache.get(this).put("replaceUrl", inputText);
                             mPresenter.importDataS(inputText);
-                        });
+                        }).show();
                 break;
             case R.id.action_del_all:
-                mPresenter.delData(adapter.getDataList());
+                mPresenter.delData(adapter.getData());
                 break;
             case android.R.id.home:
                 finish();
@@ -211,35 +209,25 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectReplaceRuleFile() {
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                FilePicker filePicker = new FilePicker(ReplaceRuleActivity.this, FilePicker.FILE);
-                filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-                filePicker.setItemHeight(30);
-                filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-                filePicker.setOnFilePickListener(s -> {
-                    mPresenter.importDataSLocal(s);
-                });
-                filePicker.show();
-                filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-                filePicker.getSubmitButton().setOnClickListener(view -> {
-                    filePicker.dismiss();
-                    selectFileSys();
-                });
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                ReplaceRuleActivity.this.toast(R.string.import_book_source);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                PermissionUtils.requestMorePermissions(ReplaceRuleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
-            }
-        });
+        new PermissionsCompat.Builder(this)
+                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                .rationale(R.string.get_storage_per)
+                .onGranted((requestCode) -> {
+                    FilePicker filePicker = new FilePicker(ReplaceRuleActivity.this, FilePicker.FILE);
+                    filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                    filePicker.setItemHeight(30);
+                    filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                    filePicker.setOnFilePickListener(s -> mPresenter.importDataSLocal(s));
+                    filePicker.show();
+                    filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                    filePicker.getSubmitButton().setOnClickListener(view -> {
+                        filePicker.dismiss();
+                        selectFileSys();
+                    });
+                    return Unit.INSTANCE;
+                })
+                .request();
     }
 
     private void selectFileSys() {
@@ -264,28 +252,6 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-            @Override
-            public void onHasPermission() {
-                selectReplaceRuleFile();
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDown(String... permission) {
-                ReplaceRuleActivity.this.toast(R.string.import_book_source);
-            }
-
-            @Override
-            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                ReplaceRuleActivity.this.toast(R.string.import_book_source);
-                PermissionUtils.toAppSetting(ReplaceRuleActivity.this);
-            }
-        });
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
@@ -299,7 +265,13 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     public void refresh() {
-        adapter.resetDataS(ReplaceRuleManager.getAll());
+        ReplaceRuleManager.getAll()
+                .subscribe(new MySingleObserver<List<ReplaceRuleBean>>() {
+                    @Override
+                    public void onSuccess(List<ReplaceRuleBean> replaceRuleBeans) {
+                        adapter.resetDataS(replaceRuleBeans);
+                    }
+                });
     }
 
     @Override

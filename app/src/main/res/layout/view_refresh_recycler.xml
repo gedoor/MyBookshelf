@@ -1,37 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/ll_content">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_header"
+    <com.kunfei.bookshelf.widget.recycler.refresh.RefreshProgressBar
+        android:id="@+id/rpb"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessLeaf">
+        android:layout_height="3dp"
+        android:visibility="visible" />
 
-    </LinearLayout>
-
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:scrollbarStyle="outsideOverlay"/>
-
-        <com.kunfei.bookshelf.widget.recycler.refresh.RefreshProgressBar
-            android:id="@+id/rpb"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:visibility="visible"/>
-    </FrameLayout>
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

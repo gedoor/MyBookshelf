@@ -10,8 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -22,7 +20,6 @@ import com.kunfei.bookshelf.utils.DensityUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 public class SmoothCheckBox extends View implements Checkable {
-    private static final String KEY_INSTANCE_STATE = "InstanceState";
 
     private static final int DEF_DRAW_SIZE = 25;
     private static final int DEF_ANIM_DURATION = 300;
@@ -125,26 +122,6 @@ public class SmoothCheckBox extends View implements Checkable {
                 startUnCheckedAnimation();
             }
         });
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_INSTANCE_STATE, super.onSaveInstanceState());
-        bundle.putBoolean(KEY_INSTANCE_STATE, isChecked());
-        return bundle;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            boolean isChecked = bundle.getBoolean(KEY_INSTANCE_STATE);
-            setChecked(isChecked);
-            super.onRestoreInstanceState(bundle.getParcelable(KEY_INSTANCE_STATE));
-            return;
-        }
-        super.onRestoreInstanceState(state);
     }
 
     @Override

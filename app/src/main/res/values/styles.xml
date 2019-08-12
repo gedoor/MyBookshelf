@@ -1,22 +1,30 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
+    <!-- 亮色主题 -->
     <style name="CAppTheme" parent="Base.AppTheme">
         <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Light</item>
     </style>
 
+    <!-- 暗色主题 -->
     <style name="CAppThemeBarDark" parent="Base.AppTheme">
         <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Dark</item>
     </style>
 
-    <style name="CAppTransparentTheme" parent="CAppTheme">
-        <!-- Customize your theme here. -->
+    <!-- 透明主题 -->
+    <style name="CAppTransparentTheme" parent="Base.AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- Welcome主题 -->
+    <style name="CAppWelcomeTheme" parent="Base.AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- Base application theme. -->
     <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -25,18 +33,19 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
+    <style name="Activity.Permission" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
     <style name="NavigationViewStyle">
         <item name="android:listPreferredItemHeightSmall">44dp</item>
     </style>
 
-    <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/background_card</item>
-        <item name="android:textColor">@color/tv_text_default</item>
-        <item name="android:textColorPrimary">@color/tv_text_default</item>
-        <item name="textColorAlertDialogListItem">@color/tv_text_default</item>
-
-    </style>
+    <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert" />
 
     <style name="MenuItemTextStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/menu_color_default</item>

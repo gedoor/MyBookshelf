@@ -1,60 +1,42 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * 书本缓存内容
  */
-public class BookContentBean implements Parcelable {
+@Entity
+public class BookContentBean {
     private String noteUrl; //对应BookInfoBean noteUrl;
-
+    @Id
     private String durChapterUrl;
 
-    private int durChapterIndex;   //当前章节  （包括番外）
+    private Integer durChapterIndex;   //当前章节  （包括番外）
 
     private String durChapterContent; //当前章节内容
 
     private String tag;   //来源  某个网站/本地
 
+    private Long timeMillis;
+
     public BookContentBean() {
 
     }
 
-    private BookContentBean(Parcel in) {
-        durChapterUrl = in.readString();
-        durChapterIndex = in.readInt();
-        durChapterContent = in.readString();
-        tag = in.readString();
-        noteUrl = in.readString();
+    @Generated(hash = 695554675)
+    public BookContentBean(String noteUrl, String durChapterUrl,
+                           Integer durChapterIndex, String durChapterContent, String tag,
+                           Long timeMillis) {
+        this.noteUrl = noteUrl;
+        this.durChapterUrl = durChapterUrl;
+        this.durChapterIndex = durChapterIndex;
+        this.durChapterContent = durChapterContent;
+        this.tag = tag;
+        this.timeMillis = timeMillis;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(durChapterUrl);
-        dest.writeInt(durChapterIndex);
-        dest.writeString(durChapterContent);
-        dest.writeString(tag);
-        dest.writeString(noteUrl);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<BookContentBean> CREATOR = new Creator<BookContentBean>() {
-        @Override
-        public BookContentBean createFromParcel(Parcel in) {
-            return new BookContentBean(in);
-        }
-
-        @Override
-        public BookContentBean[] newArray(int size) {
-            return new BookContentBean[size];
-        }
-    };
 
     public String getDurChapterUrl() {
         return durChapterUrl;
@@ -95,4 +77,24 @@ public class BookContentBean implements Parcelable {
     public void setNoteUrl(String noteUrl) {
         this.noteUrl = noteUrl;
     }
+
+    public void setDurChapterIndex(Integer durChapterIndex) {
+        this.durChapterIndex = durChapterIndex;
+    }
+
+    public Long getTimeMillis() {
+        return this.timeMillis;
+    }
+
+    public void setTimeMillis(Long timeMillis) {
+        this.timeMillis = timeMillis;
+    }
+
+    public boolean outTime() {
+        if (timeMillis == null) {
+            return true;
+        }
+        return timeMillis < System.currentTimeMillis();
+    }
+
 }

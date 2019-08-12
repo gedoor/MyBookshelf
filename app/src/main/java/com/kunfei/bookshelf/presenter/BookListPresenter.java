@@ -3,7 +3,8 @@ package com.kunfei.bookshelf.presenter;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -11,22 +12,24 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
+import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.model.content.WebBook;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.service.DownloadService;
-import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
@@ -63,13 +66,13 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         if (null != value) {
                             bookShelfBeans = value;
                             mView.refreshBookShelf(bookShelfBeans);
-                            if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
+                            if (needRefresh && NetworkUtils.isNetWorkAvailable()) {
                                 startRefreshBook();
                             }
                         }
@@ -78,7 +81,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
+                        mView.refreshError(NetworkUtils.getErrorTip(NetworkUtils.ERROR_CODE_ANALY));
                     }
                 });
     }
@@ -90,21 +93,20 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         AsyncTask.execute(() -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
-                    int chapterNum = bookShelfBean.getChapterListSize();
-                    bookShelfBean.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl()));
-                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapter(start))
-                                && start < chapterNum - 1) {
-                            DownloadBookBean downloadBook = new DownloadBookBean();
-                            downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
-                            downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
-                            downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
-                            downloadBook.setStart(start);
-                            downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1);
-                            downloadBook.setFinalDate(System.currentTimeMillis());
-                            DownloadService.addDownload(mView.getContext(), downloadBook);
-                            bookShelfBean.getBookInfoBean().setChapterList(null);
-                            break;
+                    List<BookChapterBean> chapterBeanList = BookshelfHelp.getChapterList(bookShelfBean.getNoteUrl());
+                    if (chapterBeanList.size() >= bookShelfBean.getDurChapter()) {
+                        for (int start = bookShelfBean.getDurChapter(); start < chapterBeanList.size(); start++) {
+                            if (!chapterBeanList.get(start).getHasCache(bookShelfBean.getBookInfoBean())) {
+                                DownloadBookBean downloadBook = new DownloadBookBean();
+                                downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
+                                downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
+                                downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
+                                downloadBook.setStart(start);
+                                downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterBeanList.size() - 1, start + downloadNum - 1) : chapterBeanList.size() - 1);
+                                downloadBook.setFinalDate(System.currentTimeMillis());
+                                DownloadService.addDownload(mView.getContext(), downloadBook);
+                                break;
+                            }
                         }
                     }
                 }
@@ -133,7 +135,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
                 WebBookModel.getInstance().getChapterList(bookShelfBean)
-                        .flatMap(this::saveBookToShelfO)
+                        .flatMap(chapterBeanList -> saveBookToShelfO(bookShelfBean, chapterBeanList))
                         .compose(RxUtils::toSimpleSingle)
                         .subscribe(new Observer<BookShelfBean>() {
                             @Override
@@ -156,11 +158,12 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
 
                             @Override
                             public void onError(Throwable e) {
-                                errBooks.add(bookShelfBean.getBookInfoBean().getName());
-                                Log.w("MonkBook", String.format("%s: %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()));
-                                bookShelfBean.setLoading(false);
-                                mView.refreshBook(bookShelfBean.getNoteUrl());
-                                refreshBookshelf();
+                                if (!(e instanceof WebBook.NoSourceThrowable)) {
+                                    errBooks.add(bookShelfBean.getBookInfoBean().getName());
+                                    bookShelfBean.setLoading(false);
+                                    mView.refreshBook(bookShelfBean.getNoteUrl());
+                                    refreshBookshelf();
+                                }
                             }
 
                             @Override
@@ -169,7 +172,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             }
                         });
             } else {
-
                 refreshBookshelf();
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
@@ -188,10 +190,13 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
     /**
      * 保存数据
      */
-    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList) {
         return Observable.create(e -> {
-            BookshelfHelp.saveBookToShelf(bookShelfBean);
-            bookShelfBean.getBookInfoBean().setChapterList(null);
+            if (!chapterBeanList.isEmpty()) {
+                BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
+                BookshelfHelp.saveBookToShelf(bookShelfBean);
+                DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(chapterBeanList);
+            }
             e.onNext(bookShelfBean);
             e.onComplete();
         });

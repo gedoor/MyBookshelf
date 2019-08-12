@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
-import androidx.annotation.Nullable;
 
 public class ATETextInputLayout extends TextInputLayout {
     public ATETextInputLayout(Context context) {

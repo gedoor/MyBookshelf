@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.ColorUtil;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.CheckResult;
 import androidx.annotation.ColorInt;
@@ -15,6 +12,9 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
+import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
 
 /**
  * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)

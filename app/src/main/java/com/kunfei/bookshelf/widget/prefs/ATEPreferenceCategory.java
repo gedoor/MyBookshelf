@@ -1,17 +1,20 @@
 package com.kunfei.bookshelf.widget.prefs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.preference.PreferenceCategory;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
+@SuppressWarnings("unused")
 public class ATEPreferenceCategory extends PreferenceCategory {
 
-    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ATEPreferenceCategory(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }

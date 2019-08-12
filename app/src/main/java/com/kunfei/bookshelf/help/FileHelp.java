@@ -51,7 +51,6 @@ public class FileHelp {
                 file.createNewFile();
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return file;
     }
@@ -137,9 +136,7 @@ public class FileHelp {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             IOUtils.close(reader);
         }

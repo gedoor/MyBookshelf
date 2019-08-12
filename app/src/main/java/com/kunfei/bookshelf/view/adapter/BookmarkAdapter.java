@@ -6,8 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
+import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -16,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,12 +28,18 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
 
     private BookShelfBean bookShelfBean;
     private OnItemClickListener itemClickListener;
+    private List<BookmarkBean> allBookmark = new ArrayList<>();
     private List<BookmarkBean> bookmarkBeans = new ArrayList<>();
     private boolean isSearch = false;
 
     public BookmarkAdapter(BookShelfBean bookShelfBean, @NonNull OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
+    }
+
+    public void setAllBookmark(List<BookmarkBean> allBookmark) {
+        this.allBookmark = allBookmark;
+        notifyDataSetChanged();
     }
 
     public void search(final String key) {
@@ -42,7 +49,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
             notifyDataSetChanged();
         } else {
             Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-                for (BookmarkBean bookmarkBean : bookShelfBean.getBookInfoBean().getBookmarkList()) {
+                for (BookmarkBean bookmarkBean : allBookmark) {
                     if (bookmarkBean.getChapterName().contains(key)) {
                         bookmarkBeans.add(bookmarkBean);
                     } else if (bookmarkBean.getContent().contains(key)) {
@@ -53,7 +60,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
                 emitter.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
+                    .subscribe(new MyObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean aBoolean) {
                             isSearch = true;
@@ -88,7 +95,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
             holder.line.setVisibility(View.VISIBLE);
         }
 
-        BookmarkBean bookmarkBean = isSearch ? bookmarkBeans.get(realPosition) : bookShelfBean.getBookmark(realPosition);
+        BookmarkBean bookmarkBean = isSearch ? bookmarkBeans.get(realPosition) : allBookmark.get(realPosition);
         holder.tvName.setText(StringUtils.isTrimEmpty(bookmarkBean.getContent()) ? bookmarkBean.getChapterName() : bookmarkBean.getContent());
         holder.llName.setOnClickListener(v -> {
             if (itemClickListener != null) {
@@ -111,7 +118,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
             if (isSearch) {
                 return bookmarkBeans.size();
             }
-            return bookShelfBean.getBookmarkListSize();
+            return allBookmark.size();
         }
     }
 

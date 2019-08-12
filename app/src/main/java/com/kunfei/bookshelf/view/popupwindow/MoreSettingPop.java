@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.popupwindow;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -18,14 +20,13 @@ import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.widget.views.ATESwitch;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class MoreSettingPop extends FrameLayout {
-
+    @BindView(R.id.vw_bg)
+    View vwBg;
     @BindView(R.id.sb_click_all_next)
     Switch sbClickAllNext;
     @BindView(R.id.sb_click)
@@ -64,8 +65,6 @@ public class MoreSettingPop extends FrameLayout {
     Switch swReadAloudKey;
     @BindView(R.id.ll_read_aloud_key)
     LinearLayout llReadAloudKey;
-    @BindView(R.id.sb_tip_margin_change)
-    Switch sbTipMarginChange;
     @BindView(R.id.ll_click_all_next)
     LinearLayout llClickAllNext;
     @BindView(R.id.reNavBarColor)
@@ -78,10 +77,12 @@ public class MoreSettingPop extends FrameLayout {
     ATESwitch sbImmersionStatusBar;
     @BindView(R.id.llImmersionStatusBar)
     LinearLayout llImmersionStatusBar;
+    @BindView(R.id.sb_select_text)
+    Switch switchSelectText;
 
     private Context context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private OnChangeProListener changeProListener;
+    private Callback callback;
 
     public MoreSettingPop(Context context) {
         super(context);
@@ -102,15 +103,13 @@ public class MoreSettingPop extends FrameLayout {
     }
 
     private void init(Context context) {
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, this);
         ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
+        vwBg.setOnClickListener(null);
     }
 
-    public void setListener(@NonNull OnChangeProListener changeProListener) {
-        this.changeProListener = changeProListener;
+    public void setListener(@NonNull Callback callback) {
+        this.callback = callback;
         initData();
         bindEvent();
     }
@@ -120,21 +119,21 @@ public class MoreSettingPop extends FrameLayout {
         sbImmersionStatusBar.setOnCheckedChangeListener(((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setImmersionStatusBar(b);
-                changeProListener.upBar();
+                callback.upBar();
                 RxBus.get().post(RxBusTag.RECREATE, true);
             }
         }));
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
-                changeProListener.recreate();
+                callback.recreate();
             }
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideNavigationBar(isChecked);
                 initData();
-                changeProListener.recreate();
+                callback.recreate();
             }
         });
         swVolumeNextPage.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -163,25 +162,19 @@ public class MoreSettingPop extends FrameLayout {
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTitle(isChecked);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTimeBattery(isChecked);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowLine(isChecked);
-                changeProListener.refreshPage();
-            }
-        });
-        sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (compoundButton.isPressed()) {
-                readBookControl.setTipMarginChange(b);
-                changeProListener.refreshPage();
+                callback.refreshPage();
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
@@ -190,7 +183,7 @@ public class MoreSettingPop extends FrameLayout {
                     .setSingleChoiceItems(context.getResources().getStringArray(R.array.screen_time_out), readBookControl.getScreenTimeOut(), (dialogInterface, i) -> {
                         readBookControl.setScreenTimeOut(i);
                         upScreenTimeOut(i);
-                        changeProListener.keepScreenOnChange(i);
+                        callback.keepScreenOnChange(i);
                         dialogInterface.dismiss();
                     })
                     .create();
@@ -204,7 +197,7 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
                         dialogInterface.dismiss();
-                        changeProListener.refreshPage();
+                        callback.refreshPage();
                     })
                     .create();
             dialog.show();
@@ -217,7 +210,7 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setScreenDirection(i);
                         upScreenDirection(i);
                         dialogInterface.dismiss();
-                        changeProListener.recreate();
+                        callback.recreate();
                     })
                     .create();
             dialog.show();
@@ -230,11 +223,16 @@ public class MoreSettingPop extends FrameLayout {
                         readBookControl.setNavBarColor(i);
                         upNavBarColor(i);
                         dialogInterface.dismiss();
-                        changeProListener.recreate();
+                        callback.recreate();
                     })
                     .create();
             dialog.show();
             ATH.setAlertDialogTint(dialog);
+        });
+        switchSelectText.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                readBookControl.setCanSelectText(isChecked);
+            }
         });
     }
 
@@ -253,7 +251,7 @@ public class MoreSettingPop extends FrameLayout {
         sbShowTitle.setChecked(readBookControl.getShowTitle());
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
-        sbTipMarginChange.setChecked(readBookControl.getTipMarginChange());
+        switchSelectText.setChecked(readBookControl.isCanSelectText());
         upView();
     }
 
@@ -303,7 +301,7 @@ public class MoreSettingPop extends FrameLayout {
         reNavBarColorVal.setText(context.getResources().getStringArray(R.array.NavBarColors)[nColor]);
     }
 
-    public interface OnChangeProListener {
+    public interface Callback {
         void upBar();
 
         void keepScreenOnChange(int keepScreenOn);

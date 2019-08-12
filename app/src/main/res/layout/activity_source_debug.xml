@@ -37,16 +37,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lv_log"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textIsSelectable="true"
-            android:clickable="true"
-            android:focusable="true" />
+            android:layout_height="match_parent"
+            android:divider="@null" />
 
-        <com.victor.loading.rotate.RotateLoading
+        <com.kunfei.bookshelf.widget.RotateLoading
             android:id="@+id/loading"
             android:layout_width="36dp"
             android:layout_height="36dp"

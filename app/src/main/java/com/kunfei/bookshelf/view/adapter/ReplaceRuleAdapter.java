@@ -6,17 +6,18 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
+import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ReplaceRuleActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by GKF on 2017/12/22.
@@ -24,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.MyViewHolder> {
-    private List<ReplaceRuleBean> dataList;
+    private List<ReplaceRuleBean> data;
     private ReplaceRuleActivity activity;
     private ItemTouchCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new ItemTouchCallback.OnItemTouchCallbackListener() {
         @Override
@@ -34,7 +35,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
         @Override
         public boolean onMove(int srcPosition, int targetPosition) {
-            Collections.swap(dataList, srcPosition, targetPosition);
+            Collections.swap(data, srcPosition, targetPosition);
             notifyItemMoved(srcPosition, targetPosition);
             notifyItemChanged(srcPosition);
             notifyItemChanged(targetPosition);
@@ -45,7 +46,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
     public ReplaceRuleAdapter(ReplaceRuleActivity activity) {
         this.activity = activity;
-        dataList = new ArrayList<>();
+        data = new ArrayList<>();
     }
 
     public ItemTouchCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
@@ -53,14 +54,14 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
     }
 
     public void resetDataS(List<ReplaceRuleBean> dataList) {
-        this.dataList.clear();
-        this.dataList.addAll(dataList);
+        this.data.clear();
+        this.data.addAll(dataList);
         notifyDataSetChanged();
         activity.upDateSelectAll();
     }
 
-    public List<ReplaceRuleBean> getDataList() {
-        return dataList;
+    public List<ReplaceRuleBean> getData() {
+        return data;
     }
 
     @NonNull
@@ -72,24 +73,25 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.checkBox.setText(dataList.get(position).getReplaceSummary());
-        holder.checkBox.setChecked(dataList.get(position).getEnable());
+        holder.itemView.setBackgroundColor(ThemeStore.backgroundColor(activity));
+        holder.checkBox.setText(data.get(position).getReplaceSummary());
+        holder.checkBox.setChecked(data.get(position).getEnable());
         holder.checkBox.setOnClickListener((View view) -> {
-            dataList.get(position).setEnable(holder.checkBox.isChecked());
+            data.get(position).setEnable(holder.checkBox.isChecked());
             activity.upDateSelectAll();
             activity.saveDataS();
         });
-        holder.editView.setOnClickListener(view -> activity.editReplaceRule(dataList.get(position)));
+        holder.editView.setOnClickListener(view -> activity.editReplaceRule(data.get(position)));
         holder.delView.setOnClickListener(view -> {
-            activity.delData(dataList.get(position));
-            dataList.remove(position);
+            activity.delData(data.get(position));
+            data.remove(position);
             notifyDataSetChanged();
         });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

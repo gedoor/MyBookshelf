@@ -6,13 +6,13 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.loader.content.CursorLoader;
+
 import java.io.File;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.loader.content.CursorLoader;
 
 /**
  * Created by newbiechen on 2018/1/14.

@@ -28,6 +28,8 @@ public interface SearchBookContract {
         void toSearchBooks(String key, Boolean fromError);
 
         void stopSearch();
+
+        void initSearchEngineS(String group);
     }
 
     interface View extends IView {
@@ -67,7 +69,7 @@ public interface SearchBookContract {
         /**
          * 搜索失败
          */
-        void searchBookError(Boolean isRefresh);
+        void searchBookError(Throwable throwable);
 
         /**
          * 获取搜索内容EditText

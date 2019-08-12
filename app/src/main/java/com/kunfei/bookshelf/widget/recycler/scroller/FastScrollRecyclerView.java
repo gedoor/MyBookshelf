@@ -5,10 +5,10 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import com.kunfei.bookshelf.R;
-
 import androidx.annotation.ColorInt;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.kunfei.bookshelf.R;
 
 @SuppressWarnings("unused")
 public class FastScrollRecyclerView extends RecyclerView {
@@ -245,7 +245,7 @@ public class FastScrollRecyclerView extends RecyclerView {
 
         mFastScroller = new FastScroller(context, attrs);
 
-        mFastScroller.setId(R.id.fastscroller);
+        mFastScroller.setId(R.id.fast_scroller);
 
     }
 

@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center">
 
-                <com.victor.loading.rotate.RotateLoading
+                <com.kunfei.bookshelf.widget.RotateLoading
                     android:id="@+id/rl_loading"
                     android:layout_width="48dp"
                     android:layout_height="48dp"

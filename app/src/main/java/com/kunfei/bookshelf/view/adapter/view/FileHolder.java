@@ -7,8 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.constant.AppConstant;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.base.ViewHolderImpl;
@@ -86,7 +86,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         //图片
         mIvIcon.setVisibility(View.VISIBLE);
         mCbSelect.setVisibility(View.GONE);
-        mIvIcon.setImageResource(R.drawable.ic_folder_black_24dp);
+        mIvIcon.setImageResource(R.drawable.ic_folder);
         //名字
         mTvName.setText(folder.getName());
         //介绍

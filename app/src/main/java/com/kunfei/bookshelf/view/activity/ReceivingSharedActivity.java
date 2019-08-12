@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.StringUtils;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class ReceivingSharedActivity extends AppCompatActivity {
 

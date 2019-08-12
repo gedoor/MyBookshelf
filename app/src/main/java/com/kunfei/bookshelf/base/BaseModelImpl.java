@@ -8,11 +8,10 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.CookieBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.EncodeConverter;
-import com.kunfei.bookshelf.help.HttpInterceptor;
 import com.kunfei.bookshelf.help.SSLSocketClient;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
@@ -22,7 +21,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -45,19 +43,19 @@ public class BaseModelImpl {
             case POST:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getPath(),
+                        .postMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getPath(),
+                        .getMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
                 return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getPath(),
+                        .get(analyzeUrl.getPath(),
                                 analyzeUrl.getHeaderMap());
         }
     }
@@ -92,8 +90,7 @@ public class BaseModelImpl {
                     .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.createTrustAllManager())
                     .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                    .addInterceptor(getHeaderInterceptor())
-                    .addInterceptor(new HttpInterceptor(1));
+                    .addInterceptor(getHeaderInterceptor());
         }
         return clientBuilder;
     }
@@ -133,10 +130,12 @@ public class BaseModelImpl {
     }
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
-    protected Observable<String> getAjaxHtml(AnalyzeUrl analyzeUrl, String sourceUrl) {
-        String js = "document.documentElement.outerHTML";
+    protected Observable<String> getAjaxString(AnalyzeUrl analyzeUrl, String tag, String js) {
+        final Web web = new Web("加载超时");
+        if (!TextUtils.isEmpty(js)) {
+            web.js = js;
+        }
         return Observable.create(e -> {
-            final Html html = new Html("加载超时");
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 Runnable timeoutRunnable;
@@ -147,10 +146,10 @@ public class BaseModelImpl {
                 Runnable retryRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        webView.evaluateJavascript(js, value -> {
-                            html.content = StringEscapeUtils.unescapeJson(value);
-                            if (isLoadFinish(html.content)) {
-                                e.onNext(html.content);
+                        webView.evaluateJavascript(web.js, value -> {
+                            if (!TextUtils.isEmpty(value)) {
+                                web.content = StringEscapeUtils.unescapeJson(value);
+                                e.onNext(web.content);
                                 e.onComplete();
                                 webView.destroy();
                                 handler.removeCallbacks(this);
@@ -163,17 +162,17 @@ public class BaseModelImpl {
                 timeoutRunnable = () -> {
                     if (!e.isDisposed()) {
                         handler.removeCallbacks(retryRunnable);
-                        e.onNext(html.content);
+                        e.onNext(web.content);
                         e.onComplete();
                         webView.destroy();
                     }
                 };
-                handler.postDelayed(timeoutRunnable, 25000);
+                handler.postDelayed(timeoutRunnable, 30000);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         DbHelper.getDaoSession().getCookieBeanDao()
-                                .insertOrReplace(new CookieBean(sourceUrl, cookieManager.getCookie(webView.getUrl())));
+                                .insertOrReplace(new CookieBean(tag, cookieManager.getCookie(webView.getUrl())));
                         handler.postDelayed(retryRunnable, 1000);
                     }
                 });
@@ -191,15 +190,11 @@ public class BaseModelImpl {
         });
     }
 
-    private boolean isLoadFinish(String value) {    // 验证正文内容是否符合要求
-        value = value.replaceAll("&nbsp;|<br.*?>|\\s|\\n","");
-        return Pattern.matches(".*[^\\x00-\\xFF]{50,}.*", value);
-    }
-
-    private class Html {
+    private class Web {
         private String content;
+        private String js = "document.documentElement.outerHTML";
 
-        Html(String content) {
+        Web(String content) {
             this.content = content;
         }
     }

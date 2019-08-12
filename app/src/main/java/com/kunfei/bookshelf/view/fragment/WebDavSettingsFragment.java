@@ -11,6 +11,8 @@ import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -19,6 +21,8 @@ import com.kunfei.bookshelf.help.DataRestore;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.WebDavHelp;
+import com.kunfei.bookshelf.help.permission.Permissions;
+import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ZipUtils;
@@ -31,12 +35,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AlertDialog;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import kotlin.Unit;
 
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 
@@ -128,46 +132,16 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals("web_dav_restore")) {
-            if (!WebDavHelp.initWebDav()) return super.onPreferenceTreeClick(preferenceScreen, preference);
-            Single.create((SingleOnSubscribe<String[]>) emitter -> {
-                List<WebDavFile> webDavFiles = new WebDavFile(WebDavHelp.getWebDavUrl() + "YueDu/").listFiles();
-                Collections.reverse(webDavFiles);
-                List<String> fileNames = new ArrayList<>();
-                for (int i = 0; i < Math.min(webDavFiles.size(), 10); i++) {
-                    fileNames.add(webDavFiles.get(i).getDisplayName());
-                }
-                String[] strings = fileNames.toArray(new String[0]);
-                emitter.onSuccess(strings);
-            }).compose(RxUtils::toSimpleSingle)
-                    .subscribe(new SingleObserver<String[]>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            compositeDisposable.add(d);
-                        }
-
-                        @Override
-                        public void onSuccess(String[] strings) {
-                            if (strings.length > 0) {
-                                AlertDialog dialog = new AlertDialog.Builder(settingActivity)
-                                        .setTitle("选择恢复文件")
-                                        .setSingleChoiceItems(strings, 0, (dialogInterface, i) -> {
-                                            restore(WebDavHelp.getWebDavUrl() + "YueDu/" + strings[i]);
-                                            dialogInterface.dismiss();
-                                        })
-                                        .create();
-                                dialog.show();
-                                ATH.setAlertDialogTint(dialog);
-                            } else {
-                                Toast.makeText(MApplication.getInstance(), "没有找到备份", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(MApplication.getInstance(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+            if (!WebDavHelp.initWebDav())
+                return super.onPreferenceTreeClick(preferenceScreen, preference);
+            new PermissionsCompat.Builder(settingActivity)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.backup_permission)
+                    .onGranted((requestCode) -> {
+                        showRestoreFiles();
+                        return Unit.INSTANCE;
+                    })
+                    .request();
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -181,6 +155,47 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void showRestoreFiles() {
+        Single.create((SingleOnSubscribe<String[]>) emitter -> {
+            List<WebDavFile> webDavFiles = new WebDavFile(WebDavHelp.getWebDavUrl() + "YueDu/").listFiles();
+            Collections.reverse(webDavFiles);
+            List<String> fileNames = new ArrayList<>();
+            for (int i = 0; i < Math.min(webDavFiles.size(), 10); i++) {
+                fileNames.add(webDavFiles.get(i).getDisplayName());
+            }
+            String[] strings = fileNames.toArray(new String[0]);
+            emitter.onSuccess(strings);
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<String[]>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(String[] strings) {
+                        if (strings.length > 0) {
+                            AlertDialog dialog = new AlertDialog.Builder(settingActivity)
+                                    .setTitle("选择恢复文件")
+                                    .setSingleChoiceItems(strings, 0, (dialogInterface, i) -> {
+                                        restore(WebDavHelp.getWebDavUrl() + "YueDu/" + strings[i]);
+                                        dialogInterface.dismiss();
+                                    })
+                                    .create();
+                            dialog.show();
+                            ATH.setAlertDialogTint(dialog);
+                        } else {
+                            Toast.makeText(MApplication.getInstance(), "没有找到备份", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MApplication.getInstance(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void restore(String url) {

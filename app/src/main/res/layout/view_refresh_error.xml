@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_error_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_data_error"
+        android:textColor="@color/tv_text_default"
+        android:textSize="16sp" />
+
+    <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+        android:id="@+id/tv_refresh_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:lines="1"
+        android:paddingLeft="18dp"
+        android:paddingTop="7dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="7dp"
+        android:text="@string/retry"
+        android:textSize="16sp" />
+</LinearLayout>

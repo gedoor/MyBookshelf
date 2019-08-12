@@ -8,9 +8,9 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
