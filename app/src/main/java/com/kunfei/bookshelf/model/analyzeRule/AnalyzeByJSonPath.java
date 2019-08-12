@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class AnalyzeByJSonPath {
                     }
                 }
             }
-            return StringUtils.join(",", textS).trim();
+            return TextUtils.join(",", textS).trim();
         }
     }
 

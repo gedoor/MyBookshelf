@@ -207,14 +207,24 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     public void refreshBookSource() {
         if (isSearch) {
-            String term = "%" + searchView.getQuery() + "%";
-            List<BookSourceBean> sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
-                            BookSourceBeanDao.Properties.BookSourceGroup.like(term),
-                            BookSourceBeanDao.Properties.BookSourceUrl.like(term))
-                    .orderRaw(BookSourceManager.getBookSourceSort())
-                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                    .list();
+            List<BookSourceBean> sourceBeanList;
+            if (searchView.getQuery().toString().equals("enabled")) {
+                sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .where(BookSourceBeanDao.Properties.Enable.eq(1))
+                        .orderRaw(BookSourceManager.getBookSourceSort())
+                        .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                        .list();
+            } else {
+                String term = "%" + searchView.getQuery() + "%";
+                sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
+                                BookSourceBeanDao.Properties.BookSourceGroup.like(term),
+                                BookSourceBeanDao.Properties.BookSourceUrl.like(term))
+                        .orderRaw(BookSourceManager.getBookSourceSort())
+                        .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                        .list();
+            }
+
             adapter.resetDataS(sourceBeanList);
         } else {
             adapter.resetDataS(BookSourceManager.getAllBookSource());
@@ -298,6 +308,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
             case R.id.sort_pin_yin:
                 upSourceSort(2);
+                break;
+            case R.id.show_enabled:
+                searchView.setQuery("enabled", false);
                 break;
             case R.id.action_share_wifi:
                 ShareService.startThis(this, adapter.getSelectDataList());
