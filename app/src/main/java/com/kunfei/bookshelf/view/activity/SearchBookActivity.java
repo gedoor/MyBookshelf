@@ -313,7 +313,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         if (MApplication.SEARCH_GROUP != null) {
             boolean hasGroup = false;
             for (int i = 0; i < menu.size(); i++) {
-                if (menu.getItem(i).getTitle() == MApplication.SEARCH_GROUP) {
+                if (menu.getItem(i).getTitle().toString().equals(MApplication.SEARCH_GROUP)) {
                     menu.getItem(i).setChecked(true);
                     hasGroup = true;
                     break;
