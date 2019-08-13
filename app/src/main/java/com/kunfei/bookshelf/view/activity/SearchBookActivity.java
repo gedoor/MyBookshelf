@@ -79,7 +79,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private boolean showHistory;
     private String searchKey;
     private Menu menu;
-    private String group;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -181,11 +180,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 if (item.getGroupId() == R.id.source_group) {
                     item.setChecked(true);
                     if (Objects.equals(getString(R.string.all_source), item.getTitle().toString())) {
-                        group = null;
+                        MApplication.SEARCH_GROUP = null;
                     } else {
-                        group = item.getTitle().toString();
+                        MApplication.SEARCH_GROUP = item.getTitle().toString();
                     }
-                    mPresenter.initSearchEngineS(group);
+                    mPresenter.initSearchEngineS(MApplication.SEARCH_GROUP);
                 }
         }
         return super.onOptionsItemSelected(item);
@@ -311,7 +310,21 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             menu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
         }
         menu.setGroupCheckable(R.id.source_group, true, true);
-        menu.getItem(1).setChecked(true);
+        if (MApplication.SEARCH_GROUP != null) {
+            boolean hasGroup = false;
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getTitle() == MApplication.SEARCH_GROUP) {
+                    menu.getItem(i).setChecked(true);
+                    hasGroup = true;
+                    break;
+                }
+            }
+            if (!hasGroup) {
+                menu.getItem(1).setChecked(true);
+            }
+        } else {
+            menu.getItem(1).setChecked(true);
+        }
     }
 
     private void showHideSetting() {
@@ -493,7 +506,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         if (resultCode == RESULT_OK) {
             if (requestCode == requestSource) {
                 initMenu();
-                mPresenter.initSearchEngineS(group);
+                mPresenter.initSearchEngineS(MApplication.SEARCH_GROUP);
             }
         }
     }

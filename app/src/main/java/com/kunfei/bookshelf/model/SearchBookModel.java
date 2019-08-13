@@ -43,12 +43,20 @@ public class SearchBookModel {
     private OnSearchListener searchListener;
 
     public SearchBookModel(OnSearchListener searchListener) {
+        this(searchListener, BookSourceManager.getSelectedBookSource());
+    }
+
+    public SearchBookModel(OnSearchListener searchListener, List<BookSourceBean> sourceBeanList) {
         this.searchListener = searchListener;
         threadsNum = MApplication.getConfigPreferences().getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
-        initSearchEngineS(BookSourceManager.getSelectedBookSource());
+        if (sourceBeanList == null) {
+            initSearchEngineS(BookSourceManager.getSelectedBookSource());
+        } else {
+            initSearchEngineS(sourceBeanList);
+        }
     }
 
     /**
