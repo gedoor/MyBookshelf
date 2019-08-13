@@ -128,7 +128,8 @@
     <!--底部设置栏-->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:background="@color/background_menu">
 
         <View
             android:id="@+id/vw_bg"
@@ -139,7 +140,6 @@
             android:id="@+id/llNavigationBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_menu"
             android:orientation="vertical">
             <!--章节设置-->
             <LinearLayout
