@@ -12,7 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:textColor="@color/tv_text_default" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_checked"
