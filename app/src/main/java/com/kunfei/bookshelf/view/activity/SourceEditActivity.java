@@ -221,7 +221,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .create();
-        return gson.toJson(getBookSource(true));
+        return gson.toJson(getBookSource(hasFind));
     }
 
     @Override
@@ -381,37 +381,37 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                     break;
             }
         }
-        for (SourceEdit sourceEdit : findEditList) {
-            switch (sourceEdit.getKey()) {
-                case "ruleFindUrl":
-                    if (hasFind) {
+        if (hasFind) {
+            for (SourceEdit sourceEdit : findEditList) {
+                switch (sourceEdit.getKey()) {
+                    case "ruleFindUrl":
                         bookSourceBeanN.setRuleFindUrl(sourceEdit.value);
-                    }
-                    break;
-                case "ruleFindList":
-                    bookSourceBeanN.setRuleFindList(sourceEdit.value);
-                    break;
-                case "ruleFindName":
-                    bookSourceBeanN.setRuleFindName(sourceEdit.value);
-                    break;
-                case "ruleFindAuthor":
-                    bookSourceBeanN.setRuleFindAuthor(sourceEdit.value);
-                    break;
-                case "ruleFindKind":
-                    bookSourceBeanN.setRuleFindKind(sourceEdit.value);
-                    break;
-                case "ruleFindIntroduce":
-                    bookSourceBeanN.setRuleFindIntroduce(sourceEdit.value);
-                    break;
-                case "ruleFindLastChapter":
-                    bookSourceBeanN.setRuleFindLastChapter(sourceEdit.value);
-                    break;
-                case "ruleFindCoverUrl":
-                    bookSourceBeanN.setRuleFindCoverUrl(sourceEdit.value);
-                    break;
-                case "ruleFindNoteUrl":
-                    bookSourceBeanN.setRuleFindNoteUrl(sourceEdit.value);
-                    break;
+                        break;
+                    case "ruleFindList":
+                        bookSourceBeanN.setRuleFindList(sourceEdit.value);
+                        break;
+                    case "ruleFindName":
+                        bookSourceBeanN.setRuleFindName(sourceEdit.value);
+                        break;
+                    case "ruleFindAuthor":
+                        bookSourceBeanN.setRuleFindAuthor(sourceEdit.value);
+                        break;
+                    case "ruleFindKind":
+                        bookSourceBeanN.setRuleFindKind(sourceEdit.value);
+                        break;
+                    case "ruleFindIntroduce":
+                        bookSourceBeanN.setRuleFindIntroduce(sourceEdit.value);
+                        break;
+                    case "ruleFindLastChapter":
+                        bookSourceBeanN.setRuleFindLastChapter(sourceEdit.value);
+                        break;
+                    case "ruleFindCoverUrl":
+                        bookSourceBeanN.setRuleFindCoverUrl(sourceEdit.value);
+                        break;
+                    case "ruleFindNoteUrl":
+                        bookSourceBeanN.setRuleFindNoteUrl(sourceEdit.value);
+                        break;
+                }
             }
         }
         bookSourceBeanN.setSerialNumber(serialNumber);
