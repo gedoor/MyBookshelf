@@ -216,7 +216,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     @Override
-    public String getBookSourceStr() {
+    public String getBookSourceStr(boolean hasFind) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
@@ -424,7 +424,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 600);
+            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(true), 600);
             QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             emitter.onSuccess(bitmap);
         }).compose(RxUtils::toSimpleSingle)
@@ -516,10 +516,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 }
                 break;
             case R.id.action_copy_source:
-                mPresenter.copySource(getBookSource(true));
+                mPresenter.copySource(getBookSourceStr(true));
                 break;
             case R.id.action_copy_source_no_find:
-                mPresenter.copySource(getBookSource(false));
+                mPresenter.copySource(getBookSourceStr(false));
                 break;
             case R.id.action_paste_source:
                 mPresenter.pasteSource();
