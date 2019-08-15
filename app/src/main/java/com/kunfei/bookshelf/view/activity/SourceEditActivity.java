@@ -384,7 +384,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         for (SourceEdit sourceEdit : findEditList) {
             switch (sourceEdit.getKey()) {
                 case "ruleFindUrl":
-                    bookSourceBeanN.setRuleFindUrl(sourceEdit.value);
+                    if (hasFind) {
+                        bookSourceBeanN.setRuleFindUrl(sourceEdit.value);
+                    }
                     break;
                 case "ruleFindList":
                     bookSourceBeanN.setRuleFindList(sourceEdit.value);
@@ -415,9 +417,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setSerialNumber(serialNumber);
         bookSourceBeanN.setEnable(cbIsEnable.isChecked());
         bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : null);
-        if (!hasFind) {
-            bookSourceBeanN.setRuleFindUrl(null);
-        }
         return bookSourceBeanN;
     }
 
