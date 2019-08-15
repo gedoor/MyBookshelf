@@ -1081,7 +1081,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                                                 moDialogHUD.dismiss();
 
-                                                refreshDurChapter();
+                                                refresh(false);
                                             }
                                         })).show();
 
