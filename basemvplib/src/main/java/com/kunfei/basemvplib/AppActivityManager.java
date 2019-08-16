@@ -101,7 +101,7 @@ public class AppActivityManager {
      * 判断指定Activity是否存在
      */
     public Boolean isExist(Class<?> activityClass) {
-        Boolean result = false;
+        boolean result = false;
         for (WeakReference<Activity> item : activities) {
             if (null != item && null != item.get() && item.get().getClass() == activityClass) {
                 result = true;
