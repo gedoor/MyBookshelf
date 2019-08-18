@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -145,25 +146,29 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
         if (!readBookControl.getHideStatusBar()) {
             marginTop = marginTop + statusBarHeight;
         }
-        switch (pageMode) {
-            case SIMULATION:
-                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
-                break;
-            case COVER:
-                mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, this);
-                break;
-            case SLIDE:
-                mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, this);
-                break;
-            case NONE:
-                mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, this);
-                break;
-            case SCROLL:
-                mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        marginTop, marginBottom, this, this);
-                break;
-            default:
-                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
+        if (MApplication.isEInkMode){
+            mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, this);
+        }else {
+            switch (pageMode) {
+                case SIMULATION:
+                    mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
+                    break;
+                case COVER:
+                    mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, this);
+                    break;
+                case SLIDE:
+                    mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, this);
+                    break;
+                case NONE:
+                    mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, this);
+                    break;
+                case SCROLL:
+                    mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
+                            marginTop, marginBottom, this, this);
+                    break;
+                default:
+                    mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
+            }
         }
     }
 

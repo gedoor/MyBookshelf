@@ -481,6 +481,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             }
         });
+        applyEInkMode();
+    }
+
+    private void applyEInkMode() {
+        if (MApplication.isEInkMode){
+            menuTopIn.setDuration(0);
+            menuTopOut.setDuration(0);
+            menuBottomIn.setDuration(0);
+            menuBottomOut.setDuration(0);
+        }
     }
 
     @Override
