@@ -130,9 +130,7 @@ public class BookshelfHelp {
     }
 
     private static String formatFolderName(String folderName) {
-        return folderName.replace("/", "")
-                .replace(":", "")
-                .replace(".", "");
+        return folderName.replaceAll("[\\\\/:*?\"<>|.]", "");
     }
 
     /**
