@@ -70,9 +70,6 @@ import kotlin.Unit;
 import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallbackValue {
-    private static final int BACKUP_RESULT = 11;
-    private static final int RESTORE_RESULT = 12;
-    private static final int FILE_SELECT_RESULT = 13;
     private final int requestSource = 14;
     private String[] mTitles;
 
