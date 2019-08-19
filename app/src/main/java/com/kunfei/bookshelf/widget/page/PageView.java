@@ -352,47 +352,49 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
     List<TxtLine> mLinseData = null;
 
     private void getSelectData() {
+        TxtPage txtPage = mPageLoader.curChapter().txtChapter.getPage(mPageLoader.getCurPagePos());
+        if (txtPage != null) {
+            mLinseData = txtPage.getTxtLists();
 
-        mLinseData = mPageLoader.curChapter().txtChapter.getPage(mPageLoader.getCurPagePos()).getTxtLists();
+            Boolean Started = false;
+            Boolean Ended = false;
 
-        Boolean Started = false;
-        Boolean Ended = false;
+            mSelectLines.clear();
 
-        mSelectLines.clear();
+            // 找到选择的字符数据，转化为选择的行，然后将行选择背景画出来
+            for (TxtLine l : mLinseData) {
 
-        // 找到选择的字符数据，转化为选择的行，然后将行选择背景画出来
-        for (TxtLine l : mLinseData) {
+                TxtLine selectline = new TxtLine();
+                selectline.setCharsData(new ArrayList<>());
 
-            TxtLine selectline = new TxtLine();
-            selectline.setCharsData(new ArrayList<>());
-
-            for (TxtChar c : l.getCharsData()) {
-                if (!Started) {
-                    if (c.getIndex() == firstSelectTxtChar.getIndex()) {
-                        Started = true;
-                        selectline.getCharsData().add(c);
+                for (TxtChar c : l.getCharsData()) {
+                    if (!Started) {
+                        if (c.getIndex() == firstSelectTxtChar.getIndex()) {
+                            Started = true;
+                            selectline.getCharsData().add(c);
+                            if (c.getIndex() == lastSelectTxtChar.getIndex()) {
+                                Ended = true;
+                                break;
+                            }
+                        }
+                    } else {
                         if (c.getIndex() == lastSelectTxtChar.getIndex()) {
                             Ended = true;
+                            if (!selectline.getCharsData().contains(c)) {
+                                selectline.getCharsData().add(c);
+                            }
                             break;
-                        }
-                    }
-                } else {
-                    if (c.getIndex() == lastSelectTxtChar.getIndex()) {
-                        Ended = true;
-                        if (!selectline.getCharsData().contains(c)) {
+                        } else {
                             selectline.getCharsData().add(c);
                         }
-                        break;
-                    } else {
-                        selectline.getCharsData().add(c);
                     }
                 }
-            }
 
-            mSelectLines.add(selectline);
+                mSelectLines.add(selectline);
 
-            if (Started && Ended) {
-                break;
+                if (Started && Ended) {
+                    break;
+                }
             }
         }
     }
