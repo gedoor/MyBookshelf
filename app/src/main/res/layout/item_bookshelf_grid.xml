@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:focusable="true">
 
         <com.kunfei.bookshelf.widget.CoverImageView
             android:id="@+id/iv_cover"
@@ -54,6 +53,11 @@
             android:textSize="15sp" />
 
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground" />
 
     <View
         android:id="@+id/vw_select"
