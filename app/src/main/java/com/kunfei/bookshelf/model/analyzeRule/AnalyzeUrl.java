@@ -58,19 +58,19 @@ public class AnalyzeUrl {
         if (!TextUtils.isEmpty(baseUrl)) {
             this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         }
-        //解析Header
-        ruleUrl = analyzeHeader(ruleUrl, headerMapF);
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
             ruleUrl = ruleUrl.replace("searchKey", key);
         }
-        //分离编码规则
-        ruleUrl = splitCharCode(ruleUrl);
         //判断是否有下一页
         if (page != null && page > 1 && !ruleUrl.contains("searchPage"))
             throw new Exception("没有下一页");
         //替换js
         ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
+        //解析Header
+        ruleUrl = analyzeHeader(ruleUrl, headerMapF);
+        //分离编码规则
+        ruleUrl = splitCharCode(ruleUrl);
         //设置页数
         ruleUrl = analyzePage(ruleUrl, page);
         //执行规则列表
