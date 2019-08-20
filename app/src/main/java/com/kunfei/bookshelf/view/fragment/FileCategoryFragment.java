@@ -211,6 +211,9 @@ public class FileCategoryFragment extends BaseFileFragment {
             if (pathname.getName().startsWith(".")) {
                 return false;
             }
+            if (pathname.list() == null) {
+                return false;
+            }
             //文件夹内部数量为0
             if (pathname.isDirectory() && pathname.list().length == 0) {
                 return false;
