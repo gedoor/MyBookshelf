@@ -267,8 +267,10 @@ public class MoreSettingPop extends FrameLayout {
     private void upView() {
         if (readBookControl.getHideStatusBar()) {
             sbShowTimeBattery.setEnabled(true);
+            sbToLh.setEnabled(true);
         } else {
             sbShowTimeBattery.setEnabled(false);
+            sbToLh.setEnabled(false);
         }
         if (readBookControl.getCanKeyTurn()) {
             swReadAloudKey.setEnabled(true);
