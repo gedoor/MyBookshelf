@@ -568,6 +568,16 @@ public class ReadBookControl {
                 .apply();
     }
 
+    public Boolean getToLh() {
+        return preferences.getBoolean("toLh", false);
+    }
+
+    public void setToLh(Boolean toLh) {
+        preferences.edit()
+                .putBoolean("toLh", toLh)
+                .apply();
+    }
+
     public Boolean getHideNavigationBar() {
         return hideNavigationBar;
     }

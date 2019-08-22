@@ -448,4 +448,5 @@
     <string name="dsm_start"><![CDATA[<]]></string>
     <string name="dsm_end"><![CDATA[>]]></string>
     <string name="show_enabled">显示勾选</string>
+    <string name="to_lh">扩展到刘海</string>
 </resources>
