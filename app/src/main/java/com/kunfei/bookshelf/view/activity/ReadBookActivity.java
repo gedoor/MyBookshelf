@@ -196,7 +196,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onCreateActivity() {
         setOrientation(readBookControl.getScreenDirection());
         setContentView(R.layout.activity_book_read);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && readBookControl.getToLh()) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
                 lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
