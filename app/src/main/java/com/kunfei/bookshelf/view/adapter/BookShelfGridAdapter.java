@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -165,17 +164,17 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             }
         }
 
-        holder.flContent.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
         });
-        holder.tvName.setOnClickListener(view -> {
+        holder.itemView.setOnClickListener(view -> {
             if (itemClickListener != null) {
                 itemClickListener.onLongClick(view, index);
             }
         });
         if (!Objects.equals(bookshelfPx, "2")) {
-            holder.flContent.setOnLongClickListener(v -> {
+            holder.itemView.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
                     itemClickListener.onLongClick(v, index);
                 }
@@ -233,7 +232,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
         ImageView ivCover;
         TextView tvName;
         BadgeView bvUnread;
@@ -242,7 +240,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
 
         MyViewHolder(View itemView) {
             super(itemView);
-            flContent = itemView.findViewById(R.id.fl_content);
             ivCover = itemView.findViewById(R.id.iv_cover);
             tvName = itemView.findViewById(R.id.tv_name);
             bvUnread = itemView.findViewById(R.id.bv_unread);
