@@ -55,11 +55,6 @@
     </FrameLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground" />
-
-    <View
         android:id="@+id/vw_select"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
