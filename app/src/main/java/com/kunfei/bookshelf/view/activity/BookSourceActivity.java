@@ -291,6 +291,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_import_book_source_rwm:
                 scanBookSource();
                 break;
+            case R.id.action_import_book_source_default:
+                importBookSourceDefault();
+                break;
             case R.id.action_revert_selection:
                 revertSelection();
                 break;
@@ -405,6 +408,10 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
                 }).show();
+    }
+
+    private void importBookSourceDefault() {
+
     }
 
     private void selectFileSys() {
