@@ -61,7 +61,7 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
         return fileList.size() == 0 ? 1 : fileList.size();
     }
 
-    public void upData(File[] files) {
+    void upData(File[] files) {
         if (files != null) {
             fileList.clear();
             for (File file : files) {
