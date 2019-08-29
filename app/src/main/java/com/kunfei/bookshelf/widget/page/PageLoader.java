@@ -987,7 +987,19 @@ public abstract class PageLoader {
                 mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
 
                 //进行绘制
-                canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
+                //canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
+                mTitlePaint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText(str, mMarginLeft, top, mTitlePaint);
+                mTitlePaint.setTextAlign(Paint.Align.CENTER);
+
+                // 画一条线
+                if (i == txtPage.getTitleLines() - 2) {
+                    float topOffset = top + ScreenUtils.dpToPx(8);
+                    float lastWidth = mTitlePaint.getStrokeWidth();
+                    mTitlePaint.setStrokeWidth(ScreenUtils.dpToPx(1));
+                    canvas.drawLine(mMarginLeft, topOffset, mDisplayWidth - mMarginRight, topOffset, mTitlePaint);
+                    mTitlePaint.setStrokeWidth(lastWidth);
+                }
 
                 //pzl
                 float leftposition = mDisplayWidth / 2;

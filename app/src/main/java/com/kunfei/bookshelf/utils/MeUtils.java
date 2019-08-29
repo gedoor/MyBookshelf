@@ -1,6 +1,9 @@
 package com.kunfei.bookshelf.utils;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -53,5 +56,38 @@ public class MeUtils {
             e.printStackTrace();
         }
         return s;
+    }
+
+    public static Bitmap getFitAssetsSampleBitmap(AssetManager am, String file, int width, int height) {
+        InputStream assetFile = null;
+        try {
+            assetFile = am.open(file);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(assetFile, null, options);
+            options.inSampleSize = getFitInSampleSize(width, height, options);
+            options.inJustDecodeBounds = false;
+            assetFile.close();
+            assetFile = am.open(file);
+            Bitmap bm = BitmapFactory.decodeStream(assetFile, null, options);
+            assetFile.close();
+            return bm;
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (assetFile != null) assetFile.close();
+            } catch (Exception ee) {}
+            return null;
+        }
+    }
+
+    public static int getFitInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options) {
+        int inSampleSize = 1;
+        if (options.outWidth > reqWidth || options.outHeight > reqHeight) {
+            int widthRatio = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRatio = Math.round((float) options.outHeight / (float) reqHeight);
+            inSampleSize = Math.min(widthRatio, heightRatio);
+        }
+        return inSampleSize;
     }
 }
