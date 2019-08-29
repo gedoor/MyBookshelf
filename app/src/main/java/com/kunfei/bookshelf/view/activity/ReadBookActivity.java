@@ -74,6 +74,7 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;
 import com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop;
 import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
+import com.kunfei.bookshelf.view.popupwindow.ReadAdjustMarginPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu;
 import com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop;
@@ -132,6 +133,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     PageView pageView;
     @BindView(R.id.readAdjustPop)
     ReadAdjustPop readAdjustPop;
+    @BindView(R.id.readAdjustMarginPop)
+    ReadAdjustMarginPop readAdjustMarginPop;
     @BindView(R.id.readInterfacePop)
     ReadInterfacePop readInterfacePop;
     @BindView(R.id.moreSettingPop)
@@ -172,6 +175,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private boolean autoPage = false;
     private boolean aloudNextPage;
     private int lastX, lastY;
+
+    private boolean disReSetPage = false;
 
     @Override
     protected ReadBookContract.Presenter initInjector() {
@@ -296,6 +301,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (readBottomMenu.getVisibility() == View.VISIBLE
                 || readAdjustPop.getVisibility() == View.VISIBLE
                 || readInterfacePop.getVisibility() == View.VISIBLE
+                || readAdjustMarginPop.getVisibility() == View.VISIBLE
                 || moreSettingPop.getVisibility() == View.VISIBLE) {
             barColorType = 0;
         }
@@ -456,6 +462,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 llMenuTop.setVisibility(View.INVISIBLE);
                 readBottomMenu.setVisibility(View.INVISIBLE);
                 readAdjustPop.setVisibility(View.INVISIBLE);
+                readAdjustMarginPop.setVisibility(View.INVISIBLE);
                 readInterfacePop.setVisibility(View.INVISIBLE);
                 moreSettingPop.setVisibility(View.INVISIBLE);
                 initImmersionBar();
@@ -480,6 +487,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 llMenuTop.setVisibility(View.INVISIBLE);
                 readBottomMenu.setVisibility(View.INVISIBLE);
                 readAdjustPop.setVisibility(View.INVISIBLE);
+                readAdjustMarginPop.setVisibility(View.INVISIBLE);
                 readInterfacePop.setVisibility(View.INVISIBLE);
                 moreSettingPop.setVisibility(View.INVISIBLE);
                 initImmersionBar();
@@ -512,6 +520,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initBottomMenu();
         initReadInterfacePop();
         initReadAdjustPop();
+        initReadAdjustMarginPop();
         initMoreSettingPop();
         initMediaPlayer();
         initReadLongPressPop();
@@ -640,19 +649,49 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void initReadAdjustPop() {
         readAdjustPop.setListener(this, new ReadAdjustPop.Callback() {
             @Override
+            public void speechRateFollowSys() {
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
+                }
+            }
+
+            @Override
             public void changeSpeechRate(int speechRate) {
                 if (ReadAloudService.running) {
                     ReadAloudService.pause(ReadBookActivity.this);
                     ReadAloudService.resume(ReadBookActivity.this);
                 }
             }
+        });
+    }
+
+    /**
+     * 初始化调节
+     */
+    private void initReadAdjustMarginPop() {
+        readAdjustMarginPop.setListener(this, new ReadAdjustMarginPop.Callback() {
 
             @Override
-            public void speechRateFollowSys() {
-                if (ReadAloudService.running) {
-                    ReadAloudService.stop(ReadBookActivity.this);
+            public void upTextSize() {
+                if (mPageLoader != null) {
+                    mPageLoader.setTextSize();
                 }
             }
+
+            @Override
+            public void upMargin() {
+                if (mPageLoader != null) {
+                    mPageLoader.upMargin();
+                }
+            }
+
+            @Override
+            public void refresh() {
+                if (mPageLoader != null) {
+                    mPageLoader.refreshUi();
+                }
+            }
+
         });
     }
 
@@ -1377,6 +1416,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
+     * 显示自定义边界调节
+     */
+    public void readAdjustMarginIn() {
+        flMenu.setVisibility(View.VISIBLE);
+        readAdjustMarginPop.show();
+        readAdjustMarginPop.setVisibility(View.VISIBLE);
+        readAdjustMarginPop.startAnimation(menuBottomIn);
+    }
+
+    /**
      * 显示界面设置
      */
     private void readInterfaceIn() {
@@ -1425,6 +1474,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
             if (readInterfacePop.getVisibility() == View.VISIBLE) {
                 readInterfacePop.startAnimation(menuBottomOut);
+            }
+            if (readAdjustMarginPop.getVisibility() == View.VISIBLE) {
+                readAdjustMarginPop.startAnimation(menuBottomOut);
             }
         }
     }
@@ -1594,6 +1646,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (readInterfacePop.getVisibility() == View.VISIBLE
                         || readAdjustPop.getVisibility() == View.VISIBLE
+                        || readAdjustMarginPop.getVisibility() == View.VISIBLE
                         || moreSettingPop.getVisibility() == View.VISIBLE) {
                     popMenuOut();
                     return true;

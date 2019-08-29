@@ -297,6 +297,8 @@ public abstract class PageLoader {
         initPageStyle();
     }
 
+    private boolean disReSetPage = false;
+
     /**
      * 设置文字相关参数
      */
@@ -304,7 +306,12 @@ public abstract class PageLoader {
         // 设置文字相关参数
         setUpTextParams();
         initPaint();
-        skipToChapter(mCurChapterPos, mCurPagePos);
+        disReSetPage = true;
+        try {
+            skipToChapter(mCurChapterPos, mCurPagePos);
+        } finally {
+            disReSetPage = false;
+        }
     }
 
     private void setupTextInterval() {
@@ -341,7 +348,12 @@ public abstract class PageLoader {
      * 设置内容与屏幕的间距 单位为 px
      */
     public void upMargin() {
-        prepareDisplay(mDisplayWidth, mDisplayHeight);
+        disReSetPage = true;
+        try {
+            prepareDisplay(mDisplayWidth, mDisplayHeight);
+        } finally {
+            disReSetPage = false;
+        }
     }
 
     /**
@@ -650,7 +662,8 @@ public abstract class PageLoader {
 
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
-            reSetPage();
+            if (!disReSetPage)
+                reSetPage();
         } else if (curChapter().txtChapter.getStatus() == TxtChapter.Status.FINISH) {
             reSetPage();
             mPageView.invalidate();
