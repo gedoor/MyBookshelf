@@ -51,6 +51,7 @@ public abstract class PageLoader {
     private static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
+    private static final int EXTRA_TITLE_SIZE = 1;
     private static final float MAX_SCROLL_OFFSET = 100;
     private static final int TIP_ALPHA = 180;
     // 监听器
@@ -218,8 +219,9 @@ public abstract class PageLoader {
     private void setUpTextParams() {
         // 文字大小
         mTextSize = ScreenUtils.spToPx(readBookControl.getTextSize());
-        mTitleSize = mTextSize + oneSpPx;
-        mTextEndSize = mTextSize - oneSpPx;
+        int extTitleSize = ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
+        mTitleSize = mTextSize + extTitleSize;
+        mTextEndSize = mTextSize - extTitleSize;
         // 行间距(大小为字体的一半)
         mTextInterval = (int) (mTextSize * readBookControl.getLineMultiplier() / 2);
         mTitleInterval = (int) (mTitleSize * readBookControl.getLineMultiplier() / 2);

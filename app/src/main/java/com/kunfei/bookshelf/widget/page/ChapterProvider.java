@@ -78,7 +78,7 @@ class ChapterProvider {
         String paragraph = null;
         if (showTitle) {
             paragraph = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), chapter.getDurChapterName(), pageLoader.book.getReplaceEnable());
-            paragraph = paragraph.trim() + "\n";
+            paragraph = paragraph.trim() + "\n \n";
         }
         int i = 1;
         while (showTitle || i < allLine.length) {
