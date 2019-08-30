@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,9 +8,11 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
+        app:elevation="0dp"
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="UnusedAttribute">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,7 +24,12 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0.5dp"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorGravity="bottom"
+            app:tabMode="fixed"
             android:background="@color/background" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -76,6 +84,8 @@
 
     <View
         android:id="@+id/v_shadow"
-        style="@style/Style.Shadow.Bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/bg_divider_line"
         android:layout_above="@+id/rl_bottom" />
 </RelativeLayout>

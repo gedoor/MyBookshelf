@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,6 +36,7 @@ import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.MeUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -42,6 +44,7 @@ import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -291,6 +294,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_import_book_source_rwm:
                 scanBookSource();
                 break;
+            case R.id.action_import_book_source_default:
+                importBookSourceDefault();
+                break;
             case R.id.action_revert_selection:
                 revertSelection();
                 break;
@@ -405,6 +411,31 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
                 }).show();
+    }
+
+    private void importBookSourceDefault() {
+        AssetManager am = this.getAssets();
+        try {
+            final CharSequence[] items = MeUtils.getAssetsFileList(am, "src");
+            if (items == null || items.length == 0) {
+                toast(this.getString(R.string.no_default_source));
+                return;
+            }
+            final String[] path = am.list("src");
+            AlertDialog dialog = new AlertDialog.Builder(this, R.style.alertDialogTheme)
+                    .setTitle(this.getString(R.string.default_source))
+                    .setItems(items, (dialogInterface, i) -> {
+                        String json = MeUtils.getOriginalFundData(am, "src/" + path[i]);
+                        if (json != null && !json.isEmpty()) {
+                            mPresenter.importBookSource(json);
+                        }
+                        dialogInterface.dismiss();
+                    })
+                    .create();
+            dialog.show();
+        } catch (IOException e) {
+            toast(e.getMessage());
+        }
     }
 
     private void selectFileSys() {

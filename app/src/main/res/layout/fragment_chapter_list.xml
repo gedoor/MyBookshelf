@@ -15,7 +15,7 @@
     <LinearLayout
         android:id="@+id/ll_chapter_base_info"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="42dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_alignParentBottom="true"
@@ -56,6 +56,8 @@
 
     <View
         android:id="@+id/v_shadow"
-        style="@style/Style.Shadow.Bottom"
+        android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="@color/bg_divider_line"
         android:layout_above="@id/ll_chapter_base_info" />
 </RelativeLayout>

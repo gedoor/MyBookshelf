@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
+        app:elevation="0dp"
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
+                android:paddingBottom="4dp"
+                app:tabIndicatorHeight="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
 
@@ -39,7 +42,9 @@
         android:layout_height="match_parent" />
 
     <View
-        style="@style/Style.Shadow.Top"
-        android:layout_below="@id/action_bar" />
+        android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="@color/bg_divider_line"
+        android:layout_above="@id/tab_vp" />
 
 </RelativeLayout>

@@ -1,0 +1,32 @@
+<resources>
+    <string name="default_source">默认书源</string>
+    <string name="import_by_default">默认书源导入</string>
+    <string name="no_default_source">没有可用的默认书源</string>
+    <string name="row_0">单倍</string>
+    <string name="row_1">双倍</string>
+    <string name="row_2">三倍</string>
+    <string name="row_def">默认</string>
+    <string name="custom_mr">自定义间距</string>
+
+    <string name="custom_mr_rm">行间距</string>
+    <string name="custom_mr_dm">段间距</string>
+    <string name="custom_mr_f">字间距</string>
+    <string name="custom_mr_z_t">上边距</string>
+    <string name="custom_mr_z_b">下边距</string>
+    <string name="custom_mr_z_l">左边距</string>
+    <string name="custom_mr_z_r">右边距</string>
+
+    <string name="custom_mr_t_t">上Tip</string>
+    <string name="custom_mr_t_b">下Tip</string>
+    <string name="custom_mr_t_l">左Tip</string>
+    <string name="custom_mr_t_r">右Tip</string>
+
+    <declare-styleable name="ATEStrokeTextView">
+        <attr name="cornerRadius" format="dimension" />
+    </declare-styleable>
+
+    <dimen name="adjust_margin_left">55dp</dimen>
+    <dimen name="adjust_margin_right">45dp</dimen>
+    <dimen name="adjust_margin_barH">25dp</dimen>
+    <dimen name="adjust_margin_titfs">13sp</dimen>
+</resources>

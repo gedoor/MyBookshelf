@@ -10,19 +10,34 @@
     android:background="?android:attr/selectableItemBackground"
     tools:ignore="UnusedAttribute">
 
-    <com.kunfei.bookshelf.widget.CoverImageView
-        android:id="@+id/iv_cover"
-        android:layout_width="60dp"
-        android:layout_height="80dp"
+    <com.lijiankun24.shadowlayout.ShadowLayout
+        android:id="@+id/iv_cover_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
-        android:contentDescription="@string/img_cover"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_cover_default"
-        android:transitionName="img_cover"
+        tools:ignore="UnusedAttribute"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+        app:shadowColor="#32999999"
+        app:shadowShape="rectangle"
+        app:shadowDx="0dp"
+        app:shadowDy="2dp"
+        app:shadowRadius="6dp"
+        app:shadowSide="all">
+
+        <com.kunfei.bookshelf.widget.CoverImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/img_cover"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_cover_default"
+            android:transitionName="img_cover"
+            tools:ignore="UnusedAttribute" />
+
+    </com.lijiankun24.shadowlayout.ShadowLayout>
 
     <FrameLayout
         android:id="@+id/fl_has_new"
@@ -64,7 +79,7 @@
         android:textColor="@color/tv_text_default"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tv_author"
-        app:layout_constraintLeft_toRightOf="@+id/iv_cover"
+        app:layout_constraintLeft_toRightOf="@+id/iv_cover_bg"
         app:layout_constraintRight_toLeftOf="@id/fl_has_new"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -79,7 +94,7 @@
         android:paddingEnd="2dp"
         android:src="@drawable/ic_author"
         app:layout_constraintBottom_toBottomOf="@+id/tv_author"
-        app:layout_constraintLeft_toRightOf="@+id/iv_cover"
+        app:layout_constraintLeft_toRightOf="@+id/iv_cover_bg"
         app:layout_constraintTop_toTopOf="@+id/tv_author"
         app:tint="@color/tv_text_secondary"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -110,7 +125,7 @@
         android:paddingEnd="2dp"
         android:src="@drawable/ic_history"
         app:layout_constraintBottom_toBottomOf="@+id/tv_read"
-        app:layout_constraintLeft_toRightOf="@+id/iv_cover"
+        app:layout_constraintLeft_toRightOf="@+id/iv_cover_bg"
         app:layout_constraintTop_toTopOf="@+id/tv_read"
         app:tint="@color/tv_text_secondary"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -139,7 +154,7 @@
         android:paddingEnd="2dp"
         android:src="@drawable/ic_book_last"
         app:layout_constraintBottom_toBottomOf="@+id/tv_last"
-        app:layout_constraintLeft_toRightOf="@+id/iv_cover"
+        app:layout_constraintLeft_toRightOf="@+id/iv_cover_bg"
         app:layout_constraintTop_toTopOf="@+id/tv_last"
         app:tint="@color/tv_text_secondary"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
