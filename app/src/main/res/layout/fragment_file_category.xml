@@ -17,15 +17,15 @@
         <TextView
             android:id="@+id/tv_sd"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="6dp"
+            android:padding="8dp"
             android:layout_marginLeft="8dp"
             android:singleLine="true"
             android:textSize="13sp"
             android:text="@string/nb_file_path"
             android:textColor="@color/success"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="RtlHardcoded,UnusedAttribute" />
 
         <TextView
             android:id="@+id/file_category_tv_path"
@@ -42,11 +42,13 @@
         <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
             android:id="@+id/file_category_tv_back_last"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_margin="4dp"
             app:cornerRadius="5dp"
             android:text="上级"

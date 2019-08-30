@@ -10,7 +10,6 @@
     tools:showIn="@layout/activity_main">
 
     <com.google.android.material.appbar.AppBarLayout
-        app:elevation="0dp"
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +30,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_search"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="30dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="@color/background_card"
@@ -53,7 +52,6 @@
             android:layout_height="36dp"
             android:layout_gravity="bottom"
             app:tabGravity="fill"
-            app:tabIndicatorHeight="0.5dp"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorGravity="bottom"
             app:tabMode="fixed" />
