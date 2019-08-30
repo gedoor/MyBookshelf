@@ -51,18 +51,6 @@
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/iv_cover" />
 
-    <TextView
-        android:id="@+id/tv_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:singleLine="true"
-        android:text="@string/app_name"
-        android:textColor="@color/tv_text_default"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
     <View
         android:id="@+id/vw_select"
         android:layout_width="match_parent"

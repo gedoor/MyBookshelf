@@ -143,14 +143,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         holder.tvName.setText(bookInfoBean.getName());
         holder.tvName.setBackgroundColor(ThemeStore.backgroundColor(activity));
 
-        String author = bookInfoBean.getAuthor();
-        if (author != null && !author.isEmpty()) author = " - " + author;
-
-        if (bookShelfBean.getChapterListSize() == 0 || (bookShelfBean.getDurChapter() == 0 && bookShelfBean.getDurChapterPage() == 0)) {
-            holder.tvDesc.setText("未读" + author);
-        } else
-            holder.tvDesc.setText(String.format("%d/%d章%s", bookShelfBean.getDurChapter() + 1, bookShelfBean.getChapterListSize(), author));
-
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 Glide.with(activity).load(bookShelfBean.getBookInfoBean().getCoverUrl())
@@ -246,7 +238,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCover;
         TextView tvName;
-        TextView tvDesc;
         BadgeView bvUnread;
         RotateLoading rotateLoading;
         View vwSelect;
@@ -255,7 +246,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             super(itemView);
             ivCover = itemView.findViewById(R.id.iv_cover);
             tvName = itemView.findViewById(R.id.tv_name);
-            tvDesc = itemView.findViewById(R.id.tv_desc);
             bvUnread = itemView.findViewById(R.id.bv_unread);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
             rotateLoading.setLoadingColor(ThemeStore.accentColor(itemView.getContext()));
