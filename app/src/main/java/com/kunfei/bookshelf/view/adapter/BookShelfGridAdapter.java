@@ -176,7 +176,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             }
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
         });
@@ -186,7 +186,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             }
         });
         if (!Objects.equals(bookshelfPx, "2")) {
-            holder.itemView.setOnLongClickListener(v -> {
+            holder.ivCover.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
                     itemClickListener.onLongClick(v, index);
                 }
