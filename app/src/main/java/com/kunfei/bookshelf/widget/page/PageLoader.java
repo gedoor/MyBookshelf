@@ -51,7 +51,6 @@ public abstract class PageLoader {
     private static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
-    private static final int EXTRA_TITLE_SIZE = 1;
     private static final float MAX_SCROLL_OFFSET = 100;
     private static final int TIP_ALPHA = 180;
     // 监听器
@@ -219,9 +218,8 @@ public abstract class PageLoader {
     private void setUpTextParams() {
         // 文字大小
         mTextSize = ScreenUtils.spToPx(readBookControl.getTextSize());
-        int extTitleSize = ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
-        mTitleSize = mTextSize + extTitleSize;
-        mTextEndSize = mTextSize - extTitleSize;
+        mTitleSize = mTextSize + oneSpPx;
+        mTextEndSize = mTextSize - oneSpPx;
         // 行间距(大小为字体的一半)
         mTextInterval = (int) (mTextSize * readBookControl.getLineMultiplier() / 2);
         mTitleInterval = (int) (mTitleSize * readBookControl.getLineMultiplier() / 2);
@@ -299,8 +297,6 @@ public abstract class PageLoader {
         initPageStyle();
     }
 
-    private boolean disReSetPage = false;
-
     /**
      * 设置文字相关参数
      */
@@ -308,12 +304,7 @@ public abstract class PageLoader {
         // 设置文字相关参数
         setUpTextParams();
         initPaint();
-        disReSetPage = true;
-        try {
-            skipToChapter(mCurChapterPos, mCurPagePos);
-        } finally {
-            disReSetPage = false;
-        }
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     private void setupTextInterval() {
@@ -350,12 +341,7 @@ public abstract class PageLoader {
      * 设置内容与屏幕的间距 单位为 px
      */
     public void upMargin() {
-        disReSetPage = true;
-        try {
-            prepareDisplay(mDisplayWidth, mDisplayHeight);
-        } finally {
-            disReSetPage = false;
-        }
+        prepareDisplay(mDisplayWidth, mDisplayHeight);
     }
 
     /**
@@ -664,8 +650,7 @@ public abstract class PageLoader {
 
         if (curChapter().txtChapter == null) {
             curChapter().txtChapter = new TxtChapter(mCurChapterPos);
-            if (!disReSetPage)
-                reSetPage();
+            reSetPage();
         } else if (curChapter().txtChapter.getStatus() == TxtChapter.Status.FINISH) {
             reSetPage();
             mPageView.invalidate();
@@ -989,19 +974,7 @@ public abstract class PageLoader {
                 mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
 
                 //进行绘制
-                //canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
-                mTitlePaint.setTextAlign(Paint.Align.LEFT);
-                canvas.drawText(str, mMarginLeft, top, mTitlePaint);
-                mTitlePaint.setTextAlign(Paint.Align.CENTER);
-
-                // 画一条线
-                if (i == txtPage.getTitleLines() - 2) {
-                    float topOffset = top + ScreenUtils.dpToPx(8);
-                    float lastWidth = mTitlePaint.getStrokeWidth();
-                    mTitlePaint.setStrokeWidth(ScreenUtils.dpToPx(1));
-                    canvas.drawLine(mMarginLeft, topOffset, mDisplayWidth - mMarginRight, topOffset, mTitlePaint);
-                    mTitlePaint.setStrokeWidth(lastWidth);
-                }
+                canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
 
                 //pzl
                 float leftposition = mDisplayWidth / 2;
