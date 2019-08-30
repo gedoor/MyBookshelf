@@ -46,6 +46,7 @@ import com.kunfei.bookshelf.widget.explosion_field.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
@@ -193,6 +194,19 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
         searchView.setQueryHint(getString(R.string.search_book_key));
+
+        // 隐藏SearchView边框
+        try {
+            Class<?> argClass = searchView.getClass();
+            //--指定某个私有属性,mSearchPlate是搜索框父布局的名字
+            Field ownField = argClass.getDeclaredField("mSearchPlate");
+            //--暴力反射,只有暴力反射才能拿到私有属性
+            ownField.setAccessible(true);
+            View mView = (View) ownField.get(searchView);
+            //--设置背景
+            mView.setBackgroundResource(R.drawable.searchview_line);
+        } catch (Exception e) {}
+
         //获取到TextView的控件
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mSearchAutoComplete.setPadding(15, 0, 0, 0);
