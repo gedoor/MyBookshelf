@@ -607,6 +607,14 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         return super.onKeyDown(keyCode, keyEvent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSoftKeyboardTool != null) {
+            mSoftKeyboardTool.dismiss();
+        }
+    }
+
     private boolean back() {
         if (bookSourceBean == null) {
             bookSourceBean = new BookSourceBean();
