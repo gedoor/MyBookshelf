@@ -22,9 +22,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_list_grid"
+        android:id="@+id/menu_bookshelf_layout"
         android:icon="@drawable/ic_view_quilt"
-        android:title="@string/action_list_grid"
+        android:title="@string/bookshelf_layout"
         app:showAsAction="never" />
 
     <item
