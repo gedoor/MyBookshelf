@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
@@ -25,7 +24,6 @@ public class RefreshProgressBar extends View {
     private int speed = 1;
     private int secondFinalProgress = 0;
     private Paint paint;
-    private Handler handler;
     private Boolean isAutoLoading = false;
     private Rect bgRect = new Rect();
     private Rect secondRect = new Rect();
@@ -64,7 +62,6 @@ public class RefreshProgressBar extends View {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        handler = new Handler(Looper.getMainLooper());
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
 
