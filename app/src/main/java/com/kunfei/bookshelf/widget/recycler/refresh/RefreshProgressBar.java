@@ -27,6 +27,9 @@ public class RefreshProgressBar extends View {
     private Paint paint;
     private Handler handler;
     private Boolean isAutoLoading = false;
+    private Rect bgRect = new Rect();
+    private Rect secondRect = new Rect();
+    private RectF fontRectF = new RectF();
 
     public RefreshProgressBar(Context context) {
         this(context, null);
@@ -83,7 +86,7 @@ public class RefreshProgressBar extends View {
         super.onDraw(canvas);
 
         paint.setColor(bgColor);
-        Rect bgRect = new Rect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+        bgRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
         canvas.drawRect(bgRect, paint);
 
         if (secondDurProgress > 0 && secondMaxProgress > 0) {
@@ -96,13 +99,13 @@ public class RefreshProgressBar extends View {
             }
             paint.setColor(secondColor);
             int tempW = (int) (getMeasuredWidth() * 1.0f * (secondDur * 1.0f / secondMaxProgress));
-            Rect secondRect = new Rect(getMeasuredWidth() / 2 - tempW / 2, 0, getMeasuredWidth() / 2 + tempW / 2, getMeasuredHeight());
+            secondRect.set(getMeasuredWidth() / 2 - tempW / 2, 0, getMeasuredWidth() / 2 + tempW / 2, getMeasuredHeight());
             canvas.drawRect(secondRect, paint);
         }
 
         if (durProgress > 0 && maxProgress > 0) {
             paint.setColor(fontColor);
-            RectF fontRectF = new RectF(0, 0, getMeasuredWidth() * 1.0f * (durProgress * 1.0f / maxProgress), getMeasuredHeight());
+            fontRectF.set(0, 0, getMeasuredWidth() * 1.0f * (durProgress * 1.0f / maxProgress), getMeasuredHeight());
             canvas.drawRect(fontRectF, paint);
         }
 
