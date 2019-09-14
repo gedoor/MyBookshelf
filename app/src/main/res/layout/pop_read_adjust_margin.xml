@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -51,12 +50,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_rm_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_rm"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_rm_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_rm"
@@ -87,12 +102,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_dm_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_dm"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_dm_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_dm"
@@ -123,12 +154,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_f_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_f"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_f_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_f"
@@ -159,12 +206,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_t_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_z_t"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_t_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_z_t"
@@ -195,12 +258,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_l_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_z_l"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_l_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_z_l"
@@ -231,12 +310,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_r_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_z_r"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_r_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_z_r"
@@ -267,12 +362,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_b_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_z_b"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_z_b_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_z_b"
@@ -303,12 +414,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_t_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_t_t"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_t_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_t_t"
@@ -339,12 +466,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_l_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_t_l"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_l_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_t_l"
@@ -375,12 +518,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_r_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_t_r"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_r_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_t_r"
@@ -411,12 +570,28 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="@dimen/adjust_margin_titfs" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_b_remove"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_remove"
+                    android:tint="@color/tv_text_default" />
+
                 <com.kunfei.bookshelf.widget.views.ATESeekBar
                     android:id="@+id/hpb_mr_t_b"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/adjust_margin_barH"
                     android:layout_weight="1"
                     android:max="255" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_mr_t_b_add"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/tv_text_default" />
 
                 <TextView
                     android:id="@+id/tv_hpb_mr_t_b"
