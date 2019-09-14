@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -10,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +31,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -44,9 +42,11 @@ import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.MeUtils;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.widget.HorizontalListView;
+import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -188,15 +188,12 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
         bgImgListAdapter = new BgImgListAdapter(this);
         bgImgListAdapter.initList();
         bgImgList.setAdapter(bgImgListAdapter);
-        bgImgList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == bgImgListAdapter.getCount() - 1) {
-                    selectImage();
-                } else {
-                    bgPath = bgImgListAdapter.getItemAssetsFile(i);
-                    setAssetsBg(bgPath);
-                }
+        bgImgList.setOnItemClickListener((adapterView, view, i, l) -> {
+            if (i == 0) {
+                selectImage();
+            } else {
+                bgPath = bgImgListAdapter.getItemAssetsFile(i - 1);
+                setAssetsBg(bgPath);
             }
         });
 
@@ -218,13 +215,26 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
                 .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
                 .rationale(R.string.bg_image_per)
                 .onGranted((requestCode) -> {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, ResultSelectBg);
+                    selectImageDialog();
                     return Unit.INSTANCE;
                 })
                 .request();
+    }
+
+    private void selectImageDialog() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, ResultSelectBg);
+        } catch (Exception e) {
+            FilePicker picker = new FilePicker(this, FilePicker.FILE);
+            picker.setBackgroundColor(getResources().getColor(R.color.background));
+            picker.setTopBackgroundColor(getResources().getColor(R.color.background));
+            picker.setItemHeight(30);
+            picker.setOnFilePickListener(this::setCustomBg);
+            picker.show();
+        }
     }
 
     //设置ToolBar
@@ -289,9 +299,8 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
     /**
      * 自定义背景
      */
-    public void setCustomBg(Uri uri) {
+    public void setCustomBg(String bgPath) {
         try {
-            bgPath = FileUtils.getPath(this, uri);
             Resources resources = this.getResources();
             DisplayMetrics dm = resources.getDisplayMetrics();
             int width = dm.widthPixels;
@@ -328,14 +337,17 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ResultSelectBg) {
             if (resultCode == RESULT_OK && null != data) {
-                setCustomBg(data.getData());
+                try {
+                    bgPath = FileUtils.getPath(this, data.getData());
+                    setCustomBg(bgPath);
+                } catch (Exception ignored) {
+                }
             }
         }
     }
 
     /**
      * Callback that is invoked when a color is selected from the color picker dialog.
-     *
      * @param dialogId The dialog id used to create the dialog instance.
      * @param color    The selected color
      */
@@ -356,7 +368,6 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
 
     /**
      * Callback that is invoked when the color picker dialog was dismissed.
-     *
      * @param dialogId The dialog id used to create the dialog instance.
      */
     @Override
@@ -370,7 +381,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
         private List<String> assetsFiles;
         final BitmapFactory.Options options = new BitmapFactory.Options();
 
-        public BgImgListAdapter(Context context) {
+        BgImgListAdapter(Context context) {
             this.context = context;
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -378,20 +389,18 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
             options.inSampleSize = 4;
         }
 
-        public void initList() {
+        void initList() {
             AssetManager am = context.getAssets();
-            String[] path = null;
+            String[] path;
             try {
-                path = am.list("bg");  // ""获取所有,填入目录获取该目录下所有资源
+                path = am.list("bg");  //获取所有,填入目录获取该目录下所有资源
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
 
             assetsFiles = new ArrayList<>();
-            for(int i = 0; i < path.length; i++){
-                assetsFiles.add(path[i]);
-            }
+            Collections.addAll(assetsFiles, path);
             assetsFiles.add("");
         }
 
@@ -410,29 +419,29 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
             return position;
         }
 
-        public String getItemAssetsFile(int position) {
+        String getItemAssetsFile(int position) {
             return "bg/" + assetsFiles.get(position);
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if(convertView==null){
                 holder = new ViewHolder();
                 convertView = mInflater.inflate(R.layout.item_read_bg, null);
-                holder.mImage=(ImageView)convertView.findViewById(R.id.iv_cover);
-                holder.mTitle=(TextView)convertView.findViewById(R.id.tv_desc);
+                holder.mImage = convertView.findViewById(R.id.iv_cover);
+                holder.mTitle = convertView.findViewById(R.id.tv_desc);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder)convertView.getTag();
             }
-
-            String path = assetsFiles.get(position);
-            if (position == this.getCount() - 1) {
+            if (position == 0) {
                 holder.mTitle.setText("选择背景");
                 holder.mTitle.setTextColor(Color.parseColor("#101010"));
                 holder.mImage.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_image));
             } else {
+                String path = assetsFiles.get(position - 1);
                 holder.mTitle.setText(getFileName(path));
                 holder.mTitle.setTextColor(Color.parseColor("#909090"));
                 try {
@@ -452,11 +461,11 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
             return convertView;
         }
 
-        public String getFileName(String pathandname){
-            int start=pathandname.lastIndexOf("/");
-            int end=pathandname.lastIndexOf(".");
-            if (end < 0) end = pathandname.length();
-            return pathandname.substring(start+1,end);
+        String getFileName(String path) {
+            int start = path.lastIndexOf("/");
+            int end = path.lastIndexOf(".");
+            if (end < 0) end = path.length();
+            return path.substring(start + 1, end);
         }
 
         private static class ViewHolder {
