@@ -401,12 +401,11 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
 
             assetsFiles = new ArrayList<>();
             Collections.addAll(assetsFiles, path);
-            assetsFiles.add("");
         }
 
         @Override
         public int getCount() {
-            return assetsFiles == null ? 0 : assetsFiles.size();
+            return assetsFiles.size() + 1;
         }
 
         @Override
@@ -451,7 +450,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
                         bitmapDrawable.getBitmap().recycle();
                     }
                     //该变现实的图片
-                    Bitmap bmp = MeUtils.getFitAssetsSampleBitmap(context.getAssets(), getItemAssetsFile(position), 256, 256);
+                    Bitmap bmp = MeUtils.getFitAssetsSampleBitmap(context.getAssets(), getItemAssetsFile(position - 1), 256, 256);
                     holder.mImage.setImageBitmap(bmp);
                 } catch (Exception e) {
                     e.printStackTrace();
