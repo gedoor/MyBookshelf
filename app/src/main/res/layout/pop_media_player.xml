@@ -32,8 +32,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_cover"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="260dp"
+                android:layout_height="260dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/img_cover"
                 android:src="@drawable/img_cover_default"
