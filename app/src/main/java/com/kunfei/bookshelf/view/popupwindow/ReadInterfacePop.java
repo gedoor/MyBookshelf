@@ -18,12 +18,10 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
-import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.activity.ReadStyleActivity;
 import com.kunfei.bookshelf.widget.font.FontSelector;
-import com.kunfei.bookshelf.widget.number.NumberButton;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
 import butterknife.BindView;
@@ -79,34 +77,6 @@ public class ReadInterfacePop extends FrameLayout {
     TextView tvRowDef;
     @BindView(R.id.tvOther)
     ImageView tvOther;
-
-
-//    @BindView(R.id.nbPaddingTop)
-//    NumberButton nbPaddingTop;
-//    @BindView(R.id.nbPaddingBottom)
-//    NumberButton nbPaddingBottom;
-//    @BindView(R.id.nbPaddingLeft)
-//    NumberButton nbPaddingLeft;
-//    @BindView(R.id.nbPaddingRight)
-//    NumberButton nbPaddingRight;
-//    @BindView(R.id.nbTextSize)
-//    NumberButton nbTextSize;
-//    @BindView(R.id.nbLineSize)
-//    NumberButton nbLineSize;
-//    @BindView(R.id.nbParagraphSize)
-//    NumberButton nbParagraphSize;
-//    @BindView(R.id.fl_indent)
-//    TextView tvIndent;
-//    @BindView(R.id.nbTipPaddingTop)
-//    NumberButton nbTipPaddingTop;
-//    @BindView(R.id.nbTipPaddingBottom)
-//    NumberButton nbTipPaddingBottom;
-//    @BindView(R.id.nbTipPaddingLeft)
-//    NumberButton nbTipPaddingLeft;
-//    @BindView(R.id.nbTipPaddingRight)
-//    NumberButton nbTipPaddingRight;
-//    @BindView(R.id.nbLetterSpacing)
-//    NumberButton nbLetterSpacing;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
