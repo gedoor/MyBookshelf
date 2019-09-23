@@ -28,6 +28,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class WebDavFile {
     public final static String TAG = WebDavFile.class.getSimpleName();
     public final static String OBJECT_NOT_EXISTS_TAG = "ObjectNotFound";
