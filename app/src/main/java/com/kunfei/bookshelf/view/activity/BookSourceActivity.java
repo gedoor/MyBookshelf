@@ -396,14 +396,15 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void importBookSourceOnLine() {
-        String[] cacheUrls = ACache.get(this).getAsString("sourceUrl").split(";");
+        String cu = ACache.get(this).getAsString("sourceUrl");
+        String[] cacheUrls = cu == null ? new String[]{} : cu.split(";");
         InputDialog.builder(this)
                 .setDefaultValue("")
                 .setTitle(getString(R.string.input_book_source_url))
                 .setAdapterValues(cacheUrls)
                 .setCallback(inputText -> {
                     inputText = StringUtils.trim(inputText);
-                    List<String> urlList = Arrays.asList(cacheUrls);
+                    List<String> urlList = new ArrayList<>(Arrays.asList(cacheUrls));
                     if (!urlList.contains(inputText)) {
                         urlList.add(0, inputText);
                         ACache.get(this).put("sourceUrl", TextUtils.join(";", urlList));
