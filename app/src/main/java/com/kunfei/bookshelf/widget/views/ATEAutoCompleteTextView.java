@@ -49,4 +49,8 @@ public class ATEAutoCompleteTextView extends AppCompatAutoCompleteTextView {
 
         performFiltering(getText(), KeyEvent.KEYCODE_UNKNOWN);
     }
+
+    public void up() {
+        performFiltering(getText(), KeyEvent.KEYCODE_UNKNOWN);
+    }
 }
