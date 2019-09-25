@@ -417,7 +417,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
                     @Override
                     public void delete(String value) {
-
+                        urlList.remove(value);
+                        ACache.get(BookSourceActivity.this).put("sourceUrl", TextUtils.join(";", urlList));
                     }
                 }).show();
     }
