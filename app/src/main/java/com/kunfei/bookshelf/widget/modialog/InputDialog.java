@@ -110,10 +110,10 @@ public class InputDialog extends BaseDialog {
             tv.setText(value);
             iv.setOnClickListener(v -> {
                 remove(value);
-                etInput.up();
                 if (callback != null) {
                     callback.delete(value);
                 }
+                etInput.showDropDown();
             });
             return view;
         }

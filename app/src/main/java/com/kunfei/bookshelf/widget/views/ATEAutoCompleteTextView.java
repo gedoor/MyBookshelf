@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
@@ -47,10 +46,7 @@ public class ATEAutoCompleteTextView extends AppCompatAutoCompleteTextView {
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
-        performFiltering(getText(), KeyEvent.KEYCODE_UNKNOWN);
+        showDropDown();
     }
 
-    public void up() {
-        performFiltering(getText(), KeyEvent.KEYCODE_UNKNOWN);
-    }
 }
