@@ -178,7 +178,7 @@ public class DocumentUtil {
 
     public static boolean writeBytes(Context context, byte[] data, Uri fileUri) {
         try {
-            OutputStream out = context.getContentResolver().openOutputStream(fileUri);
+            OutputStream out = context.getContentResolver().openOutputStream(fileUri, "wt"); //Write file need open with truncate mode, the mode truncate file upon opening (to zero bytes)
             out.write(data);
             out.close();
             return true;
