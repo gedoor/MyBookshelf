@@ -130,9 +130,17 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             InputDialog.builder(this)
                     .setTitle(getString(R.string.add_book_url))
                     .setDefaultValue(shared_url)
-                    .setCallback(inputText -> {
-                        inputText = StringUtils.trim(inputText);
-                        mPresenter.addBookUrl(inputText);
+                    .setCallback(new InputDialog.Callback() {
+                        @Override
+                        public void setInputText(String inputText) {
+                            inputText = StringUtils.trim(inputText);
+                            mPresenter.addBookUrl(inputText);
+                        }
+
+                        @Override
+                        public void delete(String value) {
+
+                        }
                     }).show();
             preferences.edit()
                     .putString("shared_url", "")
@@ -425,9 +433,17 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             case R.id.action_add_url:
                 InputDialog.builder(this)
                         .setTitle(getString(R.string.add_book_url))
-                        .setCallback(inputText -> {
-                            inputText = StringUtils.trim(inputText);
-                            mPresenter.addBookUrl(inputText);
+                        .setCallback(new InputDialog.Callback() {
+                            @Override
+                            public void setInputText(String inputText) {
+                                inputText = StringUtils.trim(inputText);
+                                mPresenter.addBookUrl(inputText);
+                            }
+
+                            @Override
+                            public void delete(String value) {
+
+                            }
                         }).show();
                 break;
             case R.id.action_download_all:

@@ -92,6 +92,7 @@ import com.kunfei.bookshelf.widget.page.TxtChapter;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -1338,18 +1339,28 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setCharset() {
         final String charset = mPresenter.getBookShelf().getBookInfoBean().getCharset();
+        String[] a = new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"};
+        List<String> values = new ArrayList<>(Arrays.asList(a));
         InputDialog.builder(this)
                 .setTitle(getString(R.string.input_charset))
                 .setDefaultValue(charset)
-                .setAdapterValues(new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "UTF-16LE", "ASCII"})
-                .setCallback(inputText -> {
-                    inputText = inputText.trim();
-                    if (!Objects.equals(charset, inputText)) {
-                        mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
-                        mPresenter.saveProgress();
-                        if (mPageLoader != null) {
-                            mPageLoader.updateChapter();
+                .setAdapterValues(values)
+                .setCallback(new InputDialog.Callback() {
+                    @Override
+                    public void setInputText(String inputText) {
+                        inputText = inputText.trim();
+                        if (!Objects.equals(charset, inputText)) {
+                            mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
+                            mPresenter.saveProgress();
+                            if (mPageLoader != null) {
+                                mPageLoader.updateChapter();
+                            }
                         }
+                    }
+
+                    @Override
+                    public void delete(String value) {
+
                     }
                 }).show();
     }
