@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -42,6 +43,7 @@ public class ATEAutoCompleteTextView extends AppCompatAutoCompleteTextView {
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
