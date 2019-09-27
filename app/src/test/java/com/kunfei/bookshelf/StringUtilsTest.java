@@ -39,7 +39,7 @@ public class StringUtilsTest {
     public void escapeTestCase3() throws Exception {
         String input = "\u0006\b";
         String output;
-        String expected;
+        String expected = "%06%08";
 
         output = StringUtils.escape(input);
 
@@ -49,7 +49,7 @@ public class StringUtilsTest {
     public void escapeTestCase4() throws Exception {
         String input = "如果没";
         String output;
-        String expected;
+        String expected = "%u5982%u679c%u6ca1";
 
         output = StringUtils.escape(input);
 
