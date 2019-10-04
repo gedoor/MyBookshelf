@@ -56,7 +56,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     public final static int OPEN_FROM_APP = 1;
 
     private BookShelfBean bookShelf;
-    private BookSourceBean bookSourceBean;
     private ChangeSourceHelp changeSourceHelp;
     private List<BookChapterBean> chapterBeanList = new ArrayList<>();
 
@@ -96,9 +95,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             if (bookShelf != null && chapterBeanList.isEmpty()) {
                 chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
             }
-            if (bookShelf != null && !bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG) && bookSourceBean == null) {
-                bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
-            }
             e.onNext(bookShelf);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -126,6 +122,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
      */
     public void disableDurBookSource() {
         try {
+            BookSourceBean bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
             if (bookSourceBean != null) {
                 bookSourceBean.addGroup("禁用");
                 DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
@@ -133,16 +130,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             }
         } catch (Exception ignored) {
         }
-    }
-
-    @Override
-    public BookSourceBean getBookSource() {
-        return bookSourceBean;
-    }
-
-    @Override
-    public void upBookSource() {
-        bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
     }
 
     @Override
@@ -239,7 +226,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         chapterBeanList = value.getData2();
                         mView.changeSourceFinish(bookShelf);
                         String tag = bookShelf.getTag();
-                        upBookSource();
                         try {
                             long currentTime = System.currentTimeMillis();
                             String bookName = bookShelf.getBookInfoBean().getName();
@@ -283,7 +269,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                     bookShelf = bookShelfBean;
                     ReadBookPresenter.this.chapterBeanList = chapterBeanList;
                     mView.changeSourceFinish(bookShelf);
-                    upBookSource();
                 } else {
                     mView.changeSourceFinish(null);
                 }
@@ -405,6 +390,14 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             e.onNext(data == null ? "" : data);
             e.onComplete();
         });
+    }
+
+    @Override
+    public BookSourceBean getBookSource() {
+        if (bookShelf != null) {
+            return BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+        }
+        return null;
     }
 
     @Override

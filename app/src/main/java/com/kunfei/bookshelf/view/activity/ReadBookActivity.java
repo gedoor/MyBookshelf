@@ -100,8 +100,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
 
-import static com.kunfei.bookshelf.view.activity.SourceEditActivity.EDIT_SOURCE;
-
 
 /**
  * 阅读界面
@@ -1833,11 +1831,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         initImmersionBar();
-        if (requestCode == EDIT_SOURCE) {
-            if (resultCode == RESULT_OK) {
-                mPresenter.upBookSource();
-            }
-        }
     }
 
     @SuppressLint("DefaultLocale")
