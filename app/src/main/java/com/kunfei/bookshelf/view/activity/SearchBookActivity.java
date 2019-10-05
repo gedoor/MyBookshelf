@@ -546,6 +546,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void openBookInfo(BookInfoBean bookInfoBean) {
-
+        Intent intent = new Intent(this, BookDetailActivity.class);
+        intent.putExtra("noteUrl", bookInfoBean.getNoteUrl());
+        startActivity(intent);
     }
 }
