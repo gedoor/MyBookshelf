@@ -31,9 +31,11 @@ import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
@@ -43,6 +45,7 @@ import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
+import com.kunfei.bookshelf.view.adapter.SearchBookshelfAdapter;
 import com.kunfei.bookshelf.widget.explosion_field.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
@@ -84,6 +87,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private boolean showHistory;
     private String searchKey;
     private Menu menu;
+    private SearchBookshelfAdapter searchBookshelfAdapter;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -112,6 +116,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     protected void initData() {
         mExplosionField = ExplosionField.attach2Window(this);
         searchBookAdapter = new SearchBookAdapter(this);
+        searchBookshelfAdapter = new SearchBookshelfAdapter();
     }
 
     @SuppressLint("InflateParams")
@@ -149,6 +154,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             fabSearchStop.hide();
             mPresenter.stopSearch();
         });
+        rvBookshelf.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        rvBookshelf.setAdapter(searchBookshelfAdapter);
     }
 
     //设置ToolBar
@@ -232,6 +239,20 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText != null) {
+                    List<BookInfoBean> beans = BookshelfHelp.searchBookInfo(newText);
+                    searchBookshelfAdapter.setItems(beans);
+                    if (beans.size() > 0) {
+                        tvBookshelf.setVisibility(View.VISIBLE);
+                        rvBookshelf.setVisibility(View.VISIBLE);
+                    } else {
+                        tvBookshelf.setVisibility(View.INVISIBLE);
+                        rvBookshelf.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    tvBookshelf.setVisibility(View.INVISIBLE);
+                    rvBookshelf.setVisibility(View.INVISIBLE);
+                }
                 if (!newText.toLowerCase().startsWith("set")) {
                     mPresenter.querySearchHistory(newText);
                 } else {
