@@ -56,7 +56,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
+public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter>
+        implements SearchBookContract.View, SearchBookshelfAdapter.CallBack {
     private final int requestSource = 14;
 
     @BindView(R.id.searchView)
@@ -116,7 +117,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     protected void initData() {
         mExplosionField = ExplosionField.attach2Window(this);
         searchBookAdapter = new SearchBookAdapter(this);
-        searchBookshelfAdapter = new SearchBookshelfAdapter();
+        searchBookshelfAdapter = new SearchBookshelfAdapter(this);
     }
 
     @SuppressLint("InflateParams")
@@ -541,5 +542,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     public void finish() {
         super.finish();
         overridePendingTransition(0, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void openBookInfo(BookInfoBean bookInfoBean) {
+
     }
 }

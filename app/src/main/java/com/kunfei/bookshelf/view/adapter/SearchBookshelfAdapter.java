@@ -17,6 +17,11 @@ import java.util.List;
 public class SearchBookshelfAdapter extends RecyclerView.Adapter<SearchBookshelfAdapter.MyViewHolder> {
 
     private List<BookInfoBean> beans = new ArrayList<>();
+    private CallBack callBack;
+
+    public SearchBookshelfAdapter(CallBack callBack) {
+        this.callBack = callBack;
+    }
 
     public void setItems(List<BookInfoBean> beans) {
         this.beans.clear();
@@ -33,6 +38,7 @@ public class SearchBookshelfAdapter extends RecyclerView.Adapter<SearchBookshelf
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView.setText(beans.get(position).getName());
+        holder.itemView.setOnClickListener(v -> callBack.openBookInfo(beans.get(position)));
     }
 
     @Override
@@ -49,5 +55,8 @@ public class SearchBookshelfAdapter extends RecyclerView.Adapter<SearchBookshelf
         }
     }
 
+    public interface CallBack {
+        void openBookInfo(BookInfoBean bookInfoBean);
+    }
 }
 
