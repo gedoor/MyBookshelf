@@ -246,12 +246,12 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                         tvBookshelf.setVisibility(View.VISIBLE);
                         rvBookshelf.setVisibility(View.VISIBLE);
                     } else {
-                        tvBookshelf.setVisibility(View.INVISIBLE);
-                        rvBookshelf.setVisibility(View.INVISIBLE);
+                        tvBookshelf.setVisibility(View.GONE);
+                        rvBookshelf.setVisibility(View.GONE);
                     }
                 } else {
-                    tvBookshelf.setVisibility(View.INVISIBLE);
-                    rvBookshelf.setVisibility(View.INVISIBLE);
+                    tvBookshelf.setVisibility(View.GONE);
+                    rvBookshelf.setVisibility(View.GONE);
                 }
                 if (!newText.toLowerCase().startsWith("set")) {
                     mPresenter.querySearchHistory(newText);
