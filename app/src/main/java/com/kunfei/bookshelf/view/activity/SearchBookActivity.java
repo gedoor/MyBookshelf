@@ -22,6 +22,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,6 +72,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     RefreshRecyclerView rfRvSearchBooks;
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
+    @BindView(R.id.tv_bookshelf)
+    TextView tvBookshelf;
+    @BindView(R.id.rv_bookshelf)
+    RecyclerView rvBookshelf;
 
     private View refreshErrorView;
     private ExplosionField mExplosionField;
