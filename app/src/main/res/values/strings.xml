@@ -356,8 +356,6 @@
     <string name="debug_source">调试书源</string>
     <string name="import_by_qr_code">二维码导入</string>
     <string name="scan_qr_code">扫描二维码</string>
-    <string name="at_char">\@</string>
-    <string name="and_char"><![CDATA[&]]></string>
     <string name="click_on_selected_show_menu">选中时点击可弹出菜单</string>
     <string name="theme">主题</string>
     <string name="default_theme">默认主题</string>
@@ -443,8 +441,6 @@
     <string name="clear_find_cache">清空发现缓存</string>
     <string name="edit_find">编辑发现</string>
     <string name="change_icon_summary">切换软件显示在桌面的图标</string>
-    <string name="dsm_start"><![CDATA[<]]></string>
-    <string name="dsm_end"><![CDATA[>]]></string>
     <string name="show_enabled">显示勾选</string>
     <string name="to_lh">扩展到刘海</string>
 
