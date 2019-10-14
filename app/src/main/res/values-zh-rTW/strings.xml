@@ -356,7 +356,6 @@
     <string name="debug_source">調試書源</string>
     <string name="import_by_qr_code">二維碼導入</string>
     <string name="scan_qr_code">掃描二維碼</string>
-    <string name="at_char">\@</string>
     <string name="click_on_selected_show_menu">選中時點擊可彈出菜單</string>
     <string name="theme">主題</string>
     <string name="default_theme">默認主題</string>
