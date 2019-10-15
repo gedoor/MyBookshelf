@@ -49,7 +49,7 @@
     <string name="download_offline_s">下載選擇的章節到本地</string>
     <string name="change_origin">換源</string>
     <string name="about_description">\u3000\u3000這是一款開源的閱讀軟件，你可以fork我們的代碼自己編譯APK。</string>
-    <string name="version_name">版本％s</string>
+    <string name="version_name">Version %s</string>
     <string name="pt_auto_refresh">自動刷新</string>
     <string name="ps_auto_refresh">打開軟件時自動更新書籍</string>
     <string name="pt_auto_download">自動下載最新章節</string>
