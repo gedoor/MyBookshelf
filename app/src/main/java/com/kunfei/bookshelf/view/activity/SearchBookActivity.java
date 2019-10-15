@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BitIntentDataManager;
@@ -155,7 +156,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             fabSearchStop.hide();
             mPresenter.stopSearch();
         });
-        rvBookshelf.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        rvBookshelf.setLayoutManager(new FlexboxLayoutManager(this));
         rvBookshelf.setAdapter(searchBookshelfAdapter);
     }
 
