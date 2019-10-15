@@ -86,49 +86,69 @@ public class DataRestore {
     }
 
     private void restoreBookShelf(String file) {
-        String json = DocumentHelper.readString("myBookShelf.json", file);
-        if (json == null) return;
-        List<BookShelfBean> bookShelfList = GsonUtils.parseJArray(json, BookShelfBean.class);
-        if (bookShelfList == null) return;
-        for (BookShelfBean bookshelf : bookShelfList) {
-            if (bookshelf.getNoteUrl() != null) {
-                DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+        try {
+            String json = DocumentHelper.readString("myBookShelf.json", file);
+            if (json == null) return;
+            List<BookShelfBean> bookShelfList = GsonUtils.parseJArray(json, BookShelfBean.class);
+            if (bookShelfList == null) return;
+            for (BookShelfBean bookshelf : bookShelfList) {
+                if (bookshelf.getNoteUrl() != null) {
+                    DbHelper.getDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+                }
+                if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
+                    DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                }
             }
-            if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
-                DbHelper.getDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void restoreBookSource(String file) {
-        String json = DocumentHelper.readString("myBookSource.json", file);
-        if (json == null) return;
-        List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(json, BookSourceBean.class);
-        if (bookSourceBeans == null) return;
-        BookSourceManager.addBookSource(bookSourceBeans);
+        try {
+            String json = DocumentHelper.readString("myBookSource.json", file);
+            if (json == null) return;
+            List<BookSourceBean> bookSourceBeans = GsonUtils.parseJArray(json, BookSourceBean.class);
+            if (bookSourceBeans == null) return;
+            BookSourceManager.addBookSource(bookSourceBeans);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void restoreSearchHistory(String file) {
-        String json = DocumentHelper.readString("myBookSearchHistory.json", file);
-        if (json == null) return;
-        List<SearchHistoryBean> searchHistoryBeans = GsonUtils.parseJArray(json, SearchHistoryBean.class);
-        if (searchHistoryBeans == null) return;
-        DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
+        try {
+            String json = DocumentHelper.readString("myBookSearchHistory.json", file);
+            if (json == null) return;
+            List<SearchHistoryBean> searchHistoryBeans = GsonUtils.parseJArray(json, SearchHistoryBean.class);
+            if (searchHistoryBeans == null) return;
+            DbHelper.getDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void restoreReplaceRule(String file) {
-        String json = DocumentHelper.readString("myBookReplaceRule.json", file);
-        if (json == null) return;
-        List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
-        if (replaceRuleBeans == null) return;
-        ReplaceRuleManager.addDataS(replaceRuleBeans);
+        try {
+            String json = DocumentHelper.readString("myBookReplaceRule.json", file);
+            if (json == null) return;
+            List<ReplaceRuleBean> replaceRuleBeans = GsonUtils.parseJArray(json, ReplaceRuleBean.class);
+            if (replaceRuleBeans == null) return;
+            ReplaceRuleManager.addDataS(replaceRuleBeans);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void restoreTxtChapterRule(String file) {
-        String json = DocumentHelper.readString("myTxtChapterRule.json", file);
-        if (json == null) return;
-        List<TxtChapterRuleBean> ruleBeanList = GsonUtils.parseJArray(json, TxtChapterRuleBean.class);
-        if (ruleBeanList == null) return;
-        TxtChapterRuleManager.save(ruleBeanList);
+        try {
+            String json = DocumentHelper.readString("myTxtChapterRule.json", file);
+            if (json == null) return;
+            List<TxtChapterRuleBean> ruleBeanList = GsonUtils.parseJArray(json, TxtChapterRuleBean.class);
+            if (ruleBeanList == null) return;
+            TxtChapterRuleManager.save(ruleBeanList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
