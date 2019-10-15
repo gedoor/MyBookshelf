@@ -7,7 +7,7 @@ public class SavedSource {
 
     private String bookName;
     private long saveTime;
-    private BookSourceBean bookSource;
+    private String sourceUrl;
 
     private SavedSource() {
         this.bookName = "";
@@ -31,10 +31,15 @@ public class SavedSource {
     }
 
     public BookSourceBean getBookSource() {
-        return bookSource;
+        if (sourceUrl == null) {
+            return null;
+        }
+        return BookSourceManager.getBookSourceByUrl(sourceUrl);
     }
 
     public void setBookSource(BookSourceBean bookSource) {
-        this.bookSource = bookSource;
+        if (bookSource != null) {
+            this.sourceUrl = bookSource.getBookSourceUrl();
+        }
     }
 }
