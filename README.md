@@ -12,6 +12,7 @@
 - atbest https://github.com/atbest
 - Antecer https://github.com/Antecer
 - mabDc https://github.com/mabDc
+- 繁体-翻译者:Cello琴弦之間
 
 **其它贡献人员**
 - 图标绘制 群管理员-新奥尔良烤鲟魚堡
