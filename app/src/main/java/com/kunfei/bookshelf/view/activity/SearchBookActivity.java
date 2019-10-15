@@ -449,7 +449,12 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 tagView.setText(searchHistoryBean.getContent());
                 tagView.setOnClickListener(view -> {
                     SearchHistoryBean historyBean = (SearchHistoryBean) view.getTag();
-                    searchView.setQuery(historyBean.getContent(), true);
+                    List<BookInfoBean> beans = BookshelfHelp.searchBookInfo(historyBean.getContent());
+                    if (beans.isEmpty()) {
+                        searchView.setQuery(historyBean.getContent(), true);
+                    } else {
+                        searchView.setQuery(historyBean.getContent(), false);
+                    }
                 });
                 tagView.setOnLongClickListener(view -> {
                     SearchHistoryBean historyBean = (SearchHistoryBean) view.getTag();
