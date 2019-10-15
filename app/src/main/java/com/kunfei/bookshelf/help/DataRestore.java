@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
@@ -34,55 +35,13 @@ public class DataRestore {
 
     public Boolean run() {
         String dirPath = FileUtils.getSdCardPath() + File.separator + "YueDu";
-        restoreConfig(dirPath);
         restoreBookSource(dirPath);
         restoreBookShelf(dirPath);
         restoreSearchHistory(dirPath);
         restoreReplaceRule(dirPath);
         restoreTxtChapterRule(dirPath);
+        restoreConfig(dirPath);
         return true;
-    }
-
-    private void restoreConfig(String dirPath) {
-        Map<String, ?> entries = null;
-        try (FileInputStream ins = new FileInputStream(dirPath + File.separator + "config.xml")) {
-            entries = XmlUtils.readMapXml(ins);
-        } catch (Exception ignored) {
-        }
-        if (entries == null || entries.isEmpty()) return;
-        long donateHb = MApplication.getConfigPreferences().getLong("DonateHb", 0);
-        donateHb = donateHb > System.currentTimeMillis() ? 0 : donateHb;
-        SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
-        editor.clear();
-        for (Map.Entry<String, ?> entry : entries.entrySet()) {
-            Object v = entry.getValue();
-            String key = entry.getKey();
-            String type = v.getClass().getSimpleName();
-
-            switch (type) {
-                case "Integer":
-                    editor.putInt(key, (Integer) v);
-                    break;
-                case "Boolean":
-                    editor.putBoolean(key, (Boolean) v);
-                    break;
-                case "String":
-                    editor.putString(key, (String) v);
-                    break;
-                case "Float":
-                    editor.putFloat(key, (Float) v);
-                    break;
-                case "Long":
-                    editor.putLong(key, (Long) v);
-                    break;
-            }
-        }
-        editor.putLong("DonateHb", donateHb);
-        editor.putInt("versionCode", MApplication.getVersionCode());
-        editor.apply();
-        ReadBookControl.getInstance().updateReaderSettings();
-        MApplication.getInstance().upThemeStore();
-        MApplication.getInstance().initNightTheme();
     }
 
     private void restoreBookShelf(String file) {
@@ -151,4 +110,52 @@ public class DataRestore {
             e.printStackTrace();
         }
     }
+
+    private void restoreConfig(String dirPath) {
+        try {
+            Map<String, ?> entries = null;
+            try (FileInputStream ins = new FileInputStream(dirPath + File.separator + "config.xml")) {
+                entries = XmlUtils.readMapXml(ins);
+            } catch (Exception ignored) {
+            }
+            if (entries == null || entries.isEmpty()) return;
+            long donateHb = MApplication.getConfigPreferences().getLong("DonateHb", 0);
+            donateHb = donateHb > System.currentTimeMillis() ? 0 : donateHb;
+            SharedPreferences.Editor editor = MApplication.getConfigPreferences().edit();
+            editor.clear();
+            for (Map.Entry<String, ?> entry : entries.entrySet()) {
+                Object v = entry.getValue();
+                String key = entry.getKey();
+                String type = v.getClass().getSimpleName();
+
+                switch (type) {
+                    case "Integer":
+                        editor.putInt(key, (Integer) v);
+                        break;
+                    case "Boolean":
+                        editor.putBoolean(key, (Boolean) v);
+                        break;
+                    case "String":
+                        editor.putString(key, (String) v);
+                        break;
+                    case "Float":
+                        editor.putFloat(key, (Float) v);
+                        break;
+                    case "Long":
+                        editor.putLong(key, (Long) v);
+                        break;
+                }
+            }
+            editor.putLong("DonateHb", donateHb);
+            editor.putInt("versionCode", MApplication.getVersionCode());
+            editor.apply();
+            LauncherIcon.ChangeIcon(MApplication.getConfigPreferences().getString("launcher_icon", MApplication.getInstance().getString(R.string.icon_main)));
+            ReadBookControl.getInstance().updateReaderSettings();
+            MApplication.getInstance().upThemeStore();
+            MApplication.getInstance().initNightTheme();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
