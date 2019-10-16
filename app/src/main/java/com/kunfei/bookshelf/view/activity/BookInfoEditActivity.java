@@ -30,6 +30,7 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.widget.modialog.ChangeCoverDialog;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -152,7 +153,7 @@ public class BookInfoEditActivity extends MBaseActivity {
         super.bindEvent();
         tvSelectCover.setOnClickListener(view -> selectCover());
         tvChangeCover.setOnClickListener(view ->
-                ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
+                ChangeCoverDialog.builder(BookInfoEditActivity.this, book)
                         .setCallback(searchBookBean -> {
                             tieCoverUrl.setText(searchBookBean.getCoverUrl());
                             book.setCustomCoverPath(tieCoverUrl.getText().toString());
