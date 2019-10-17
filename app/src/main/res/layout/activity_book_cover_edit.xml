@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/ll_content"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context="com.kunfei.bookshelf.view.activity.BookCoverEditActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?attr/actionBarStyle">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView
+        android:id="@+id/rf_rv_change_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:bg_color="#00000000"
+        app:font_color="#767676"
+        app:second_color="#c1c1c1"
+        app:second_max_progress="80dp"
+        app:speed="2dp" />
+
+</LinearLayout>
