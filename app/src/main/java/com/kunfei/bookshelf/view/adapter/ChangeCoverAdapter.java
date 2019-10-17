@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +16,6 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by GKF on 2017/12/22.
@@ -87,14 +84,17 @@ public class ChangeCoverAdapter extends RefreshRecyclerViewAdapter {
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivCover;
+        TextView tvSourceName;
 
         MyViewHolder(View itemView) {
             super(itemView);
             ivCover = itemView.findViewById(R.id.iv_cover);
+            tvSourceName = itemView.findViewById(R.id.tv_source_name);
         }
 
         public void bind(SearchBookBean searchBookBean, CallBack callBack, RecyclerView.ViewHolder holder) {
             Glide.with(holder.itemView.getContext()).load(searchBookBean.getCoverUrl()).into(ivCover);
+            tvSourceName.setText(searchBookBean.getOrigin());
             ivCover.setOnClickListener(view -> {
                 if (callBack != null) {
                     callBack.changeTo(searchBookBean);
