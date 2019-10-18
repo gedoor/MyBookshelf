@@ -155,10 +155,6 @@ public class RefreshRecyclerView extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     private void bindEvent() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
