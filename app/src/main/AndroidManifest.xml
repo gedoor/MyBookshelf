@@ -28,7 +28,6 @@
         android:theme="@style/CAppTheme"
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:replace="android:theme">
-        <activity android:name=".view.activity.BookCoverEditActivity"></activity>
         <activity
             android:name=".view.activity.WelcomeActivity"
             android:theme="@style/CAppWelcomeTheme">
@@ -182,6 +181,10 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.TxtChapterRuleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".view.activity.BookCoverEditActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
