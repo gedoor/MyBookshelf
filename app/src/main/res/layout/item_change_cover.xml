@@ -8,7 +8,7 @@
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:gravity="center_vertical"
+    android:gravity="center_horizontal"
     tools:ignore="UnusedAttribute"
     android:layout_margin="10dp">
 
@@ -23,6 +23,6 @@
         android:id="@+id/tv_source_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true" />
+        android:singleLine="true"/>
 
 </LinearLayout>
