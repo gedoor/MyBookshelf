@@ -1,16 +1,16 @@
 package com.kunfei.bookshelf.view.activity;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -124,7 +124,10 @@ public class BookCoverEditActivity extends MBaseActivity {
 
             public void bind(String url,String origin, RecyclerView.ViewHolder holder) {
                 tvSourceName.setText(origin);
-                Glide.with(holder.itemView.getContext()).load(url).into(ivCover);
+                Glide.with(holder.itemView.getContext())
+                        .load(url)
+                        .placeholder(R.drawable.img_cover_default)
+                        .into(ivCover);
                 ivCover.setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.putExtra("url", url);
