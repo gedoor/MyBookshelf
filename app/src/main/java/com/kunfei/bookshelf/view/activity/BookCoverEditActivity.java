@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -53,6 +54,19 @@ public class BookCoverEditActivity extends MBaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("封面换源");
         }
+    }
+
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
