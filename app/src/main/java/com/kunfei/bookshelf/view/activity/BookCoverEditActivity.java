@@ -12,14 +12,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
+import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
@@ -34,9 +37,14 @@ public class BookCoverEditActivity extends MBaseActivity {
 
     @BindView(R.id.rf_rv_change_cover)
     RefreshRecyclerView changeCover;
-
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    private SearchBookModel searchBookModel;
+    private String name;
+    private String author;
 
     @Override
     protected void onCreateActivity() {
@@ -71,8 +79,8 @@ public class BookCoverEditActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        String name = getIntent().getStringExtra("name");
-        String author = getIntent().getStringExtra("author");
+        name = getIntent().getStringExtra("name");
+        author = getIntent().getStringExtra("author");
         List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                 .where(SearchBookBeanDao.Properties.Name.eq(name), SearchBookBeanDao.Properties.Author.eq(author), SearchBookBeanDao.Properties.CoverUrl.isNotNull())
                 .build().list();
@@ -87,6 +95,63 @@ public class BookCoverEditActivity extends MBaseActivity {
         }
         ChangeCoverAdapter changeCoverAdapter = new ChangeCoverAdapter(urls, origins);
         changeCover.setRefreshRecyclerViewAdapter(changeCoverAdapter, new GridLayoutManager(this,3));
+        SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
+            @Override
+            public void refreshSearchBook() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+
+            @Override
+            public void refreshFinish(Boolean value) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void loadMoreFinish(Boolean value) {
+
+            }
+
+            @Override
+            public void loadMoreSearchBook(List<SearchBookBean> value) {
+                if (!value.isEmpty()) {
+                    SearchBookBean bookBean = value.get(0);
+                    if (bookBean.getCoverUrl() != null && !urls.contains(bookBean.getCoverUrl())) {
+                        urls.add(bookBean.getCoverUrl());
+                        origins.add(bookBean.getOrigin());
+                        changeCoverAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void searchBookError(Throwable throwable) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        };
+        searchBookModel = new SearchBookModel(searchListener);
+        swipeRefreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            long time = System.currentTimeMillis();
+            searchBookModel.setSearchTime(time);
+            searchBookModel.search(name, time, new ArrayList<>(), false);
+        });
+        if (urls.isEmpty()) {
+            swipeRefreshLayout.setRefreshing(true);
+            long time = System.currentTimeMillis();
+            searchBookModel.setSearchTime(time);
+            searchBookModel.search(name, time, new ArrayList<>(), false);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        searchBookModel.onDestroy();
     }
 
     @Override
@@ -140,7 +205,7 @@ public class BookCoverEditActivity extends MBaseActivity {
                 tvSourceName.setText(origin);
                 Glide.with(holder.itemView.getContext())
                         .load(url)
-                        .placeholder(R.drawable.img_cover_default)
+                        .error(R.drawable.img_cover_default)
                         .into(ivCover);
                 ivCover.setOnClickListener(view -> {
                     Intent intent = new Intent();

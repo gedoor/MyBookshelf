@@ -25,14 +25,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView
-        android:id="@+id/rf_rv_change_cover"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:bg_color="#00000000"
-        app:font_color="#767676"
-        app:second_color="#c1c1c1"
-        app:second_max_progress="80dp"
-        app:speed="2dp" />
+        android:layout_height="match_parent">
+
+        <com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView
+            android:id="@+id/rf_rv_change_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:bg_color="#00000000"
+            app:font_color="#767676"
+            app:second_color="#c1c1c1"
+            app:second_max_progress="80dp"
+            app:speed="2dp" />
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
