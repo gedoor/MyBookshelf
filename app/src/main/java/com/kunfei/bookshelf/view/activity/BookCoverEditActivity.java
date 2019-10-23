@@ -120,7 +120,7 @@ public class BookCoverEditActivity extends MBaseActivity {
                             && !urls.contains(bookBean.getCoverUrl())) {
                         urls.add(bookBean.getCoverUrl());
                         origins.add(bookBean.getOrigin());
-                        changeCoverAdapter.notifyDataSetChanged();
+                        changeCoverAdapter.notifyItemChanged(urls.size() - 1);
                     }
                 }
             }
@@ -165,7 +165,7 @@ public class BookCoverEditActivity extends MBaseActivity {
         private List<String> urls;
         private List<String> origins;
 
-        public ChangeCoverAdapter(List<String> urls, List<String> origins) {
+        ChangeCoverAdapter(List<String> urls, List<String> origins) {
             super(false);
             this.urls = urls;
             this.origins = origins;
