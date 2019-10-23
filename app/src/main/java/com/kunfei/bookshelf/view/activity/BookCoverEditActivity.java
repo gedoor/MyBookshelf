@@ -86,15 +86,15 @@ public class BookCoverEditActivity extends MBaseActivity {
                 .build().list();
         List<String> urls = new ArrayList<>();
         List<String> origins = new ArrayList<>();
-        for (SearchBookBean searchBook : searchBookBeans){
+        for (SearchBookBean searchBook : searchBookBeans) {
             String url = searchBook.getCoverUrl();
-            if(url!= null && !urls.contains(url)){
+            if (url != null && !urls.contains(url)) {
                 urls.add(url);
                 origins.add(searchBook.getOrigin());
             }
         }
         ChangeCoverAdapter changeCoverAdapter = new ChangeCoverAdapter(urls, origins);
-        changeCover.setRefreshRecyclerViewAdapter(changeCoverAdapter, new GridLayoutManager(this,3));
+        changeCover.setRefreshRecyclerViewAdapter(changeCoverAdapter, new GridLayoutManager(this, 3));
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
@@ -115,7 +115,9 @@ public class BookCoverEditActivity extends MBaseActivity {
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 if (!value.isEmpty()) {
                     SearchBookBean bookBean = value.get(0);
-                    if (bookBean.getCoverUrl() != null && !urls.contains(bookBean.getCoverUrl())) {
+                    if (bookBean.getName().equals(name)
+                            && bookBean.getCoverUrl() != null
+                            && !urls.contains(bookBean.getCoverUrl())) {
                         urls.add(bookBean.getCoverUrl());
                         origins.add(bookBean.getOrigin());
                         changeCoverAdapter.notifyDataSetChanged();
@@ -163,7 +165,7 @@ public class BookCoverEditActivity extends MBaseActivity {
         private List<String> urls;
         private List<String> origins;
 
-        public ChangeCoverAdapter(List<String> urls,List<String> origins) {
+        public ChangeCoverAdapter(List<String> urls, List<String> origins) {
             super(false);
             this.urls = urls;
             this.origins = origins;
@@ -177,7 +179,7 @@ public class BookCoverEditActivity extends MBaseActivity {
         @Override
         public void onBindIViewHolder(RecyclerView.ViewHolder holder, int position) {
             MyViewHolder myViewHolder = (MyViewHolder) holder;
-            myViewHolder.bind(urls.get(position),origins.get(position), holder);
+            myViewHolder.bind(urls.get(position), origins.get(position), holder);
         }
 
         @Override
@@ -201,7 +203,7 @@ public class BookCoverEditActivity extends MBaseActivity {
                 tvSourceName = itemView.findViewById(R.id.tv_source_name);
             }
 
-            public void bind(String url,String origin, RecyclerView.ViewHolder holder) {
+            public void bind(String url, String origin, RecyclerView.ViewHolder holder) {
                 tvSourceName.setText(origin);
                 Glide.with(holder.itemView.getContext())
                         .load(url)
