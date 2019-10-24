@@ -82,7 +82,7 @@ public class FilePicker extends ConfirmPopup<LinearLayout> implements FileAdapte
         emptyView = rootLayout.findViewById(R.id.tv_empty);
 
         RecyclerView pathView = rootLayout.findViewById(R.id.rv_path);
-        pathView.setLayoutManager(new LinearLayoutManager(activity, LinearLayout.HORIZONTAL, false));
+        pathView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false));
         pathView.setAdapter(pathAdapter);
 
         return rootLayout;
