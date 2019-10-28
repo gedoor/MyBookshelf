@@ -38,7 +38,7 @@ public class EncodeConverter extends Converter.Factory {
     public Converter<ResponseBody, String> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         return value -> {
             if (!TextUtils.isEmpty(encode)) {
-                return new String((value.bytes()), encode);
+                return UTF8BOMFighter.removeUTF8BOM(new String((value.bytes()), encode));
             }
             String charsetStr;
             MediaType mediaType = value.contentType();
@@ -49,13 +49,13 @@ public class EncodeConverter extends Converter.Factory {
                 if (charset != null) {
                     charsetStr = charset.displayName();
                     if (!isEmpty(charsetStr)) {
-                        return new String(responseBytes, Charset.forName(charsetStr));
+                        return UTF8BOMFighter.removeUTF8BOM(new String(responseBytes, Charset.forName(charsetStr)));
                     }
                 }
             }
             //根据内容判断
             charsetStr = EncodingDetect.getEncodeInHtml(responseBytes);
-            return new String(responseBytes, Charset.forName(charsetStr));
+            return UTF8BOMFighter.removeUTF8BOM(new String(responseBytes, Charset.forName(charsetStr)));
         };
     }
 }
