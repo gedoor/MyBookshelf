@@ -1,8 +1,10 @@
 package com.kunfei.bookshelf.widget.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
@@ -34,5 +36,19 @@ public class ATEAutoCompleteTextView extends AppCompatAutoCompleteTextView {
                     .setDefaultColor(ThemeStore.textColorPrimary(context))
                     .create());
         }
+    }
+
+    @Override
+    public boolean enoughToFilter() {
+        return true;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            showDropDown();
+        }
+        return super.onTouchEvent(event);
     }
 }

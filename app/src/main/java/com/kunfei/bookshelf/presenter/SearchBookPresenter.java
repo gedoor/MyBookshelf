@@ -11,8 +11,10 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -90,7 +92,16 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(onSearchListener);
+        if (MApplication.SEARCH_GROUP != null) {
+            List<BookSourceBean> sourceBeanList = BookSourceManager.getEnableSourceByGroup(MApplication.SEARCH_GROUP);
+            if (sourceBeanList.size() > 0) {
+                searchBookModel = new SearchBookModel(onSearchListener, sourceBeanList);
+            } else {
+                searchBookModel = new SearchBookModel(onSearchListener);
+            }
+        } else {
+            searchBookModel = new SearchBookModel(onSearchListener);
+        }
     }
 
     /**

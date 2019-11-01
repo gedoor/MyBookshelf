@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="bookshelf_layout">
+        <item>@string/layout_list</item>
+        <item>@string/layout_grid3</item>
+        <item>@string/layout_grid4</item>
+    </string-array>
+
     <string-array name="indent">
         <item>@string/indent_0</item>
         <item>@string/indent_1</item>

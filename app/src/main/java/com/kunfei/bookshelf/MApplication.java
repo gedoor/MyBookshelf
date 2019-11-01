@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf;
 
-import android.Manifest;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -35,10 +34,9 @@ public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
     public final static String channelIdWeb = "channel_web";
-    public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    public final static int RESULT__PERMS = 263;
     public static String downloadPath;
     public static boolean isEInkMode;
+    public static String SEARCH_GROUP = null;
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;

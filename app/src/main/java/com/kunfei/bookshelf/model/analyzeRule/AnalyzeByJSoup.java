@@ -383,8 +383,9 @@ public class AnalyzeByJSoup {
                 case "text":
                     for (Element element : elements) {
                         String text = element.text();
-                        textS.add(text);
+                        cText.add(text);
                     }
+                    textS.add(TextUtils.join("\n", cText));
                     break;
                 case "textNodes":
                     for (Element element : elements) {

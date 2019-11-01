@@ -92,7 +92,5 @@ public interface ReadBookContract {
         void disableDurBookSource();
 
         BookSourceBean getBookSource();
-
-        void upBookSource();
     }
 }

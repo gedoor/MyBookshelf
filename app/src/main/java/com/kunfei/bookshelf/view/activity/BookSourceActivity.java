@@ -43,6 +43,7 @@ import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -207,14 +208,24 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     public void refreshBookSource() {
         if (isSearch) {
-            String term = "%" + searchView.getQuery() + "%";
-            List<BookSourceBean> sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
-                            BookSourceBeanDao.Properties.BookSourceGroup.like(term),
-                            BookSourceBeanDao.Properties.BookSourceUrl.like(term))
-                    .orderRaw(BookSourceManager.getBookSourceSort())
-                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                    .list();
+            List<BookSourceBean> sourceBeanList;
+            if (searchView.getQuery().toString().equals("enabled")) {
+                sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .where(BookSourceBeanDao.Properties.Enable.eq(1))
+                        .orderRaw(BookSourceManager.getBookSourceSort())
+                        .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                        .list();
+            } else {
+                String term = "%" + searchView.getQuery() + "%";
+                sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
+                                BookSourceBeanDao.Properties.BookSourceGroup.like(term),
+                                BookSourceBeanDao.Properties.BookSourceUrl.like(term))
+                        .orderRaw(BookSourceManager.getBookSourceSort())
+                        .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                        .list();
+            }
+
             adapter.resetDataS(sourceBeanList);
         } else {
             adapter.resetDataS(BookSourceManager.getAllBookSource());
@@ -299,6 +310,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.sort_pin_yin:
                 upSourceSort(2);
                 break;
+            case R.id.show_enabled:
+                searchView.setQuery("enabled", false);
+                break;
             case R.id.action_share_wifi:
                 ShareService.startThis(this, adapter.getSelectDataList());
                 break;
@@ -382,15 +396,30 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void importBookSourceOnLine() {
-        String cacheUrl = ACache.get(this).getAsString("sourceUrl");
+        String cu = ACache.get(this).getAsString("sourceUrl");
+        String[] cacheUrls = cu == null ? new String[]{} : cu.split(";");
+        List<String> urlList = new ArrayList<>(Arrays.asList(cacheUrls));
         InputDialog.builder(this)
-                .setDefaultValue(cacheUrl)
+                .setDefaultValue("")
                 .setTitle(getString(R.string.input_book_source_url))
-                .setAdapterValues(new String[]{cacheUrl})
-                .setCallback(inputText -> {
-                    inputText = StringUtils.trim(inputText);
-                    ACache.get(this).put("sourceUrl", inputText);
-                    mPresenter.importBookSource(inputText);
+                .setShowDel(true)
+                .setAdapterValues(urlList)
+                .setCallback(new InputDialog.Callback() {
+                    @Override
+                    public void setInputText(String inputText) {
+                        inputText = StringUtils.trim(inputText);
+                        if (!urlList.contains(inputText)) {
+                            urlList.add(0, inputText);
+                            ACache.get(BookSourceActivity.this).put("sourceUrl", TextUtils.join(";", urlList));
+                        }
+                        mPresenter.importBookSource(inputText);
+                    }
+
+                    @Override
+                    public void delete(String value) {
+                        urlList.remove(value);
+                        ACache.get(BookSourceActivity.this).put("sourceUrl", TextUtils.join(";", urlList));
+                    }
                 }).show();
     }
 

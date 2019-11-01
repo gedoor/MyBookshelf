@@ -37,12 +37,12 @@ public class EncodeConverter extends Converter.Factory {
     @Override
     public Converter<ResponseBody, String> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         return value -> {
+            byte[] responseBytes = UTF8BOMFighter.removeUTF8BOM(value.bytes());
             if (!TextUtils.isEmpty(encode)) {
-                return new String((value.bytes()), encode);
+                return new String((responseBytes), encode);
             }
             String charsetStr;
             MediaType mediaType = value.contentType();
-            byte[] responseBytes = value.bytes();
             //根据http头判断
             if (mediaType != null) {
                 Charset charset = mediaType.charset();

@@ -30,7 +30,6 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
@@ -41,6 +40,7 @@ import kotlin.Unit;
 
 public class BookInfoEditActivity extends MBaseActivity {
     private final int ResultSelectCover = 103;
+    private final int ResultEditCover = 104;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -151,13 +151,12 @@ public class BookInfoEditActivity extends MBaseActivity {
     protected void bindEvent() {
         super.bindEvent();
         tvSelectCover.setOnClickListener(view -> selectCover());
-        tvChangeCover.setOnClickListener(view ->
-                ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
-                        .setCallback(searchBookBean -> {
-                            tieCoverUrl.setText(searchBookBean.getCoverUrl());
-                            book.setCustomCoverPath(tieCoverUrl.getText().toString());
-                            initCover();
-                        }).show());
+        tvChangeCover.setOnClickListener(view ->{
+            Intent intent = new Intent(BookInfoEditActivity.this, BookCoverEditActivity.class);
+            intent.putExtra("name",book.getBookInfoBean().getName());
+            intent.putExtra("author",book.getBookInfoBean().getAuthor());
+            startActivityForResult(intent, ResultEditCover);
+                });
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();
@@ -269,6 +268,14 @@ public class BookInfoEditActivity extends MBaseActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                    initCover();
+                }
+                break;
+            case ResultEditCover:
+                if (resultCode == RESULT_OK && null != data) {
+                    String url = data.getStringExtra("url");
+                    tieCoverUrl.setText(url);
+                    book.setCustomCoverPath(url);
                     initCover();
                 }
                 break;

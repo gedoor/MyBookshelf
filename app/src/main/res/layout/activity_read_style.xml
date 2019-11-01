@@ -26,6 +26,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_menu"
@@ -92,6 +93,7 @@
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="背景图片"
+                android:visibility="gone"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -108,6 +110,27 @@
                 android:text="恢复默认"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:padding="6dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="背景图片" />
+
+            <com.kunfei.bookshelf.widget.HorizontalListView
+                android:id="@+id/bgImgList"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
         </LinearLayout>
 
         <com.google.android.material.appbar.AppBarLayout

@@ -28,12 +28,12 @@
         android:theme="@style/CAppTheme"
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:replace="android:theme">
-
         <activity
             android:name=".view.activity.WelcomeActivity"
             android:theme="@style/CAppWelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -49,6 +49,7 @@
             android:theme="@style/CAppWelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -70,7 +71,9 @@
             android:screenOrientation="behind">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -80,12 +83,16 @@
             android:label="@string/receiving_shared_label">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -160,10 +167,6 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".view.activity.UpdateActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".view.activity.ChapterListActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
@@ -181,13 +184,16 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
+            android:name=".view.activity.BookCoverEditActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".help.permission.PermissionActivity"
             android:theme="@style/Activity.Permission" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
         <service android:name=".service.CheckSourceService" />
-        <service android:name=".service.UpdateService" />
         <service android:name=".service.WebService" />
         <service android:name=".service.ShareService" />
 
@@ -206,7 +212,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

@@ -43,7 +43,7 @@ public class ChapterContentHelp {
         for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
             if (isUseTo(replaceRule.getUseTo(), bookTag, bookName)) {
                 try {
-                    content = content.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement()).trim();
+                    content = content.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement());
                 } catch (Exception ignored) {
                 }
             }

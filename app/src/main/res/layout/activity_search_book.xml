@@ -68,7 +68,29 @@
             android:layout_height="match_parent"
             android:background="@color/background"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/tv_bookshelf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/bookshelf"
+                android:textColor="#767676"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:ignore="RtlHardcoded" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_bookshelf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

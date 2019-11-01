@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.recycler.refresh;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -38,6 +39,7 @@ public class RefreshScrollView extends ScrollView {
         init();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init() {
         this.setOnTouchListener((View v, MotionEvent event) -> {
             int action = event.getAction();
@@ -55,11 +57,7 @@ public class RefreshScrollView extends ScrollView {
                             rpb.setVisibility(View.VISIBLE);
                         }
                         rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
-                        if (rpb.getSecondDurProgress() <= 0) {
-                            return false;
-                        } else {
-                            return true;
-                        }
+                        return rpb.getSecondDurProgress() > 0;
                     }
                     break;
                 case MotionEvent.ACTION_UP:

@@ -3,25 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <!--path-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="36dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+        <TextView
             android:id="@+id/tv_sd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:layout_margin="5dp"
+            android:padding="8dp"
+            android:layout_marginLeft="8dp"
             android:singleLine="true"
             android:textSize="13sp"
-            android:text="@string/nb_file_path" />
+            android:text="@string/nb_file_path"
+            android:textColor="@color/success"
+            tools:ignore="RtlHardcoded,UnusedAttribute" />
 
         <TextView
             android:id="@+id/file_category_tv_path"
@@ -30,27 +34,33 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:textColor="@color/tv_text_default"
+            android:textColor="@color/tv_text_secondary"
             android:textSize="13sp"
             android:focusable="true"
             tools:text="/" />
 
-        <TextView
+        <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
             android:id="@+id/file_category_tv_back_last"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:drawableLeft="@drawable/ic_back_last"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:text="上一级"
-            android:textColor="@color/tv_text_default"
-            android:textSize="13sp"
-            tools:ignore="RtlHardcoded" />
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_margin="4dp"
+            app:cornerRadius="5dp"
+            android:text="上级"
+            android:textFontWeight="800"
+            android:textSize="14sp"
+            tools:ignore="UnusedAttribute" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
+        android:layout_marginBottom="4dp"
         android:background="@color/btn_bg_press" />
 
     <androidx.recyclerview.widget.RecyclerView

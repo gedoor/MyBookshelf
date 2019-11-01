@@ -10,7 +10,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp">
+        android:layout_height="220dp"
+        android:background="@color/background_menu">
 
         <View
             android:id="@+id/vw_bg"
@@ -20,7 +21,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_menu"
             android:orientation="vertical">
 
             <LinearLayout
@@ -134,7 +134,7 @@
                     android:layout_height="30dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:max="20" />
+                    android:max="45" />
 
             </LinearLayout>
 

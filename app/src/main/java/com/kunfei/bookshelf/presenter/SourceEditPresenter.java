@@ -39,9 +39,9 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
     }
 
     @Override
-    public void copySource(BookSourceBean bookSourceBean) {
+    public void copySource(String bookSource) {
         ClipboardManager clipboard = (ClipboardManager) mView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(null, mView.getBookSourceStr());
+        ClipData clipData = ClipData.newPlainText(null, bookSource);
         if (clipboard != null) {
             clipboard.setPrimaryClip(clipData);
         }

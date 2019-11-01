@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.widget.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
@@ -27,8 +28,10 @@ public class ATEStrokeTextView extends AppCompatTextView {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ATEStrokeTextView);
+
         setBackground(Selector.shapeBuild()
-                .setCornerRadius(ScreenUtils.dpToPx(1))
+                .setCornerRadius(a.getDimensionPixelSize(R.styleable.ATEStrokeTextView_cornerRadius, 1))
                 .setStrokeWidth(ScreenUtils.dpToPx(1))
                 .setDisabledStrokeColor(context.getResources().getColor(R.color.md_grey_500))
                 .setDefaultStrokeColor(ThemeStore.textColorSecondary(context))

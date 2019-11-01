@@ -33,6 +33,11 @@
                     android:id="@+id/sort_pin_yin"
                     android:checkable="true"
                     android:title="@string/sort_pin_yin" />
+
+                <item
+                    android:id="@+id/show_enabled"
+                    android:title="@string/show_enabled" />
+
             </group>
 
             <group android:id="@+id/source_group">
@@ -65,6 +70,12 @@
         android:id="@+id/action_import_book_source_rwm"
         android:icon="@drawable/ic_import"
         android:title="@string/import_by_qr_code"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_book_source_default"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_by_default"
         app:showAsAction="never" />
 
     <item

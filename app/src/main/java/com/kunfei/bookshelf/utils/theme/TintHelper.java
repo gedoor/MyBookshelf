@@ -206,7 +206,7 @@ public final class TintHelper {
                 new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
                 new int[]{android.R.attr.state_enabled, android.R.attr.state_checked}
         }, new int[]{
-                // Rdio button includes own alpha for disabled state
+                // Radio button includes own alpha for disabled state
                 ColorUtil.stripAlpha(ContextCompat.getColor(radioButton.getContext(), useDarker ? R.color.ate_control_disabled_dark : R.color.ate_control_disabled_light)),
                 ContextCompat.getColor(radioButton.getContext(), useDarker ? R.color.ate_control_normal_dark : R.color.ate_control_normal_light),
                 color

@@ -1,6 +1,9 @@
-# 本软件为开源软件,没有上架Google Play,没有在任何地方售卖,如果想支持我请通过软件里的捐赠,不要在任何地方购买!
+# 本软件为开源软件,不要在任何地方购买!
 # 关注公众号请搜索:开源阅读软件,有福利噢
 # blog http://www.hostfans.cn
+# 在线书源库
+## http://ku.iszoc.com
+## http://ku.mumuceo.com
 # 开发
 - 本项目Fork于 https://github.com/ZhangQinhao/MONKOVEL
 - fork 之后主要开发人员 kunfei https://github.com/gedoor
@@ -10,6 +13,7 @@
 - atbest https://github.com/atbest
 - Antecer https://github.com/Antecer
 - mabDc https://github.com/mabDc
+- 繁体-翻译者:Cello琴弦之間
 
 **其它贡献人员**
 - 图标绘制 群管理员-新奥尔良烤鲟魚堡

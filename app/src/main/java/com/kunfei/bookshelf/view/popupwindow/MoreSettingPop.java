@@ -37,6 +37,8 @@ public class MoreSettingPop extends FrameLayout {
     Switch sbShowTimeBattery;
     @BindView(R.id.sb_hideStatusBar)
     Switch sbHideStatusBar;
+    @BindView(R.id.sb_to_lh)
+    Switch sbToLh;
     @BindView(R.id.ll_hideStatusBar)
     LinearLayout llHideStatusBar;
     @BindView(R.id.ll_showTimeBattery)
@@ -126,6 +128,12 @@ public class MoreSettingPop extends FrameLayout {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
+                callback.recreate();
+            }
+        });
+        sbToLh.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                readBookControl.setToLh(isChecked);
                 callback.recreate();
             }
         });
@@ -245,6 +253,7 @@ public class MoreSettingPop extends FrameLayout {
         swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
+        sbToLh.setChecked(readBookControl.getToLh());
         sbHideNavigationBar.setChecked(readBookControl.getHideNavigationBar());
         sbClick.setChecked(readBookControl.getCanClickTurn());
         sbClickAllNext.setChecked(readBookControl.getClickAllNext());
@@ -258,8 +267,10 @@ public class MoreSettingPop extends FrameLayout {
     private void upView() {
         if (readBookControl.getHideStatusBar()) {
             sbShowTimeBattery.setEnabled(true);
+            sbToLh.setEnabled(true);
         } else {
             sbShowTimeBattery.setEnabled(false);
+            sbToLh.setEnabled(false);
         }
         if (readBookControl.getCanKeyTurn()) {
             swReadAloudKey.setEnabled(true);

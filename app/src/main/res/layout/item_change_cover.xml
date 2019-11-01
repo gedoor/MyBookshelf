@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:ignore="UnusedAttribute"
+    android:layout_margin="10dp">
+
+    <com.kunfei.bookshelf.widget.CoverImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/img_cover"/>
+
+    <TextView
+        android:id="@+id/tv_source_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"/>
+
+</LinearLayout>

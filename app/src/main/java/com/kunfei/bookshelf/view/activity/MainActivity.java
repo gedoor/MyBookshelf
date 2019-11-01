@@ -70,9 +70,6 @@ import kotlin.Unit;
 import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallbackValue {
-    private static final int BACKUP_RESULT = 11;
-    private static final int RESTORE_RESULT = 12;
-    private static final int FILE_SELECT_RESULT = 13;
     private final int requestSource = 14;
     private String[] mTitles;
 
@@ -133,9 +130,17 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             InputDialog.builder(this)
                     .setTitle(getString(R.string.add_book_url))
                     .setDefaultValue(shared_url)
-                    .setCallback(inputText -> {
-                        inputText = StringUtils.trim(inputText);
-                        mPresenter.addBookUrl(inputText);
+                    .setCallback(new InputDialog.Callback() {
+                        @Override
+                        public void setInputText(String inputText) {
+                            inputText = StringUtils.trim(inputText);
+                            mPresenter.addBookUrl(inputText);
+                        }
+
+                        @Override
+                        public void delete(String value) {
+
+                        }
                     }).show();
             preferences.edit()
                     .putString("shared_url", "")
@@ -398,12 +403,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseMenu = menu.findItem(R.id.action_list_grid);
-        if (viewIsList) {
-            pauseMenu.setTitle(R.string.action_grid);
-        } else {
-            pauseMenu.setTitle(R.string.action_list);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -419,7 +418,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        SharedPreferences.Editor editor = preferences.edit();
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_local:
@@ -435,9 +433,17 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             case R.id.action_add_url:
                 InputDialog.builder(this)
                         .setTitle(getString(R.string.add_book_url))
-                        .setCallback(inputText -> {
-                            inputText = StringUtils.trim(inputText);
-                            mPresenter.addBookUrl(inputText);
+                        .setCallback(new InputDialog.Callback() {
+                            @Override
+                            public void setInputText(String inputText) {
+                                inputText = StringUtils.trim(inputText);
+                                mPresenter.addBookUrl(inputText);
+                            }
+
+                            @Override
+                            public void delete(String value) {
+
+                            }
                         }).show();
                 break;
             case R.id.action_download_all:
@@ -446,9 +452,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 else
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
-            case R.id.action_list_grid:
-                editor.putBoolean("bookshelfIsList", !viewIsList).apply();
-                recreate();
+            case R.id.menu_bookshelf_layout:
+                selectBookshelfLayout();
                 break;
             case R.id.action_arrange_bookshelf:
                 if (getBookListFragment() != null) {
@@ -459,8 +464,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 WebService.startThis(this);
                 break;
             case android.R.id.home:
-                if (drawer.isDrawerOpen(GravityCompat.START)
-                ) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawers();
                 } else {
                     drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
@@ -513,7 +517,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void setUpNavigationView() {
         navigationView.setBackgroundColor(ThemeStore.backgroundColor(this));
-        NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.disableScrollbar(navigationView);
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
@@ -571,6 +574,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             vwNightTheme.setContentDescription(getString(R.string.click_to_night));
         }
         vwNightTheme.getDrawable().mutate().setColorFilter(ThemeStore.accentColor(this), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void selectBookshelfLayout() {
+        new AlertDialog.Builder(this)
+                .setTitle("选择书架布局")
+                .setItems(R.array.bookshelf_layout, (dialog, which) -> {
+                    preferences.edit().putInt("bookshelfLayout", which).apply();
+                    recreate();
+                }).show();
     }
 
     /**

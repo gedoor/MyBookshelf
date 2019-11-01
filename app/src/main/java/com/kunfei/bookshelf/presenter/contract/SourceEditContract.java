@@ -11,7 +11,7 @@ public interface SourceEditContract {
 
         Observable<Boolean> saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld);
 
-        void copySource(BookSourceBean bookSourceBean);
+        void copySource(String bookSource);
 
         void pasteSource();
 
@@ -22,6 +22,6 @@ public interface SourceEditContract {
 
         void setText(BookSourceBean bookSourceBean);
 
-        String getBookSourceStr();
+        String getBookSourceStr(boolean hasFind);
     }
 }

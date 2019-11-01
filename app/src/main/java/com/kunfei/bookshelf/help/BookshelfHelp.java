@@ -130,9 +130,7 @@ public class BookshelfHelp {
     }
 
     private static String formatFolderName(String folderName) {
-        return folderName.replace("/", "")
-                .replace(":", "")
-                .replace(".", "");
+        return folderName.replaceAll("[\\\\/:*?\"<>|.]", "");
     }
 
     /**
@@ -251,6 +249,12 @@ public class BookshelfHelp {
             }
         }
         return null;
+    }
+
+    public static List<BookInfoBean> searchBookInfo(String key) {
+        return DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
+                .where(BookInfoBeanDao.Properties.Name.like("%" + key + "%"))
+                .list();
     }
 
     /**

@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.BitmapUtil;
+import com.kunfei.bookshelf.utils.MeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -181,14 +182,19 @@ public class ReadBookControl {
 
     @SuppressWarnings("ConstantConditions")
     private void initPageStyle() {
-        if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
+        int bgCustom = getBgCustom(textDrawableIndex);
+        if ((bgCustom == 2 || bgCustom == 3)  && getBgPath(textDrawableIndex) != null) {
             bgIsColor = false;
             String bgPath = getBgPath(textDrawableIndex);
             Resources resources = MApplication.getInstance().getResources();
             DisplayMetrics dm = resources.getDisplayMetrics();
             int width = dm.widthPixels;
             int height = dm.heightPixels;
-            bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
+            if (bgCustom == 2) {
+                bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
+            } else {
+                bgBitmap = MeUtils.getFitAssetsSampleBitmap(MApplication.getInstance().getAssets(), bgPath, width, height);
+            }
             if (bgBitmap != null) {
                 return;
             }
@@ -224,9 +230,15 @@ public class ReadBookControl {
     public Drawable getBgDrawable(int textDrawableIndex, Context context, int width, int height) {
         int color;
         try {
+            Bitmap bitmap = null;
             switch (getBgCustom(textDrawableIndex)) {
+                case 3:
+                    bitmap = MeUtils.getFitAssetsSampleBitmap(context.getAssets(), getBgPath(textDrawableIndex), width, height);
+                    if (bitmap != null) {
+                        return new BitmapDrawable(context.getResources(), bitmap);
+                    }
                 case 2:
-                    Bitmap bitmap = BitmapUtil.getFitSampleBitmap(getBgPath(textDrawableIndex), width, height);
+                    bitmap = BitmapUtil.getFitSampleBitmap(getBgPath(textDrawableIndex), width, height);
                     if (bitmap != null) {
                         return new BitmapDrawable(context.getResources(), bitmap);
                     }
@@ -565,6 +577,16 @@ public class ReadBookControl {
         this.hideStatusBar = hideStatusBar;
         preferences.edit()
                 .putBoolean("hide_status_bar", hideStatusBar)
+                .apply();
+    }
+
+    public Boolean getToLh() {
+        return preferences.getBoolean("toLh", false);
+    }
+
+    public void setToLh(Boolean toLh) {
+        preferences.edit()
+                .putBoolean("toLh", toLh)
                 .apply();
     }
 

@@ -10,7 +10,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="246dp">
+        android:layout_height="205dp"
+        android:paddingTop="8dp"
+        android:background="@color/background_menu">
 
         <View
             android:id="@+id/vw_bg"
@@ -20,294 +22,228 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_menu"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:paddingRight="15dp"
-                android:paddingBottom="5dp">
+                android:paddingBottom="10dp">
+
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/nbTextSizeDec"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="3.5"
+                    android:gravity="center"
+                    app:cornerRadius="16dp"
+                    android:text="A-"
+                    android:textFontWeight="800"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/nbTextSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="20" />
+
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/nbTextSizeAdd"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="3.5"
+                    android:gravity="center"
+                    app:cornerRadius="16dp"
+                    android:text="A+"
+                    android:textFontWeight="800"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
 
                 <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_text_Bold"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center"
+                    app:cornerRadius="16dp"
                     android:text="@string/text_bold"
                     android:textSize="14sp" />
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
 
                 <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_text_font"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center"
+                    app:cornerRadius="16dp"
                     android:text="@string/custom_font"
                     android:textSize="14sp" />
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
 
                 <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_indent"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center"
+                    app:cornerRadius="16dp"
                     android:text="@string/indent"
                     android:textSize="14sp" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:background="@color/btn_bg_press" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingTop="12dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
 
                 <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
                     android:id="@+id/tvPageMode"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
-                    android:layout_weight="6"
+                    android:layout_weight="5"
                     android:gravity="center"
+                    app:cornerRadius="16dp"
                     android:text="@string/page_mode"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
 
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:background="@color/btn_bg_press" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingTop="5dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_size" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbTextSize"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                    android:layout_weight="1.0" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_letter_spacing"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbLetterSpacing"
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/tvRowDef0"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/line_size"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbLineSize"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/paragraph_size"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbParagraphSize"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.8dp"
-                android:background="@color/btn_bg_press" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingTop="5dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/content_padding" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
                     android:gravity="center"
-                    android:text="@string/top" />
+                    app:cornerRadius="16dp"
+                    android:textSize="14sp"
+                    android:text="@string/row_0"
+                    tools:ignore="HardcodedText" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbPaddingTop"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                    android:layout_weight="0.5" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/tvRowDef1"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
                     android:gravity="center"
-                    android:text="@string/bottom"
-                    tools:ignore="RtlHardcoded" />
+                    app:cornerRadius="16dp"
+                    android:text="@string/row_1"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbPaddingBottom"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                    android:layout_weight="0.5" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/tvRowDef2"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
                     android:gravity="center"
-                    android:text="@string/left"
-                    tools:ignore="RtlHardcoded" />
+                    app:cornerRadius="16dp"
+                    android:text="@string/row_2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbPaddingLeft"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                    android:layout_weight="0.5" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                    android:id="@+id/tvRowDef"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
                     android:gravity="center"
-                    android:text="@string/right"
-                    tools:ignore="RtlHardcoded" />
+                    app:cornerRadius="16dp"
+                    android:text="@string/row_def"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbPaddingRight"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                    android:layout_weight="0.5" />
 
-            </LinearLayout>
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingTop="5dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="5dp">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/tvOther"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/custom_mr"
+                        android:tooltipText="@string/custom_mr"
+                        android:src="@color/background_menu"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp"
+                        tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/tip_padding" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_add"
+                        app:tint="@color/tv_text_default"
+                        tools:ignore="NestedWeights" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/top" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbTipPaddingTop"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center"
-                    android:text="@string/bottom"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbTipPaddingBottom"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center"
-                    android:text="@string/left"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbTipPaddingLeft"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center"
-                    android:text="@string/right"
-                    tools:ignore="RtlHardcoded" />
-
-                <com.kunfei.bookshelf.widget.number.NumberButton
-                    android:id="@+id/nbTipPaddingRight"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -321,14 +257,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background_menu"
                 android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/text_bg_style" />
+                android:paddingTop="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -336,9 +265,7 @@
                     android:layout_gravity="center"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:paddingStart="10dp"
                     android:paddingTop="5dp"
-                    android:paddingEnd="10dp"
                     android:paddingBottom="9dp">
 
                     <Space
