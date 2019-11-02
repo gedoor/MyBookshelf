@@ -48,7 +48,7 @@ public class BookCoverEditActivity extends MBaseActivity {
     private SearchBookModel searchBookModel;
     private String name;
     private String author;
-
+    private Boolean isLoading = true;
     private List<String> urls = new ArrayList<>();
     private List<String> origins = new ArrayList<>();
 
@@ -99,11 +99,14 @@ public class BookCoverEditActivity extends MBaseActivity {
             @Override
             public void refreshFinish(Boolean value) {
                 swipeRefreshLayout.setRefreshing(false);
+                isLoading = false;
             }
 
             @Override
             public void loadMoreFinish(Boolean value) {
-
+                if (value) {
+                    isLoading = false;
+                }
             }
 
             @Override
@@ -123,6 +126,7 @@ public class BookCoverEditActivity extends MBaseActivity {
             @Override
             public void searchBookError(Throwable throwable) {
                 swipeRefreshLayout.setRefreshing(false);
+                isLoading = false;
             }
 
             @Override
@@ -133,16 +137,13 @@ public class BookCoverEditActivity extends MBaseActivity {
         searchBookModel = new SearchBookModel(searchListener);
         swipeRefreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            long time = System.currentTimeMillis();
-            searchBookModel.setSearchTime(time);
-            searchBookModel.search(name, time, new ArrayList<>(), false);
+            if (!isLoading) {
+                isLoading = true;
+                long time = System.currentTimeMillis();
+                searchBookModel.setSearchTime(time);
+                searchBookModel.search(name, time, new ArrayList<>(), false);
+            }
         });
-        if (urls.isEmpty()) {
-            swipeRefreshLayout.setRefreshing(true);
-            long time = System.currentTimeMillis();
-            searchBookModel.setSearchTime(time);
-            searchBookModel.search(name, time, new ArrayList<>(), false);
-        }
         Single.create((SingleOnSubscribe<Boolean>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(name), SearchBookBeanDao.Properties.Author.eq(author), SearchBookBeanDao.Properties.CoverUrl.isNotNull())
@@ -160,7 +161,15 @@ public class BookCoverEditActivity extends MBaseActivity {
                 .subscribe(new MySingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(Boolean aBoolean) {
-                        changeCoverAdapter.notifyDataSetChanged();
+                        if (urls.isEmpty()) {
+                            swipeRefreshLayout.setRefreshing(true);
+                            long time = System.currentTimeMillis();
+                            searchBookModel.setSearchTime(time);
+                            searchBookModel.search(name, time, new ArrayList<>(), false);
+                        } else {
+                            changeCoverAdapter.notifyDataSetChanged();
+                            isLoading = false;
+                        }
                     }
                 });
     }
