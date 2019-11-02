@@ -21,8 +21,10 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.base.observer.MySingleObserver;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -148,12 +150,14 @@ public class BookCoverEditActivity extends MBaseActivity {
             List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(name), SearchBookBeanDao.Properties.Author.eq(author), SearchBookBeanDao.Properties.CoverUrl.isNotNull())
                     .build().list();
-
             for (SearchBookBean searchBook : searchBookBeans) {
-                String url = searchBook.getCoverUrl();
-                if (url != null && !urls.contains(url)) {
-                    urls.add(url);
-                    origins.add(searchBook.getOrigin());
+                BookSourceBean bean = BookSourceManager.getBookSourceByUrl(searchBook.getTag());
+                if (bean != null) {
+                    String url = searchBook.getCoverUrl();
+                    if (url != null && !urls.contains(url)) {
+                        urls.add(url);
+                        origins.add(searchBook.getOrigin());
+                    }
                 }
             }
             e.onSuccess(true);
