@@ -447,4 +447,7 @@
     <string name="layout_list">列表视图</string>
     <string name="layout_grid3">网格视图三列</string>
     <string name="layout_grid4">网格视图四列</string>
+    <string name="cover_change_source">封面换源</string>
+    <string name="select_local_image">选择本地图片</string>
+    <string name="refresh_cover">刷新封面</string>
 </resources>

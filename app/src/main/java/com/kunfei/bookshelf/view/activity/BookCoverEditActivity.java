@@ -20,11 +20,12 @@ import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
 import com.kunfei.bookshelf.model.SearchBookModel;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -32,11 +33,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 public class BookCoverEditActivity extends MBaseActivity {
 
     @BindView(R.id.rf_rv_change_cover)
-    RefreshRecyclerView changeCover;
+    RecyclerView changeCover;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.toolbar)
@@ -45,6 +48,9 @@ public class BookCoverEditActivity extends MBaseActivity {
     private SearchBookModel searchBookModel;
     private String name;
     private String author;
+
+    private List<String> urls = new ArrayList<>();
+    private List<String> origins = new ArrayList<>();
 
     @Override
     protected void onCreateActivity() {
@@ -60,7 +66,7 @@ public class BookCoverEditActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("封面换源");
+            actionBar.setTitle(R.string.cover_change_source);
         }
     }
 
@@ -81,20 +87,9 @@ public class BookCoverEditActivity extends MBaseActivity {
     protected void initData() {
         name = getIntent().getStringExtra("name");
         author = getIntent().getStringExtra("author");
-        List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
-                .where(SearchBookBeanDao.Properties.Name.eq(name), SearchBookBeanDao.Properties.Author.eq(author), SearchBookBeanDao.Properties.CoverUrl.isNotNull())
-                .build().list();
-        List<String> urls = new ArrayList<>();
-        List<String> origins = new ArrayList<>();
-        for (SearchBookBean searchBook : searchBookBeans) {
-            String url = searchBook.getCoverUrl();
-            if (url != null && !urls.contains(url)) {
-                urls.add(url);
-                origins.add(searchBook.getOrigin());
-            }
-        }
-        ChangeCoverAdapter changeCoverAdapter = new ChangeCoverAdapter(urls, origins);
-        changeCover.setRefreshRecyclerViewAdapter(changeCoverAdapter, new GridLayoutManager(this, 3));
+        ChangeCoverAdapter changeCoverAdapter = new ChangeCoverAdapter();
+        changeCover.setLayoutManager(new GridLayoutManager(this, 3));
+        changeCover.setAdapter(changeCoverAdapter);
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
@@ -148,6 +143,26 @@ public class BookCoverEditActivity extends MBaseActivity {
             searchBookModel.setSearchTime(time);
             searchBookModel.search(name, time, new ArrayList<>(), false);
         }
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
+            List<SearchBookBean> searchBookBeans = DbHelper.getDaoSession().getSearchBookBeanDao().queryBuilder()
+                    .where(SearchBookBeanDao.Properties.Name.eq(name), SearchBookBeanDao.Properties.Author.eq(author), SearchBookBeanDao.Properties.CoverUrl.isNotNull())
+                    .build().list();
+
+            for (SearchBookBean searchBook : searchBookBeans) {
+                String url = searchBook.getCoverUrl();
+                if (url != null && !urls.contains(url)) {
+                    urls.add(url);
+                    origins.add(searchBook.getOrigin());
+                }
+            }
+            e.onSuccess(true);
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new MySingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        changeCoverAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     @Override
@@ -162,13 +177,9 @@ public class BookCoverEditActivity extends MBaseActivity {
     }
 
     public class ChangeCoverAdapter extends RefreshRecyclerViewAdapter {
-        private List<String> urls;
-        private List<String> origins;
 
-        ChangeCoverAdapter(List<String> urls, List<String> origins) {
+        ChangeCoverAdapter() {
             super(false);
-            this.urls = urls;
-            this.origins = origins;
         }
 
         @Override
