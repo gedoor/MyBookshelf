@@ -76,7 +76,7 @@ public class Debug {
         SOURCE_DEBUG_TAG = tag;
         this.compositeDisposable = compositeDisposable;
         if (NetworkUtils.isUrl(key)) {
-            printLog(String.format("%s %s", getDoTime(), "≡关键字为Url"));
+            printLog(String.format("%s %s", getDoTime(), "⇒开始访问详情页:" + key));
             BookShelfBean bookShelfBean = new BookShelfBean();
             bookShelfBean.setTag(Debug.SOURCE_DEBUG_TAG);
             bookShelfBean.setNoteUrl(key);
@@ -85,13 +85,49 @@ public class Debug {
             bookShelfBean.setDurChapterPage(0);
             bookShelfBean.setFinalDate(System.currentTimeMillis());
             bookInfoDebug(bookShelfBean);
+        } else if (key.contains("::")) {
+            String url = key.substring(key.indexOf("::") + 2);
+            printLog(String.format("%s %s", getDoTime(), "⇒开始访问发现页:" + url));
+            findDebug(url);
         } else {
+            printLog(String.format("%s %s", getDoTime(), "⇒开始搜索关键字:" + key));
             searchDebug(key);
         }
     }
 
+    private void findDebug(String url) {
+        printLog(String.format("\n%s ≡开始获取发现页", getDoTime()));
+        WebBookModel.getInstance().findBook(url, 1, Debug.SOURCE_DEBUG_TAG)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Observer<List<SearchBookBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onNext(List<SearchBookBean> searchBookBeans) {
+                        SearchBookBean searchBookBean = searchBookBeans.get(0);
+                        if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
+                            bookInfoDebug(BookshelfHelp.getBookFromSearchBook(searchBookBean));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        printError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     private void searchDebug(String key) {
-        printLog(String.format("%s %s", getDoTime(), "≡开始搜索指定关键字"));
+        printLog(String.format("\n%s ≡开始获取搜索页", getDoTime()));
         WebBookModel.getInstance().searchBook(key, 1, Debug.SOURCE_DEBUG_TAG)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
