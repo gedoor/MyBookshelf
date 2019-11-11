@@ -367,7 +367,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mHandler.removeCallbacks(autoPageRunnable);
         if (autoPage) {
             progressBarNextPage.setVisibility(View.VISIBLE);
-            nextPageTime = readBookControl.getClickSensitivity() * 1000;
+            //每页按字数计算一次时间
+            nextPageTime = mPageLoader.curPageLength() * 60 * 1000 / readBookControl.getCPM();
+            if (0 == nextPageTime) nextPageTime = 1000;
             progressBarNextPage.setMax(nextPageTime);
             mHandler.postDelayed(upHpbNextPage, upHpbInterval);
             mHandler.postDelayed(autoPageRunnable, nextPageTime);
