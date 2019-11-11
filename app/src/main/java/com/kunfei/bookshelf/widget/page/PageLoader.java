@@ -585,9 +585,11 @@ public abstract class PageLoader {
         String str;
         int strLength = 0;
         TxtPage txtPage = curChapter().txtChapter.getPage(mCurPagePos);
-        for (int i = txtPage.getTitleLines(); i < txtPage.size(); ++i) {
-            str = txtPage.getLine(i);
-            strLength = strLength + str.length();
+        if (txtPage != null) {
+            for (int i = txtPage.getTitleLines(); i < txtPage.size(); ++i) {
+                str = txtPage.getLine(i);
+                strLength = strLength + str.length();
+            }
         }
         return strLength;
     }
