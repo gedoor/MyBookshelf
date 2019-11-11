@@ -246,12 +246,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         }
 
-        if (readBookControl.getHideStatusBar()) {
-            progressBarNextPage.setY(0);
-        } else {
-            progressBarNextPage.setY(ImmersionBar.getStatusBarHeight(this));
-        }
-
         if (readBottomMenu.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
