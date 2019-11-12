@@ -86,7 +86,7 @@ public class ReadAdjustPop extends FrameLayout {
             hpbTtsSpeechRate.setEnabled(true);
         }
         //CPM范围设置 每分钟阅读200字到2000字 默认500字/分钟
-        hpbClick.setMax(readBookControl.maxCPM);
+        hpbClick.setMax(readBookControl.maxCPM - readBookControl.minCPM);
         hpbClick.setProgress(readBookControl.getCPM());
         tvAutoPage.setText(String.format("%sCPM", readBookControl.getCPM()));
         hpbTtsSpeechRate.setProgress(readBookControl.getSpeechRate() - 5);
@@ -137,8 +137,8 @@ public class ReadAdjustPop extends FrameLayout {
         hpbClick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvAutoPage.setText(String.format("%sCPM", i));
-                readBookControl.setCPM(i);
+                tvAutoPage.setText(String.format("%sCPM", i + readBookControl.minCPM));
+                readBookControl.setCPM(i + readBookControl.minCPM);
             }
 
             @Override
