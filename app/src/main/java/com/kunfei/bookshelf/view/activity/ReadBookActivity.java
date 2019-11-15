@@ -84,7 +84,6 @@ import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.DownLoadDialog;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-import com.kunfei.bookshelf.widget.modialog.PageKeyDialog;
 import com.kunfei.bookshelf.widget.modialog.ReplaceRuleDialog;
 import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageLoaderNet;
@@ -1213,24 +1212,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_login:
                 SourceLoginActivity.startThis(this, mPresenter.getBookSource());
                 break;
-            case R.id.menu_page_key:
-                customPageKey();
-                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void customPageKey() {
-        PageKeyDialog.builder(this)
-                .setDefaultValue("")
-                .setTitle("请按需要录入的按键")
-                .setCallback(inputText -> preferences.edit()
-                        .putInt("pageKeyCode", Integer.valueOf(inputText))
-                        .apply())
-                .show();
     }
 
     /**
