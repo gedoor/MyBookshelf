@@ -118,7 +118,10 @@ class MoreSettingPop : FrameLayout {
         llScreenTimeOut.setOnClickListener {
             val dialog = AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.keep_light))
-                    .setSingleChoiceItems(context.resources.getStringArray(R.array.screen_time_out), readBookControl.screenTimeOut) { dialogInterface: DialogInterface, i: Int ->
+                    .setSingleChoiceItems(
+                            context.resources.getStringArray(R.array.screen_time_out),
+                            readBookControl.screenTimeOut
+                    ) { dialogInterface: DialogInterface, i: Int ->
                         readBookControl.screenTimeOut = i
                         upScreenTimeOut(i)
                         callback?.keepScreenOnChange(i)
