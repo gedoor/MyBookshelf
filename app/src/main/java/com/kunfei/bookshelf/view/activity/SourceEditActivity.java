@@ -535,6 +535,16 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             case R.id.action_share_it:
                 shareBookSource();
                 break;
+            case R.id.action_share_str:
+                try {
+                    Intent textIntent = new Intent(Intent.ACTION_SEND);
+                    textIntent.setType("text/plain");
+                    textIntent.putExtra(Intent.EXTRA_TEXT, getBookSourceStr(true));
+                    startActivity(Intent.createChooser(textIntent, "Source Share"));
+                } catch (Exception e) {
+                    toast(R.string.can_not_share, ERROR);
+                }
+                break;
             case R.id.action_share_wifi:
                 ShareService.startThis(this, Collections.singletonList(getBookSource(true)));
                 break;
