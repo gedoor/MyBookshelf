@@ -80,6 +80,7 @@
             android:icon="@drawable/ic_toc"
             android:title="@string/book_info"
             app:showAsAction="never" />
+
     </group>
 
     <group android:id="@+id/menu_login">

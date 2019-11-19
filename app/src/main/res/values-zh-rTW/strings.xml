@@ -256,7 +256,7 @@
     <string name="read_aloud_speed">朗讀語速</string>
     <string name="auto_next_page">自動翻頁</string>
     <string name="auto_next_page_stop">停止自動翻頁</string>
-    <string name="auto_next_page_speed">自動翻頁間隔</string>
+    <string name="auto_next_page_speed">自動翻頁時每分鐘閱讀字數(CPM)</string>
     <string name="book_info">書籍資訊</string>
     <string name="ps_default_read">默認打開書架</string>
     <string name="pt_default_read">自動跳轉最近閱讀</string>

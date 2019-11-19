@@ -85,9 +85,10 @@ public class ReadAdjustPop extends FrameLayout {
         } else {
             hpbTtsSpeechRate.setEnabled(true);
         }
-        hpbClick.setMax(180);
-        hpbClick.setProgress(readBookControl.getClickSensitivity());
-        tvAutoPage.setText(String.format("%sS", readBookControl.getClickSensitivity()));
+        //CPM范围设置 每分钟阅读200字到2000字 默认500字/分钟
+        hpbClick.setMax(readBookControl.maxCPM - readBookControl.minCPM);
+        hpbClick.setProgress(readBookControl.getCPM());
+        tvAutoPage.setText(String.format("%sCPM", readBookControl.getCPM()));
         hpbTtsSpeechRate.setProgress(readBookControl.getSpeechRate() - 5);
     }
 
@@ -132,12 +133,12 @@ public class ReadAdjustPop extends FrameLayout {
             }
         });
 
-        //自动翻页间隔
+        //自动翻页阅读速度(CPM)
         hpbClick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvAutoPage.setText(String.format("%sS", i));
-                readBookControl.setClickSensitivity(i);
+                tvAutoPage.setText(String.format("%sCPM", i + readBookControl.minCPM));
+                readBookControl.setCPM(i + readBookControl.minCPM);
             }
 
             @Override
