@@ -421,7 +421,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.MEDIA_BUTTON)})
     public void onMediaButton(String command) {
         if (bookShelf != null) {
-            mView.onMediaButton();
+            mView.onMediaButton(command);
         }
     }
 
