@@ -37,7 +37,13 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                 case KeyEvent.KEYCODE_MEDIA_PLAY:
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    command = ReadAloudService.ActionMediaButton;
+                    command = ReadAloudService.ActionMediaPlay;
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                    command = ReadAloudService.ActionMediaPrev;
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                    command = ReadAloudService.ActionMediaNext;
                     break;
                 default:
                     break;

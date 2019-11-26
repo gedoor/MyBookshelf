@@ -97,6 +97,10 @@
     <string name="set_timer">定時</string>
     <string name="read_aloud_pause">朗讀暫停</string>
     <string name="read_aloud_timer">正在朗讀(還剩%d分鐘)</string>
+    <string name="read_aloud_timerlong">"正在朗讀(還剩%d小時%d分)"</string>
+    <string name="read_aloud_timerremaining">%d分鐘</string>
+    <string name="read_aloud_timerremaininglong">"%d小時%d分"</string>
+    <string name="read_aloud_timerstop">"計時已取消"</string>
     <string name="ps_hide_navigation_bar">閱讀畫面隱藏虛擬按鍵</string>
     <string name="pt_hide_navigation_bar">隱藏導航欄</string>
     <string name="re_navigation_bar_color">導航欄顏色</string>
