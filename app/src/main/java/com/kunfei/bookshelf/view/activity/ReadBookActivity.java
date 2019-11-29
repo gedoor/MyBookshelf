@@ -1674,9 +1674,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
                 return true;
             } else if (flMenu.getVisibility() != View.VISIBLE) {
-                if (keyCode == preferences.getInt("pageKeyCode", 0)) {
+                if (keyCode == preferences.getInt("nextKeyCode", 0)) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
+                    }
+                    return true;
+                }
+                if (keyCode == preferences.getInt("prevKeyCode", 0)) {
+                    if (mPageLoader != null) {
+                        mPageLoader.skipToPrePage();
                     }
                     return true;
                 }
@@ -1705,7 +1711,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             if (readBookControl.getCanKeyTurn(aloudStatus == ReadAloudService.Status.PLAY)
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                     || keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                    || keyCode == preferences.getInt("pageKeyCode", 0))) {
+                    || keyCode == preferences.getInt("nextKeyCode", 0)
+                    || keyCode == preferences.getInt("prevKeyCode", 0))) {
                 return true;
             }
         }
@@ -1821,7 +1828,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
                 } else if (cmd.equals(ReadAloudService.ActionMediaPrev)) {
                     //停止倒计时
-                    ReadAloudService.setTimer(getContext(), ReadAloudService.maxTimeMinute+1);
+                    ReadAloudService.setTimer(getContext(), ReadAloudService.maxTimeMinute + 1);
                     //语音提示倒计时结束
                     ReadAloudService.tts_ui_timer_stop(this);
                 } else if (cmd.equals(ReadAloudService.ActionMediaNext)) {
