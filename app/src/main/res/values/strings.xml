@@ -97,6 +97,10 @@
     <string name="set_timer">定时</string>
     <string name="read_aloud_pause">朗读暂停</string>
     <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
+    <string name="read_aloud_timerlong">"正在朗读(还剩%d小时%d分)"</string>
+    <string name="read_aloud_timerremaining">%d分钟</string>
+    <string name="read_aloud_timerremaininglong">"%d小时%d分"</string>
+    <string name="read_aloud_timerstop">"计时已取消"</string>
     <string name="ps_hide_navigation_bar">阅读界面隐藏虚拟按键</string>
     <string name="pt_hide_navigation_bar">隐藏导航栏</string>
     <string name="re_navigation_bar_color">导航栏颜色</string>
@@ -104,6 +108,7 @@
     <string name="scoring">评分</string>
     <string name="send_mail">发送邮件</string>
     <string name="can_not_open">无法打开</string>
+    <string name="can_not_share">分享失败</string>
     <string name="no_chapter">无章节</string>
     <string name="add_url">添加网址</string>
     <string name="add_book_url">添加书籍网址</string>
@@ -429,6 +434,7 @@
     <string name="web_port_title">web端口</string>
     <string name="web_port_summary">当前端口 %s</string>
     <string name="qr_share">二维码分享</string>
+    <string name="str_share">字符串分享</string>
     <string name="wifi_share">wifi分享</string>
     <string name="please_grant_storage_permission">请给于存储权限</string>
     <string name="skip_previous">上一个</string>
@@ -451,4 +457,8 @@
     <string name="select_local_image">选择本地图片</string>
     <string name="refresh_cover">刷新封面</string>
     <string name="c_page_key">自定义翻页按键</string>
+
+    <string name="custom_page_key">自定义翻页按键</string>
+    <string name="prev_page_key">上一页按键</string>
+    <string name="next_page_key">下一页按键</string>
 </resources>

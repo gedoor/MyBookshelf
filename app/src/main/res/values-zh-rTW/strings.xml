@@ -97,6 +97,10 @@
     <string name="set_timer">定時</string>
     <string name="read_aloud_pause">朗讀暫停</string>
     <string name="read_aloud_timer">正在朗讀(還剩%d分鐘)</string>
+    <string name="read_aloud_timerlong">"正在朗讀(還剩%d小時%d分)"</string>
+    <string name="read_aloud_timerremaining">%d分鐘</string>
+    <string name="read_aloud_timerremaininglong">"%d小時%d分"</string>
+    <string name="read_aloud_timerstop">"計時已取消"</string>
     <string name="ps_hide_navigation_bar">閱讀畫面隱藏虛擬按鍵</string>
     <string name="pt_hide_navigation_bar">隱藏導航欄</string>
     <string name="re_navigation_bar_color">導航欄顏色</string>
@@ -104,6 +108,7 @@
     <string name="scoring">評分</string>
     <string name="send_mail">發送郵件</string>
     <string name="can_not_open">無法打開</string>
+    <string name="can_not_share">分享失敗</string>
     <string name="no_chapter">無章節</string>
     <string name="add_url">添加網址</string>
     <string name="add_book_url">添加書籍網址</string>
@@ -428,6 +433,7 @@
     <string name="web_port_title">web端口</string>
     <string name="web_port_summary">當前端口 %s</string>
     <string name="qr_share">二維碼分享</string>
+    <string name="str_share">字符串分享</string>
     <string name="wifi_share">wifi分享</string>
     <string name="please_grant_storage_permission">請授予儲存權限</string>
     <string name="skip_previous">上一個</string>

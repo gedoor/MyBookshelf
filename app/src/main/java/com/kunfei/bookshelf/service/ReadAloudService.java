@@ -53,14 +53,19 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
  */
 public class ReadAloudService extends Service {
     private static final String TAG = ReadAloudService.class.getSimpleName();
-    public static final String ActionMediaButton = "mediaButton";
+    public static final String ActionMediaPlay = "mediaBtnPlay";
+    public static final String ActionMediaPrev = "mediaBtnPrev";
+    public static final String ActionMediaNext = "mediaBtnNext";
     public static final String ActionNewReadAloud = "newReadAloud";
     public static final String ActionPauseService = "pauseService";
     public static final String ActionResumeService = "resumeService";
     private static final String ActionReadActivity = "readActivity";
     private static final String ActionSetTimer = "updateTimer";
     private static final String ActionSetProgress = "setProgress";
+    private static final String ActionUITimerStop = "UITimerStop";
+    private static final String ActionUITimerRemaining = "UITimerRemaining";
     private static final int notificationId = 3222;
+    public static final int maxTimeMinute = 360;
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
             | PlaybackStateCompat.ACTION_PAUSE
             | PlaybackStateCompat.ACTION_PLAY_PAUSE
@@ -70,6 +75,8 @@ public class ReadAloudService extends Service {
             | PlaybackStateCompat.ACTION_SEEK_TO;
     public static Boolean running = false;
     private TextToSpeech textToSpeech;
+    private TextToSpeech textToSpeech_ui;
+    private HashMap mParams;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
     private Boolean pause = false;
@@ -164,6 +171,22 @@ public class ReadAloudService extends Service {
         }
     }
 
+    public static void tts_ui_timer_stop(Context context) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionUITimerStop);
+            context.startService(intent);
+        }
+    }
+
+    public static void tts_ui_timer_remaining(Context context) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionUITimerRemaining);
+            context.startService(intent);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -199,6 +222,7 @@ public class ReadAloudService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             if (action != null) {
+                String sText;
                 switch (action) {
                     case ActionDoneService:
                         stopSelf();
@@ -225,6 +249,27 @@ public class ReadAloudService extends Service {
                             mediaPlayer.seekTo(intent.getIntExtra("progress", 0));
                         }
                         break;
+                    case ActionUITimerStop:
+                        sText = getString(R.string.read_aloud_timerstop);
+                        textToSpeech_ui.speak(sText,TextToSpeech.QUEUE_FLUSH, mParams);
+                        break;
+                    case ActionUITimerRemaining:
+                        if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
+                            if (timeMinute<=60) {
+                                sText = getString(R.string.read_aloud_timerremaining, timeMinute);
+                            }
+                            else {
+                                int hours = timeMinute / 60;
+                                int minutes = timeMinute % 60;
+                                sText = getString(R.string.read_aloud_timerremaininglong, hours, minutes);
+                            }
+                        } else {
+                            sText = getString(R.string.read_aloud_timerstop);
+                        }
+                        pauseReadAloud(false);
+                        textToSpeech_ui.speak(sText,TextToSpeech.QUEUE_FLUSH, mParams);
+                        resumeReadAloud();
+                        break;
                 }
             }
         }
@@ -246,6 +291,12 @@ public class ReadAloudService extends Service {
     private void initTTS() {
         if (textToSpeech == null)
             textToSpeech = new TextToSpeech(this, new TTSListener());
+        if (textToSpeech_ui == null)
+            textToSpeech_ui = new TextToSpeech(this, new TTSUIListener());
+        if (mParams == null) {
+            mParams = new HashMap();
+            mParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, "3");
+        }
     }
 
     private void initMediaPlayer() {
@@ -413,8 +464,19 @@ public class ReadAloudService extends Service {
     }
 
     private void updateTimer(int minute) {
-        timeMinute = timeMinute + minute;
-        int maxTimeMinute = 60;
+        if (10==minute) {
+            if (timeMinute < 30) {
+                timeMinute = timeMinute + minute;
+            } else if (timeMinute < 120) {
+                timeMinute = timeMinute + 15;
+            } else if (timeMinute < 180) {
+                timeMinute = timeMinute + 30;
+            } else {
+                timeMinute = timeMinute + 60;
+            }
+        } else {
+            timeMinute = timeMinute + minute;
+        }
         if (timeMinute > maxTimeMinute) {
             timerEnable = false;
             handler.removeCallbacks(dsRunnable);
@@ -460,8 +522,15 @@ public class ReadAloudService extends Service {
         String nTitle;
         if (pause) {
             nTitle = getString(R.string.read_aloud_pause);
-        } else if (timeMinute > 0 && timeMinute <= 60) {
-            nTitle = getString(R.string.read_aloud_timer, timeMinute);
+        } else if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
+            if (timeMinute<=60) {
+                nTitle = getString(R.string.read_aloud_timer, timeMinute);
+            }
+            else {
+                int hours = timeMinute / 60;
+                int minutes = timeMinute % 60;
+                nTitle = getString(R.string.read_aloud_timerlong, hours, minutes);
+            }
         } else {
             nTitle = getString(R.string.read_aloud_t);
         }
@@ -513,6 +582,11 @@ public class ReadAloudService extends Service {
             textToSpeech.stop();
             textToSpeech.shutdown();
             textToSpeech = null;
+        }
+        if (textToSpeech_ui != null) {
+            textToSpeech_ui.stop();
+            textToSpeech_ui.shutdown();
+            textToSpeech_ui = null;
         }
     }
 
@@ -616,6 +690,18 @@ public class ReadAloudService extends Service {
             } else {
                 mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
                 ReadAloudService.this.stopSelf();
+            }
+        }
+    }
+
+    private final class TTSUIListener implements TextToSpeech.OnInitListener {
+        @Override
+        public void onInit(int i) {
+            if (i == TextToSpeech.SUCCESS) {
+                int result = textToSpeech_ui.setLanguage(Locale.CHINA);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_fix), Toast.LENGTH_SHORT).show());
+                }
             }
         }
     }
