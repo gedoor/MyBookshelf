@@ -25,7 +25,7 @@ import static com.kunfei.bookshelf.utils.StringUtils.isTrimEmpty;
 
 public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
-    private List<SearchBookBean> searchBooks;
+    private ArrayList<SearchBookBean> searchBooks;
     private Callback callback;
 
     public ChoiceBookAdapter(Activity activity) {
@@ -42,6 +42,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
+        if (searchBooks.get(position) == null) return;
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
