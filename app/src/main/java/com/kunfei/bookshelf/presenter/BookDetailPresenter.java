@@ -56,10 +56,11 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 String noteUrl = intent.getStringExtra("noteUrl");
                 if (!TextUtils.isEmpty(noteUrl)) {
                     bookShelf = BookshelfHelp.getBook(noteUrl);
-                } else {
-                    mView.finish();
-                    return;
                 }
+            }
+            if (bookShelf == null) {
+                mView.finish();
+                return;
             }
             inBookShelf = true;
             searchBook = new SearchBookBean();
