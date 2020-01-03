@@ -95,10 +95,10 @@ public class DonateActivity extends MBaseActivity {
                 toast(R.string.copy_complete);
             }
         });
-        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbhbrwm.png"));
-        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
-        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
+        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbhbrwm.png"));
+        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbskrwm.jpg"));
+        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/wxskrwm.jpg"));
+        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/qqskrwm.jpg"));
         vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
     }
 
