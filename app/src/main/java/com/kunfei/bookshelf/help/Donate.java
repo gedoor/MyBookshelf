@@ -16,7 +16,8 @@ public class Donate {
     public static void aliDonate(Context context) {
         try {
             String qrCode = URLEncoder.encode("tsx06677nwdk3javroq4ef0", "utf-8");
-            final String aliPayQr = "alipayqr://platformapi/startapp?saId=10000007&qrcode=https://qr.alipay.com/" + qrCode;
+            String aliPayQr = "alipayqr://platformapi/startapp?saId=10000007&qrcode=https://qr.alipay.com/" + qrCode;
+            aliPayQr = aliPayQr + "%3F_s%3Dweb-other&_t=" + System.currentTimeMillis();
             openUri(context, aliPayQr);
         } catch (Exception e) {
             e.printStackTrace();
