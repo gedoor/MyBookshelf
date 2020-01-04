@@ -690,10 +690,7 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                int result = textToSpeech_ui.setLanguage(Locale.CHINA);
-                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_fix), Toast.LENGTH_SHORT).show());
-                }
+                textToSpeech_ui.setLanguage(Locale.CHINA);
             }
         }
     }
