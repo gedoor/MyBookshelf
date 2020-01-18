@@ -533,7 +533,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             llMenuTop.setVisibility(View.VISIBLE);
             llMenuTop.startAnimation(menuTopIn);
         });
-        mediaPlayerPop.setPlayClickListener(v -> onMediaButton());
+        mediaPlayerPop.setPlayClickListener(v -> onMediaButton(ReadAloudService.ActionMediaPlay));
         mediaPlayerPop.setPrevClickListener(v -> {
             mPresenter.getBookShelf().setDurChapterPage(0);
             mPageLoader.skipToPrePage();
@@ -559,7 +559,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void onMediaButton() {
-                ReadBookActivity.this.onMediaButton();
+                ReadBookActivity.this.onMediaButton(ReadAloudService.ActionMediaPlay);
             }
 
             @Override
@@ -887,7 +887,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         readBottomMenu.getReadProgress().post(
                                 () -> readBottomMenu.getReadProgress().setProgress(pageIndex)
                         );
-                        Long end = mPresenter.getChapterList().get(mPresenter.getBookShelf().getDurChapter(mPresenter.getChapterList().size())).getEnd();
+                        Long end = mPresenter.getDurChapter().getEnd();
                         int audioSize = end != null ? end.intValue() : 0;
                         mediaPlayerPop.upAudioSize(audioSize);
                         mediaPlayerPop.upAudioDur(mPresenter.getBookShelf().getDurChapterPage());
@@ -915,7 +915,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         if (getIntent().getBooleanExtra("readAloud", false)
                                 && pageIndex >= 0 && mPageLoader.getContent() != null) {
                             getIntent().putExtra("readAloud", false);
-                            onMediaButton();
+                            onMediaButton(ReadAloudService.ActionMediaPlay);
                             return;
                         }
                         autoPage();
@@ -1674,9 +1674,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
                 return true;
             } else if (flMenu.getVisibility() != View.VISIBLE) {
-                if (keyCode == preferences.getInt("pageKeyCode", 0)) {
-                    if (mPageLoader != null) {
+                if (keyCode == preferences.getInt("nextKeyCode", 0)) {
+                    if (mPageLoader != null && keyCode != 0) {
                         mPageLoader.skipToNextPage();
+                    }
+                    return true;
+                }
+                if (keyCode == preferences.getInt("prevKeyCode", 0)) {
+                    if (mPageLoader != null && keyCode != 0) {
+                        mPageLoader.skipToPrePage();
                     }
                     return true;
                 }
@@ -1703,9 +1709,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (flMenu.getVisibility() != View.VISIBLE) {
             if (readBookControl.getCanKeyTurn(aloudStatus == ReadAloudService.Status.PLAY)
+                    && keyCode != 0
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                     || keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                    || keyCode == preferences.getInt("pageKeyCode", 0))) {
+                    || keyCode == preferences.getInt("nextKeyCode", 0)
+                    || keyCode == preferences.getInt("prevKeyCode", 0))) {
                 return true;
             }
         }
@@ -1809,19 +1817,45 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 朗读按钮
      */
     @Override
-    public void onMediaButton() {
+    public void onMediaButton(String cmd) {
         if (!ReadAloudService.running) {
             aloudStatus = ReadAloudService.Status.STOP;
             SystemUtil.ignoreBatteryOptimization(this);
         }
         switch (aloudStatus) {
             case PAUSE:
-                ReadAloudService.resume(this);
-                readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                if (cmd.equals(ReadAloudService.ActionMediaPlay)) {
+                    ReadAloudService.resume(this);
+                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                } else if (cmd.equals(ReadAloudService.ActionMediaPrev)) {
+                    //停止倒计时
+                    ReadAloudService.setTimer(getContext(), ReadAloudService.maxTimeMinute + 1);
+                    //语音提示倒计时结束
+                    ReadAloudService.tts_ui_timer_stop(this);
+                } else if (cmd.equals(ReadAloudService.ActionMediaNext)) {
+                    //翻到上一章并开始朗读
+                    if (mPageLoader != null) {
+                        mPageLoader.skipPreChapter();
+                    }
+                    ReadAloudService.resume(this);
+                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                }
                 break;
             case PLAY:
-                ReadAloudService.pause(this);
-                readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud_pause));
+                if (cmd.equals(ReadAloudService.ActionMediaPlay)) {
+                    ReadAloudService.pause(this);
+                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud_pause));
+                } else if (cmd.equals(ReadAloudService.ActionMediaPrev)) {
+                    //倒计时增加
+                    ReadAloudService.setTimer(getContext(), 10);
+                    //语音提示剩余时间
+                    ReadAloudService.tts_ui_timer_remaining(this);
+                } else if (cmd.equals(ReadAloudService.ActionMediaNext)) {
+                    //翻到下一章
+                    if (mPageLoader != null) {
+                        mPageLoader.skipNextChapter();
+                    }
+                }
                 break;
             default:
                 ReadBookActivity.this.popMenuOut();

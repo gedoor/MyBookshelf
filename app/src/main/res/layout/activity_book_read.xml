@@ -16,6 +16,22 @@
         android:focusable="true"
         tools:visibility="gone" />
 
+    <com.kunfei.bookshelf.widget.seekbar.VerticalSeekBarWrapper
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        tools:ignore="RtlHardcoded">
+
+        <com.kunfei.bookshelf.widget.seekbar.VerticalSeekBar
+            android:id="@+id/pb_nextPage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:seekBarRotation="CW270" />
+
+    </com.kunfei.bookshelf.widget.seekbar.VerticalSeekBarWrapper>
+
     <ImageView
         android:id="@+id/cursor_left"
         android:layout_width="wrap_content"
@@ -168,29 +184,5 @@
             android:visibility="invisible" />
 
     </FrameLayout>
-
-    <!--    <ProgressBar-->
-    <!--        android:id="@+id/pb_nextPage"-->
-    <!--        style="@android:style/Widget.ProgressBar.Horizontal"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="3dp"-->
-    <!--        android:layout_gravity="bottom"-->
-    <!--        android:visibility="invisible" />-->
-
-    <com.kunfei.bookshelf.widget.seekbar.VerticalSeekBarWrapper
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="20dp"
-        tools:ignore="RtlHardcoded">
-
-        <com.kunfei.bookshelf.widget.seekbar.VerticalSeekBar
-            android:id="@+id/pb_nextPage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:seekBarRotation="CW270"
-            android:visibility="invisible" />
-
-    </com.kunfei.bookshelf.widget.seekbar.VerticalSeekBarWrapper>
 
 </FrameLayout>

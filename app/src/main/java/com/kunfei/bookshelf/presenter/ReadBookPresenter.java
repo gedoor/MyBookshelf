@@ -133,6 +133,17 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Override
+    public BookChapterBean getDurChapter() {
+        if (chapterBeanList.size() == 0) {
+            return null;
+        }
+        if (chapterBeanList.size() > bookShelf.getDurChapter()) {
+            return chapterBeanList.get(bookShelf.getDurChapter());
+        }
+        return chapterBeanList.get(chapterBeanList.size() - 1);
+    }
+
+    @Override
     public void saveBook() {
         if (bookShelf != null) {
             AsyncTask.execute(() -> BookshelfHelp.saveBookToShelf(bookShelf));
@@ -421,7 +432,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.MEDIA_BUTTON)})
     public void onMediaButton(String command) {
         if (bookShelf != null) {
-            mView.onMediaButton();
+            mView.onMediaButton(command);
         }
     }
 

@@ -10,7 +10,6 @@ import android.widget.CompoundButton
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import com.hwangjr.rxbus.RxBus
-import com.kunfei.bookshelf.MApplication
 import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.constant.RxBusTag
 import com.kunfei.bookshelf.help.ReadBookControl
@@ -176,16 +175,7 @@ class MoreSettingPop : FrameLayout {
             }
         }
         ll_click_key_code.onClick {
-            PageKeyDialog.builder(context)
-                    .setDefaultValue("")
-                    .setTitle("请按需要录入的按键")
-                    .setCallback { inputText: String? ->
-                        MApplication.getConfigPreferences()
-                                .edit()
-                                .putInt("pageKeyCode", Integer.valueOf(inputText))
-                                .apply()
-                    }
-                    .show()
+            PageKeyDialog(context).show()
         }
     }
 
