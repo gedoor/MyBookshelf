@@ -13,8 +13,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 
-import com.kunfei.bookshelf.MApplication;
-
 /**
  * 仿真翻页
  */
@@ -44,7 +42,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private Matrix mMatrix;
     private float[] mMatrixArray = {0, 0, 0, 0, 0, 0, 0, 0, 1.0f};
 
-    private boolean mIsRTandLB; // 是否属于右上左下
+    private boolean mIsRT_LB; // 是否属于右上左下
     private float mMaxLength;
     private int[] mBackShadowColors;// 背面颜色组
     private int[] mFrontShadowColors;// 前面颜色组
@@ -59,7 +57,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private GradientDrawable mFrontShadowDrawableVRL;
 
     private Paint mPaint;
-    private boolean blurBackImage;
 
 
     public SimulationPageAnim(int w, int h, View view, OnPageChangeListener listener) {
@@ -84,7 +81,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         mTouchX = 0.01f; // 不让x,y为0,否则在点计算时会有问题
         mTouchY = 0.01f;
-        blurBackImage = MApplication.getConfigPreferences().getBoolean("blurSimBack", false);
     }
 
     @Override
@@ -149,14 +145,14 @@ public class SimulationPageAnim extends HorizonPageAnim {
         switch (direction) {
             case PREV:
                 //上一页滑动不出现对角
-                if (mStartX > mScreenWidth / 2) {
+                if (mStartX > mScreenWidth / 2.0) {
                     calcCornerXY(mStartX, mScreenHeight);
                 } else {
                     calcCornerXY(mScreenWidth - mStartX, mScreenHeight);
                 }
                 break;
             case NEXT:
-                if (mScreenWidth / 2 > mStartX) {
+                if (mScreenWidth / 2.0 > mStartX) {
                     calcCornerXY(mScreenWidth - mStartX, mStartY);
                 }
                 break;
@@ -173,11 +169,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
     public void setTouchPoint(float x, float y) {
         super.setTouchPoint(x, y);
         //触摸y中间位置吧y变成屏幕高度
-        if ((mStartY > mScreenHeight / 3 && mStartY < mScreenHeight * 2 / 3) || mDirection.equals(Direction.PREV)) {
+        if ((mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight * 2 / 3.0) || mDirection.equals(Direction.PREV)) {
             mTouchY = mScreenHeight;
         }
 
-        if (mStartY > mScreenHeight / 3 && mStartY < mScreenHeight / 2 && mDirection.equals(Direction.NEXT)) {
+        if (mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight / 2.0 && mDirection.equals(Direction.NEXT)) {
             mTouchY = 1;
         }
     }
@@ -250,7 +246,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         GradientDrawable mFolderShadowDrawable;
         int left;
         int right;
-        if (mIsRTandLB) {
+        if (mIsRT_LB) {
             left = (int) (mBezierStart1.x - 1);
             right = (int) (mBezierStart1.x + f3 + 1);
             mFolderShadowDrawable = mFolderShadowDrawableLR;
@@ -300,7 +296,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
      */
     private void drawCurrentPageShadow(Canvas canvas) {
         double degree;
-        if (mIsRTandLB) {
+        if (mIsRT_LB) {
             degree = Math.PI
                     / 4
                     - Math.atan2(mBezierControl1.y - mTouchY, mTouchX
@@ -316,7 +312,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         double d2 = (float) 25 * 1.414 * Math.sin(degree);
         float x = (float) (mTouchX + d1);
         float y;
-        if (mIsRTandLB) {
+        if (mIsRT_LB) {
             y = (float) (mTouchY + d2);
         } else {
             y = (float) (mTouchY - d2);
@@ -343,7 +339,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         int leftx;
         int rightx;
         GradientDrawable mCurrentPageShadow;
-        if (mIsRTandLB) {
+        if (mIsRT_LB) {
             leftx = (int) (mBezierControl1.x);
             rightx = (int) mBezierControl1.x + 25;
             mCurrentPageShadow = mFrontShadowDrawableVLR;
@@ -380,7 +376,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         } catch (Exception ignored) {
         }
 
-        if (mIsRTandLB) {
+        if (mIsRT_LB) {
             leftx = (int) (mBezierControl2.y);
             rightx = (int) (mBezierControl2.y + 25);
             mCurrentPageShadow = mFrontShadowDrawableHTB;
@@ -427,7 +423,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         int leftx;
         int rightx;
         GradientDrawable mBackShadowDrawable;
-        if (mIsRTandLB) {  //左下及右上
+        if (mIsRT_LB) {  //左下及右上
             leftx = (int) (mBezierStart1.x);
             rightx = (int) (mBezierStart1.x + mTouchToCornerDis / 4);
             mBackShadowDrawable = mBackShadowDrawableLR;
@@ -487,18 +483,18 @@ public class SimulationPageAnim extends HorizonPageAnim {
      * 计算拖拽点对应的拖拽脚
      */
     private void calcCornerXY(float x, float y) {
-        if (x <= mScreenWidth / 2) {
+        if (x <= mScreenWidth / 2.0) {
             mCornerX = 0;
         } else {
             mCornerX = mScreenWidth;
         }
-        if (y <= mScreenHeight / 2) {
+        if (y <= mScreenHeight / 2.0) {
             mCornerY = 0;
         } else {
             mCornerY = mScreenHeight;
         }
 
-        mIsRTandLB = (mCornerX == 0 && mCornerY == mScreenHeight)
+        mIsRT_LB = (mCornerX == 0 && mCornerY == mScreenHeight)
                 || (mCornerX == mScreenWidth && mCornerY == 0);
 
     }

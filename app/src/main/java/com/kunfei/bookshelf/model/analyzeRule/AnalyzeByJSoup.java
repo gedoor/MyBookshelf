@@ -410,6 +410,8 @@ public class AnalyzeByJSoup {
                     String html = elements.html();
                     textS.add(html);
                     break;
+                case "all":
+                    textS.add(elements.html());
                 default:
                     for (Element element : elements) {
                         String url = element.attr(lastRule);

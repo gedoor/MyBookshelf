@@ -65,6 +65,8 @@ public interface ReadBookContract {
 
         List<BookChapterBean> getChapterList();
 
+        BookChapterBean getDurChapter();
+
         void setChapterList(List<BookChapterBean> chapterList);
 
         void saveBook();

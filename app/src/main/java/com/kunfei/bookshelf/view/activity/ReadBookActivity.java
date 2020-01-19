@@ -887,7 +887,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         readBottomMenu.getReadProgress().post(
                                 () -> readBottomMenu.getReadProgress().setProgress(pageIndex)
                         );
-                        Long end = mPresenter.getChapterList().get(mPresenter.getBookShelf().getDurChapter(mPresenter.getChapterList().size())).getEnd();
+                        Long end = mPresenter.getDurChapter().getEnd();
                         int audioSize = end != null ? end.intValue() : 0;
                         mediaPlayerPop.upAudioSize(audioSize);
                         mediaPlayerPop.upAudioDur(mPresenter.getBookShelf().getDurChapterPage());
@@ -1675,13 +1675,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 return true;
             } else if (flMenu.getVisibility() != View.VISIBLE) {
                 if (keyCode == preferences.getInt("nextKeyCode", 0)) {
-                    if (mPageLoader != null) {
+                    if (mPageLoader != null && keyCode != 0) {
                         mPageLoader.skipToNextPage();
                     }
                     return true;
                 }
                 if (keyCode == preferences.getInt("prevKeyCode", 0)) {
-                    if (mPageLoader != null) {
+                    if (mPageLoader != null && keyCode != 0) {
                         mPageLoader.skipToPrePage();
                     }
                     return true;
@@ -1709,6 +1709,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (flMenu.getVisibility() != View.VISIBLE) {
             if (readBookControl.getCanKeyTurn(aloudStatus == ReadAloudService.Status.PLAY)
+                    && keyCode != 0
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                     || keyCode == KeyEvent.KEYCODE_VOLUME_UP
                     || keyCode == preferences.getInt("nextKeyCode", 0)

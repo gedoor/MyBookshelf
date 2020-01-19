@@ -74,7 +74,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
-    api 'androidx.core:core-ktx:1.2.0-beta01'
+    api 'androidx.core:core-ktx:1.2.0-rc01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //anko
@@ -83,18 +83,18 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-beta01'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
