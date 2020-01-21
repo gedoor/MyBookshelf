@@ -41,8 +41,9 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity
+        <activity-alias
             android:name=".view.activity.WelcomeBookActivity"
+            android:targetActivity=".view.activity.WelcomeActivity"
             android:enabled="false"
             android:icon="@mipmap/book_launcher"
             android:roundIcon="@mipmap/book_launcher_round"
@@ -56,7 +57,7 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
+        </activity-alias>
         <activity
             android:name=".view.activity.WelcomeToReadActivity"
             android:theme="@style/CAppWelcomeTheme">
