@@ -121,7 +121,7 @@ class BookContent {
 
         analyzer.setContent(s, NetworkUtils.getAbsoluteURL(baseUrl, chapterUrl));
         Debug.printLog(tag, 1, "┌解析正文内容");
-        if (!ruleBookContent.contains("html") && ruleBookContent.contains("all")) {
+        if (ruleBookContent.equals("all") || ruleBookContent.contains("@all")) {
             webContentBean.content = analyzer.getString(ruleBookContent);
         }
         else {
