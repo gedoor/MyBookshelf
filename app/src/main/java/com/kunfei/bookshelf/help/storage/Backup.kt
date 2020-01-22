@@ -2,9 +2,12 @@ package com.kunfei.bookshelf.help.storage
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import com.kunfei.bookshelf.DbHelper
 import com.kunfei.bookshelf.MApplication
+import com.kunfei.bookshelf.R
+import com.kunfei.bookshelf.base.observer.MySingleObserver
 import com.kunfei.bookshelf.help.BookshelfHelp
 import com.kunfei.bookshelf.help.FileHelp
 import com.kunfei.bookshelf.model.BookSourceManager
@@ -96,7 +99,11 @@ object Backup {
             e.onSuccess(true)
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+                .subscribe(object : MySingleObserver<Boolean>() {
+                    override fun onSuccess(t: Boolean) {
+                        Toast.makeText(context, R.string.backup_success, Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     private fun copyBackup(context: Context, uri: Uri) {
