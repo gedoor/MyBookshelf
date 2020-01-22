@@ -37,7 +37,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.DbHelper;
@@ -50,7 +49,6 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
-import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -1824,37 +1822,45 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         switch (aloudStatus) {
             case PAUSE:
-                if (cmd.equals(ReadAloudService.ActionMediaPlay)) {
-                    ReadAloudService.resume(this);
-                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
-                } else if (cmd.equals(ReadAloudService.ActionMediaPrev)) {
-                    //停止倒计时
-                    ReadAloudService.setTimer(getContext(), ReadAloudService.maxTimeMinute + 1);
-                    //语音提示倒计时结束
-                    ReadAloudService.tts_ui_timer_stop(this);
-                } else if (cmd.equals(ReadAloudService.ActionMediaNext)) {
-                    //翻到上一章并开始朗读
-                    if (mPageLoader != null) {
-                        mPageLoader.skipPreChapter();
-                    }
-                    ReadAloudService.resume(this);
-                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                switch (cmd) {
+                    case ReadAloudService.ActionMediaPlay:
+                        ReadAloudService.resume(this);
+                        readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                        break;
+                    case ReadAloudService.ActionMediaPrev:
+                        //停止倒计时
+                        ReadAloudService.setTimer(getContext(), ReadAloudService.maxTimeMinute + 1);
+                        //语音提示倒计时结束
+                        ReadAloudService.tts_ui_timer_stop(this);
+                        break;
+                    case ReadAloudService.ActionMediaNext:
+                        //翻到上一章并开始朗读
+                        if (mPageLoader != null) {
+                            mPageLoader.skipPreChapter();
+                        }
+                        ReadAloudService.resume(this);
+                        readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud));
+                        break;
                 }
                 break;
             case PLAY:
-                if (cmd.equals(ReadAloudService.ActionMediaPlay)) {
-                    ReadAloudService.pause(this);
-                    readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud_pause));
-                } else if (cmd.equals(ReadAloudService.ActionMediaPrev)) {
-                    //倒计时增加
-                    ReadAloudService.setTimer(getContext(), 10);
-                    //语音提示剩余时间
-                    ReadAloudService.tts_ui_timer_remaining(this);
-                } else if (cmd.equals(ReadAloudService.ActionMediaNext)) {
-                    //翻到下一章
-                    if (mPageLoader != null) {
-                        mPageLoader.skipNextChapter();
-                    }
+                switch (cmd) {
+                    case ReadAloudService.ActionMediaPlay:
+                        ReadAloudService.pause(this);
+                        readBottomMenu.setFabReadAloudText(getString(R.string.read_aloud_pause));
+                        break;
+                    case ReadAloudService.ActionMediaPrev:
+                        //倒计时增加
+                        ReadAloudService.setTimer(getContext(), 10);
+                        //语音提示剩余时间
+                        ReadAloudService.tts_ui_timer_remaining(this);
+                        break;
+                    case ReadAloudService.ActionMediaNext:
+                        //翻到下一章
+                        if (mPageLoader != null) {
+                            mPageLoader.skipNextChapter();
+                        }
+                        break;
                 }
                 break;
             default:
@@ -1919,15 +1925,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+        backup();
+        super.finish();
+    }
+
+    private void backup() {
         new PermissionsCompat.Builder(this)
                 .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
                 .rationale("自动备份需要存储权限")
                 .onGranted((requestCode) -> {
-                    RxBus.get().post(RxBusTag.AUTO_BACKUP, true);
+
                     return Unit.INSTANCE;
                 })
                 .request();
-        super.finish();
     }
 
     @Override

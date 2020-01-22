@@ -80,7 +80,7 @@ public class BaseModelImpl {
                 .build();
     }
 
-    private static OkHttpClient.Builder getClientBuilder() {
+    public static OkHttpClient.Builder getClientBuilder() {
         if (clientBuilder == null) {
             clientBuilder = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
