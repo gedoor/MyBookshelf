@@ -54,7 +54,7 @@
             android:title="默认启用替换净化" />
 
         <Preference
-            android:key="@string/pk_backup_path"
+            android:key="backupPath"
             android:title="@string/backup_path" />
 
         <Preference
