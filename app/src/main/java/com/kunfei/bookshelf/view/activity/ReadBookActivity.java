@@ -54,6 +54,7 @@ import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
+import com.kunfei.bookshelf.help.storage.Backup;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
@@ -1930,14 +1931,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     private void backup() {
-        new PermissionsCompat.Builder(this)
-                .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
-                .rationale("自动备份需要存储权限")
-                .onGranted((requestCode) -> {
-
-                    return Unit.INSTANCE;
-                })
-                .request();
+        String path = preferences.getString("backupPath", "");
+        if (TextUtils.isEmpty(path)) {
+            new PermissionsCompat.Builder(this)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale("自动备份需要存储权限")
+                    .onGranted((requestCode) -> {
+                        Backup.INSTANCE.backup(ReadBookActivity.this, null);
+                        return Unit.INSTANCE;
+                    })
+                    .request();
+        } else {
+            Backup.INSTANCE.backup(this, Uri.parse(path));
+        }
     }
 
     @Override
