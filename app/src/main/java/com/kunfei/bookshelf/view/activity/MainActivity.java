@@ -44,6 +44,7 @@ import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
@@ -66,12 +67,17 @@ import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.InputDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 
 import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
@@ -645,24 +651,34 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      * 恢复
      */
     private void restore() {
-        if (!WebDavHelp.INSTANCE.showRestoreDialog(this)) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                String path = getBackupPath();
-                if (TextUtils.isEmpty(path)) {
-                    selectRestoreFolder();
-                } else {
-                    Restore.INSTANCE.restore(this, Uri.parse(path));
-                }
-            } else {
-                new PermissionsCompat.Builder(this)
-                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
-                        .rationale(R.string.restore_permission)
-                        .onGranted((requestCode) -> {
-                            Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
-                            return Unit.INSTANCE;
-                        }).request();
-            }
-        }
+        Single.create((SingleOnSubscribe<ArrayList<String>>) emitter -> {
+            emitter.onSuccess(WebDavHelp.INSTANCE.getWebDavFileNames());
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySingleObserver<ArrayList<String>>() {
+                    @Override
+                    public void onSuccess(ArrayList<String> strings) {
+                        if (WebDavHelp.INSTANCE.showRestoreDialog(MainActivity.this, strings)) {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                String path = getBackupPath();
+                                if (TextUtils.isEmpty(path)) {
+                                    selectRestoreFolder();
+                                } else {
+                                    Restore.INSTANCE.restore(MainActivity.this, Uri.parse(path));
+                                }
+                            } else {
+                                new PermissionsCompat.Builder(MainActivity.this)
+                                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                                        .rationale(R.string.restore_permission)
+                                        .onGranted((requestCode) -> {
+                                            Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
+                                            return Unit.INSTANCE;
+                                        }).request();
+                            }
+                        }
+                    }
+                });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

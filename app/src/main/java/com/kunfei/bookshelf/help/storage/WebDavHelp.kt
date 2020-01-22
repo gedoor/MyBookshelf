@@ -36,7 +36,7 @@ object WebDavHelp {
         return false
     }
 
-    private fun getWebDavFileNames(): ArrayList<String> {
+    fun getWebDavFileNames(): ArrayList<String> {
         val url = getWebDavUrl()
         val names = arrayListOf<String>()
         if (!url.isNullOrBlank() && initWebDav()) {
@@ -51,8 +51,7 @@ object WebDavHelp {
         return names
     }
 
-    fun showRestoreDialog(context: Context): Boolean {
-        val names = getWebDavFileNames()
+    fun showRestoreDialog(context: Context, names: ArrayList<String>): Boolean {
         return if (names.isNotEmpty()) {
             context.selector(title = "选择恢复文件", items = names) { _, index ->
                 if (index in 0 until names.size) {

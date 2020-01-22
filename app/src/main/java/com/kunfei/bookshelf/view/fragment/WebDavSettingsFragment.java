@@ -9,16 +9,23 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.storage.WebDavHelp;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_WEB_DAV_URL;
 
@@ -116,7 +123,18 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     }
 
     private void restore() {
-        WebDavHelp.INSTANCE.showRestoreDialog(getActivity());
+        Single.create((SingleOnSubscribe<ArrayList<String>>) emitter -> {
+            emitter.onSuccess(WebDavHelp.INSTANCE.getWebDavFileNames());
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySingleObserver<ArrayList<String>>() {
+                    @Override
+                    public void onSuccess(ArrayList<String> strings) {
+                        if (!WebDavHelp.INSTANCE.showRestoreDialog(getActivity(), strings)) {
+                            Toast.makeText(getActivity(), "没有备份", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
