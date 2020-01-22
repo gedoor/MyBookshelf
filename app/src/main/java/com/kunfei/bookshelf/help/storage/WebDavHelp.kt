@@ -1,12 +1,19 @@
 package com.kunfei.bookshelf.help.storage
 
 import android.content.Context
+import android.widget.Toast
 import com.kunfei.bookshelf.MApplication
+import com.kunfei.bookshelf.R
+import com.kunfei.bookshelf.base.observer.MySingleObserver
 import com.kunfei.bookshelf.constant.AppConstant
 import com.kunfei.bookshelf.help.FileHelp
 import com.kunfei.bookshelf.utils.ZipUtils
 import com.kunfei.bookshelf.utils.webdav.WebDav
 import com.kunfei.bookshelf.utils.webdav.http.HttpAuth
+import io.reactivex.Single
+import io.reactivex.SingleOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.selector
 import java.io.File
 import java.text.SimpleDateFormat
@@ -65,13 +72,22 @@ object WebDavHelp {
     }
 
     private fun restoreWebDav(name: String) {
-        getWebDavUrl()?.let {
-            val file = WebDav(it + "YueDu/" + name)
-            file.downloadTo(zipFilePath, true)
-            @Suppress("BlockingMethodInNonBlockingContext")
-            ZipUtils.unzipFile(zipFilePath, unzipFilesPath)
-            Restore.restore(unzipFilesPath)
-        }
+        Single.create(SingleOnSubscribe<Boolean> { e ->
+            getWebDavUrl()?.let {
+                val file = WebDav(it + "YueDu/" + name)
+                file.downloadTo(zipFilePath, true)
+                @Suppress("BlockingMethodInNonBlockingContext")
+                ZipUtils.unzipFile(zipFilePath, unzipFilesPath)
+                Restore.restore(unzipFilesPath)
+            }
+            e.onSuccess(true)
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : MySingleObserver<Boolean>() {
+                    override fun onSuccess(t: Boolean) {
+                        Toast.makeText(MApplication.getInstance(), R.string.restore_success, Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     fun backUpWebDav(path: String) {
