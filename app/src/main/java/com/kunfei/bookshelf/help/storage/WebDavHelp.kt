@@ -2,10 +2,12 @@ package com.kunfei.bookshelf.help.storage
 
 import android.content.Context
 import android.widget.Toast
+import com.hwangjr.rxbus.RxBus
 import com.kunfei.bookshelf.MApplication
 import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.base.observer.MySingleObserver
 import com.kunfei.bookshelf.constant.AppConstant
+import com.kunfei.bookshelf.constant.RxBusTag
 import com.kunfei.bookshelf.help.FileHelp
 import com.kunfei.bookshelf.utils.ZipUtils
 import com.kunfei.bookshelf.utils.webdav.WebDav
@@ -85,6 +87,7 @@ object WebDavHelp {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MySingleObserver<Boolean>() {
                     override fun onSuccess(t: Boolean) {
+                        RxBus.get().post(RxBusTag.RECREATE, true)
                         Toast.makeText(MApplication.getInstance(), R.string.restore_success, Toast.LENGTH_SHORT).show()
                     }
                 })

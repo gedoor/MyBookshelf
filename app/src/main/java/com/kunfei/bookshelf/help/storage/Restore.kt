@@ -5,8 +5,11 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.kunfei.bookshelf.DbHelper
 import com.kunfei.bookshelf.MApplication
+import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.bean.*
 import com.kunfei.bookshelf.help.FileHelp
+import com.kunfei.bookshelf.help.LauncherIcon
+import com.kunfei.bookshelf.help.ReadBookControl
 import com.kunfei.bookshelf.model.BookSourceManager
 import com.kunfei.bookshelf.model.ReplaceRuleManager
 import com.kunfei.bookshelf.model.TxtChapterRuleManager
@@ -82,6 +85,8 @@ object Restore {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        var donateHb = MApplication.getConfigPreferences().getLong("DonateHb", 0)
+        donateHb = if (donateHb > System.currentTimeMillis()) 0 else donateHb
         Preferences.getSharedPreferences(MApplication.getInstance(), path, "config")?.all?.map {
             val edit = MApplication.getConfigPreferences().edit()
             when (val value = it.value) {
@@ -92,6 +97,13 @@ object Restore {
                 is String -> edit.putString(it.key, value)
                 else -> Unit
             }
+            edit.putLong("DonateHb", donateHb)
+            edit.putInt("versionCode", MApplication.getVersionCode())
+            edit.apply()
+            LauncherIcon.ChangeIcon(MApplication.getConfigPreferences().getString("launcher_icon", MApplication.getInstance().getString(R.string.icon_main)))
+            ReadBookControl.getInstance().updateReaderSettings()
+            MApplication.getInstance().upThemeStore()
+            MApplication.getInstance().initNightTheme()
             edit.commit()
         }
     }
