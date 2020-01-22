@@ -130,7 +130,7 @@ constructor(urlStr: String) {
                 )
             }
             request.header("Depth", if (depth < 0) "infinity" else depth.toString())
-            return BaseModelImpl.getClientBuilder().build().newCall(request.build()).execute()
+            return BaseModelImpl.getClient().newCall(request.build()).execute()
         }
         return null
     }
@@ -225,7 +225,7 @@ constructor(urlStr: String) {
                     Credentials.basic(it.user, it.pass)
             )
         }
-        val response = BaseModelImpl.getClientBuilder().build().newCall(requestBuilder.build()).execute()
+        val response = BaseModelImpl.getClient().newCall(requestBuilder.build()).execute()
         return response.isSuccessful
     }
 
@@ -236,7 +236,7 @@ constructor(urlStr: String) {
                 request.header("Authorization", Credentials.basic(it.user, it.pass))
             }
             try {
-                return BaseModelImpl.getClientBuilder().build().newCall(request.build()).execute().body?.byteStream()
+                return BaseModelImpl.getClient().newCall(request.build()).execute().body?.byteStream()
             } catch (e: IOException) {
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {
