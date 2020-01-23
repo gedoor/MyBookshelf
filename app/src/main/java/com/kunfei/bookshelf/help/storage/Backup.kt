@@ -2,11 +2,9 @@ package com.kunfei.bookshelf.help.storage
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import com.kunfei.bookshelf.DbHelper
 import com.kunfei.bookshelf.MApplication
-import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.base.observer.MySingleObserver
 import com.kunfei.bookshelf.help.BookshelfHelp
 import com.kunfei.bookshelf.help.FileHelp
@@ -42,7 +40,7 @@ object Backup {
         )
     }
 
-    fun backup(context: Context, uri: Uri?) {
+    fun backup(context: Context, uri: Uri?, callBack: CallBack?) {
         Single.create(SingleOnSubscribe<Boolean> { e ->
             BookshelfHelp.getAllBook().let {
                 if (it.isNotEmpty()) {
@@ -101,7 +99,7 @@ object Backup {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MySingleObserver<Boolean>() {
                     override fun onSuccess(t: Boolean) {
-                        Toast.makeText(context, R.string.backup_success, Toast.LENGTH_SHORT).show()
+                        callBack?.backupSuccess()
                     }
                 })
     }
@@ -126,5 +124,9 @@ object Backup {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    interface CallBack {
+        fun backupSuccess()
     }
 }

@@ -82,7 +82,9 @@ import kotlin.Unit;
 
 import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
-public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallbackValue {
+public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View,
+        BookListFragment.CallbackValue,
+        Backup.CallBack {
     private final int requestSource = 14;
     private final int backupSelectRequestCode = 23;
     private final int restoreSelectRequestCode = 33;
@@ -611,7 +613,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             if (TextUtils.isEmpty(path)) {
                 selectBackupFolder();
             } else {
-                Backup.INSTANCE.backup(this, Uri.parse(path));
+                Backup.INSTANCE.backup(this, Uri.parse(path), MainActivity.this);
             }
         } else {
             backupOld();
@@ -627,7 +629,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                             .setTitle(R.string.backup_confirmation)
                             .setMessage(R.string.backup_message)
                             .setPositiveButton(R.string.ok, (dialog, which) ->
-                                    Backup.INSTANCE.backup(MainActivity.this, null)
+                                    Backup.INSTANCE.backup(MainActivity.this, null, MainActivity.this)
                             )
                             .setNegativeButton(R.string.cancel, null)
                             .show();
@@ -754,6 +756,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             }
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Override
+    public void backupSuccess() {
+        toast(R.string.backup_success);
     }
 
     /**

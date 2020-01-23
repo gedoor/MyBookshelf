@@ -1937,12 +1937,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
                     .rationale("自动备份需要存储权限")
                     .onGranted((requestCode) -> {
-                        Backup.INSTANCE.backup(ReadBookActivity.this, null);
+                        Backup.INSTANCE.backup(ReadBookActivity.this, null, null);
                         return Unit.INSTANCE;
                     })
                     .request();
         } else {
-            Backup.INSTANCE.backup(this, Uri.parse(path));
+            Backup.INSTANCE.backup(this, Uri.parse(path), null);
         }
     }
 
