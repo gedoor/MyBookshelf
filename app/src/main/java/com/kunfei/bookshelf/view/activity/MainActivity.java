@@ -660,13 +660,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 .subscribe(new MySingleObserver<ArrayList<String>>() {
                     @Override
                     public void onSuccess(ArrayList<String> strings) {
-                        if (WebDavHelp.INSTANCE.showRestoreDialog(MainActivity.this, strings)) {
+                        if (!WebDavHelp.INSTANCE.showRestoreDialog(MainActivity.this, strings)) {
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                                 String path = getBackupPath();
                                 if (TextUtils.isEmpty(path)) {
                                     selectRestoreFolder();
                                 } else {
                                     Restore.INSTANCE.restore(MainActivity.this, Uri.parse(path));
+                                    recreate();
                                 }
                             } else {
                                 new PermissionsCompat.Builder(MainActivity.this)
@@ -674,6 +675,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                                         .rationale(R.string.restore_permission)
                                         .onGranted((requestCode) -> {
                                             Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
+                                            recreate();
                                             return Unit.INSTANCE;
                                         }).request();
                             }
@@ -814,7 +816,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     if (uri == null) return;
                     getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     preferences.edit().putString("backupPath", uri.toString()).apply();
-                    restore();
+                    Restore.INSTANCE.restore(this, uri);
+                    recreate();
                 }
                 break;
         }
