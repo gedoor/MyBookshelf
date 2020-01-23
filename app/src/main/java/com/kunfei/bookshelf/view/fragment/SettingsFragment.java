@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.view.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -58,6 +57,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         addPreferencesFromResource(R.xml.pref_settings);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_bookshelf_px)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_download_path)));
+        bindPreferenceSummaryToValue(findPreference("backupPath"));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value) -> {
@@ -75,11 +75,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         return true;
     };
 
-    private static void bindPreferenceSummaryToValue(Preference preference) {
+    private void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                preference.getContext().getSharedPreferences("CONFIG", Context.MODE_PRIVATE).getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, getPrefValue(preference.getKey()));
+    }
+
+    private String getPrefValue(String key) {
+        return MApplication.getConfigPreferences().getString(key, "");
     }
 
     @Override
