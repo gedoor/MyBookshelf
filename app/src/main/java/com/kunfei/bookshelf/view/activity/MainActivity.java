@@ -667,7 +667,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                                     selectRestoreFolder();
                                 } else {
                                     restore(Uri.parse(path));
-                                    recreate();
                                 }
                             } else {
                                 new PermissionsCompat.Builder(MainActivity.this)
