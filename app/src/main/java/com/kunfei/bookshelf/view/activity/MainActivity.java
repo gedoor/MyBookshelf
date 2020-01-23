@@ -666,7 +666,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                                 if (TextUtils.isEmpty(path)) {
                                     selectRestoreFolder();
                                 } else {
-                                    Restore.INSTANCE.restore(MainActivity.this, Uri.parse(path));
+                                    restore(Uri.parse(path));
                                     recreate();
                                 }
                             } else {
@@ -683,6 +683,20 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     }
                 });
 
+    }
+
+    private void restore(Uri uri) {
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
+            Restore.INSTANCE.restore(this, uri);
+            e.onSuccess(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean t) {
+                        recreate();
+                    }
+                });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -816,8 +830,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     if (uri == null) return;
                     getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     preferences.edit().putString("backupPath", uri.toString()).apply();
-                    Restore.INSTANCE.restore(this, uri);
-                    recreate();
+                    restore(uri);
                 }
                 break;
         }
