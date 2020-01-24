@@ -673,8 +673,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                                         .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
                                         .rationale(R.string.restore_permission)
                                         .onGranted((requestCode) -> {
-                                            Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
-                                            recreate();
+                                            restoreOld();
                                             return Unit.INSTANCE;
                                         }).request();
                             }
@@ -698,6 +697,20 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 });
     }
 
+    private void restoreOld() {
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
+            Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
+            e.onSuccess(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean t) {
+                        recreate();
+                    }
+                });
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void selectRestoreFolder() {
         try {
@@ -705,7 +718,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(intent, restoreSelectRequestCode);
         } catch (Exception e) {
-            Restore.INSTANCE.restore(Backup.INSTANCE.getDefaultPath());
+            restoreOld();
         }
     }
 
