@@ -462,10 +462,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         }).show();
                 break;
             case R.id.action_download_all:
-                if (!isNetWorkAvailable())
+                if (!isNetWorkAvailable()) {
                     toast(R.string.network_connection_unavailable);
-                else
+                } else {
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
+                }
                 break;
             case R.id.menu_bookshelf_layout:
                 selectBookshelfLayout();
@@ -476,7 +477,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
                 break;
             case R.id.action_web_start:
-                WebService.startThis(this);
+                boolean startedThisTime = WebService.startThis(this);
+                if (!startedThisTime) {
+                    toast(getString(R.string.web_service_already_started_hint));
+                }
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
