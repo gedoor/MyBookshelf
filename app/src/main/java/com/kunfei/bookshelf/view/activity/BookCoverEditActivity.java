@@ -231,7 +231,7 @@ public class BookCoverEditActivity extends MBaseActivity {
                 tvSourceName.setText(origin);
                 Glide.with(holder.itemView.getContext())
                         .load(url)
-                        .error(R.drawable.img_cover_default)
+                        .error(R.drawable.image_cover_default)
                         .into(ivCover);
                 ivCover.setOnClickListener(view -> {
                     Intent intent = new Intent();

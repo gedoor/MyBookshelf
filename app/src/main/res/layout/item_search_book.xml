@@ -17,13 +17,13 @@
         android:layout_height="100dp"
         android:orientation="horizontal">
 
-        <com.kunfei.bookshelf.widget.CoverImageView
+        <com.kunfei.bookshelf.widget.image.CoverImageView
             android:id="@+id/iv_cover"
             android:layout_width="70dp"
             android:layout_height="100dp"
             android:contentDescription="@string/book"
             android:scaleType="centerCrop"
-            android:src="@drawable/img_cover_default" />
+            android:src="@drawable/image_cover_default" />
 
         <LinearLayout
             android:layout_width="match_parent"

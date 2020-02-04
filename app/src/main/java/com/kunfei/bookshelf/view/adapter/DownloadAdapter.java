@@ -10,13 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.view.activity.DownloadActivity;
+import com.kunfei.bookshelf.widget.image.CoverImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,13 +108,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
         } else {
             holder.ivDel.getDrawable().mutate();
             holder.ivDel.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-            Glide.with(activity)
-                    .load(item.getCoverUrl())
-                    .apply(new RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .dontAnimate().placeholder(R.drawable.img_cover_default)
-                            .error(R.drawable.img_cover_default))
-                    .into(holder.ivCover);
+            holder.ivCover.load(item.getCoverUrl(), item.getName(), null);
             if (item.getSuccessCount() > 0) {
                 holder.tvName.setText(String.format(Locale.getDefault(), "%s(正在下载)", item.getName()));
             } else {
@@ -134,7 +126,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivCover;
+        CoverImageView ivCover;
         TextView tvName;
         TextView tvDownload;
         ImageView ivDel;

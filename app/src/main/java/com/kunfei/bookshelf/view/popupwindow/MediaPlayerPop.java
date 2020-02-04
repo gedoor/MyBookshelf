@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +17,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BlurTransformation;
+import com.kunfei.bookshelf.help.ImageLoader;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.views.ATESeekBar;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -172,29 +172,21 @@ public class MediaPlayerPop extends FrameLayout {
     }
 
     public void setCover(String coverPath) {
-        if (TextUtils.isEmpty(coverPath)) return;
-        if (coverPath.startsWith("http")) {
-            Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
-                    .into(ivCover);
-            Glide.with(this).load(coverPath)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)))
-                    .into(ivCoverBg);
-        } else {
-            File file = new File(coverPath);
-            Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
-                    .into(ivCover);
-            Glide.with(this).load(file)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_gs))
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)))
-                    .into(ivCoverBg);
-        }
+        ImageLoader.INSTANCE.load(getContext(), coverPath)
+                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                        .placeholder(R.drawable.image_cover_default))
+                .into(ivCover);
+        ImageLoader.INSTANCE.load(getContext(), coverPath)
+                .transition(DrawableTransitionOptions.withCrossFade(1500))
+                .thumbnail(defaultCover())
+                .centerCrop()
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)))
+                .into(ivCoverBg);
+    }
+
+    private RequestBuilder<Drawable> defaultCover() {
+        return ImageLoader.INSTANCE.load(getContext(), R.drawable.image_cover_default)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(getContext(), 25)));
     }
 
     public interface Callback {
