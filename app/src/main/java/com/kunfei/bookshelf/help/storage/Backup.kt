@@ -105,13 +105,17 @@ object Backup {
     }
 
     private fun copyBackup(context: Context, uri: Uri) {
-        DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
-            for (fileName in backupFileNames) {
-                val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
-                doc?.let {
-                    DocumentUtil.writeBytes(context, FileHelp.getFile(backupPath + File.separator + fileName).readBytes(), doc)
+        try {
+            DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
+                for (fileName in backupFileNames) {
+                    val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
+                    doc?.let {
+                        DocumentUtil.writeBytes(context, FileHelp.getFile(backupPath + File.separator + fileName).readBytes(), doc)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            copyBackup()
         }
     }
 
