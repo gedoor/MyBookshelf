@@ -175,7 +175,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             if (uri == null) return;
             getPreferenceManager().getSharedPreferences().edit().putString("backupPath", uri.toString()).apply();
             findPreference("backupPath").setSummary(uri.toString());
-            MApplication.getInstance().setDownloadPath(uri.toString());
         }
     }
 }
