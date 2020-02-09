@@ -48,14 +48,18 @@ object WebDavHelp {
     fun getWebDavFileNames(): ArrayList<String> {
         val url = getWebDavUrl()
         val names = arrayListOf<String>()
-        if (!url.isNullOrBlank() && initWebDav()) {
-            var files = WebDav(url + "YueDu/").listFiles()
-            files = files.reversed()
-            for (index: Int in 0 until min(10, files.size)) {
-                files[index].displayName?.let {
-                    names.add(it)
+        try {
+            if (!url.isNullOrBlank() && initWebDav()) {
+                var files = WebDav(url + "YueDu/").listFiles()
+                files = files.reversed()
+                for (index: Int in 0 until min(10, files.size)) {
+                    files[index].displayName?.let {
+                        names.add(it)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return names
     }
