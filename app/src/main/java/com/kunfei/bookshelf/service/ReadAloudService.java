@@ -82,7 +82,7 @@ public class ReadAloudService extends Service {
     private Boolean pause = false;
     private List<String> contentList = new ArrayList<>();
     private int nowSpeak;
-    private int timeMinute = 0;
+    private static int timeMinute = 0;
     private boolean timerEnable = false;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
