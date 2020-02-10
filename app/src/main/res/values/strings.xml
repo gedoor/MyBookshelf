@@ -419,6 +419,7 @@
     <string name="indent_2">二字符缩进</string>
     <string name="indent_3">三字符缩进</string>
     <string name="indent_4">四字符缩进</string>
+    <string name="select_folder">选择文件夹</string>
     <string name="select_sd_file">选择SD卡</string>
     <string name="no_find">没有发现，可以在书源里添加。</string>
     <string name="restore_default">恢复默认</string>
@@ -431,7 +432,10 @@
     <string name="content_padding">正文边距</string>
     <string name="tip_padding">Tip边距</string>
     <string name="text_letter_spacing">字距</string>
-
+    <string name="default_path">默认路径</string>
+    <string name="sys_folder_picker">系统文件夹选择器</string>
+    <string name="app_folder_picker">自带选择器\n(Android10以上因权限限制可能无法使用)</string>
+    <string name="a10_permission_toast">Android10以上因权限限制可能无法读写文件</string>
     <string name="e_ink_mode">E-Ink 模式</string>
     <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
     <string name="web_menu">Web服务</string>

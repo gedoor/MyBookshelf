@@ -19,6 +19,7 @@ import io.reactivex.SingleOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 object Backup {
@@ -40,7 +41,20 @@ object Backup {
         )
     }
 
-    fun backup(context: Context, uri: Uri?, callBack: CallBack?) {
+    fun autoBack() {
+        val lastBackup = MApplication.getConfigPreferences().getLong("lastBackup", 0)
+        if (System.currentTimeMillis() - lastBackup < TimeUnit.DAYS.toMillis(1)) {
+            return
+        }
+        val path = MApplication.getConfigPreferences().getString("backupPath", defaultPath)
+        if (path == null) {
+            backup(MApplication.getInstance(), defaultPath, null)
+        } else {
+            backup(MApplication.getInstance(), path, null)
+        }
+    }
+
+    fun backup(context: Context, path: String, callBack: CallBack?) {
         Single.create(SingleOnSubscribe<Boolean> { e ->
             BookshelfHelp.getAllBook().let {
                 if (it.isNotEmpty()) {
@@ -89,10 +103,10 @@ object Backup {
                 edit.commit()
             }
             WebDavHelp.backUpWebDav(backupPath)
-            if (uri != null) {
-                copyBackup(context, uri)
+            if (path.isContentPath()) {
+                copyBackup(context, Uri.parse(path))
             } else {
-                copyBackup()
+                copyBackup(path)
             }
             e.onSuccess(true)
         }).subscribeOn(Schedulers.io())
@@ -101,36 +115,36 @@ object Backup {
                     override fun onSuccess(t: Boolean) {
                         callBack?.backupSuccess()
                     }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        callBack?.backupError(e.localizedMessage ?: "ERROR")
+                    }
                 })
     }
 
+    @Throws(Exception::class)
     private fun copyBackup(context: Context, uri: Uri) {
-        try {
-            DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
-                for (fileName in backupFileNames) {
-                    val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
-                    doc?.let {
-                        DocumentUtil.writeBytes(context, FileHelp.getFile(backupPath + File.separator + fileName).readBytes(), doc)
-                    }
+        DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
+            for (fileName in backupFileNames) {
+                val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
+                doc?.let {
+                    DocumentUtil.writeBytes(context, FileHelp.getFile(backupPath + File.separator + fileName).readBytes(), doc)
                 }
             }
-        } catch (e: Exception) {
-            copyBackup()
         }
     }
 
-    private fun copyBackup() {
-        try {
-            for (fileName in backupFileNames) {
-                FileHelp.getFile(backupPath + File.separator + "bookshelf.json")
-                        .copyTo(FileHelp.getFile(defaultPath + File.separator + "bookshelf.json"), true)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    @Throws(java.lang.Exception::class)
+    private fun copyBackup(path: String) {
+        for (fileName in backupFileNames) {
+            FileHelp.getFile(backupPath + File.separator + fileName)
+                    .copyTo(FileHelp.getFile(path + File.separator + fileName), true)
         }
     }
 
     interface CallBack {
         fun backupSuccess()
+        fun backupError(msg: String)
     }
 }

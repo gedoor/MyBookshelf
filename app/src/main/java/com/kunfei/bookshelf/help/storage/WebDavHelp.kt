@@ -1,13 +1,9 @@
 package com.kunfei.bookshelf.help.storage
 
 import android.content.Context
-import android.widget.Toast
-import com.hwangjr.rxbus.RxBus
 import com.kunfei.bookshelf.MApplication
-import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.base.observer.MySingleObserver
 import com.kunfei.bookshelf.constant.AppConstant
-import com.kunfei.bookshelf.constant.RxBusTag
 import com.kunfei.bookshelf.help.FileHelp
 import com.kunfei.bookshelf.utils.ZipUtils
 import com.kunfei.bookshelf.utils.webdav.WebDav
@@ -64,11 +60,11 @@ object WebDavHelp {
         return names
     }
 
-    fun showRestoreDialog(context: Context, names: ArrayList<String>): Boolean {
+    fun showRestoreDialog(context: Context, names: ArrayList<String>, callBack: Restore.CallBack?): Boolean {
         return if (names.isNotEmpty()) {
             context.selector(title = "选择恢复文件", items = names) { _, index ->
                 if (index in 0 until names.size) {
-                    restoreWebDav(names[index])
+                    restoreWebDav(names[index], callBack)
                 }
             }
             true
@@ -77,22 +73,20 @@ object WebDavHelp {
         }
     }
 
-    private fun restoreWebDav(name: String) {
+    private fun restoreWebDav(name: String, callBack: Restore.CallBack?) {
         Single.create(SingleOnSubscribe<Boolean> { e ->
             getWebDavUrl()?.let {
                 val file = WebDav(it + "YueDu/" + name)
                 file.downloadTo(zipFilePath, true)
                 @Suppress("BlockingMethodInNonBlockingContext")
                 ZipUtils.unzipFile(zipFilePath, unzipFilesPath)
-                Restore.restore(unzipFilesPath)
             }
             e.onSuccess(true)
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MySingleObserver<Boolean>() {
                     override fun onSuccess(t: Boolean) {
-                        RxBus.get().post(RxBusTag.RECREATE, true)
-                        Toast.makeText(MApplication.getInstance(), R.string.restore_success, Toast.LENGTH_SHORT).show()
+                        Restore.restore(unzipFilesPath, callBack)
                     }
                 })
     }
