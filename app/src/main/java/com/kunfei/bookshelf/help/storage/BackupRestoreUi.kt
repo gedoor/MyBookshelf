@@ -93,7 +93,10 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
             titleResource = R.string.select_folder
             items(activity.resources.getStringArray(R.array.select_folder).toList()) { _, index ->
                 when (index) {
-                    0 -> backupUsePermission(activity)
+                    0 -> {
+                        setBackupPath(Backup.defaultPath)
+                        backupUsePermission(activity)
+                    }
                     1 -> {
                         try {
                             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
