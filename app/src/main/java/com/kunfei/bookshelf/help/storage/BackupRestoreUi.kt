@@ -1,10 +1,10 @@
 package com.kunfei.bookshelf.help.storage
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import com.hwangjr.rxbus.RxBus
 import com.kunfei.bookshelf.MApplication
@@ -58,7 +58,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         MApplication.getInstance().toast(msg)
     }
 
-    fun backup(activity: AppCompatActivity) {
+    fun backup(activity: Activity) {
         val backupPath = getBackupPath()
         if (backupPath.isNullOrEmpty()) {
             selectBackupFolder(activity)
@@ -77,7 +77,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         }
     }
 
-    private fun backupUsePermission(activity: AppCompatActivity, path: String = Backup.defaultPath) {
+    private fun backupUsePermission(activity: Activity, path: String = Backup.defaultPath) {
         PermissionsCompat.Builder(activity)
                 .addPermissions(*Permissions.Group.STORAGE)
                 .rationale(R.string.get_storage_per)
@@ -88,7 +88,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
                 .request()
     }
 
-    private fun selectBackupFolder(activity: AppCompatActivity) {
+    fun selectBackupFolder(activity: Activity) {
         activity.alert {
             titleResource = R.string.select_folder
             items(activity.resources.getStringArray(R.array.select_folder).toList()) { _, index ->
@@ -121,7 +121,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         }.show()
     }
 
-    private fun selectBackupFolderApp(activity: AppCompatActivity, isRestore: Boolean) {
+    private fun selectBackupFolderApp(activity: Activity, isRestore: Boolean) {
         val picker = FilePicker(activity, FilePicker.DIRECTORY)
         picker.setBackgroundColor(activity.resources.getColor(R.color.background))
         picker.setTopBackgroundColor(activity.resources.getColor(R.color.background))
@@ -137,7 +137,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         picker.show()
     }
 
-    fun restore(activity: AppCompatActivity) {
+    fun restore(activity: Activity) {
         Single.create { emitter: SingleEmitter<ArrayList<String>?> ->
             emitter.onSuccess(getWebDavFileNames())
         }.subscribeOn(Schedulers.io())
@@ -166,7 +166,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
                 })
     }
 
-    private fun restoreUsePermission(activity: AppCompatActivity, path: String = Backup.defaultPath) {
+    private fun restoreUsePermission(activity: Activity, path: String = Backup.defaultPath) {
         PermissionsCompat.Builder(activity)
                 .addPermissions(*Permissions.Group.STORAGE)
                 .rationale(R.string.get_storage_per)
@@ -177,7 +177,7 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
                 .request()
     }
 
-    private fun selectRestoreFolder(activity: AppCompatActivity) {
+    private fun selectRestoreFolder(activity: Activity) {
         activity.alert {
             titleResource = R.string.select_folder
             items(activity.resources.getStringArray(R.array.select_folder).toList()) { _, index ->

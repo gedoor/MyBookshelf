@@ -15,7 +15,6 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -279,13 +278,7 @@ public class ReadAloudService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new MyBinder();
-    }
-
-    public class MyBinder extends Binder {
-        public ReadAloudService getService() {
-            return ReadAloudService.this;
-        }
+        return null;
     }
 
     private void initTTS() {

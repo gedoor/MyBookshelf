@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
+import com.kunfei.bookshelf.help.storage.BackupRestoreUi;
 import com.kunfei.bookshelf.service.WebService;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -113,15 +114,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (preference.getKey().equals(getString(R.string.pk_download_path))) {
             selectDownloadPath(preference);
         } else if (preference.getKey().equals("backupPath")) {
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent, backupSelectRequestCode);
-                }
-            } catch (Exception ignored) {
-
-            }
+            BackupRestoreUi.INSTANCE.selectBackupFolder(getActivity());
         } else if (preference.getKey().equals("webDavSetting")) {
             WebDavSettingsFragment webDavSettingsFragment = new WebDavSettingsFragment();
             getFragmentManager().beginTransaction().replace(R.id.settingsFrameLayout, webDavSettingsFragment, "webDavSettings").commit();
