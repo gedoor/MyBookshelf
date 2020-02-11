@@ -13,8 +13,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
-import static android.text.TextUtils.isEmpty;
-
 public class EncodeConverter extends Converter.Factory {
     private String encode;
 
@@ -50,13 +48,7 @@ public class EncodeConverter extends Converter.Factory {
             if (mediaType != null) {
                 Charset charset = mediaType.charset();
                 if (charset != null) {
-                    charsetStr = charset.displayName();
-                    if (!isEmpty(charsetStr)) {
-                        try {
-                            return new String((responseBytes), Charset.forName(charsetStr));
-                        } catch (Exception ignored) {
-                        }
-                    }
+                    return new String((responseBytes), charset);
                 }
             }
             //根据内容判断
