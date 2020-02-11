@@ -23,12 +23,7 @@ public class EncodeConverter extends Converter.Factory {
     }
 
     private EncodeConverter(String encode) {
-        try {
-            Charset charset = Charset.forName(encode);
-            this.encode = charset.name();
-        } catch (Exception ignored) {
-
-        }
+        this.encode = encode;
     }
 
     public static EncodeConverter create() {
@@ -44,7 +39,10 @@ public class EncodeConverter extends Converter.Factory {
         return value -> {
             byte[] responseBytes = UTF8BOMFighter.removeUTF8BOM(value.bytes());
             if (!TextUtils.isEmpty(encode)) {
-                return new String((responseBytes), encode);
+                try {
+                    return new String((responseBytes), Charset.forName(encode));
+                } catch (Exception ignored) {
+                }
             }
             String charsetStr;
             MediaType mediaType = value.contentType();
@@ -54,7 +52,10 @@ public class EncodeConverter extends Converter.Factory {
                 if (charset != null) {
                     charsetStr = charset.displayName();
                     if (!isEmpty(charsetStr)) {
-                        return new String(responseBytes, Charset.forName(charsetStr));
+                        try {
+                            return new String((responseBytes), Charset.forName(charsetStr));
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
             }
@@ -63,4 +64,5 @@ public class EncodeConverter extends Converter.Factory {
             return new String(responseBytes, Charset.forName(charsetStr));
         };
     }
+
 }
