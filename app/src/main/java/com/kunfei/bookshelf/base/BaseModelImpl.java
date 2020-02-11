@@ -41,19 +41,19 @@ public class BaseModelImpl {
     public Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
         switch (analyzeUrl.getUrlMode()) {
             case POST:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpPostApi.class)
                         .postMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpGetApi.class)
                         .getMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpGetApi.class)
                         .get(analyzeUrl.getPath(),
                                 analyzeUrl.getHeaderMap());

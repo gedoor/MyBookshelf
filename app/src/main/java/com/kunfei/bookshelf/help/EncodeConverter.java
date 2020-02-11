@@ -23,7 +23,12 @@ public class EncodeConverter extends Converter.Factory {
     }
 
     private EncodeConverter(String encode) {
-        this.encode = encode;
+        try {
+            Charset charset = Charset.forName(encode);
+            this.encode = charset.name();
+        } catch (Exception ignored) {
+
+        }
     }
 
     public static EncodeConverter create() {
