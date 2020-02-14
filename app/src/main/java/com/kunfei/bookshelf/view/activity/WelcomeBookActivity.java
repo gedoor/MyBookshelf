@@ -1,5 +1,5 @@
 package com.kunfei.bookshelf.view.activity;
 
-class WelcomeBookActivity extends WelcomeActivity {
+public class WelcomeBookActivity extends WelcomeActivity {
 
 }
