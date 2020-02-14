@@ -89,7 +89,3 @@ public class WelcomeActivity extends MBaseActivity {
     }
 
 }
-
-class WelcomeBookActivity extends WelcomeActivity {
-
-}
