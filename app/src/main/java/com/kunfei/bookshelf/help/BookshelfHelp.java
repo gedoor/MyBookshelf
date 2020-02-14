@@ -254,6 +254,7 @@ public class BookshelfHelp {
     public static List<BookInfoBean> searchBookInfo(String key) {
         return DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                 .where(BookInfoBeanDao.Properties.Name.like("%" + key + "%"))
+                .orderAsc(BookInfoBeanDao.Properties.Name)
                 .list();
     }
 
