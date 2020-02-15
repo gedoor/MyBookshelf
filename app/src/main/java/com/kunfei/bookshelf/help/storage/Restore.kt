@@ -31,7 +31,7 @@ object Restore {
                 for (fileName in Backup.backupFileNames) {
                     if (doc.name == fileName) {
                         DocumentUtil.readBytes(context, doc.uri)?.let {
-                            FileHelp.getFile(Backup.backupPath + File.separator + fileName)
+                            FileHelp.createFileIfNotExist(Backup.backupPath + File.separator + fileName)
                                     .writeBytes(it)
                         }
                     }
@@ -55,7 +55,7 @@ object Restore {
     fun restore(path: String, callBack: CallBack?) {
         Single.create(SingleOnSubscribe<Boolean> { e ->
             try {
-                val file = FileHelp.getFile(path + File.separator + "myBookShelf.json")
+                val file = FileHelp.createFileIfNotExist(path + File.separator + "myBookShelf.json")
                 val json = file.readText()
                 GSON.fromJsonArray<BookShelfBean>(json)?.forEach { bookshelf ->
                     if (bookshelf.noteUrl != null) {
@@ -69,7 +69,7 @@ object Restore {
                 e.printStackTrace()
             }
             try {
-                val file = FileHelp.getFile(path + File.separator + "myBookSource.json")
+                val file = FileHelp.createFileIfNotExist(path + File.separator + "myBookSource.json")
                 val json = file.readText()
                 GSON.fromJsonArray<BookSourceBean>(json)?.let {
                     BookSourceManager.addBookSource(it)
@@ -78,7 +78,7 @@ object Restore {
                 e.printStackTrace()
             }
             try {
-                val file = FileHelp.getFile(path + File.separator + "myBookSearchHistory.json")
+                val file = FileHelp.createFileIfNotExist(path + File.separator + "myBookSearchHistory.json")
                 val json = file.readText()
                 GSON.fromJsonArray<SearchHistoryBean>(json)?.let {
                     DbHelper.getDaoSession().searchHistoryBeanDao.insertOrReplaceInTx(it)
@@ -87,7 +87,7 @@ object Restore {
                 e.printStackTrace()
             }
             try {
-                val file = FileHelp.getFile(path + File.separator + "myBookReplaceRule.json")
+                val file = FileHelp.createFileIfNotExist(path + File.separator + "myBookReplaceRule.json")
                 val json = file.readText()
                 GSON.fromJsonArray<ReplaceRuleBean>(json)?.let {
                     ReplaceRuleManager.addDataS(it)
@@ -96,7 +96,7 @@ object Restore {
                 e.printStackTrace()
             }
             try {
-                val file = FileHelp.getFile(path + File.separator + "myTxtChapterRule.json")
+                val file = FileHelp.createFileIfNotExist(path + File.separator + "myTxtChapterRule.json")
                 val json = file.readText()
                 GSON.fromJsonArray<TxtChapterRuleBean>(json)?.let {
                     TxtChapterRuleManager.save(it)

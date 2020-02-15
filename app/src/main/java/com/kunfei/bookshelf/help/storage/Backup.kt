@@ -60,32 +60,32 @@ object Backup {
             BookshelfHelp.getAllBook().let {
                 if (it.isNotEmpty()) {
                     val json = GSON.toJson(it)
-                    FileHelp.getFile(backupPath + File.separator + "myBookShelf.json").writeText(json)
+                    FileHelp.createFileIfNotExist(backupPath + File.separator + "myBookShelf.json").writeText(json)
                 }
             }
             BookSourceManager.getAllBookSource().let {
                 if (it.isNotEmpty()) {
                     val json = GSON.toJson(it)
-                    FileHelp.getFile(backupPath + File.separator + "myBookSource.json").writeText(json)
+                    FileHelp.createFileIfNotExist(backupPath + File.separator + "myBookSource.json").writeText(json)
                 }
             }
             DbHelper.getDaoSession().searchHistoryBeanDao.queryBuilder().list().let {
                 if (it.isNotEmpty()) {
                     val json = GSON.toJson(it)
-                    FileHelp.getFile(backupPath + File.separator + "myBookSearchHistory.json")
+                    FileHelp.createFileIfNotExist(backupPath + File.separator + "myBookSearchHistory.json")
                             .writeText(json)
                 }
             }
             ReplaceRuleManager.getAll().blockingGet().let {
                 if (it.isNotEmpty()) {
                     val json = GSON.toJson(it)
-                    FileHelp.getFile(backupPath + File.separator + "myBookReplaceRule.json").writeText(json)
+                    FileHelp.createFileIfNotExist(backupPath + File.separator + "myBookReplaceRule.json").writeText(json)
                 }
             }
             TxtChapterRuleManager.getAll().let {
                 if (it.isNotEmpty()) {
                     val json = GSON.toJson(it)
-                    FileHelp.getFile(backupPath + File.separator + "myTxtChapterRule.json")
+                    FileHelp.createFileIfNotExist(backupPath + File.separator + "myTxtChapterRule.json")
                             .writeText(json)
                 }
             }
@@ -128,9 +128,12 @@ object Backup {
     private fun copyBackup(context: Context, uri: Uri) {
         DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
             for (fileName in backupFileNames) {
-                val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
-                doc?.let {
-                    DocumentUtil.writeBytes(context, FileHelp.getFile(backupPath + File.separator + fileName).readBytes(), doc)
+                val file = File(backupPath + File.separator + fileName)
+                if (file.exists()) {
+                    val doc = treeDoc.findFile(fileName) ?: treeDoc.createFile("", fileName)
+                    doc?.let {
+                        DocumentUtil.writeBytes(context, file.readBytes(), doc)
+                    }
                 }
             }
         }
@@ -139,8 +142,10 @@ object Backup {
     @Throws(java.lang.Exception::class)
     private fun copyBackup(path: String) {
         for (fileName in backupFileNames) {
-            FileHelp.getFile(backupPath + File.separator + fileName)
-                    .copyTo(FileHelp.getFile(path + File.separator + fileName), true)
+            val file = File(backupPath + File.separator + fileName)
+            if (file.exists()) {
+                file.copyTo(FileHelp.createFileIfNotExist(path + File.separator + fileName), true)
+            }
         }
     }
 
