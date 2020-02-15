@@ -52,10 +52,10 @@ object Backup {
         } else {
             backup(MApplication.getInstance(), path, null)
         }
-        MApplication.getConfigPreferences().edit().putLong("lastBackup", System.currentTimeMillis()).apply()
     }
 
     fun backup(context: Context, path: String, callBack: CallBack?) {
+        MApplication.getConfigPreferences().edit().putLong("lastBackup", System.currentTimeMillis()).apply()
         Single.create(SingleOnSubscribe<Boolean> { e ->
             BookshelfHelp.getAllBook().let {
                 if (it.isNotEmpty()) {
