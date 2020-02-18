@@ -341,12 +341,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
             mCurrentPageShadow = mFrontShadowDrawableVRL;
         }
 
-        rotateDegrees = (float) Math.toDegrees(Math.atan2(mTouchX
-                - mBezierControl1.x, mBezierControl1.y - mTouchY));
+        rotateDegrees = (float) Math.toDegrees(Math.atan2(mTouchX - mBezierControl1.x, mBezierControl1.y - mTouchY));
         canvas.rotate(rotateDegrees, mBezierControl1.x, mBezierControl1.y);
-        mCurrentPageShadow.setBounds(leftx,
-                (int) (mBezierControl1.y - mMaxLength), rightx,
-                (int) (mBezierControl1.y));
+        mCurrentPageShadow.setBounds(leftx, (int) (mBezierControl1.y - mMaxLength),
+                rightx, (int) (mBezierControl1.y));
         mCurrentPageShadow.draw(canvas);
         canvas.restore();
 
@@ -377,14 +375,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
             rightx = (int) (mBezierControl2.y + 1);
             mCurrentPageShadow = mFrontShadowDrawableHBT;
         }
-        rotateDegrees = (float) Math.toDegrees(Math.atan2(mBezierControl2.y
-                - mTouchY, mBezierControl2.x - mTouchX));
+        rotateDegrees = (float) Math.toDegrees(Math.atan2(mBezierControl2.y - mTouchY, mBezierControl2.x - mTouchX));
         canvas.rotate(rotateDegrees, mBezierControl2.x, mBezierControl2.y);
         float temp;
-        if (mBezierControl2.y < 0)
-            temp = mBezierControl2.y - mScreenHeight;
-        else
-            temp = mBezierControl2.y;
+        if (mBezierControl2.y < 0) temp = mBezierControl2.y - mScreenHeight;
+        else temp = mBezierControl2.y;
 
         int hmg = (int) Math.hypot(mBezierControl2.x, temp);
         if (hmg > mMaxLength)
