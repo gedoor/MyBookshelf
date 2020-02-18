@@ -516,8 +516,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
             mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX)
                     * (mCornerX - mMiddleX) / (mCornerY - mMiddleY);
         }
-        mBezierStart1.x = mBezierControl1.x - (mCornerX - mBezierControl1.x)
-                / 2;
+        mBezierStart1.x = mBezierControl1.x - (mCornerX - mBezierControl1.x) / 2;
         mBezierStart1.y = mCornerY;
 
         // 当mBezierStart1.x < 0或者mBezierStart1.x > 480时
@@ -558,16 +557,15 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
         }
         mBezierStart2.x = mCornerX;
-        mBezierStart2.y = mBezierControl2.y - (mCornerY - mBezierControl2.y)
-                / 2;
+        mBezierStart2.y = mBezierControl2.y - (mCornerY - mBezierControl2.y) / 2;
 
         mTouchToCornerDis = (float) Math.hypot((mTouchX - mCornerX),
                 (mTouchY - mCornerY));
 
-        mBezierEnd1 = getCross(new PointF(mTouchX, mTouchY), mBezierControl1, mBezierStart1,
-                mBezierStart2);
-        mBezierEnd2 = getCross(new PointF(mTouchX, mTouchY), mBezierControl2, mBezierStart1,
-                mBezierStart2);
+        mBezierEnd1 =
+                getCross(new PointF(mTouchX, mTouchY), mBezierControl1, mBezierStart1, mBezierStart2);
+        mBezierEnd2 =
+                getCross(new PointF(mTouchX, mTouchY), mBezierControl2, mBezierStart1, mBezierStart2);
 
         mBezierVertex1.x = (mBezierStart1.x + 2 * mBezierControl1.x + mBezierEnd1.x) / 4;
         mBezierVertex1.y = (2 * mBezierControl1.y + mBezierStart1.y + mBezierEnd1.y) / 4;
