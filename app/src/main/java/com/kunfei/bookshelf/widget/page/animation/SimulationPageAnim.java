@@ -405,8 +405,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mPath1.lineTo(mCornerX, mCornerY);
         mPath1.close();
 
-        mDegrees = (float) Math.toDegrees(Math.atan2(mBezierControl1.x
-                - mCornerX, mBezierControl2.y - mCornerY));
+        mDegrees = (float) Math.toDegrees(Math.atan2(mBezierControl1.x - mCornerX,
+                mBezierControl2.y - mCornerY));
         int leftx;
         int rightx;
         GradientDrawable mBackShadowDrawable;
