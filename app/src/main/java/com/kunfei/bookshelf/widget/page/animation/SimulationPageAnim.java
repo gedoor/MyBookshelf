@@ -293,15 +293,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private void drawCurrentPageShadow(Canvas canvas) {
         double degree;
         if (mIsRT_LB) {
-            degree = Math.PI
-                    / 4
-                    - Math.atan2(mBezierControl1.y - mTouchY, mTouchX
-                    - mBezierControl1.x);
+            degree = Math.PI / 4
+                    - Math.atan2(mBezierControl1.y - mTouchY, mTouchX - mBezierControl1.x);
         } else {
-            degree = Math.PI
-                    / 4
-                    - Math.atan2(mTouchY - mBezierControl1.y, mTouchX
-                    - mBezierControl1.x);
+            degree = Math.PI / 4
+                    - Math.atan2(mTouchY - mBezierControl1.y, mTouchX - mBezierControl1.x);
         }
         // 翻起页阴影顶点与touch点的距离
         double d1 = (float) 25 * 1.414 * Math.cos(degree);
