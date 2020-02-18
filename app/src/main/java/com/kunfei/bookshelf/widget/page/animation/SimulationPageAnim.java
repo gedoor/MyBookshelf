@@ -223,10 +223,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 .setGradientType(GradientDrawable.LINEAR_GRADIENT);
     }
 
-    public boolean right() {
-        return mCornerX <= -4;
-    }
-
     /**
      * 绘制翻起页背面
      */
