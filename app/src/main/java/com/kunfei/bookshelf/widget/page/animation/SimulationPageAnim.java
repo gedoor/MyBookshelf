@@ -443,12 +443,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private void drawCurrentPageArea(Canvas canvas, Bitmap bitmap, Path path) {
         mPath0.reset();
         mPath0.moveTo(mBezierStart1.x, mBezierStart1.y);
-        mPath0.quadTo(mBezierControl1.x, mBezierControl1.y, mBezierEnd1.x,
-                mBezierEnd1.y);
+        mPath0.quadTo(mBezierControl1.x, mBezierControl1.y, mBezierEnd1.x, mBezierEnd1.y);
         mPath0.lineTo(mTouchX, mTouchY);
         mPath0.lineTo(mBezierEnd2.x, mBezierEnd2.y);
-        mPath0.quadTo(mBezierControl2.x, mBezierControl2.y, mBezierStart2.x,
-                mBezierStart2.y);
+        mPath0.quadTo(mBezierControl2.x, mBezierControl2.y, mBezierStart2.x, mBezierStart2.y);
         mPath0.lineTo(mCornerX, mCornerY);
         mPath0.close();
 
