@@ -503,8 +503,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mBezierStart1.x = mBezierControl1.x - (mCornerX - mBezierControl1.x) / 2;
         mBezierStart1.y = mCornerY;
 
-        // 当mBezierStart1.x < 0或者mBezierStart1.x > 480时
-        // 如果继续翻页，会出现BUG故在此限制
+        // 固定左边上下两个点
         if (mTouchX > 0 && mTouchX < mScreenWidth) {
             if (mBezierStart1.x < 0 || mBezierStart1.x > mScreenWidth) {
                 if (mBezierStart1.x < 0)
