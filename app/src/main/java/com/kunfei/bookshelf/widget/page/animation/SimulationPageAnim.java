@@ -490,10 +490,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mBezierControl1.x = mMiddleX - (mCornerY - mMiddleY)
                 * (mCornerY - mMiddleY) / (mCornerX - mMiddleX);
         mBezierControl1.y = mCornerY;
-        mBezierControl2.x = mCornerX;
 
-        float f4 = mCornerY - mMiddleY;
-        if (f4 == 0) {
+        mBezierControl2.x = mCornerX;
+        if (mCornerY - mMiddleY == 0) {
             mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX)
                     * (mCornerX - mMiddleX) / 0.1f;
 
