@@ -385,8 +385,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         if (hmg > mMaxLength)
             mCurrentPageShadow
                     .setBounds((int) (mBezierControl2.x - 25) - hmg, leftx,
-                            (int) (mBezierControl2.x + mMaxLength) - hmg,
-                            rightx);
+                            (int) (mBezierControl2.x + mMaxLength) - hmg, rightx);
         else
             mCurrentPageShadow.setBounds(
                     (int) (mBezierControl2.x - mMaxLength), leftx,
