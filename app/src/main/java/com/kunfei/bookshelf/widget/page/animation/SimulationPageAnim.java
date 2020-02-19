@@ -487,8 +487,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private void calcPoints() {
         mMiddleX = (mTouchX + mCornerX) / 2;
         mMiddleY = (mTouchY + mCornerY) / 2;
-        mBezierControl1.x = mMiddleX - (mCornerY - mMiddleY)
-                * (mCornerY - mMiddleY) / (mCornerX - mMiddleX);
+        mBezierControl1.x =
+                mMiddleX - (mCornerY - mMiddleY) * (mCornerY - mMiddleY) / (mCornerX - mMiddleX);
         mBezierControl1.y = mCornerY;
 
         mBezierControl2.x = mCornerX;
