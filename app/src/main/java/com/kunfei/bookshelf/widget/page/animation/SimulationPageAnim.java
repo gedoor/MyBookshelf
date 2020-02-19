@@ -430,7 +430,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
         } catch (Exception ignored) {
         }
 
-
         canvas.drawBitmap(bitmap, 0, 0, null);
         canvas.rotate(mDegrees, mBezierStart1.x, mBezierStart1.y);
         mBackShadowDrawable.setBounds(leftx, (int) mBezierStart1.y, rightx,
