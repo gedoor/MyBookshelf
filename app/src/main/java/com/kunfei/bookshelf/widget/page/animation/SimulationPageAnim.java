@@ -84,19 +84,42 @@ public class SimulationPageAnim extends HorizonPageAnim {
     }
 
     @Override
-    public void drawMove(Canvas canvas) {
-        if (mDirection == Direction.NEXT) {
-            calcPoints();
-            drawCurrentPageArea(canvas, bitmapList.get(1), mPath0);//绘制翻页时的正面页
-            drawNextPageAreaAndShadow(canvas, bitmapList.get(2));
-            drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, bitmapList.get(1));
-        } else {
-            calcPoints();
-            drawCurrentPageArea(canvas, bitmapList.get(0), mPath0);
-            drawNextPageAreaAndShadow(canvas, bitmapList.get(1));
-            drawCurrentPageShadow(canvas);
-            drawCurrentBackArea(canvas, bitmapList.get(0));
+    public void setStartPoint(float x, float y) {
+        super.setStartPoint(x, y);
+        calcCornerXY(x, y);
+    }
+
+    @Override
+    public void setTouchPoint(float x, float y) {
+        super.setTouchPoint(x, y);
+        //触摸y中间位置吧y变成屏幕高度
+        if ((mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight * 2 / 3.0) || mDirection.equals(Direction.PREV)) {
+            mTouchY = mScreenHeight;
+        }
+
+        if (mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight / 2.0 && mDirection.equals(Direction.NEXT)) {
+            mTouchY = 1;
+        }
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        super.setDirection(direction);
+
+        switch (direction) {
+            case PREV:
+                //上一页滑动不出现对角
+                if (mStartX > mScreenWidth / 2.0) {
+                    calcCornerXY(mStartX, mScreenHeight);
+                } else {
+                    calcCornerXY(mScreenWidth - mStartX, mScreenHeight);
+                }
+                break;
+            case NEXT:
+                if (mScreenWidth / 2.0 > mStartX) {
+                    calcCornerXY(mScreenWidth - mStartX, mStartY);
+                }
+                break;
         }
     }
 
@@ -139,42 +162,19 @@ public class SimulationPageAnim extends HorizonPageAnim {
     }
 
     @Override
-    public void setDirection(Direction direction) {
-        super.setDirection(direction);
-
-        switch (direction) {
-            case PREV:
-                //上一页滑动不出现对角
-                if (mStartX > mScreenWidth / 2.0) {
-                    calcCornerXY(mStartX, mScreenHeight);
-                } else {
-                    calcCornerXY(mScreenWidth - mStartX, mScreenHeight);
-                }
-                break;
-            case NEXT:
-                if (mScreenWidth / 2.0 > mStartX) {
-                    calcCornerXY(mScreenWidth - mStartX, mStartY);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        super.setStartPoint(x, y);
-        calcCornerXY(x, y);
-    }
-
-    @Override
-    public void setTouchPoint(float x, float y) {
-        super.setTouchPoint(x, y);
-        //触摸y中间位置吧y变成屏幕高度
-        if ((mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight * 2 / 3.0) || mDirection.equals(Direction.PREV)) {
-            mTouchY = mScreenHeight;
-        }
-
-        if (mStartY > mScreenHeight / 3.0 && mStartY < mScreenHeight / 2.0 && mDirection.equals(Direction.NEXT)) {
-            mTouchY = 1;
+    public void drawMove(Canvas canvas) {
+        if (mDirection == Direction.NEXT) {
+            calcPoints();
+            drawCurrentPageArea(canvas, bitmapList.get(1), mPath0);//绘制翻页时的正面页
+            drawNextPageAreaAndShadow(canvas, bitmapList.get(2));
+            drawCurrentPageShadow(canvas);
+            drawCurrentBackArea(canvas, bitmapList.get(1));
+        } else {
+            calcPoints();
+            drawCurrentPageArea(canvas, bitmapList.get(0), mPath0);
+            drawNextPageAreaAndShadow(canvas, bitmapList.get(1));
+            drawCurrentPageShadow(canvas);
+            drawCurrentBackArea(canvas, bitmapList.get(0));
         }
     }
 
@@ -519,8 +519,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 mMiddleX = (mTouchX + mCornerX) / 2;
                 mMiddleY = (mTouchY + mCornerY) / 2;
 
-                mBezierControl1.x = mMiddleX - (mCornerY - mMiddleY)
-                        * (mCornerY - mMiddleY) / (mCornerX - mMiddleX);
+                mBezierControl1.x =
+                        mMiddleX - (mCornerY - mMiddleY) * (mCornerY - mMiddleY) / (mCornerX - mMiddleX);
                 mBezierControl1.y = mCornerY;
 
                 mBezierControl2.x = mCornerX;
@@ -541,8 +541,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mBezierStart2.x = mCornerX;
         mBezierStart2.y = mBezierControl2.y - (mCornerY - mBezierControl2.y) / 2;
 
-        mTouchToCornerDis = (float) Math.hypot((mTouchX - mCornerX),
-                (mTouchY - mCornerY));
+        mTouchToCornerDis = (float) Math.hypot((mTouchX - mCornerX), (mTouchY - mCornerY));
 
         mBezierEnd1 =
                 getCross(new PointF(mTouchX, mTouchY), mBezierControl1, mBezierStart1, mBezierStart2);
