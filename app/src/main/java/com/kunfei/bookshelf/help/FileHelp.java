@@ -41,7 +41,7 @@ public class FileHelp {
     }
 
     //获取文件
-    public static synchronized File getFile(String filePath) {
+    public static synchronized File createFileIfNotExist(String filePath) {
         File file = new File(filePath);
         try {
             if (!file.exists()) {

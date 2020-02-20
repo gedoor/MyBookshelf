@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,18 +27,29 @@ import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
 import static com.kunfei.bookshelf.constant.AppConstant.ActionStartService;
 
 public class WebService extends Service {
-    private static boolean isRunning = false;
+    private static boolean sIsRunning = false;
     private HttpServer httpServer;
     private WebSocketServer webSocketServer;
 
-    public static void startThis(Activity activity) {
-        Intent intent = new Intent(activity, WebService.class);
-        intent.setAction(ActionStartService);
-        activity.startService(intent);
+    /**
+     * Start the web service, return true if the service can be started normally, false if it is started.
+     *
+     * @param context Indicates component context.
+     * @return true if the service can be started normally, false if it is started.
+     */
+    public static boolean startThis(Context context) {
+        if (sIsRunning) {
+            return false;
+        } else {
+            Intent intent = new Intent(context, WebService.class);
+            intent.setAction(ActionStartService);
+            context.startService(intent);
+            return true;
+        }
     }
 
     public static void upHttpServer(Activity activity) {
-        if (isRunning) {
+        if (sIsRunning) {
             Intent intent = new Intent(activity, WebService.class);
             intent.setAction(ActionStartService);
             activity.startService(intent);
@@ -47,9 +59,9 @@ public class WebService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        updateNotification("正在启动服务");
+        updateNotification(getString(R.string.web_service_starting_hint_short));
         new Handler(Looper.getMainLooper())
-                .post(() -> Toast.makeText(this, "正在启动服务\n具体信息查看通知栏", Toast.LENGTH_SHORT).show());
+                .post(() -> Toast.makeText(this, R.string.web_service_starting_hint_long, Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -85,7 +97,7 @@ public class WebService extends Service {
             try {
                 httpServer.start();
                 webSocketServer.start(1000 * 30); // 通信超时设置
-                isRunning = true;
+                sIsRunning = true;
                 updateNotification(getString(R.string.http_ip, inetAddress.getHostAddress(), port));
             } catch (IOException e) {
                 stopSelf();
@@ -98,7 +110,7 @@ public class WebService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        isRunning = false;
+        sIsRunning = false;
         if (httpServer != null && httpServer.isAlive()) {
             httpServer.stop();
         }

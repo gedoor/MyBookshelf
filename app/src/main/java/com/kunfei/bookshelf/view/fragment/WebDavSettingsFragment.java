@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ProcessTextHelp;
+import com.kunfei.bookshelf.help.storage.BackupRestoreUi;
 import com.kunfei.bookshelf.help.storage.WebDavHelp;
 import com.kunfei.bookshelf.view.activity.SettingActivity;
 
@@ -123,6 +124,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
     }
 
     private void restore() {
+
         Single.create((SingleOnSubscribe<ArrayList<String>>) emitter -> {
             emitter.onSuccess(WebDavHelp.INSTANCE.getWebDavFileNames());
         }).subscribeOn(Schedulers.io())
@@ -130,7 +132,7 @@ public class WebDavSettingsFragment extends PreferenceFragment implements Shared
                 .subscribe(new MySingleObserver<ArrayList<String>>() {
                     @Override
                     public void onSuccess(ArrayList<String> strings) {
-                        if (!WebDavHelp.INSTANCE.showRestoreDialog(getActivity(), strings)) {
+                        if (!WebDavHelp.INSTANCE.showRestoreDialog(getActivity(), strings, BackupRestoreUi.INSTANCE)) {
                             Toast.makeText(getActivity(), "没有备份", Toast.LENGTH_SHORT).show();
                         }
                     }

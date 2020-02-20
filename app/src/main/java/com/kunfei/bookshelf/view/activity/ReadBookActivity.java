@@ -1926,24 +1926,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-        backup();
+        Backup.INSTANCE.autoBack();
         super.finish();
-    }
-
-    private void backup() {
-        String path = preferences.getString("backupPath", "");
-        if (TextUtils.isEmpty(path)) {
-            new PermissionsCompat.Builder(this)
-                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
-                    .rationale("自动备份需要存储权限")
-                    .onGranted((requestCode) -> {
-                        Backup.INSTANCE.backup(ReadBookActivity.this, null, null);
-                        return Unit.INSTANCE;
-                    })
-                    .request();
-        } else {
-            Backup.INSTANCE.backup(this, Uri.parse(path), null);
-        }
     }
 
     @Override

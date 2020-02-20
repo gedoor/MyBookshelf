@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,8 +21,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
@@ -36,17 +37,15 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.BlurTransformation;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.help.ImageLoader;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.widget.CoverImageView;
+import com.kunfei.bookshelf.widget.image.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-
-import java.io.File;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -133,7 +132,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         } else {
             if (mPresenter.getSearchBook() == null) return;
             SearchBookBean searchBookBean = mPresenter.getSearchBook();
-            upImageView(searchBookBean.getCoverUrl());
+            upImageView(searchBookBean.getCoverUrl(), searchBookBean.getName(), searchBookBean.getAuthor());
             tvName.setText(searchBookBean.getName());
             author = searchBookBean.getAuthor();
             tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
@@ -200,9 +199,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvOrigin.setVisibility(View.INVISIBLE);
             }
             if (!TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
-                upImageView(bookShelfBean.getCustomCoverPath());
+                upImageView(bookShelfBean.getCustomCoverPath(), bookInfoBean.getName(), bookInfoBean.getAuthor());
             } else {
-                upImageView(bookInfoBean.getCoverUrl());
+                upImageView(bookInfoBean.getCoverUrl(), bookInfoBean.getName(), bookInfoBean.getAuthor());
             }
             if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 tvChangeOrigin.setVisibility(View.INVISIBLE);
@@ -226,37 +225,19 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
     }
 
-    private void upImageView(String path) {
-        if (TextUtils.isEmpty(path)) return;
-        if (Objects.equals(coverPath, path)) return;
-        if (this.isFinishing()) return;
-        coverPath = path;
-        if (coverPath.startsWith("http")) {
-            Glide.with(this).load(coverPath)
-                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .centerCrop()
-                    .placeholder(R.drawable.img_cover_default)
-                    .into(ivCover);
-            Glide.with(this).load(coverPath)
-                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .centerCrop()
-                    .placeholder(R.drawable.img_cover_gs)
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
-                    .into(ivBlurCover);
-        } else {
-            File file = new File(coverPath);
-            Glide.with(this).load(file)
-                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .centerCrop()
-                    .placeholder(R.drawable.img_cover_default)
-                    .into(ivCover);
-            Glide.with(this).load(file)
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .centerCrop()
-                    .placeholder(R.drawable.img_cover_gs)
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
-                    .into(ivBlurCover);
-        }
+    private void upImageView(String path, String name, String author) {
+        ivCover.load(path, name, author);
+        ImageLoader.INSTANCE.load(this, path)
+                .transition(DrawableTransitionOptions.withCrossFade(1500))
+                .thumbnail(defaultCover())
+                .centerCrop()
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
+                .into(ivBlurCover);  //模糊、渐变、缩小效果
+    }
+
+    private RequestBuilder<Drawable> defaultCover() {
+        return ImageLoader.INSTANCE.load(this, R.drawable.image_cover_default)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)));
     }
 
     private void refresh() {

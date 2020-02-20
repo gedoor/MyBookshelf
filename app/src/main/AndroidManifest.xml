@@ -58,13 +58,6 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".view.activity.WelcomeToReadActivity"
-            android:theme="@style/CAppWelcomeTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".view.activity.ReadBookActivity"
             android:configChanges="locale|keyboardHidden"
             android:launchMode="singleTask"

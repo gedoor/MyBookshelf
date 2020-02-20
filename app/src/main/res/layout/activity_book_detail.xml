@@ -29,12 +29,11 @@
             app:cardCornerRadius="5dp"
             app:cardElevation="10dp">
 
-            <com.kunfei.bookshelf.widget.FilletImageView
+            <com.kunfei.bookshelf.widget.image.FilletImageView
                 android:id="@+id/iv_blur_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_cover_gs"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
@@ -49,14 +48,14 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.kunfei.bookshelf.widget.CoverImageView
+                    <com.kunfei.bookshelf.widget.image.CoverImageView
                         android:id="@+id/iv_cover"
                         android:layout_width="92dp"
                         android:layout_height="130dp"
                         android:layout_margin="3dp"
                         android:contentDescription="@string/img_cover"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_cover_default" />
+                        android:src="@drawable/image_cover_default" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
