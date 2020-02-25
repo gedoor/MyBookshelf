@@ -165,13 +165,13 @@ public class SimulationPageAnim extends HorizonPageAnim {
     public void drawMove(Canvas canvas) {
         if (mDirection == Direction.NEXT) {
             calcPoints();
-            drawCurrentPageArea(canvas, bitmapList.get(1), mPath0);//绘制翻页时的正面页
+            drawCurrentPageArea(canvas, bitmapList.get(1));//绘制翻页时的正面页
             drawNextPageAreaAndShadow(canvas, bitmapList.get(2));
             drawCurrentPageShadow(canvas);
             drawCurrentBackArea(canvas, bitmapList.get(1));
         } else {
             calcPoints();
-            drawCurrentPageArea(canvas, bitmapList.get(0), mPath0);
+            drawCurrentPageArea(canvas, bitmapList.get(0));
             drawNextPageAreaAndShadow(canvas, bitmapList.get(1));
             drawCurrentPageShadow(canvas);
             drawCurrentBackArea(canvas, bitmapList.get(0));
@@ -438,7 +438,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
         canvas.restore();
     }
 
-    private void drawCurrentPageArea(Canvas canvas, Bitmap bitmap, Path path) {
+    private void drawCurrentPageArea(Canvas canvas, Bitmap bitmap) {
         mPath0.reset();
         mPath0.moveTo(mBezierStart1.x, mBezierStart1.y);
         mPath0.quadTo(mBezierControl1.x, mBezierControl1.y, mBezierEnd1.x, mBezierEnd1.y);
@@ -450,9 +450,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         canvas.save();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.clipOutPath(path);
+            canvas.clipOutPath(mPath0);
         } else {
-            canvas.clipPath(path, Region.Op.XOR);
+            canvas.clipPath(mPath0, Region.Op.XOR);
         }
         canvas.drawBitmap(bitmap, 0, 0, null);
         try {
@@ -491,9 +491,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         mBezierControl2.x = mCornerX;
         if (mCornerY - mMiddleY == 0) {
-            mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX)
-                    * (mCornerX - mMiddleX) / 0.1f;
-
+            mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX) * (mCornerX - mMiddleX) / 0.1f;
         } else {
             mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX)
                     * (mCornerX - mMiddleX) / (mCornerY - mMiddleY);
@@ -522,7 +520,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 mBezierControl1.y = mCornerY;
 
                 mBezierControl2.x = mCornerX;
-
                 float f5 = mCornerY - mMiddleY;
                 if (f5 == 0) {
                     mBezierControl2.y = mMiddleY - (mCornerX - mMiddleX)
@@ -532,8 +529,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
                             * (mCornerX - mMiddleX) / (mCornerY - mMiddleY);
                 }
 
-                mBezierStart1.x = mBezierControl1.x
-                        - (mCornerX - mBezierControl1.x) / 2;
+                mBezierStart1.x = mBezierControl1.x - (mCornerX - mBezierControl1.x) / 2;
             }
         }
         mBezierStart2.x = mCornerX;
