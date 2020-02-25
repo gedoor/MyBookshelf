@@ -281,8 +281,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mPaint.setColorFilter(null);
 
         canvas.rotate(mDegrees, mBezierStart1.x, mBezierStart1.y);
-        mFolderShadowDrawable.setBounds(left, (int) mBezierStart1.y, right,
-                (int) (mBezierStart1.y + mMaxLength));
+        mFolderShadowDrawable.setBounds(
+                left, (int) mBezierStart1.y,
+                right, (int) (mBezierStart1.y + mMaxLength)
+        );
         mFolderShadowDrawable.draw(canvas);
         canvas.restore();
     }
@@ -293,11 +295,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private void drawCurrentPageShadow(Canvas canvas) {
         double degree;
         if (mIsRT_LB) {
-            degree = Math.PI / 4
-                    - Math.atan2(mBezierControl1.y - mTouchY, mTouchX - mBezierControl1.x);
+            degree = Math.PI / 4 - Math.atan2(mBezierControl1.y - mTouchY, mTouchX - mBezierControl1.x);
         } else {
-            degree = Math.PI / 4
-                    - Math.atan2(mTouchY - mBezierControl1.y, mTouchX - mBezierControl1.x);
+            degree = Math.PI / 4 - Math.atan2(mTouchY - mBezierControl1.y, mTouchX - mBezierControl1.x);
         }
         // 翻起页阴影顶点与touch点的距离
         double d1 = (float) 25 * 1.414 * Math.cos(degree);
@@ -315,7 +315,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mPath1.lineTo(mBezierControl1.x, mBezierControl1.y);
         mPath1.lineTo(mBezierStart1.x, mBezierStart1.y);
         mPath1.close();
-        float rotateDegrees;
         canvas.save();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -341,9 +340,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
             mCurrentPageShadow = mFrontShadowDrawableVRL;
         }
 
+        float rotateDegrees;
         rotateDegrees = (float) Math.toDegrees(Math.atan2(mTouchX - mBezierControl1.x, mBezierControl1.y - mTouchY));
         canvas.rotate(rotateDegrees, mBezierControl1.x, mBezierControl1.y);
-        mCurrentPageShadow.setBounds(leftx, (int) (mBezierControl1.y - mMaxLength),
+        mCurrentPageShadow.setBounds(
+                leftx, (int) (mBezierControl1.y - mMaxLength),
                 rightx, (int) (mBezierControl1.y));
         mCurrentPageShadow.draw(canvas);
         canvas.restore();
@@ -383,9 +384,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         int hmg = (int) Math.hypot(mBezierControl2.x, temp);
         if (hmg > mMaxLength)
-            mCurrentPageShadow
-                    .setBounds((int) (mBezierControl2.x - 25) - hmg, leftx,
-                            (int) (mBezierControl2.x + mMaxLength) - hmg, rightx);
+            mCurrentPageShadow.setBounds(
+                    (int) (mBezierControl2.x - 25) - hmg, leftx,
+                    (int) (mBezierControl2.x + mMaxLength) - hmg, rightx
+            );
         else
             mCurrentPageShadow.setBounds(
                     (int) (mBezierControl2.x - mMaxLength), leftx,
@@ -432,8 +434,9 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         canvas.drawBitmap(bitmap, 0, 0, null);
         canvas.rotate(mDegrees, mBezierStart1.x, mBezierStart1.y);
-        mBackShadowDrawable.setBounds(leftx, (int) mBezierStart1.y, rightx,
-                (int) (mMaxLength + mBezierStart1.y));//左上及右下角的xy坐标值,构成一个矩形
+        mBackShadowDrawable.setBounds(
+                leftx, (int) mBezierStart1.y,
+                rightx, (int) (mMaxLength + mBezierStart1.y));//左上及右下角的xy坐标值,构成一个矩形
         mBackShadowDrawable.draw(canvas);
         canvas.restore();
     }
