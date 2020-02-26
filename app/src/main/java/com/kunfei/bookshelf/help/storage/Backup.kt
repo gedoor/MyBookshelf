@@ -131,9 +131,8 @@ object Backup {
                 val file = File(backupPath + File.separator + fileName)
                 if (file.exists()) {
                     treeDoc.findFile(fileName)?.delete()
-                    val doc = treeDoc.createFile("", fileName)
-                    doc?.let {
-                        DocumentUtil.writeBytes(context, file.readBytes(), doc)
+                    treeDoc.createFile("", fileName)?.let {
+                        DocumentUtil.writeBytes(context, file.readBytes(), it)
                     }
                 }
             }
