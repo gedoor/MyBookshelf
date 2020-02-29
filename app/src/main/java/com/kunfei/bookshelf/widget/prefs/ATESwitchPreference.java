@@ -38,7 +38,9 @@ public class ATESwitchPreference extends SwitchPreference {
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
-
+        if (view.isInEditMode()) {
+            return;
+        }
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             LinkedList<ViewGroup> queue = new LinkedList<>();

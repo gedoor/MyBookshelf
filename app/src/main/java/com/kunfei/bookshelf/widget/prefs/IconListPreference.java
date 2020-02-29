@@ -18,6 +18,8 @@ import android.widget.ListAdapter;
 
 import com.kunfei.bookshelf.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class IconListPreference extends ListPreference {
         setWidgetLayoutResource(R.layout.view_icon);
     }
 
-    protected ListAdapter createListAdapter() {
+    private ListAdapter createListAdapter() {
         final String selectedValue = getValue();
         int selectedIndex = findIndexOfValue(selectedValue);
         return new AppArrayAdapter(getContext(), R.layout.item_icon_preference, getEntries(), mEntryDrawables, selectedIndex);
@@ -74,18 +76,19 @@ public class IconListPreference extends ListPreference {
         super.onPrepareDialogBuilder(builder);
     }
 
-    public class AppArrayAdapter extends ArrayAdapter<CharSequence> {
+    public static class AppArrayAdapter extends ArrayAdapter<CharSequence> {
         private List<Drawable> mImageDrawables = null;
         private int mSelectedIndex = 0;
 
-        public AppArrayAdapter(Context context, int textViewResourceId,
-                               CharSequence[] objects, List<Drawable> imageDrawables,
-                               int selectedIndex) {
+        AppArrayAdapter(Context context, int textViewResourceId,
+                        CharSequence[] objects, List<Drawable> imageDrawables,
+                        int selectedIndex) {
             super(context, textViewResourceId, objects);
             mSelectedIndex = selectedIndex;
             mImageDrawables = imageDrawables;
         }
 
+        @NotNull
         @Override
         @SuppressLint("ViewHolder")
         public View getView(int position, View convertView, ViewGroup parent) {
