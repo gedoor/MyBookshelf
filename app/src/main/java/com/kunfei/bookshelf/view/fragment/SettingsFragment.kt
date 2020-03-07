@@ -8,7 +8,6 @@ import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceScreen
-import android.view.View
 import com.hwangjr.rxbus.RxBus
 import com.kunfei.bookshelf.MApplication
 import com.kunfei.bookshelf.R
@@ -145,7 +144,7 @@ class SettingsFragment : PreferenceFragment(), OnSharedPreferenceChangeListener 
                     }
                     picker.show()
                     picker.cancelButton.setText(R.string.restore_default)
-                    picker.cancelButton.setOnClickListener { view: View? ->
+                    picker.cancelButton.setOnClickListener {
                         picker.dismiss()
                         MApplication.getInstance().setDownloadPath(null)
                         preference.summary = MApplication.downloadPath
