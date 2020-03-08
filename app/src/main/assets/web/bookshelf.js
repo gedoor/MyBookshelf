@@ -7,6 +7,7 @@
     ;
 
 var now_chapter = -1;
+var sum_chapter = 0;
 
 var formatTime = value => {
     return new Date(value).toLocaleString('zh-CN', {
@@ -61,7 +62,8 @@ var init = () => {
             });
             $$('#books img').forEach(bookImg =>
                 bookImg.addEventListener("click", () => {
-                    now_chapter = -1
+                    now_chapter = -1;
+                    sum_chapter = 0;
                     $('#allcontent').classList.add("read");
                     var book = books[bookImg.getAttribute("data-series-num")];
                     $("#info").innerHTML = `<img src="${bookImg.src}">
@@ -94,6 +96,7 @@ var init = () => {
                                 ch.innerHTML = chapter.durChapterName.length > 15 ? chapter.durChapterName.substring(0, 14) + "..." : chapter.durChapterName;
                                 $("#chapter").appendChild(ch);
                             });
+                            sum_chapter = data.data.length;
                             $('#chapter').scrollTop = 0;
                             $("#content").innerHTML = "章节列表加载完成！";
                         });
@@ -140,11 +143,16 @@ $('#up').addEventListener('click', e => {
 });
 
 $('#down').addEventListener('click', e => {
-    if (now_chapter > -1) {
-        now_chapter++;
-        let clickEvent = document.createEvent('MouseEvents');
-        clickEvent.initEvent("click", true, false);
-        $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+    if ((now_chapter > -1)) {
+        if (now_chapter < sum_chapter - 1) {
+            now_chapter++;
+            let clickEvent = document.createEvent('MouseEvents');
+            clickEvent.initEvent("click", true, false);
+            $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+
+        } else {
+            alert("已经是最后一章了^_^!")
+        }
     }
 });
 
