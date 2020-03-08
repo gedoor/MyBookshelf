@@ -139,11 +139,15 @@ $('#up').addEventListener('click', e => {
         let clickEvent = document.createEvent('MouseEvents');
         clickEvent.initEvent("click", true, false);
         $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+    } else if (now_chapter == 0) {
+        alert("已经是第一章了^_^!")
+    } else {
+
     }
 });
 
 $('#down').addEventListener('click', e => {
-    if ((now_chapter > -1)) {
+    if (now_chapter > -1) {
         if (now_chapter < sum_chapter - 1) {
             now_chapter++;
             let clickEvent = document.createEvent('MouseEvents');
