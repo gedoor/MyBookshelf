@@ -1,10 +1,12 @@
 ﻿var $ = document.querySelector.bind(document)
     , $$ = document.querySelectorAll.bind(document)
     , $c = document.createElement.bind(document)
-    , randomImg = "http://acg.bakayun.cn/randbg.php?t=dfzh"
+    , randomImg = "http://api.mtyqx.cn/api/random.php"
     , randomImg2 = "http://img.xjh.me/random_img.php"
     , books
     ;
+
+var now_chapter = -1;
 
 var formatTime = value => {
     return new Date(value).toLocaleString('zh-CN', {
@@ -13,10 +15,10 @@ var formatTime = value => {
 };
 
 var apiMap = {
-    getBookshelf: "/getBookshelf",
-    getChapterList: "/getChapterList",
-    getBookContent: "/getBookContent",
-    saveBook: "/saveBook"
+    "getBookshelf": "/getBookshelf",
+    "getChapterList": "/getChapterList",
+    "getBookContent": "/getBookContent",
+    "saveBook": "/saveBook"
 };
 
 var apiAddress = (apiName, url) => {
@@ -59,6 +61,7 @@ var init = () => {
             });
             $$('#books img').forEach(bookImg =>
                 bookImg.addEventListener("click", () => {
+                    now_chapter = -1
                     $('#allcontent').classList.add("read");
                     var book = books[bookImg.getAttribute("data-series-num")];
                     $("#info").innerHTML = `<img src="${bookImg.src}">
@@ -86,6 +89,7 @@ var init = () => {
                             data.data.forEach(chapter => {
                                 let ch = $c("button");
                                 ch.setAttribute("data-url", chapter.durChapterUrl);
+                                ch.setAttribute("data-index", chapter.durChapterIndex);
                                 ch.setAttribute("title", chapter.durChapterName);
                                 ch.innerHTML = chapter.durChapterName.length > 15 ? chapter.durChapterName.substring(0, 14) + "..." : chapter.durChapterName;
                                 $("#chapter").appendChild(ch);
@@ -126,13 +130,33 @@ $('#showchapter').addEventListener("click", () => {
     window.location.hash = "#chapter";
 });
 
+$('#up').addEventListener('click', e => {
+    if (now_chapter > 0) {
+        now_chapter--;
+        let clickEvent = document.createEvent('MouseEvents');
+        clickEvent.initEvent("click", true, false);
+        $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+    }
+});
+
+$('#down').addEventListener('click', e => {
+    if (now_chapter > -1) {
+        now_chapter++;
+        let clickEvent = document.createEvent('MouseEvents');
+        clickEvent.initEvent("click", true, false);
+        $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+    }
+});
+
 $('#chapter').addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
         var url = e.target.getAttribute("data-url");
+        var index = e.target.getAttribute("data-index");
         var name = e.target.getAttribute("title");
         if (!url) {
             alert("未取得章节地址");
         }
+        now_chapter = parseInt(index);
         $("#content").innerHTML = "<p>" + name + " 加载中...</p>";
         fetch(apiAddress("getBookContent", url), { mode: "cors" })
             .then(res => res.json())
