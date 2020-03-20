@@ -17,8 +17,6 @@
             android:id="@+id/tv_markdown"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:linksClickable="true"
-            android:autoLink="web"
             android:lineSpacingMultiplier="1.2"
             android:padding="10dp"/>
     </ScrollView>
