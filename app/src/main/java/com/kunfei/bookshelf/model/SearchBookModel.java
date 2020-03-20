@@ -238,7 +238,7 @@ public class SearchBookModel {
         int getItemCount();
     }
 
-    private class SearchEngine {
+    private static class SearchEngine {
         private String tag;
         private Boolean hasMore;
 

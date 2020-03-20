@@ -48,13 +48,13 @@ object Backup {
         }
         val path = MApplication.getConfigPreferences().getString("backupPath", defaultPath)
         if (path == null) {
-            backup(MApplication.getInstance(), defaultPath, null)
+            backup(MApplication.getInstance(), defaultPath, null, true)
         } else {
-            backup(MApplication.getInstance(), path, null)
+            backup(MApplication.getInstance(), path, null, true)
         }
     }
 
-    fun backup(context: Context, path: String, callBack: CallBack?) {
+    fun backup(context: Context, path: String, callBack: CallBack?, isAuto: Boolean = false) {
         MApplication.getConfigPreferences().edit().putLong("lastBackup", System.currentTimeMillis()).apply()
         Single.create(SingleOnSubscribe<Boolean> { e ->
             BookshelfHelp.getAllBook().let {
@@ -105,9 +105,9 @@ object Backup {
             }
             WebDavHelp.backUpWebDav(backupPath)
             if (path.isContentPath()) {
-                copyBackup(context, Uri.parse(path))
+                copyBackup(context, Uri.parse(path), isAuto)
             } else {
-                copyBackup(path)
+                copyBackup(path, isAuto)
             }
             e.onSuccess(true)
         }).subscribeOn(Schedulers.io())
@@ -125,14 +125,27 @@ object Backup {
     }
 
     @Throws(Exception::class)
-    private fun copyBackup(context: Context, uri: Uri) {
-        DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
-            for (fileName in backupFileNames) {
-                val file = File(backupPath + File.separator + fileName)
-                if (file.exists()) {
-                    treeDoc.findFile(fileName)?.delete()
-                    treeDoc.createFile("", fileName)?.let {
-                        DocumentUtil.writeBytes(context, file.readBytes(), it)
+    private fun copyBackup(context: Context, uri: Uri, isAuto: Boolean) {
+        synchronized(this) {
+            DocumentFile.fromTreeUri(context, uri)?.let { treeDoc ->
+                for (fileName in backupFileNames) {
+                    val file = File(backupPath + File.separator + fileName)
+                    if (file.exists()) {
+                        if (isAuto) {
+                            treeDoc.findFile("auto")?.findFile(fileName)?.delete()
+                            var autoDoc = treeDoc.findFile("auto")
+                            if (autoDoc == null) {
+                                autoDoc = treeDoc.createDirectory("auto")
+                            }
+                            autoDoc?.createFile("", fileName)?.let {
+                                DocumentUtil.writeBytes(context, file.readBytes(), it)
+                            }
+                        } else {
+                            treeDoc.findFile(fileName)?.delete()
+                            treeDoc.createFile("", fileName)?.let {
+                                DocumentUtil.writeBytes(context, file.readBytes(), it)
+                            }
+                        }
                     }
                 }
             }
@@ -140,11 +153,20 @@ object Backup {
     }
 
     @Throws(java.lang.Exception::class)
-    private fun copyBackup(path: String) {
-        for (fileName in backupFileNames) {
-            val file = File(backupPath + File.separator + fileName)
-            if (file.exists()) {
-                file.copyTo(FileHelp.createFileIfNotExist(path + File.separator + fileName), true)
+    private fun copyBackup(path: String, isAuto: Boolean) {
+        synchronized(this) {
+            for (fileName in backupFileNames) {
+                if (isAuto) {
+                    val file = File(backupPath + File.separator + fileName)
+                    if (file.exists()) {
+                        file.copyTo(FileHelp.createFileIfNotExist(path + File.separator + "auto" + File.separator + fileName), true)
+                    }
+                } else {
+                    val file = File(backupPath + File.separator + fileName)
+                    if (file.exists()) {
+                        file.copyTo(FileHelp.createFileIfNotExist(path + File.separator + fileName), true)
+                    }
+                }
             }
         }
     }
