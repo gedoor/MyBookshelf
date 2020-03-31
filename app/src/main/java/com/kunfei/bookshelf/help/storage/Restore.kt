@@ -119,17 +119,16 @@ object Restore {
                 edit.putLong("DonateHb", donateHb)
                 edit.putInt("versionCode", MApplication.getVersionCode())
                 edit.apply()
-                LauncherIcon.ChangeIcon(MApplication.getConfigPreferences().getString("launcher_icon", MApplication.getInstance().getString(R.string.icon_main)))
-                ReadBookControl.getInstance().updateReaderSettings()
-                MApplication.getInstance().upThemeStore()
-                MApplication.getInstance().initNightTheme()
-                edit.commit()
             }
             e.onSuccess(true)
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MySingleObserver<Boolean>() {
                     override fun onSuccess(t: Boolean) {
+                        LauncherIcon.ChangeIcon(MApplication.getConfigPreferences().getString("launcher_icon", MApplication.getInstance().getString(R.string.icon_main)))
+                        ReadBookControl.getInstance().updateReaderSettings()
+                        MApplication.getInstance().upThemeStore()
+                        MApplication.getInstance().initNightTheme()
                         callBack?.restoreSuccess()
                     }
 
