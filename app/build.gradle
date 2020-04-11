@@ -70,7 +70,7 @@ resourcePlaceholders {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13-beta-3'
+    testImplementation 'junit:junit:4.13'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
@@ -83,7 +83,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     //androidX
@@ -95,11 +95,11 @@ dependencies {
 
     //google
     implementation 'com.google.android.material:material:1.2.0-alpha05'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android:flexbox:1.1.0'
 
     //J_SOUP
-    implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
 
@@ -112,7 +112,7 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //CircleImageView
@@ -140,7 +140,7 @@ dependencies {
     implementation 'net.ricecode:string-similarity:1.0.0'
 
     //MarkDown
-    implementation 'ru.noties.markwon:core:3.0.2'
+    implementation 'ru.noties.markwon:core:3.1.0'
 
     //epub
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
