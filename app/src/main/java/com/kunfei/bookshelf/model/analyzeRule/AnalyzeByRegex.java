@@ -8,6 +8,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.NetworkUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,10 +83,13 @@ public class AnalyzeByRegex {
                 ruleVal.put(ruleName.get(i), hasVarParams.get(i) ? AnalyzeByRegex.checkKeys(infoVal.toString(), analyzer) : infoVal.toString());
             }
             // 保存详情信息
-            if (!isEmpty(ruleVal.get("BookName"))) bookInfoBean.setName(ruleVal.get("BookName"));
-            if (!isEmpty(ruleVal.get("BookAuthor"))) bookInfoBean.setAuthor(ruleVal.get("BookAuthor"));
+            if (!isEmpty(ruleVal.get("BookName")))
+                bookInfoBean.setName(StringUtils.formatHtml(ruleVal.get("BookName")));
+            if (!isEmpty(ruleVal.get("BookAuthor")))
+                bookInfoBean.setAuthor(StringUtils.formatHtml(ruleVal.get("BookAuthor")));
             if (!isEmpty(ruleVal.get("LastChapter"))) bookShelfBean.setLastChapterName(ruleVal.get("LastChapter"));
-            if (!isEmpty(ruleVal.get("Introduce"))) bookInfoBean.setIntroduce(ruleVal.get("Introduce"));
+            if (!isEmpty(ruleVal.get("Introduce")))
+                bookInfoBean.setIntroduce(StringUtils.formatHtml(ruleVal.get("Introduce")));
             if (!isEmpty(ruleVal.get("CoverUrl"))) bookInfoBean.setCoverUrl(ruleVal.get("CoverUrl"));
             if (!isEmpty(ruleVal.get("ChapterUrl"))) bookInfoBean.setChapterUrl(NetworkUtils.getAbsoluteURL(baseUrl, ruleVal.get("ChapterUrl")));
             else bookInfoBean.setChapterUrl(baseUrl);

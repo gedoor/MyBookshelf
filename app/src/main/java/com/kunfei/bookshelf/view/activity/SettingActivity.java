@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.help.storage.BackupRestoreUi;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
 
@@ -103,4 +105,9 @@ public class SettingActivity extends MBaseActivity {
         super.initImmersionBar();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        BackupRestoreUi.INSTANCE.onActivityResult(requestCode, resultCode, data);
+    }
 }

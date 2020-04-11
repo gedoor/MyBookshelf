@@ -41,9 +41,8 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity-alias
+        <activity
             android:name=".view.activity.WelcomeBookActivity"
-            android:targetActivity=".view.activity.WelcomeActivity"
             android:enabled="false"
             android:icon="@mipmap/book_launcher"
             android:roundIcon="@mipmap/book_launcher_round"
@@ -57,13 +56,6 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity-alias>
-        <activity
-            android:name=".view.activity.WelcomeToReadActivity"
-            android:theme="@style/CAppWelcomeTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.ReadBookActivity"
@@ -100,8 +92,7 @@
         <activity
             android:name=".view.activity.QRCodeScanActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"

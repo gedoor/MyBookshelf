@@ -43,7 +43,7 @@
     <string name="retry">重試</string>
     <string name="web_service">web服務</string>
     <string name="web_edit_source">web編輯書源</string>
-    <string name="http_ip">HTTP：//％S：％d</string>
+    <string name="http_ip">http://%s:%d</string>
     <string name="download_offline">離線下載</string>
     <string name="download_offline_t">離線下載</string>
     <string name="download_offline_s">下載選擇的章節到本地</string>
@@ -267,6 +267,7 @@
     <string name="pt_default_read">自動跳轉最近閱讀</string>
     <string name="use_to">替換範圍，選填書名或者源名</string>
     <string name="menu_action_group">分組</string>
+    <string name="backup_path">备份路徑</string>
     <string name="download_path">內容緩存路徑</string>
     <string name="sys_file_picker">系統檔案選擇器</string>
     <string name="new_version">新版本</string>

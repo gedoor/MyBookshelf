@@ -125,7 +125,7 @@ public class BookshelfHelp {
      * 创建或获取存储文件
      */
     public static File getBookFile(String folderName, int index, String fileName) {
-        return FileHelp.getFile(AppConstant.BOOK_CACHE_PATH + formatFolderName(folderName)
+        return FileHelp.createFileIfNotExist(AppConstant.BOOK_CACHE_PATH + formatFolderName(folderName)
                 + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
     }
 
@@ -254,6 +254,7 @@ public class BookshelfHelp {
     public static List<BookInfoBean> searchBookInfo(String key) {
         return DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
                 .where(BookInfoBeanDao.Properties.Name.like("%" + key + "%"))
+                .orderAsc(BookInfoBeanDao.Properties.Name)
                 .list();
     }
 

@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget;
+package com.kunfei.bookshelf.widget.image;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

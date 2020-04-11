@@ -146,9 +146,6 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
             marginTop = marginTop + statusBarHeight;
         }
         switch (pageMode) {
-            case SIMULATION:
-                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
-                break;
             case COVER:
                 mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, this);
                 break;

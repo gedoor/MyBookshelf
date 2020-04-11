@@ -32,7 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class BaseModelImpl {
-    private static OkHttpClient.Builder clientBuilder;
+    private static OkHttpClient httpClient;
 
     public static BaseModelImpl getInstance() {
         return new BaseModelImpl();
@@ -41,19 +41,19 @@ public class BaseModelImpl {
     public Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
         switch (analyzeUrl.getUrlMode()) {
             case POST:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpPostApi.class)
                         .postMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpGetApi.class)
                         .getMap(analyzeUrl.getPath(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
-                return getRetrofitString(analyzeUrl.getHost())
+                return getRetrofitString(analyzeUrl.getHost(), analyzeUrl.getCharCode())
                         .create(IHttpGetApi.class)
                         .get(analyzeUrl.getPath(),
                                 analyzeUrl.getHeaderMap());
@@ -66,7 +66,7 @@ public class BaseModelImpl {
                 .addConverterFactory(EncodeConverter.create())
                 //增加返回值为Observable<T>的支持
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(getClientBuilder().build())
+                .client(getClient())
                 .build();
     }
 
@@ -76,13 +76,13 @@ public class BaseModelImpl {
                 .addConverterFactory(EncodeConverter.create(encode))
                 //增加返回值为Observable<T>的支持
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(getClientBuilder().build())
+                .client(getClient())
                 .build();
     }
 
-    private static OkHttpClient.Builder getClientBuilder() {
-        if (clientBuilder == null) {
-            clientBuilder = new OkHttpClient.Builder()
+    synchronized public static OkHttpClient getClient() {
+        if (httpClient == null) {
+            httpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS)
@@ -90,9 +90,10 @@ public class BaseModelImpl {
                     .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.createTrustAllManager())
                     .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                    .addInterceptor(getHeaderInterceptor());
+                    .addInterceptor(getHeaderInterceptor())
+                    .build();
         }
-        return clientBuilder;
+        return httpClient;
     }
 
     private static Interceptor getHeaderInterceptor() {

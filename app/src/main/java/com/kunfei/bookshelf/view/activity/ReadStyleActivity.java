@@ -429,7 +429,7 @@ public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialo
             if(convertView==null){
                 holder = new ViewHolder();
                 convertView = mInflater.inflate(R.layout.item_read_bg, null);
-                holder.mImage = convertView.findViewById(R.id.iv_cover);
+                holder.mImage = convertView.findViewById(R.id.iv_bg);
                 holder.mTitle = convertView.findViewById(R.id.tv_desc);
                 convertView.setTag(holder);
             } else {
