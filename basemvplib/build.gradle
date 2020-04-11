@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13-beta-3'
+    testImplementation 'junit:junit:4.13'
     api fileTree(dir: 'libs', include: ['*.jar'])
 
     //support
@@ -34,15 +34,16 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxjava:2.2.10'
+    api 'io.reactivex.rxjava2:rxjava:2.2.19'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //RxBus
     api 'com.hwangjr.rxbus:rxbus:2.0.1'
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.6.1'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
-    api 'com.squareup.retrofit2:converter-scalars:2.6.1'
+    //noinspection GradleDependency
+    api 'com.squareup.retrofit2:retrofit:2.7.2'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
+    api 'com.squareup.retrofit2:converter-scalars:2.8.1'
 
 }

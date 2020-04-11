@@ -113,15 +113,15 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //CircleImageView
-    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //bind view
     //noinspection AnnotationProcessorOnCompilePath
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     //webServer
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
