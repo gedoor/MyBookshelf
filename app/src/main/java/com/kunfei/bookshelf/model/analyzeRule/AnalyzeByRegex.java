@@ -104,7 +104,7 @@ public class AnalyzeByRegex {
             Debug.printLog(tag, "┌获取最新章节");
             Debug.printLog(tag, "└" + bookShelfBean.getLastChapterName());
             Debug.printLog(tag, "┌获取简介内容");
-            Debug.printLog(tag, "└" + bookInfoBean.getIntroduce());
+            Debug.printLog(tag, 1, "└" + bookInfoBean.getIntroduce(), true, true);
             Debug.printLog(tag, "┌获取封面网址");
             Debug.printLog(tag, "└" + bookInfoBean.getCoverUrl());
             Debug.printLog(tag, "┌获取目录网址");
