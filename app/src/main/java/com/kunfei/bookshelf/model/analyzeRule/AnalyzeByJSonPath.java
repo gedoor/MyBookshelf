@@ -28,6 +28,16 @@ public class AnalyzeByJSonPath {
         String result = "";
         String[] rules;
         String elementsType;
+
+        if (rule.contains("{$.")) {
+            result = rule;
+            Matcher matcher = jsonRulePattern.matcher(rule);
+            while (matcher.find()) {
+                result = result.replace(String.format("{%s}", matcher.group()), getString(matcher.group().trim()));
+            }
+            return result;
+        }
+
         if (rule.contains("&&")) {
             rules = rule.split("&&");
             elementsType = "&";
@@ -35,30 +45,22 @@ public class AnalyzeByJSonPath {
             rules = rule.split("\\|\\|");
             elementsType = "|";
         }
+
         if (rules.length == 1) {
-            if (!rule.contains("{$.")) {
-                try {
-                    Object object = ctx.read(rule);
-                    if (object instanceof List) {
-                        StringBuilder builder = new StringBuilder();
-                        for (Object o : (List) object) {
-                            builder.append(o).append("\n");
-                        }
-                        result = builder.toString().replaceAll("\\n$", "");
-                    } else {
-                        result = String.valueOf(object);
+            try {
+                Object object = ctx.read(rule);
+                if (object instanceof List) {
+                    StringBuilder builder = new StringBuilder();
+                    for (Object o : (List) object) {
+                        builder.append(o).append("\n");
                     }
-                } catch (Exception ignored) {
+                    result = builder.toString().replaceAll("\\n$", "");
+                } else {
+                    result = String.valueOf(object);
                 }
-                return result;
-            } else {
-                result = rule;
-                Matcher matcher = jsonRulePattern.matcher(rule);
-                while (matcher.find()) {
-                    result = result.replace(String.format("{%s}", matcher.group()), getString(matcher.group()));
-                }
-                return result;
+            } catch (Exception ignored) {
             }
+            return result;
         } else {
             List<String> textS = new ArrayList<>();
             for (String rl : rules) {
