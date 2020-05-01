@@ -72,7 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="请关注微信公众号 开源阅读软件 点击复制" />
+                        android:text="请关注微信公众号 开源阅读 点击复制" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

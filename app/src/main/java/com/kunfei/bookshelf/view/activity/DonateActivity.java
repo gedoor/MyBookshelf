@@ -89,7 +89,7 @@ public class DonateActivity extends MBaseActivity {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
         cvWxGzh.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, "开源阅读软件");
+            ClipData clipData = ClipData.newPlainText(null, "开源阅读");
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
                 toast(R.string.copy_complete);
