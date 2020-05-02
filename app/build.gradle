@@ -83,7 +83,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     //androidX
@@ -94,7 +94,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android:flexbox:1.1.0'
 
@@ -157,6 +157,9 @@ greendao {
 }
 
 apply plugin: 'com.google.gms.google-services'
-repositories {
-    mavenCentral()
+
+afterEvaluate {
+    for (Task task : project.tasks.matching { it.name.startsWith('crashlyticsUploadDeobs') }) {
+        task.enabled = false
+    }
 }

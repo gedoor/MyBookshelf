@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kunfei.bookshelf.view.fragment
 
 import android.content.Intent

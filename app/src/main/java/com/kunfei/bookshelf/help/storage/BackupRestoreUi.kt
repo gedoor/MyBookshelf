@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import com.hwangjr.rxbus.RxBus
 import com.kunfei.bookshelf.MApplication
@@ -123,8 +124,8 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
 
     private fun selectBackupFolderApp(activity: Activity, isRestore: Boolean) {
         val picker = FilePicker(activity, FilePicker.DIRECTORY)
-        picker.setBackgroundColor(activity.resources.getColor(R.color.background))
-        picker.setTopBackgroundColor(activity.resources.getColor(R.color.background))
+        picker.setBackgroundColor(ContextCompat.getColor(activity, R.color.background))
+        picker.setTopBackgroundColor(ContextCompat.getColor(activity, R.color.background))
         picker.setItemHeight(30)
         picker.setOnFilePickListener { currentPath: String ->
             setBackupPath(currentPath)
