@@ -34,6 +34,9 @@ public class ATEPreferenceCategory extends PreferenceCategory {
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
+        if (view.isInEditMode()) {
+            return;
+        }
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextColor(ThemeStore.accentColor(view.getContext()));//设置title文本的颜色

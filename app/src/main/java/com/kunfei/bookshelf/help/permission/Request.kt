@@ -1,11 +1,11 @@
 package com.kunfei.bookshelf.help.permission
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.kunfei.bookshelf.R
@@ -30,7 +30,7 @@ internal class Request : OnRequestPermissionsResultCallback {
             return getDeniedPermissions(this.permissions?.toTypedArray())
         }
 
-    constructor(activity: AppCompatActivity) {
+    constructor(activity: Activity) {
         source = ActivitySource(activity)
         permissions = ArrayList()
         requestTime = System.currentTimeMillis()

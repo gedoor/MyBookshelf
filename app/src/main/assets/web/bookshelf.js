@@ -1,10 +1,13 @@
 ﻿var $ = document.querySelector.bind(document)
     , $$ = document.querySelectorAll.bind(document)
     , $c = document.createElement.bind(document)
-    , randomImg = "http://acg.bakayun.cn/randbg.php?t=dfzh"
+    , randomImg = "http://api.mtyqx.cn/api/random.php"
     , randomImg2 = "http://img.xjh.me/random_img.php"
     , books
     ;
+
+var now_chapter = -1;
+var sum_chapter = 0;
 
 var formatTime = value => {
     return new Date(value).toLocaleString('zh-CN', {
@@ -13,10 +16,10 @@ var formatTime = value => {
 };
 
 var apiMap = {
-    getBookshelf: "/getBookshelf",
-    getChapterList: "/getChapterList",
-    getBookContent: "/getBookContent",
-    saveBook: "/saveBook"
+    "getBookshelf": "/getBookshelf",
+    "getChapterList": "/getChapterList",
+    "getBookContent": "/getBookContent",
+    "saveBook": "/saveBook"
 };
 
 var apiAddress = (apiName, url) => {
@@ -42,11 +45,11 @@ var init = () => {
                 return;
             }
             books = data.data.sort((book1, book2) => book1.serialNumber - book2.serialNumber);
-            books.forEach(book => {
+            books.forEach((book, i) => {
                 let bookDiv = $c("div");
                 let img = $c("img");
                 img.src = book.bookInfoBean.coverUrl || randomImg;
-                img.setAttribute("data-series-num", book.serialNumber);
+                img.setAttribute("data-series-num", i);
                 bookDiv.appendChild(img);
                 bookDiv.innerHTML += `<table><tbody>
                                 <tr><td>书名：</td><td>${book.bookInfoBean.name}</td></tr>
@@ -59,6 +62,8 @@ var init = () => {
             });
             $$('#books img').forEach(bookImg =>
                 bookImg.addEventListener("click", () => {
+                    now_chapter = -1;
+                    sum_chapter = 0;
                     $('#allcontent').classList.add("read");
                     var book = books[bookImg.getAttribute("data-series-num")];
                     $("#info").innerHTML = `<img src="${bookImg.src}">
@@ -86,10 +91,12 @@ var init = () => {
                             data.data.forEach(chapter => {
                                 let ch = $c("button");
                                 ch.setAttribute("data-url", chapter.durChapterUrl);
+                                ch.setAttribute("data-index", chapter.durChapterIndex);
                                 ch.setAttribute("title", chapter.durChapterName);
                                 ch.innerHTML = chapter.durChapterName.length > 15 ? chapter.durChapterName.substring(0, 14) + "..." : chapter.durChapterName;
                                 $("#chapter").appendChild(ch);
                             });
+                            sum_chapter = data.data.length;
                             $('#chapter').scrollTop = 0;
                             $("#content").innerHTML = "章节列表加载完成！";
                         });
@@ -126,13 +133,42 @@ $('#showchapter').addEventListener("click", () => {
     window.location.hash = "#chapter";
 });
 
+$('#up').addEventListener('click', e => {
+    if (now_chapter > 0) {
+        now_chapter--;
+        let clickEvent = document.createEvent('MouseEvents');
+        clickEvent.initEvent("click", true, false);
+        $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+    } else if (now_chapter == 0) {
+        alert("已经是第一章了^_^!")
+    } else {
+
+    }
+});
+
+$('#down').addEventListener('click', e => {
+    if (now_chapter > -1) {
+        if (now_chapter < sum_chapter - 1) {
+            now_chapter++;
+            let clickEvent = document.createEvent('MouseEvents');
+            clickEvent.initEvent("click", true, false);
+            $('[data-index="' + now_chapter + '"]').dispatchEvent(clickEvent);
+
+        } else {
+            alert("已经是最后一章了^_^!")
+        }
+    }
+});
+
 $('#chapter').addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
         var url = e.target.getAttribute("data-url");
+        var index = e.target.getAttribute("data-index");
         var name = e.target.getAttribute("title");
         if (!url) {
             alert("未取得章节地址");
         }
+        now_chapter = parseInt(index);
         $("#content").innerHTML = "<p>" + name + " 加载中...</p>";
         fetch(apiAddress("getBookContent", url), { mode: "cors" })
             .then(res => res.json())

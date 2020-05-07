@@ -10,14 +10,14 @@
     android:background="?android:attr/selectableItemBackground"
     tools:ignore="UnusedAttribute">
 
-    <com.kunfei.bookshelf.widget.CoverImageView
+    <com.kunfei.bookshelf.widget.image.CoverImageView
         android:id="@+id/iv_cover"
         android:layout_width="60dp"
         android:layout_height="80dp"
         android:layout_margin="8dp"
         android:contentDescription="@string/img_cover"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_cover_default"
+        android:src="@drawable/image_cover_default"
         android:transitionName="img_cover"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

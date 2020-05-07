@@ -260,6 +260,10 @@ public class AnalyzeUrl {
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
+    public String getCharCode() {
+        return charCode;
+    }
+
     public String getHost() {
         return host;
     }

@@ -1,7 +1,7 @@
 package com.kunfei.bookshelf.help.permission
 
+import android.app.Activity
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 class PermissionsCompat private constructor() {
@@ -15,7 +15,7 @@ class PermissionsCompat private constructor() {
     class Builder {
         private val request: Request
 
-        constructor(activity: AppCompatActivity) {
+        constructor(activity: Activity) {
             request = Request(activity)
         }
 

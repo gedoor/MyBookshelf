@@ -4,26 +4,15 @@ package com.kunfei.bookshelf.view.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
@@ -34,8 +23,8 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
 import com.kunfei.bookshelf.widget.RotateLoading;
+import com.kunfei.bookshelf.widget.image.CoverImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -145,39 +134,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         if (!activity.isFinishing()) {
-            if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
-                Glide.with(activity).load(bookInfoBean.getCoverUrl())
-                        .dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
-                        .placeholder(R.drawable.img_cover_default)
-                        .into(holder.ivCover);
-            } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
-                Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                bookShelfBean.setCustomCoverPath("");
-                                BookshelfHelp.saveBookToShelf(bookShelfBean);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
-                        .into(holder.ivCover);
-            } else {
-                Glide.with(activity).load(new File(bookShelfBean.getCustomCoverPath()))
-                        .dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
-                        .placeholder(R.drawable.img_cover_default)
-                        .into(holder.ivCover);
-            }
+            holder.ivCover.load(bookShelfBean.getCoverPath(), bookShelfBean.getName(), bookShelfBean.getAuthor());
         }
         holder.tvName.setText(bookInfoBean.getName());
         holder.tvAuthor.setText(bookInfoBean.getAuthor());
@@ -260,7 +217,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         ViewGroup flContent;
-        ImageView ivCover;
+        CoverImageView ivCover;
         BadgeView bvUnread;
         TextView tvName;
         TextView tvAuthor;
