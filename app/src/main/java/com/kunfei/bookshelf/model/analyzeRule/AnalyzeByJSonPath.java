@@ -48,7 +48,7 @@ public class AnalyzeByJSonPath {
 
         if (rules.length == 1) {
             try {
-                Object object = ctx.read(rule);
+                Object object = ctx.read(rules[0]);
                 if (object instanceof List) {
                     StringBuilder builder = new StringBuilder();
                     for (Object o : (List) object) {
@@ -58,7 +58,8 @@ public class AnalyzeByJSonPath {
                 } else {
                     result = String.valueOf(object);
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                return rules[0];
             }
             return result;
         } else {
