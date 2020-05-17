@@ -47,21 +47,24 @@ public class AnalyzeByJSonPath {
         }
 
         if (rules.length == 1) {
-            try {
-                Object object = ctx.read(rules[0]);
-                if (object instanceof List) {
-                    StringBuilder builder = new StringBuilder();
-                    for (Object o : (List) object) {
-                        builder.append(o).append("\n");
+            if (rule.startsWith("$.")) {
+                try {
+                    Object object = ctx.read(rule);
+                    if (object instanceof List) {
+                        StringBuilder builder = new StringBuilder();
+                        for (Object o : (List) object) {
+                            builder.append(o).append("\n");
+                        }
+                        result = builder.toString().replaceAll("\\n$", "");
+                    } else {
+                        result = String.valueOf(object);
                     }
-                    result = builder.toString().replaceAll("\\n$", "");
-                } else {
-                    result = String.valueOf(object);
+                } catch (Exception ignored) {
                 }
-            } catch (Exception e) {
-                return rules[0];
+                return result;
+            } else {
+                return rule;
             }
-            return result;
         } else {
             List<String> textS = new ArrayList<>();
             for (String rl : rules) {
