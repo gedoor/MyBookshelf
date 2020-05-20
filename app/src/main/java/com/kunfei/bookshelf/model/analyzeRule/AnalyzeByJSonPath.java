@@ -58,7 +58,10 @@ public class AnalyzeByJSonPath {
                 } else {
                     result = String.valueOf(object);
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                if (!rule.startsWith("$.")) {
+                    return rule;
+                }
             }
             return result;
         } else {
