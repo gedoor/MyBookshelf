@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 2
         versionName "1.1.0"
     }
@@ -30,7 +30,7 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 
     //support
-    api 'androidx.core:core:1.2.0'
+    api 'androidx.core:core:1.3.0'
     api 'androidx.appcompat:appcompat:1.1.0'
 
     //RxAndroid
@@ -42,8 +42,8 @@ dependencies {
 
     //Retrofit
     //noinspection GradleDependency
-    api 'com.squareup.retrofit2:retrofit:2.7.2'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
-    api 'com.squareup.retrofit2:converter-scalars:2.8.1'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
 }
