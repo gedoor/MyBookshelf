@@ -7,7 +7,7 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
+        maven {  url 'http://s3.amazonaws.com/fabric-artifacts/public' }
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
@@ -26,6 +26,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven {  url 'http://s3.amazonaws.com/fabric-artifacts/public' }
         maven { url "https://jitpack.io" }
         maven { url 'https://maven.google.com/' }
         maven { url 'https://github.com/psiegman/mvn-repo/raw/master/releases' }

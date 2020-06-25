@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.gedoor.monkeybook"
+        applicationId "com.kunfei.monkeybook"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 10000 + gitCommits
@@ -143,7 +143,7 @@ dependencies {
     implementation 'ru.noties.markwon:core:3.1.0'
 
     //epub
-    implementation('nl.siegmann.epublib:epublib-core:3.1') {
+    implementation('com.positiondev.epublib:epublib-core:3.1') {
         exclude group: 'org.slf4j'
         exclude group: 'xmlpull'
     }

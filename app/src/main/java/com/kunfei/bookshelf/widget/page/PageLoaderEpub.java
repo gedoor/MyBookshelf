@@ -12,6 +12,8 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import net.sf.jazzlib.ZipFile;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -105,8 +107,8 @@ public class PageLoaderEpub extends PageLoader {
                     MediatypeService.PNG,
                     MediatypeService.MP3,
                     MediatypeService.MP4};
-
-            return epubReader.readEpubLazy(file.getAbsolutePath(), "utf-8", Arrays.asList(lazyTypes));
+            ZipFile zipFile = new ZipFile(file);
+            return epubReader.readEpubLazy(zipFile, "utf-8", Arrays.asList(lazyTypes));
         } catch (Exception e) {
             return null;
         }
