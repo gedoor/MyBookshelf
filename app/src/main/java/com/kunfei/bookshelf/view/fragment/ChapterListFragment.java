@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ChapterListFragment extends MBaseFragment {
+public class ChapterListFragment extends MBaseFragment<IPresenter> {
     @BindView(R.id.rv_list)
     FastScrollRecyclerView rvList;
     @BindView(R.id.tv_current_chapter_info)

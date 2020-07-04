@@ -30,7 +30,7 @@ import butterknife.Unbinder;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
-public class BookmarkFragment extends MBaseFragment {
+public class BookmarkFragment extends MBaseFragment<IPresenter> {
     @BindView(R.id.rv_list)
     FastScrollRecyclerView rvList;
 

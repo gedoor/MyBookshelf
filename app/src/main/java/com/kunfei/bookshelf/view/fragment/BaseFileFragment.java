@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * FileSystemActivity的基础Fragment类
  */
 
-public abstract class BaseFileFragment extends MBaseFragment {
+public abstract class BaseFileFragment extends MBaseFragment<IPresenter> {
 
     protected FileSystemAdapter mAdapter;
     protected OnFileCheckedListener mListener;
@@ -67,6 +68,7 @@ public abstract class BaseFileFragment extends MBaseFragment {
         //删除选中的文件
         for (File file : files) {
             if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
         }

@@ -159,7 +159,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         ivBack.setOnClickListener(v -> setArrange(false));
         ivDel.setOnClickListener(v -> {
             if (bookShelfAdapter.getSelected().size() == bookShelfAdapter.getBooks().size()) {
-                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
                         .setTitle(R.string.delete)
                         .setMessage(getString(R.string.sure_del_all_book))
                         .setPositiveButton(R.string.yes, (dialog, which) -> delSelect())
