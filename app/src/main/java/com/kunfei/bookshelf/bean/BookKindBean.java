@@ -16,7 +16,7 @@ public class BookKindBean {
         for (String kind : kindS.split("[,|\n]")) {
             if (StringUtils.isContainNumber(kind) && TextUtils.isEmpty(wordsS)) {
                 if (StringUtils.isNumeric(kind)) {
-                    int words = Integer.valueOf(kind);
+                    int words = Integer.parseInt(kind);
                     if (words > 0) {
                         wordsS = words + "字";
                         if (words > 10000) {

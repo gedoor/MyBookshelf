@@ -263,7 +263,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public int getUnreadChapterNum() {
         int num = getChapterListSize() - getDurChapter() - 1;
-        return num < 0 ? 0 : num;
+        return Math.max(num, 0);
     }
 
     public int getChapterListSize() {

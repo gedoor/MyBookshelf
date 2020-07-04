@@ -148,8 +148,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         }
 
         if(mScroller.computeScrollOffset()){
-            int scrollx = mScroller.getCurrX();
-            mNextX = scrollx;
+            mNextX = mScroller.getCurrX();
         }
 
         if(mNextX <= 0){
