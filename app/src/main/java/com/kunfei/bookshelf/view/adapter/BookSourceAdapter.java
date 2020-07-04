@@ -152,7 +152,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return dataList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         CheckBox cbView;
         ImageView editView;
         ImageView delView;

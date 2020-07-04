@@ -75,7 +75,7 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvSourceName;
 
         public MyViewHolder(@NonNull View itemView) {

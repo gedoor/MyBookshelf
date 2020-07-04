@@ -83,7 +83,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         return allBookBeans.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout llContent;
         TextView tvBookSource;
         TextView tvLastChapter;

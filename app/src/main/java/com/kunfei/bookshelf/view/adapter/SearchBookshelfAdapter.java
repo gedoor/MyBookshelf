@@ -46,7 +46,7 @@ public class SearchBookshelfAdapter extends RecyclerView.Adapter<SearchBookshelf
         return beans.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
         public MyViewHolder(@NonNull View itemView) {

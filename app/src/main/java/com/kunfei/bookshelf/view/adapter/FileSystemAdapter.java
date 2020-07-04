@@ -107,10 +107,7 @@ public class FileSystemAdapter extends BaseListAdapter<File> {
 
     private boolean isFileLoaded(String id) {
         //如果是已加载的文件，则点击事件无效。
-        if (BookshelfHelp.getBook(id) != null) {
-            return true;
-        }
-        return false;
+        return BookshelfHelp.getBook(id) != null;
     }
 
     public int getCheckableCount() {

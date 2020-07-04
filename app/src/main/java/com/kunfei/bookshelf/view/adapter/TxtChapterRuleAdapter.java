@@ -94,7 +94,7 @@ public class TxtChapterRuleAdapter extends RecyclerView.Adapter<TxtChapterRuleAd
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkBox;
         ImageView editView;
         ImageView delView;

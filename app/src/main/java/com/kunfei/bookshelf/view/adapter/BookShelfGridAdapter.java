@@ -210,7 +210,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         return selectList;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         CoverImageView ivCover;
         TextView tvName;
         BadgeView bvUnread;

@@ -200,7 +200,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks.get(pos);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         ViewGroup flContent;
         CoverImageView ivCover;
         TextView tvName;

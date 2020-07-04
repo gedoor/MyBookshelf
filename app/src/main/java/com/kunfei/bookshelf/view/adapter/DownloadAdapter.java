@@ -125,7 +125,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         CoverImageView ivCover;
         TextView tvName;
         TextView tvDownload;
