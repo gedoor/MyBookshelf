@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * 捐赠页面
  */
 
-public class DonateActivity extends MBaseActivity {
+public class DonateActivity extends MBaseActivity<IPresenter> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.cv_wx_gzh)

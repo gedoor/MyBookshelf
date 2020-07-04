@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
 
-public class BookInfoEditActivity extends MBaseActivity {
+public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     private final int ResultSelectCover = 103;
     private final int ResultEditCover = 104;
 

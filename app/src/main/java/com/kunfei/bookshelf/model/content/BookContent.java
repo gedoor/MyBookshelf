@@ -138,7 +138,7 @@ class BookContent {
         return webContentBean;
     }
 
-    private class WebContentBean {
+    private static class WebContentBean {
         private String content;
         private String nextUrl;
 

@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
-public class BookCoverEditActivity extends MBaseActivity {
+public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
 
     @BindView(R.id.rf_rv_change_cover)
     RecyclerView changeCover;

@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class SourceDebugActivity extends MBaseActivity {
+public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)

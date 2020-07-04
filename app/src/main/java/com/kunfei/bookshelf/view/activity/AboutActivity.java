@@ -39,7 +39,7 @@ import io.reactivex.SingleOnSubscribe;
  * 关于
  */
 
-public class AboutActivity extends MBaseActivity {
+public class AboutActivity extends MBaseActivity<IPresenter> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_version)

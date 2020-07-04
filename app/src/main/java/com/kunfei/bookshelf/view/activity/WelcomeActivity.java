@@ -17,7 +17,7 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WelcomeActivity extends MBaseActivity {
+public class WelcomeActivity extends MBaseActivity<IPresenter> {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
