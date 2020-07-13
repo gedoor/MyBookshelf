@@ -134,7 +134,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         void clickItem(View animView, int position, SearchBookBean searchBookBean);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         ViewGroup flContent;
         CoverImageView ivCover;
         TextView tvName;

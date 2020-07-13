@@ -1775,7 +1775,7 @@ public abstract class PageLoader {
 
     /*****************************************interface*****************************************/
 
-    class ChapterContainer {
+    static class ChapterContainer {
         TxtChapter txtChapter;
     }
 

@@ -55,7 +55,9 @@ import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener, OnRecyclerViewListener.OnItemLongClickListener {
+public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View,
+        OnRecyclerViewListener.OnItemClickListener,
+        OnRecyclerViewListener.OnItemLongClickListener {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.refresh_layout)
@@ -294,7 +296,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @SuppressWarnings("unused")
-    public class ScrollLinearLayoutManger extends GridLayoutManager {
+    public static class ScrollLinearLayoutManger extends GridLayoutManager {
 
         public ScrollLinearLayoutManger(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
             super(context, attrs, defStyleAttr, defStyleRes);

@@ -26,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CAppTheme"
+        android:requestLegacyExternalStorage="true"
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:replace="android:theme">
         <activity

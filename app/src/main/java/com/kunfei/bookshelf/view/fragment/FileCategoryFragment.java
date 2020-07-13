@@ -155,7 +155,8 @@ public class FileCategoryFragment extends BaseFileFragment {
         // textView.getCompoundDrawables()[0].mutate();
         try {
             textView.getCompoundDrawables()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private void toggleFileTree(File file) {
@@ -194,7 +195,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     }
 
 
-    public class FileComparator implements Comparator<File> {
+    public static class FileComparator implements Comparator<File> {
         @Override
         public int compare(File o1, File o2) {
             if (o1.isDirectory() && o2.isFile()) {
@@ -207,7 +208,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         }
     }
 
-    public class SimpleFileFilter implements FileFilter {
+    public static class SimpleFileFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
             if (pathname.getName().startsWith(".")) {

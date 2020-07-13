@@ -30,7 +30,7 @@ import kotlin.Unit;
  * Created by GKF on 2018/1/29.
  */
 
-public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Delegate {
+public class QRCodeScanActivity extends MBaseActivity<IPresenter> implements QRCodeView.Delegate {
 
     @BindView(R.id.zxingview)
     ZXingView zxingview;

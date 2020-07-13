@@ -30,7 +30,7 @@ import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SourceLoginActivity extends MBaseActivity {
+public class SourceLoginActivity extends MBaseActivity<IPresenter> {
     @BindView(R.id.web_view)
     WebView webView;
     @BindView(R.id.toolbar)

@@ -191,7 +191,7 @@ public class BaseModelImpl {
         });
     }
 
-    private class Web {
+    private static class Web {
         private String content;
         private String js = "document.documentElement.outerHTML";
 

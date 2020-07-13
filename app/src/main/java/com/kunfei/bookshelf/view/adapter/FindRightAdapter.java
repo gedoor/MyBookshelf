@@ -108,7 +108,7 @@ public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdap
         return data;
     }
 
-    class HeaderHolder extends RecyclerView.ViewHolder {
+    static class HeaderHolder extends RecyclerView.ViewHolder {
         TextView tv_source_name;
 
         HeaderHolder(View itemView) {
@@ -117,7 +117,7 @@ public class FindRightAdapter extends SectionedRecyclerViewAdapter<FindRightAdap
         }
     }
 
-    class DescHolder extends RecyclerView.ViewHolder {
+    static class DescHolder extends RecyclerView.ViewHolder {
         TextView tv_item;
 
         DescHolder(View view) {

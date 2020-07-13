@@ -125,7 +125,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         super.onResume();
 
         String shared_url = preferences.getString("shared_url", "");
-        assert shared_url != null;
         if (shared_url.length() > 1) {
             InputDialog.builder(this)
                     .setTitle(getString(R.string.add_book_url))

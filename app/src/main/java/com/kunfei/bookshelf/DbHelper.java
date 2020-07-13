@@ -54,7 +54,7 @@ public class DbHelper {
         return getInstance().db;
     }
 
-    public class DaoOpenHelper extends DaoMaster.OpenHelper {
+    public static class DaoOpenHelper extends DaoMaster.OpenHelper {
         DaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
             super(context, name, factory);
         }

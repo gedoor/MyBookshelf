@@ -457,7 +457,7 @@ public class AnalyzeRule {
     /**
      * 规则类
      */
-    public class SourceRule {
+    public static class SourceRule {
         Mode mode;
         String rule;
         String replaceRegex = "";

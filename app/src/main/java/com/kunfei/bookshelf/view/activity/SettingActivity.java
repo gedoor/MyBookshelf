@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * 设置
  */
 
-public class SettingActivity extends MBaseActivity {
+public class SettingActivity extends MBaseActivity<IPresenter> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)

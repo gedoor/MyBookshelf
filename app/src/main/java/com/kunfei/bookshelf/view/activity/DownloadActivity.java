@@ -35,7 +35,7 @@ import static com.kunfei.bookshelf.service.DownloadService.obtainDownloadListAct
 import static com.kunfei.bookshelf.service.DownloadService.progressDownloadAction;
 import static com.kunfei.bookshelf.service.DownloadService.removeDownloadAction;
 
-public class DownloadActivity extends MBaseActivity {
+public class DownloadActivity extends MBaseActivity<IPresenter> {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

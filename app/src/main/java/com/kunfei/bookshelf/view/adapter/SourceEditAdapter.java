@@ -91,7 +91,7 @@ public class SourceEditAdapter extends Adapter<SourceEditAdapter.MyViewHolder> {
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextInputLayout textInputLayout;
         AppCompatEditText editText;
 

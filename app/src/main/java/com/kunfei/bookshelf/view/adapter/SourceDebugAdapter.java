@@ -68,7 +68,7 @@ public class SourceDebugAdapter extends Adapter<SourceDebugAdapter.MyViewHolder>
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
         public MyViewHolder(@NonNull View itemView) {

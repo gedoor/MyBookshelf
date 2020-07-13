@@ -53,7 +53,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
 
-public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialogListener {
+public class ReadStyleActivity extends MBaseActivity<IPresenter> implements ColorPickerDialogListener {
     private final int ResultSelectBg = 103;
     private final int SELECT_TEXT_COLOR = 201;
     private final int SELECT_BG_COLOR = 301;

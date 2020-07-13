@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
-import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class ChapterListActivity extends BaseTabActivity {
+public class ChapterListActivity extends BaseTabActivity<IPresenter> {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,7 +47,7 @@ public class ChapterListActivity extends BaseTabActivity {
     private BookShelfBean bookShelf;
     private List<BookChapterBean> chapterBeanList;
 
-    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf, List<BookChapterBean> chapterBeanList) {
+    public static void startThis(Activity activity, BookShelfBean bookShelf, List<BookChapterBean> chapterBeanList) {
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
         String bookKey = "book" + key;
