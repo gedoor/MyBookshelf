@@ -78,7 +78,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
-    api 'androidx.core:core-ktx:1.3.0'
+    api 'androidx.core:core-ktx:1.3.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //anko
@@ -98,7 +98,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android:flexbox:1.1.0'
 
