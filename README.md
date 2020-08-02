@@ -1,12 +1,7 @@
 # 本软件为开源软件,不要在任何地方购买!
 # 关注公众号请搜索:开源阅读,有福利噢
-# blog http://www.hostfans.cn
-# 在线书源库
-## http://ku.iszoc.com
-## http://ku.mumuceo.com
 # 开发
 - 本项目Fork于 https://github.com/ZhangQinhao/MONKOVEL
-- fork 之后主要开发人员 kunfei https://github.com/gedoor
 
 **代码贡献人员**
 - 大古队员 https://github.com/DaguDuiyuan
