@@ -36,6 +36,7 @@ public class SearchBookModel {
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS = new ArrayList<>();
     private int threadsNum;
+    private int search_result_filter_grade;
     private int page = 0;
     private int searchEngineIndex;
     private int searchSuccessNum;
@@ -52,6 +53,7 @@ public class SearchBookModel {
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
+        search_result_filter_grade = MApplication.getConfigPreferences().getInt(MApplication.getInstance().getString(R.string.pk_search_result_filter_grade), 0);
         if (sourceBeanList == null) {
             initSearchEngineS(BookSourceManager.getSelectedBookSource());
         } else {
@@ -169,6 +171,31 @@ public class SearchBookModel {
                                                 }
                                             }
                                         }
+
+                                            if(search_result_filter_grade>0){
+                                                for(int index=0;index<searchBookBeans.size();index++){
+                                                    SearchBookBean temp=searchBookBeans.get(index);
+                                                    String r=temp.getName()+temp.getAuthor();
+                                                    char[] s=content.replaceAll("\\s","").toCharArray();
+                                                    int j=9-search_result_filter_grade;
+
+                                                    for(int i=0;i<s.length;i++){
+                                                        if(r.indexOf(s[i])<0){
+                                                            j--;
+                                                        }
+                                                        if(j<0){
+//                                                            Log.d("search_result_filter="+search_result_filter_grade,"search="+content+", result="+r);
+                                                            searchBookBeans.remove(index);
+                                                            index--;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                        }else{
+//                                                Log.d("search_result_filter="+search_result_filter_grade,"search="+content);
+                                            }
+
                                         searchListener.loadMoreSearchBook(searchBookBeans);
                                     } else {
                                         searchEngine.setHasMore(false);
