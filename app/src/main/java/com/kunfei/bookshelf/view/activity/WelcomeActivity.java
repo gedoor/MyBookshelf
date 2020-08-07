@@ -38,9 +38,9 @@ public class WelcomeActivity extends MBaseActivity<IPresenter> {
             return;
         }
         setContentView(R.layout.activity_welcome);
-        tvGzh.setTextColor(ThemeStore.accentColor(this));
         AsyncTask.execute(DbHelper::getDaoSession);
         ButterKnife.bind(this);
+        tvGzh.setTextColor(ThemeStore.accentColor(this));
         ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
