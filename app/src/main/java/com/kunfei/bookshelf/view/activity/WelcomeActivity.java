@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.DbHelper;
@@ -21,6 +22,8 @@ public class WelcomeActivity extends MBaseActivity<IPresenter> {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
+    @BindView(R.id.tv_gzh)
+    TextView tvGzh;
 
     @Override
     protected IPresenter initInjector() {
@@ -37,6 +40,7 @@ public class WelcomeActivity extends MBaseActivity<IPresenter> {
         setContentView(R.layout.activity_welcome);
         AsyncTask.execute(DbHelper::getDaoSession);
         ButterKnife.bind(this);
+        tvGzh.setTextColor(ThemeStore.accentColor(this));
         ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);

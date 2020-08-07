@@ -248,7 +248,8 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     private void selectFileSys() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/*");//设置类型
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"text/*", "application/json"});
+        intent.setType("*/*");//设置类型
         startActivityForResult(intent, IMPORT_SOURCE);
     }
 

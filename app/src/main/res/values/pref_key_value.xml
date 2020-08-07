@@ -12,6 +12,7 @@
     <string name="pk_auto_download">autoDownload</string>
     <string name="pk_download_path">downloadPath</string>
     <string name="pk_check_update">checkUpdate</string>
+    <string name="pk_search_result_filter_grade">search_result_filter_grade</string>
 
     <string name="icon_main">ic_launcher_round</string>
     <string name="icon_book">book_launcher_round</string>
