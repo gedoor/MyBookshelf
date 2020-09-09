@@ -111,6 +111,11 @@ class BookContent {
                     }
                 }
             }
+            String replaceRule = bookSourceBean.getRuleBookContentReplace();
+            if (replaceRule != null && replaceRule.trim().length() > 0) {
+                analyzer.setContent(bookContentBean.getDurChapterContent());
+                bookContentBean.setDurChapterContent(analyzer.getString(replaceRule));
+            }
             e.onNext(bookContentBean);
             e.onComplete();
         });

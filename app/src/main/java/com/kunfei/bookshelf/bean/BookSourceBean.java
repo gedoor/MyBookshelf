@@ -73,17 +73,18 @@ public class BookSourceBean implements Cloneable {
     //正文页规则
     private String ruleContentUrlNext;
     private String ruleBookContent;
+    private String ruleBookContentReplace;
     private String httpUserAgent;
 
     @Transient
     private transient ArrayList<String> groupList;
 
-    @Generated(hash = 1840823895)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String loginUrl, Long lastUpdateTime, int serialNumber, int weight, boolean enable, String ruleFindUrl,
-                          String ruleFindList, String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter, String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl,
-                          String ruleSearchList, String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl,
-                          String ruleBookUrlPattern, String ruleBookInfoInit, String ruleBookName, String ruleBookAuthor, String ruleCoverUrl, String ruleIntroduce, String ruleBookKind, String ruleBookLastChapter, String ruleChapterUrl,
-                          String ruleChapterUrlNext, String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String httpUserAgent) {
+    @Generated(hash = 243497779)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String loginUrl, Long lastUpdateTime, int serialNumber, int weight, boolean enable, String ruleFindUrl, String ruleFindList,
+                          String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter, String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl, String ruleSearchList,
+                          String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookUrlPattern,
+                          String ruleBookInfoInit, String ruleBookName, String ruleBookAuthor, String ruleCoverUrl, String ruleIntroduce, String ruleBookKind, String ruleBookLastChapter, String ruleChapterUrl, String ruleChapterUrlNext,
+                          String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookContentReplace, String httpUserAgent) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.bookSourceGroup = bookSourceGroup;
@@ -126,6 +127,7 @@ public class BookSourceBean implements Cloneable {
         this.ruleContentUrl = ruleContentUrl;
         this.ruleContentUrlNext = ruleContentUrlNext;
         this.ruleBookContent = ruleBookContent;
+        this.ruleBookContentReplace = ruleBookContentReplace;
         this.httpUserAgent = httpUserAgent;
     }
 
@@ -163,7 +165,8 @@ public class BookSourceBean implements Cloneable {
                     && stringEquals(httpUserAgent, bs.httpUserAgent)
                     && stringEquals(ruleBookKind, bs.ruleBookKind)
                     && stringEquals(ruleBookLastChapter, bs.ruleBookLastChapter)
-                    && stringEquals(ruleBookUrlPattern, bs.ruleBookUrlPattern);
+                    && stringEquals(ruleBookUrlPattern, bs.ruleBookUrlPattern)
+                    && stringEquals(ruleBookContentReplace, bs.ruleBookContentReplace);
         }
         return false;
     }
@@ -583,4 +586,11 @@ public class BookSourceBean implements Cloneable {
         this.ruleBookInfoInit = ruleBookInfoInit;
     }
 
+    public String getRuleBookContentReplace() {
+        return ruleBookContentReplace;
+    }
+
+    public void setRuleBookContentReplace(String ruleBookContentReplace) {
+        this.ruleBookContentReplace = ruleBookContentReplace;
+    }
 }

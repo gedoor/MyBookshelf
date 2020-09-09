@@ -327,6 +327,7 @@
     <string name="book_source_login_url">登錄URL(loginUrl)</string>
     <string name="rule_book_author">作者規則(ruleBookAuthor)</string>
     <string name="rule_book_content">正文規則(ruleBookContent)</string>
+    <string name="rule_book_content_replace">正文替换規則(ruleBookContentReplace)</string>
     <string name="rule_book_name">書名規則(ruleBookName)</string>
     <string name="rule_chapter_list">目錄列表規則(ruleChapterList)</string>
     <string name="rule_chapter_name">章節名稱規則(ruleChapterName)</string>
