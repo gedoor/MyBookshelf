@@ -70,6 +70,14 @@
             app:MinValue="1" />
 
         <com.kunfei.bookshelf.widget.number.NumberPickerPreference
+            android:defaultValue="0"
+            android:key="@string/pk_search_result_filter_grade"
+            android:summary="@string/search_result_filter_grade_tip"
+            android:title="@string/search_result_filter_grade"
+            app:MaxValue="9"
+            app:MinValue="0" />
+
+        <com.kunfei.bookshelf.widget.number.NumberPickerPreference
             android:defaultValue="1122"
             android:key="webPort"
             android:summary="@string/web_port_summary"

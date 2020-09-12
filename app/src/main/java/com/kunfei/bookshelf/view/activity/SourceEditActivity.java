@@ -266,6 +266,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         //正文页
         sourceEditList.add(new SourceEdit("ruleContentUrlNext", bookSourceBean.getRuleContentUrlNext(), R.string.rule_content_url_next));
         sourceEditList.add(new SourceEdit("ruleBookContent", bookSourceBean.getRuleBookContent(), R.string.rule_book_content));
+        sourceEditList.add(new SourceEdit("ruleBookContentReplace", bookSourceBean.getRuleBookContentReplace(), R.string.rule_book_content_replace));
         sourceEditList.add(new SourceEdit("httpUserAgent", bookSourceBean.getHttpUserAgent(), R.string.source_user_agent));
 
         //发现
@@ -380,6 +381,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                     break;
                 case "ruleBookContent":
                     bookSourceBeanN.setRuleBookContent(sourceEdit.value);
+                    break;
+                case "ruleBookContentReplace":
+                    bookSourceBeanN.setRuleBookContentReplace(sourceEdit.value);
                     break;
                 case "httpUserAgent":
                     bookSourceBeanN.setHttpUserAgent(sourceEdit.value);

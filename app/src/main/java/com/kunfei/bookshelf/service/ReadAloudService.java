@@ -217,6 +217,13 @@ public class ReadAloudService extends Service {
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        clearTTS();
+        stopSelf();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
@@ -256,8 +263,7 @@ public class ReadAloudService extends Service {
                         if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
                             if (timeMinute<=60) {
                                 sText = getString(R.string.read_aloud_timerremaining, timeMinute);
-                            }
-                            else {
+                            } else {
                                 int hours = timeMinute / 60;
                                 int minutes = timeMinute % 60;
                                 sText = getString(R.string.read_aloud_timerremaininglong, hours, minutes);

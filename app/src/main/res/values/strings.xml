@@ -330,6 +330,7 @@
     <string name="book_source_login_url">登录URL(loginUrl)</string>
     <string name="rule_book_author">作者规则(ruleBookAuthor)</string>
     <string name="rule_book_content">正文规则(ruleBookContent)</string>
+    <string name="rule_book_content_replace">正文替换规则(ruleBookContentReplace)</string>
     <string name="rule_book_name">书名规则(ruleBookName)</string>
     <string name="rule_chapter_list">目录列表规则(ruleChapterList)</string>
     <string name="rule_chapter_name">章节名称规则(ruleChapterName)</string>
@@ -469,4 +470,9 @@
     <string name="custom_page_key">自定义翻页按键</string>
     <string name="prev_page_key">上一页按键</string>
     <string name="next_page_key">下一页按键</string>
+
+    <string name="search_result_filter_grade">搜索结果过滤等级</string>
+    <string name="search_result_filter_grade_tip">调高过滤等级可以避免看到书名/作者无关的搜索结果。
+        等级1-9：搜索关键字需要出现到书名/作者中，但是允许有8-0个字（空格不计）没有出现（避免误输入的影响）。默认等级0，不过滤。推荐等级7，允许2个错別字。
+        \n当前过滤等级 %s</string>
 </resources>

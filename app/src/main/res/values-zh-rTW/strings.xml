@@ -327,6 +327,7 @@
     <string name="book_source_login_url">登錄URL(loginUrl)</string>
     <string name="rule_book_author">作者規則(ruleBookAuthor)</string>
     <string name="rule_book_content">正文規則(ruleBookContent)</string>
+    <string name="rule_book_content_replace">正文替换規則(ruleBookContentReplace)</string>
     <string name="rule_book_name">書名規則(ruleBookName)</string>
     <string name="rule_chapter_list">目錄列表規則(ruleChapterList)</string>
     <string name="rule_chapter_name">章節名稱規則(ruleChapterName)</string>
@@ -448,4 +449,8 @@
     <string name="layout_grid3">網格視圖三列</string>
     <string name="layout_grid4">網格視圖四列</string>
     <string name="all_source">全部書源</string>
+    <string name="search_result_filter_grade">搜索結果過濾等級</string>
+    <string name="search_result_filter_grade_tip">調高過濾等級可以避免看到書名/作者無關的搜索結果。
+        等級1-9：搜索關鍵字需要出現到書名/作者中，但是允許有8-0個字（空格不計）沒有出現（避免誤輸入的影響）。默認等級0，不過濾。推薦等級7，允許2個錯別字。
+        \n當前過濾等級 %s</string>
 </resources>
