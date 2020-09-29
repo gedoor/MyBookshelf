@@ -69,16 +69,47 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             } else {
                 String baseUrl = StringUtils.getBaseUrl(bookUrl);
                 BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
+
+                // RuleBookUrlPattern推定  考虑有书源规则不完善，需要排除RuleBookUrlPatternt填写.*匹配全部url的情况
                 if (bookSourceBean == null) {
                     List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull(), BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")).list();
+                            .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull()
+                                    ,BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")
+                                    ,BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq(".*")
+                            ).list();
                     for (BookSourceBean sourceBean : sourceBeans) {
                         if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
                             bookSourceBean = sourceBean;
+//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern="+sourceBean.getRuleBookUrlPattern());
                             break;
                         }
                     }
                 }
+
+                //BookSourceUrl推定  考虑有书源规则不完善，没有填写RuleBookUrlPattern的情况（但是通常会填写bookSourceUrl），因此需要做补充
+                if (bookSourceBean == null) {
+                    String siteUrl=bookUrl.replaceFirst("^(http://|https://)?(m\\.|www\\.|web\\.)?","").replaceFirst("/.*$","");
+                    List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.BookSourceUrl.like("%"+siteUrl+"%")).list();
+                    for (BookSourceBean sourceBean : sourceBeans) {
+                        //由于RuleBookUrlPattern推定排除了RuleBookUrlPattern为空或者匹配所有字符的情况，因此需要做过杀推定
+                        if(sourceBean.getRuleBookUrlPattern().equals(null)){
+                            bookSourceBean = sourceBean;
+//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern=null,source="+sourceBean.getBookSourceUrl());
+                            break;
+                        }else  if(sourceBean.getRuleBookUrlPattern().replaceAll("\\s","").length()==0){
+                            bookSourceBean = sourceBean;
+//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern,source={space}"+sourceBean.getBookSourceUrl());
+                            break;
+                        }
+                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                            bookSourceBean = sourceBean;
+//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern="+sourceBean.getRuleBookUrlPattern());
+                            break;
+                        }
+                    }
+                }
+
                 if (bookSourceBean != null) {
                     BookShelfBean bookShelfBean = new BookShelfBean();
                     bookShelfBean.setTag(bookSourceBean.getBookSourceUrl());
