@@ -55,6 +55,12 @@ class MoreSettingPop : FrameLayout {
                 RxBus.get().post(RxBusTag.RECREATE, true)
             }
         }
+        sb_light_novel_paragraph.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+            if (buttonView.isPressed) {
+                readBookControl.lightNovelParagraph = isChecked
+                callback?.recreate()
+            }
+        }
         sb_hideStatusBar.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
             if (buttonView.isPressed) {
                 readBookControl.hideStatusBar = isChecked
@@ -187,6 +193,7 @@ class MoreSettingPop : FrameLayout {
         sbImmersionStatusBar!!.isChecked = readBookControl.immersionStatusBar
         sw_volume_next_page.isChecked = readBookControl.canKeyTurn
         sw_read_aloud_key.isChecked = readBookControl.aloudCanKeyTurn
+        sb_light_novel_paragraph.isChecked = readBookControl.lightNovelParagraph;
         sb_hideStatusBar.isChecked = readBookControl.hideStatusBar
         sb_to_lh.isChecked = readBookControl.toLh
         sb_hideNavigationBar.isChecked = readBookControl.hideNavigationBar
