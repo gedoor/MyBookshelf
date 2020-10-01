@@ -580,7 +580,7 @@ public class ReadBookControl {
     public void setLightNovelParagraph(Boolean lightNovelParagraph) {
         this.lightNovelParagraph = lightNovelParagraph;
         preferences.edit()
-                .putBoolean("light_movel_paragraph", hideStatusBar)
+                .putBoolean("light_novel_paragraph", lightNovelParagraph)
                 .apply();
     }
 
