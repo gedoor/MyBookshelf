@@ -7,11 +7,15 @@ import androidx.annotation.Keep;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
+import com.kunfei.bookshelf.help.SSLSocketClient;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Entities;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -179,6 +183,7 @@ public class AnalyzeRule {
             }
             if (!isEmpty(rule.replaceRegex) && result instanceof List) {
                 List<String> newList = new ArrayList<>();
+                //noinspection rawtypes
                 for (Object item : (List) result) {
                     newList.add(replaceRegex(String.valueOf(item), rule));
                 }
@@ -193,6 +198,7 @@ public class AnalyzeRule {
         }
         if (isUrl && !isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
+            //noinspection rawtypes
             for (Object url : (List) result) {
                 String absoluteURL = NetworkUtils.getAbsoluteURL(baseUrl, String.valueOf(url));
                 if (!urlList.contains(absoluteURL) && !isEmpty(absoluteURL)) {
@@ -315,7 +321,6 @@ public class AnalyzeRule {
         if (result == null) {
             return new ArrayList<>();
         }
-        //noinspection ConstantConditions
         return (List<Object>) result;
     }
 
@@ -573,4 +578,30 @@ public class AnalyzeRule {
         return s;
     }
 
+    /**
+     * js实现重定向拦截,不能删
+     */
+    public Connection.Response get(String urlStr, Map<String, String> headers) throws IOException {
+        return Jsoup.connect(urlStr)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                .ignoreContentType(true)
+                .followRedirects(false)
+                .headers(headers)
+                .method(Connection.Method.GET)
+                .execute();
+    }
+
+    /**
+     * js实现重定向拦截,不能删
+     */
+    public Connection.Response post(String urlStr, String body, Map<String, String> headers) throws IOException {
+        return Jsoup.connect(urlStr)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                .ignoreContentType(true)
+                .followRedirects(false)
+                .requestBody(body)
+                .headers(headers)
+                .method(Connection.Method.POST)
+                .execute();
+    }
 }
