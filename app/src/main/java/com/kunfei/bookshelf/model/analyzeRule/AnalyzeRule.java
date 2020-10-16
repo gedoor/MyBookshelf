@@ -5,17 +5,13 @@ import android.annotation.SuppressLint;
 import androidx.annotation.Keep;
 
 import com.google.gson.Gson;
-import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BaseBookBean;
-import com.kunfei.bookshelf.help.SSLSocketClient;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Entities;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.SimpleBindings;
-
-import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
@@ -41,7 +35,7 @@ import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
  */
 @Keep
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AnalyzeRule {
+public class AnalyzeRule extends JsExtensions {
     private static final Pattern putPattern = Pattern.compile("@put:(\\{[^}]+?\\})", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{([^}]+?)\\}", Pattern.CASE_INSENSITIVE);
 
@@ -542,66 +536,4 @@ public class AnalyzeRule {
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
 
-    /**
-     * js实现跨域访问,不能删
-     */
-    public String ajax(String urlStr) {
-        try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
-            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
-                    .blockingFirst();
-            return response.body();
-        } catch (Exception e) {
-            return e.getLocalizedMessage();
-        }
-    }
-
-    /**
-     * js实现解码,不能删
-     */
-    public String base64Decoder(String base64) {
-        return StringUtils.base64Decode(base64);
-    }
-
-    /**
-     * 章节数转数字
-     */
-    public String toNumChapter(String s) {
-        if (s == null) {
-            return null;
-        }
-        Pattern pattern = Pattern.compile("(第)(.+?)(章)");
-        Matcher matcher = pattern.matcher(s);
-        if (matcher.find()) {
-            return matcher.group(1) + StringUtils.stringToInt(matcher.group(2)) + matcher.group(3);
-        }
-        return s;
-    }
-
-    /**
-     * js实现重定向拦截,不能删
-     */
-    public Connection.Response get(String urlStr, Map<String, String> headers) throws IOException {
-        return Jsoup.connect(urlStr)
-                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
-                .ignoreContentType(true)
-                .followRedirects(false)
-                .headers(headers)
-                .method(Connection.Method.GET)
-                .execute();
-    }
-
-    /**
-     * js实现重定向拦截,不能删
-     */
-    public Connection.Response post(String urlStr, String body, Map<String, String> headers) throws IOException {
-        return Jsoup.connect(urlStr)
-                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
-                .ignoreContentType(true)
-                .followRedirects(false)
-                .requestBody(body)
-                .headers(headers)
-                .method(Connection.Method.POST)
-                .execute();
-    }
 }
