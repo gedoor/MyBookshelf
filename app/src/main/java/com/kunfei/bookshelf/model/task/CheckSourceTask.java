@@ -24,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
-public class CheckSourceTask extends JsExtensions {
+public class CheckSourceTask implements JsExtensions {
 
     private BookSourceBean sourceBean;
     private Scheduler scheduler;

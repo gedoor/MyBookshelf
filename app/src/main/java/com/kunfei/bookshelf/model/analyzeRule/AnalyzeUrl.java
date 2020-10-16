@@ -34,7 +34,7 @@ import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
  * 搜索URL规则解析
  */
 @Keep
-public class AnalyzeUrl extends JsExtensions {
+public class AnalyzeUrl implements JsExtensions {
     private static final Pattern pagePattern = Pattern.compile("\\{(.*?)\\}");
     private String baseUrl;
     private String url;

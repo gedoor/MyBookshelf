@@ -12,6 +12,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -31,7 +32,7 @@ import io.reactivex.disposables.Disposable;
 
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
-public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
+public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter, JsExtensions {
     private Disposable disposable;
     private AnalyzeRule analyzeRule;
     private String findError = "发现规则语法错误";

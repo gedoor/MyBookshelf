@@ -15,12 +15,12 @@ import java.util.regex.Pattern;
 import retrofit2.Response;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class JsExtensions {
+public interface JsExtensions {
 
     /**
      * js实现跨域访问,不能删
      */
-    public String ajax(String urlStr) {
+    default String ajax(String urlStr) {
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
             Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
@@ -34,14 +34,14 @@ public class JsExtensions {
     /**
      * js实现解码,不能删
      */
-    public String base64Decoder(String base64) {
+    default String base64Decoder(String base64) {
         return StringUtils.base64Decode(base64);
     }
 
     /**
      * 章节数转数字
      */
-    public String toNumChapter(String s) {
+    default String toNumChapter(String s) {
         if (s == null) {
             return null;
         }
@@ -56,7 +56,7 @@ public class JsExtensions {
     /**
      * js实现重定向拦截,不能删
      */
-    public Connection.Response get(String urlStr, Map<String, String> headers) throws IOException {
+    default Connection.Response get(String urlStr, Map<String, String> headers) throws IOException {
         return Jsoup.connect(urlStr)
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 .ignoreContentType(true)
@@ -69,7 +69,7 @@ public class JsExtensions {
     /**
      * js实现重定向拦截,不能删
      */
-    public Connection.Response post(String urlStr, String body, Map<String, String> headers) throws IOException {
+    default Connection.Response post(String urlStr, String body, Map<String, String> headers) throws IOException {
         return Jsoup.connect(urlStr)
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 .ignoreContentType(true)
