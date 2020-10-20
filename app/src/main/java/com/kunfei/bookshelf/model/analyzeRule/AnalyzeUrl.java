@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.Keep;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.UrlEncoderUtils;
@@ -33,7 +34,7 @@ import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
  * 搜索URL规则解析
  */
 @Keep
-public class AnalyzeUrl {
+public class AnalyzeUrl implements JsExtensions {
     private static final Pattern pagePattern = Pattern.compile("\\{(.*?)\\}");
     private String baseUrl;
     private String url;
