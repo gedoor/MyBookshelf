@@ -39,6 +39,7 @@ public class ReadBookControl {
     private float lineMultiplier;
     private float paragraphSize;
     private int pageMode;
+    private Boolean lightNovelParagraph;
     private Boolean hideStatusBar;
     private Boolean hideNavigationBar;
     private String fontPath;
@@ -92,6 +93,7 @@ public class ReadBookControl {
     }
 
     public void updateReaderSettings() {
+        this.lightNovelParagraph = preferences.getBoolean("light_novel_paragraph", false);
         this.hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = preferences.getBoolean("hide_navigation_bar", false);
         this.indent = preferences.getInt("indent", 2);
@@ -570,6 +572,15 @@ public class ReadBookControl {
         this.showTimeBattery = showTimeBattery;
         preferences.edit()
                 .putBoolean("showTimeBattery", showTimeBattery)
+                .apply();
+    }
+
+    public Boolean getLightNovelParagraph(){return lightNovelParagraph;}
+
+    public void setLightNovelParagraph(Boolean lightNovelParagraph) {
+        this.lightNovelParagraph = lightNovelParagraph;
+        preferences.edit()
+                .putBoolean("light_novel_paragraph", lightNovelParagraph)
                 .apply();
     }
 

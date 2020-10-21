@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.text.Layout;
 import android.text.StaticLayout;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -69,6 +70,11 @@ class ChapterProvider {
             return txtChapter;
         }
         content = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), content, pageLoader.book.getReplaceEnable());
+//        Log.i("content",content);
+//        Log.i("chapterName",chapter.getDurChapterName());
+//      方便debug
+//        if(chapter.getDurChapterName().matches(".*宣战.*"))
+        content = contentHelper.LightNovelParagraph2(content,chapter.getDurChapterName());
         String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         List<TxtLine> txtLists = new ArrayList<>();//记录每个字的位置 //pzl

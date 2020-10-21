@@ -475,4 +475,5 @@
     <string name="search_result_filter_grade_tip">调高过滤等级可以避免看到书名/作者无关的搜索结果。
         等级1-9：搜索关键字需要出现到书名/作者中，但是允许有8-0个字（空格不计）没有出现（避免误输入的影响）。默认等级0，不过滤。推荐等级7，允许2个错別字。
         \n当前过滤等级 %s</string>
+    <string name="light_novel_paragraph">自动重分段落</string>
 </resources>
