@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.renderscript.Allocation;
@@ -388,6 +389,18 @@ public class BitmapUtil {
         output.copyTo(blurredBitmap);
 
         return blurredBitmap;
+    }
+
+
+    public static Bitmap addBitmap(Bitmap first, Bitmap second,int spacer_mid,int spacer_width,int spacer_top,int spacer_bottom) {
+        int width = Math.max(first.getWidth(),second.getWidth())+spacer_width*2;
+        int height = first.getHeight() + second.getHeight() + spacer_mid+spacer_bottom+spacer_top;
+        Bitmap result = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(first, (width-first.getWidth())/2, spacer_top, null);
+        canvas.drawBitmap(second, (width-second.getWidth())/2,first.getHeight()+spacer_top+spacer_mid,  null);
+        return result;
     }
 
 }
