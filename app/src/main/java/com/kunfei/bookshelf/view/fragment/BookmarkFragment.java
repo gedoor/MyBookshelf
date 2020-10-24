@@ -143,8 +143,13 @@ public class BookmarkFragment extends MBaseFragment<IPresenter> {
 
                     @Override
                     public void delBookmark(BookmarkBean bookmarkBean) {
+//                        Log.d("delBookmark","before="+bookmarkBeanList.size());
                         DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
-                        adapter.notifyDataSetChanged();
+//                        Log.d("delBookmark","after="+bookmarkBeanList.size());
+                        bookmarkBeanList = BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName());
+//                        Log.d("delBookmark","fine="+bookmarkBeanList.size());
+                        adapter.setAllBookmark(bookmarkBeanList);
+//                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
