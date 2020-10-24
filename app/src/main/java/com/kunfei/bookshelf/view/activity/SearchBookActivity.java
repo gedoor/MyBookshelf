@@ -211,9 +211,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mSearchAutoComplete.setPadding(15, 0, 0, 0);
         searchView.onActionViewExpanded();
-        LinearLayout editFrame = searchView.findViewById(androidx.appcompat.R.id.search_edit_frame);
-        ImageView closeButton = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
-        ImageView goButton = searchView.findViewById(androidx.appcompat.R.id.search_go_btn);
+        LinearLayout editFrame = searchView.findViewById(R.id.search_edit_frame);
+        ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
+        ImageView goButton = searchView.findViewById(R.id.search_go_btn);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame.getLayoutParams();
         params.setMargins(20, 0, 10, 0);
         editFrame.setLayoutParams(params);

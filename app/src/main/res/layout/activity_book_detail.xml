@@ -22,8 +22,9 @@
             android:layout_weight="1" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/book_info_main"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="30dp"
             app:cardCornerRadius="5dp"
@@ -32,7 +33,7 @@
             <com.kunfei.bookshelf.widget.image.FilletImageView
                 android:id="@+id/iv_blur_cover"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="210dp"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 
@@ -197,7 +198,7 @@
                                 android:layout_height="18sp"
                                 android:contentDescription="@string/last_read"
                                 android:paddingRight="2dp"
-                                android:src="@drawable/ic_book_last"
+                                android:src="@drawable/ic_history"
                                 app:tint="@color/tv_text_book_detail"
                                 tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -312,11 +313,11 @@
                 <com.kunfei.bookshelf.widget.ScrollTextView
                     android:id="@+id/tv_intro"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="160dp"
                     android:background="@color/background_menu"
                     android:clickable="true"
                     android:focusable="true"
+                    android:minLines="3"
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
@@ -328,26 +329,32 @@
                     android:textSize="15sp"
                     android:visibility="invisible" />
 
-                <View
+                <TextView
+                    android:id="@+id/tv_book_url"
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/btn_bg_press" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_menu"
+                    android:text="@string/book_intro"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
 
                 <FrameLayout
+                    android:id="@+id/book_info_btns"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/background_menu"
-                        android:orientation="horizontal"
-                        android:padding="3dp">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_shelf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginTop="10sp"
+                            android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/selector_fillet_btn_bg"
                             android:clickable="true"
@@ -355,17 +362,16 @@
                             android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="@string/remove_from_bookshelf"
-                            android:textColor="@color/tv_text_default"
+                            android:textColor="@color/white"
                             android:textSize="15sp" />
-
-                        <Space
-                            android:layout_width="3dp"
-                            android:layout_height="match_parent" />
 
                         <TextView
                             android:id="@+id/tv_read"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginTop="10sp"
+                            android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/selector_fillet_btn_bg"
                             android:clickable="true"
@@ -373,7 +379,25 @@
                             android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="@string/start_read"
-                            android:textColor="@color/tv_text_default"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+
+
+                        <TextView
+                            android:id="@+id/tv_share"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginTop="10sp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_fillet_btn_bg"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="@string/share_book"
+                            android:textColor="@color/white"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -390,6 +414,7 @@
                         android:textColor="#767676"
                         android:textSize="16sp"
                         android:visibility="gone" />
+
                 </FrameLayout>
             </LinearLayout>
 

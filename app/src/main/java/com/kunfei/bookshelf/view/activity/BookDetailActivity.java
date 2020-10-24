@@ -3,7 +3,9 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,16 +23,23 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.AppActivityManager;
 import com.kunfei.basemvplib.BitIntentDataManager;
+import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -42,13 +52,21 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
+import com.kunfei.bookshelf.utils.BitmapUtil;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.widget.image.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 import static com.kunfei.bookshelf.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 
@@ -77,6 +95,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvShelf;
     @BindView(R.id.tv_read)
     TextView tvRead;
+    @BindView(R.id.tv_share)
+    TextView tvShare;
+    @BindView(R.id.tv_book_url)
+    TextView tvBookUrl;
+    @BindView(R.id.book_info_main)
+    View bookInfoMain;
+    @BindView(R.id.book_info_btns)
+    View bookInfoBtns;
     @BindView(R.id.tv_loading)
     TextView tvLoading;
     @BindView(R.id.tv_change_origin)
@@ -90,6 +116,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     private String author;
     private BookShelfBean bookShelfBean;
     private String coverPath;
+    private String bookUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,10 +163,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvName.setText(searchBookBean.getName());
             author = searchBookBean.getAuthor();
             tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
+            bookUrl=searchBookBean.getNoteUrl();
+            tvBookUrl.setText(bookUrl);
+//            bookInfoBtns.bringToFront();
             String origin = TextUtils.isEmpty(searchBookBean.getOrigin()) ? "未知" : searchBookBean.getOrigin();
             tvOrigin.setText(origin);
             tvChapter.setText(searchBookBean.getLastChapter());  // newest
-            tvIntro.setText(StringUtils.formatHtml(searchBookBean.getIntroduce()));
+            tvIntro.setText(StringUtils.formatHtml2Intor(searchBookBean.getIntroduce()));
             tvShelf.setText(R.string.add_to_shelf);
             tvRead.setText(R.string.start_read);
             tvRead.setOnClickListener(v -> {
@@ -166,6 +196,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvName.setText(bookInfoBean.getName());
             author = bookInfoBean.getAuthor();
             tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
+            bookUrl=bookInfoBean.getNoteUrl();
+            tvBookUrl.setText(bookUrl);
             ((RadioButton) rgBookGroup.getChildAt(bookShelfBean.getGroup())).setChecked(true);
             if (mPresenter.getInBookShelf()) {
                 tvChapter.setText(bookShelfBean.getDurChapterName()); // last
@@ -186,7 +218,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     mPresenter.addToBookShelf();
                 });
             }
-            tvIntro.setText(StringUtils.formatHtml(bookInfoBean.getIntroduce()));
+            tvIntro.setText(StringUtils.formatHtml2Intor(bookInfoBean.getIntroduce()));
             if (tvIntro.getVisibility() != View.VISIBLE) {
                 tvIntro.setVisibility(View.VISIBLE);
             }
@@ -306,6 +338,85 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 finish();
                 overridePendingTransition(0, android.R.anim.fade_out);
             }
+        });
+
+
+        tvShare.setOnClickListener(v -> {
+
+            Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
+                // 使用url
+                String url="";
+                BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
+                if (sourceBean != null) {
+                    Gson gson = new GsonBuilder()
+                            .disableHtmlEscaping()
+                            .setPrettyPrinting()
+                            .create();
+                    url=tvBookUrl.getText().toString()+"#"+ gson.toJson(sourceBean).trim();
+                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+                    Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 800);
+                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+                    emitter.onSuccess(bitmap);
+                }else{
+                    url=tvBookUrl.getText().toString();
+                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+                    Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 300);
+                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+                    emitter.onSuccess(bitmap);
+                }
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new MySingleObserver<Bitmap>() {
+
+                        @Override
+                        public void onSuccess(Bitmap bitmap2) {
+                            bookInfoBtns.setVisibility(View.GONE);
+                            LinearLayout.LayoutParams layoutParams=
+                                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            tvIntro.setLayoutParams(layoutParams);
+//                            updateView();
+
+                            bookInfoMain.measure(
+                                    View.MeasureSpec.makeMeasureSpec(960, View.MeasureSpec.AT_MOST),
+                                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                            bookInfoMain.layout(0, 0, bookInfoMain.getMeasuredWidth(), bookInfoMain.getMeasuredHeight());
+                            bookInfoMain.buildDrawingCache();
+                            Bitmap bitmap = bookInfoMain.getDrawingCache();
+                            bookInfoBtns.setVisibility(View.VISIBLE);
+                            layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
+                            tvIntro.setLayoutParams(layoutParams);
+                            //假如图片不符合要求，可以使用Bitmap.createBitmap( )方法处理图片
+
+//            BitmapUtil.localshare(this.getApplication(),bitmap,tvName.getText().toString());
+                            if (bitmap == null) {
+                                toast("生成照片失败");
+                                return;
+                            }
+
+                            if(bitmap2 !=null)
+                                bitmap=BitmapUtil.addBitmap(bitmap,bitmap2,20,0,0,60);
+
+                            try {
+                                File file = new File(BookDetailActivity.this.getExternalCacheDir(), tvName.getText().toString()+".png");
+                                FileOutputStream fOut = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 80, fOut);
+                                fOut.flush();
+                                fOut.close();
+                                //noinspection ResultOfMethodCallIgnored
+                                file.setReadable(true, false);
+                                Uri contentUri = FileProvider.getUriForFile(BookDetailActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+                                final Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                                intent.setType("image/png");
+                                startActivity(Intent.createChooser(intent, "分享书籍"));
+                            } catch (Exception e) {
+                                toast(e.getLocalizedMessage());
+                            }
+                        }
+                    });
+
+
+
         });
 
         ivMenu.setOnClickListener(view -> {
