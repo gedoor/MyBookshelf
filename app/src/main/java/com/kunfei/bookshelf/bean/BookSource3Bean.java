@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
+import kotlin.jvm.Transient;
 import kotlinx.android.parcel.Parcelize;
 
 // 解析阅读3.0的书源规则,toBookSourceBean()方法转换为阅读2.0书源规则
@@ -30,6 +31,10 @@ public class BookSource3Bean {
     private TocRule ruleToc;                 // 目录页规则
     private ContentRule ruleContent;            // 正文页规则
 
+    @Transient
+    private String userAgent;
+    @Transient
+    private String RuleSearchUrl;
 
     class ContentRule {
         String content;
@@ -110,7 +115,7 @@ public class BookSource3Bean {
         String RuleSearchUrl = searchUrl;
         if (searchUrl != null) {
             String q = "";
-            if (searchUrl.replaceAll("\\s","").matches("^[^,]+,\\{.+\\}")) {
+            if (searchUrl.replaceAll("\\s", "").matches("^[^,]+,\\{.+\\}")) {
                 String[] strings = searchUrl.split(",", 2);
                 try {
                     Gson gson = new Gson();
@@ -121,8 +126,10 @@ public class BookSource3Bean {
                                 .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
                         ;
 
-                        if (request.charset != null)
-                            q = q + "|char=" + request.charset;
+                        if (request.charset != null) {
+                            if (request.charset.trim().length() > 0)
+                                q = q + "|char=" + request.charset;
+                        }
 
                         if (request.method != null) {
                             if (request.method.toLowerCase().contains("post"))
@@ -130,6 +137,14 @@ public class BookSource3Bean {
                             else
                                 q = "?" + q;
                         }
+
+                        if (request.headers != null) {
+                            if (this.header == null)
+                                this.header = request.headers;
+                            else if (request.headers.trim().length() < 1)
+                                this.header = request.headers;
+                        }
+
                         return strings[0] + q;
                     }
 
@@ -137,7 +152,7 @@ public class BookSource3Bean {
                 }
             }
 
-            return searchUrl
+            return searchUrl.replaceAll("\\s", "")
                     .replace("{{key}}", "searchKey")
                     .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
                     ;
@@ -151,7 +166,12 @@ public class BookSource3Bean {
         if (this.bookSourceType != 0)
             bookSourceType = "" + this.bookSourceType;
 
-        String RuleSearchUrl = searchUrl2RuleSearchUrl(searchUrl);
+        RuleSearchUrl = searchUrl2RuleSearchUrl(searchUrl);
+
+        if (header != null && userAgent == null) {
+            if (header.matches("(?!).*(User-Agent).*"))
+                userAgent = header.replaceFirst("(?!).*(User-Agent)[\\s:]+\"([^\"]+)\".*", "$2");
+        }
 
         return new BookSourceBean(
                 bookSourceUrl,
@@ -197,7 +217,7 @@ public class BookSource3Bean {
                 ruleContent.nextContentUrl, //ruleContentUrlNext,
                 ruleContent.content, //  ruleBookContent,
                 ruleContent.replaceRegex,//    ruleBookContentReplace,
-                header //  httpUserAgent
+                userAgent //  httpUserAgent
         );
     }
 }
