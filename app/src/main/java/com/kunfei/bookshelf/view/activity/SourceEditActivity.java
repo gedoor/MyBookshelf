@@ -107,7 +107,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private PopupWindow mSoftKeyboardTool;
     private boolean mIsSoftKeyBoardShowing = false;
     private boolean showFind;
-    private String[] keyHelp = {"@", "&", "|", "%", "/", ":", "[", "]", "{", "}", "<", ">", "\\", "$", "#", "!", ".",
+    private String[] keyHelp = {"@", "&", "|", "%", "/", ":", "[", "]", "(", ")", "{", "}", "<", ">", "\\", "$", "#", "!", ".",
             "href", "src", "textNodes", "xpath", "json", "css", "id", "class", "tag"};
 
     public static void startThis(Object object, BookSourceBean sourceBean) {
