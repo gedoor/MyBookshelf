@@ -4,6 +4,12 @@ import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import kotlin.jvm.Transient;
 import kotlinx.android.parcel.Parcelize;
 
@@ -104,6 +110,27 @@ public class BookSource3Bean {
         return this;
     }*/
 
+    // 给书源增加一个标签
+    public BookSource3Bean addGroupTag(String tag) {
+        if (this.bookSourceGroup != null) {
+            //为了避免空格、首尾位置的差异造成影响，这里做循环处理
+            String[] tags = (this.bookSourceGroup + ";" + tag).split(";");
+
+            List<String> list = new ArrayList<>();
+            list.add(tag);
+            for (String s : tags) {
+                if (!list.contains(s)) {
+                    list.add(s);
+                }
+            }
+            bookSourceGroup = tag;
+            for (int i = 1; i < list.size(); i++) {
+                bookSourceGroup = bookSourceGroup + ";" + list.get(i);
+            }
+        }
+        return this;
+    }
+
     class httpRequest {
         String method;
         String body;
@@ -120,39 +147,43 @@ public class BookSource3Bean {
                 try {
                     Gson gson = new Gson();
                     httpRequest request = gson.fromJson(strings[1], httpRequest.class);
+                    if (gson.toJson(request).replaceAll("\\s", "").length() > 0)
+                        q = "";
+
+                    if (request.charset != null) {
+                        if (request.charset.trim().length() > 0)
+                            q = q + "|char=" + request.charset;
+                    }
+
+                    if (request.method != null) {
+                        if (request.method.toLowerCase().contains("post"))
+                            q = "@" + q;
+                        else
+                            q = "?" + q;
+                    }
+
+                    if (request.headers != null) {
+                        if (this.header == null)
+                            this.header = request.headers;
+                        else if (request.headers.trim().length() < 1)
+                            this.header = request.headers;
+                    }
+
                     if (request.body != null) {
-                        q = request.body
+                        q = q + request.body
                                 .replace("{{key}}", "searchKey")
                                 .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
                         ;
-
-                        if (request.charset != null) {
-                            if (request.charset.trim().length() > 0)
-                                q = q + "|char=" + request.charset;
-                        }
-
-                        if (request.method != null) {
-                            if (request.method.toLowerCase().contains("post"))
-                                q = "@" + q;
-                            else
-                                q = "?" + q;
-                        }
-
-                        if (request.headers != null) {
-                            if (this.header == null)
-                                this.header = request.headers;
-                            else if (request.headers.trim().length() < 1)
-                                this.header = request.headers;
-                        }
-
                         return strings[0] + q;
                     }
+
+                    RuleSearchUrl = strings[0] + q;
 
                 } catch (Exception ignored) {
                 }
             }
 
-            return searchUrl.replaceAll("\\s", "")
+            return RuleSearchUrl.replaceAll("\\s", "")
                     .replace("{{key}}", "searchKey")
                     .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
                     ;

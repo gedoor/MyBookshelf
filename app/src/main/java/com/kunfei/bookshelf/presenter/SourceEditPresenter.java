@@ -65,16 +65,15 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
             if (bookSourceStr.trim().length() > 5) {
                 mView.setText( mathcSourceBean(bookSourceStr.trim())  );
             } else {
+                mView.toast("似乎不是书源内容");
                 // 理论上这里已经没用了
-                Gson gson = new Gson();
-                BookSourceBean bookSourceBean = gson.fromJson(bookSourceStr, BookSourceBean.class);
-                mView.setText(bookSourceBean);
+//                Gson gson = new Gson();
+//                BookSourceBean bookSourceBean = gson.fromJson(bookSourceStr, BookSourceBean.class);
+//                mView.setText(bookSourceBean);
             }
         } catch (Exception e) {
-            if (!setTextV3(bookSourceStr)) {
-                mView.toast("数据格式不对");
-                e.printStackTrace();
-            }
+            mView.toast("数据格式不对");
+            e.printStackTrace();
         }
     }
 
@@ -105,7 +104,8 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
                 bookSource2Bean = gson.fromJson(str, BookSourceBean.class);
             }
             r2 = gson.toJson(bookSource2Bean).length();
-            if (r2 >= r3)
+            // r2 r3的计算在调用searchUrl2RuleSearchUrl() 等高级转换方法之前，是简化算法的粗糙的做法
+            if (r2 > r3)
                 return bookSource2Bean;
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,38 +113,9 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
 
         if (r3 > 0) {
             mView.toast("导入了阅读3.0书源。如有Bug请及时上报");
-            return bookSource3Bean.toBookSourceBean();
+            return bookSource3Bean.addGroupTag("阅读3.0书源").toBookSourceBean();
         }
         return bookSource2Bean;
-    }
-
-    // 把阅读v3.0的书源解析并填充到文本框内
-// 输入字符串为多个书源的数组时，只解析第一个源
-    public boolean setTextV3(String bookSourceStr) {
-        try {
-            String str = bookSourceStr.trim();
-            if (str.length() > 5) {
-                Gson gson = new Gson();
-                BookSource3Bean bookSource3Bean;
-
-                if (str.charAt(0) == '[' && str.charAt(str.length() - 1) == ']') {
-                    List<BookSource3Bean> list = gson.fromJson(str, new TypeToken<List<BookSource3Bean>>() {
-                    }.getType());
-                    bookSource3Bean = list.get(0);
-                } else {
-                    bookSource3Bean = gson.fromJson(str, BookSource3Bean.class);
-                }
-
-                mView.setText(bookSource3Bean.toBookSourceBean());
-                mView.toast("导入了阅读3.0书源。如有Bug请及时上报");
-                return true;
-            } else
-                mView.toast("数据格式不对");
-        } catch (Exception e) {
-            e.printStackTrace();
-            mView.toast("数据格式不对");
-        }
-        return false;
     }
 
     @Override
