@@ -61,7 +61,11 @@ public class AnalyzeUrl implements JsExtensions {
         }
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
-            ruleUrl = ruleUrl.replace("searchKey", key);
+            // 处理searchKey=searchKey的情况
+            if (ruleUrl.matches("=[\\s{(]*searchKey"))
+                ruleUrl = ruleUrl.replaceFirst("=[\\s{(]*searchKey", "=" + key);
+            else
+                ruleUrl = ruleUrl.replace("searchKey", key);
         }
         //判断是否有下一页
         if (page != null && page > 1 && !ruleUrl.contains("searchPage"))
