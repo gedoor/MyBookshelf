@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.help;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
@@ -128,10 +127,16 @@ public class ChapterContentHelp {
 
             content = chapterName + "\n\n"
                     + buffer.toString()
-//         处理章节头部空格和换行
+                    //处理章节头部空格和换行
                     .replaceFirst("^\\s+", "")
+                    // 此规则会造成不规范引号被误换行，暂时无法解决，我认为利大于弊
+                    // 例句：“你”“我”“他”都是一样的
+                    // 误处理为 “你”\n“我”\n“他”都是一样的
+                    // 而规范使用的标点不会被误处理： “你”、“我”、“他”，都是一样的。
                     .replaceAll("\\s*[\"”“]+[\\s]*[\"”“][\\s\"”“]*", "”\n“")
+                    // 规范 A：“B...
                     .replaceAll("[:：][”“\"\\s]+","：“")
+                    // 处理奇怪的多余引号  \n”A：“B... 为 \nA:“B...
                     .replaceAll("\n[\"“”]([^\n\"“”]+)([,:，：][\"”“])([^\n\"“”]+)","\n$1：“$3")
                     .replaceAll("\n(\\s*)", "\n");
         }

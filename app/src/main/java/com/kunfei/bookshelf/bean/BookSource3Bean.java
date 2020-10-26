@@ -1,17 +1,11 @@
 package com.kunfei.bookshelf.bean;
 
-import android.os.Parcelable;
-
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import kotlin.jvm.Transient;
-import kotlinx.android.parcel.Parcelize;
 
 // 解析阅读3.0的书源规则,toBookSourceBean()方法转换为阅读2.0书源规则
 // https://raw.githubusercontent.com/gedoor/legado/master/app/src/main/java/io/legado/app/data/entities/BookSource.kt
@@ -143,43 +137,48 @@ public class BookSource3Bean {
         if (searchUrl != null) {
             String q = "";
             if (searchUrl.replaceAll("\\s", "").matches("^[^,]+,\\{.+\\}")) {
+                // 正常网址不包含逗号
                 String[] strings = searchUrl.split(",", 2);
                 try {
                     Gson gson = new Gson();
                     httpRequest request = gson.fromJson(strings[1], httpRequest.class);
-                    if (gson.toJson(request).replaceAll("\\s", "").length() > 0)
-                        q = "";
+                    if (gson.toJson(request).replaceAll("\\s", "").length() > 0) {
+                        // 阅读2.0没有header，只有useragent
+                        if (request.headers != null) {
+                            if (this.header == null)
+                                this.header = request.headers;
+                            else if (request.headers.trim().length() < 1)
+                                this.header = request.headers;
+                        }
 
-                    if (request.charset != null) {
-                        if (request.charset.trim().length() > 0)
-                            q = q + "|char=" + request.charset;
-                    }
+                        if (request.charset != null) {
+                            if (request.charset.trim().length() > 0)
+                                q = q + "|char=" + request.charset;
+                        }
 
-                    if (request.method != null) {
-                        if (request.method.toLowerCase().contains("post"))
-                            q = "@" + q;
-                        else
-                            q = "?" + q;
-                    }
+                        if (request.body != null) {
+                            q = request.body
+                                    .replace("{{key}}", "searchKey")
+                                    .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
+                                    + q;
 
-                    if (request.headers != null) {
-                        if (this.header == null)
-                            this.header = request.headers;
-                        else if (request.headers.trim().length() < 1)
-                            this.header = request.headers;
-                    }
+                            // post请求的关键词一定在第二部分
+                            if (request.method != null) {
+                                if (request.method.toLowerCase().contains("post"))
+                                    q = "@" + q;
+                                else
+                                    q = "?" + q;
+                            }
+                            return strings[0] + q;
+                        }
 
-                    if (request.body != null) {
-                        q = q + request.body
-                                .replace("{{key}}", "searchKey")
-                                .replaceFirst("\\{\\{([^{}]*)page([^{}]*)\\}\\}", "$1searchPage$2")
-                        ;
-                        return strings[0] + q;
-                    }
+                        RuleSearchUrl = strings[0] + q;
+                    } else
+                        RuleSearchUrl = searchUrl;
 
-                    RuleSearchUrl = strings[0] + q;
-
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    RuleSearchUrl = searchUrl;
                 }
             }
 
@@ -204,6 +203,11 @@ public class BookSource3Bean {
                 userAgent = header.replaceFirst("(?!).*(User-Agent)[\\s:]+\"([^\"]+)\".*", "$2");
         }
 
+        String ruleFindUrl=null;
+        if(exploreUrl!=null){
+            ruleFindUrl=exploreUrl.replaceAll("\\{\\{page\\}\\}","searchPage");
+        }
+
         return new BookSourceBean(
                 bookSourceUrl,
                 bookSourceName,
@@ -214,7 +218,7 @@ public class BookSource3Bean {
                 0, //u  serialNumber,
                 weight,
                 true, //u enable,
-                exploreUrl,//发现规则 ruleFindUrl,
+                ruleFindUrl,//发现规则 ruleFindUrl,
                 ruleExplore.bookList,  //  列表 ruleFindList,
                 ruleExplore.name,//  ruleFindName,
                 ruleExplore.author,//   ruleFindAuthor,
