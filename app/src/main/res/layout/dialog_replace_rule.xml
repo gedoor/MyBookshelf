@@ -12,6 +12,7 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -76,6 +77,16 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3" />
         </com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+
+        <TextView
+            android:id="@+id/replace_ad_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="10dp"
+            android:text="@string/replace_ad_intro"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_ok"

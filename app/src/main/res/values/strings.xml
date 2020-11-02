@@ -478,4 +478,10 @@
     <string name="light_novel_paragraph">自动重分段落</string>
     <string name="share_book">分享书籍</string>
     <string name="add_qrcode">扫二维码</string>
+    <string name="copy_url">复制网址</string>
+    <string name="check_find_source">标记所选发现源</string>
+    <string name="replace_ad">广告话术</string>
+    <string name="replace_ad_title">编辑广告话术规则</string>
+    <string name="replace_add_ad_title">添加广告话术规则</string>
+    <string name="replace_ad_intro">广告话术功能使用了自动优化的算法，不需要使用正则表达式，只需要多次标记不想看的文字，就可以获得较好的广告替换效果。同一个网站的广告话术自动保存在一个规则内，避免了“替换净化”列表里有太多多的规则。</string>
 </resources>

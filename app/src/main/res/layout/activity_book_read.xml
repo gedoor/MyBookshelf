@@ -50,7 +50,7 @@
 
     <com.kunfei.bookshelf.view.popupwindow.ReadLongPressPop
         android:id="@+id/readLongPress"
-        android:layout_width="120dp"
+        android:layout_width="190dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:visibility="invisible" />

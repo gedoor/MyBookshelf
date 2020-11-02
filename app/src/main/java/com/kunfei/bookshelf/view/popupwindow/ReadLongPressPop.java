@@ -28,6 +28,8 @@ public class ReadLongPressPop extends FrameLayout {
     FrameLayout flReplace;
     @BindView(R.id.fl_cp)
     FrameLayout flCp;
+    @BindView(R.id.fl_replace_ad)
+    FrameLayout flReplaceAd;
 
 
     //private ReadBookActivity activity;
@@ -82,17 +84,22 @@ public class ReadLongPressPop extends FrameLayout {
 
     private void bindEvent() {
 
-        //翻页1
+        //复制
         flCp.setOnClickListener(v -> clickListener.copySelect());
 
-        //翻页2
+        //替换
         flReplace.setOnClickListener(v -> clickListener.replaceSelect());
+
+        //标记广告
+        flReplaceAd.setOnClickListener(v -> clickListener.replaceSelectAd());
     }
 
     public interface OnBtnClickListener {
         void copySelect();
 
         void replaceSelect();
+
+        void replaceSelectAd();
 
     }
 }

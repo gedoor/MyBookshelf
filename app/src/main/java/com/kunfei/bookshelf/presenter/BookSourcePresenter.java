@@ -191,6 +191,41 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         CheckSourceService.start(mView.getContext(), sourceBeans);
     }
 
+    @Override
+    public void checkFindSource(List<BookSourceBean> sourceBeans) {
+        String TAG_FIND_SOUECE="发现";
+
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            for (BookSourceBean sourceBean : sourceBeans) {
+                String rule=sourceBean.getRuleFindUrl();
+                if(rule==null)
+                    sourceBean.removeGroup(TAG_FIND_SOUECE);
+                else if(rule.trim().length()<1){
+                    sourceBean.removeGroup(TAG_FIND_SOUECE);
+                    sourceBean.setRuleFindUrl(null);
+                }else{
+                    sourceBean.addGroup(TAG_FIND_SOUECE);
+                }
+                DbHelper.getDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(sourceBean);
+            }
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        mView.toast(TAG_FIND_SOUECE+"标签验校完成");
+                        mView.refreshBookSource();
+                        mView.setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.toast("验校失败");
+                    }
+                });
+    }
+
     /////////////////////////////////////////////////
 
     @Override

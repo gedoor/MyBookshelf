@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
+    android:layout_width="190dp"
     android:layout_height="30dp"
     android:layout_gravity="center_horizontal"
     android:alpha="0.9"
     android:background="#000000"
     android:clickable="true"
-    android:orientation="vertical"
-    android:focusable="true">
+    android:focusable="true"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="120dp"
+        android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="0.0dip"
@@ -21,18 +21,17 @@
 
         <FrameLayout
             android:id="@+id/fl_cp"
-            android:layout_width="fill_parent"
-            android:layout_height="32.0dip"
-            android:layout_marginLeft="4.0dip"
-            android:layout_marginRight="4.0dip"
-            android:layout_weight="50.0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:paddingLeft="4.0dip"
             android:paddingRight="4.0dip">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="复制"
                 android:textColor="#ffbbbbbb"
                 android:textSize="14sp" />
@@ -42,19 +41,37 @@
 
         <FrameLayout
             android:id="@+id/fl_replace"
-            android:layout_width="fill_parent"
-            android:layout_height="32.0dip"
-            android:layout_marginLeft="4.0dip"
-            android:layout_marginRight="4.0dip"
-            android:layout_weight="50.0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:paddingLeft="4.0dip"
             android:paddingRight="4.0dip">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="替换"
+                android:textColor="#ffbbbbbb"
+                android:textSize="14sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_replace_ad"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="4.0dip"
+            android:paddingRight="4.0dip">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="广告"
                 android:textColor="#ffbbbbbb"
                 android:textSize="14sp" />
 

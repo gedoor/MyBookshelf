@@ -38,7 +38,7 @@ public class BookInfoBean implements Cloneable {
     private String chapterUrl;  //章节目录地址,本地目录正则
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
-    private String author;//作者
+    private String author="";//作者
     private String introduce; //简介
     private String origin; //来源
     private String charset;//编码
