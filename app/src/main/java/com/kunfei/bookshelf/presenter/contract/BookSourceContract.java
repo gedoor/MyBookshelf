@@ -25,6 +25,7 @@ public interface BookSourceContract {
 
         void checkBookSource(List<BookSourceBean> sourceBeans);
 
+        void checkFindSource(List<BookSourceBean> sourceBeans);
     }
 
     interface View extends IView {

@@ -2,6 +2,9 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -434,6 +437,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 popupMenu.getMenu().add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.edit_book_source);
             }
+            if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                popupMenu.getMenu().add(Menu.NONE, R.id.menu_copy_url, Menu.NONE, R.string.copy_url);
+            }
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_refresh:
@@ -451,6 +457,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                         BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
                         if (sourceBean != null) {
                             SourceEditActivity.startThis(this, sourceBean);
+                        }
+                        break;
+                    case R.id.menu_copy_url:
+                        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clipData = ClipData.newPlainText(null, mPresenter.getBookShelf().getNoteUrl());
+                        if (clipboard != null) {
+                            clipboard.setPrimaryClip(clipData);
+                            toast(R.string.copy_complete);
                         }
                         break;
                 }

@@ -23,4 +23,6 @@
 
     <item name="menu_disable" type="id" />
 
+    <item name="menu_copy_url" type="id"/>
+
 </resources>

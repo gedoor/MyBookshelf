@@ -143,7 +143,7 @@ public class BookSource3Bean {
                     Gson gson = new Gson();
                     httpRequest request = gson.fromJson(strings[1], httpRequest.class);
                     if (gson.toJson(request).replaceAll("\\s", "").length() > 0) {
-                        // 阅读2.0没有header，只有useragent
+                        // 阅读2.0没有单独的header，只有useragent
                         if (request.headers != null) {
                             if (this.header == null)
                                 this.header = request.headers;
@@ -208,6 +208,14 @@ public class BookSource3Bean {
             ruleFindUrl=exploreUrl.replaceAll("\\{\\{page\\}\\}","searchPage");
         }
 
+        // 暂时只给发现和搜索添加了header
+        String header="";
+        if(this.header!=null){
+            if(this.header.trim().length()>0)
+            header="@Header:"+this.header.replaceAll("\\n"," ");
+        }
+
+
         return new BookSourceBean(
                 bookSourceUrl,
                 bookSourceName,
@@ -218,7 +226,7 @@ public class BookSource3Bean {
                 0, //u  serialNumber,
                 weight,
                 true, //u enable,
-                ruleFindUrl,//发现规则 ruleFindUrl,
+                ruleFindUrl+header,//发现规则 ruleFindUrl,
                 ruleExplore.bookList,  //  列表 ruleFindList,
                 ruleExplore.name,//  ruleFindName,
                 ruleExplore.author,//   ruleFindAuthor,
@@ -227,7 +235,7 @@ public class BookSource3Bean {
                 ruleExplore.lastChapter,//    ruleFindLastChapter,
                 ruleExplore.coverUrl,//   ruleFindCoverUrl,
                 ruleExplore.bookUrl,//???   ruleFindNoteUrl,
-                RuleSearchUrl,//   ruleSearchUrl,
+                RuleSearchUrl+header,//   ruleSearchUrl,
                 ruleSearch.bookList,//  ruleSearchList,
                 ruleSearch.name,// ruleSearchName,
                 ruleSearch.author,// ruleSearchAuthor,

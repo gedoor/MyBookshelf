@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.activity;
 
+import java.util.regex.Matcher;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -16,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -94,6 +97,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -1037,14 +1041,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         readLongPress.setVisibility(View.VISIBLE);
         //如果太靠右，则靠左
         int[] aa = ScreenUtils.getScreenSize(this);
-        if ((cursorLeft.getX() + ScreenUtils.dpToPx(120)) > aa[0]) {
-            readLongPress.setX(cursorLeft.getX() - ScreenUtils.dpToPx(125));
+        if ((cursorLeft.getX() + ScreenUtils.dpToPx(200)) > aa[0]) {
+            readLongPress.setX(aa[0] - ScreenUtils.dpToPx(200));
         } else {
             readLongPress.setX(cursorLeft.getX() + cursorLeft.getWidth() + ScreenUtils.dpToPx(5));
         }
 
         //如果太靠上
-        if ((cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()) - ScreenUtils.dpToPx(40)) < 0) {
+        if ((cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()) - ScreenUtils.dpToPx(60)) < 0) {
             readLongPress.setY(cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()));
         } else {
             readLongPress.setY(cursorLeft.getY() - ScreenUtils.spToPx(readBookControl.getTextSize()) - ScreenUtils.dpToPx(40));
@@ -1111,11 +1115,69 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 oldRuleBean.setIsRegex(false);
                 oldRuleBean.setReplacement("");
                 oldRuleBean.setSerialNumber(0);
-                oldRuleBean.setUseTo("");
+                oldRuleBean.setUseTo(String.format("%s,%s", mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag()));
 
-                ReplaceRuleDialog.builder(ReadBookActivity.this, oldRuleBean, mPresenter.getBookShelf())
+                ReplaceRuleDialog.builder(ReadBookActivity.this, oldRuleBean, mPresenter.getBookShelf(), ReplaceRuleDialog.DefaultUI)
                         .setPositiveButton(replaceRuleBean1 ->
                                 ReplaceRuleManager.saveData(replaceRuleBean1)
+                                        .subscribe(new MySingleObserver<Boolean>() {
+                                            @Override
+                                            public void onSuccess(Boolean aBoolean) {
+                                                cursorLeft.setVisibility(View.INVISIBLE);
+                                                cursorRight.setVisibility(View.INVISIBLE);
+                                                readLongPress.setVisibility(View.INVISIBLE);
+
+                                                pageView.setSelectMode(PageView.SelectMode.Normal);
+
+                                                moDialogHUD.dismiss();
+
+                                                refresh(false);
+                                            }
+                                        })).show();
+            }
+
+            @Override
+            public void replaceSelectAd() {
+                String selectString = pageView.getSelectStr();
+
+
+                if (selectString != null) {
+                    String spacer = null;
+                    String name = (mPresenter.getBookShelf().getBookInfoBean().getName());
+                    if (name != null)
+                        if (name.trim().length() > 0)
+                            spacer = "|" + Pattern.quote(name.trim());
+//                        spacer = "|" + Matcher.quoteReplacement(name.trim());
+
+                    name = (mPresenter.getBookShelf().getBookInfoBean().getAuthor());
+                    if (name != null)
+                        if (name.trim().length() > 0)
+                            if (spacer != null)
+                                spacer = spacer + "|" + Pattern.quote(name.trim());
+                            else
+                                spacer = "|" + Pattern.quote(name.trim());
+                            String rule="(\\s*\n\\s*" + spacer + ")";
+                    selectString = ReplaceRuleManager.formateAdRule(
+                            selectString.replaceAll(rule, "\n")
+                    );
+
+                    Log.i("selectString.afterAd2",selectString);
+
+                }
+
+
+                ReplaceRuleBean oldRuleBean = new ReplaceRuleBean();
+                oldRuleBean.setReplaceSummary(getString(R.string.replace_ad) + "-" + mPresenter.getBookShelf().getTag());
+                oldRuleBean.setEnable(true);
+                oldRuleBean.setRegex(selectString);
+                oldRuleBean.setIsRegex(false);
+                oldRuleBean.setReplacement("");
+                oldRuleBean.setSerialNumber(0);
+                oldRuleBean.setUseTo(String.format(mPresenter.getBookShelf().getTag()));
+
+                ReplaceRuleDialog.builder(ReadBookActivity.this, oldRuleBean, mPresenter.getBookShelf(), ReplaceRuleDialog.AddAdUI)
+                        .setPositiveButton(replaceRuleBean1 ->
+                                ReplaceRuleManager.mergeAdRules(replaceRuleBean1)
                                         .subscribe(new MySingleObserver<Boolean>() {
                                             @Override
                                             public void onSuccess(Boolean aBoolean) {
