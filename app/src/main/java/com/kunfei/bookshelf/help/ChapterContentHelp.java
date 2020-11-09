@@ -584,21 +584,35 @@ public class ChapterContentHelp {
      */
     private static List<String> makeDict(String str) {
 
-        // 引号中间不包含任何标点
+        // 引号中间不包含任何标点，但是没有排除空格
         Pattern patten = Pattern.compile("(?<=[\"'”“])([^\n\\p{P}]{1," + WORD_MAX_LENGTH + "})(?=[\"'”“])");
-//        Pattern patten = Pattern.compile("(?<=[\"'”“])([^\n\"'”“]{1,16})(?=[\"'”“])");
         Matcher matcher = patten.matcher(str);
 
         List<String> cache = new ArrayList<>();
         List<String> dict = new ArrayList<>();
+        List<String> groups = new ArrayList<>();
 
         while (matcher.find()) {
             String word = matcher.group();
-            if (cache.contains(word)) {
-                if (!dict.contains(word))
-                    dict.add(word);
-            } else
+            String w = word.replaceAll("\\s+", "");
+            if (!groups.contains(word))
+                groups.add(word);
+            if (!groups.contains(w))
+                groups.add(w);
+        }
+
+        for (String word : groups) {
+            String w = word.replaceAll("\\s+", "");
+            if (cache.contains(w)) {
+                if (!dict.contains(w)) {
+                    dict.add(w);
+                    if (!dict.contains(word))
+                        dict.add(word);
+                }
+            } else {
+                cache.add(w);
                 cache.add(word);
+            }
         }
 /*
         System.out.print("makeDict:");
@@ -718,6 +732,8 @@ public class ChapterContentHelp {
         List<Integer> array_ignore_quote = new ArrayList<>();
         //  标记插入换行符的位置，int为插入位置（str的char下标）
         ArrayList<Integer> ins_n = new ArrayList<>();
+        //  标记不需要插入换行符的位置。功能暂未实现。
+        ArrayList<Integer> remove_n = new ArrayList<>();
 
 //      mod[i]标记str的每一段处于引号内还是引号外。范围： str.substring( array_quote.get(i), array_quote.get(i+1) )的状态。
 //      长度：array_quote.size(),但是初始化时未预估占用的长度，用空间换时间
@@ -907,16 +923,20 @@ public class ChapterContentHelp {
                     if (dict.contains(word)) {
 //                        System.out.println("使用字典验证 跳过\tins_n=" + i + "  word=" + word);
 //                        引号内如果是字典词条，后方不插入换行符（前方不需要优化）
+                        remove_n.add(i);
                         continue;
                     } else {
-//                        System.out.println("使用字典验证 插入\tins_n=" + i + "  word=" + word);
-                        if (match("的地得", str.charAt(start))) {
+                        System.out.println("使用字典验证 插入\tins_n=" + i + "  word=" + word);
+                        if (match("的地得和或", str.charAt(start))) {
 //                        xx的“xx”，后方不插入换行符（前方不需要优化）
                             continue;
                         }
 
                     }
                 }
+            } else {
+                //          System.out.println("使用字典验证 else\tins_n=" + i + "  substring=" + string.substring(i-5,i+5));
+
             }
             _ins_n.add(i);
         }

@@ -1,7 +1,9 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.presenter;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +22,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.help.BookshelfHelp;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -33,12 +36,20 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
 
+    /**
+     * @param bookUrls 如果不包含书源，一行为一本小说的地址。如果包含书源，只解析为一本数，以免url#{{书源}}中书源包含换行
+     */
     @Override
     public void addBookUrl(String bookUrls) {
         bookUrls = bookUrls.trim();
         if (TextUtils.isEmpty(bookUrls)) return;
 
-        String[] urls = bookUrls.split("\\n");
+        String[] urls;
+        if (bookUrls.matches("[^\n]+#\\{[\\s\\S]+")) {
+            urls = new String[]{bookUrls};
+        } else {
+            urls = bookUrls.split("\\n");
+        }
 
         Observable.fromArray(urls)
                 .flatMap(this::addBookUrlO)
@@ -62,25 +73,36 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 e.onComplete();
                 return;
             }
-            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().load(bookUrl);
+
+            String source = "";
+            String url = bookUrl;
+            if (url.replaceAll("(\\s|\n)*", "").matches("^.*(#\\{).*")) {
+                String[] string = bookUrl.split("#\\{", 2);
+                source = StringUtils.unCompressJson(string[1]);
+                if (StringUtils.isJsonType(source))
+                    url = string[0];
+                else
+                    source = "";
+            }
+
+            BookInfoBean temp = DbHelper.getDaoSession().getBookInfoBeanDao().load(url);
             if (temp != null) {
                 e.onError(new Throwable("已在书架中"));
                 return;
             } else {
-                String baseUrl = StringUtils.getBaseUrl(bookUrl);
+                String baseUrl = StringUtils.getBaseUrl(url);
                 BookSourceBean bookSourceBean = DbHelper.getDaoSession().getBookSourceBeanDao().load(baseUrl);
 
                 // RuleBookUrlPattern推定  考虑有书源规则不完善，需要排除RuleBookUrlPatternt填写.*匹配全部url的情况
                 if (bookSourceBean == null) {
                     List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                             .where(BookSourceBeanDao.Properties.RuleBookUrlPattern.isNotNull()
-                                    ,BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")
-                                    ,BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq(".*")
+                                    , BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq("")
+                                    , BookSourceBeanDao.Properties.RuleBookUrlPattern.notEq(".*")
                             ).list();
                     for (BookSourceBean sourceBean : sourceBeans) {
-                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                        if (url.matches(sourceBean.getRuleBookUrlPattern())) {
                             bookSourceBean = sourceBean;
-//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern="+sourceBean.getRuleBookUrlPattern());
                             break;
                         }
                     }
@@ -88,38 +110,67 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
                 //BookSourceUrl推定  考虑有书源规则不完善，没有填写RuleBookUrlPattern的情况（但是通常会填写bookSourceUrl），因此需要做补充
                 if (bookSourceBean == null) {
-                    String siteUrl=bookUrl.replaceFirst("^(http://|https://)?(m\\.|www\\.|web\\.)?","").replaceFirst("/.*$","");
+                    String siteUrl = url.replaceFirst("^(http://|https://)?(m\\.|www\\.|web\\.)?", "").replaceFirst("/.*$", "");
                     List<BookSourceBean> sourceBeans = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.BookSourceUrl.like("%"+siteUrl+"%")).list();
+                            .where(BookSourceBeanDao.Properties.BookSourceUrl.like("%" + siteUrl + "%")).list();
                     for (BookSourceBean sourceBean : sourceBeans) {
                         //由于RuleBookUrlPattern推定排除了RuleBookUrlPattern为空或者匹配所有字符的情况，因此需要做过杀推定
-                        if(sourceBean.getRuleBookUrlPattern().equals(null)){
+                        if (sourceBean.getRuleBookUrlPattern().equals(null)) {
                             bookSourceBean = sourceBean;
-//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern=null,source="+sourceBean.getBookSourceUrl());
                             break;
-                        }else  if(sourceBean.getRuleBookUrlPattern().replaceAll("\\s","").length()==0){
+                        } else if (sourceBean.getRuleBookUrlPattern().replaceAll("\\s", "").length() == 0) {
                             bookSourceBean = sourceBean;
-//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern,source={space}"+sourceBean.getBookSourceUrl());
                             break;
                         }
-                        if (bookUrl.matches(sourceBean.getRuleBookUrlPattern())) {
+                        if (url.matches(sourceBean.getRuleBookUrlPattern())) {
                             bookSourceBean = sourceBean;
-//                            Log.w("addBookUrlO()","url="+bookUrl+",pattern="+sourceBean.getRuleBookUrlPattern());
                             break;
                         }
                     }
                 }
-
+                BookShelfBean bookShelfBean = new BookShelfBean();
+                bookShelfBean.setNoteUrl(url);
                 if (bookSourceBean != null) {
-                    BookShelfBean bookShelfBean = new BookShelfBean();
                     bookShelfBean.setTag(bookSourceBean.getBookSourceUrl());
-                    bookShelfBean.setNoteUrl(bookUrl);
                     bookShelfBean.setDurChapter(0);
                     bookShelfBean.setGroup(mView.getGroup() % 4);
                     bookShelfBean.setDurChapterPage(0);
                     bookShelfBean.setFinalDate(System.currentTimeMillis());
                     e.onNext(bookShelfBean);
                 } else {
+                    if (source.length() > 10) {
+                        Observable<List<BookSourceBean>> observable = BookSourceManager.importSource(source);
+                        if (observable != null) {
+                            observable.subscribe(new MyObserver<List<BookSourceBean>>() {
+                                @SuppressLint("DefaultLocale")
+                                @Override
+                                public void onNext(List<BookSourceBean> bookSourceBeans) {
+                                    Log.e("onNext", "bookSourceBeans.size=" + bookSourceBeans.size());
+                                    if (bookSourceBeans.size() == 1) {
+                                        BookSourceBean bean = (bookSourceBeans.get(0));
+//                                         BookShelfBean bookShelfBean = new BookShelfBean();
+                                        bookShelfBean.setTag(bean.getBookSourceUrl());
+//                                         bookShelfBean.setNoteUrl(url);
+                                        bookShelfBean.setDurChapter(0);
+                                        bookShelfBean.setGroup(mView.getGroup() % 4);
+                                        bookShelfBean.setDurChapterPage(0);
+                                        bookShelfBean.setFinalDate(System.currentTimeMillis());
+//                                        e.onNext(bookShelfBean);
+                                        getBook(bookShelfBean);
+                                    } else {
+                                        e.onError(new Throwable("未导入内嵌的书源-" + bookSourceBeans.size()));
+                                    }
+                                }
+/*                                @Override
+                                public void onError(Throwable e) {
+                                    mView.toast(e.getLocalizedMessage());
+                                }*/
+                            });
+                        } else {
+                            e.onError(new Throwable("未找到内嵌的书源"));
+                        }
+                    }
+
                     e.onError(new Throwable("未找到对应书源"));
                     return;
                 }

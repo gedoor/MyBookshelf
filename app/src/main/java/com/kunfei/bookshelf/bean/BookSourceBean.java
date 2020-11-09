@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.bean;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -129,6 +130,53 @@ public class BookSourceBean implements Cloneable {
         this.ruleBookContent = ruleBookContent;
         this.ruleBookContentReplace = ruleBookContentReplace;
         this.httpUserAgent = httpUserAgent;
+    }
+
+    public BookSourceBean(BookSourceBean sourceBean) {
+        this.bookSourceUrl = sourceBean.bookSourceUrl;
+        this.bookSourceName = sourceBean.bookSourceName;
+        this.bookSourceGroup = sourceBean.bookSourceGroup;
+        this.bookSourceType = sourceBean.bookSourceType;
+        this.loginUrl = sourceBean.loginUrl;
+        this.lastUpdateTime = sourceBean.lastUpdateTime;
+        this.serialNumber = sourceBean.serialNumber;
+        this.weight = sourceBean.weight;
+        this.enable = sourceBean.enable;
+        this.ruleFindUrl = sourceBean.ruleFindUrl;
+        this.ruleFindList = sourceBean.ruleFindList;
+        this.ruleFindName = sourceBean.ruleFindName;
+        this.ruleFindAuthor = sourceBean.ruleFindAuthor;
+        this.ruleFindKind = sourceBean.ruleFindKind;
+        this.ruleFindIntroduce = sourceBean.ruleFindIntroduce;
+        this.ruleFindLastChapter = sourceBean.ruleFindLastChapter;
+        this.ruleFindCoverUrl = sourceBean.ruleFindCoverUrl;
+        this.ruleFindNoteUrl = sourceBean.ruleFindNoteUrl;
+        this.ruleSearchUrl = sourceBean.ruleSearchUrl;
+        this.ruleSearchList = sourceBean.ruleSearchList;
+        this.ruleSearchName = sourceBean.ruleSearchName;
+        this.ruleSearchAuthor = sourceBean.ruleSearchAuthor;
+        this.ruleSearchKind = sourceBean.ruleSearchKind;
+        this.ruleSearchIntroduce = sourceBean.ruleSearchIntroduce;
+        this.ruleSearchLastChapter = sourceBean.ruleSearchLastChapter;
+        this.ruleSearchCoverUrl = sourceBean.ruleSearchCoverUrl;
+        this.ruleSearchNoteUrl = sourceBean.ruleSearchNoteUrl;
+        this.ruleBookUrlPattern = sourceBean.ruleBookUrlPattern;
+        this.ruleBookInfoInit = sourceBean.ruleBookInfoInit;
+        this.ruleBookName = sourceBean.ruleBookName;
+        this.ruleBookAuthor = sourceBean.ruleBookAuthor;
+        this.ruleCoverUrl = sourceBean.ruleCoverUrl;
+        this.ruleIntroduce = sourceBean.ruleIntroduce;
+        this.ruleBookKind = sourceBean.ruleBookKind;
+        this.ruleBookLastChapter = sourceBean.ruleBookLastChapter;
+        this.ruleChapterUrl = sourceBean.ruleChapterUrl;
+        this.ruleChapterUrlNext = sourceBean.ruleChapterUrlNext;
+        this.ruleChapterList = sourceBean.ruleChapterList;
+        this.ruleChapterName = sourceBean.ruleChapterName;
+        this.ruleContentUrl = sourceBean.ruleContentUrl;
+        this.ruleContentUrlNext = sourceBean.ruleContentUrlNext;
+        this.ruleBookContent = sourceBean.ruleBookContent;
+        this.ruleBookContentReplace = sourceBean.ruleBookContentReplace;
+        this.httpUserAgent = sourceBean.httpUserAgent;
     }
 
     public BookSourceBean() {
@@ -592,5 +640,69 @@ public class BookSourceBean implements Cloneable {
 
     public void setRuleBookContentReplace(String ruleBookContentReplace) {
         this.ruleBookContentReplace = ruleBookContentReplace;
+    }
+
+    public String getJson(int maxLength) {
+        try {
+            String source = getMinJson(false);
+            // 优先直接输出
+            if (source.getBytes("utf-8").length <= maxLength)
+                return source;
+            source = StringUtils.zipString(source
+                    .replaceFirst("^\\{", "")
+                    // 保留末位的括号，用于解压缩后的验证
+                    .replaceFirst("(\\s|\n)*\\}$", "}")
+                    .trim());
+            // 优先输出带发现的书源
+            if (source.getBytes("utf-8").length < maxLength)
+                return "{" + source;
+            // 去除发现
+            return "{" + StringUtils.zipString(getMinJson(true)
+                    .replaceFirst("^\\{", "")
+                    // 保留末位的括号，用于解压缩后的验证
+                    .replaceFirst("(\\s|\n)*\\}$", "}")
+                    .trim());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * 把书源bean转为json，并去除不必要的信息。
+     *
+     * @param removeFind false，去除空信息和排序、可用性信息。true，额外去除发现规则
+     * @return
+     */
+    public String getMinJson(Boolean removeFind) {
+        BookSourceBean bean = new BookSourceBean(this);
+        String json;
+
+        if (removeFind) {
+            bean.setRuleFindUrl(null);
+            bean.setRuleFindList(null);
+            bean.setRuleFindName(null);
+            bean.setRuleFindAuthor(null);
+            bean.setRuleFindKind(null);
+            bean.setRuleFindIntroduce(null);
+            bean.setRuleFindLastChapter(null);
+            bean.setRuleFindCoverUrl(null);
+            bean.setRuleFindNoteUrl(null);
+        }
+
+        try {
+            Gson gson = new Gson();
+            json = gson.toJson(bean);
+
+            return json.replaceFirst("\n\\s*\"enable\":\\s*\\S+(,)?\\s*", "\n")
+                    .replaceFirst("\n\\s*\"serialNumber\":\\s*\\d+(,)?\\s*", "\n")
+                    .replaceFirst("\n\\s*\"\"weight\":\\s*\\d+(,)?\\s*", "\n")
+                    .replaceAll("\n\\s*\"[a-zA-Z]+\"(:\"\"|: \"\"| :\"\"| : \"\")\\s*,\\s*\n", "\n")
+                    .replaceAll("\\s*\n\\s*", "")
+                    ;
+        } catch (Exception ignored) {
+        }
+        return "";
     }
 }

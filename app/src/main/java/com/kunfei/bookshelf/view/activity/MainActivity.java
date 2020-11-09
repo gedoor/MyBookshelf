@@ -700,12 +700,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     String result = data.getStringExtra("result");
                     if (!StringUtils.isTrimEmpty(result)) {
                         result=result.trim();
-                        if(result.replaceAll("\\s","").matches("^\\{.*\\}$")) {
+                        // 如果只有书源,则导入书源
+                        if(result.replaceAll("(\\s|\n)*","").matches("^\\{.*$")) {
                             new BookSourcePresenter().importBookSource(result);
                             break;
                         }
-                        String[] string=result.split("#",2);
-                        mPresenter.addBookUrl(string[0]);
+//                        String[] string=result.split("#",2);
+//                        mPresenter.addBookUrl(string[0]);
+                        mPresenter.addBookUrl(result);
                     }
                 }
                 break;
