@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -166,7 +167,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvName.setText(searchBookBean.getName());
             author = searchBookBean.getAuthor();
             tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
-            bookUrl=searchBookBean.getNoteUrl();
+            bookUrl = searchBookBean.getNoteUrl();
             tvBookUrl.setText(bookUrl);
 //            bookInfoBtns.bringToFront();
             String origin = TextUtils.isEmpty(searchBookBean.getOrigin()) ? "未知" : searchBookBean.getOrigin();
@@ -199,7 +200,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvName.setText(bookInfoBean.getName());
             author = bookInfoBean.getAuthor();
             tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
-            bookUrl=bookInfoBean.getNoteUrl();
+            bookUrl = bookInfoBean.getNoteUrl();
             tvBookUrl.setText(bookUrl);
             ((RadioButton) rgBookGroup.getChildAt(bookShelfBean.getGroup())).setChecked(true);
             if (mPresenter.getInBookShelf()) {
@@ -348,22 +349,26 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
             Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
                 // 使用url
-                String url="";
+                String url = tvBookUrl.getText().toString();
+                if (url == null)
+                    url = "";
+                int maxLength = 1273 - 1 - url.length();
+
                 BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
+
                 if (sourceBean != null) {
-                    Gson gson = new GsonBuilder()
-                            .disableHtmlEscaping()
-                            .setPrettyPrinting()
-                            .create();
-                    url=tvBookUrl.getText().toString()+"#"+ gson.toJson(sourceBean).trim();
+//                    url=tvBookUrl.getText().toString()+"#"+ gson.toJson(sourceBean).replaceAll("\n\\s*\"[a-zA-Z]+\"(:\"\"|: \"\"| :\"\"| : \"\")\\s*,\\s*\n","\n").trim();
+                    url=url+"#"+sourceBean.getJson(maxLength);
+
+                    Log.d("QRcode", "Length=" + url.length() + "\n" + url);
+                    Bitmap bitmap;
                     QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-                    Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 800);
-                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-                    emitter.onSuccess(bitmap);
-                }else{
-                    url=tvBookUrl.getText().toString();
-                    QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-                    Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 300);
+                    if (url.length() > 300)
+                        bitmap = QRCodeEncoder.syncEncodeQRCode(url, 800);
+                    else if (url.length() > 100)
+                        bitmap = QRCodeEncoder.syncEncodeQRCode(url, 500);
+                    else
+                        bitmap = QRCodeEncoder.syncEncodeQRCode(url, 300);
                     QRCodeEncoder.HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
                     emitter.onSuccess(bitmap);
                 }
@@ -373,7 +378,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                         @Override
                         public void onSuccess(Bitmap bitmap2) {
                             bookInfoBtns.setVisibility(View.GONE);
-                            LinearLayout.LayoutParams layoutParams=
+                            LinearLayout.LayoutParams layoutParams =
                                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             tvIntro.setLayoutParams(layoutParams);
 //                            updateView();
@@ -385,7 +390,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                             bookInfoMain.buildDrawingCache();
                             Bitmap bitmap = bookInfoMain.getDrawingCache();
                             bookInfoBtns.setVisibility(View.VISIBLE);
-                            layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
+                            layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
                             tvIntro.setLayoutParams(layoutParams);
                             //假如图片不符合要求，可以使用Bitmap.createBitmap( )方法处理图片
 
@@ -395,11 +400,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                                 return;
                             }
 
-                            if(bitmap2 !=null)
-                                bitmap=BitmapUtil.addBitmap(bitmap,bitmap2,20,0,0,60);
+                            if (bitmap2 != null)
+                                bitmap = BitmapUtil.addBitmap(bitmap, bitmap2, 20, 0, 0, 60);
 
                             try {
-                                File file = new File(BookDetailActivity.this.getExternalCacheDir(), tvName.getText().toString()+".png");
+                                File file = new File(BookDetailActivity.this.getExternalCacheDir(), tvName.getText().toString() + ".png");
                                 FileOutputStream fOut = new FileOutputStream(file);
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 80, fOut);
                                 fOut.flush();
@@ -417,7 +422,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                             }
                         }
                     });
-
 
 
         });

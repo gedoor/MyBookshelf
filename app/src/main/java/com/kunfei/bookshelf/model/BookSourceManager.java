@@ -180,6 +180,9 @@ public class BookSourceManager {
         if (StringUtils.isJsonType(string)) {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);
+        }else if(StringUtils.isCompressJsonType(string)){
+            return importBookSourceFromJson(StringUtils.unCompressJson(string))
+                    .compose(RxUtils::toSimpleSingle);
         }
         if (NetworkUtils.isUrl(string)) {
             return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(string), "utf-8")
