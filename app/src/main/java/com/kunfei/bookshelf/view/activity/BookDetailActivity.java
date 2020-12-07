@@ -19,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -54,7 +53,6 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
-import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.widget.image.CoverImageView;
@@ -489,35 +487,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     @Override
                     public void onSuccess(Bitmap bitmap2) {
 
-                        LinearLayout.LayoutParams layoutParams =
-                                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        tvIntro.setLayoutParams(layoutParams);
-//                            updateView();
-
-                        bookInfoMain.measure(
-                                View.MeasureSpec.makeMeasureSpec(960, View.MeasureSpec.AT_MOST),
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                        bookInfoMain.layout(0, 0, bookInfoMain.getMeasuredWidth(), bookInfoMain.getMeasuredHeight());
-                        bookInfoMain.buildDrawingCache();
-                        Bitmap bitmap = bookInfoMain.getDrawingCache();
-
-                        layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
-                        tvIntro.setLayoutParams(layoutParams);
-                        //假如图片不符合要求，可以使用Bitmap.createBitmap( )方法处理图片
-
-//            BitmapUtil.localshare(this.getApplication(),bitmap,tvName.getText().toString());
-                        if (bitmap == null) {
-                            toast("生成照片失败");
-                            return;
-                        }
-
-                        if (bitmap2 != null)
-                            bitmap = BitmapUtil.addBitmap(bitmap, bitmap2, 20, 0, 0, 60);
-
                         try {
                             File file = new File(BookDetailActivity.this.getExternalCacheDir(), tvName.getText().toString() + ".png");
                             FileOutputStream fOut = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 80, fOut);
+                            bitmap2.compress(Bitmap.CompressFormat.PNG, 80, fOut);
                             fOut.flush();
                             fOut.close();
                             //noinspection ResultOfMethodCallIgnored
