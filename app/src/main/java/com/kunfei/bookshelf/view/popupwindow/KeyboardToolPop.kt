@@ -41,7 +41,7 @@ class KeyboardToolPop(
             RecyclerAdapter<String, ItemTextBinding>(context) {
 
         override fun getViewBinding(parent: ViewGroup): ItemTextBinding {
-            return ItemTextBinding.bind(parent)
+            return ItemTextBinding.inflate(inflater, parent, false)
         }
 
         override fun convert(holder: ItemViewHolder, binding: ItemTextBinding, item: String, payloads: MutableList<Any>) {
