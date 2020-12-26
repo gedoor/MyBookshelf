@@ -17,20 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.zxing.EncodeHintType;
@@ -43,6 +38,7 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.constant.BookType;
+import com.kunfei.bookshelf.databinding.ActivitySourceEditBinding;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
@@ -52,7 +48,6 @@ import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceEditAdapter;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
-import com.kunfei.bookshelf.widget.views.ATECheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,8 +59,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -82,21 +75,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     public final static int EDIT_SOURCE = 1101;
     private final int REQUEST_QR = 202;
 
-    @BindView(R.id.action_bar)
-    AppBarLayout actionBar;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.cb_is_audio)
-    ATECheckBox cbIsAudio;
-    @BindView(R.id.cb_is_enable)
-    ATECheckBox cbIsEnable;
-    @BindView(R.id.tv_edit_find)
-    TextView tvEditFind;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-
+    private ActivitySourceEditBinding binding;
     private SourceEditAdapter adapter;
     private List<SourceEdit> sourceEditList = new ArrayList<>();
     private List<SourceEdit> findEditList = new ArrayList<>();
@@ -158,7 +137,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_source_edit);
+        binding = ActivitySourceEditBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -180,14 +160,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         mSoftKeyboardTool = new KeyboardToolPop(this, Arrays.asList(keyHelp), this);
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
         adapter = new SourceEditAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(adapter);
         adapter.reSetData(sourceEditList);
         setText(bookSourceBean);
     }
@@ -195,23 +174,23 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     protected void bindEvent() {
         super.bindEvent();
-        tvEditFind.setOnClickListener(v -> {
-            recyclerView.clearFocus();
+        binding.tvEditFind.setOnClickListener(v -> {
+            binding.recyclerView.clearFocus();
             if (showFind) {
                 adapter.reSetData(sourceEditList);
-                tvEditFind.setText(R.string.edit_find);
+                binding.tvEditFind.setText(R.string.edit_find);
             } else {
                 adapter.reSetData(findEditList);
-                tvEditFind.setText(R.string.back);
+                binding.tvEditFind.setText(R.string.back);
             }
             showFind = !showFind;
-            recyclerView.scrollToPosition(0);
+            binding.recyclerView.scrollToPosition(0);
         });
     }
 
     private boolean canSaveBookSource() {
-        SoftInputUtil.hideIMM(recyclerView);
-        recyclerView.clearFocus();
+        SoftInputUtil.hideIMM(binding.recyclerView);
+        binding.recyclerView.clearFocus();
         BookSourceBean bookSourceBean = getBookSource(true);
         if (isEmpty(bookSourceBean.getBookSourceName()) || isEmpty(bookSourceBean.getBookSourceUrl())) {
             toast(R.string.non_null_source_name_url, ERROR);
@@ -285,8 +264,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         } else {
             adapter.reSetData(sourceEditList);
         }
-        cbIsAudio.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.AUDIO));
-        cbIsEnable.setChecked(bookSourceBean.getEnable());
+        binding.cbIsAudio.setChecked(Objects.equals(bookSourceBean.getBookSourceType(), BookType.AUDIO));
+        binding.cbIsEnable.setChecked(bookSourceBean.getEnable());
     }
 
     private void scanBookSource() {
@@ -424,8 +403,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             }
         }
         bookSourceBeanN.setSerialNumber(serialNumber);
-        bookSourceBeanN.setEnable(cbIsEnable.isChecked());
-        bookSourceBeanN.setBookSourceType(cbIsAudio.isChecked() ? BookType.AUDIO : null);
+        bookSourceBeanN.setEnable(binding.cbIsEnable.isChecked());
+        bookSourceBeanN.setBookSourceType(binding.cbIsAudio.isChecked() ? BookType.AUDIO : null);
         return bookSourceBeanN;
     }
 
@@ -678,7 +657,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             return;
         }
         if (mSoftKeyboardTool != null & !this.isFinishing()) {
-            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, 0, 0);
+            mSoftKeyboardTool.showAtLocation(binding.llContent, Gravity.BOTTOM, 0, 0);
         }
     }
 
@@ -699,11 +678,11 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             boolean preShowing = mIsSoftKeyBoardShowing;
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
-                recyclerView.setPadding(0, 0, 0, 100);
+                binding.recyclerView.setPadding(0, 0, 0, 100);
                 showKeyboardTopPopupWindow();
             } else {
                 mIsSoftKeyBoardShowing = false;
-                recyclerView.setPadding(0, 0, 0, 0);
+                binding.recyclerView.setPadding(0, 0, 0, 0);
                 if (preShowing) {
                     closePopupWindow();
                 }

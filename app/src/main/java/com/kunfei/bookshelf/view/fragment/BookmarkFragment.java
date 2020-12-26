@@ -1,6 +1,9 @@
 package com.kunfei.bookshelf.view.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,40 +11,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.DbHelper;
-import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.FragmentBookmarkListBinding;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.BookmarkAdapter;
 import com.kunfei.bookshelf.widget.modialog.BookmarkDialog;
-import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
 public class BookmarkFragment extends MBaseFragment<IPresenter> {
-    @BindView(R.id.rv_list)
-    FastScrollRecyclerView rvList;
 
-    private Unbinder unbinder;
+    private FragmentBookmarkListBinding binding;
     private BookShelfBean bookShelf;
     private List<BookmarkBean> bookmarkBeanList;
     private BookmarkAdapter adapter;
 
     @Override
-    public int createLayoutId() {
-        return R.layout.fragment_bookmark_list;
+    protected View createView(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentBookmarkListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     /**
@@ -75,7 +73,6 @@ public class BookmarkFragment extends MBaseFragment<IPresenter> {
     @Override
     protected void bindView() {
         super.bindView();
-        unbinder = ButterKnife.bind(this, view);
         adapter = new BookmarkAdapter(bookShelf, new BookmarkAdapter.OnItemClickListener() {
             @Override
             public void itemClick(int index, int page) {
@@ -96,8 +93,8 @@ public class BookmarkFragment extends MBaseFragment<IPresenter> {
                 showBookmark(bookmarkBean);
             }
         });
-        rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvList.setAdapter(adapter);
+        binding.rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rvList.setAdapter(adapter);
     }
 
     @Override
@@ -124,7 +121,7 @@ public class BookmarkFragment extends MBaseFragment<IPresenter> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
         RxBus.get().unregister(this);
     }
 

@@ -57,7 +57,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.kunfei.bookshelf.widget.views.ATESeekBar
-                android:id="@+id/player_progress"
+                android:id="@+id/seek_bar"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"

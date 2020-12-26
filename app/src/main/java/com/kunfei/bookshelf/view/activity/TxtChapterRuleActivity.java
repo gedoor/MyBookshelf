@@ -4,18 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
+import com.kunfei.bookshelf.databinding.ActivityRecyclerVewBinding;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
@@ -28,20 +26,12 @@ import com.kunfei.bookshelf.view.adapter.TxtChapterRuleAdapter;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 import com.kunfei.bookshelf.widget.modialog.TxtChapterRuleDialog;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 
 public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract.Presenter> implements TxtChapterRuleContract.View {
     private final int requestImport = 102;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-
+    private ActivityRecyclerVewBinding binding;
     private TxtChapterRuleAdapter adapter;
     private boolean selectAll = true;
 
@@ -59,13 +49,13 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_recycler_vew);
+        binding = ActivityRecyclerVewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
     protected void initData() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         initRecyclerView();
         refresh();
@@ -115,14 +105,14 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     }
 
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TxtChapterRuleAdapter(this);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
     }
 
     public void editChapterRule(TxtChapterRuleBean txtChapterRuleBean) {
@@ -171,7 +161,7 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
 
     @Override
     public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(llContent, msg, length);
+        return Snackbar.make(binding.llContent, msg, length);
     }
 
     private void selectReplaceRuleFile() {

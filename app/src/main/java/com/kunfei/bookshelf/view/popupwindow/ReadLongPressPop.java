@@ -8,30 +8,17 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.databinding.PopReadLongPressBinding;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.DensityUtil;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ReadLongPressPop extends FrameLayout {
 
-
-    //翻页相关
-    @BindView(R.id.fl_replace)
-    FrameLayout flReplace;
-    @BindView(R.id.fl_cp)
-    FrameLayout flCp;
-    @BindView(R.id.fl_replace_ad)
-    FrameLayout flReplaceAd;
-
-
+    private PopReadLongPressBinding binding = PopReadLongPressBinding.inflate(LayoutInflater.from(getContext()), this, true);
     //private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnBtnClickListener clickListener;
@@ -65,10 +52,7 @@ public class ReadLongPressPop extends FrameLayout {
     }
 
     private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_long_press, null);
-        addView(view);
-        ButterKnife.bind(this, view);
-        view.setOnClickListener(null);
+        binding.getRoot().setOnClickListener(null);
     }
 
     public void setListener(@NonNull OnBtnClickListener clickListener) {
@@ -85,13 +69,13 @@ public class ReadLongPressPop extends FrameLayout {
     private void bindEvent() {
 
         //复制
-        flCp.setOnClickListener(v -> clickListener.copySelect());
+        binding.flCp.setOnClickListener(v -> clickListener.copySelect());
 
         //替换
-        flReplace.setOnClickListener(v -> clickListener.replaceSelect());
+        binding.flReplace.setOnClickListener(v -> clickListener.replaceSelect());
 
         //标记广告
-        flReplaceAd.setOnClickListener(v -> clickListener.replaceSelectAd());
+        binding.flReplaceAd.setOnClickListener(v -> clickListener.replaceSelectAd());
     }
 
     public interface OnBtnClickListener {

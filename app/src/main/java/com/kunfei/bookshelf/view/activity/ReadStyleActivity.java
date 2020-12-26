@@ -20,12 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 
 import com.hwangjr.rxbus.RxBus;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
@@ -34,6 +31,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.ActivityReadStyleBinding;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
@@ -41,7 +39,6 @@ import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.MeUtils;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
-import com.kunfei.bookshelf.widget.HorizontalListView;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.io.IOException;
@@ -49,8 +46,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 
 public class ReadStyleActivity extends MBaseActivity<IPresenter> implements ColorPickerDialogListener {
@@ -58,28 +53,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     private final int SELECT_TEXT_COLOR = 201;
     private final int SELECT_BG_COLOR = 301;
 
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.ll_bottom)
-    LinearLayout llBottom;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.tv_content)
-    TextView tvContent;
-    @BindView(R.id.tvSelectTextColor)
-    TextView tvSelectTextColor;
-    @BindView(R.id.tvSelectBgColor)
-    TextView tvSelectBgColor;
-    @BindView(R.id.tvSelectBgImage)
-    TextView tvSelectBgImage;
-    @BindView(R.id.tvDefault)
-    TextView tvDefault;
-    @BindView(R.id.sw_darkStatusIcon)
-    Switch swDarkStatusIcon;
-
-    @BindView(R.id.bgImgList)
-    HorizontalListView bgImgList;
-
+    private ActivityReadStyleBinding binding;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private int textDrawableIndex;
     private int textColor;
@@ -108,10 +82,10 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
      */
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_read_style);
-        ButterKnife.bind(this);
-        llContent.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
-        this.setSupportActionBar(toolbar);
+        binding = ActivityReadStyleBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.llContent.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         setTextKind(readBookControl);
     }
@@ -121,11 +95,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
         super.initImmersionBar();
         if (!isImmersionBarEnabled()) {
             mImmersionBar.statusBarDarkFont(false);
-        } else if (darkStatusIcon) {
-            mImmersionBar.statusBarDarkFont(true);
-        } else {
-            mImmersionBar.statusBarDarkFont(false);
-        }
+        } else mImmersionBar.statusBarDarkFont(darkStatusIcon);
         mImmersionBar.init();
     }
 
@@ -155,20 +125,21 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
      */
     @Override
     protected void bindEvent() {
-        swDarkStatusIcon.setChecked(darkStatusIcon);
-        swDarkStatusIcon.setOnCheckedChangeListener((compoundButton, b) -> {
+        binding.swDarkStatusIcon.setChecked(darkStatusIcon);
+        binding.swDarkStatusIcon.setOnCheckedChangeListener((compoundButton, b) -> {
             darkStatusIcon = b;
             initImmersionBar();
         });
         //文字背景点击事件
-        llContent.setOnClickListener((view) -> {
-            if (llBottom.getVisibility() == View.GONE) {
-                llBottom.setVisibility(View.VISIBLE);
+        binding.llContent.setOnClickListener((view) -> {
+            if (binding.llBottom.getVisibility() == View.GONE) {
+                binding.llBottom.setVisibility(View.VISIBLE);
             } else {
-                llBottom.setVisibility(View.GONE);
-            }});
+                binding.llBottom.setVisibility(View.GONE);
+            }
+        });
         //选择文字颜色
-        tvSelectTextColor.setOnClickListener(view ->
+        binding.tvSelectTextColor.setOnClickListener(view ->
                 ColorPickerDialog.newBuilder()
                         .setColor(textColor)
                         .setShowAlphaSlider(false)
@@ -176,7 +147,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
                         .setDialogId(SELECT_TEXT_COLOR)
                         .show(ReadStyleActivity.this));
         //选择背景颜色
-        tvSelectBgColor.setOnClickListener(view ->
+        binding.tvSelectBgColor.setOnClickListener(view ->
                 ColorPickerDialog.newBuilder()
                         .setColor(bgColor)
                         .setShowAlphaSlider(false)
@@ -187,8 +158,8 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
         //背景图列表
         bgImgListAdapter = new BgImgListAdapter(this);
         bgImgListAdapter.initList();
-        bgImgList.setAdapter(bgImgListAdapter);
-        bgImgList.setOnItemClickListener((adapterView, view, i, l) -> {
+        binding.bgImgList.setAdapter(bgImgListAdapter);
+        binding.bgImgList.setOnItemClickListener((adapterView, view, i, l) -> {
             if (i == 0) {
                 selectImage();
             } else {
@@ -198,10 +169,10 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
         });
 
         //选择背景图片
-        tvSelectBgImage.setOnClickListener(view -> selectImage());
+        binding.tvSelectBgImage.setOnClickListener(view -> selectImage());
 
         //恢复默认
-        tvDefault.setOnClickListener(view -> {
+        binding.tvDefault.setOnClickListener(view -> {
             bgCustom = 0;
             textColor = readBookControl.getDefaultTextColor(textDrawableIndex);
             bgDrawable = readBookControl.getDefaultBgDrawable(textDrawableIndex, this);
@@ -285,15 +256,15 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     }
 
     private void setTextKind(ReadBookControl readBookControl) {
-        tvContent.setTextSize(readBookControl.getTextSize());
+        binding.tvContent.setTextSize(readBookControl.getTextSize());
     }
 
     private void upText() {
-        tvContent.setTextColor(textColor);
+        binding.tvContent.setTextColor(textColor);
     }
 
     private void upBg() {
-        llContent.setBackground(bgDrawable);
+        binding.llContent.setBackground(bgDrawable);
     }
 
     /**

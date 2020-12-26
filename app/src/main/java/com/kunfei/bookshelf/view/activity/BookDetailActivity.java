@@ -18,14 +18,10 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.RequestBuilder;
@@ -46,6 +42,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.ActivityBookDetailBinding;
 import com.kunfei.bookshelf.help.BlurTransformation;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.ImageLoader;
@@ -55,15 +52,12 @@ import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.widget.image.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
@@ -71,41 +65,7 @@ import io.reactivex.SingleOnSubscribe;
 import static com.kunfei.bookshelf.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
-    @BindView(R.id.ifl_content)
-    View vwContent;
-    @BindView(R.id.book_info_main)
-    View bookInfoMain;
-    @BindView(R.id.iv_menu)
-    ImageView ivMenu;
-    @BindView(R.id.iv_blur_cover)
-    AppCompatImageView ivBlurCover;
-    @BindView(R.id.iv_cover)
-    CoverImageView ivCover;
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.tv_author)
-    TextView tvAuthor;
-    @BindView(R.id.tv_origin)
-    TextView tvOrigin;
-    @BindView(R.id.iv_web)
-    ImageView ivWeb;
-    @BindView(R.id.tv_chapter)
-    TextView tvChapter;
-    @BindView(R.id.tv_intro)
-    TextView tvIntro;
-    @BindView(R.id.tv_shelf)
-    TextView tvShelf;
-    @BindView(R.id.tv_read)
-    TextView tvRead;
-    @BindView(R.id.tv_loading)
-    TextView tvLoading;
-    @BindView(R.id.tv_change_origin)
-    TextView tvChangeOrigin;
-    @BindView(R.id.rg_book_group)
-    RadioGroup rgBookGroup;
-    @BindView(R.id.tv_chapter_size)
-    TextView tvChapterSize;
-
+    private ActivityBookDetailBinding binding;
     private MoDialogHUD moDialogHUD;
     private String author;
     private BookShelfBean bookShelfBean;
@@ -125,7 +85,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     protected void onCreateActivity() {
         setTheme(R.style.CAppTransparentTheme);
-        setContentView(R.layout.activity_book_detail);
+        binding = ActivityBookDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -144,33 +105,32 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
         //弹窗
         moDialogHUD = new MoDialogHUD(this);
-        tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
+        binding.tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             updateView();
         } else {
             if (mPresenter.getSearchBook() == null) return;
             SearchBookBean searchBookBean = mPresenter.getSearchBook();
             upImageView(searchBookBean.getCoverUrl(), searchBookBean.getName(), searchBookBean.getAuthor());
-            tvName.setText(searchBookBean.getName());
+            binding.tvName.setText(searchBookBean.getName());
             author = searchBookBean.getAuthor();
-            tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
+            binding.tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
             bookUrl = searchBookBean.getNoteUrl();
             String origin = TextUtils.isEmpty(searchBookBean.getOrigin()) ? "未知" : searchBookBean.getOrigin();
-            tvOrigin.setText(origin);
-            tvChapter.setText(searchBookBean.getLastChapter());  // newest
-            tvIntro.setText(StringUtils.formatHtml2Intor(searchBookBean.getIntroduce()));
-            tvShelf.setText(R.string.add_to_shelf);
-            tvRead.setText(R.string.start_read);
-            tvRead.setOnClickListener(v -> {
+            binding.tvOrigin.setText(origin);
+            binding.tvChapter.setText(searchBookBean.getLastChapter());  // newest
+            binding.tvIntro.setText(StringUtils.formatHtml2Intor(searchBookBean.getIntroduce()));
+            binding.tvShelf.setText(R.string.add_to_shelf);
+            binding.tvRead.setText(R.string.start_read);
+            binding.tvRead.setOnClickListener(v -> {
                 //放入书架
             });
-            tvIntro.setVisibility(View.INVISIBLE);
-            tvLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText(R.string.loading);
-            tvLoading.setOnClickListener(null);
+            binding.tvIntro.setVisibility(View.INVISIBLE);
+            binding.tvLoading.setVisibility(View.VISIBLE);
+            binding.tvLoading.setText(R.string.loading);
+            binding.tvLoading.setOnClickListener(null);
         }
     }
 
@@ -180,46 +140,46 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         BookInfoBean bookInfoBean;
         if (null != bookShelfBean) {
             if (BookShelfBean.LOCAL_TAG.equals(bookShelfBean.getTag())) {
-                ivMenu.setVisibility(View.GONE);
+                binding.ivMenu.setVisibility(View.GONE);
             } else {
-                ivMenu.setVisibility(View.VISIBLE);
+                binding.ivMenu.setVisibility(View.VISIBLE);
             }
             bookInfoBean = bookShelfBean.getBookInfoBean();
-            tvName.setText(bookInfoBean.getName());
+            binding.tvName.setText(bookInfoBean.getName());
             author = bookInfoBean.getAuthor();
-            tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
+            binding.tvAuthor.setText(TextUtils.isEmpty(author) ? "未知" : author);
             bookUrl = bookInfoBean.getNoteUrl();
-            ((RadioButton) rgBookGroup.getChildAt(bookShelfBean.getGroup())).setChecked(true);
+            ((RadioButton) binding.rgBookGroup.getChildAt(bookShelfBean.getGroup())).setChecked(true);
             if (mPresenter.getInBookShelf()) {
-                tvChapter.setText(bookShelfBean.getDurChapterName()); // last
-                tvShelf.setText(R.string.remove_from_bookshelf);
-                tvRead.setText(R.string.continue_read);
-                tvShelf.setOnClickListener(v -> {
+                binding.tvChapter.setText(bookShelfBean.getDurChapterName()); // last
+                binding.tvShelf.setText(R.string.remove_from_bookshelf);
+                binding.tvRead.setText(R.string.continue_read);
+                binding.tvShelf.setOnClickListener(v -> {
                     //从书架移出
                     mPresenter.removeFromBookShelf();
                 });
             } else {
                 if (!TextUtils.isEmpty(bookShelfBean.getLastChapterName())) {
-                    tvChapter.setText(bookShelfBean.getLastChapterName()); // last
+                    binding.tvChapter.setText(bookShelfBean.getLastChapterName()); // last
                 }
-                tvShelf.setText(R.string.add_to_shelf);
-                tvRead.setText(R.string.start_read);
-                tvShelf.setOnClickListener(v -> {
+                binding.tvShelf.setText(R.string.add_to_shelf);
+                binding.tvRead.setText(R.string.start_read);
+                binding.tvShelf.setOnClickListener(v -> {
                     //放入书架
                     mPresenter.addToBookShelf();
                 });
             }
-            tvIntro.setText(StringUtils.formatHtml2Intor(bookInfoBean.getIntroduce()));
-            if (tvIntro.getVisibility() != View.VISIBLE) {
-                tvIntro.setVisibility(View.VISIBLE);
+            binding.tvIntro.setText(StringUtils.formatHtml2Intor(bookInfoBean.getIntroduce()));
+            if (binding.tvIntro.getVisibility() != View.VISIBLE) {
+                binding.tvIntro.setVisibility(View.VISIBLE);
             }
             String origin = bookInfoBean.getOrigin();
             if (!TextUtils.isEmpty(origin)) {
-                ivWeb.setVisibility(View.VISIBLE);
-                tvOrigin.setText(origin);
+                binding.ivWeb.setVisibility(View.VISIBLE);
+                binding.tvOrigin.setText(origin);
             } else {
-                ivWeb.setVisibility(View.INVISIBLE);
-                tvOrigin.setVisibility(View.INVISIBLE);
+                binding.ivWeb.setVisibility(View.INVISIBLE);
+                binding.tvOrigin.setVisibility(View.INVISIBLE);
             }
             if (!TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
                 upImageView(bookShelfBean.getCustomCoverPath(), bookInfoBean.getName(), bookInfoBean.getAuthor());
@@ -227,35 +187,35 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 upImageView(bookInfoBean.getCoverUrl(), bookInfoBean.getName(), bookInfoBean.getAuthor());
             }
             if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                tvChangeOrigin.setVisibility(View.INVISIBLE);
+                binding.tvChangeOrigin.setVisibility(View.INVISIBLE);
             } else {
-                tvChangeOrigin.setVisibility(View.VISIBLE);
+                binding.tvChangeOrigin.setVisibility(View.VISIBLE);
             }
             upChapterSizeTv();
         }
-        tvLoading.setVisibility(View.GONE);
-        tvLoading.setOnClickListener(null);
+        binding.tvLoading.setVisibility(View.GONE);
+        binding.tvLoading.setOnClickListener(null);
     }
 
     @Override
     public void getBookShelfError() {
-        tvLoading.setVisibility(View.VISIBLE);
-        tvLoading.setText(R.string.load_error_retry);
-        tvLoading.setOnClickListener(v -> {
-            tvLoading.setText(R.string.loading);
-            tvLoading.setOnClickListener(null);
+        binding.tvLoading.setVisibility(View.VISIBLE);
+        binding.tvLoading.setText(R.string.load_error_retry);
+        binding.tvLoading.setOnClickListener(v -> {
+            binding.tvLoading.setText(R.string.loading);
+            binding.tvLoading.setOnClickListener(null);
             mPresenter.getBookShelfInfo();
         });
     }
 
     private void upImageView(String path, String name, String author) {
-        ivCover.load(path, name, author);
+        binding.ivCover.load(path, name, author);
         ImageLoader.INSTANCE.load(this, path)
                 .transition(DrawableTransitionOptions.withCrossFade(1500))
                 .thumbnail(defaultCover())
                 .centerCrop()
                 .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
-                .into(ivBlurCover);  //模糊、渐变、缩小效果
+                .into(binding.ivBlurCover);  //模糊、渐变、缩小效果
     }
 
     private RequestBuilder<Drawable> defaultCover() {
@@ -264,9 +224,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     }
 
     private void refresh() {
-        tvLoading.setVisibility(View.VISIBLE);
-        tvLoading.setText(R.string.loading);
-        tvLoading.setOnClickListener(null);
+        binding.tvLoading.setVisibility(View.VISIBLE);
+        binding.tvLoading.setText(R.string.loading);
+        binding.tvLoading.setOnClickListener(null);
         mPresenter.getBookShelf().getBookInfoBean().setBookInfoHtml(null);
         mPresenter.getBookShelf().getBookInfoBean().setChapterListHtml(null);
         mPresenter.getBookShelfInfo();
@@ -275,7 +235,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bindEvent() {
-        tvName.setOnClickListener(v -> {
+        binding.tvName.setOnClickListener(v -> {
             if (bookShelfBean == null) return;
             if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getName())) return;
             if (!AppActivityManager.getInstance().isExist(SearchBookActivity.class)) {
@@ -285,16 +245,18 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
             finish();
         });
-        ivBlurCover.setOnClickListener(null);
-        vwContent.setOnClickListener(v -> finish());
-
-        tvChangeOrigin.setOnClickListener(view ->
+        binding.ivBlurCover.setOnClickListener(null);
+        binding.iflContent.setOnClickListener(v -> finish());
+        binding.tvToc.setOnClickListener(v -> {
+            ChapterListActivity.startThis(this, mPresenter.getBookShelf(), mPresenter.getChapterList());
+        });
+        binding.tvChangeOrigin.setOnClickListener(view ->
                 ChangeSourceDialog.builder(BookDetailActivity.this, mPresenter.getBookShelf())
                         .setCallback(searchBookBean -> {
-                            tvOrigin.setText(searchBookBean.getOrigin());
-                            tvLoading.setVisibility(View.VISIBLE);
-                            tvLoading.setText(R.string.loading);
-                            tvLoading.setOnClickListener(null);
+                            binding.tvOrigin.setText(searchBookBean.getOrigin());
+                            binding.tvLoading.setVisibility(View.VISIBLE);
+                            binding.tvLoading.setText(R.string.loading);
+                            binding.tvLoading.setOnClickListener(null);
                             if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
                                 mPresenter.changeBookSource(searchBookBean);
                             } else {
@@ -303,7 +265,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                             }
                         }).show());
 
-        tvRead.setOnClickListener(v -> {
+        binding.tvRead.setOnClickListener(v -> {
             if (!mPresenter.getInBookShelf()) {
                 BookshelfHelp.saveBookToShelf(mPresenter.getBookShelf());
                 if (mPresenter.getChapterList() != null)
@@ -331,7 +293,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
         });
 
-        ivMenu.setOnClickListener(view -> {
+        binding.ivMenu.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(this, view, Gravity.END);
             if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 popupMenu.getMenu().add(Menu.NONE, R.id.menu_refresh, Menu.NONE, R.string.refresh);
@@ -386,13 +348,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             popupMenu.show();
         });
 
-        ivCover.setOnClickListener(view -> {
+        binding.ivCover.setOnClickListener(view -> {
             if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
                 BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
             }
         });
 
-        tvAuthor.setOnClickListener(view -> {
+        binding.tvAuthor.setOnClickListener(view -> {
             if (TextUtils.isEmpty(author)) return;
             if (!AppActivityManager.getInstance().isExist(SearchBookActivity.class)) {
                 SearchBookActivity.startByKey(this, author);
@@ -402,7 +364,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             finish();
         });
 
-        rgBookGroup.setOnCheckedChangeListener((radioGroup, i) -> {
+        binding.rgBookGroup.setOnCheckedChangeListener((radioGroup, i) -> {
             View checkView = radioGroup.findViewById(i);
             if (!checkView.isPressed()) {
                 return;
@@ -432,7 +394,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (newChapterNum > 0)
                 chapterSize = String.format("(+%d)", newChapterNum);
         }
-        tvChapterSize.setText(chapterSize);
     }
 
     @Override
@@ -488,7 +449,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     public void onSuccess(Bitmap bitmap2) {
 
                         try {
-                            File file = new File(BookDetailActivity.this.getExternalCacheDir(), tvName.getText().toString() + ".png");
+                            File file = new File(BookDetailActivity.this.getExternalCacheDir(), binding.tvName.getText().toString() + ".png");
                             FileOutputStream fOut = new FileOutputStream(file);
                             bitmap2.compress(Bitmap.CompressFormat.PNG, 80, fOut);
                             fOut.flush();

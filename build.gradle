@@ -2,7 +2,7 @@ ext {
     support_library_version = '28.0.0'
 }
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.21'
     repositories {
         google()
         jcenter()
@@ -13,7 +13,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
         classpath 'com.google.gms:google-services:4.3.4'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
         classpath 'net.ricecode:string-similarity:1.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.3'

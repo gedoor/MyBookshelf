@@ -1,9 +1,9 @@
 package com.kunfei.bookshelf.view.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,39 +14,22 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.FragmentChapterListBinding;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.view.adapter.ChapterListAdapter;
-import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
 
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class ChapterListFragment extends MBaseFragment<IPresenter> {
-    @BindView(R.id.rv_list)
-    FastScrollRecyclerView rvList;
-    @BindView(R.id.tv_current_chapter_info)
-    TextView tvChapterInfo;
-    @BindView(R.id.iv_chapter_top)
-    ImageView ivChapterTop;
-    @BindView(R.id.iv_chapter_bottom)
-    ImageView ivChapterBottom;
-    @BindView(R.id.ll_chapter_base_info)
-    View llBaseInfo;
-    @BindView(R.id.v_shadow)
-    View vShadow;
 
-    private Unbinder unbinder;
+    private FragmentChapterListBinding binding;
 
     private ChapterListAdapter chapterListAdapter;
 
@@ -57,8 +40,9 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
     private boolean isChapterReverse;
 
     @Override
-    public int createLayoutId() {
-        return R.layout.fragment_chapter_list;
+    protected View createView(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentChapterListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     /**
@@ -94,9 +78,8 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
     @Override
     protected void bindView() {
         super.bindView();
-        unbinder = ButterKnife.bind(this, view);
-        rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, isChapterReverse));
-        rvList.setItemAnimator(null);
+        binding.rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, isChapterReverse));
+        binding.rvList.setItemAnimator(null);
         chapterListAdapter = new ChapterListAdapter(bookShelf, chapterBeanList, (index, page) -> {
             if (index != bookShelf.getDurChapter()) {
                 RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
@@ -107,7 +90,7 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
             }
         });
         if (bookShelf != null) {
-            rvList.setAdapter(chapterListAdapter);
+            binding.rvList.setAdapter(chapterListAdapter);
             updateIndex(bookShelf.getDurChapter());
             updateChapterInfo();
         }
@@ -119,11 +102,11 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
     @Override
     protected void bindEvent() {
         super.bindEvent();
-        tvChapterInfo.setOnClickListener(view -> layoutManager.scrollToPositionWithOffset(bookShelf.getDurChapter(), 0));
-        ivChapterTop.setOnClickListener(v -> rvList.scrollToPosition(0));
-        ivChapterBottom.setOnClickListener(v -> {
+        binding.tvCurrentChapterInfo.setOnClickListener(view -> layoutManager.scrollToPositionWithOffset(bookShelf.getDurChapter(), 0));
+        binding.ivChapterTop.setOnClickListener(v -> binding.rvList.scrollToPosition(0));
+        binding.ivChapterBottom.setOnClickListener(v -> {
             if (chapterListAdapter.getItemCount() > 0) {
-                rvList.scrollToPosition(chapterListAdapter.getItemCount() - 1);
+                binding.rvList.scrollToPosition(chapterListAdapter.getItemCount() - 1);
             }
         });
     }
@@ -140,9 +123,9 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
     private void updateChapterInfo() {
         if (bookShelf != null) {
             if (chapterListAdapter.getItemCount() == 0) {
-                tvChapterInfo.setText(bookShelf.getDurChapterName());
+                binding.tvCurrentChapterInfo.setText(bookShelf.getDurChapterName());
             } else {
-                tvChapterInfo.setText(String.format(Locale.getDefault(), "%s (%d/%d章)", bookShelf.getDurChapterName(), bookShelf.getDurChapter() + 1, bookShelf.getChapterListSize()));
+                binding.tvCurrentChapterInfo.setText(String.format(Locale.getDefault(), "%s (%d/%d章)", bookShelf.getDurChapterName(), bookShelf.getDurChapter() + 1, bookShelf.getChapterListSize()));
             }
         }
     }
@@ -154,7 +137,7 @@ public class ChapterListFragment extends MBaseFragment<IPresenter> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
         RxBus.get().unregister(this);
     }
 

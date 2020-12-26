@@ -9,10 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -24,6 +22,7 @@ import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.SearchBookBeanDao;
+import com.kunfei.bookshelf.databinding.ActivityBookCoverEditBinding;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
@@ -33,20 +32,11 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
 public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
-
-    @BindView(R.id.rf_rv_change_cover)
-    RecyclerView changeCover;
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
+    private ActivityBookCoverEditBinding binding;
     private SearchBookModel searchBookModel;
     private String name;
     private String author;
@@ -57,9 +47,9 @@ public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_book_cover_edit);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        binding = ActivityBookCoverEditBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
     }
 
@@ -90,17 +80,17 @@ public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
         name = getIntent().getStringExtra("name");
         author = getIntent().getStringExtra("author");
         ChangeCoverAdapter changeCoverAdapter = new ChangeCoverAdapter();
-        changeCover.setLayoutManager(new GridLayoutManager(this, 3));
-        changeCover.setAdapter(changeCoverAdapter);
+        binding.rfRvChangeCover.setLayoutManager(new GridLayoutManager(this, 3));
+        binding.rfRvChangeCover.setAdapter(changeCoverAdapter);
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
-                swipeRefreshLayout.setRefreshing(true);
+                binding.swipeRefreshLayout.setRefreshing(true);
             }
 
             @Override
             public void refreshFinish(Boolean value) {
-                swipeRefreshLayout.setRefreshing(false);
+                binding.swipeRefreshLayout.setRefreshing(false);
                 isLoading = false;
             }
 
@@ -127,7 +117,7 @@ public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
 
             @Override
             public void searchBookError(Throwable throwable) {
-                swipeRefreshLayout.setRefreshing(false);
+                binding.swipeRefreshLayout.setRefreshing(false);
                 isLoading = false;
             }
 
@@ -137,8 +127,8 @@ public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
             }
         };
         searchBookModel = new SearchBookModel(searchListener);
-        swipeRefreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
-        swipeRefreshLayout.setOnRefreshListener(() -> {
+        binding.swipeRefreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
             if (!isLoading) {
                 isLoading = true;
                 long time = System.currentTimeMillis();
@@ -166,7 +156,7 @@ public class BookCoverEditActivity extends MBaseActivity<IPresenter> {
                     @Override
                     public void onSuccess(Boolean aBoolean) {
                         if (urls.isEmpty()) {
-                            swipeRefreshLayout.setRefreshing(true);
+                            binding.swipeRefreshLayout.setRefreshing(true);
                             long time = System.currentTimeMillis();
                             searchBookModel.setSearchTime(time);
                             searchBookModel.search(name, time, new ArrayList<>(), false);

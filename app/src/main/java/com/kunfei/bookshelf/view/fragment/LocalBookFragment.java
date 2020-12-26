@@ -1,19 +1,17 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.databinding.FragmentLocalBookBinding;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.media.MediaStoreHelper;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
-import com.kunfei.bookshelf.widget.recycler.refresh.RefreshLayout;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by newbiechen on 17-5-27.
@@ -21,16 +19,13 @@ import butterknife.Unbinder;
  */
 
 public class LocalBookFragment extends BaseFileFragment {
-    @BindView(R.id.refresh_layout)
-    RefreshLayout mRlRefresh;
-    @BindView(R.id.local_book_rv_content)
-    RecyclerView mRvContent;
 
-    private Unbinder unbinder;
+    private FragmentLocalBookBinding binding;
 
     @Override
-    public int createLayoutId() {
-        return R.layout.fragment_local_book;
+    protected View createView(LayoutInflater inflater, ViewGroup container) {
+        binding = FragmentLocalBookBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     /**
@@ -44,16 +39,15 @@ public class LocalBookFragment extends BaseFileFragment {
     @Override
     protected void bindView() {
         super.bindView();
-        unbinder = ButterKnife.bind(this, view);
         setUpAdapter();
     }
 
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         if (getContext() != null) {
-            mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
-            mRvContent.setAdapter(mAdapter);
+            binding.localBookRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.localBookRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
+            binding.localBookRvContent.setAdapter(mAdapter);
         }
     }
 
@@ -86,10 +80,10 @@ public class LocalBookFragment extends BaseFileFragment {
             MediaStoreHelper.getAllBookFile(getActivity(),
                     (files) -> {
                         if (files.isEmpty()) {
-                            mRlRefresh.showEmpty();
+                            binding.refreshLayout.showEmpty();
                         } else {
                             mAdapter.refreshItems(files);
-                            mRlRefresh.showFinish();
+                            binding.refreshLayout.showFinish();
                             //反馈
                             if (mListener != null) {
                                 mListener.onCategoryChanged();
@@ -102,6 +96,6 @@ public class LocalBookFragment extends BaseFileFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
+        binding = null;
     }
 }

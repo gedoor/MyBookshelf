@@ -4,39 +4,33 @@ package com.kunfei.bookshelf.view.popupwindow
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import android.widget.TextView
-import com.kunfei.bookshelf.R
+import com.kunfei.bookshelf.databinding.PopReadAdjustMarginBinding
 import com.kunfei.bookshelf.help.ReadBookControl
-import kotlinx.android.synthetic.main.pop_read_adjust_margin.view.*
 import org.jetbrains.anko.sdk27.listeners.onClick
 
 class ReadAdjustMarginPop : FrameLayout {
 
-    private var context: Activity? = null
+    val binding = PopReadAdjustMarginBinding.inflate(LayoutInflater.from(context), this, true)
+    private var activity: Activity? = null
     private val readBookControl = ReadBookControl.getInstance()
     private var callback: Callback? = null
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private fun init(context: Context) {
-        inflate(context, R.layout.pop_read_adjust_margin, this)
-        vw_bg.setOnClickListener(null)
+    init {
+        binding.vwBg.setOnClickListener(null)
     }
 
     fun setListener(activity: Activity, callback: Callback) {
-        this.context = activity
+        this.activity = activity
         this.callback = callback
         initData(0)
         bindEvent()
@@ -49,86 +43,86 @@ class ReadAdjustMarginPop : FrameLayout {
     private fun initData(flag: Int) {
         if (flag == 0) {
             // 字距
-            setSeekBarView(hpb_mr_f, tv_hpb_mr_f, -0.5f, 0.5f, readBookControl.textLetterSpacing, 100)
+            setSeekBarView(binding.hpbMrF, binding.tvHpbMrF, -0.5f, 0.5f, readBookControl.textLetterSpacing, 100)
             // 行距
-            setSeekBarView(hpb_mr_rm, tv_hpb_mr_rm, 0.5f, 3.0f, readBookControl.lineMultiplier, 10)
+            setSeekBarView(binding.hpbMrRm, binding.tvHpbMrRm, 0.5f, 3.0f, readBookControl.lineMultiplier, 10)
             // 段距
-            setSeekBarView(hpb_mr_dm, tv_hpb_mr_dm, 1.0f, 5.0f, readBookControl.paragraphSize, 10)
+            setSeekBarView(binding.hpbMrDm, binding.tvHpbMrDm, 1.0f, 5.0f, readBookControl.paragraphSize, 10)
         }
         if (flag == 0 || flag == 1) {
             // 正文边距
-            setSeekBarView(hpb_mr_z_t, tv_hpb_mr_z_t, 0, 100, readBookControl.paddingTop)
-            setSeekBarView(hpb_mr_z_l, tv_hpb_mr_z_l, 0, 100, readBookControl.paddingLeft)
-            setSeekBarView(hpb_mr_z_r, tv_hpb_mr_z_r, 0, 100, readBookControl.paddingRight)
-            setSeekBarView(hpb_mr_z_b, tv_hpb_mr_z_b, 0, 100, readBookControl.paddingBottom)
+            setSeekBarView(binding.hpbMrZT, binding.tvHpbMrZT, 0, 100, readBookControl.paddingTop)
+            setSeekBarView(binding.hpbMrZL, binding.tvHpbMrZL, 0, 100, readBookControl.paddingLeft)
+            setSeekBarView(binding.hpbMrZR, binding.tvHpbMrZR, 0, 100, readBookControl.paddingRight)
+            setSeekBarView(binding.hpbMrZB, binding.tvHpbMrZB, 0, 100, readBookControl.paddingBottom)
         }
         if (flag == 0 || flag == 2) {
             // Tip边距
-            setSeekBarView(hpb_mr_t_t, tv_hpb_mr_t_t, 0, 100, readBookControl.tipPaddingTop)
-            setSeekBarView(hpb_mr_t_l, tv_hpb_mr_t_l, 0, 100, readBookControl.tipPaddingLeft)
-            setSeekBarView(hpb_mr_t_r, tv_hpb_mr_t_r, 0, 100, readBookControl.tipPaddingRight)
-            setSeekBarView(hpb_mr_t_b, tv_hpb_mr_t_b, 0, 100, readBookControl.tipPaddingBottom)
+            setSeekBarView(binding.hpbMrTT, binding.tvHpbMrTT, 0, 100, readBookControl.tipPaddingTop)
+            setSeekBarView(binding.hpbMrTL, binding.tvHpbMrTL, 0, 100, readBookControl.tipPaddingLeft)
+            setSeekBarView(binding.hpbMrTR, binding.tvHpbMrTR, 0, 100, readBookControl.tipPaddingRight)
+            setSeekBarView(binding.hpbMrTB, binding.tvHpbMrTB, 0, 100, readBookControl.tipPaddingBottom)
         }
     }
 
-    private fun bindEvent() {
+    private fun bindEvent() = with(binding) {
         //字距调节
-        hpb_mr_f.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        hpbMrF.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 readBookControl.textLetterSpacing = i / 100.0f - 0.5f
-                tv_hpb_mr_f.text = String.format("%.2f", readBookControl.textLetterSpacing)
+                tvHpbMrF.text = String.format("%.2f", readBookControl.textLetterSpacing)
                 callback?.upTextSize()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        iv_mr_f_add.onClick { hpb_mr_f.progress = hpb_mr_f.progress + 1 }
-        iv_mr_f_remove.onClick { hpb_mr_f.progress = hpb_mr_f.progress - 1 }
+        ivMrFAdd.onClick { hpbMrF.progress = hpbMrF.progress + 1 }
+        ivMrFRemove.onClick { hpbMrF.progress = hpbMrF.progress - 1 }
 
         //行距调节
-        hpb_mr_rm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        hpbMrRm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 readBookControl.lineMultiplier = i / 10.0f + 0.5f
-                tv_hpb_mr_rm.text = String.format("%.1f", readBookControl.lineMultiplier)
+                tvHpbMrRm.text = String.format("%.1f", readBookControl.lineMultiplier)
                 callback?.upTextSize()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        iv_mr_rm_add.onClick { hpb_mr_rm.progress = hpb_mr_rm.progress + 1 }
-        iv_mr_rm_remove.onClick { hpb_mr_rm.progress = hpb_mr_rm.progress - 1 }
+        ivMrRmAdd.onClick { hpbMrRm.progress = hpbMrRm.progress + 1 }
+        ivMrRmRemove.onClick { hpbMrRm.progress = hpbMrRm.progress - 1 }
 
         //段距调节
-        hpb_mr_dm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        hpbMrDm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 readBookControl.paragraphSize = i / 10.0f + 1.0f
-                tv_hpb_mr_dm.text = String.format("%.1f", readBookControl.paragraphSize)
+                tvHpbMrDm.text = String.format("%.1f", readBookControl.paragraphSize)
                 callback?.upTextSize()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        iv_mr_dm_add.onClick { hpb_mr_dm.progress = hpb_mr_dm.progress + 1 }
-        iv_mr_dm_remove.onClick { hpb_mr_dm.progress = hpb_mr_dm.progress - 1 }
+        ivMrDmAdd.onClick { hpbMrDm.progress = hpbMrDm.progress + 1 }
+        ivMrDmRemove.onClick { hpbMrDm.progress = hpbMrDm.progress - 1 }
 
         //段距调节
         val pdChange = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 var flag = 1
                 when {
-                    seekBar === hpb_mr_z_t -> readBookControl.paddingTop = i
-                    seekBar === hpb_mr_z_l -> readBookControl.paddingLeft = i
-                    seekBar === hpb_mr_z_r -> readBookControl.paddingRight = i
-                    seekBar === hpb_mr_z_b -> readBookControl.paddingBottom = i
+                    seekBar === hpbMrZT -> readBookControl.paddingTop = i
+                    seekBar === hpbMrZL -> readBookControl.paddingLeft = i
+                    seekBar === hpbMrZR -> readBookControl.paddingRight = i
+                    seekBar === hpbMrZB -> readBookControl.paddingBottom = i
                     else -> {
                         flag = 2
                         when {
-                            seekBar === hpb_mr_t_t -> readBookControl.tipPaddingTop = i
-                            seekBar === hpb_mr_t_l -> readBookControl.tipPaddingLeft = i
-                            seekBar === hpb_mr_t_r -> readBookControl.tipPaddingRight = i
+                            seekBar === hpbMrTT -> readBookControl.tipPaddingTop = i
+                            seekBar === hpbMrTL -> readBookControl.tipPaddingLeft = i
+                            seekBar === hpbMrTR -> readBookControl.tipPaddingRight = i
                             else -> readBookControl.tipPaddingBottom = i
                         }
                     }
@@ -140,30 +134,30 @@ class ReadAdjustMarginPop : FrameLayout {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
-        hpb_mr_z_t.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_z_l.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_z_r.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_z_b.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_t_t.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_t_l.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_t_r.setOnSeekBarChangeListener(pdChange)
-        hpb_mr_t_b.setOnSeekBarChangeListener(pdChange)
-        iv_mr_z_t_add.onClick { hpb_mr_z_t.progress = hpb_mr_z_t.progress + 1 }
-        iv_mr_z_t_remove.onClick { hpb_mr_z_t.progress = hpb_mr_z_t.progress - 1 }
-        iv_mr_z_l_add.onClick { hpb_mr_z_l.progress = hpb_mr_z_l.progress + 1 }
-        iv_mr_z_l_remove.onClick { hpb_mr_z_l.progress = hpb_mr_z_l.progress - 1 }
-        iv_mr_z_r_add.onClick { hpb_mr_z_r.progress = hpb_mr_z_r.progress + 1 }
-        iv_mr_z_r_remove.onClick { hpb_mr_z_r.progress = hpb_mr_z_r.progress - 1 }
-        iv_mr_z_b_add.onClick { hpb_mr_z_b.progress = hpb_mr_z_b.progress + 1 }
-        iv_mr_z_b_remove.onClick { hpb_mr_z_b.progress = hpb_mr_z_b.progress - 1 }
-        iv_mr_t_t_add.onClick { hpb_mr_t_t.progress = hpb_mr_t_t.progress + 1 }
-        iv_mr_t_t_remove.onClick { hpb_mr_t_t.progress = hpb_mr_t_t.progress - 1 }
-        iv_mr_t_l_add.onClick { hpb_mr_t_l.progress = hpb_mr_t_l.progress + 1 }
-        iv_mr_t_l_remove.onClick { hpb_mr_t_l.progress = hpb_mr_t_l.progress - 1 }
-        iv_mr_t_r_add.onClick { hpb_mr_t_r.progress = hpb_mr_t_r.progress + 1 }
-        iv_mr_t_r_remove.onClick { hpb_mr_t_r.progress = hpb_mr_t_r.progress - 1 }
-        iv_mr_t_b_add.onClick { hpb_mr_t_b.progress = hpb_mr_t_b.progress + 1 }
-        iv_mr_t_b_remove.onClick { hpb_mr_t_b.progress = hpb_mr_t_b.progress - 1 }
+        hpbMrZT.setOnSeekBarChangeListener(pdChange)
+        hpbMrZL.setOnSeekBarChangeListener(pdChange)
+        hpbMrZR.setOnSeekBarChangeListener(pdChange)
+        hpbMrZB.setOnSeekBarChangeListener(pdChange)
+        hpbMrTT.setOnSeekBarChangeListener(pdChange)
+        hpbMrTL.setOnSeekBarChangeListener(pdChange)
+        hpbMrTR.setOnSeekBarChangeListener(pdChange)
+        hpbMrTB.setOnSeekBarChangeListener(pdChange)
+        ivMrZTAdd.onClick { hpbMrZT.progress = hpbMrZT.progress + 1 }
+        ivMrZTRemove.onClick { hpbMrZT.progress = hpbMrZT.progress - 1 }
+        ivMrZLAdd.onClick { hpbMrZL.progress = hpbMrZL.progress + 1 }
+        ivMrZLRemove.onClick { hpbMrZL.progress = hpbMrZL.progress - 1 }
+        ivMrZRAdd.onClick { hpbMrZR.progress = hpbMrZR.progress + 1 }
+        ivMrZRRemove.onClick { hpbMrZR.progress = hpbMrZR.progress - 1 }
+        ivMrZBAdd.onClick { hpbMrZB.progress = hpbMrZB.progress + 1 }
+        ivMrZBRemove.onClick { hpbMrZB.progress = hpbMrZB.progress - 1 }
+        ivMrTTAdd.onClick { hpbMrTT.progress = hpbMrTT.progress + 1 }
+        ivMrTTRemove.onClick { hpbMrTT.progress = hpbMrTT.progress - 1 }
+        ivMrTLAdd.onClick { hpbMrTL.progress = hpbMrTL.progress + 1 }
+        ivMrTLRemove.onClick { hpbMrTL.progress = hpbMrTL.progress - 1 }
+        ivMrTRAdd.onClick { hpbMrTR.progress = hpbMrTR.progress + 1 }
+        ivMrTRRemove.onClick { hpbMrTR.progress = hpbMrTR.progress - 1 }
+        ivMrTBAdd.onClick { hpbMrTB.progress = hpbMrTB.progress + 1 }
+        ivMrTBRemove.onClick { hpbMrTB.progress = hpbMrTB.progress - 1 }
     }
 
     private fun setSeekBarView(hpb: SeekBar, tv: TextView?, min: Float, max: Float, value: Float, p: Int) {

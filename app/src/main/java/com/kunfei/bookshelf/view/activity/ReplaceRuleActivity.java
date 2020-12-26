@@ -10,11 +10,9 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hwangjr.rxbus.RxBus;
@@ -25,6 +23,7 @@ import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.ActivityRecyclerVewBinding;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
@@ -45,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 
 /**
@@ -57,13 +54,7 @@ import kotlin.Unit;
 public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Presenter> implements ReplaceRuleContract.View {
     private final int IMPORT_SOURCE = 102;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-
+    private ActivityRecyclerVewBinding binding;
     private BookShelfBean bookShelfBean;
     private MoDialogHUD moDialogHUD;
     private ReplaceRuleAdapter adapter;
@@ -90,7 +81,8 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_recycler_vew);
+        binding = ActivityRecyclerVewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -99,8 +91,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         if (!TextUtils.isEmpty(dataKey)) {
             bookShelfBean = (BookShelfBean) BitIntentDataManager.getInstance().getData(dataKey);
         }
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         initRecyclerView();
         moDialogHUD = new MoDialogHUD(this);
@@ -108,15 +99,15 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         adapter = new ReplaceRuleAdapter(this);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         ItemTouchCallback itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
@@ -298,6 +289,6 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(llContent, msg, length);
+        return Snackbar.make(binding.llContent, msg, length);
     }
 }

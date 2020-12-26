@@ -7,64 +7,31 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.ActivityBookInfoEditBinding;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.widget.image.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 
 public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     private final int ResultSelectCover = 103;
     private final int ResultEditCover = 104;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.iv_cover)
-    CoverImageView ivCover;
-    @BindView(R.id.tie_book_name)
-    EditText tieBookName;
-    @BindView(R.id.til_book_name)
-    TextInputLayout tilBookName;
-    @BindView(R.id.tie_book_author)
-    EditText tieBookAuthor;
-    @BindView(R.id.til_book_author)
-    TextInputLayout tilBookAuthor;
-    @BindView(R.id.tie_cover_url)
-    EditText tieCoverUrl;
-    @BindView(R.id.til_cover_url)
-    TextInputLayout tilCoverUrl;
-    @BindView(R.id.tv_select_cover)
-    TextView tvSelectCover;
-    @BindView(R.id.tv_change_cover)
-    TextView tvChangeCover;
-    @BindView(R.id.tv_refresh_cover)
-    TextView tvRefreshCover;
-    @BindView(R.id.tie_book_jj)
-    EditText tieBookJj;
-    @BindView(R.id.til_book_jj)
-    TextInputLayout tilBookJj;
-
+    private ActivityBookInfoEditBinding binding;
     private String noteUrl;
     private BookShelfBean book;
     private MoDialogHUD moDialogHUD;
@@ -105,14 +72,14 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_book_info_edit);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        binding = ActivityBookInfoEditBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
-        tilBookName.setHint(getString(R.string.book_name));
-        tilBookAuthor.setHint(getString(R.string.author));
-        tilCoverUrl.setHint(getString(R.string.cover_path));
-        tilBookJj.setHint(getString(R.string.book_intro));
+        binding.tilBookName.setHint(getString(R.string.book_name));
+        binding.tilBookAuthor.setHint(getString(R.string.author));
+        binding.tilCoverUrl.setHint(getString(R.string.cover_path));
+        binding.tilBookJj.setHint(getString(R.string.book_intro));
         moDialogHUD = new MoDialogHUD(this);
     }
 
@@ -127,13 +94,13 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
         if (!TextUtils.isEmpty(noteUrl)) {
             book = BookshelfHelp.getBook(noteUrl);
             if (book != null) {
-                tieBookName.setText(book.getBookInfoBean().getName());
-                tieBookAuthor.setText(book.getBookInfoBean().getAuthor());
-                tieBookJj.setText(book.getBookInfoBean().getIntroduce());
+                binding.tieBookName.setText(book.getBookInfoBean().getName());
+                binding.tieBookAuthor.setText(book.getBookInfoBean().getAuthor());
+                binding.tieBookJj.setText(book.getBookInfoBean().getIntroduce());
                 if (TextUtils.isEmpty(book.getCustomCoverPath())) {
-                    tieCoverUrl.setText(book.getBookInfoBean().getCoverUrl());
+                    binding.tieCoverUrl.setText(book.getBookInfoBean().getCoverUrl());
                 } else {
-                    tieCoverUrl.setText(book.getCustomCoverPath());
+                    binding.tieCoverUrl.setText(book.getCustomCoverPath());
                 }
             }
             initCover();
@@ -146,15 +113,15 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void bindEvent() {
         super.bindEvent();
-        tvSelectCover.setOnClickListener(view -> selectCover());
-        tvChangeCover.setOnClickListener(view ->{
+        binding.tvSelectCover.setOnClickListener(view -> selectCover());
+        binding.tvChangeCover.setOnClickListener(view -> {
             Intent intent = new Intent(BookInfoEditActivity.this, BookCoverEditActivity.class);
-            intent.putExtra("name",book.getBookInfoBean().getName());
-            intent.putExtra("author",book.getBookInfoBean().getAuthor());
+            intent.putExtra("name", book.getBookInfoBean().getName());
+            intent.putExtra("author", book.getBookInfoBean().getAuthor());
             startActivityForResult(intent, ResultEditCover);
-                });
-        tvRefreshCover.setOnClickListener(view -> {
-            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+        });
+        binding.tvRefreshCover.setOnClickListener(view -> {
+            book.setCustomCoverPath(binding.tieCoverUrl.getText().toString());
             initCover();
         });
     }
@@ -175,7 +142,7 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
 
     private void initCover() {
         if (!this.isFinishing() && book != null) {
-            ivCover.load(book.getCoverPath(), book.getName(), book.getAuthor());
+            binding.ivCover.load(book.getCoverPath(), book.getName(), book.getAuthor());
         }
     }
 
@@ -213,10 +180,10 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
 
     private void saveInfo() {
         if (book != null) {
-            book.getBookInfoBean().setName(tieBookName.getText().toString());
-            book.getBookInfoBean().setAuthor(tieBookAuthor.getText().toString());
-            book.getBookInfoBean().setIntroduce(tieBookJj.getText().toString());
-            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+            book.getBookInfoBean().setName(binding.tieBookName.getText().toString());
+            book.getBookInfoBean().setAuthor(binding.tieBookAuthor.getText().toString());
+            book.getBookInfoBean().setIntroduce(binding.tieBookJj.getText().toString());
+            book.setCustomCoverPath(binding.tieCoverUrl.getText().toString());
             initCover();
             BookshelfHelp.saveBookToShelf(book);
             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
@@ -244,15 +211,15 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
         switch (requestCode) {
             case ResultSelectCover:
                 if (resultCode == RESULT_OK && null != data) {
-                    tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
-                    book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                    binding.tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
+                    book.setCustomCoverPath(binding.tieCoverUrl.getText().toString());
                     initCover();
                 }
                 break;
             case ResultEditCover:
                 if (resultCode == RESULT_OK && null != data) {
                     String url = data.getStringExtra("url");
-                    tieCoverUrl.setText(url);
+                    binding.tieCoverUrl.setText(url);
                     book.setCustomCoverPath(url);
                     initCover();
                 }

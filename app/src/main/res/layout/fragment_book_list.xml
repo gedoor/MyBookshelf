@@ -18,7 +18,7 @@
             android:padding="6dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/local_book_rv_content"
+                android:id="@+id/rv_bookshelf"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:bg_color="@color/transparent"
@@ -27,7 +27,9 @@
                 app:second_max_progress="80dp"
                 app:speed="2dp" />
 
-            <include layout="@layout/view_empty" />
+            <include
+                android:id="@+id/viewEmpty"
+                layout="@layout/view_empty" />
         </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
