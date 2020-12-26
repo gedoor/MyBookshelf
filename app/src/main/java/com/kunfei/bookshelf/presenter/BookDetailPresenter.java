@@ -66,6 +66,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             searchBook = new SearchBookBean();
             searchBook.setNoteUrl(bookShelf.getNoteUrl());
             searchBook.setTag(bookShelf.getTag());
+            chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
         } else {
             initBookFormSearch((SearchBookBean) BitIntentDataManager.getInstance().getData(key));
         }
