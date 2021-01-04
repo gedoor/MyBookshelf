@@ -68,6 +68,12 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected void initData() {
+
+    }
+
+    @Override
+    protected void bindView() {
+        super.bindView();
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         mTlIndicator.setTabTextColors(getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
     }
