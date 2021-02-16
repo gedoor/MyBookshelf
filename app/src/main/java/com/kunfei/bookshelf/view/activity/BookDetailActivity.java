@@ -266,31 +266,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                         }).show());
 
         binding.tvRead.setOnClickListener(v -> {
-            if (!mPresenter.getInBookShelf()) {
-                BookshelfHelp.saveBookToShelf(mPresenter.getBookShelf());
-                if (mPresenter.getChapterList() != null)
-                    DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(mPresenter.getChapterList());
-            }
-            Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
-            intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
-            intent.putExtra("inBookshelf", mPresenter.getInBookShelf());
-            String key = String.valueOf(System.currentTimeMillis());
-            String bookKey = "book" + key;
-            intent.putExtra("bookKey", bookKey);
-            BitIntentDataManager.getInstance().putData(bookKey, mPresenter.getBookShelf().clone());
-            startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (getStart_share_ele()) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                    overridePendingTransition(0, android.R.anim.fade_out);
-                }
-            } else {
-                finish();
-                overridePendingTransition(0, android.R.anim.fade_out);
-            }
+            readBook();
         });
 
         binding.ivMenu.setOnClickListener(view -> {
@@ -383,6 +359,35 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         if (mPresenter.getOpenFrom() == BookDetailPresenter.FROM_SEARCH) {
             //网络请求
             mPresenter.getBookShelfInfo();
+        }
+    }
+
+    @Override
+    public void readBook() {
+        if (!mPresenter.getInBookShelf()) {
+            BookshelfHelp.saveBookToShelf(mPresenter.getBookShelf());
+            if (mPresenter.getChapterList() != null)
+                DbHelper.getDaoSession().getBookChapterBeanDao().insertOrReplaceInTx(mPresenter.getChapterList());
+        }
+        Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
+        intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
+        intent.putExtra("inBookshelf", mPresenter.getInBookShelf());
+        String key = String.valueOf(System.currentTimeMillis());
+        String bookKey = "book" + key;
+        intent.putExtra("bookKey", bookKey);
+        BitIntentDataManager.getInstance().putData(bookKey, mPresenter.getBookShelf().clone());
+        startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (getStart_share_ele()) {
+                finishAfterTransition();
+            } else {
+                finish();
+                overridePendingTransition(0, android.R.anim.fade_out);
+            }
+        } else {
+            finish();
+            overridePendingTransition(0, android.R.anim.fade_out);
         }
     }
 

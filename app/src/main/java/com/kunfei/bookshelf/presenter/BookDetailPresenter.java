@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.base.observer.MyObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.TwoDataBean;
 import com.kunfei.bookshelf.constant.RxBusTag;
@@ -286,5 +287,15 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         bookShelf = bookShelfBean;
         mView.updateView();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SKIP_TO_CHAPTER)})
+    public void skipToChapter(OpenChapterBean openChapterBean) {
+        bookShelf.setDurChapter(openChapterBean.getChapterIndex());
+        bookShelf.setDurChapterPage(openChapterBean.getPageIndex());
+        if (inBookShelf) {
+            BookshelfHelp.saveBookToShelf(bookShelf);
+        }
+        mView.readBook();
     }
 }
