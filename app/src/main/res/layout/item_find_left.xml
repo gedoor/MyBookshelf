@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:padding="6dp"
     android:singleLine="true"
-    android:text="@string/app_name" />
+    android:text="@string/app_name"
+    android:textColor="@color/tv_text_default" />
