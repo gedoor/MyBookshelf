@@ -129,7 +129,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     @Override
     public int getItemCount() {
-        if (bookShelfBean == null)
+        if (bookShelfBean == null || allChapter == null)
             return 0;
         else {
             if (isSearch) {

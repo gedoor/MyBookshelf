@@ -2,9 +2,6 @@ package com.kunfei.bookshelf.base;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,20 +23,10 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
     }
 
     @Override
-    protected View createView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(createLayoutId(), container, false);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         detachView();
     }
-
-    /**
-     * @return LayoutId
-     */
-    public abstract int createLayoutId();
 
     /**
      * P层绑定   若无则返回null;

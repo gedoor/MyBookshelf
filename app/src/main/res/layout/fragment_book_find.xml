@@ -39,7 +39,9 @@
 
             </LinearLayout>
 
-            <include layout="@layout/view_empty" />
+            <include
+                android:id="@+id/empty_view"
+                layout="@layout/view_empty" />
 
         </FrameLayout>
 

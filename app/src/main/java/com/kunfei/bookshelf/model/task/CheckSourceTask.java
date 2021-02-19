@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.service.CheckSourceService;
@@ -23,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
-public class CheckSourceTask {
+public class CheckSourceTask implements JsExtensions {
 
     private BookSourceBean sourceBean;
     private Scheduler scheduler;

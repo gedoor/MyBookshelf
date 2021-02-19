@@ -9,32 +9,25 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.databinding.ActivityBookChoiceBinding;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ChoiceBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ChoiceBookAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
-import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Presenter> implements ChoiceBookContract.View {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.rfRv_search_books)
-    RefreshRecyclerView rfRvSearchBooks;
 
+    private ActivityBookChoiceBinding binding;
     private ChoiceBookAdapter searchBookAdapter;
     private View viewRefreshError;
 
@@ -46,7 +39,8 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_book_choice);
+        binding = ActivityBookChoiceBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -67,11 +61,10 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @SuppressLint("InflateParams")
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
 
-        rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
+        binding.rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_refresh_error, null);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
@@ -81,7 +74,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
             mPresenter.toSearchBooks(null);
             startRefreshAnim();
         });
-        rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
+        binding.rfRvSearchBooks.setNoDataAndRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_refresh_no_data, null),
                 viewRefreshError);
     }
 
@@ -115,12 +108,12 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
-        rfRvSearchBooks.setBaseRefreshListener(() -> {
+        binding.rfRvSearchBooks.setBaseRefreshListener(() -> {
             mPresenter.initPage();
             mPresenter.toSearchBooks(null);
             startRefreshAnim();
         });
-        rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
+        binding.rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void startLoadMore() {
                 mPresenter.toSearchBooks(null);
@@ -140,12 +133,12 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     public void refreshFinish(Boolean isAll) {
-        rfRvSearchBooks.finishRefresh(isAll, true);
+        binding.rfRvSearchBooks.finishRefresh(isAll, true);
     }
 
     @Override
     public void loadMoreFinish(Boolean isAll) {
-        rfRvSearchBooks.finishLoadMore(isAll, true);
+        binding.rfRvSearchBooks.finishLoadMore(isAll, true);
     }
 
     @Override
@@ -161,10 +154,10 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public void searchBookError(String msg) {
         if (mPresenter.getPage() > 1) {
-            rfRvSearchBooks.finishLoadMore(true, true);
+            binding.rfRvSearchBooks.finishLoadMore(true, true);
         } else {
             //刷新失败
-            rfRvSearchBooks.refreshError();
+            binding.rfRvSearchBooks.refreshError();
             if (msg != null) {
                 ((TextView) viewRefreshError.findViewById(R.id.tv_error_msg)).setText(msg);
             } else {
@@ -186,7 +179,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     public void startRefreshAnim() {
-        rfRvSearchBooks.startRefresh();
+        binding.rfRvSearchBooks.startRefresh();
     }
 
     @Override

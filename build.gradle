@@ -2,19 +2,18 @@ ext {
     support_library_version = '28.0.0'
 }
 buildscript {
-    ext.kotlin_version = '1.4.0'
+    ext.kotlin_version = '1.4.30'
     repositories {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
-        classpath 'com.google.gms:google-services:4.3.3'
-        classpath 'io.fabric.tools:gradle:1.31.2'
+        classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
         classpath 'net.ricecode:string-similarity:1.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.3'

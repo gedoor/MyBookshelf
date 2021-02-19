@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "de.timfreiheit.resourceplaceholders"
 
 static def releaseTime() {
@@ -35,7 +34,9 @@ android {
         multiDexEnabled true
 
     }
-
+    buildFeatures {
+        viewBinding true
+    }
     lintOptions {
         abortOnError false
     }
@@ -73,12 +74,12 @@ resourcePlaceholders {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
-    testImplementation 'junit:junit:4.13'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    testImplementation 'junit:junit:4.13.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
 
-    api 'androidx.core:core-ktx:1.3.1'
+    api 'androidx.core:core-ktx:1.3.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //anko
@@ -87,18 +88,18 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.5.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.media:media:1.1.0'
+    implementation 'androidx.media:media:1.2.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.3.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android:flexbox:1.1.0'
 
@@ -134,11 +135,6 @@ dependencies {
 
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
-    //bind view
-    //noinspection AnnotationProcessorOnCompilePath
-    implementation 'com.jakewharton:butterknife:10.2.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     //webServer
     implementation 'org.nanohttpd:nanohttpd:2.3.1'

@@ -3,21 +3,17 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.databinding.ActivitySettingsBinding;
 import com.kunfei.bookshelf.help.storage.BackupRestoreUi;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -25,11 +21,8 @@ import butterknife.ButterKnife;
  */
 
 public class SettingActivity extends MBaseActivity<IPresenter> {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
 
+    private ActivitySettingsBinding binding;
     private SettingsFragment settingsFragment = new SettingsFragment();
 
     public static void startThis(Context context) {
@@ -44,9 +37,9 @@ public class SettingActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar(getString(R.string.setting));
 
         getFragmentManager().beginTransaction()

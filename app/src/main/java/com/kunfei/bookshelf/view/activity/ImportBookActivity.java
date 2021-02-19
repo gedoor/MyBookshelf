@@ -1,17 +1,15 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
+import com.kunfei.bookshelf.databinding.ActivityImportBookBinding;
 import com.kunfei.bookshelf.presenter.ImportBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ImportBookContract;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -23,9 +21,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 /**
  * 导入本地书籍
@@ -33,16 +28,7 @@ import butterknife.ButterKnife;
 public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Presenter> implements ImportBookContract.View {
     private static final String TAG = "ImportBookActivity";
 
-    @BindView(R.id.file_system_cb_selected_all)
-    CheckBox mCbSelectAll;
-    @BindView(R.id.file_system_btn_delete)
-    TextView mBtnDelete;
-    @BindView(R.id.file_system_btn_add_book)
-    TextView mBtnAddBook;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-
+    private ActivityImportBookBinding binding;
     private LocalBookFragment mLocalFragment;
     private FileCategoryFragment mCategoryFragment;
     private BaseFileFragment mCurFragment;
@@ -73,15 +59,21 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_import_book);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        binding = ActivityImportBookBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
         setupActionBar();
 
     }
 
     @Override
     protected void initData() {
+
+    }
+
+    @Override
+    protected void bindView() {
+        super.bindView();
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         mTlIndicator.setTabTextColors(getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
     }
@@ -100,10 +92,10 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected void bindEvent() {
-        mCbSelectAll.setOnClickListener(
+        binding.fileSystemCbSelectedAll.setOnClickListener(
                 (view) -> {
                     //设置全选状态
-                    boolean isChecked = mCbSelectAll.isChecked();
+                    boolean isChecked = binding.fileSystemCbSelectedAll.isChecked();
                     mCurFragment.setCheckedAll(isChecked);
                     //改变菜单状态
                     changeMenuStatus();
@@ -129,7 +121,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
             }
         });
 
-        mBtnAddBook.setOnClickListener(
+        binding.fileSystemBtnAddBook.setOnClickListener(
                 (v) -> {
                     //获取选中的文件
                     List<File> files = mCurFragment.getCheckedFiles();
@@ -138,7 +130,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                 }
         );
 
-        mBtnDelete.setOnClickListener(
+        binding.fileSystemBtnDelete.setOnClickListener(
                 (v) -> {
                     //弹出，确定删除文件吗。
                     new AlertDialog.Builder(this)
@@ -190,17 +182,17 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
         //点击、删除状态的设置
         if (mCurFragment.getCheckedCount() == 0) {
-            mBtnAddBook.setText(getString(R.string.nb_file_add_shelf));
+            binding.fileSystemBtnAddBook.setText(getString(R.string.nb_file_add_shelf));
             //设置某些按钮的是否可点击
             setMenuClickable(false);
 
-            if (mCbSelectAll.isChecked()) {
+            if (binding.fileSystemCbSelectedAll.isChecked()) {
                 mCurFragment.setChecked(false);
-                mCbSelectAll.setChecked(mCurFragment.isCheckedAll());
+                binding.fileSystemCbSelectedAll.setChecked(mCurFragment.isCheckedAll());
             }
 
         } else {
-            mBtnAddBook.setText(getString(R.string.nb_file_add_shelves, mCurFragment.getCheckedCount()));
+            binding.fileSystemBtnAddBook.setText(getString(R.string.nb_file_add_shelves, mCurFragment.getCheckedCount()));
             setMenuClickable(true);
 
             //全选状态的设置
@@ -209,20 +201,20 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
             if (mCurFragment.getCheckedCount() == mCurFragment.getCheckableCount()) {
                 //设置为全选
                 mCurFragment.setChecked(true);
-                mCbSelectAll.setChecked(mCurFragment.isCheckedAll());
+                binding.fileSystemCbSelectedAll.setChecked(mCurFragment.isCheckedAll());
             }
             //如果曾今是全选则替换
             else if (mCurFragment.isCheckedAll()) {
                 mCurFragment.setChecked(false);
-                mCbSelectAll.setChecked(mCurFragment.isCheckedAll());
+                binding.fileSystemCbSelectedAll.setChecked(mCurFragment.isCheckedAll());
             }
         }
 
         //重置全选的文字
         if (mCurFragment.isCheckedAll()) {
-            mCbSelectAll.setText(R.string.cancel);
+            binding.fileSystemCbSelectedAll.setText(R.string.cancel);
         } else {
-            mCbSelectAll.setText(getString(R.string.select_all));
+            binding.fileSystemCbSelectedAll.setText(getString(R.string.select_all));
         }
 
     }
@@ -230,12 +222,12 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     private void setMenuClickable(boolean isClickable) {
 
         //设置是否可删除
-        mBtnDelete.setEnabled(isClickable);
-        mBtnDelete.setClickable(isClickable);
+        binding.fileSystemBtnDelete.setEnabled(isClickable);
+        binding.fileSystemBtnDelete.setClickable(isClickable);
 
         //设置是否可添加书籍
-        mBtnAddBook.setEnabled(isClickable);
-        mBtnAddBook.setClickable(isClickable);
+        binding.fileSystemBtnAddBook.setEnabled(isClickable);
+        binding.fileSystemBtnAddBook.setClickable(isClickable);
     }
 
     /**
@@ -247,11 +239,11 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
         //设置是否能够全选
         if (count > 0) {
-            mCbSelectAll.setClickable(true);
-            mCbSelectAll.setEnabled(true);
+            binding.fileSystemCbSelectedAll.setClickable(true);
+            binding.fileSystemCbSelectedAll.setEnabled(true);
         } else {
-            mCbSelectAll.setClickable(false);
-            mCbSelectAll.setEnabled(false);
+            binding.fileSystemCbSelectedAll.setClickable(false);
+            binding.fileSystemCbSelectedAll.setEnabled(false);
         }
     }
 

@@ -13,17 +13,13 @@ import com.kunfei.bookshelf.R;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * Created by newbiechen on 17-4-24.
  */
 
 public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivity<T> {
     /**************View***************/
-    @BindView(R.id.tab_tl_indicator)
     protected TabLayout mTlIndicator;
-    @BindView(R.id.tab_vp)
     protected ViewPager mVp;
     /**************Adapter***************/
     protected TabFragmentPageAdapter tabFragmentPageAdapter;
@@ -39,6 +35,8 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     @Override
     protected void bindView() {
         super.bindView();
+        mTlIndicator = findViewById(R.id.tab_tl_indicator);
+        mVp = findViewById(R.id.tab_vp);
         setUpTabLayout();
     }
 

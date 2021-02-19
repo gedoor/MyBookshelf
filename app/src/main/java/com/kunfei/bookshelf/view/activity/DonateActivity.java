@@ -8,22 +8,18 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.databinding.ActivityDonateBinding;
 import com.kunfei.bookshelf.help.Donate;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by GKF on 2018/1/13.
@@ -31,24 +27,8 @@ import butterknife.ButterKnife;
  */
 
 public class DonateActivity extends MBaseActivity<IPresenter> {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.cv_wx_gzh)
-    CardView cvWxGzh;
-    @BindView(R.id.vw_zfb_tz)
-    CardView vwZfbTz;
-    @BindView(R.id.vw_zfb_hb)
-    CardView vwZfbHb;
-    @BindView(R.id.vw_zfb_rwm)
-    CardView vwZfbRwm;
-    @BindView(R.id.vw_wx_rwm)
-    CardView vwWxRwm;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.vw_qq_rwm)
-    CardView vwQqRwm;
-    @BindView(R.id.vw_zfb_hb_ssm)
-    CardView vwZfbHbSsm;
+
+    private ActivityDonateBinding binding;
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, DonateActivity.class);
@@ -69,13 +49,13 @@ public class DonateActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_donate);
+        binding = ActivityDonateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
     }
 
@@ -86,8 +66,8 @@ public class DonateActivity extends MBaseActivity<IPresenter> {
 
     @Override
     protected void bindEvent() {
-        vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
-        cvWxGzh.setOnClickListener(view -> {
+        binding.vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
+        binding.cvWxGzh.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, "开源阅读");
             if (clipboard != null) {
@@ -95,11 +75,11 @@ public class DonateActivity extends MBaseActivity<IPresenter> {
                 toast(R.string.copy_complete);
             }
         });
-        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbhbrwm.png"));
-        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/wxskrwm.jpg"));
-        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/qqskrwm.jpg"));
-        vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
+        binding.vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbhbrwm.png"));
+        binding.vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbskrwm.jpg"));
+        binding.vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/wxskrwm.jpg"));
+        binding.vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/qqskrwm.jpg"));
+        binding.vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
     }
 
     public static void getZfbHb(Context context) {

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -16,20 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.databinding.ViewRefreshRecyclerBinding;
 
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class RefreshRecyclerView extends FrameLayout {
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.rpb)
-    RefreshProgressBar rpb;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
 
+    private ViewRefreshRecyclerBinding binding = ViewRefreshRecyclerBinding.inflate(LayoutInflater.from(getContext()), this, true);
     private View noDataView;
     private View refreshErrorView;
     private float durTouchX = -1000000;
@@ -55,29 +47,31 @@ public class RefreshRecyclerView extends FrameLayout {
 
                     float dY = event.getY() - durTouchY;  //>0下拉
                     durTouchY = event.getY();
-                    if (baseRefreshListener != null && ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getIsRequesting() == 0 && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress()) {
-                        if (rpb.getVisibility() != View.VISIBLE) {
-                            rpb.setVisibility(View.VISIBLE);
+                    if (baseRefreshListener != null
+                            && ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).getIsRequesting() == 0
+                            && binding.rpb.getSecondDurProgress() == binding.rpb.getSecondFinalProgress()) {
+                        if (binding.rpb.getVisibility() != View.VISIBLE) {
+                            binding.rpb.setVisibility(View.VISIBLE);
                         }
-                        if (recyclerView.getAdapter().getItemCount() > 0) {
-                            if (0 == ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).findFirstCompletelyVisibleItemPosition()) {
-                                rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                        if (binding.recyclerView.getAdapter().getItemCount() > 0) {
+                            if (0 == ((LinearLayoutManager) Objects.requireNonNull(binding.recyclerView.getLayoutManager())).findFirstCompletelyVisibleItemPosition()) {
+                                binding.rpb.setSecondDurProgress((int) (binding.rpb.getSecondDurProgress() + dY));
                             }
                         } else {
-                            rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                            binding.rpb.setSecondDurProgress((int) (binding.rpb.getSecondDurProgress() + dY));
                         }
-                        return rpb.getSecondDurProgress() > 0;
+                        return binding.rpb.getSecondDurProgress() > 0;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
-                        if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getIsRequesting() == 0) {
+                    if (baseRefreshListener != null && binding.rpb.getSecondMaxProgress() > 0 && binding.rpb.getSecondDurProgress() > 0) {
+                        if (binding.rpb.getSecondDurProgress() >= binding.rpb.getSecondMaxProgress() && ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).getIsRequesting() == 0) {
                             if (baseRefreshListener instanceof OnRefreshWithProgressListener) {
                                 //带有进度的
                                 //执行刷新响应
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
-                                rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
+                                ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsAll(false, false);
+                                ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsRequesting(1, true);
+                                binding.rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
                                 baseRefreshListener.startRefresh();
                                 if (noDataView != null) {
                                     noDataView.setVisibility(GONE);
@@ -87,8 +81,8 @@ public class RefreshRecyclerView extends FrameLayout {
                                 }
                             } else {
                                 //不带进度的
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
+                                ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsAll(false, false);
+                                ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsRequesting(1, true);
                                 baseRefreshListener.startRefresh();
                                 if (noDataView != null) {
                                     noDataView.setVisibility(GONE);
@@ -96,11 +90,11 @@ public class RefreshRecyclerView extends FrameLayout {
                                 if (refreshErrorView != null) {
                                     refreshErrorView.setVisibility(GONE);
                                 }
-                                rpb.setIsAutoLoading(true);
+                                binding.rpb.setIsAutoLoading(true);
                             }
                         } else {
-                            if (((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getIsRequesting() != 1)
-                                rpb.setSecondDurProgressWithAnim(0);
+                            if (((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).getIsRequesting() != 1)
+                                binding.rpb.setSecondDurProgressWithAnim(0);
                         }
                     }
                     durTouchX = -1000000;
@@ -122,26 +116,21 @@ public class RefreshRecyclerView extends FrameLayout {
     public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recycler, this, false);
-        ButterKnife.bind(this, view);
-
         @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RefreshProgressBar);
-        rpb.setSpeed(a.getDimensionPixelSize(R.styleable.RefreshProgressBar_speed, rpb.getSpeed()));
-        rpb.setMaxProgress(a.getInt(R.styleable.RefreshProgressBar_max_progress, rpb.getMaxProgress()));
-        rpb.setSecondMaxProgress(a.getDimensionPixelSize(R.styleable.RefreshProgressBar_second_max_progress, rpb.getSecondMaxProgress()));
-        rpb.setBgColor(a.getColor(R.styleable.RefreshProgressBar_bg_color, rpb.getBgColor()));
-        rpb.setSecondColor(a.getColor(R.styleable.RefreshProgressBar_second_color, rpb.getSecondColor()));
-        rpb.setFontColor(a.getColor(R.styleable.RefreshProgressBar_font_color, rpb.getFontColor()));
+        binding.rpb.setSpeed(a.getDimensionPixelSize(R.styleable.RefreshProgressBar_speed, binding.rpb.getSpeed()));
+        binding.rpb.setMaxProgress(a.getInt(R.styleable.RefreshProgressBar_max_progress, binding.rpb.getMaxProgress()));
+        binding.rpb.setSecondMaxProgress(a.getDimensionPixelSize(R.styleable.RefreshProgressBar_second_max_progress, binding.rpb.getSecondMaxProgress()));
+        binding.rpb.setBgColor(a.getColor(R.styleable.RefreshProgressBar_bg_color, binding.rpb.getBgColor()));
+        binding.rpb.setSecondColor(a.getColor(R.styleable.RefreshProgressBar_second_color, binding.rpb.getSecondColor()));
+        binding.rpb.setFontColor(a.getColor(R.styleable.RefreshProgressBar_font_color, binding.rpb.getFontColor()));
         a.recycle();
 
         bindEvent();
-
-        addView(view);
     }
 
     public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
-        recyclerView.addItemDecoration(decor);
+        binding.recyclerView.addItemDecoration(decor);
     }
 
     public void setBaseRefreshListener(BaseRefreshListener baseRefreshListener) {
@@ -154,7 +143,7 @@ public class RefreshRecyclerView extends FrameLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     private void bindEvent() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -170,21 +159,21 @@ public class RefreshRecyclerView extends FrameLayout {
                 }
             }
         });
-        recyclerView.setOnTouchListener(refreshTouchListener);
+        binding.recyclerView.setOnTouchListener(refreshTouchListener);
     }
 
     public RefreshProgressBar getRpb() {
-        return rpb;
+        return binding.rpb;
     }
 
     public RecyclerView getRecyclerView() {
-        return recyclerView;
+        return binding.recyclerView;
     }
 
     public void refreshError() {
-        rpb.setIsAutoLoading(false);
-        rpb.clean();
-        ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, true);
+        binding.rpb.setIsAutoLoading(false);
+        binding.rpb.clean();
+        ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(0, true);
         if (noDataView != null) {
             noDataView.setVisibility(GONE);
         }
@@ -195,13 +184,13 @@ public class RefreshRecyclerView extends FrameLayout {
 
     public void startRefresh() {
         if (baseRefreshListener instanceof OnRefreshWithProgressListener) {
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsAll(false, false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, false);
-            rpb.setSecondDurProgress(rpb.getSecondMaxProgress());
-            rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsAll(false, false);
+            ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsRequesting(1, false);
+            binding.rpb.setSecondDurProgress(binding.rpb.getSecondMaxProgress());
+            binding.rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
         } else {
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(1, true);
-            rpb.setIsAutoLoading(true);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(1, true);
+            binding.rpb.setIsAutoLoading(true);
             if (noDataView != null) {
                 noDataView.setVisibility(GONE);
             }
@@ -212,24 +201,24 @@ public class RefreshRecyclerView extends FrameLayout {
     }
 
     public void finishRefresh(Boolean needNotify) {
-        finishRefresh(((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).getICount() == 0, needNotify);
+        finishRefresh(((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).getICount() == 0, needNotify);
     }
 
     public void finishRefresh(Boolean isAll, Boolean needNotify) {
-        rpb.setDurProgress(0);
+        binding.rpb.setDurProgress(0);
         if (isAll) {
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, false);
-            rpb.setIsAutoLoading(false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(true, needNotify);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(0, false);
+            binding.rpb.setIsAutoLoading(false);
+            ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsAll(true, needNotify);
         } else {
-            rpb.setIsAutoLoading(false);
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, needNotify);
+            binding.rpb.setIsAutoLoading(false);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(0, needNotify);
         }
 
         if (isAll) {
             if (noDataView != null) {
-                recyclerView.post(() -> {
-                    if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0) {
+                binding.recyclerView.post(() -> {
+                    if (((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).getICount() == 0) {
                         noDataView.setVisibility(VISIBLE);
                     } else {
                         noDataView.setVisibility(GONE);
@@ -244,10 +233,10 @@ public class RefreshRecyclerView extends FrameLayout {
 
     public void finishLoadMore(Boolean isAll, Boolean needNoti) {
         if (isAll) {
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(true, needNoti);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(0, false);
+            ((RefreshRecyclerViewAdapter) binding.recyclerView.getAdapter()).setIsAll(true, needNoti);
         } else {
-            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setIsRequesting(0, needNoti);
+            ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setIsRequesting(0, needNoti);
         }
 
         if (noDataView != null) {
@@ -263,8 +252,8 @@ public class RefreshRecyclerView extends FrameLayout {
             if (loadMoreListener != null)
                 loadMoreListener.loadMoreErrorTryAgain();
         });
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(refreshRecyclerViewAdapter);
+        binding.recyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setAdapter(refreshRecyclerViewAdapter);
     }
 
     public void setRefreshRecyclerViewAdapter(View headerView, RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
@@ -272,20 +261,20 @@ public class RefreshRecyclerView extends FrameLayout {
             if (loadMoreListener != null)
                 loadMoreListener.loadMoreErrorTryAgain();
         });
-        llContent.addView(headerView, 0);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(refreshRecyclerViewAdapter);
+        binding.llContent.addView(headerView, 0);
+        binding.recyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setAdapter(refreshRecyclerViewAdapter);
     }
 
     public void setItemTouchHelperCallback(ItemTouchHelper.Callback callback) {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
     }
 
     public void loadMoreError() {
-        rpb.setIsAutoLoading(false);
-        rpb.clean();
-        ((RefreshRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setLoadMoreError(true, true);
+        binding.rpb.setIsAutoLoading(false);
+        binding.rpb.clean();
+        ((RefreshRecyclerViewAdapter) Objects.requireNonNull(binding.recyclerView.getAdapter())).setLoadMoreError(true, true);
     }
 
     public void setNoDataAndRefreshErrorView(View noData, View refreshError) {

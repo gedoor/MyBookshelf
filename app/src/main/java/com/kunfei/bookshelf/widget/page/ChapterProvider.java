@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.page;
 
 import android.text.Layout;
 import android.text.StaticLayout;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -68,7 +69,17 @@ class ChapterProvider {
             txtChapter.addPage(page);
             return txtChapter;
         }
+        Log.i("content-1",chapter.getDurChapterName()+"\n"+content.substring(content.length()/3*2));
         content = contentHelper.replaceContent(pageLoader.book.getBookInfoBean().getName(), pageLoader.book.getTag(), content, pageLoader.book.getReplaceEnable());
+
+//        Log.i("chapterName",chapter.getDurChapterName());
+//      方便debug
+//        if(chapter.getDurChapterName().matches(".*幽魂.*"))
+        {
+//               Log.i("content",content);
+
+        content = contentHelper.LightNovelParagraph2(content,chapter.getDurChapterName());
+        }
         String[] allLine = content.split("\n");
         List<String> lines = new ArrayList<>();
         List<TxtLine> txtLists = new ArrayList<>();//记录每个字的位置 //pzl

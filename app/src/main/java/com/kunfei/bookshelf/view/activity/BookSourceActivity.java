@@ -14,11 +14,9 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kunfei.bookshelf.DbHelper;
@@ -26,6 +24,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
+import com.kunfei.bookshelf.databinding.ActivityBookSourceBinding;
 import com.kunfei.bookshelf.help.ItemTouchCallback;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
@@ -46,8 +45,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 
 /**
@@ -58,16 +55,7 @@ import kotlin.Unit;
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     private final int IMPORT_SOURCE = 102;
     private final int REQUEST_QR = 202;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.searchView)
-    SearchView searchView;
-
+    private ActivityBookSourceBinding binding;
     private ItemTouchCallback itemTouchCallback;
     private boolean selectAll = true;
     private MenuItem groupItem;
@@ -93,9 +81,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_book_source);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        binding = ActivityBookSourceBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
     }
 
@@ -128,12 +116,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void initSearchView() {
-        mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
+        mSearchAutoComplete = binding.searchView.findViewById(R.id.search_src_text);
         mSearchAutoComplete.setTextSize(16);
-        searchView.setQueryHint(getString(R.string.search_book_source));
-        searchView.onActionViewExpanded();
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setQueryHint(getString(R.string.search_book_source));
+        binding.searchView.onActionViewExpanded();
+        binding.searchView.clearFocus();
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -149,14 +137,14 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         adapter = new BookSourceAdapter(this);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         itemTouchCallback = new ItemTouchCallback();
         itemTouchCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
         setDragEnable(getSort());
     }
 
@@ -165,11 +153,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             return;
         }
         adapter.setSort(sort);
-        if (sort == 0) {
-            itemTouchCallback.setDragEnable(true);
-        } else {
-            itemTouchCallback.setDragEnable(false);
-        }
+        itemTouchCallback.setDragEnable(sort == 0);
     }
 
     public void upDateSelectAll() {
@@ -202,21 +186,21 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     public void upSearchView(int size) {
-        searchView.setQueryHint(getString(R.string.search_book_source_num, size));
+        binding.searchView.setQueryHint(getString(R.string.search_book_source_num, size));
     }
 
     @Override
     public void refreshBookSource() {
         if (isSearch) {
             List<BookSourceBean> sourceBeanList;
-            if (searchView.getQuery().toString().equals("enabled")) {
+            if (binding.searchView.getQuery().toString().equals("enabled")) {
                 sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                         .where(BookSourceBeanDao.Properties.Enable.eq(1))
                         .orderRaw(BookSourceManager.getBookSourceSort())
                         .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                         .list();
             } else {
-                String term = "%" + searchView.getQuery() + "%";
+                String term = "%" + binding.searchView.getQuery() + "%";
                 sourceBeanList = DbHelper.getDaoSession().getBookSourceBeanDao().queryBuilder()
                         .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                                 BookSourceBeanDao.Properties.BookSourceGroup.like(term),
@@ -301,6 +285,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_check_book_source:
                 mPresenter.checkBookSource(adapter.getSelectDataList());
                 break;
+            case R.id.action_check_find_source:
+                mPresenter.checkFindSource(adapter.getSelectDataList());
+                break;
             case R.id.sort_manual:
                 upSourceSort(0);
                 break;
@@ -311,7 +298,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 upSourceSort(2);
                 break;
             case R.id.show_enabled:
-                searchView.setQuery("enabled", false);
+                binding.searchView.setQuery("enabled", false);
                 break;
             case R.id.action_share_wifi:
                 ShareService.startThis(this, adapter.getSelectDataList());
@@ -321,7 +308,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
         }
         if (item.getGroupId() == R.id.source_group) {
-            searchView.setQuery(item.getTitle(), true);
+            binding.searchView.setQuery(item.getTitle(), true);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -448,8 +435,22 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 case REQUEST_QR:
                     if (data != null) {
                         String result = data.getStringExtra("result");
+                        if (!StringUtils.isTrimEmpty(result)) {
+
+                        if(result.replaceAll("\\s","").matches("^\\{.*\\}$")) {
+                            mPresenter.importBookSource(result);
+                            break;
+                        }
+                            result=result.trim();
+                        String[] string=result.split("#",2);
+                        if(string.length==2){
+                            if(string[1].replaceAll("\\s","").matches("^\\{.*\\}$")) {
+                                mPresenter.importBookSource(string[1]);
+                                break;
+                            }
+                        }
                         mPresenter.importBookSource(result);
-                    }
+                    }}
                     break;
             }
         }
@@ -473,12 +474,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(llContent, msg, length);
+        return Snackbar.make(binding.llContent, msg, length);
     }
 
     @Override
     public void showSnackBar(String msg, int length) {
-        super.showSnackBar(llContent, msg, length);
+        super.showSnackBar(binding.llContent, msg, length);
     }
 
 }

@@ -95,6 +95,11 @@
         android:icon="@drawable/ic_check_source"
         android:title="@string/check_select_source"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_check_find_source"
+        android:icon="@drawable/ic_baseline_label"
+        android:title="@string/check_find_source"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_wifi"

@@ -12,12 +12,9 @@ import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.kunfei.basemvplib.BitIntentDataManager;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.DbHelper;
@@ -25,21 +22,12 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.databinding.ActivitySourceLoginBinding;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class SourceLoginActivity extends MBaseActivity<IPresenter> {
-    @BindView(R.id.web_view)
-    WebView webView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.action_bar)
-    AppBarLayout actionBar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
 
+    private ActivitySourceLoginBinding binding;
     private BookSourceBean bookSourceBean;
     private boolean checking = false;
 
@@ -74,9 +62,9 @@ public class SourceLoginActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_source_login);
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        binding = ActivitySourceLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
     }
 
@@ -88,13 +76,13 @@ public class SourceLoginActivity extends MBaseActivity<IPresenter> {
     protected void initData() {
         String key = this.getIntent().getStringExtra("data_key");
         bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
-        WebSettings settings = webView.getSettings();
+        WebSettings settings = binding.webView.getSettings();
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setJavaScriptEnabled(true);
         CookieManager cookieManager = CookieManager.getInstance();
-        webView.setWebViewClient(new WebViewClient() {
+        binding.webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 String cookie = cookieManager.getCookie(url);
@@ -109,11 +97,11 @@ public class SourceLoginActivity extends MBaseActivity<IPresenter> {
                 if (checking)
                     finish();
                 else
-                    showSnackBar(toolbar, getString(R.string.click_check_after_success));
+                    showSnackBar(binding.toolbar, getString(R.string.click_check_after_success));
                 super.onPageFinished(view, url);
             }
         });
-        webView.loadUrl(bookSourceBean.getLoginUrl());
+        binding.webView.loadUrl(bookSourceBean.getLoginUrl());
     }
 
     //设置ToolBar
@@ -140,8 +128,8 @@ public class SourceLoginActivity extends MBaseActivity<IPresenter> {
             case R.id.action_check:
                 if (checking) break;
                 checking = true;
-                showSnackBar(toolbar, getString(R.string.check_host_cookie));
-                webView.loadUrl(bookSourceBean.getBookSourceUrl());
+                showSnackBar(binding.toolbar, getString(R.string.check_host_cookie));
+                binding.webView.loadUrl(bookSourceBean.getBookSourceUrl());
                 break;
             case android.R.id.home:
                 finish();

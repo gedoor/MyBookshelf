@@ -2,25 +2,27 @@ package com.kunfei.bookshelf.widget.modialog
 
 import android.content.Context
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import com.kunfei.bookshelf.MApplication
-import com.kunfei.bookshelf.R
+import com.kunfei.bookshelf.databinding.DialogPageKeyBinding
 import com.kunfei.bookshelf.utils.SoftInputUtil
-import kotlinx.android.synthetic.main.dialog_page_key.*
 import org.jetbrains.anko.sdk27.listeners.onClick
 
 
 class PageKeyDialog(context: Context) : BaseDialog(context) {
 
+    val binding = DialogPageKeyBinding.inflate(LayoutInflater.from(context))
+
     init {
-        setContentView(R.layout.dialog_page_key)
-        et_prev.setText(MApplication.getConfigPreferences().getInt("prevKeyCode", 0).toString())
-        et_next.setText(MApplication.getConfigPreferences().getInt("nextKeyCode", 0).toString())
-        tv_ok.onClick {
+        setContentView(binding.root)
+        binding.etPrev.setText(MApplication.getConfigPreferences().getInt("prevKeyCode", 0).toString())
+        binding.etNext.setText(MApplication.getConfigPreferences().getInt("nextKeyCode", 0).toString())
+        binding.tvOk.onClick {
             val edit = MApplication.getConfigPreferences().edit()
-            et_prev.text?.let {
+            binding.etPrev.text?.let {
                 edit.putInt("prevKeyCode", it.toString().toInt())
             }
-            et_next.text?.let {
+            binding.etNext.text?.let {
                 edit.putInt("nextKeyCode", it.toString().toInt())
             }
             edit.apply()
@@ -30,10 +32,10 @@ class PageKeyDialog(context: Context) : BaseDialog(context) {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode != KeyEvent.KEYCODE_BACK) {
-            if (et_prev.hasFocus()) {
-                et_prev.setText(keyCode.toString())
-            } else if (et_next.hasFocus()) {
-                et_next.setText(keyCode.toString())
+            if (binding.etPrev.hasFocus()) {
+                binding.etPrev.setText(keyCode.toString())
+            } else if (binding.etNext.hasFocus()) {
+                binding.etNext.setText(keyCode.toString())
             }
             return true
         }

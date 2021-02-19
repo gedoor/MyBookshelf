@@ -22,6 +22,7 @@
             android:layout_weight="1" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/book_info_main"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_gravity="center"
@@ -215,12 +216,17 @@
                                 android:textColor="@color/tv_text_book_detail"
                                 android:textSize="13sp" />
 
-                            <TextView
-                                android:id="@+id/tv_chapter_size"
+                            <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                                android:id="@+id/tv_toc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:paddingStart="4dp"
+                                android:paddingTop="1dp"
+                                android:paddingEnd="4dp"
+                                android:paddingBottom="1dp"
                                 android:singleLine="true"
-                                android:textColor="@color/tv_text_book_detail"
+                                android:text="@string/chapter_list"
                                 android:textSize="13sp" />
                         </LinearLayout>
 

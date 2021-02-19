@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.hwangjr.rxbus.RxBus;
@@ -20,6 +19,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.databinding.ActivityChapterlistBinding;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.theme.ATH;
@@ -31,17 +31,12 @@ import com.kunfei.bookshelf.view.fragment.ChapterListFragment;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class ChapterListActivity extends BaseTabActivity<IPresenter> {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
+    private ActivityChapterlistBinding binding;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private SearchView searchView;
     private BookShelfBean bookShelf;
@@ -94,9 +89,14 @@ public class ChapterListActivity extends BaseTabActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_chapterlist);
-        ButterKnife.bind(this);
+        binding = ActivityChapterlistBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setupActionBar();
+    }
+
+    @Override
+    protected void bindView() {
+        super.bindView();
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
         mTlIndicator.setTabTextColors(ColorUtil.isColorLight(ThemeStore.primaryColor(this)) ? Color.BLACK : Color.WHITE,
                 ThemeStore.accentColor(this));
@@ -175,7 +175,7 @@ public class ChapterListActivity extends BaseTabActivity<IPresenter> {
 
     //设置ToolBar
     private void setupActionBar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

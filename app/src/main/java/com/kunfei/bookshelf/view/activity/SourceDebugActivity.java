@@ -9,11 +9,8 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -22,31 +19,19 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.databinding.ActivitySourceDebugBinding;
 import com.kunfei.bookshelf.model.content.Debug;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceDebugAdapter;
-import com.kunfei.bookshelf.widget.RotateLoading;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     private final int REQUEST_QR = 202;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.searchView)
-    SearchView searchView;
-    @BindView(R.id.loading)
-    RotateLoading loading;
-    @BindView(R.id.action_bar)
-    AppBarLayout actionBar;
-    @BindView(R.id.lv_log)
-    RecyclerView recyclerView;
-
+    private ActivitySourceDebugBinding binding;
     private SourceDebugAdapter adapter;
     private CompositeDisposable compositeDisposable;
     private String sourceTag;
@@ -89,7 +74,8 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void onCreateActivity() {
         getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
-        setContentView(R.layout.activity_source_debug);
+        binding = ActivitySourceDebugBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     /**
@@ -103,26 +89,25 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     @Override
     protected void bindView() {
         super.bindView();
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
+        this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         initSearchView();
         adapter = new SourceDebugAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void initSearchView() {
-        searchView.setQueryHint(getString(R.string.debug_hint));
-        searchView.onActionViewExpanded();
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setQueryHint(getString(R.string.debug_hint));
+        binding.searchView.onActionViewExpanded();
+        binding.searchView.setSubmitButtonEnabled(true);
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (TextUtils.isEmpty(query))
                     return false;
                 startDebug(query);
-                SoftInputUtil.hideIMM(searchView);
+                SoftInputUtil.hideIMM(binding.searchView);
                 return true;
             }
 
@@ -142,7 +127,7 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
-        loading.start();
+        binding.loading.start();
         adapter.clearData();
         Debug.newDebug(sourceTag, key, compositeDisposable);
     }
@@ -189,7 +174,7 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
             if (requestCode == REQUEST_QR) {
                 String result = data.getStringExtra("result");
                 if (!StringUtils.isTrimEmpty(result)) {
-                    searchView.setQuery(result, true);
+                    binding.searchView.setQuery(result, true);
                 }
             }
         }
@@ -199,7 +184,7 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     public void printDebugLog(String msg) {
         adapter.addData(msg);
         if (msg.equals("finish")) {
-            loading.stop();
+            binding.loading.stop();
         }
     }
 

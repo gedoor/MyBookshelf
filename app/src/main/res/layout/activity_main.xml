@@ -13,7 +13,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/content_main" />
+        <include
+            android:id="@+id/main_view"
+            layout="@layout/content_main" />
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"

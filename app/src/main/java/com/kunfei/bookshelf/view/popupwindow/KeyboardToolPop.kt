@@ -1,17 +1,15 @@
 package com.kunfei.bookshelf.view.popupwindow
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.base.adapter.ItemViewHolder
-import com.kunfei.bookshelf.base.adapter.SimpleRecyclerAdapter
-import kotlinx.android.synthetic.main.item_text.view.*
-import kotlinx.android.synthetic.main.popup_keyboard_tool.view.*
+import com.kunfei.bookshelf.base.adapter.RecyclerAdapter
+import com.kunfei.bookshelf.databinding.ItemTextBinding
+import com.kunfei.bookshelf.databinding.PopupKeyboardToolBinding
 import org.jetbrains.anko.sdk27.listeners.onClick
 
 
@@ -21,32 +19,40 @@ class KeyboardToolPop(
         val callBack: CallBack?
 ) : PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
 
-    init {
-        @SuppressLint("InflateParams")
-        this.contentView = LayoutInflater.from(context).inflate(R.layout.popup_keyboard_tool, null)
+    private val binding = PopupKeyboardToolBinding.inflate(LayoutInflater.from(context))
 
+    init {
         isTouchable = true
         isOutsideTouchable = false
         isFocusable = false
         inputMethodMode = INPUT_METHOD_NEEDED //解决遮盖输入法
+        contentView = binding.root
         initRecyclerView()
     }
 
     private fun initRecyclerView() = with(contentView) {
         val adapter = Adapter(context)
-        recycler_view.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        recycler_view.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        binding.recyclerView.adapter = adapter
         adapter.setItems(chars)
     }
 
     inner class Adapter(context: Context) :
-            SimpleRecyclerAdapter<String>(context, R.layout.item_text) {
+            RecyclerAdapter<String, ItemTextBinding>(context) {
 
-        override fun convert(holder: ItemViewHolder, item: String, payloads: MutableList<Any>) {
-            with(holder.itemView) {
-                text_view.text = item
-                onClick { callBack?.sendText(item) }
+        override fun getViewBinding(parent: ViewGroup): ItemTextBinding {
+            return ItemTextBinding.inflate(inflater, parent, false)
+        }
+
+        override fun convert(holder: ItemViewHolder, binding: ItemTextBinding, item: String, payloads: MutableList<Any>) {
+            with(binding) {
+                textView.text = item
+                root.onClick { callBack?.sendText(item) }
             }
+        }
+
+        override fun registerListener(holder: ItemViewHolder, binding: ItemTextBinding) {
+
         }
     }
 
