@@ -13,8 +13,8 @@ def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
     signingConfigs {
         myConfig {
             storeFile file(RELEASE_STORE_FILE)
@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 10000 + gitCommits
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
@@ -169,10 +169,16 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 
 afterEvaluate {
     for (Task task : project.tasks.matching { it.name.startsWith('crashlyticsUploadDeobs') }) {
         task.enabled = false
     }
+}
+repositories {
+    google()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+    maven { url 'https://plugins.gradle.org/m2/' }
 }
