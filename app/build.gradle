@@ -69,7 +69,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked"
+        //options.compilerArgs << "-Xlint:deprecation"
+    }
 }
 
 resourcePlaceholders {
@@ -148,6 +151,9 @@ dependencies {
 
     //颜色选择
     implementation 'com.jaredrummler:colorpicker:1.1.0'
+
+    //apache
+    implementation('org.apache.commons:commons-text:1.9')
 
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
