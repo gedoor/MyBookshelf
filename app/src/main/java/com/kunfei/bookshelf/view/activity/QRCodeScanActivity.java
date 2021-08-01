@@ -140,20 +140,17 @@ public class QRCodeScanActivity extends MBaseActivity<IPresenter> implements QRC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_choose_from_gallery:
-                new PermissionsCompat.Builder(this)
-                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
-                        .rationale(R.string.get_storage_per)
-                        .onGranted((requestCode) -> {
-                            chooseFromGallery();
-                            return Unit.INSTANCE;
-                        })
-                        .request();
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_choose_from_gallery) {
+            new PermissionsCompat.Builder(this)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.get_storage_per)
+                    .onGranted((requestCode) -> {
+                        chooseFromGallery();
+                        return Unit.INSTANCE;
+                    })
+                    .request();
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

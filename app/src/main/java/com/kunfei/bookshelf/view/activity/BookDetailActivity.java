@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.activity;
 
+import static com.kunfei.bookshelf.presenter.BookDetailPresenter.FROM_BOOKSHELF;
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -61,8 +63,6 @@ import java.io.FileOutputStream;
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-
-import static com.kunfei.bookshelf.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     private ActivityBookDetailBinding binding;
@@ -289,35 +289,29 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
             popupMenu.getMenu().add(Menu.NONE, R.id.menu_share, Menu.NONE, R.string.share_book);
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                switch (menuItem.getItemId()) {
-                    case R.id.menu_refresh:
-                        refresh();
-                        break;
-                    case R.id.menu_allow_update:
-                        mPresenter.getBookShelf().setAllowUpdate(true);
-                        mPresenter.addToBookShelf();
-                        break;
-                    case R.id.menu_disable_update:
-                        mPresenter.getBookShelf().setAllowUpdate(false);
-                        mPresenter.addToBookShelf();
-                        break;
-                    case R.id.menu_edit:
-                        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
-                        if (sourceBean != null) {
-                            SourceEditActivity.startThis(this, sourceBean);
-                        }
-                        break;
-                    case R.id.menu_copy_url:
-                        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText(null, mPresenter.getBookShelf().getNoteUrl());
-                        if (clipboard != null) {
-                            clipboard.setPrimaryClip(clipData);
-                            toast(R.string.copy_complete);
-                        }
-                        break;
-                    case R.id.menu_share:
-                        share();
-                        break;
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.menu_refresh) {
+                    refresh();
+                } else if (itemId == R.id.menu_allow_update) {
+                    mPresenter.getBookShelf().setAllowUpdate(true);
+                    mPresenter.addToBookShelf();
+                } else if (itemId == R.id.menu_disable_update) {
+                    mPresenter.getBookShelf().setAllowUpdate(false);
+                    mPresenter.addToBookShelf();
+                } else if (itemId == R.id.menu_edit) {
+                    BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
+                    if (sourceBean != null) {
+                        SourceEditActivity.startThis(this, sourceBean);
+                    }
+                } else if (itemId == R.id.menu_copy_url) {
+                    ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText(null, mPresenter.getBookShelf().getNoteUrl());
+                    if (clipboard != null) {
+                        clipboard.setPrimaryClip(clipData);
+                        toast(R.string.copy_complete);
+                    }
+                } else if (itemId == R.id.menu_share) {
+                    share();
                 }
                 return true;
             });

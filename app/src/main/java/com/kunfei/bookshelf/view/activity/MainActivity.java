@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.activity;
 
+import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,8 +63,6 @@ import java.util.List;
 import java.util.Objects;
 
 import kotlin.Unit;
-
-import static com.kunfei.bookshelf.utils.NetworkUtils.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View,
         BookListFragment.CallbackValue {
@@ -403,66 +403,56 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add_local:
-                new PermissionsCompat.Builder(this)
-                        .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
-                        .rationale(R.string.import_per)
-                        .onGranted((requestCode) -> {
-                            startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
-                            return Unit.INSTANCE;
-                        })
-                        .request();
-                break;
-            case R.id.action_add_url:
-                InputDialog.builder(this)
-                        .setTitle(getString(R.string.add_book_url))
-                        .setCallback(new InputDialog.Callback() {
-                            @Override
-                            public void setInputText(String inputText) {
-                                inputText = StringUtils.trim(inputText);
-                                mPresenter.addBookUrl(inputText);
-                            }
+        if (id == R.id.action_add_local) {
+            new PermissionsCompat.Builder(this)
+                    .addPermissions(Permissions.READ_EXTERNAL_STORAGE, Permissions.WRITE_EXTERNAL_STORAGE)
+                    .rationale(R.string.import_per)
+                    .onGranted((requestCode) -> {
+                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
+                        return Unit.INSTANCE;
+                    })
+                    .request();
+        } else if (id == R.id.action_add_url) {
+            InputDialog.builder(this)
+                    .setTitle(getString(R.string.add_book_url))
+                    .setCallback(new InputDialog.Callback() {
+                        @Override
+                        public void setInputText(String inputText) {
+                            inputText = StringUtils.trim(inputText);
+                            mPresenter.addBookUrl(inputText);
+                        }
 
-                            @Override
-                            public void delete(String value) {
+                        @Override
+                        public void delete(String value) {
 
-                            }
-                        }).show();
-                break;
-            case R.id.action_add_qrcode:
-
-                Intent intent = new Intent(this, QRCodeScanActivity.class);
-                startActivityForResult(intent, REQUEST_QR);
-                break;
-            case R.id.action_download_all:
-                if (!isNetWorkAvailable()) {
-                    toast(R.string.network_connection_unavailable);
-                } else {
-                    RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
-                }
-                break;
-            case R.id.menu_bookshelf_layout:
-                selectBookshelfLayout();
-                break;
-            case R.id.action_arrange_bookshelf:
-                if (getBookListFragment() != null) {
-                    getBookListFragment().setArrange(true);
-                }
-                break;
-            case R.id.action_web_start:
-                boolean startedThisTime = WebService.startThis(this);
-                if (!startedThisTime) {
-                    toast(getString(R.string.web_service_already_started_hint));
-                }
-                break;
-            case android.R.id.home:
-                if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-                    binding.drawer.closeDrawers();
-                } else {
-                    binding.drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
-                }
-                break;
+                        }
+                    }).show();
+        } else if (id == R.id.action_add_qrcode) {
+            Intent intent = new Intent(this, QRCodeScanActivity.class);
+            startActivityForResult(intent, REQUEST_QR);
+        } else if (id == R.id.action_download_all) {
+            if (!isNetWorkAvailable()) {
+                toast(R.string.network_connection_unavailable);
+            } else {
+                RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
+            }
+        } else if (id == R.id.menu_bookshelf_layout) {
+            selectBookshelfLayout();
+        } else if (id == R.id.action_arrange_bookshelf) {
+            if (getBookListFragment() != null) {
+                getBookListFragment().setArrange(true);
+            }
+        } else if (id == R.id.action_web_start) {
+            boolean startedThisTime = WebService.startThis(this);
+            if (!startedThisTime) {
+                toast(getString(R.string.web_service_already_started_hint));
+            }
+        } else if (id == android.R.id.home) {
+            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                binding.drawer.closeDrawers();
+            } else {
+                binding.drawer.openDrawer(GravityCompat.START, !MApplication.isEInkMode);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -522,34 +512,25 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         vwNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         binding.navigationView.setNavigationItemSelectedListener(menuItem -> {
             binding.drawer.closeDrawer(GravityCompat.START, !MApplication.isEInkMode);
-            switch (menuItem.getItemId()) {
-                case R.id.action_book_source_manage:
-                    handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
-                    break;
-                case R.id.action_replace_rule:
-                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this, null), 200);
-                    break;
-                case R.id.action_download:
-                    handler.postDelayed(() -> DownloadActivity.startThis(this), 200);
-                    break;
-                case R.id.action_setting:
-                    handler.postDelayed(() -> SettingActivity.startThis(this), 200);
-                    break;
-                case R.id.action_about:
-                    handler.postDelayed(() -> AboutActivity.startThis(this), 200);
-                    break;
-                case R.id.action_donate:
-                    handler.postDelayed(() -> DonateActivity.startThis(this), 200);
-                    break;
-                case R.id.action_backup:
-                    handler.postDelayed(() -> BackupRestoreUi.INSTANCE.backup(this), 200);
-                    break;
-                case R.id.action_restore:
-                    handler.postDelayed(() -> BackupRestoreUi.INSTANCE.restore(this), 200);
-                    break;
-                case R.id.action_theme:
-                    handler.postDelayed(() -> ThemeSettingActivity.startThis(this), 200);
-                    break;
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.action_book_source_manage) {
+                handler.postDelayed(() -> BookSourceActivity.startThis(this, requestSource), 200);
+            } else if (itemId == R.id.action_replace_rule) {
+                handler.postDelayed(() -> ReplaceRuleActivity.startThis(this, null), 200);
+            } else if (itemId == R.id.action_download) {
+                handler.postDelayed(() -> DownloadActivity.startThis(this), 200);
+            } else if (itemId == R.id.action_setting) {
+                handler.postDelayed(() -> SettingActivity.startThis(this), 200);
+            } else if (itemId == R.id.action_about) {
+                handler.postDelayed(() -> AboutActivity.startThis(this), 200);
+            } else if (itemId == R.id.action_donate) {
+                handler.postDelayed(() -> DonateActivity.startThis(this), 200);
+            } else if (itemId == R.id.action_backup) {
+                handler.postDelayed(() -> BackupRestoreUi.INSTANCE.backup(this), 200);
+            } else if (itemId == R.id.action_restore) {
+                handler.postDelayed(() -> BackupRestoreUi.INSTANCE.restore(this), 200);
+            } else if (itemId == R.id.action_theme) {
+                handler.postDelayed(() -> ThemeSettingActivity.startThis(this), 200);
             }
             return true;
         });

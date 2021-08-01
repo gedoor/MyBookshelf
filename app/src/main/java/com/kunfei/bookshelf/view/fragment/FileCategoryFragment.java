@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class FileCategoryFragment extends BaseFileFragment {
@@ -62,7 +61,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         binding.fileCategoryRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.fileCategoryRvContent.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext())));
+        binding.fileCategoryRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
         binding.fileCategoryRvContent.setAdapter(mAdapter);
         setTextViewIconColor(binding.fileCategoryTvBackLast);
     }

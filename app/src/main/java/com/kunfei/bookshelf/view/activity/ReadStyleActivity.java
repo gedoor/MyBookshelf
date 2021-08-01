@@ -228,13 +228,10 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_save:
-                saveStyle();
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_save) {
+            saveStyle();
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -347,8 +344,8 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     }
 
     private static class BgImgListAdapter extends BaseAdapter {
-        private Context context;
-        private LayoutInflater mInflater;
+        private final Context context;
+        private final LayoutInflater mInflater;
         private List<String> assetsFiles;
         final BitmapFactory.Options options = new BitmapFactory.Options();
 

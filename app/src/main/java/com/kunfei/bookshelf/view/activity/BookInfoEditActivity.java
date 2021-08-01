@@ -166,14 +166,11 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_save:
-                saveInfo();
-                break;
-            case android.R.id.home:
-                SoftInputUtil.hideIMM(getCurrentFocus());
-                finish();
-                break;
+        if (id == R.id.action_save) {
+            saveInfo();
+        } else if (id == android.R.id.home) {
+            SoftInputUtil.hideIMM(getCurrentFocus());
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

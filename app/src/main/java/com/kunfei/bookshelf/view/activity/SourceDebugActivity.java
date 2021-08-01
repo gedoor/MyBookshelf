@@ -151,13 +151,10 @@ public class SourceDebugActivity extends MBaseActivity<IPresenter> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_scan:
-                scan();
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_scan) {
+            scan();
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

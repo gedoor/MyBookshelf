@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
@@ -44,9 +46,6 @@ import com.kunfei.bookshelf.widget.recycler.sectioned.SectionedSpanSizeLookup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static android.app.Activity.RESULT_OK;
 
 public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View,
         OnRecyclerViewListener.OnItemClickListener,
@@ -167,7 +166,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             binding.rvFindLeft.setLayoutManager(leftLayoutManager);
             binding.rvFindLeft.setAdapter(findLeftAdapter);
 
-            findRightAdapter = new FindRightAdapter(Objects.requireNonNull(getActivity()), this);
+            findRightAdapter = new FindRightAdapter(requireActivity(), this);
             //设置header
             rightLayoutManager = new ScrollLinearLayoutManger(getActivity(), 3);
             ((ScrollLinearLayoutManger) rightLayoutManager).setSpanSizeLookup(new SectionedSpanSizeLookup(findRightAdapter, (ScrollLinearLayoutManger) rightLayoutManager));
@@ -227,26 +226,22 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         popupMenu.getMenu().add(Menu.NONE, R.id.menu_del, Menu.NONE, R.string.delete);
         popupMenu.getMenu().add(Menu.NONE, R.id.menu_clear, Menu.NONE, R.string.clear_cache);
         popupMenu.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    SourceEditActivity.startThis(this, sourceBean);
-                    break;
-                case R.id.menu_top:
-                    BookSourceManager.toTop(sourceBean)
-                            .subscribe(new MySingleObserver<Boolean>() {
-                                @Override
-                                public void onSuccess(Boolean aBoolean) {
-                                    refreshData();
-                                }
-                            });
-                    break;
-                case R.id.menu_del:
-                    BookSourceManager.removeBookSource(sourceBean);
-                    refreshData();
-                    break;
-                case R.id.menu_clear:
-                    ACache.get(getActivity(), "findCache").remove(sourceBean.getBookSourceUrl());
-                    break;
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu_edit) {
+                SourceEditActivity.startThis(this, sourceBean);
+            } else if (itemId == R.id.menu_top) {
+                BookSourceManager.toTop(sourceBean)
+                        .subscribe(new MySingleObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                refreshData();
+                            }
+                        });
+            } else if (itemId == R.id.menu_del) {
+                BookSourceManager.removeBookSource(sourceBean);
+                refreshData();
+            } else if (itemId == R.id.menu_clear) {
+                ACache.get(getActivity(), "findCache").remove(sourceBean.getBookSourceUrl());
             }
             return true;
         });

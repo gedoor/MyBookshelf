@@ -169,47 +169,40 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add_replace_rule:
-                editReplaceRule(null);
-                break;
-            case R.id.action_select_all:
-                selectAllDataS();
-                break;
-            case R.id.action_import:
-                selectReplaceRuleFile();
-                break;
-            case R.id.action_import_onLine:
-                String cacheUrl = ACache.get(this).getAsString("replaceUrl");
-                String[] cacheUrls = cacheUrl == null ? new String[]{} : cacheUrl.split(";");
-                List<String> urlList = new ArrayList<>(Arrays.asList(cacheUrls));
-                InputDialog.builder(this)
-                        .setTitle(getString(R.string.input_replace_url))
-                        .setDefaultValue(cacheUrl)
-                        .setAdapterValues(urlList)
-                        .setCallback(new InputDialog.Callback() {
-                            @Override
-                            public void setInputText(String inputText) {
-                                inputText = StringUtils.trim(inputText);
-                                if (!urlList.contains(inputText)) {
-                                    urlList.add(0, inputText);
-                                    ACache.get(ReplaceRuleActivity.this).put("replaceUrl", TextUtils.join(";", urlList));
-                                }
-                                mPresenter.importDataS(inputText);
+        if (id == R.id.action_add_replace_rule) {
+            editReplaceRule(null);
+        } else if (id == R.id.action_select_all) {
+            selectAllDataS();
+        } else if (id == R.id.action_import) {
+            selectReplaceRuleFile();
+        } else if (id == R.id.action_import_onLine) {
+            String cacheUrl = ACache.get(this).getAsString("replaceUrl");
+            String[] cacheUrls = cacheUrl == null ? new String[]{} : cacheUrl.split(";");
+            List<String> urlList = new ArrayList<>(Arrays.asList(cacheUrls));
+            InputDialog.builder(this)
+                    .setTitle(getString(R.string.input_replace_url))
+                    .setDefaultValue(cacheUrl)
+                    .setAdapterValues(urlList)
+                    .setCallback(new InputDialog.Callback() {
+                        @Override
+                        public void setInputText(String inputText) {
+                            inputText = StringUtils.trim(inputText);
+                            if (!urlList.contains(inputText)) {
+                                urlList.add(0, inputText);
+                                ACache.get(ReplaceRuleActivity.this).put("replaceUrl", TextUtils.join(";", urlList));
                             }
+                            mPresenter.importDataS(inputText);
+                        }
 
-                            @Override
-                            public void delete(String value) {
+                        @Override
+                        public void delete(String value) {
 
-                            }
-                        }).show();
-                break;
-            case R.id.action_del_all:
-                mPresenter.delData(adapter.getData());
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+                        }
+                    }).show();
+        } else if (id == R.id.action_del_all) {
+            mPresenter.delData(adapter.getData());
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -261,12 +254,10 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case IMPORT_SOURCE:
-                if (data != null) {
-                    mPresenter.importDataSLocal(FileUtils.getPath(this, data.getData()));
-                }
-                break;
+        if (requestCode == IMPORT_SOURCE) {
+            if (data != null) {
+                mPresenter.importDataSLocal(FileUtils.getPath(this, data.getData()));
+            }
         }
     }
 

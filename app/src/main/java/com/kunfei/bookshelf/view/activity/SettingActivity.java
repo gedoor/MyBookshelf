@@ -23,7 +23,7 @@ import com.kunfei.bookshelf.view.fragment.SettingsFragment;
 public class SettingActivity extends MBaseActivity<IPresenter> {
 
     private ActivitySettingsBinding binding;
-    private SettingsFragment settingsFragment = new SettingsFragment();
+    private final SettingsFragment settingsFragment = new SettingsFragment();
 
     public static void startThis(Context context) {
         context.startActivity(new Intent(context, SettingActivity.class));

@@ -1176,52 +1176,38 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.enable_replace:
-                mPresenter.getBookShelf().setReplaceEnable(!mPresenter.getBookShelf().getReplaceEnable());
-                refresh(false);
-                break;
-            case R.id.action_change_source:
-                changeSource();
-                break;
-            case R.id.action_refresh:
-                refreshDurChapter();
-                break;
-            case R.id.action_download:
-                download();
-                break;
-            case R.id.add_bookmark:
-                showBookmark(null);
-                break;
-            case R.id.action_copy_text:
-                popMenuOut();
-                if (mPageLoader != null) {
-                    moDialogHUD.showText(mPageLoader.getAllContent());
-                }
-                break;
-            case R.id.disable_book_source:
-                mPresenter.disableDurBookSource();
-                break;
-            case R.id.action_book_info:
-                BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
-                break;
-            case R.id.action_set_charset:
-                setCharset();
-                break;
-            case R.id.update_chapter_list:
-                if (mPageLoader != null) {
-                    mPageLoader.updateChapter();
-                }
-                break;
-            case R.id.action_set_regex:
-                setTextChapterRegex();
-                break;
-            case R.id.action_login:
-                SourceLoginActivity.startThis(this, mPresenter.getBookSource());
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.enable_replace) {
+            mPresenter.getBookShelf().setReplaceEnable(!mPresenter.getBookShelf().getReplaceEnable());
+            refresh(false);
+        } else if (id == R.id.action_change_source) {
+            changeSource();
+        } else if (id == R.id.action_refresh) {
+            refreshDurChapter();
+        } else if (id == R.id.action_download) {
+            download();
+        } else if (id == R.id.add_bookmark) {
+            showBookmark(null);
+        } else if (id == R.id.action_copy_text) {
+            popMenuOut();
+            if (mPageLoader != null) {
+                moDialogHUD.showText(mPageLoader.getAllContent());
+            }
+        } else if (id == R.id.disable_book_source) {
+            mPresenter.disableDurBookSource();
+        } else if (id == R.id.action_book_info) {
+            BookInfoEditActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
+        } else if (id == R.id.action_set_charset) {
+            setCharset();
+        } else if (id == R.id.update_chapter_list) {
+            if (mPageLoader != null) {
+                mPageLoader.updateChapter();
+            }
+        } else if (id == R.id.action_set_regex) {
+            setTextChapterRegex();
+        } else if (id == R.id.action_login) {
+            SourceLoginActivity.startThis(this, mPresenter.getBookSource());
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

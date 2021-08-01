@@ -124,16 +124,13 @@ public class SourceLoginActivity extends MBaseActivity<IPresenter> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_check:
-                if (checking) break;
-                checking = true;
-                showSnackBar(binding.toolbar, getString(R.string.check_host_cookie));
-                binding.webView.loadUrl(bookSourceBean.getBookSourceUrl());
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_check) {
+            if (checking) return super.onOptionsItemSelected(item);
+            checking = true;
+            showSnackBar(binding.toolbar, getString(R.string.check_host_cookie));
+            binding.webView.loadUrl(bookSourceBean.getBookSourceUrl());
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

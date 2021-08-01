@@ -260,52 +260,36 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add_book_source:
-                addBookSource();
-                break;
-            case R.id.action_select_all:
-                selectAllDataS();
-                break;
-            case R.id.action_import_book_source_local:
-                selectBookSourceFile();
-                break;
-            case R.id.action_import_book_source_onLine:
-                importBookSourceOnLine();
-                break;
-            case R.id.action_import_book_source_rwm:
-                scanBookSource();
-                break;
-            case R.id.action_revert_selection:
-                revertSelection();
-                break;
-            case R.id.action_del_select:
-                deleteDialog();
-                break;
-            case R.id.action_check_book_source:
-                mPresenter.checkBookSource(adapter.getSelectDataList());
-                break;
-            case R.id.action_check_find_source:
-                mPresenter.checkFindSource(adapter.getSelectDataList());
-                break;
-            case R.id.sort_manual:
-                upSourceSort(0);
-                break;
-            case R.id.sort_auto:
-                upSourceSort(1);
-                break;
-            case R.id.sort_pin_yin:
-                upSourceSort(2);
-                break;
-            case R.id.show_enabled:
-                binding.searchView.setQuery("enabled", false);
-                break;
-            case R.id.action_share_wifi:
-                ShareService.startThis(this, adapter.getSelectDataList());
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_add_book_source) {
+            addBookSource();
+        } else if (id == R.id.action_select_all) {
+            selectAllDataS();
+        } else if (id == R.id.action_import_book_source_local) {
+            selectBookSourceFile();
+        } else if (id == R.id.action_import_book_source_onLine) {
+            importBookSourceOnLine();
+        } else if (id == R.id.action_import_book_source_rwm) {
+            scanBookSource();
+        } else if (id == R.id.action_revert_selection) {
+            revertSelection();
+        } else if (id == R.id.action_del_select) {
+            deleteDialog();
+        } else if (id == R.id.action_check_book_source) {
+            mPresenter.checkBookSource(adapter.getSelectDataList());
+        } else if (id == R.id.action_check_find_source) {
+            mPresenter.checkFindSource(adapter.getSelectDataList());
+        } else if (id == R.id.sort_manual) {
+            upSourceSort(0);
+        } else if (id == R.id.sort_auto) {
+            upSourceSort(1);
+        } else if (id == R.id.sort_pin_yin) {
+            upSourceSort(2);
+        } else if (id == R.id.show_enabled) {
+            binding.searchView.setQuery("enabled", false);
+        } else if (id == R.id.action_share_wifi) {
+            ShareService.startThis(this, adapter.getSelectDataList());
+        } else if (id == android.R.id.home) {
+            finish();
         }
         if (item.getGroupId() == R.id.source_group) {
             binding.searchView.setQuery(item.getTitle(), true);

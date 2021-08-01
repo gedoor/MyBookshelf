@@ -1,5 +1,11 @@
 package com.kunfei.bookshelf.view.activity;
 
+import static com.kunfei.bookshelf.service.DownloadService.addDownloadAction;
+import static com.kunfei.bookshelf.service.DownloadService.finishDownloadAction;
+import static com.kunfei.bookshelf.service.DownloadService.obtainDownloadListAction;
+import static com.kunfei.bookshelf.service.DownloadService.progressDownloadAction;
+import static com.kunfei.bookshelf.service.DownloadService.removeDownloadAction;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,12 +29,6 @@ import com.kunfei.bookshelf.view.adapter.DownloadAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-import static com.kunfei.bookshelf.service.DownloadService.addDownloadAction;
-import static com.kunfei.bookshelf.service.DownloadService.finishDownloadAction;
-import static com.kunfei.bookshelf.service.DownloadService.obtainDownloadListAction;
-import static com.kunfei.bookshelf.service.DownloadService.progressDownloadAction;
-import static com.kunfei.bookshelf.service.DownloadService.removeDownloadAction;
 
 public class DownloadActivity extends MBaseActivity<IPresenter> {
 
@@ -124,13 +124,10 @@ public class DownloadActivity extends MBaseActivity<IPresenter> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_cancel:
-                DownloadService.cancelDownload(this);
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_cancel) {
+            DownloadService.cancelDownload(this);
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

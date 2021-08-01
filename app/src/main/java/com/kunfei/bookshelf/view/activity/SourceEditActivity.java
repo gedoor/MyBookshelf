@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.view.activity;
 
+import static android.text.TextUtils.isEmpty;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -64,8 +66,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
-import static android.text.TextUtils.isEmpty;
-
 /**
  * Created by GKF on 2018/1/26.
  * 编辑书源
@@ -77,8 +77,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
     private ActivitySourceEditBinding binding;
     private SourceEditAdapter adapter;
-    private List<SourceEdit> sourceEditList = new ArrayList<>();
-    private List<SourceEdit> findEditList = new ArrayList<>();
+    private final List<SourceEdit> sourceEditList = new ArrayList<>();
+    private final List<SourceEdit> findEditList = new ArrayList<>();
     private BookSourceBean bookSourceBean;
     private int serialNumber;
     private boolean enable;
@@ -487,82 +487,69 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_save:
-                if (canSaveBookSource()) {
-                    mPresenter.saveSource(getBookSource(true), bookSourceBean)
-                            .subscribe(new MyObserver<Boolean>() {
-                                @Override
-                                public void onNext(Boolean aBoolean) {
-                                    bookSourceBean = getBookSource(true);
-                                    toast("保存成功");
-                                    setResult(RESULT_OK);
-                                    finish();
-                                }
+        if (id == R.id.action_save) {
+            if (canSaveBookSource()) {
+                mPresenter.saveSource(getBookSource(true), bookSourceBean)
+                        .subscribe(new MyObserver<Boolean>() {
+                            @Override
+                            public void onNext(Boolean aBoolean) {
+                                bookSourceBean = getBookSource(true);
+                                toast("保存成功");
+                                setResult(RESULT_OK);
+                                finish();
+                            }
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    toast(e.getLocalizedMessage());
-                                }
-                            });
-                }
-                break;
-            case R.id.action_login:
-                if (!isEmpty(getBookSource(true).getLoginUrl())) {
-                    SourceLoginActivity.startThis(this, getBookSource(true));
-                } else {
-                    toast(R.string.source_no_login);
-                }
-                break;
-            case R.id.action_copy_source:
-                mPresenter.copySource(getBookSourceStr(true));
-                break;
-            case R.id.action_copy_source_no_find:
-                mPresenter.copySource(getBookSourceStr(false));
-                break;
-            case R.id.action_paste_source:
-                mPresenter.pasteSource();
-                break;
-            case R.id.action_qr_code_camera:
-                scanBookSource();
-                break;
-            case R.id.action_share_it:
-                shareBookSource();
-                break;
-            case R.id.action_share_str:
-                shareText("Source Share", getBookSourceStr(true));
-                break;
-            case R.id.action_share_wifi:
-                ShareService.startThis(this, Collections.singletonList(getBookSource(true)));
-                break;
-            case R.id.action_rule_summary:
-                openRuleSummary();
-                break;
-            case R.id.action_debug_source:
-                if (canSaveBookSource()) {
-                    mPresenter.saveSource(getBookSource(true), bookSourceBean)
-                            .subscribe(new MyObserver<Boolean>() {
-                                @Override
-                                public void onNext(Boolean aBoolean) {
-                                    bookSourceBean = getBookSource(true);
-                                    setResult(RESULT_OK);
-                                    SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource(true).getBookSourceUrl());
-                                }
+                            @Override
+                            public void onError(Throwable e) {
+                                toast(e.getLocalizedMessage());
+                            }
+                        });
+            }
+        } else if (id == R.id.action_login) {
+            if (!isEmpty(getBookSource(true).getLoginUrl())) {
+                SourceLoginActivity.startThis(this, getBookSource(true));
+            } else {
+                toast(R.string.source_no_login);
+            }
+        } else if (id == R.id.action_copy_source) {
+            mPresenter.copySource(getBookSourceStr(true));
+        } else if (id == R.id.action_copy_source_no_find) {
+            mPresenter.copySource(getBookSourceStr(false));
+        } else if (id == R.id.action_paste_source) {
+            mPresenter.pasteSource();
+        } else if (id == R.id.action_qr_code_camera) {
+            scanBookSource();
+        } else if (id == R.id.action_share_it) {
+            shareBookSource();
+        } else if (id == R.id.action_share_str) {
+            shareText("Source Share", getBookSourceStr(true));
+        } else if (id == R.id.action_share_wifi) {
+            ShareService.startThis(this, Collections.singletonList(getBookSource(true)));
+        } else if (id == R.id.action_rule_summary) {
+            openRuleSummary();
+        } else if (id == R.id.action_debug_source) {
+            if (canSaveBookSource()) {
+                mPresenter.saveSource(getBookSource(true), bookSourceBean)
+                        .subscribe(new MyObserver<Boolean>() {
+                            @Override
+                            public void onNext(Boolean aBoolean) {
+                                bookSourceBean = getBookSource(true);
+                                setResult(RESULT_OK);
+                                SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource(true).getBookSourceUrl());
+                            }
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    toast(e.getLocalizedMessage());
-                                }
-                            });
-                }
-                break;
-            case android.R.id.home:
-                SoftInputUtil.hideIMM(getCurrentFocus());
-                if (back()) {
-                    return true;
-                }
-                finish();
-                break;
+                            @Override
+                            public void onError(Throwable e) {
+                                toast(e.getLocalizedMessage());
+                            }
+                        });
+            }
+        } else if (id == android.R.id.home) {
+            SoftInputUtil.hideIMM(getCurrentFocus());
+            if (back()) {
+                return true;
+            }
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -693,7 +680,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     public class SourceEdit {
         private String key;
         private String value;
-        private int hint;
+        private final int hint;
 
         SourceEdit(String key, String value, int hint) {
             this.key = key;

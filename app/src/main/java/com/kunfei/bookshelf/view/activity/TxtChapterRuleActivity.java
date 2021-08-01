@@ -81,25 +81,17 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add_replace_rule:
-                editChapterRule(null);
-                break;
-            case R.id.action_select_all:
-                selectAllDataS();
-                break;
-            case R.id.action_import:
-                selectReplaceRuleFile();
-                break;
-            case R.id.action_import_onLine:
-
-                break;
-            case R.id.action_del_all:
-                mPresenter.delData(adapter.getData());
-                break;
-            case android.R.id.home:
-                finish();
-                break;
+        if (id == R.id.action_add_replace_rule) {
+            editChapterRule(null);
+        } else if (id == R.id.action_select_all) {
+            selectAllDataS();
+        } else if (id == R.id.action_import) {
+            selectReplaceRuleFile();
+        } else if (id == R.id.action_import_onLine) {
+        } else if (id == R.id.action_del_all) {
+            mPresenter.delData(adapter.getData());
+        } else if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

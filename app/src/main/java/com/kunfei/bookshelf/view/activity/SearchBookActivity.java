@@ -154,24 +154,21 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_book_source_manage:
-                BookSourceActivity.startThis(this, requestSource);
-                break;
-            case android.R.id.home:
-                SoftInputUtil.hideIMM(getCurrentFocus());
-                finish();
-                break;
-            default:
-                if (item.getGroupId() == R.id.source_group) {
-                    item.setChecked(true);
-                    if (Objects.equals(getString(R.string.all_source), item.getTitle().toString())) {
-                        MApplication.SEARCH_GROUP = null;
-                    } else {
-                        MApplication.SEARCH_GROUP = item.getTitle().toString();
-                    }
-                    mPresenter.initSearchEngineS(MApplication.SEARCH_GROUP);
+        if (id == R.id.action_book_source_manage) {
+            BookSourceActivity.startThis(this, requestSource);
+        } else if (id == android.R.id.home) {
+            SoftInputUtil.hideIMM(getCurrentFocus());
+            finish();
+        } else {
+            if (item.getGroupId() == R.id.source_group) {
+                item.setChecked(true);
+                if (Objects.equals(getString(R.string.all_source), item.getTitle().toString())) {
+                    MApplication.SEARCH_GROUP = null;
+                } else {
+                    MApplication.SEARCH_GROUP = item.getTitle().toString();
                 }
+                mPresenter.initSearchEngineS(MApplication.SEARCH_GROUP);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
