@@ -4,7 +4,10 @@ package com.kunfei.bookshelf.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
@@ -41,14 +44,28 @@ public class NetworkUtils {
     }
 
     public static boolean isNetWorkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) MApplication.getInstance()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (manager != null) {
-            NetworkInfo info = manager.getActiveNetworkInfo();
-            return info != null && info.isConnected();
+        ConnectivityManager cm = (ConnectivityManager) MApplication.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT < 23) {
+            NetworkInfo mWiFiNetworkInfo = cm.getActiveNetworkInfo();
+            if (mWiFiNetworkInfo != null) {
+                //移动数据
+                if (mWiFiNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {//WIFI
+                    return true;
+                } else return mWiFiNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
         } else {
-            return false;
+            Network network = cm.getActiveNetwork();
+            if (network != null) {
+                NetworkCapabilities nc = cm.getNetworkCapabilities(network);
+                if (nc != null) {
+                    //移动数据
+                    if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {//WIFI
+                        return true;
+                    } else return nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+                }
+            }
         }
+        return false;
     }
 
     public static String getUrl(Response response) {
