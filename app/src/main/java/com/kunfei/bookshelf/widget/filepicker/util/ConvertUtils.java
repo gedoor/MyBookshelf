@@ -217,11 +217,6 @@ public class ConvertUtils {
         return result;
     }
 
-    public static <T> T[] toArray(List<T> list) {
-        //noinspection unchecked
-        return (T[]) list.toArray();
-    }
-
     public static <T> List<T> toList(T[] array) {
         return Arrays.asList(array);
     }
