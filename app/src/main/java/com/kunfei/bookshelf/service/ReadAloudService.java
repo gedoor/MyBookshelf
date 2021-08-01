@@ -1,5 +1,8 @@
 package com.kunfei.bookshelf.service;
 
+import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -43,9 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.ActionDoneService;
-
 /**
  * Created by GKF on 2018/1/2.
  * 朗读服务
@@ -75,7 +75,7 @@ public class ReadAloudService extends Service {
     public static Boolean running = false;
     private TextToSpeech textToSpeech;
     private TextToSpeech textToSpeech_ui;
-    private HashMap mParams;
+    private HashMap<String, String> mParams;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
     private Boolean pause = false;
@@ -293,7 +293,7 @@ public class ReadAloudService extends Service {
         if (textToSpeech_ui == null)
             textToSpeech_ui = new TextToSpeech(this, new TTSUIListener());
         if (mParams == null) {
-            mParams = new HashMap();
+            mParams = new HashMap<>();
             mParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, "3");
         }
     }

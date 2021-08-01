@@ -51,6 +51,7 @@ public class AnalyzeByJSonPath {
                 Object object = ctx.read(rule);
                 if (object instanceof List) {
                     StringBuilder builder = new StringBuilder();
+                    //noinspection rawtypes
                     for (Object o : (List) object) {
                         builder.append(o).append("\n");
                     }
@@ -100,6 +101,7 @@ public class AnalyzeByJSonPath {
                     Object object = ctx.read(rule);
                     if (object == null) return result;
                     if (object instanceof List) {
+                        //noinspection rawtypes
                         for (Object o : ((List) object))
                             result.add(String.valueOf(o));
                     } else {
@@ -107,7 +109,6 @@ public class AnalyzeByJSonPath {
                     }
                 } catch (Exception ignored) {
                 }
-                return result;
             } else {
                 Matcher matcher = jsonRulePattern.matcher(rule);
                 while (matcher.find()) {
@@ -116,7 +117,6 @@ public class AnalyzeByJSonPath {
                         result.add(rule.replace(String.format("{%s}", matcher.group()), s));
                     }
                 }
-                return result;
             }
         } else {
             List<List<String>> results = new ArrayList<>();
@@ -144,8 +144,8 @@ public class AnalyzeByJSonPath {
                     }
                 }
             }
-            return result;
         }
+        return result;
     }
 
     Object getObject(String rule) {
@@ -174,9 +174,9 @@ public class AnalyzeByJSonPath {
                 return null;
             }
         } else {
-            List<List> results = new ArrayList<>();
+            List<List<Object>> results = new ArrayList<>();
             for (String rl : rules) {
-                List temp = getList(rl);
+                List<Object> temp = getList(rl);
                 if (temp != null && !temp.isEmpty()) {
                     results.add(temp);
                     if (temp.size() > 0 && elementsType.equals("|")) {
@@ -187,14 +187,14 @@ public class AnalyzeByJSonPath {
             if (results.size() > 0) {
                 if ("%".equals(elementsType)) {
                     for (int i = 0; i < results.get(0).size(); i++) {
-                        for (List temp : results) {
+                        for (List<Object> temp : results) {
                             if (i < temp.size()) {
                                 result.add(temp.get(i));
                             }
                         }
                     }
                 } else {
-                    for (List temp : results) {
+                    for (List<Object> temp : results) {
                         result.addAll(temp);
                     }
                 }

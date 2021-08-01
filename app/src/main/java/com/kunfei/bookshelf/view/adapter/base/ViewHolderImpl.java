@@ -25,6 +25,7 @@ public abstract class ViewHolderImpl<T> implements IViewHolder<T> {
         return view;
     }
 
+    @SuppressWarnings("unchecked")
     protected <V extends View> V findById(int id) {
         return (V) view.findViewById(id);
     }

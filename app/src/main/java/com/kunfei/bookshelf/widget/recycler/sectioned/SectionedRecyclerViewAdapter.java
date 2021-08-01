@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @param <VH> Class extending RecyclerView.ViewHolder to hold and bind the items view
  * @param <F>  Class extending RecyclerView.ViewHolder to hold and bind the footer view
  */
+@SuppressWarnings("unused")
 public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHolder,
         VH extends RecyclerView.ViewHolder,
         F extends RecyclerView.ViewHolder>
@@ -129,6 +130,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
         return viewHolder;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int section = sectionForPosition[position];

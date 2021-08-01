@@ -26,7 +26,7 @@ public class InputDialog extends BaseDialog {
     private ATEAutoCompleteTextView etInput;
     private TextView tvOk;
     private Callback callback = null;
-    private Context context;
+    private final Context context;
 
     public static InputDialog builder(Context context) {
         return new InputDialog(context);
@@ -84,7 +84,7 @@ public class InputDialog extends BaseDialog {
         return this;
     }
 
-    class MyAdapter extends ArrayAdapter {
+    class MyAdapter extends ArrayAdapter<String> {
 
         MyAdapter(@NonNull Context context, @NonNull List<String> objects) {
             super(context, R.layout.item_1line_text_and_del, objects);

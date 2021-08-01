@@ -1,8 +1,10 @@
 package com.kunfei.bookshelf.view.adapter.base;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -25,21 +27,23 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     protected abstract IViewHolder<T> createViewHolder(int viewType);
 
     /*************************rewrite logic area***************************************/
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         IViewHolder<T> viewHolder = createViewHolder(viewType);
 
         View view = viewHolder.createItemView(parent);
         //初始化
-        return new BaseViewHolder(view, viewHolder);
+        return new BaseViewHolder<>(view, viewHolder);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //防止别人直接使用RecyclerView.ViewHolder调用该方法
         if (!(holder instanceof BaseViewHolder))
             throw new IllegalArgumentException("The ViewHolder item must extend BaseViewHolder");
 
+        @SuppressWarnings({"rawtypes", "unchecked"})
         IViewHolder<T> iHolder = ((BaseViewHolder) holder).holder;
         iHolder.onBind(getItem(position), position);
 
@@ -87,26 +91,31 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         this.mLongClickListener = mListener;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void addItem(T value) {
         mList.add(value);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void addItem(int index, T value) {
         mList.add(index, value);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void addItems(List<T> values) {
         mList.addAll(values);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void removeItem(T value) {
         mList.remove(value);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void removeItems(List<T> value) {
         mList.removeAll(value);
         notifyDataSetChanged();

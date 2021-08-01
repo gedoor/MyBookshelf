@@ -782,10 +782,10 @@ public class XmlUtils {
      * @return HashMap The newly generated list.
      * @see #readListXml
      */
-    private static ArrayList readThisListXml(XmlPullParser parser, String endTag,
-                                             String[] name, ReadMapCallback callback)
+    private static ArrayList<Object> readThisListXml(XmlPullParser parser, String endTag,
+                                                     String[] name, ReadMapCallback callback)
             throws XmlPullParserException, java.io.IOException {
-        ArrayList list = new ArrayList();
+        ArrayList<Object> list = new ArrayList<>();
 
         int eventType = parser.getEventType();
         do {
@@ -841,9 +841,9 @@ public class XmlUtils {
      * @hide
      * @see #readSetXml
      */
-    private static HashSet readThisSetXml(XmlPullParser parser, String endTag, String[] name,
-                                          ReadMapCallback callback) throws XmlPullParserException, java.io.IOException {
-        HashSet set = new HashSet();
+    private static HashSet<Object> readThisSetXml(XmlPullParser parser, String endTag, String[] name,
+                                                  ReadMapCallback callback) throws XmlPullParserException, java.io.IOException {
+        HashSet<Object> set = new HashSet<>();
 
         int eventType = parser.getEventType();
         do {
