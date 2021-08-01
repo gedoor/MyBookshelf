@@ -1948,6 +1948,7 @@ public class ImmersionBar {
      *
      * @return boolean 成功执行返回true
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void setMIUIStatusBarDarkFont(Window window, boolean darkFont) {
         if (window != null) {
             Class clazz = window.getClass();
@@ -1975,6 +1976,7 @@ public class ImmersionBar {
      * @param activity the activity
      * @param view     the view
      */
+    @SuppressLint("ObsoleteSdkInt")
     public static void setTitleBar(final Activity activity, final View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final ViewGroup.LayoutParams lp = view.getLayoutParams();

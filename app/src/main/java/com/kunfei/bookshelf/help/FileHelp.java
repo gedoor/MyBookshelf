@@ -171,7 +171,7 @@ public class FileHelp {
 
     //获取txt文件
     public static List<File> getTxtFiles(String filePath, int layer) {
-        List txtFiles = new ArrayList();
+        List txtFiles = new ArrayList<File>();
         File file = new File(filePath);
 
         //如果层级为 3，则直接返回
