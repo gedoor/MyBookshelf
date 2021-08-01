@@ -67,6 +67,7 @@ public class ReadBookControl {
     private int tipPaddingBottom;
     private float textLetterSpacing;
     private boolean canSelectText;
+    private boolean isReverseLine;
     public int minCPM = 200;
     public int maxCPM = 2000;
     private int defaultCPM = 500;
@@ -128,6 +129,7 @@ public class ReadBookControl {
         this.navBarColor = preferences.getInt("navBarColorInt", 0);
         this.textLetterSpacing = preferences.getFloat("textLetterSpacing", 0);
         this.canSelectText = preferences.getBoolean("canSelectText", false);
+        this.isReverseLine = preferences.getBoolean("isReverseLine", false);
         initTextDrawableIndex();
     }
 
@@ -716,6 +718,17 @@ public class ReadBookControl {
         this.canSelectText = canSelectText;
         preferences.edit()
                 .putBoolean("canSelectText", canSelectText)
+                .apply();
+    }
+
+    public boolean isReverseLine() {
+        return isReverseLine;
+    }
+
+    public void setIsReverseLine(boolean isReverseLine) {
+        this.isReverseLine = isReverseLine;
+        preferences.edit()
+                .putBoolean("isReverseLine", isReverseLine)
                 .apply();
     }
 

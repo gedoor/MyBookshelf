@@ -180,6 +180,12 @@ class MoreSettingPop : FrameLayout {
                 readBookControl.isCanSelectText = isChecked
             }
         }
+        binding.sbReverseLine.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+            if (buttonView.isPressed) {
+                readBookControl.setIsReverseLine(isChecked)
+                callback?.refreshPage()
+            }
+        }
         binding.llClickKeyCode.onClick {
             PageKeyDialog(context).show()
         }

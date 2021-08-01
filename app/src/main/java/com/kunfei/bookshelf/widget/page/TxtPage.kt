@@ -17,7 +17,7 @@ class TxtPage(val position: Int) {
         get() {
             val s = StringBuilder()
             for (i in lines.indices) {
-                s.append(lines[i])
+                s.append(lines[i].reversed())
             }
             return s.toString()
         }

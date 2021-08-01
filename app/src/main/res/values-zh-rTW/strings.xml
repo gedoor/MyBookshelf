@@ -194,6 +194,7 @@
     <string name="no_last_chapter">無最新章節資訊</string>
     <string name="showTimeBattery">顯示時間和電量</string>
     <string name="select_text">長按選取文本</string>
+    <string name="reverse_line">翻轉行</string>
     <string name="showLine">顯示分隔線</string>
     <string name="darkStatusIcon">深色狀態欄圖標</string>
     <string name="content">內容</string>

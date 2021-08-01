@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
+import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 
 import java.util.ArrayList;
@@ -81,6 +82,14 @@ class ChapterProvider {
         content = contentHelper.LightNovelParagraph2(content,chapter.getDurChapterName());
         }
         String[] allLine = content.split("\n");
+        boolean reverseLine = ReadBookControl.getInstance().isReverseLine();
+        if(reverseLine){
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < allLine.length; i++) {
+                allLine[i]=sb.append(allLine[i]).reverse().toString();
+                sb.delete(0, sb.length());
+            }
+        }
         List<String> lines = new ArrayList<>();
         List<TxtLine> txtLists = new ArrayList<>();//记录每个字的位置 //pzl
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
