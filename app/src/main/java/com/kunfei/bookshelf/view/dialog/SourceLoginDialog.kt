@@ -25,8 +25,8 @@ class SourceLoginDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<LoginRule>("loginRule")?.let { loginRule ->
-            loginRule.ui?.forEachIndexed { index, ui ->
-                when (ui.type) {
+            loginRule.ui?.forEachIndexed { index, rowUi ->
+                when (rowUi.type) {
                     "text" -> layoutInflater.inflate(R.layout.item_source_edit, binding.root)
                     "password" -> layoutInflater.inflate(R.layout.item_source_edit, binding.root)
                     "button" -> layoutInflater.inflate(R.layout.item_source_edit, binding.root)
