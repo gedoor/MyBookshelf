@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao'
-//apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'kotlin-parcelize'
 apply plugin: "de.timfreiheit.resourceplaceholders"
 
 static def releaseTime() {
@@ -93,9 +93,9 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27:$anko_version"
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
-    //fireBase
-    //implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    //implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    //lifecycle
+    def lifecycle_version = '2.3.1'
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -177,8 +177,6 @@ greendao {
     daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }
-
-//apply plugin: 'com.google.gms.google-services'
 
 afterEvaluate {
 //    for (Task task : project.tasks.matching { it.name.startsWith('crashlyticsUploadDeobs') }) {

@@ -1,8 +1,11 @@
 package com.kunfei.bookshelf.bean;
 
+import static android.text.TextUtils.isEmpty;
+
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -14,8 +17,6 @@ import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by GKF on 2017/12/14.
@@ -640,6 +641,21 @@ public class BookSourceBean implements Cloneable {
 
     public void setRuleBookContentReplace(String ruleBookContentReplace) {
         this.ruleBookContentReplace = ruleBookContentReplace;
+    }
+
+    @Transient
+    private LoginRule loginRule = null;
+
+    public LoginRule getLoginRule() {
+        if (loginRule == null) {
+            if (StringUtils.isJsonObject(loginUrl)) {
+                loginRule = GsonUtils.parseJObject(loginUrl, LoginRule.class);
+            } else {
+                loginRule = new LoginRule();
+                loginRule.setUrl(loginUrl);
+            }
+        }
+        return loginRule;
     }
 
     public String getJson(int maxLength) {
