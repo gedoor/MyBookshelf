@@ -1,5 +1,8 @@
 package com.kunfei.bookshelf.constant;
 
+import android.content.Context;
+import android.provider.Settings;
+
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.MApplication;
@@ -40,4 +43,8 @@ public class AppConstant {
     public static final ScriptEngine SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("rhino");
 
     public static final MediaType jsonMediaType = MediaType.parse("Content-Type, application/json");
+
+    static public String androidId(Context context) {
+        return Settings.System.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 }

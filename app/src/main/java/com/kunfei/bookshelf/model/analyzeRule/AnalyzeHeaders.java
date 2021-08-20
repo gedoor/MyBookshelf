@@ -1,5 +1,9 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
+import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_USER_AGENT;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
+
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
@@ -12,10 +16,6 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_USER_AGENT;
-import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 /**
  * Created by GKF on 2018/3/2.
@@ -42,6 +42,13 @@ public class AnalyzeHeaders {
             CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(bookSourceBean.getBookSourceUrl());
             if (cookie != null) {
                 headerMap.put("Cookie", cookie.getCookie());
+            }
+            cookie = DbHelper.getDaoSession().getCookieBeanDao().load("headers_" + bookSourceBean.getBookSourceUrl());
+            if (cookie != null) {
+                Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
+                if (map != null) {
+                    headerMap.putAll(map);
+                }
             }
         } else {
             headerMap.put("User-Agent", getDefaultUserAgent());

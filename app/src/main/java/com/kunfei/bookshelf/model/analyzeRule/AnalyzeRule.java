@@ -1,11 +1,19 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
+import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
+
 import android.annotation.SuppressLint;
 
 import androidx.annotation.Keep;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.bean.BaseBookBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -21,13 +29,6 @@ import java.util.regex.Pattern;
 
 import javax.script.SimpleBindings;
 
-import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.EXP_PATTERN;
-import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
-import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
-import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
-import static com.kunfei.bookshelf.utils.NetworkUtils.headerPattern;
-
 
 /**
  * Created by REFGD.
@@ -39,6 +40,7 @@ public class AnalyzeRule implements JsExtensions {
     private static final Pattern putPattern = Pattern.compile("@put:(\\{[^}]+?\\})", Pattern.CASE_INSENSITIVE);
     private static final Pattern getPattern = Pattern.compile("@get:\\{([^}]+?)\\}", Pattern.CASE_INSENSITIVE);
 
+    private final BookSourceBean bookSource;
     private BaseBookBean book;
     private Object object;
     private Boolean isJSON = false;
@@ -52,8 +54,9 @@ public class AnalyzeRule implements JsExtensions {
     private boolean objectChangedJS = false;
     private boolean objectChangedJP = false;
 
-    public AnalyzeRule(BaseBookBean bookBean) {
+    public AnalyzeRule(BaseBookBean bookBean, BookSourceBean bookSourceBean) {
         book = bookBean;
+        bookSource = bookSourceBean;
     }
 
     public void setBook(BaseBookBean book) {
@@ -79,6 +82,11 @@ public class AnalyzeRule implements JsExtensions {
         objectChangedJS = true;
         objectChangedJP = true;
         return this;
+    }
+
+    @Override
+    public BookSourceBean getBookSource() {
+        return bookSource;
     }
 
     public String getBaseUrl() {

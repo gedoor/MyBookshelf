@@ -57,7 +57,7 @@ public class BookChapterList {
                 Debug.printLog(tag, 1, "└" + bookShelfBean.getBookInfoBean().getChapterUrl(), analyzeNextUrl);
             }
             bookShelfBean.setTag(tag);
-            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
+            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean, bookSourceBean);
             String ruleChapterList = bookSourceBean.getRuleChapterList();
             if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
                 dx = true;
@@ -79,7 +79,7 @@ public class BookChapterList {
                 Debug.printLog(tag, "正在加载下一页");
                 while (!chapterUrlS.isEmpty() && !usedUrl.contains(chapterUrlS.get(0))) {
                     usedUrl.add(chapterUrlS.get(0));
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(0), headerMap, tag);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(0), tag, bookSourceBean);
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
@@ -132,7 +132,7 @@ public class BookChapterList {
                 }
                 for (WebChapterBean bean : webChapterBeans) {
                     BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, false);
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(bean.getUrl(), headerMap, tag);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(bean.getUrl(), tag, bookSourceBean);
                     new AnalyzeNextUrlTask(bookChapterList, bean, bookShelfBean, headerMap)
                             .setCallback(callback)
                             .analyzeUrl(analyzeUrl);

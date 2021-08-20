@@ -68,7 +68,7 @@ public class Debug {
         new Debug(tag, key, compositeDisposable);
     }
 
-    private CompositeDisposable compositeDisposable;
+    private final CompositeDisposable compositeDisposable;
 
     private Debug(String tag, String key, CompositeDisposable compositeDisposable) {
         UpLastChapterModel.destroy();

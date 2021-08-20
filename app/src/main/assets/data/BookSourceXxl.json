@@ -1,0 +1,22 @@
+{
+  "bookSourceUrl": "https://www.kaixin7days.com",
+  "bookSourceName": "消消乐听书",
+  "bookSourceGroup": "听书",
+  "bookSourceType": "AUDIO",
+  "loginUrl": "{\"ui\": [{\"name\": \"userName\",\"type\": \"text\"},{\"name\": \"password\",\"type\": \"password\"}],\"url\": \"https://www.kaixin7days.com/login@{\\\"telephone\\\":\\\"{{telephone}}\\\",\\\"password\\\":\\\"{{password}}\\\"}\",\"checkJs\": \"var a = result\\\nvar c = JSON.parse(result.body())\\\nif (c.statusCode == 301) {\\\n    var b = java.ajax(\\\"https://www.kaixin7days.com/visitorLogin@{}\\\")\\\n    c = JSON.parse(b)\\\n    var accessToken = {\\\n        Authorization: \\\"Bearer \\\" + c.content.accessToken\\\n    }\\\n    var header = JSON.stringify(accessToken)\\\n    java.putCache(\\\"headers_https://www.kaixin7days.com\\\", header)\\\n    a = java.getResponse(\\\"@Header:\\\" + header + url)\\\n}\\\na\"}",
+  "serialNumber": -100,
+  "enable": true,
+  "ruleFindUrl": "<js>var header = java.getCache(\"headers_https://www.kaixin7days.com\")\nvar json = \"\"\nvar j = null\nif (header != null) {\n    json = java.ajax(\"@Header:\" + header + \"https://www.kaixin7days.com/book-service/bookMgt/getBookCategroy@{}\")\n    j = JSON.parse(json)\n}\nif (j == null || j.statusCode == 301) {\n    json = java.ajax(\"https://www.kaixin7days.com/visitorLogin@{}\")\n    j = JSON.parse(json)\n    var accessToken = {\n        Authorization: \"Bearer \" + j.content.accessToken\n    }\n    header = JSON.stringify(accessToken)\n    java.putCache(\"headers_https://www.kaixin7days.com\", header)\n    json = java.ajax(\"@Header:\" + header + \"https://www.kaixin7days.com/book-service/bookMgt/getBookCategroy@{}\")\n    j = JSON.parse(json)\n}\nvar fls = j.content\nvar fx = \"\"\nfor (var i = 0; i < fls.length; i++) {\n    fx = fx + fls[i].categoryName + '::/book-service/bookMgt/getAllBookByCategroyId@{\"categoryIds\": \"' + fls[i].associationCategoryIDs + '\",\"pageNum\": {{searchPage}},\"pageSize\": 100}&&'\n}\nfx</js>",
+  "ruleFindList": "$.content.content",
+  "ruleFindName": "$.title",
+  "ruleFindAuthor": "$.author",
+  "ruleFindKind": "",
+  "ruleFindIntroduce": "$.desc",
+  "ruleFindLastChapter": "$.newestChapter",
+  "ruleFindCoverUrl": "$.cover",
+  "ruleFindNoteUrl": "$.id@js:'https://www.kaixin7days.com/book-service/bookMgt/getAllChapterByBookId@{\"bookId\": \"'+result+'\",\"pageNum\": 1,\"pageSize\": 100}'",
+  "ruleChapterList": "$.content.content",
+  "ruleChapterName": "$.chapterTitle",
+  "ruleContentUrl": "$.id",
+  "ruleBookContent": ""
+}

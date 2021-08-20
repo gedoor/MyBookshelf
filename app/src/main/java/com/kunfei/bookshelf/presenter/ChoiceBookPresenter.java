@@ -26,10 +26,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.View> implements ChoiceBookContract.Presenter {
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private String tag;
-    private String url;
-    private String title;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final String tag;
+    private final String url;
+    private final String title;
 
     private int page = 1;
     private long startThisSearchTime;
@@ -47,19 +47,19 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BookShelfBean>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(List<BookShelfBean> value) {
+                    public void onNext(@NonNull List<BookShelfBean> value) {
                         initPage();
                         toSearchBooks(null);
                         mView.startRefreshAnim();
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NonNull Throwable e) {
                         e.printStackTrace();
                     }
 
@@ -93,12 +93,12 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<SearchBookBean>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(List<SearchBookBean> value) {
+                    public void onNext(@NonNull List<SearchBookBean> value) {
                         if (searchTime == startThisSearchTime) {
                             if (page == 1) {
                                 mView.refreshSearchBook(value);
@@ -111,7 +111,8 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
                         mView.searchBookError(e.getMessage());
                     }
 

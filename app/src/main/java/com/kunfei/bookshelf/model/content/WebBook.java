@@ -1,5 +1,9 @@
 package com.kunfei.bookshelf.model.content;
 
+import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.base.BaseModelImpl;
@@ -9,6 +13,7 @@ import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
@@ -21,18 +26,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
-import io.reactivex.Observable;
+import javax.script.SimpleBindings;
 
-import static android.text.TextUtils.isEmpty;
-import static com.kunfei.bookshelf.constant.AppConstant.JS_PATTERN;
+import io.reactivex.Observable;
+import retrofit2.Response;
 
 /**
  * 默认检索规则
  */
-public class WebBook extends BaseModelImpl {
-    private String tag;
+public class WebBook extends BaseModelImpl implements JsExtensions {
+    private final String tag;
     private String name;
-    private BookSourceBean bookSourceBean;
+    private final BookSourceBean bookSourceBean;
     private Map<String, String> headerMap;
 
     public static WebBook getInstance(String tag) {
@@ -54,6 +59,11 @@ public class WebBook extends BaseModelImpl {
         }
     }
 
+    @Override
+    public BookSourceBean getBookSource() {
+        return bookSourceBean;
+    }
+
     /**
      * 发现
      */
@@ -63,8 +73,10 @@ public class WebBook extends BaseModelImpl {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean, true);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, null, page, headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, tag, bookSourceBean, null, page);
+
             return getResponseO(analyzeUrl)
+                    .flatMap(response -> checkLogin(response, url, tag))
                     .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("%s错误:%s", url, e.getLocalizedMessage())));
@@ -83,8 +95,9 @@ public class WebBook extends BaseModelImpl {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean, false);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), tag, bookSourceBean, content, page);
             return getResponseO(analyzeUrl)
+                    .flatMap(response -> checkLogin(response, bookSourceBean.getRuleSearchUrl(), tag))
                     .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
             return Observable.error(e);
@@ -103,9 +116,10 @@ public class WebBook extends BaseModelImpl {
             return bookInfo.analyzeBookInfo(bookShelfBean.getBookInfoBean().getBookInfoHtml(), bookShelfBean);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), headerMap, tag);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), tag, bookSourceBean);
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
+                    .flatMap(response -> checkLogin(response, bookShelfBean.getNoteUrl(), tag))
                     .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getNoteUrl())));
@@ -124,9 +138,10 @@ public class WebBook extends BaseModelImpl {
             return bookChapterList.analyzeChapterList(bookShelfBean.getBookInfoBean().getChapterListHtml(), bookShelfBean, headerMap);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap, bookShelfBean.getNoteUrl());
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getNoteUrl(), bookSourceBean);
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
+                    .flatMap(stringResponse -> checkLogin(stringResponse, bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getNoteUrl()))
                     .flatMap(response -> bookChapterList.analyzeChapterList(response.body(), bookShelfBean, headerMap));
         } catch (Exception e) {
             return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
@@ -157,7 +172,7 @@ public class WebBook extends BaseModelImpl {
             return bookContent.analyzeBookContent(bookShelfBean.getBookInfoBean().getChapterListHtml(), chapterBean, nextChapterBean, bookShelfBean, headerMap);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), headerMap, bookShelfBean.getBookInfoBean().getChapterUrl());
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookSourceBean);
             String contentRule = bookSourceBean.getRuleBookContent();
             if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
                 //动态网页第一个js放到webView里执行
@@ -177,11 +192,29 @@ public class WebBook extends BaseModelImpl {
             } else {
                 return getResponseO(analyzeUrl)
                         .flatMap(response -> setCookie(response, tag))
+                        .flatMap(stringResponse -> checkLogin(stringResponse, chapterBean.getDurChapterUrl(), bookShelfBean.getBookInfoBean().getChapterUrl()))
                         .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean, nextChapterBean, bookShelfBean, headerMap));
             }
         } catch (Exception e) {
-            return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
+            return Observable.error(new Throwable(String.format("url错误:%s", e.getLocalizedMessage())));
         }
+    }
+
+    Observable<Response<String>> checkLogin(final Response<String> stringResponse, String url, String baseUrl) {
+        return Observable.create(emitter -> {
+            String checkJs = bookSourceBean.getLoginRule().getCheckJs();
+            if (!TextUtils.isEmpty(checkJs)) {
+                SimpleBindings bindings = new SimpleBindings();
+                bindings.put("url", url);
+                bindings.put("java", this);
+                bindings.put("result", stringResponse);
+                bindings.put("baseUrl", baseUrl);
+                Response<String> res = (Response<String>) SCRIPT_ENGINE.eval(checkJs, bindings);
+                emitter.onNext(res);
+                return;
+            }
+            emitter.onNext(stringResponse);
+        });
     }
 
     public class NoSourceThrowable extends Throwable {

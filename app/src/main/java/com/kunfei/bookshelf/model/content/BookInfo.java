@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.model.content;
 
+import static android.text.TextUtils.isEmpty;
+
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
@@ -12,8 +14,6 @@ import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import io.reactivex.Observable;
-
-import static android.text.TextUtils.isEmpty;
 
 class BookInfo {
     private String tag;
@@ -45,7 +45,7 @@ class BookInfo {
             bookInfoBean.setOrigin(sourceName);
             bookInfoBean.setBookSourceType(bookSourceBean.getBookSourceType()); // 是否为有声读物
 
-            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
+            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean, bookSourceBean);
             analyzer.setContent(s, baseUrl);
 
             // 获取详情页预处理规则

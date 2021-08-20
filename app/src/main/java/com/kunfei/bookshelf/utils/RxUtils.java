@@ -1,6 +1,8 @@
 package com.kunfei.bookshelf.utils;
 
 
+import androidx.annotation.NonNull;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -19,6 +21,7 @@ public class RxUtils {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @NonNull
     public static <T> ObservableSource<T> toSimpleSingle(Observable<T> upstream) {
         return upstream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.model.content;
 
+import static android.text.TextUtils.isEmpty;
+
 import android.os.Build;
 import android.text.TextUtils;
 
@@ -25,13 +27,11 @@ import java.util.regex.Pattern;
 import io.reactivex.Observable;
 import retrofit2.Response;
 
-import static android.text.TextUtils.isEmpty;
-
 class BookList {
-    private String tag;
-    private String sourceName;
-    private BookSourceBean bookSourceBean;
-    private boolean isFind;
+    private final String tag;
+    private final String sourceName;
+    private final BookSourceBean bookSourceBean;
+    private final boolean isFind;
     //规则
     private String ruleList;
     private String ruleName;
@@ -62,7 +62,7 @@ class BookList {
             }
             String body = response.body();
             List<SearchBookBean> books = new ArrayList<>();
-            AnalyzeRule analyzer = new AnalyzeRule(null);
+            AnalyzeRule analyzer = new AnalyzeRule(null, bookSourceBean);
             analyzer.setContent(body, baseUrl);
             //如果符合详情页url规则
             if (!isEmpty(bookSourceBean.getRuleBookUrlPattern())

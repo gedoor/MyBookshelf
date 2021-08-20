@@ -1,6 +1,9 @@
 package com.kunfei.bookshelf.help;
 
+import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.BaseModelImpl;
+import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.CookieBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -17,17 +20,33 @@ import retrofit2.Response;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public interface JsExtensions {
 
+    BookSourceBean getBookSource();
+
     /**
      * js实现跨域访问,不能删
      */
     default String ajax(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl(), getBookSource());
             Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
             return response.body();
         } catch (Exception e) {
             return e.getLocalizedMessage();
+        }
+    }
+
+    /**
+     * js实现跨域访问,不能删
+     */
+    default Response<String> getResponse(String urlStr, String baseUrl) {
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, baseUrl, getBookSource());
+            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+                    .blockingFirst();
+            return response;
+        } catch (Exception e) {
+            return Response.success(e.getLocalizedMessage());
         }
     }
 
@@ -80,5 +99,17 @@ public interface JsExtensions {
                 .execute();
     }
 
+    default void putCache(String key, String value) {
+        CookieBean cookie = new CookieBean(key, value);
+        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookie);
+    }
+
+    default String getCache(String key) {
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(key);
+        if (cookie == null) {
+            return null;
+        }
+        return cookie.getCookie();
+    }
 
 }
