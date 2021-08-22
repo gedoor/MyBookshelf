@@ -136,6 +136,7 @@ class CoverImageView : androidx.appcompat.widget.AppCompatImageView {
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                     ): Boolean {
+                        e?.printStackTrace()
                         loadFailed = true
                         return false
                     }

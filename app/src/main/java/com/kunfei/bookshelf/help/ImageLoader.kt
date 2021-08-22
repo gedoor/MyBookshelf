@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.kunfei.bookshelf.help.glide.GlideApp
 import java.io.File
 
 object ImageLoader {
@@ -14,7 +15,7 @@ object ImageLoader {
     fun load(context: Context, path: String?): RequestBuilder<Drawable> {
         return when {
             path.isNullOrEmpty() -> Glide.with(context).load(path)
-            path.startsWith("http", true) -> Glide.with(context).load(path)
+            path.startsWith("http", true) -> GlideApp.with(context).load(path)
             else -> try {
                 Glide.with(context).load(File(path))
             } catch (e: Exception) {
