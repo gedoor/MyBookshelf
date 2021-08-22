@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.help
+package com.kunfei.bookshelf.help.glide
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.kunfei.bookshelf.help.glide.GlideApp
 import java.io.File
 
 object ImageLoader {

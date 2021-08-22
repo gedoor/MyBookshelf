@@ -21,7 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.databinding.PopMediaPlayerBinding;
 import com.kunfei.bookshelf.help.BlurTransformation;
-import com.kunfei.bookshelf.help.ImageLoader;
+import com.kunfei.bookshelf.help.glide.ImageLoader;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;

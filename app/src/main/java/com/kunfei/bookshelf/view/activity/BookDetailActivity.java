@@ -47,7 +47,7 @@ import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.databinding.ActivityBookDetailBinding;
 import com.kunfei.bookshelf.help.BlurTransformation;
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.ImageLoader;
+import com.kunfei.bookshelf.help.glide.ImageLoader;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
