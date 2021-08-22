@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.help;
 
+import static android.content.Context.DOWNLOAD_SERVICE;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,8 +30,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.Context.DOWNLOAD_SERVICE;
-
 public class UpdateManager {
     private Activity activity;
 
@@ -44,7 +44,7 @@ public class UpdateManager {
     public void checkUpdate(boolean showMsg) {
         BaseModelImpl.getInstance().getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
-                .get(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
+                .get(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap())
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

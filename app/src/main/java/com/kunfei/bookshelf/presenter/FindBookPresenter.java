@@ -50,11 +50,16 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                     String[] kindA;
                     String findRule;
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl()) && !sourceBean.containsGroup(findError)) {
-                        boolean isJsAndCache = sourceBean.getRuleFindUrl().startsWith("<js>");
+                        boolean isJsAndCache = sourceBean.getRuleFindUrl().startsWith("<js>") || sourceBean.getRuleFindUrl().startsWith("@js:");
                         if (isJsAndCache) {
                             findRule = aCache.getAsString(sourceBean.getBookSourceUrl());
                             if (TextUtils.isEmpty(findRule)) {
-                                String jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
+                                String jsStr;
+                                if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
+                                    jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
+                                } else {
+                                    jsStr = sourceBean.getRuleFindUrl().substring(4);
+                                }
                                 findRule = evalJS(jsStr, sourceBean.getBookSourceUrl(), sourceBean).toString();
                             } else {
                                 isJsAndCache = false;

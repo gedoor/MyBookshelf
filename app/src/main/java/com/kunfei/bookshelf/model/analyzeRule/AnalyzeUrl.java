@@ -52,8 +52,12 @@ public class AnalyzeUrl implements JsExtensions {
     private UrlMode urlMode = UrlMode.DEFAULT;
     private String jsonBody = null;
 
-    public AnalyzeUrl(String urlRule, BookSourceBean bookSource) throws Exception {
-        this(urlRule, null, bookSource);
+    public AnalyzeUrl(String urlRule) throws Exception {
+        this(urlRule, null);
+    }
+
+    public AnalyzeUrl(String urlRule, String baseUrl) throws Exception {
+        this(urlRule, baseUrl, null);
     }
 
     public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource) throws Exception {

@@ -15,7 +15,6 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -186,7 +185,7 @@ public class ReplaceRuleManager {
         if (NetworkUtils.isUrl(text)) {
             return BaseModelImpl.getInstance().getRetrofitString(StringUtils.getBaseUrl(text), "utf-8")
                     .create(IHttpGetApi.class)
-                    .get(text, AnalyzeHeaders.getMap(null))
+                    .get(text, AnalyzeHeaders.getMap())
                     .flatMap(rsp -> importReplaceRuleO(rsp.body()))
                     .compose(RxUtils::toSimpleSingle);
         }

@@ -27,7 +27,7 @@ public interface JsExtensions {
      */
     default String ajax(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl(), getBookSource());
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl());
             Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
             return response.body();
@@ -39,12 +39,11 @@ public interface JsExtensions {
     /**
      * js实现跨域访问,不能删
      */
-    default Response<String> getResponse(String urlStr, String baseUrl) {
+    default Response<String> getResponse(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, baseUrl, getBookSource());
-            Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl());
+            return BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
-            return response;
         } catch (Exception e) {
             return Response.success(e.getLocalizedMessage());
         }
@@ -106,6 +105,19 @@ public interface JsExtensions {
 
     default String getCache(String key) {
         CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(key);
+        if (cookie == null) {
+            return null;
+        }
+        return cookie.getCookie();
+    }
+
+    default void putLoginHeader(String value) {
+        CookieBean cookie = new CookieBean("loginHeader_" + getBookSource().getBookSourceUrl(), value);
+        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookie);
+    }
+
+    default String getLoginHeader() {
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + getBookSource().getBookSourceUrl());
         if (cookie == null) {
             return null;
         }

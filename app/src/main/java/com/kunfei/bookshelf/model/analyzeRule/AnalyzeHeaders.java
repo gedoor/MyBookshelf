@@ -25,6 +25,10 @@ import java.util.Map;
 public class AnalyzeHeaders {
     private static SharedPreferences preferences = MApplication.getConfigPreferences();
 
+    public static Map<String, String> getMap() {
+        return getMap(null);
+    }
+
     public static Map<String, String> getMap(BookSourceBean bookSourceBean) {
         Map<String, String> headerMap = new HashMap<>();
         if (bookSourceBean != null) {
@@ -43,7 +47,7 @@ public class AnalyzeHeaders {
             if (cookie != null) {
                 headerMap.put("Cookie", cookie.getCookie());
             }
-            cookie = DbHelper.getDaoSession().getCookieBeanDao().load("headers_" + bookSourceBean.getBookSourceUrl());
+            cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + bookSourceBean.getBookSourceUrl());
             if (cookie != null) {
                 Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
                 if (map != null) {

@@ -209,6 +209,7 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
                 bindings.put("java", this);
                 bindings.put("result", stringResponse);
                 bindings.put("baseUrl", baseUrl);
+                @SuppressWarnings("unchecked")
                 Response<String> res = (Response<String>) SCRIPT_ENGINE.eval(checkJs, bindings);
                 emitter.onNext(res);
                 return;
