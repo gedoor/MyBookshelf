@@ -4,15 +4,14 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
-import okhttp3.Call
+import com.kunfei.bookshelf.base.BaseModelImpl
 import java.io.InputStream
 
 
-class OkHttpModeLoaderFactory(private val client: Call.Factory) :
-    ModelLoaderFactory<GlideUrl?, InputStream?> {
+object OkHttpModeLoaderFactory : ModelLoaderFactory<GlideUrl?, InputStream?> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<GlideUrl?, InputStream?> {
-        return OkHttpModelLoader(client)
+        return OkHttpModelLoader(BaseModelImpl.getClient())
     }
 
     override fun teardown() {
