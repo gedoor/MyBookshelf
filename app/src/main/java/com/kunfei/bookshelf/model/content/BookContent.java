@@ -92,10 +92,17 @@ class BookContent {
 
                 while (!TextUtils.isEmpty(webContentBean.nextUrl) && !usedUrlList.contains(webContentBean.nextUrl)) {
                     usedUrlList.add(webContentBean.nextUrl);
-                    if (nextChapter != null && NetworkUtils.getAbsoluteURL(baseUrl, webContentBean.nextUrl).equals(NetworkUtils.getAbsoluteURL(baseUrl, nextChapter.getDurChapterUrl()))) {
+                    if (nextChapter != null &&
+                            NetworkUtils.getAbsoluteURL(
+                                    baseUrl, webContentBean.nextUrl
+                            ).equals(NetworkUtils.getAbsoluteURL(baseUrl, nextChapter.getDurChapterUrl()))
+                    ) {
                         break;
                     }
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(webContentBean.nextUrl, tag, bookSourceBean);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                            webContentBean.nextUrl, tag, bookSourceBean,
+                            bookSourceBean.getHeaderMap(true)
+                    );
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl).blockingFirst();

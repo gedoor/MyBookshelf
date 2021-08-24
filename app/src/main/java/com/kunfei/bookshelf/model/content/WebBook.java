@@ -15,7 +15,6 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 
 import java.net.MalformedURLException;
@@ -55,7 +54,7 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
         bookSourceBean = BookSourceManager.getBookSourceByUrl(tag);
         if (bookSourceBean != null) {
             name = bookSourceBean.getBookSourceName();
-            headerMap = AnalyzeHeaders.getMap(bookSourceBean);
+            headerMap = bookSourceBean.getHeaderMap(true);
         }
     }
 
@@ -73,8 +72,10 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean, true);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, tag, bookSourceBean, null, page);
-
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                    url, tag, bookSourceBean, null, page,
+                    bookSourceBean.getHeaderMap(true)
+            );
             return getResponseO(analyzeUrl)
                     .flatMap(response -> checkLogin(response, url, tag))
                     .flatMap(bookList::analyzeSearchBook);
@@ -95,7 +96,11 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean, false);
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), tag, bookSourceBean, content, page);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                    bookSourceBean.getRuleSearchUrl(),
+                    tag, bookSourceBean, content, page,
+                    bookSourceBean.getHeaderMap(true)
+            );
             return getResponseO(analyzeUrl)
                     .flatMap(response -> checkLogin(response, bookSourceBean.getRuleSearchUrl(), tag))
                     .flatMap(bookList::analyzeSearchBook);
@@ -116,7 +121,10 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
             return bookInfo.analyzeBookInfo(bookShelfBean.getBookInfoBean().getBookInfoHtml(), bookShelfBean);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), tag, bookSourceBean);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                    bookShelfBean.getNoteUrl(), tag, bookSourceBean,
+                    bookSourceBean.getHeaderMap(true)
+            );
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
                     .flatMap(response -> checkLogin(response, bookShelfBean.getNoteUrl(), tag))
@@ -138,7 +146,11 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
             return bookChapterList.analyzeChapterList(bookShelfBean.getBookInfoBean().getChapterListHtml(), bookShelfBean, headerMap);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getNoteUrl(), bookSourceBean);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                    bookShelfBean.getBookInfoBean().getChapterUrl(),
+                    bookShelfBean.getNoteUrl(), bookSourceBean,
+                    bookSourceBean.getHeaderMap(true)
+            );
             return getResponseO(analyzeUrl)
                     .flatMap(response -> setCookie(response, tag))
                     .flatMap(stringResponse -> checkLogin(stringResponse, bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getNoteUrl()))
@@ -172,7 +184,11 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
             return bookContent.analyzeBookContent(bookShelfBean.getBookInfoBean().getChapterListHtml(), chapterBean, nextChapterBean, bookShelfBean, headerMap);
         }
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookSourceBean);
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                    chapterBean.getDurChapterUrl(),
+                    bookShelfBean.getBookInfoBean().getChapterUrl(),
+                    bookSourceBean,
+                    bookSourceBean.getHeaderMap(true));
             String contentRule = bookSourceBean.getRuleBookContent();
             if (contentRule.startsWith("$") && !contentRule.startsWith("$.")) {
                 //动态网页第一个js放到webView里执行

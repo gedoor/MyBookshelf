@@ -79,7 +79,10 @@ public class BookChapterList {
                 Debug.printLog(tag, "正在加载下一页");
                 while (!chapterUrlS.isEmpty() && !usedUrl.contains(chapterUrlS.get(0))) {
                     usedUrl.add(chapterUrlS.get(0));
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterUrlS.get(0), tag, bookSourceBean);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                            chapterUrlS.get(0), tag, bookSourceBean,
+                            bookSourceBean.getHeaderMap(true)
+                    );
                     try {
                         String body;
                         Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
@@ -131,8 +134,12 @@ public class BookChapterList {
                     webChapterBeans.add(bean);
                 }
                 for (WebChapterBean bean : webChapterBeans) {
-                    BookChapterList bookChapterList = new BookChapterList(tag, bookSourceBean, false);
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(bean.getUrl(), tag, bookSourceBean);
+                    BookChapterList bookChapterList =
+                            new BookChapterList(tag, bookSourceBean, false);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(
+                            bean.getUrl(), tag, bookSourceBean,
+                            bookSourceBean.getHeaderMap(true)
+                    );
                     new AnalyzeNextUrlTask(bookChapterList, bean, bookShelfBean, headerMap)
                             .setCallback(callback)
                             .analyzeUrl(analyzeUrl);

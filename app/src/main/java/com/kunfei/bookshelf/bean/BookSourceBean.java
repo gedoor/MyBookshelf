@@ -1,10 +1,13 @@
 package com.kunfei.bookshelf.bean;
 
 import static android.text.TextUtils.isEmpty;
+import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -16,6 +19,8 @@ import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,6 +35,8 @@ public class BookSourceBean implements Cloneable {
     private String bookSourceGroup;
     private String bookSourceType;
     private String loginUrl;
+    private String loginUi;
+    private String loginCheckJs;
     private Long lastUpdateTime;
     @OrderBy
     private int serialNumber;
@@ -81,10 +88,10 @@ public class BookSourceBean implements Cloneable {
     @Transient
     private transient ArrayList<String> groupList;
 
-    @Generated(hash = 243497779)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String loginUrl, Long lastUpdateTime, int serialNumber, int weight, boolean enable, String ruleFindUrl, String ruleFindList,
-                          String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter, String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl, String ruleSearchList,
-                          String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookUrlPattern,
+    @Generated(hash = 1482292520)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String loginUrl, String loginUi, String loginCheckJs, Long lastUpdateTime, int serialNumber, int weight, boolean enable,
+                          String ruleFindUrl, String ruleFindList, String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter, String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl,
+                          String ruleSearchList, String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookUrlPattern,
                           String ruleBookInfoInit, String ruleBookName, String ruleBookAuthor, String ruleCoverUrl, String ruleIntroduce, String ruleBookKind, String ruleBookLastChapter, String ruleChapterUrl, String ruleChapterUrlNext,
                           String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookContentReplace, String httpUserAgent) {
         this.bookSourceUrl = bookSourceUrl;
@@ -92,6 +99,8 @@ public class BookSourceBean implements Cloneable {
         this.bookSourceGroup = bookSourceGroup;
         this.bookSourceType = bookSourceType;
         this.loginUrl = loginUrl;
+        this.loginUi = loginUi;
+        this.loginCheckJs = loginCheckJs;
         this.lastUpdateTime = lastUpdateTime;
         this.serialNumber = serialNumber;
         this.weight = weight;
@@ -720,5 +729,56 @@ public class BookSourceBean implements Cloneable {
         } catch (Exception ignored) {
         }
         return "";
+    }
+
+    public String getLoginUi() {
+        return loginUi;
+    }
+
+    public void setLoginUi(String loginUi) {
+        this.loginUi = loginUi;
+    }
+
+    public String getLoginCheckJs() {
+        return loginCheckJs;
+    }
+
+    public void setLoginCheckJs(String loginCheckJs) {
+        this.loginCheckJs = loginCheckJs;
+    }
+
+    public Map<String, String> getHeaderMap(Boolean hasLoginHeader) {
+        Map<String, String> headerMap = new HashMap<>();
+        String headers = getHttpUserAgent();
+        if (!isEmpty(headers)) {
+            if (StringUtils.isJsonObject(headers)) {
+                Map<String, String> map = new Gson().fromJson(headers, MAP_STRING);
+                headerMap.putAll(map);
+            } else {
+                headerMap.put("User-Agent", headers);
+            }
+        } else {
+            headerMap.put("User-Agent", AnalyzeHeaders.getDefaultUserAgent());
+        }
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(getBookSourceUrl());
+        if (cookie != null) {
+            headerMap.put("Cookie", cookie.getCookie());
+        }
+        if (hasLoginHeader) {
+            headerMap.putAll(getLoginHeader());
+        }
+        return headerMap;
+    }
+
+    public Map<String, String> getLoginHeader() {
+        Map<String, String> headerMap = new HashMap<>();
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + getBookSourceUrl());
+        if (cookie != null) {
+            Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
+            if (map != null) {
+                headerMap.putAll(map);
+            }
+        }
+        return headerMap;
     }
 }

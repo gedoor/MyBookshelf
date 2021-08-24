@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_ui">登录UI(loginUi)</string>
+    <string name="login_check_js">登录检查Js(loginCheckJs)</string>
+</resources>

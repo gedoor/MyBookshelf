@@ -4,6 +4,7 @@ import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -27,7 +28,7 @@ public interface JsExtensions {
      */
     default String ajax(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl());
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl(), AnalyzeHeaders.getDefaultHeader());
             Response<String> response = BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
             return response.body();
@@ -41,7 +42,7 @@ public interface JsExtensions {
      */
     default Response<String> getResponse(String urlStr) {
         try {
-            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl());
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(urlStr, getBookSource().getBookSourceUrl(), AnalyzeHeaders.getDefaultHeader());
             return BaseModelImpl.getInstance().getResponseO(analyzeUrl)
                     .blockingFirst();
         } catch (Exception e) {

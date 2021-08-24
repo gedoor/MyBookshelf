@@ -217,6 +217,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         sourceEditList.add(new SourceEdit("bookSourceName", bookSourceBean.getBookSourceName(), R.string.book_source_name));
         sourceEditList.add(new SourceEdit("bookSourceGroup", bookSourceBean.getBookSourceGroup(), R.string.book_source_group));
         sourceEditList.add(new SourceEdit("loginUrl", bookSourceBean.getLoginUrl(), R.string.book_source_login_url));
+        sourceEditList.add(new SourceEdit("loginUi", bookSourceBean.getLoginUi(), R.string.login_ui));
+        sourceEditList.add(new SourceEdit("loginCheckJs", bookSourceBean.getLoginCheckJs(), R.string.login_check_js));
         //搜索
         sourceEditList.add(new SourceEdit("ruleSearchUrl", bookSourceBean.getRuleSearchUrl(), R.string.rule_search_url));
         sourceEditList.add(new SourceEdit("ruleSearchList", bookSourceBean.getRuleSearchList(), R.string.rule_search_list));
@@ -288,6 +290,12 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                     break;
                 case "loginUrl":
                     bookSourceBeanN.setLoginUrl(sourceEdit.value);
+                    break;
+                case "loginUi":
+                    bookSourceBeanN.setLoginUi(sourceEdit.value);
+                    break;
+                case "loginCheckJs":
+                    bookSourceBeanN.setLoginCheckJs(sourceEdit.value);
                     break;
                 case "ruleSearchUrl":
                     bookSourceBeanN.setRuleSearchUrl(sourceEdit.value);

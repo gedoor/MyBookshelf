@@ -44,7 +44,7 @@ public class UpdateManager {
     public void checkUpdate(boolean showMsg) {
         BaseModelImpl.getInstance().getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
-                .get(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap())
+                .get(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getDefaultHeader())
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

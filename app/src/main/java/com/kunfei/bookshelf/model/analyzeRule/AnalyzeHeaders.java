@@ -1,18 +1,11 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
-import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.DEFAULT_USER_AGENT;
-import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.bean.CookieBean;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,42 +18,13 @@ import java.util.Map;
 public class AnalyzeHeaders {
     private static SharedPreferences preferences = MApplication.getConfigPreferences();
 
-    public static Map<String, String> getMap() {
-        return getMap(null);
-    }
-
-    public static Map<String, String> getMap(BookSourceBean bookSourceBean) {
+    public static Map<String, String> getDefaultHeader() {
         Map<String, String> headerMap = new HashMap<>();
-        if (bookSourceBean != null) {
-            String headers = bookSourceBean.getHttpUserAgent();
-            if (!isEmpty(headers)) {
-                if (StringUtils.isJsonObject(headers)) {
-                    Map<String, String> map = new Gson().fromJson(headers, MAP_STRING);
-                    headerMap.putAll(map);
-                } else {
-                    headerMap.put("User-Agent", headers);
-                }
-            } else {
-                headerMap.put("User-Agent", getDefaultUserAgent());
-            }
-            CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(bookSourceBean.getBookSourceUrl());
-            if (cookie != null) {
-                headerMap.put("Cookie", cookie.getCookie());
-            }
-            cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + bookSourceBean.getBookSourceUrl());
-            if (cookie != null) {
-                Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
-                if (map != null) {
-                    headerMap.putAll(map);
-                }
-            }
-        } else {
-            headerMap.put("User-Agent", getDefaultUserAgent());
-        }
+        headerMap.put("User-Agent", getDefaultUserAgent());
         return headerMap;
     }
 
-    private static String getDefaultUserAgent() {
+    public static String getDefaultUserAgent() {
         return preferences.getString(MApplication.getInstance().getString(R.string.pk_user_agent), DEFAULT_USER_AGENT);
     }
 }

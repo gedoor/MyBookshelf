@@ -20,6 +20,8 @@ public class BookSource3Bean {
     private Boolean enabledExplore = true;             // 启用发现
     private String header;                     // 请求头
     private String loginUrl;                   // 登录地址
+    private String loginUi;
+    private String loginCheckJs;
     private String bookSourceComment;            // 注释
     private Long lastUpdateTime = 0L;               // 最后更新时间，用于排序
     private int weight = 0;                            // 智能排序的权重
@@ -222,11 +224,13 @@ public class BookSource3Bean {
                 bookSourceGroup,
                 bookSourceType,
                 loginUrl,
+                loginUi,
+                loginCheckJs,
                 lastUpdateTime,
                 0, //u  serialNumber,
                 weight,
                 true, //u enable,
-                ruleFindUrl+header,//发现规则 ruleFindUrl,
+                ruleFindUrl + header,//发现规则 ruleFindUrl,
                 ruleExplore.bookList,  //  列表 ruleFindList,
                 ruleExplore.name,//  ruleFindName,
                 ruleExplore.author,//   ruleFindAuthor,

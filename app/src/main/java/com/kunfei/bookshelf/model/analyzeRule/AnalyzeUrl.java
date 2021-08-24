@@ -52,20 +52,20 @@ public class AnalyzeUrl implements JsExtensions {
     private UrlMode urlMode = UrlMode.DEFAULT;
     private String jsonBody = null;
 
-    public AnalyzeUrl(String urlRule) throws Exception {
-        this(urlRule, null);
+    public AnalyzeUrl(String urlRule, Map<String, String> headerMap) throws Exception {
+        this(urlRule, null, headerMap);
     }
 
-    public AnalyzeUrl(String urlRule, String baseUrl) throws Exception {
-        this(urlRule, baseUrl, null);
+    public AnalyzeUrl(String urlRule, String baseUrl, Map<String, String> headerMap) throws Exception {
+        this(urlRule, baseUrl, null, headerMap);
     }
 
-    public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource) throws Exception {
-        this(urlRule, baseUrl, bookSource, null, null);
+    public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource, Map<String, String> headerMap) throws Exception {
+        this(urlRule, baseUrl, bookSource, null, null, headerMap);
     }
 
     @SuppressLint("DefaultLocale")
-    public AnalyzeUrl(String ruleUrl, String baseUrl, BookSourceBean bookSource, final String key, final Integer page) throws Exception {
+    public AnalyzeUrl(String ruleUrl, String baseUrl, BookSourceBean bookSource, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
         if (!TextUtils.isEmpty(baseUrl)) {
             this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         }
@@ -83,7 +83,7 @@ public class AnalyzeUrl implements JsExtensions {
         //替换js
         ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
         //解析Header
-        ruleUrl = analyzeHeader(ruleUrl, AnalyzeHeaders.getMap(bookSource));
+        ruleUrl = analyzeHeader(ruleUrl, headerMap);
         //分离编码规则
         ruleUrl = splitCharCode(ruleUrl);
         //设置页数
