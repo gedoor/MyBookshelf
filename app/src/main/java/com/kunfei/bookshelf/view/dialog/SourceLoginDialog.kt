@@ -59,7 +59,7 @@ class SourceLoginDialog : DialogFragment() {
             return
         }
         binding.toolBar.title = getString(R.string.login_source, source.bookSourceName)
-        val loginInfo = source.loginInfo
+        val loginInfo = source.loginInfoMap
         val loginUi = GSON.fromJsonArray<RowUi>(source.loginUi)
         loginUi?.forEachIndexed { index, rowUi ->
             when (rowUi.type) {
@@ -100,6 +100,7 @@ class SourceLoginDialog : DialogFragment() {
                         }
                     }
                     source.putLoginInfo(loginData)
+                    source.evalJS(source.loginUrl)
                     dismiss()
                 }
             }

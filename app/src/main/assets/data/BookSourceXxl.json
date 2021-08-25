@@ -19,6 +19,6 @@
   "ruleFindNoteUrl": "$.id@js:'https://www.kaixin7days.com/book-service/bookMgt/getAllChapterByBookId@{\"bookId\": \"'+result+'\",\"pageNum\": 1,\"pageSize\": 100}'",
   "ruleChapterList": "$.content.content",
   "ruleChapterName": "$.chapterTitle",
-  "ruleContentUrl": "$.id",
+  "ruleContentUrl": "https://www.shuidi.online:9021/fileMgt/getAudioByChapterId?bookId={{$.bookId}}&chapterId={{$.id}}&pageNum=1&pageSize=50&@js:result + ''",
   "ruleBookContent": ""
 }

@@ -2,11 +2,13 @@ package com.kunfei.bookshelf.bean;
 
 import static android.text.TextUtils.isEmpty;
 import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.help.JsExtensions;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -22,12 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.script.SimpleBindings;
+
 /**
  * Created by GKF on 2017/12/14.
  * 书源信息
  */
 @Entity
-public class BookSourceBean implements Cloneable {
+public class BookSourceBean implements Cloneable, JsExtensions {
     @Id
     private String bookSourceUrl;
     private String bookSourceName;
@@ -731,6 +735,18 @@ public class BookSourceBean implements Cloneable {
         this.loginCheckJs = loginCheckJs;
     }
 
+
+    /**
+     * 执行JS
+     */
+    public Object evalJS(String jsStr) throws Exception {
+        SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", this);
+        bindings.put("source", this);
+        bindings.put("baseUrl", bookSourceUrl);
+        return SCRIPT_ENGINE.eval(jsStr, bindings);
+    }
+
     public Map<String, String> getHeaderMap(Boolean hasLoginHeader) {
         Map<String, String> headerMap = new HashMap<>();
         String headers = getHttpUserAgent();
@@ -782,13 +798,18 @@ public class BookSourceBean implements Cloneable {
         DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookie);
     }
 
+    public String getLoginInfo() {
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginInfo_" + bookSourceUrl);
+        return cookie.getCookie();
+    }
+
     /**
      * @return 用户登录信息
      */
-    public Map<String, String> getLoginInfo() {
-        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginInfo_" + bookSourceUrl);
-        if (cookie != null) {
-            return new Gson().fromJson(cookie.getCookie(), MAP_STRING);
+    public Map<String, String> getLoginInfoMap() {
+        String info = getLoginInfo();
+        if (info != null) {
+            return new Gson().fromJson(info, MAP_STRING);
         }
         return null;
     }
