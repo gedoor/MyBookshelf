@@ -49,6 +49,7 @@ import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SourceEditAdapter;
+import com.kunfei.bookshelf.view.dialog.SourceLoginDialog;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
 
 import org.jetbrains.annotations.NotNull;
@@ -514,8 +515,16 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                         });
             }
         } else if (id == R.id.action_login) {
-            if (!isEmpty(getBookSource(true).getLoginUrl())) {
-                SourceLoginActivity.startThis(this, getBookSource(true));
+            BookSourceBean bookSourceBean = getBookSource(true);
+            if (!isEmpty(bookSourceBean.getLoginUrl())) {
+                if (isEmpty(bookSourceBean.getLoginUi())) {
+                    SourceLoginActivity.startThis(this, getBookSource(true));
+                } else {
+                    SourceLoginDialog.Companion.start(
+                            getSupportFragmentManager(),
+                            bookSourceBean.getBookSourceUrl()
+                    );
+                }
             } else {
                 toast(R.string.source_no_login);
             }

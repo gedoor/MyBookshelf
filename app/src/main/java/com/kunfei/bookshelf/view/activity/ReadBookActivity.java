@@ -40,6 +40,7 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.base.observer.MySingleObserver;
 import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.bean.TxtChapterRuleBean;
@@ -65,6 +66,7 @@ import com.kunfei.bookshelf.utils.bar.BarHide;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
+import com.kunfei.bookshelf.view.dialog.SourceLoginDialog;
 import com.kunfei.bookshelf.view.popupwindow.CheckAddShelfPop;
 import com.kunfei.bookshelf.view.popupwindow.MoreSettingPop;
 import com.kunfei.bookshelf.view.popupwindow.ReadAdjustMarginPop;
@@ -1205,7 +1207,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         } else if (id == R.id.action_set_regex) {
             setTextChapterRegex();
         } else if (id == R.id.action_login) {
-            SourceLoginActivity.startThis(this, mPresenter.getBookSource());
+            BookSourceBean bookSourceBean = mPresenter.getBookSource();
+            if (TextUtils.isEmpty(bookSourceBean.getLoginUi())) {
+                SourceLoginActivity.startThis(this, bookSourceBean);
+            } else {
+                SourceLoginDialog.Companion.start(
+                        getSupportFragmentManager(),
+                        bookSourceBean.getBookSourceUrl()
+                );
+            }
         } else if (id == android.R.id.home) {
             finish();
         }

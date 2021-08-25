@@ -218,7 +218,7 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
 
     Observable<Response<String>> checkLogin(final Response<String> stringResponse, String url, String baseUrl) {
         return Observable.create(emitter -> {
-            String checkJs = bookSourceBean.getLoginRule().getCheckJs();
+            String checkJs = bookSourceBean.getLoginCheckJs();
             if (!TextUtils.isEmpty(checkJs)) {
                 SimpleBindings bindings = new SimpleBindings();
                 bindings.put("url", url);

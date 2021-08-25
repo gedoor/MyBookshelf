@@ -5,9 +5,6 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.kunfei.bookshelf.utils.theme.ATH;
-import com.kunfei.bookshelf.utils.theme.ThemeStore;
-
 /**
  * @author Aidan Follestad (afollestad)
  */
@@ -29,6 +26,6 @@ public class ATEEditText extends AppCompatEditText {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        ATH.setTint(this, ThemeStore.accentColor(context));
+        //ATH.setTint(this, ThemeStore.accentColor(context));
     }
 }

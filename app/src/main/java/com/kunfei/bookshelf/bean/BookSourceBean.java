@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
-import com.kunfei.bookshelf.utils.GsonUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -652,21 +651,6 @@ public class BookSourceBean implements Cloneable {
         this.ruleBookContentReplace = ruleBookContentReplace;
     }
 
-    @Transient
-    private LoginRule loginRule = null;
-
-    public LoginRule getLoginRule() {
-        if (loginRule == null) {
-            if (StringUtils.isJsonObject(loginUrl)) {
-                loginRule = GsonUtils.parseJObject(loginUrl, LoginRule.class);
-            } else {
-                loginRule = new LoginRule();
-                loginRule.setUrl(loginUrl);
-            }
-        }
-        return loginRule;
-    }
-
     public String getJson(int maxLength) {
         try {
             String source = getMinJson(false);
@@ -760,7 +744,7 @@ public class BookSourceBean implements Cloneable {
         } else {
             headerMap.put("User-Agent", AnalyzeHeaders.getDefaultUserAgent());
         }
-        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(getBookSourceUrl());
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load(bookSourceUrl);
         if (cookie != null) {
             headerMap.put("Cookie", cookie.getCookie());
         }
@@ -770,9 +754,12 @@ public class BookSourceBean implements Cloneable {
         return headerMap;
     }
 
+    /**
+     * @return 登录头, Map格式
+     */
     public Map<String, String> getLoginHeader() {
         Map<String, String> headerMap = new HashMap<>();
-        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + getBookSourceUrl());
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + bookSourceUrl);
         if (cookie != null) {
             Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
             if (map != null) {
@@ -780,5 +767,22 @@ public class BookSourceBean implements Cloneable {
             }
         }
         return headerMap;
+    }
+
+    /**
+     * @return 用户登录信息
+     */
+    public Map<String, String> getLoginInfo() {
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginInfo_" + bookSourceUrl);
+        if (cookie != null) {
+            return new Gson().fromJson(cookie.getCookie(), MAP_STRING);
+        }
+        return null;
+    }
+
+    public void putLoginInfo(Map<String, String> info) {
+        String json = new Gson().toJson(info);
+        CookieBean cookieBean = new CookieBean("loginInfo_" + bookSourceUrl, json);
+        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookieBean);
     }
 }
