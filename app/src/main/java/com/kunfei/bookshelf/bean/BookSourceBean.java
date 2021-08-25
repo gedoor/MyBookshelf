@@ -749,7 +749,7 @@ public class BookSourceBean implements Cloneable {
             headerMap.put("Cookie", cookie.getCookie());
         }
         if (hasLoginHeader) {
-            headerMap.putAll(getLoginHeader());
+            headerMap.putAll(getLoginHeaderMap());
         }
         return headerMap;
     }
@@ -757,16 +757,29 @@ public class BookSourceBean implements Cloneable {
     /**
      * @return 登录头, Map格式
      */
-    public Map<String, String> getLoginHeader() {
+    public Map<String, String> getLoginHeaderMap() {
         Map<String, String> headerMap = new HashMap<>();
-        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + bookSourceUrl);
-        if (cookie != null) {
-            Map<String, String> map = new Gson().fromJson(cookie.getCookie(), MAP_STRING);
+        String header = getLoginHeader();
+        if (header != null) {
+            Map<String, String> map = new Gson().fromJson(header, MAP_STRING);
             if (map != null) {
                 headerMap.putAll(map);
             }
         }
         return headerMap;
+    }
+
+    public String getLoginHeader() {
+        CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginHeader_" + bookSourceUrl);
+        if (cookie == null) {
+            return null;
+        }
+        return cookie.getCookie();
+    }
+
+    public void putLoginHeader(String value) {
+        CookieBean cookie = new CookieBean("loginHeader_" + bookSourceUrl, value);
+        DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookie);
     }
 
     /**

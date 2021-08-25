@@ -58,11 +58,6 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
         }
     }
 
-    @Override
-    public BookSourceBean getBookSource() {
-        return bookSourceBean;
-    }
-
     /**
      * 发现
      */
@@ -221,6 +216,7 @@ public class WebBook extends BaseModelImpl implements JsExtensions {
             String checkJs = bookSourceBean.getLoginCheckJs();
             if (!TextUtils.isEmpty(checkJs)) {
                 SimpleBindings bindings = new SimpleBindings();
+                bindings.put("source", bookSourceBean);
                 bindings.put("url", url);
                 bindings.put("java", this);
                 bindings.put("result", stringResponse);

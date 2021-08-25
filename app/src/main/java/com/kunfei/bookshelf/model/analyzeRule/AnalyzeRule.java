@@ -84,11 +84,6 @@ public class AnalyzeRule implements JsExtensions {
         return this;
     }
 
-    @Override
-    public BookSourceBean getBookSource() {
-        return bookSource;
-    }
-
     public String getBaseUrl() {
         return this.baseUrl;
     }
@@ -539,6 +534,7 @@ public class AnalyzeRule implements JsExtensions {
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("java", this);
+        bindings.put("source", bookSource);
         bindings.put("result", result);
         bindings.put("baseUrl", baseUrl);
         return SCRIPT_ENGINE.eval(jsStr, bindings);

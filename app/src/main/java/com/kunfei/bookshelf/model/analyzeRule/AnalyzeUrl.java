@@ -124,11 +124,6 @@ public class AnalyzeUrl implements JsExtensions {
         }
     }
 
-    @Override
-    public BookSourceBean getBookSource() {
-        return bookSource;
-    }
-
     /**
      * 解析Header
      */
@@ -197,6 +192,7 @@ public class AnalyzeUrl implements JsExtensions {
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleUrl.length());
             SimpleBindings simpleBindings = new SimpleBindings() {{
+                this.put("source", bookSource);
                 this.put("baseUrl", baseUrl);
                 this.put("searchPage", searchPage);
                 this.put("searchKey", searchKey);
@@ -282,6 +278,7 @@ public class AnalyzeUrl implements JsExtensions {
      */
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
+        bindings.put("source", bookSource);
         bindings.put("result", result);
         return SCRIPT_ENGINE.eval(jsStr, bindings);
     }
