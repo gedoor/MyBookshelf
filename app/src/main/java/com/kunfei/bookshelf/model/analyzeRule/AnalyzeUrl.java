@@ -42,6 +42,7 @@ public class AnalyzeUrl implements JsExtensions {
     private static final Pattern pagePattern = Pattern.compile("(?<!@)\\{(.*?)\\}");
     private BookSourceBean bookSource;
     private String baseUrl;
+    private String ruleUrl;
     private String url;
     private String host;
     private String urlPath;
@@ -65,10 +66,12 @@ public class AnalyzeUrl implements JsExtensions {
     }
 
     @SuppressLint("DefaultLocale")
-    public AnalyzeUrl(String ruleUrl, String baseUrl, BookSourceBean bookSource, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
+    public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
         if (!TextUtils.isEmpty(baseUrl)) {
             this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         }
+        this.bookSource = bookSource;
+        ruleUrl = urlRule;
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
             // 处理searchKey=searchKey的情况
@@ -293,6 +296,10 @@ public class AnalyzeUrl implements JsExtensions {
 
     public String getPath() {
         return urlPath;
+    }
+
+    public String getRuleUrl() {
+        return ruleUrl;
     }
 
     public String getUrl() {

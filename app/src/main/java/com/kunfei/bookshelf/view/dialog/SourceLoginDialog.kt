@@ -14,9 +14,13 @@ import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.databinding.DialogLoginBinding
 import com.kunfei.bookshelf.model.BookSourceManager
 import com.kunfei.bookshelf.utils.GSON
+import com.kunfei.bookshelf.utils.RxUtils
 import com.kunfei.bookshelf.utils.fromJsonArray
 import com.kunfei.bookshelf.utils.theme.ThemeStore
 import com.kunfei.bookshelf.utils.viewbindingdelegate.viewBinding
+import io.reactivex.Single
+import io.reactivex.SingleObserver
+import io.reactivex.disposables.Disposable
 
 class SourceLoginDialog : DialogFragment() {
 
@@ -100,8 +104,27 @@ class SourceLoginDialog : DialogFragment() {
                         }
                     }
                     source.putLoginInfo(loginData)
-                    source.evalJS(source.loginUrl)
-                    dismiss()
+                    Single.create<String> { emitter ->
+                        source.loginUrl?.let { loginUrl ->
+                            emitter.onSuccess(source.evalJS(loginUrl).toString())
+                        } ?: let {
+                            emitter.onError(Throwable(""))
+                        }
+                    }.compose(RxUtils::toSimpleSingle)
+                        .subscribe(object : SingleObserver<String> {
+
+                            override fun onSubscribe(d: Disposable) {
+
+                            }
+
+                            override fun onSuccess(t: String) {
+                                dismiss()
+                            }
+
+                            override fun onError(e: Throwable) {
+
+                            }
+                        })
                 }
             }
             return@setOnMenuItemClickListener true

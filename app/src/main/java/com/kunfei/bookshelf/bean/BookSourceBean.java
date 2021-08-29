@@ -30,6 +30,7 @@ import javax.script.SimpleBindings;
  * Created by GKF on 2017/12/14.
  * 书源信息
  */
+@SuppressWarnings("unused")
 @Entity
 public class BookSourceBean implements Cloneable, JsExtensions {
     @Id
@@ -740,11 +741,16 @@ public class BookSourceBean implements Cloneable, JsExtensions {
      * 执行JS
      */
     public Object evalJS(String jsStr) throws Exception {
-        SimpleBindings bindings = new SimpleBindings();
-        bindings.put("java", this);
-        bindings.put("source", this);
-        bindings.put("baseUrl", bookSourceUrl);
-        return SCRIPT_ENGINE.eval(jsStr, bindings);
+        try {
+            SimpleBindings bindings = new SimpleBindings();
+            bindings.put("java", this);
+            bindings.put("source", this);
+            bindings.put("baseUrl", bookSourceUrl);
+            return SCRIPT_ENGINE.eval(jsStr, bindings);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getLocalizedMessage();
+        }
     }
 
     public Map<String, String> getHeaderMap(Boolean hasLoginHeader) {

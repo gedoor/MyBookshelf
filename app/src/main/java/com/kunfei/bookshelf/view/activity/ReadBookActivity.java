@@ -53,6 +53,7 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.help.storage.Backup;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
@@ -1104,12 +1105,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 spacer = spacer + "|" + Pattern.quote(name.trim());
                             else
                                 spacer = "|" + Pattern.quote(name.trim());
-                            String rule="(\\s*\n\\s*" + spacer + ")";
+                    String rule = "(\\s*\n\\s*" + spacer + ")";
                     selectString = ReplaceRuleManager.formateAdRule(
                             selectString.replaceAll(rule, "\n")
                     );
 
-                    Log.i("selectString.afterAd2",selectString);
+                    Log.i("selectString.afterAd2", selectString);
 
                 }
 
@@ -1493,6 +1494,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void readAloud() {
         aloudNextPage = false;
         String unReadContent = mPageLoader.getUnReadContent();
+        if (mPresenter.getBookShelf().isAudio()) {
+            try {
+                unReadContent = new AnalyzeUrl(unReadContent,
+                        mPresenter.getBookSource().getBookSourceUrl(),
+                        mPresenter.getBookSource(),
+                        mPresenter.getBookSource().getHeaderMap(true)).getRuleUrl();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if (mPresenter.getBookShelf() != null && mPageLoader != null && !StringUtils.isTrimEmpty(unReadContent)) {
             ReadAloudService.play(ReadBookActivity.this, false, unReadContent,
                     mPresenter.getBookShelf().getBookInfoBean().getName(),
