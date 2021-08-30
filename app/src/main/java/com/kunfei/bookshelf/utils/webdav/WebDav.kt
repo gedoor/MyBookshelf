@@ -4,6 +4,7 @@ import com.kunfei.bookshelf.base.BaseModelImpl
 import com.kunfei.bookshelf.utils.webdav.http.Handler
 import com.kunfei.bookshelf.utils.webdav.http.HttpAuth
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.IOException
@@ -77,7 +78,7 @@ constructor(urlStr: String) {
                 this.exists = false
                 return false
             }
-            response.body()?.let {
+            response.body?.let {
                 if (it.string().isNotEmpty()) {
                     return true
                 }
@@ -97,7 +98,7 @@ constructor(urlStr: String) {
     fun listFiles(propsList: ArrayList<String> = ArrayList()): List<WebDav> {
         propFindResponse(propsList)?.let { response ->
             if (response.isSuccessful) {
-                response.body()?.let { body ->
+                response.body?.let { body ->
                     return parseDir(body.string())
                 }
             }
@@ -119,10 +120,10 @@ constructor(urlStr: String) {
         }
         httpUrl?.let { url ->
             val request = Request.Builder()
-                    .url(url)
-                    // 添加RequestBody对象，可以只返回的属性。如果设为null，则会返回全部属性
-                    // 注意：尽量手动指定需要返回的属性。若返回全部属性，可能后由于Prop.java里没有该属性名，而崩溃。
-                    .method("PROPFIND", RequestBody.create(MediaType.parse("text/plain"), requestPropsStr))
+                .url(url)
+                // 添加RequestBody对象，可以只返回的属性。如果设为null，则会返回全部属性
+                // 注意：尽量手动指定需要返回的属性。若返回全部属性，可能后由于Prop.java里没有该属性名，而崩溃。
+                .method("PROPFIND", RequestBody.create("text/plain".toMediaType(), requestPropsStr))
 
             HttpAuth.auth?.let {
                 request.header(
@@ -201,7 +202,7 @@ constructor(urlStr: String) {
     fun upload(localPath: String, contentType: String? = null): Boolean {
         val file = File(localPath)
         if (!file.exists()) return false
-        val mediaType = if (contentType == null) null else MediaType.parse(contentType)
+        val mediaType = contentType?.toMediaType()
         // 务必注意RequestBody不要嵌套，不然上传时内容可能会被追加多余的文件信息
         val fileBody = RequestBody.create(mediaType, file)
         httpUrl?.let {
@@ -237,7 +238,8 @@ constructor(urlStr: String) {
                 request.header("Authorization", Credentials.basic(it.user, it.pass))
             }
             try {
-                return BaseModelImpl.getClient().newCall(request.build()).execute().body()?.byteStream()
+                return BaseModelImpl.getClient().newCall(request.build())
+                    .execute().body?.byteStream()
             } catch (e: IOException) {
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {

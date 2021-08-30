@@ -106,8 +106,8 @@ class BarConfig {
             int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
             if (resourceId > 0)
                 result = res.getDimensionPixelSize(resourceId);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         }
         return result;
     }

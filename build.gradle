@@ -2,7 +2,7 @@ ext {
     support_library_version = '28.0.0'
 }
 buildscript {
-    ext.kotlin_version = '1.5.21'
+    ext.kotlin_version = '1.5.30'
     repositories {
         google()
         mavenCentral()
