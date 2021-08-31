@@ -3,7 +3,7 @@ package com.kunfei.bookshelf.presenter;
 
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
-import android.text.TextUtils;
+import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,51 +46,9 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
             boolean showAllFind = MApplication.getConfigPreferences().getBoolean("showAllFind", true);
             List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
-                try {
-                    String[] kindA;
-                    String findRule;
-                    if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl()) && !sourceBean.containsGroup(findError)) {
-                        boolean isJsAndCache = sourceBean.getRuleFindUrl().startsWith("<js>") || sourceBean.getRuleFindUrl().startsWith("@js:");
-                        if (isJsAndCache) {
-                            findRule = aCache.getAsString(sourceBean.getBookSourceUrl());
-                            if (TextUtils.isEmpty(findRule)) {
-                                String jsStr;
-                                if (sourceBean.getRuleFindUrl().startsWith("<js>")) {
-                                    jsStr = sourceBean.getRuleFindUrl().substring(4, sourceBean.getRuleFindUrl().lastIndexOf("<"));
-                                } else {
-                                    jsStr = sourceBean.getRuleFindUrl().substring(4);
-                                }
-                                findRule = evalJS(jsStr, sourceBean.getBookSourceUrl(), sourceBean).toString();
-                            } else {
-                                isJsAndCache = false;
-                            }
-                        } else {
-                            findRule = sourceBean.getRuleFindUrl();
-                        }
-                        kindA = findRule.split("(&&|\n)+");
-                        List<FindKindBean> children = new ArrayList<>();
-                        for (String kindB : kindA) {
-                            if (kindB.trim().isEmpty()) continue;
-                            String[] kind = kindB.split("::");
-                            FindKindBean findKindBean = new FindKindBean();
-                            findKindBean.setGroup(sourceBean.getBookSourceName());
-                            findKindBean.setTag(sourceBean.getBookSourceUrl());
-                            findKindBean.setKindName(kind[0]);
-                            findKindBean.setKindUrl(kind[1]);
-                            children.add(findKindBean);
-                        }
-                        FindKindGroupBean groupBean = new FindKindGroupBean();
-                        groupBean.setGroupName(sourceBean.getBookSourceName());
-                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
-                        group.add(new RecyclerViewData(groupBean, children, false));
-                        if (isJsAndCache) {
-                            aCache.put(sourceBean.getBookSourceUrl(), findRule);
-                        }
-                    }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                    sourceBean.addGroup(findError);
-                    BookSourceManager.addBookSource(sourceBean);
+                Pair<FindKindGroupBean, List<FindKindBean>> pair = sourceBean.getFindList();
+                if (pair != null) {
+                    group.add(new RecyclerViewData(pair.first, pair.second, false));
                 }
             }
             e.onSuccess(group);

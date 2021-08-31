@@ -5,11 +5,15 @@ import static com.kunfei.bookshelf.constant.AppConstant.MAP_STRING;
 import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
 
 import android.text.TextUtils;
+import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.kunfei.bookshelf.DbHelper;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.help.JsExtensions;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
+import com.kunfei.bookshelf.utils.ACache;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -21,6 +25,7 @@ import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -825,4 +830,57 @@ public class BookSourceBean implements Cloneable, JsExtensions {
         CookieBean cookieBean = new CookieBean("loginInfo_" + bookSourceUrl, json);
         DbHelper.getDaoSession().getCookieBeanDao().insertOrReplace(cookieBean);
     }
+
+    public Pair<FindKindGroupBean, List<FindKindBean>> getFindList() {
+        String findError = "发现规则语法错误";
+        ACache aCache = ACache.get(MApplication.getInstance(), "findCache");
+        try {
+            String[] kindA;
+            String findRule;
+            if (!TextUtils.isEmpty(getRuleFindUrl()) && !containsGroup(findError)) {
+                boolean isJsAndCache = getRuleFindUrl().startsWith("<js>") || getRuleFindUrl().startsWith("@js:");
+                if (isJsAndCache) {
+                    findRule = aCache.getAsString(getBookSourceUrl());
+                    if (TextUtils.isEmpty(findRule)) {
+                        String jsStr;
+                        if (getRuleFindUrl().startsWith("<js>")) {
+                            jsStr = getRuleFindUrl().substring(4, getRuleFindUrl().lastIndexOf("<"));
+                        } else {
+                            jsStr = getRuleFindUrl().substring(4);
+                        }
+                        findRule = evalJS(jsStr).toString();
+                    } else {
+                        isJsAndCache = false;
+                    }
+                } else {
+                    findRule = getRuleFindUrl();
+                }
+                kindA = findRule.split("(&&|\n)+");
+                List<FindKindBean> children = new ArrayList<>();
+                for (String kindB : kindA) {
+                    if (kindB.trim().isEmpty()) continue;
+                    String[] kind = kindB.split("::");
+                    FindKindBean findKindBean = new FindKindBean();
+                    findKindBean.setGroup(getBookSourceName());
+                    findKindBean.setTag(getBookSourceUrl());
+                    findKindBean.setKindName(kind[0]);
+                    findKindBean.setKindUrl(kind[1]);
+                    children.add(findKindBean);
+                }
+                if (isJsAndCache) {
+                    aCache.put(getBookSourceUrl(), findRule);
+                }
+                FindKindGroupBean groupBean = new FindKindGroupBean();
+                groupBean.setGroupName(getBookSourceName());
+                groupBean.setGroupTag(getBookSourceUrl());
+                return new Pair<>(groupBean, children);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            addGroup(findError);
+            BookSourceManager.addBookSource(this);
+        }
+        return null;
+    }
+
 }
