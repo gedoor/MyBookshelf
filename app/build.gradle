@@ -107,7 +107,11 @@ dependencies {
 
     def exoplayer_version = '2.15.0'
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation 'com.google.android.exoplayer:extension-okhttp:2.15.0'
+    implementation "com.google.android.exoplayer:extension-okhttp:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-rtsp:$exoplayer_version"
 
     //google
     implementation 'com.google.android.material:material:1.4.0'

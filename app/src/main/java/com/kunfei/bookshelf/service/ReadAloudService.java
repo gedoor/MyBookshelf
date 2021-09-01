@@ -34,18 +34,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.help.ExoPlayerHelper;
 import com.kunfei.bookshelf.help.MediaManager;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 
@@ -388,12 +385,10 @@ public class ReadAloudService extends Service implements Player.Listener {
         if (isAudio) {
             try {
                 Uri uri = Uri.parse(audioUrl);
-                MediaItem mediaItem = MediaItem.fromUri(uri);
-                OkHttpDataSource.Factory factory = new OkHttpDataSource.Factory(BaseModelImpl.getClient());
-                MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory)
-                        .createMediaSource(mediaItem);
+                MediaSource mediaSource = ExoPlayerHelper.INSTANCE.createMediaSource(uri, null);
                 player.setMediaSource(mediaSource);
                 player.setPlayWhenReady(true);
+                player.prepare();
             } catch (Exception e) {
                 e.printStackTrace();
             }
