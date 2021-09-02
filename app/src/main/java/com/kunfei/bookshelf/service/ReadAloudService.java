@@ -214,8 +214,9 @@ public class ReadAloudService extends Service implements Player.Listener {
             @Override
             public void run() {
                 if (player != null) {
-                    RxBus.get().post(RxBusTag.AUDIO_DUR, player.getCurrentPosition());
+                    RxBus.get().post(RxBusTag.AUDIO_DUR, (int) player.getCurrentPosition());
                 }
+                handler.removeCallbacks(this);
                 handler.postDelayed(this, 1000);
             }
         };
