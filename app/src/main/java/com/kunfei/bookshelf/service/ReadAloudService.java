@@ -307,15 +307,6 @@ public class ReadAloudService extends Service implements Player.Listener {
         if (player != null) return;
         player = new SimpleExoPlayer.Builder(this).build();
         player.addListener(this);
-//        mediaPlayer.setOnPreparedListener(mp -> {
-//            mp.start();
-//            mp.seekTo(progress);
-//            speak = true;
-//            RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
-//            RxBus.get().post(RxBusTag.AUDIO_SIZE, mp.getDuration());
-//            RxBus.get().post(RxBusTag.AUDIO_DUR, mp.getCurrentPosition());
-//            handler.postDelayed(mpRunnable, 1000);
-//        });
     }
 
     @Override
@@ -329,8 +320,11 @@ public class ReadAloudService extends Service implements Player.Listener {
                 break;
             case Player.STATE_READY:
                 // 播放器可以立即从当前位置开始播放。如果{@link#getPlayWhenReady（）}为true，否则暂停。
-                //当点击暂停或者播放时都会调用此方法
-                //当跳转进度时，进度加载完成后调用此方法
+                speak = true;
+                RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
+                RxBus.get().post(RxBusTag.AUDIO_SIZE, player.getDuration());
+                RxBus.get().post(RxBusTag.AUDIO_DUR, player.getCurrentPosition());
+                handler.postDelayed(mpRunnable, 1000);
                 break;
             case Player.STATE_ENDED:
                 //播放器完成了播放
