@@ -321,10 +321,15 @@ public class ReadAloudService extends Service implements Player.Listener {
                 break;
             case Player.STATE_READY:
                 // 播放器可以立即从当前位置开始播放。如果{@link#getPlayWhenReady（）}为true，否则暂停。
-                speak = true;
-                RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
-                RxBus.get().post(RxBusTag.AUDIO_SIZE, player.getDuration());
-                RxBus.get().post(RxBusTag.AUDIO_DUR, player.getCurrentPosition());
+                if (player.getPlayWhenReady()) {
+                    speak = true;
+                    RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
+                } else {
+                    speak = false;
+                    RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
+                }
+                RxBus.get().post(RxBusTag.AUDIO_SIZE, (int) player.getDuration());
+                RxBus.get().post(RxBusTag.AUDIO_DUR, (int) player.getCurrentPosition());
                 handler.postDelayed(mpRunnable, 1000);
                 break;
             case Player.STATE_ENDED:
@@ -439,7 +444,8 @@ public class ReadAloudService extends Service implements Player.Listener {
     }
 
     private void initSpeechRate() {
-        if (speechRate != preference.getInt("speechRate", 10) && !preference.getBoolean("speechRateFollowSys", true)) {
+        if (speechRate != preference.getInt("speechRate", 10)
+                && !preference.getBoolean("speechRateFollowSys", true)) {
             speechRate = preference.getInt("speechRate", 10);
             float speechRateF = (float) speechRate / 10;
             textToSpeech.setSpeechRate(speechRateF);
