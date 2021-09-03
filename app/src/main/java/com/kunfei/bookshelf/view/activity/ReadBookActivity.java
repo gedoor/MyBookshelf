@@ -495,7 +495,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mPresenter.getBookShelf().setDurChapterPage(0);
             mPageLoader.skipToNextPage();
         });
-        binding.mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, dur));
+        binding.mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, (long) dur));
     }
 
     /**
@@ -1512,7 +1512,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             mPresenter.getBookShelf().getDurChapterName(),
                             mPresenter.getBookShelf().getReplaceEnable()),
                     mPresenter.getBookShelf().isAudio(),
-                    mPresenter.getBookShelf().getDurChapterPage());
+                    (long) mPresenter.getBookShelf().getDurChapterPage());
         }
     }
 

@@ -107,12 +107,12 @@ public class ReadAloudService extends Service implements Player.Listener {
     private boolean isAudio;
     private SimpleExoPlayer player;
     private String audioUrl;
-    private int progress;
+    private Long progress;
 
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content, String title, String text, boolean isAudio, int progress) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text, boolean isAudio, long progress) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
@@ -166,7 +166,7 @@ public class ReadAloudService extends Service implements Player.Listener {
         }
     }
 
-    public static void setProgress(Context context, int progress) {
+    public static void setProgress(Context context, long progress) {
         if (running) {
             Intent intent = new Intent(context, ReadAloudService.class);
             intent.setAction(ActionSetProgress);
@@ -254,11 +254,12 @@ public class ReadAloudService extends Service implements Player.Listener {
                                 intent.getStringExtra("title"),
                                 intent.getStringExtra("text"),
                                 intent.getBooleanExtra("isAudio", false),
-                                intent.getIntExtra("progress", 0));
+                                intent.getLongExtra("progress", 0L));
                         break;
                     case ActionSetProgress:
-                        if (player != null && player.isPlaying()) {
-                            player.seekTo(intent.getIntExtra("progress", 0));
+                        if (player != null) {
+                            progress = intent.getLongExtra("progress", 0);
+                            player.seekTo(progress);
                         }
                         break;
                     case ActionUITimerStop:
@@ -321,6 +322,9 @@ public class ReadAloudService extends Service implements Player.Listener {
                 break;
             case Player.STATE_READY:
                 // 播放器可以立即从当前位置开始播放。如果{@link#getPlayWhenReady（）}为true，否则暂停。
+                if (player.getCurrentPosition() != progress) {
+                    player.seekTo(progress);
+                }
                 if (player.getPlayWhenReady()) {
                     speak = true;
                     RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
@@ -349,7 +353,7 @@ public class ReadAloudService extends Service implements Player.Listener {
         player.release();
     }
 
-    private void newReadAloud(String content, Boolean aloudButton, String title, String text, boolean isAudio, int progress) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text, boolean isAudio, Long progress) {
         if (TextUtils.isEmpty(content)) {
             stopSelf();
             return;
