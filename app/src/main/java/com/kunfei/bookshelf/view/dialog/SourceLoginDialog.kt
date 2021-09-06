@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.textfield.TextInputLayout
@@ -93,6 +94,7 @@ class SourceLoginDialog : DialogFragment() {
                         it.id = index
                         (it as TextView).let { textView ->
                             textView.text = rowUi.name
+                            textView.setPadding(DensityUtil.dp2px(requireContext(), 16f))
                         }
                         it.onClick {
                             if (rowUi.action.isAbsUrl()) {
