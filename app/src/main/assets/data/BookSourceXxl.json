@@ -4,7 +4,7 @@
   "bookSourceGroup": "听书",
   "bookSourceType": "AUDIO",
   "loginUrl": "var loginInfo = source.getLoginInfo()\nvar json = java.getResponse(\"https://www.kaixin7days.com/login@\" + loginInfo).body()\nvar loginRes = JSON.parse(json)\nvar header = null\nif (loginRes.statusCode == 200) {\n    var accessToken = {\n        Authorization: \"Bearer \" + loginRes.content.accessToken\n    }\n    header = JSON.stringify(accessToken)\n    source.putLoginHeader(header)\n}\nheader",
-  "loginUi": "[{\"name\": \"telephone\",\"type\": \"text\"},{\"name\": \"password\",\"type\": \"password\"}]",
+  "loginUi": "[{\"name\": \"telephone\",\"type\": \"text\"},{\"name\": \"password\",\"type\": \"password\"},{\"type\": \"button\",\"name\": \"注册\", \"action\": \"http://www.yooike.com/xiaoshuo/#/register?title=%E6%B3%A8%E5%86%8C\"}]",
   "loginCheckJs": "var strRes = result\nvar c = JSON.parse(result.body())\nif (c.statusCode == 301) {\n    var loginInfo = source.getLoginInfo()\n    var dl = null\n    if (loginInfo) {\n        dl = java.getResponse(\"https://www.kaixin7days.com/login@\" + loginInfo).body()\n    } else {\n        dl = java.getResponse(\"https://www.kaixin7days.com/visitorLogin@{}\").body()\n    }\n    c = JSON.parse(dl)\n    var accessToken = {\n        Authorization: \"Bearer \" + c.content.accessToken\n    }\n    var header = JSON.stringify(accessToken)\n    source.putLoginHeader(header)\n    strRes = java.getResponse(\"@Header:\" + header + url)\n}\nstrRes",
   "serialNumber": -100,
   "enable": true,

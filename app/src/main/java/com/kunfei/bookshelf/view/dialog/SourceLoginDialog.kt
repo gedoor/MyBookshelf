@@ -88,7 +88,11 @@ class SourceLoginDialog : DialogFragment() {
                             setText(loginInfo?.get(rowUi.name))
                         }
                     }
-                "button" -> layoutInflater.inflate(R.layout.item_find1_kind, binding.root, false)
+                "button" -> layoutInflater.inflate(
+                    R.layout.item_find2_childer_view,
+                    binding.root,
+                    false
+                )
                     .let {
                         binding.listView.addView(it)
                         it.id = index
