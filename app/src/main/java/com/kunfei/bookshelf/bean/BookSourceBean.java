@@ -811,6 +811,9 @@ public class BookSourceBean implements Cloneable, JsExtensions {
 
     public String getLoginInfo() {
         CookieBean cookie = DbHelper.getDaoSession().getCookieBeanDao().load("loginInfo_" + bookSourceUrl);
+        if (cookie == null) {
+            return null;
+        }
         return cookie.getCookie();
     }
 
