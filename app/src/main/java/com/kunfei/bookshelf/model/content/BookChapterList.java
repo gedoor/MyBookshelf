@@ -204,17 +204,31 @@ public class BookChapterList {
             }
             String nameRule = bookSourceBean.getRuleChapterName();
             String linkRule = bookSourceBean.getRuleContentUrl();
+            String vipRule = bookSourceBean.getRuleChapterVip();
+            String payRule = bookSourceBean.getRuleChapterPay();
             String name = "";
             String link = "";
+            boolean isVip = false;
+            boolean isPay = false;
+            String vipResult = "";
+            String payResult = "";
             for (Object object : collections) {
                 if (object instanceof NativeObject) {
                     name = String.valueOf(((NativeObject) object).get(nameRule));
                     link = String.valueOf(((NativeObject) object).get(linkRule));
+                    vipResult = String.valueOf(((NativeObject) object).get(vipRule));
+                    payResult = String.valueOf(((NativeObject) object).get(payRule));
                 } else if (object instanceof Element) {
                     name = ((Element) object).text();
                     link = ((Element) object).attr(linkRule);
                 }
-                addChapter(chapterBeans, name, link);
+                if (!TextUtils.isEmpty(vipResult) && !vipResult.matches("\\s*(?i)(null|false|0)\\s*")) {
+                    isVip = true;
+                }
+                if (!TextUtils.isEmpty(payResult) && !payResult.matches("\\s*(?i)(null|false|0)\\s*")) {
+                    isPay = true;
+                }
+                addChapter(chapterBeans, name, link, isVip, isPay);
             }
         }
         // 使用默认规则解析流程提取目录列表
@@ -226,9 +240,23 @@ public class BookChapterList {
             }
             List<AnalyzeRule.SourceRule> nameRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterName());
             List<AnalyzeRule.SourceRule> linkRule = analyzer.splitSourceRule(bookSourceBean.getRuleContentUrl());
+            List<AnalyzeRule.SourceRule> vipRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterVip());
+            List<AnalyzeRule.SourceRule> payRule = analyzer.splitSourceRule(bookSourceBean.getRuleChapterPay());
             for (Object object : collections) {
                 analyzer.setContent(object, chapterUrl);
-                addChapter(chapterBeans, analyzer.getString(nameRule), analyzer.getString(linkRule));
+                String name = analyzer.getString(nameRule);
+                String url = analyzer.getString(linkRule);
+                boolean isVip = false;
+                boolean isPay = false;
+                String vipResult = analyzer.getString(vipRule);
+                String payResult = analyzer.getString(payRule);
+                if (!TextUtils.isEmpty(vipResult) && !vipResult.matches("\\s*(?i)(null|false|0)\\s*")) {
+                    isVip = true;
+                }
+                if (!TextUtils.isEmpty(payResult) && !payResult.matches("\\s*(?i)(null|false|0)\\s*")) {
+                    isPay = true;
+                }
+                addChapter(chapterBeans, name, url, isVip, isPay);
             }
         }
         Debug.printLog(tag, 1, "└找到 " + chapterBeans.size() + " 个章节", printLog);
@@ -246,10 +274,12 @@ public class BookChapterList {
         return new WebChapterBean(chapterBeans, new LinkedHashSet<>(nextUrlList));
     }
 
-    private void addChapter(final List<BookChapterBean> chapterBeans, String name, String link) {
+    private void addChapter(final List<BookChapterBean> chapterBeans,
+                            String name, String link, boolean isVip, boolean isPay
+    ) {
         if (TextUtils.isEmpty(name)) return;
         if (TextUtils.isEmpty(link)) link = chapterListUrl;
-        chapterBeans.add(new BookChapterBean(tag, name, link));
+        chapterBeans.add(new BookChapterBean(tag, name, link, isVip, isPay));
     }
 
     // region 纯java模式正则表达式获取目录列表
@@ -320,8 +350,7 @@ public class BookChapterList {
                             cLink.insert(0, linkParams.get(i));
                         }
                     }
-
-                    addChapter(chapterBeans, cName.toString(), cLink.toString());
+                    addChapter(chapterBeans, cName.toString(), cLink.toString(), false, false);
                 } while (resM.find());
             } else {
                 do {
@@ -346,8 +375,7 @@ public class BookChapterList {
                             cLink.insert(0, linkParams.get(i));
                         }
                     }
-
-                    addChapter(chapterBeans, cName.toString(), cLink.toString());
+                    addChapter(chapterBeans, cName.toString(), cLink.toString(), false, false);
                 } while (resM.find());
             }
         } else {

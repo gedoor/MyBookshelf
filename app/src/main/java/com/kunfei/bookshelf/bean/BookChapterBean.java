@@ -52,6 +52,14 @@ public class BookChapterBean implements Cloneable, BaseChapterBean {
         this.durChapterUrl = durChapterUrl;
     }
 
+    public BookChapterBean(String tag, String durChapterName, String durChapterUrl, boolean isVip, boolean isPay) {
+        this.tag = tag;
+        this.durChapterName = durChapterName;
+        this.durChapterUrl = durChapterUrl;
+        this.isVip = isVip;
+        this.isPay = isPay;
+    }
+
     @Override
     protected Object clone() {
         try {
