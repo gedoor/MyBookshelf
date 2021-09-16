@@ -45,6 +45,7 @@ public class BookSource3Bean {
         String sourceRegex;
         String replaceRegex;
         String imageStyle;  //默认大小居中,FULL最大宽度
+        String actions;
     }
 
     class TocRule {
@@ -52,6 +53,7 @@ public class BookSource3Bean {
         String chapterName;
         String chapterUrl;
         String isVip;
+        String isPay;
         String updateTime;
         String nextTocUrl;
     }
@@ -223,6 +225,7 @@ public class BookSource3Bean {
                 bookSourceName,
                 bookSourceGroup,
                 bookSourceType,
+                userAgent, //  httpUserAgent
                 loginUrl,
                 loginUi,
                 loginCheckJs,
@@ -261,10 +264,12 @@ public class BookSource3Bean {
                 ruleToc.chapterList,//   ruleChapterList,
                 ruleToc.chapterName,//     ruleChapterName,
                 ruleToc.chapterUrl,  // ruleContentUrl,
+                ruleToc.isVip,
+                ruleToc.isPay,
                 ruleContent.nextContentUrl, //ruleContentUrlNext,
                 ruleContent.content, //  ruleBookContent,
                 ruleContent.replaceRegex,//    ruleBookContentReplace,
-                userAgent //  httpUserAgent
+                ruleContent.actions
         );
     }
 }

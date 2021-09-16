@@ -40,18 +40,20 @@ import okhttp3.RequestBody;
 @Keep
 public class AnalyzeUrl implements JsExtensions {
     private static final Pattern pagePattern = Pattern.compile("(?<!@)\\{(.*?)\\}");
-    private BookSourceBean bookSource;
+    private final BookSourceBean bookSource;
     private String baseUrl;
     private String ruleUrl;
     private String url;
     private String host;
     private String urlPath;
     private String queryStr;
-    private Map<String, String> queryMap = new LinkedHashMap<>();
-    private Map<String, String> headerMap = new HashMap<>();
+    private final Map<String, String> queryMap = new LinkedHashMap<>();
+    private final Map<String, String> headerMap = new HashMap<>();
     private String charCode = null;
     private UrlMode urlMode = UrlMode.DEFAULT;
     private String jsonBody = null;
+    private final String searchKey;
+    private final int searchPage;
 
     public AnalyzeUrl(String urlRule, Map<String, String> headerMap) throws Exception {
         this(urlRule, null, headerMap);
@@ -62,15 +64,17 @@ public class AnalyzeUrl implements JsExtensions {
     }
 
     public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource, Map<String, String> headerMap) throws Exception {
-        this(urlRule, baseUrl, bookSource, null, null, headerMap);
+        this(urlRule, baseUrl, bookSource, null, 1, headerMap);
     }
 
     @SuppressLint("DefaultLocale")
-    public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
+    public AnalyzeUrl(String urlRule, String baseUrl, BookSourceBean bookSource, final String key, final int page, Map<String, String> headerMap) throws Exception {
         if (!TextUtils.isEmpty(baseUrl)) {
             this.baseUrl = headerPattern.matcher(baseUrl).replaceAll("");
         }
         this.bookSource = bookSource;
+        this.searchKey = key;
+        this.searchPage = page;
         ruleUrl = urlRule;
         //替换关键字
         if (!StringUtils.isTrimEmpty(key)) {
@@ -81,10 +85,10 @@ public class AnalyzeUrl implements JsExtensions {
                 ruleUrl = ruleUrl.replace("searchKey", key);
         }
         //判断是否有下一页
-        if (page != null && page > 1 && !ruleUrl.contains("searchPage"))
+        if (page > 1 && !ruleUrl.contains("searchPage"))
             throw new Exception("没有下一页");
         //替换js
-        ruleUrl = replaceJs(ruleUrl, baseUrl, page, key);
+        ruleUrl = replaceJs(ruleUrl);
         //解析Header
         ruleUrl = analyzeHeader(ruleUrl, headerMap);
         //分离编码规则
@@ -190,19 +194,13 @@ public class AnalyzeUrl implements JsExtensions {
      * 替换js
      */
     @SuppressLint("DefaultLocale")
-    private String replaceJs(String ruleUrl, String baseUrl, Integer searchPage, String searchKey) throws Exception {
+    private String replaceJs(String ruleUrl) throws Exception {
         if (ruleUrl.contains("{{") && ruleUrl.contains("}}")) {
             Object jsEval;
             StringBuffer sb = new StringBuffer(ruleUrl.length());
-            SimpleBindings simpleBindings = new SimpleBindings() {{
-                this.put("source", bookSource);
-                this.put("baseUrl", baseUrl);
-                this.put("searchPage", searchPage);
-                this.put("searchKey", searchKey);
-            }};
             Matcher expMatcher = EXP_PATTERN.matcher(ruleUrl);
             while (expMatcher.find()) {
-                jsEval = SCRIPT_ENGINE.eval(expMatcher.group(1), simpleBindings);
+                jsEval = evalJS(expMatcher.group(1), null);
                 if (jsEval instanceof String) {
                     expMatcher.appendReplacement(sb, (String) jsEval);
                 } else if (jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0) {
@@ -281,6 +279,9 @@ public class AnalyzeUrl implements JsExtensions {
      */
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
+        bindings.put("baseUrl", baseUrl);
+        bindings.put("searchPage", searchPage);
+        bindings.put("searchKey", searchKey);
         bindings.put("source", bookSource);
         bindings.put("result", result);
         return SCRIPT_ENGINE.eval(jsStr, bindings);

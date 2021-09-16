@@ -2,4 +2,6 @@
 <resources>
     <string name="login_ui">登录UI(loginUi)</string>
     <string name="login_check_js">登录检查Js(loginCheckJs)</string>
+    <string name="rule_vip">VIP标识(ruleVip)</string>
+    <string name="rule_pay">购买标识(rulePay)</string>
 </resources>

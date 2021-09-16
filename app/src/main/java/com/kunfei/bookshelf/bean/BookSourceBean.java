@@ -43,6 +43,7 @@ public class BookSourceBean implements Cloneable, JsExtensions {
     private String bookSourceName;
     private String bookSourceGroup;
     private String bookSourceType;
+    private String httpUserAgent;
     private String loginUrl;
     private String loginUi;
     private String loginCheckJs;
@@ -88,25 +89,32 @@ public class BookSourceBean implements Cloneable, JsExtensions {
     private String ruleChapterList;
     private String ruleChapterName;
     private String ruleContentUrl;
+    private String ruleChapterVip;
+    private String ruleChapterPay;
     //正文页规则
     private String ruleContentUrlNext;
     private String ruleBookContent;
     private String ruleBookContentReplace;
-    private String httpUserAgent;
+    private String payAction;
 
     @Transient
     private transient ArrayList<String> groupList;
 
-    @Generated(hash = 1482292520)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String loginUrl, String loginUi, String loginCheckJs, Long lastUpdateTime, int serialNumber, int weight, boolean enable,
-                          String ruleFindUrl, String ruleFindList, String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter, String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl,
-                          String ruleSearchList, String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookUrlPattern,
-                          String ruleBookInfoInit, String ruleBookName, String ruleBookAuthor, String ruleCoverUrl, String ruleIntroduce, String ruleBookKind, String ruleBookLastChapter, String ruleChapterUrl, String ruleChapterUrlNext,
-                          String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookContentReplace, String httpUserAgent) {
+    @Generated(hash = 1152082575)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String bookSourceType, String httpUserAgent,
+                          String loginUrl, String loginUi, String loginCheckJs, Long lastUpdateTime, int serialNumber, int weight, boolean enable, String ruleFindUrl,
+                          String ruleFindList, String ruleFindName, String ruleFindAuthor, String ruleFindKind, String ruleFindIntroduce, String ruleFindLastChapter,
+                          String ruleFindCoverUrl, String ruleFindNoteUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName, String ruleSearchAuthor,
+                          String ruleSearchKind, String ruleSearchIntroduce, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl,
+                          String ruleBookUrlPattern, String ruleBookInfoInit, String ruleBookName, String ruleBookAuthor, String ruleCoverUrl, String ruleIntroduce,
+                          String ruleBookKind, String ruleBookLastChapter, String ruleChapterUrl, String ruleChapterUrlNext, String ruleChapterList,
+                          String ruleChapterName, String ruleContentUrl, String ruleChapterVip, String ruleChapterPay, String ruleContentUrlNext,
+                          String ruleBookContent, String ruleBookContentReplace, String payAction) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.bookSourceGroup = bookSourceGroup;
         this.bookSourceType = bookSourceType;
+        this.httpUserAgent = httpUserAgent;
         this.loginUrl = loginUrl;
         this.loginUi = loginUi;
         this.loginCheckJs = loginCheckJs;
@@ -145,10 +153,12 @@ public class BookSourceBean implements Cloneable, JsExtensions {
         this.ruleChapterList = ruleChapterList;
         this.ruleChapterName = ruleChapterName;
         this.ruleContentUrl = ruleContentUrl;
+        this.ruleChapterVip = ruleChapterVip;
+        this.ruleChapterPay = ruleChapterPay;
         this.ruleContentUrlNext = ruleContentUrlNext;
         this.ruleBookContent = ruleBookContent;
         this.ruleBookContentReplace = ruleBookContentReplace;
-        this.httpUserAgent = httpUserAgent;
+        this.payAction = payAction;
     }
 
     public BookSourceBean(BookSourceBean sourceBean) {
@@ -884,6 +894,30 @@ public class BookSourceBean implements Cloneable, JsExtensions {
             BookSourceManager.addBookSource(this);
         }
         return null;
+    }
+
+    public String getPayAction() {
+        return this.payAction;
+    }
+
+    public void setPayAction(String payAction) {
+        this.payAction = payAction;
+    }
+
+    public String getRuleChapterVip() {
+        return this.ruleChapterVip;
+    }
+
+    public void setRuleChapterVip(String ruleChapterVip) {
+        this.ruleChapterVip = ruleChapterVip;
+    }
+
+    public String getRuleChapterPay() {
+        return this.ruleChapterPay;
+    }
+
+    public void setRuleChapterPay(String ruleChapterPay) {
+        this.ruleChapterPay = ruleChapterPay;
     }
 
 }

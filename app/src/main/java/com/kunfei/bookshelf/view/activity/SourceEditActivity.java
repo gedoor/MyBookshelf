@@ -245,6 +245,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         sourceEditList.add(new SourceEdit("ruleChapterList", bookSourceBean.getRuleChapterList(), R.string.rule_chapter_list));
         sourceEditList.add(new SourceEdit("ruleChapterName", bookSourceBean.getRuleChapterName(), R.string.rule_chapter_name));
         sourceEditList.add(new SourceEdit("ruleContentUrl", bookSourceBean.getRuleContentUrl(), R.string.rule_content_url));
+        sourceEditList.add(new SourceEdit("ruleChapterVip", bookSourceBean.getRuleChapterVip(), R.string.rule_vip));
+        sourceEditList.add(new SourceEdit("ruleChapterPay", bookSourceBean.getRuleChapterPay(), R.string.rule_pay));
         //正文页
         sourceEditList.add(new SourceEdit("ruleContentUrlNext", bookSourceBean.getRuleContentUrlNext(), R.string.rule_content_url_next));
         sourceEditList.add(new SourceEdit("ruleBookContent", bookSourceBean.getRuleBookContent(), R.string.rule_book_content));
@@ -360,6 +362,12 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                     break;
                 case "ruleChapterName":
                     bookSourceBeanN.setRuleChapterName(sourceEdit.value);
+                    break;
+                case "ruleVip":
+                    bookSourceBeanN.setRuleChapterVip(sourceEdit.value);
+                    break;
+                case "rulePay":
+                    bookSourceBeanN.setRuleChapterPay(sourceEdit.value);
                     break;
                 case "ruleContentUrl":
                     bookSourceBeanN.setRuleContentUrl(sourceEdit.value);

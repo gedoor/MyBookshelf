@@ -5,6 +5,8 @@ import com.kunfei.bookshelf.utils.webdav.http.Handler
 import com.kunfei.bookshelf.utils.webdav.http.HttpAuth
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.IOException
@@ -123,7 +125,7 @@ constructor(urlStr: String) {
                 .url(url)
                 // 添加RequestBody对象，可以只返回的属性。如果设为null，则会返回全部属性
                 // 注意：尽量手动指定需要返回的属性。若返回全部属性，可能后由于Prop.java里没有该属性名，而崩溃。
-                .method("PROPFIND", RequestBody.create("text/plain".toMediaType(), requestPropsStr))
+                .method("PROPFIND", requestPropsStr.toRequestBody("text/plain".toMediaType()))
 
             HttpAuth.auth?.let {
                 request.header(
@@ -204,7 +206,7 @@ constructor(urlStr: String) {
         if (!file.exists()) return false
         val mediaType = contentType?.toMediaType()
         // 务必注意RequestBody不要嵌套，不然上传时内容可能会被追加多余的文件信息
-        val fileBody = RequestBody.create(mediaType, file)
+        val fileBody = file.asRequestBody(mediaType)
         httpUrl?.let {
             val request = Request.Builder()
                     .url(it)
