@@ -207,7 +207,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
         bookShelfAdapter.replaceAll(bookShelfBeanList, bookPx);
-        if (binding.viewEmpty.rlEmptyView == null) return;
         if (bookShelfBeanList.size() > 0) {
             binding.viewEmpty.rlEmptyView.setVisibility(View.GONE);
         } else {

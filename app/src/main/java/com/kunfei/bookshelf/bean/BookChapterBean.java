@@ -1,7 +1,10 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.bean;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -168,6 +171,16 @@ public class BookChapterBean implements Cloneable, BaseChapterBean {
 
     public void setIsPay(boolean isPay) {
         this.isPay = isPay;
+    }
+
+    public String getDisplayTitle(Context context) {
+        if (!isVip) {
+            return durChapterName;
+        }
+        if (isPay) {
+            return context.getString(R.string.payed_title, durChapterName);
+        }
+        return context.getString(R.string.vip_title, durChapterName);
     }
 
 }

@@ -112,7 +112,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             holder.tvName.setTextColor(normalColor);
         }
 
-        holder.tvName.setText(bookChapterBean.getDurChapterName());
+        holder.tvName.setText(bookChapterBean.getDisplayTitle(holder.tvName.getContext()));
         if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || bookChapterBean.getHasCache(bookShelfBean.getBookInfoBean())) {
             holder.tvName.setSelected(true);
             holder.tvName.getPaint().setFakeBoldText(true);
