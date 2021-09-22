@@ -108,32 +108,55 @@
                         android:layout_height="1dp"
                         android:background="@color/btn_bg_press" />
 
-                    <TextView
-                        android:id="@+id/tv_chapter_name"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        android:includeFontPadding="false"
-                        android:paddingStart="10dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="2dp"
-                        android:singleLine="true"
-                        android:textColor="@color/tv_text_default" />
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_chapter_url"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        android:includeFontPadding="false"
-                        android:paddingStart="10dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="2dp"
-                        android:singleLine="true"
-                        android:textColor="@color/tv_text_default"
-                        android:visibility="gone" />
+                        <TextView
+                            android:id="@+id/tv_chapter_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimary"
+                            android:includeFontPadding="false"
+                            android:paddingStart="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/tv_text_default"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@+id/login" />
+
+                        <TextView
+                            android:id="@+id/tv_chapter_url"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimary"
+                            android:includeFontPadding="false"
+                            android:paddingStart="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/tv_text_default"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_chapter_name"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@+id/login" />
+
+                        <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                            android:id="@+id/login"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:padding="6dp"
+                            android:visibility="gone"
+                            android:text="@string/login"
+                            android:gravity="center"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:id="@+id/atv_line"

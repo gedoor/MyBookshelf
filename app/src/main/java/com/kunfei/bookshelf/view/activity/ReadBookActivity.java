@@ -108,7 +108,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Animation menuBottomOut;
     private ActionBar actionBar;
     private PageLoader mPageLoader;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
     private Runnable autoPageRunnable;
     private Runnable keepScreenRunnable;
     private Runnable upHpbNextPage;
@@ -117,12 +117,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Boolean isAdd = false; //判断是否已经添加进书架
     private ReadAloudService.Status aloudStatus = ReadAloudService.Status.STOP;
     private int screenTimeOut;
-    private int upHpbInterval = 100;
+    private final int upHpbInterval = 100;
     private Menu menu;
     private CheckAddShelfPop checkAddShelfPop;
     private MoDialogHUD moDialogHUD;
     private ThisBatInfoReceiver batInfoReceiver;
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private final ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     private boolean autoPage = false;
     private boolean aloudNextPage;
@@ -363,6 +363,21 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void onAnimationStart(Animation animation) {
                 initImmersionBar();
+                BookChapterBean durChapter = mPresenter.getDurChapter();
+                BookSourceBean source = mPresenter.getBookSource();
+                if (durChapter != null && source != null) {
+                    if (TextUtils.isEmpty(source.getLoginUrl())) {
+                        binding.login.setVisibility(View.GONE);
+                    } else if (durChapter.getIsVip() && !durChapter.getIsPay() && !TextUtils.isEmpty(source.getPayAction())) {
+                        binding.login.setVisibility(View.VISIBLE);
+                        binding.login.setText("购买");
+                    } else {
+                        binding.login.setVisibility(View.VISIBLE);
+                        binding.login.setText("登录");
+                    }
+                } else {
+                    binding.login.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -737,7 +752,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 toast(R.string.can_not_open);
             }
         });
-
+        binding.login.setOnClickListener(v -> {
+            login();
+        });
         binding.cursorLeft.setOnTouchListener(this);
         binding.cursorRight.setOnTouchListener(this);
         binding.flContent.setOnTouchListener(this);
@@ -1089,7 +1106,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void replaceSelectAd() {
                 String selectString = binding.pageView.getSelectStr();
 
-
                 if (selectString != null) {
                     String spacer = null;
                     String name = (mPresenter.getBookShelf().getBookInfoBean().getName());
@@ -1113,7 +1129,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     Log.i("selectString.afterAd2", selectString);
 
                 }
-
 
                 ReplaceRuleBean oldRuleBean = new ReplaceRuleBean();
                 oldRuleBean.setReplaceSummary(getString(R.string.replace_ad) + "-" + mPresenter.getBookShelf().getTag());
@@ -1207,20 +1222,22 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         } else if (id == R.id.action_set_regex) {
             setTextChapterRegex();
-        } else if (id == R.id.action_login) {
-            BookSourceBean bookSourceBean = mPresenter.getBookSource();
-            if (TextUtils.isEmpty(bookSourceBean.getLoginUi())) {
-                SourceLoginActivity.startThis(this, bookSourceBean);
-            } else {
-                SourceLoginDialog.Companion.start(
-                        getSupportFragmentManager(),
-                        bookSourceBean.getBookSourceUrl()
-                );
-            }
         } else if (id == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void login() {
+        BookSourceBean bookSourceBean = mPresenter.getBookSource();
+        if (TextUtils.isEmpty(bookSourceBean.getLoginUi())) {
+            SourceLoginActivity.startThis(this, bookSourceBean);
+        } else {
+            SourceLoginDialog.Companion.start(
+                    getSupportFragmentManager(),
+                    bookSourceBean.getBookSourceUrl()
+            );
+        }
     }
 
     /**
@@ -1762,9 +1779,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     boolean isTxt = mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getNoteUrl().toLowerCase().endsWith(".txt");
                     menu.getItem(i).setVisible(isTxt);
                     menu.getItem(i).setEnabled(isTxt);
-                    break;
-                case R.id.menu_login:
-                    menu.getItem(i).setVisible(mPresenter.getBookSource() != null && !TextUtils.isEmpty(mPresenter.getBookSource().getLoginUrl()));
                     break;
             }
             if (menu.getItem(i).getItemId() == R.id.enable_replace) {
