@@ -27,7 +27,7 @@
   "ruleSearchNoteUrl": "$.id@js:'https://www.kaixin7days.com/book-service/bookMgt/getAllChapterByBookId@{\"bookId\": \"'+result+'\",\"pageNum\": 1,\"pageSize\": 100000}'",
   "ruleChapterList": "$.content.content",
   "ruleChapterName": "$.chapterTitle",
-  "ruleChapterVip": "$.isFree@js:!Boolean(result)",
+  "ruleChapterVip": "$.isFree@js:var vip = false; if (result == '0') { vip = true } vip",
   "ruleChapterPay": "$.isPay",
   "ruleContentUrl": "@js:\"https://www.shuidi.online:9021/fileMgt/getAudioByChapterId?bookId=\"\n    + java.getString(\"$.bookId\") + \"&chapterId=\" + java.getString(\"$.id\")\n    + \"&pageNum=1&pageSize=50&{{var header = JSON.parse(source.getLoginHeader());'Authorization=' + header.Authorization}}\"",
   "ruleBookContent": "",
