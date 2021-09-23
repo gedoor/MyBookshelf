@@ -101,6 +101,7 @@ import kotlin.Unit;
  */
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View, View.OnTouchListener {
 
+    private int payActivityResult = 1234;
     private ActivityBookReadBinding binding;
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -753,7 +754,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         });
         binding.login.setOnClickListener(v -> {
-            login();
+            loginOrPay();
         });
         binding.cursorLeft.setOnTouchListener(this);
         binding.cursorRight.setOnTouchListener(this);
@@ -1228,8 +1229,18 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         return super.onOptionsItemSelected(item);
     }
 
-    private void login() {
+    private void loginOrPay() {
+        BookShelfBean book = mPresenter.getBookShelf();
+        BookChapterBean chapter = mPresenter.getDurChapter();
         BookSourceBean bookSourceBean = mPresenter.getBookSource();
+        if (chapter.getIsVip() && !chapter.getIsPay()) {
+            Intent webIntent = new Intent(this, WebViewActivity.class);
+            String url = "https://www.kaixin7days.com/book-service/bookMgt/createOrder?";
+            webIntent.putExtra("url", url);
+            BitIntentDataManager.getInstance().putData(url, mPresenter.getBookSource().getHeaderMap(true));
+            startActivityForResult(webIntent, payActivityResult);
+            return;
+        }
         if (TextUtils.isEmpty(bookSourceBean.getLoginUi())) {
             SourceLoginActivity.startThis(this, bookSourceBean);
         } else {
