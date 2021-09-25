@@ -373,15 +373,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (durChapter != null && source != null) {
                     if (TextUtils.isEmpty(source.getLoginUrl())) {
                         binding.login.setVisibility(View.GONE);
+                        binding.pay.setVisibility(View.GONE);
                     } else if (durChapter.getIsVip() && !durChapter.getIsPay() && !TextUtils.isEmpty(source.getPayAction())) {
                         binding.login.setVisibility(View.VISIBLE);
-                        binding.login.setText("购买");
+                        binding.pay.setVisibility(View.VISIBLE);
                     } else {
                         binding.login.setVisibility(View.VISIBLE);
-                        binding.login.setText("登录");
                     }
                 } else {
                     binding.login.setVisibility(View.GONE);
+                    binding.pay.setVisibility(View.GONE);
                 }
             }
 
@@ -758,7 +759,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         });
         binding.login.setOnClickListener(v -> {
-            loginOrPay();
+            login();
+        });
+        binding.pay.setOnClickListener(v -> {
+            pay();
         });
         binding.cursorLeft.setOnTouchListener(this);
         binding.cursorRight.setOnTouchListener(this);
@@ -1233,7 +1237,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         return super.onOptionsItemSelected(item);
     }
 
-    private void loginOrPay() {
+    private void login() {
+        BookSourceBean source = mPresenter.getBookSource();
+        if (TextUtils.isEmpty(source.getLoginUi())) {
+            SourceLoginActivity.startThis(this, source);
+        } else {
+            SourceLoginDialog.Companion.start(
+                    getSupportFragmentManager(),
+                    source.getBookSourceUrl()
+            );
+        }
+    }
+
+    private void pay() {
         BookShelfBean book = mPresenter.getBookShelf();
         BookChapterBean chapter = mPresenter.getDurChapter();
         BookSourceBean source = mPresenter.getBookSource();
@@ -1261,15 +1277,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 BitIntentDataManager.getInstance().putData(result, mPresenter.getBookSource().getHeaderMap(true));
                 startActivityForResult(webIntent, payActivityResult);
             }
-            return;
-        }
-        if (TextUtils.isEmpty(source.getLoginUi())) {
-            SourceLoginActivity.startThis(this, source);
-        } else {
-            SourceLoginDialog.Companion.start(
-                    getSupportFragmentManager(),
-                    source.getBookSourceUrl()
-            );
         }
     }
 

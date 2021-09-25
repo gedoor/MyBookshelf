@@ -152,6 +152,18 @@
                             android:visibility="gone"
                             android:text="@string/login"
                             android:gravity="center"
+                            app:layout_constraintRight_toLeftOf="@+id/pay"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                        <com.kunfei.bookshelf.widget.views.ATEAccentBgTextView
+                            android:id="@+id/pay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:padding="6dp"
+                            android:visibility="gone"
+                            android:text="@string/chapter_pay"
+                            android:gravity="center"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent" />
