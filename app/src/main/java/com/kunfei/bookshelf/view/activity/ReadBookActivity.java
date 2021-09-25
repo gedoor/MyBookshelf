@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.activity;
 
+import static com.kunfei.bookshelf.constant.AppConstant.SCRIPT_ENGINE;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -92,6 +94,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import javax.script.SimpleBindings;
 
 import kotlin.Unit;
 
@@ -1232,21 +1236,39 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void loginOrPay() {
         BookShelfBean book = mPresenter.getBookShelf();
         BookChapterBean chapter = mPresenter.getDurChapter();
-        BookSourceBean bookSourceBean = mPresenter.getBookSource();
-        if (chapter.getIsVip() && !chapter.getIsPay()) {
-            Intent webIntent = new Intent(this, WebViewActivity.class);
-            String url = "https://www.kaixin7days.com/book-service/bookMgt/createOrder?";
-            webIntent.putExtra("url", url);
-            BitIntentDataManager.getInstance().putData(url, mPresenter.getBookSource().getHeaderMap(true));
-            startActivityForResult(webIntent, payActivityResult);
+        BookSourceBean source = mPresenter.getBookSource();
+        String payRule = source.getPayAction();
+        if (chapter.getIsVip() && !chapter.getIsPay() && !TextUtils.isEmpty(payRule)) {
+            String result = "";
+            if (payRule.startsWith("http")) {
+                result = payRule;
+            } else {
+                try {
+                    SimpleBindings bindings = new SimpleBindings();
+                    bindings.put("java", source);
+                    bindings.put("source", source);
+                    bindings.put("book", book);
+                    bindings.put("chapter", chapter);
+                    result = SCRIPT_ENGINE.eval(payRule, bindings).toString();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (result.startsWith("http")) {
+                Intent webIntent = new Intent(this, WebViewActivity.class);
+                webIntent.putExtra("url", result);
+                webIntent.putExtra("title", "购买");
+                BitIntentDataManager.getInstance().putData(result, mPresenter.getBookSource().getHeaderMap(true));
+                startActivityForResult(webIntent, payActivityResult);
+            }
             return;
         }
-        if (TextUtils.isEmpty(bookSourceBean.getLoginUi())) {
-            SourceLoginActivity.startThis(this, bookSourceBean);
+        if (TextUtils.isEmpty(source.getLoginUi())) {
+            SourceLoginActivity.startThis(this, source);
         } else {
             SourceLoginDialog.Companion.start(
                     getSupportFragmentManager(),
-                    bookSourceBean.getBookSourceUrl()
+                    source.getBookSourceUrl()
             );
         }
     }

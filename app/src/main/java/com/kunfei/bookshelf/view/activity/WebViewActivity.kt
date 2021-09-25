@@ -1,6 +1,8 @@
 package com.kunfei.bookshelf.view.activity
 
+import android.R
 import android.annotation.SuppressLint
+import android.view.MenuItem
 import com.kunfei.basemvplib.BitIntentDataManager
 import com.kunfei.basemvplib.impl.IPresenter
 import com.kunfei.bookshelf.base.MBaseActivity
@@ -51,4 +53,12 @@ class WebViewActivity : MBaseActivity<IPresenter>() {
         }
     }
 
+    //菜单
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

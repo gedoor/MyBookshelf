@@ -29,7 +29,7 @@
   "ruleChapterName": "$.chapterTitle",
   "ruleChapterVip": "$.isFree@js:var vip = false; if (result == '0') { vip = true } vip",
   "ruleChapterPay": "$.isPay",
-  "ruleContentUrl": "$.id@js:java.put('chapterId', result);\"https://www.shuidi.online:9021/fileMgt/getAudioByChapterId?bookId=\"\n    + java.getString(\"$.bookId\") + \"&chapterId=\" + result\n    + \"&pageNum=1&pageSize=50&{{var header = JSON.parse(source.getLoginHeader());'Authorization=' + header.Authorization}}\"",
+  "ruleContentUrl": "$.id@js:\"https://www.shuidi.online:9021/fileMgt/getAudioByChapterId?bookId=\"\n    + java.getString(\"$.bookId\") + \"&chapterId=\" + result\n    + \"&pageNum=1&pageSize=50&{{var header = JSON.parse(source.getLoginHeader());'Authorization=' + header.Authorization}}\"",
   "ruleBookContent": "",
-  "payAction": ""
+  "payAction": "var chapterUrl = chapter.getDurChapterUrl();var reg = /&chapterId=(.*)&pageNum/;'https://www.kaixin7days.com/book-service/bookMgt/createOrder?type=2&bookId=' + book.getVariableMap().get('bookId') + '&chapterIds=' + reg.exec(chapterUrl)[1]"
 }

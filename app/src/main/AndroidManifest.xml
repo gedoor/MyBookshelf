@@ -188,6 +188,10 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
+            android:name=".view.activity.WebViewActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="standard" />
+        <activity
             android:name=".help.permission.PermissionActivity"
             android:theme="@style/Activity.Permission" />
 
