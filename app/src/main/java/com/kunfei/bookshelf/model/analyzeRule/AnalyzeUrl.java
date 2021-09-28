@@ -200,7 +200,7 @@ public class AnalyzeUrl implements JsExtensions {
             StringBuffer sb = new StringBuffer(ruleUrl.length());
             Matcher expMatcher = EXP_PATTERN.matcher(ruleUrl);
             while (expMatcher.find()) {
-                jsEval = evalJS(expMatcher.group(1), null);
+                jsEval = evalJS(expMatcher.group(1), ruleUrl);
                 if (jsEval instanceof String) {
                     expMatcher.appendReplacement(sb, (String) jsEval);
                 } else if (jsEval instanceof Double && ((Double) jsEval) % 1.0 == 0) {
@@ -279,6 +279,7 @@ public class AnalyzeUrl implements JsExtensions {
      */
     private Object evalJS(String jsStr, Object result) throws Exception {
         SimpleBindings bindings = new SimpleBindings();
+        bindings.put("java", this);
         bindings.put("baseUrl", baseUrl);
         bindings.put("searchPage", searchPage);
         bindings.put("searchKey", searchKey);

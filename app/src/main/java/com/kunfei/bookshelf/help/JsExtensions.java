@@ -5,6 +5,7 @@ import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.CookieBean;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
+import com.kunfei.bookshelf.utils.MD5Utils;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Connection;
@@ -107,6 +108,10 @@ public interface JsExtensions {
             return null;
         }
         return cookie.getCookie();
+    }
+
+    default String md5Encode(String text) {
+        return MD5Utils.strToMd5By32(text);
     }
 
 }
