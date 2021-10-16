@@ -2137,23 +2137,6 @@ public class ImmersionBar {
     }
 
     /**
-     * 隐藏状态栏
-     * Hide status bar.
-     *
-     * @param window the window
-     */
-    public static void hideStatusBar(Window window) {
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    public static void navigationBarPadding(Activity activity, View view) {
-        if (hasNavigationBar(activity)) {
-            view.setPadding(0, 0, 0, getNavigationBarHeight(activity));
-        }
-    }
-
-    /**
      * Gets bar params.
      *
      * @return the bar params

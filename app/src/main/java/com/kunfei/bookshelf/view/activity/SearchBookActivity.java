@@ -37,7 +37,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.Selector;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -103,7 +103,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         binding.fabSearchStop.hide();
         binding.fabSearchStop.setBackgroundTintList(Selector.colorBuild()
                 .setDefaultColor(ThemeStore.accentColor(this))
-                .setPressedColor(ColorUtil.darkenColor(ThemeStore.accentColor(this)))
+                .setPressedColor(ColorUtils.darkenColor(ThemeStore.accentColor(this)))
                 .create());
         binding.llSearchHistory.setOnClickListener(null);
         binding.rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));

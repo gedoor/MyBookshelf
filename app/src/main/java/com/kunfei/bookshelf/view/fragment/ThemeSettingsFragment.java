@@ -18,7 +18,7 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
 import com.kunfei.bookshelf.help.LauncherIcon;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
@@ -96,7 +96,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             case "colorPrimary":
             case "colorAccent":
             case "colorBackground":
-                if (!ColorUtil.isColorLight(sharedPreferences.getInt("colorBackground", settingActivity.getResources().getColor(R.color.md_grey_100)))) {
+                if (!ColorUtils.isColorLight(sharedPreferences.getInt("colorBackground", settingActivity.getResources().getColor(R.color.md_grey_100)))) {
                     alertDialog = new AlertDialog.Builder(getActivity())
                             .setTitle("白天背景太暗")
                             .setMessage("将会恢复默认背景？")
@@ -114,7 +114,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             case "colorPrimaryNight":
             case "colorAccentNight":
             case "colorBackgroundNight":
-                if (ColorUtil.isColorLight(sharedPreferences.getInt("colorBackgroundNight", settingActivity.getResources().getColor(R.color.md_grey_800)))) {
+                if (ColorUtils.isColorLight(sharedPreferences.getInt("colorBackgroundNight", settingActivity.getResources().getColor(R.color.md_grey_800)))) {
                     alertDialog = new AlertDialog.Builder(getActivity())
                             .setTitle("夜间背景太亮")
                             .setMessage("将会恢复默认背景？")

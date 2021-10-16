@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.utils.theme;
 
+import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -12,10 +14,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.Selector;
-
-import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -39,7 +39,7 @@ public final class ATH {
     }
 
     public static void setLightStatusbarAuto(Activity activity, int bgColor) {
-        setLightStatusbar(activity, ColorUtil.isColorLight(bgColor));
+        setLightStatusbar(activity, ColorUtils.isColorLight(bgColor));
     }
 
     public static void setLightStatusbar(Activity activity, boolean enabled) {
@@ -68,7 +68,7 @@ public final class ATH {
     }
 
     public static void setLightNavigationbarAuto(Activity activity, int bgColor) {
-        setLightNavigationbar(activity, ColorUtil.isColorLight(bgColor));
+        setLightNavigationbar(activity, ColorUtils.isColorLight(bgColor));
     }
 
     public static void setNavigationbarColorAuto(Activity activity) {
@@ -89,7 +89,7 @@ public final class ATH {
     public static void setTaskDescriptionColor(@NonNull Activity activity, @ColorInt int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Task description requires fully opaque color
-            color = ColorUtil.stripAlpha(color);
+            color = ColorUtils.stripAlpha(color);
             // Sets color of entry in the system recents page
             activity.setTaskDescription(new ActivityManager.TaskDescription((String) activity.getTitle(), null, color));
         }
@@ -106,7 +106,7 @@ public final class ATH {
     public static AlertDialog setAlertDialogTint(@NonNull AlertDialog dialog) {
         ColorStateList colorStateList = Selector.colorBuild()
                 .setDefaultColor(ThemeStore.accentColor(dialog.getContext()))
-                .setPressedColor(ColorUtil.darkenColor(ThemeStore.accentColor(dialog.getContext())))
+                .setPressedColor(ColorUtils.darkenColor(ThemeStore.accentColor(dialog.getContext())))
                 .create();
         if (dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE) != null) {
             dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(colorStateList);

@@ -23,7 +23,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
@@ -86,7 +86,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        int primaryTextColor = MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this)));
+        int primaryTextColor = MaterialValueHelper.getPrimaryTextColor(this, ColorUtils.isColorLight(ThemeStore.primaryColor(this)));
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
@@ -149,9 +149,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         } catch (Exception ignored) {
         }
         try {
-            if (isImmersionBarEnabled() && ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+            if (isImmersionBarEnabled() && ColorUtils.isColorLight(ThemeStore.primaryColor(this))) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else if (ColorUtil.isColorLight(ThemeStore.primaryColorDark(this))) {
+            } else if (ColorUtils.isColorLight(ThemeStore.primaryColorDark(this))) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
@@ -161,7 +161,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                 mImmersionBar.navigationBarDarkFont(false);
             } else if (ImmersionBar.canNavigationBarDarkFont()) {
                 mImmersionBar.navigationBarColorInt(ThemeStore.primaryColorDark(this));
-                if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+                if (ColorUtils.isColorLight(ThemeStore.primaryColor(this))) {
                     mImmersionBar.navigationBarDarkFont(true);
                 } else {
                     mImmersionBar.navigationBarDarkFont(false);
@@ -217,7 +217,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     protected void initTheme() {
-        if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
+        if (ColorUtils.isColorLight(ThemeStore.primaryColor(this))) {
             setTheme(R.style.CAppTheme);
         } else {
             setTheme(R.style.CAppThemeBarDark);

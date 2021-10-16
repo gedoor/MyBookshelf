@@ -33,7 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
 
@@ -493,10 +493,10 @@ public class FastScroller extends LinearLayout {
         mHandleView = findViewById(R.id.fastscroll_handle);
         mTrackView = findViewById(R.id.fastscroll_track);
         mScrollbar = findViewById(R.id.fastscroll_scrollbar);
-        @ColorInt int bubbleColor = ColorUtil.adjustAlpha(ThemeStore.accentColor(context), 0.8f);
+        @ColorInt int bubbleColor = ColorUtils.adjustAlpha(ThemeStore.accentColor(context), 0.8f);
         @ColorInt int handleColor = ThemeStore.accentColor(context);
         @ColorInt int trackColor = context.getResources().getColor(R.color.transparent30);
-        @ColorInt int textColor = ColorUtil.isColorLight(bubbleColor) ? Color.BLACK : Color.WHITE;
+        @ColorInt int textColor = ColorUtils.isColorLight(bubbleColor) ? Color.BLACK : Color.WHITE;
         boolean fadeScrollbar = true;
         boolean showBubble = false;
         boolean showTrack = true;

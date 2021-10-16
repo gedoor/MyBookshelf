@@ -22,7 +22,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.databinding.PopMediaPlayerBinding;
 import com.kunfei.bookshelf.help.BlurTransformation;
 import com.kunfei.bookshelf.help.glide.ImageLoader;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.TimeUtils;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -63,7 +63,7 @@ public class MediaPlayerPop extends FrameLayout {
     private void init(Context context) {
         binding.getRoot().setBackgroundColor(ThemeStore.primaryColor(context));
         binding.vwBg.setOnClickListener(null);
-        primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(ThemeStore.primaryColor(context)));
+        primaryTextColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtils.isColorLight(ThemeStore.primaryColor(context)));
         setColor(binding.ivSkipPrevious.getDrawable());
         setColor(binding.ivSkipNext.getDrawable());
         setColor(binding.ivChapter.getDrawable());

@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 
 import androidx.annotation.AttrRes;
 
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 
 /**
  * @author Aidan Follestad (afollestad)
@@ -13,7 +13,7 @@ import com.kunfei.bookshelf.utils.ColorUtil;
 public final class ATHUtil {
 
     public static boolean isWindowBackgroundDark(Context context) {
-        return !ColorUtil.isColorLight(ATHUtil.resolveColor(context, android.R.attr.windowBackground));
+        return !ColorUtils.isColorLight(ATHUtil.resolveColor(context, android.R.attr.windowBackground));
     }
 
     public static int resolveColor(Context context, @AttrRes int attr) {

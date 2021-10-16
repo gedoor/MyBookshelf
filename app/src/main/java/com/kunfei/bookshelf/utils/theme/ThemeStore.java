@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 
 /**
  * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)
@@ -39,7 +39,7 @@ public final class ThemeStore implements ThemeStorePrefKeys, ThemeStoreInterface
     public ThemeStore primaryColor(@ColorInt int color) {
         mEditor.putInt(KEY_PRIMARY_COLOR, color);
         if (autoGeneratePrimaryDark(mContext))
-            primaryColorDark(ColorUtil.darkenColor(color));
+            primaryColorDark(ColorUtils.darkenColor(color));
         return this;
     }
 

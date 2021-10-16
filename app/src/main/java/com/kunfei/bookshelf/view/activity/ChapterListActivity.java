@@ -1,5 +1,8 @@
 package com.kunfei.bookshelf.view.activity;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +24,7 @@ import com.kunfei.bookshelf.bean.BookChapterBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.databinding.ActivityChapterlistBinding;
 import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -30,9 +33,6 @@ import com.kunfei.bookshelf.view.fragment.ChapterListFragment;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 public class ChapterListActivity extends BaseTabActivity<IPresenter> {
 
@@ -98,7 +98,7 @@ public class ChapterListActivity extends BaseTabActivity<IPresenter> {
     protected void bindView() {
         super.bindView();
         mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
-        mTlIndicator.setTabTextColors(ColorUtil.isColorLight(ThemeStore.primaryColor(this)) ? Color.BLACK : Color.WHITE,
+        mTlIndicator.setTabTextColors(ColorUtils.isColorLight(ThemeStore.primaryColor(this)) ? Color.BLACK : Color.WHITE,
                 ThemeStore.accentColor(this));
     }
 
@@ -129,7 +129,7 @@ public class ChapterListActivity extends BaseTabActivity<IPresenter> {
         getMenuInflater().inflate(R.menu.menu_search_view, menu);
         MenuItem search = menu.findItem(R.id.action_search);
         searchView = (SearchView) search.getActionView();
-        ATH.setTint(searchView, MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this))));
+        ATH.setTint(searchView, MaterialValueHelper.getPrimaryTextColor(this, ColorUtils.isColorLight(ThemeStore.primaryColor(this))));
         searchView.setMaxWidth(getResources().getDisplayMetrics().widthPixels);
         searchView.onActionViewCollapsed();
         searchView.setOnCloseListener(() -> {
