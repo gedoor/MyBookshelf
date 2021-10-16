@@ -100,9 +100,9 @@ dependencies {
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.media:media:1.4.0'
+    implementation 'androidx.media:media:1.4.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     def exoplayer_version = '2.15.0'
@@ -115,7 +115,7 @@ dependencies {
 
     //google
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.google.android:flexbox:1.1.0'
 
     //RxAndroid
@@ -132,7 +132,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
     //J_SOUP
-    implementation 'org.jsoup:jsoup:1.14.1'
+    implementation 'org.jsoup:jsoup:1.14.3'
     implementation 'cn.wanghaomiao:JsoupXpath:2.5.0'
     implementation 'com.jayway.jsonpath:json-path:2.6.0'
 

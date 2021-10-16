@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -105,7 +104,7 @@ import kotlin.Unit;
  */
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View, View.OnTouchListener {
 
-    private int payActivityResult = 1234;
+    private final int payActivityResult = 1234;
     private ActivityBookReadBinding binding;
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -516,7 +515,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             mPresenter.getBookShelf().setDurChapterPage(0);
             mPageLoader.skipToNextPage();
         });
-        binding.mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, (long) dur));
+        binding.mediaPlayerPop.setCallback(dur -> ReadAloudService.setProgress(ReadBookActivity.this, dur));
     }
 
     /**
@@ -758,12 +757,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 toast(R.string.can_not_open);
             }
         });
-        binding.login.setOnClickListener(v -> {
-            login();
-        });
-        binding.pay.setOnClickListener(v -> {
-            pay();
-        });
+        binding.login.setOnClickListener(v -> login());
+        binding.pay.setOnClickListener(v -> pay());
         binding.cursorLeft.setOnTouchListener(this);
         binding.cursorRight.setOnTouchListener(this);
         binding.flContent.setOnTouchListener(this);
@@ -847,12 +842,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         binding.readMenuBottom.getReadProgress().setMax(Math.max(0, count - 1));
                         binding.readMenuBottom.getReadProgress().setProgress(0);
                         // 如果处于错误状态，那么就冻结使用
-                        if (mPageLoader.getPageStatus() == TxtChapter.Status.LOADING
-                                || mPageLoader.getPageStatus() == TxtChapter.Status.ERROR) {
-                            binding.readMenuBottom.getReadProgress().setEnabled(false);
-                        } else {
-                            binding.readMenuBottom.getReadProgress().setEnabled(true);
-                        }
+                        binding.readMenuBottom.getReadProgress().setEnabled(
+                                mPageLoader.getPageStatus() != TxtChapter.Status.LOADING
+                                        && mPageLoader.getPageStatus() != TxtChapter.Status.ERROR
+                        );
                     }
 
                     /**
@@ -963,8 +956,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
         if (v.getId() == R.id.cursor_left || v.getId() == R.id.cursor_right) {
             int ea = event.getAction();
-            //final int screenWidth = dm.widthPixels;
-            //final int screenHeight = dm.heightPixels;
             switch (ea) {
                 case MotionEvent.ACTION_DOWN:
                     lastX = (int) event.getRawX();// 获取触摸事件触摸位置的原始X坐标
@@ -1046,6 +1037,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         hideSnackBar();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void cursorShow() {
 
         binding.cursorLeft.setVisibility(View.VISIBLE);
@@ -1097,7 +1089,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 ReplaceRuleManager.saveData(replaceRuleBean1)
                                         .subscribe(new MySingleObserver<Boolean>() {
                                             @Override
-                                            public void onSuccess(Boolean aBoolean) {
+                                            public void onSuccess(@NonNull Boolean aBoolean) {
                                                 binding.cursorLeft.setVisibility(View.INVISIBLE);
                                                 binding.cursorRight.setVisibility(View.INVISIBLE);
                                                 binding.readLongPress.setVisibility(View.INVISIBLE);
@@ -1135,8 +1127,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             selectString.replaceAll(rule, "\n")
                     );
 
-                    Log.i("selectString.afterAd2", selectString);
-
                 }
 
                 ReplaceRuleBean oldRuleBean = new ReplaceRuleBean();
@@ -1146,14 +1136,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 oldRuleBean.setIsRegex(false);
                 oldRuleBean.setReplacement("");
                 oldRuleBean.setSerialNumber(0);
-                oldRuleBean.setUseTo(String.format(mPresenter.getBookShelf().getTag()));
+                oldRuleBean.setUseTo(mPresenter.getBookShelf().getTag());
 
                 ReplaceRuleDialog.builder(ReadBookActivity.this, oldRuleBean, mPresenter.getBookShelf(), ReplaceRuleDialog.AddAdUI)
                         .setPositiveButton(replaceRuleBean1 ->
                                 ReplaceRuleManager.mergeAdRules(replaceRuleBean1)
                                         .subscribe(new MySingleObserver<Boolean>() {
                                             @Override
-                                            public void onSuccess(Boolean aBoolean) {
+                                            public void onSuccess(@NonNull Boolean aBoolean) {
                                                 binding.cursorLeft.setVisibility(View.INVISIBLE);
                                                 binding.cursorRight.setVisibility(View.INVISIBLE);
                                                 binding.readLongPress.setVisibility(View.INVISIBLE);
@@ -1275,6 +1265,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 webIntent.putExtra("url", result);
                 webIntent.putExtra("title", "购买");
                 BitIntentDataManager.getInstance().putData(result, mPresenter.getBookSource().getHeaderMap(true));
+                //noinspection deprecation
                 startActivityForResult(webIntent, payActivityResult);
             }
         }
@@ -1569,7 +1560,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             mPresenter.getBookShelf().getDurChapterName(),
                             mPresenter.getBookShelf().getReplaceEnable()),
                     mPresenter.getBookShelf().isAudio(),
-                    (long) mPresenter.getBookShelf().getDurChapterPage());
+                    mPresenter.getBookShelf().getDurChapterPage());
         }
     }
 
@@ -1806,27 +1797,20 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             binding.atvLine.setVisibility(View.GONE);
         }
         for (int i = 0; i < menu.size(); i++) {
-            switch (menu.getItem(i).getGroupId()) {
-                case R.id.menuOnLine:
-                    menu.getItem(i).setVisible(onLine);
-                    menu.getItem(i).setEnabled(onLine);
-                    break;
-                case R.id.menuLocal:
-                    menu.getItem(i).setVisible(!onLine);
-                    menu.getItem(i).setEnabled(!onLine);
-                    break;
-                case R.id.menu_text:
-                    boolean isTxt = mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getNoteUrl().toLowerCase().endsWith(".txt");
-                    menu.getItem(i).setVisible(isTxt);
-                    menu.getItem(i).setEnabled(isTxt);
-                    break;
+            int groupId = menu.getItem(i).getGroupId();
+            if (groupId == R.id.menuOnLine) {
+                menu.getItem(i).setVisible(onLine);
+                menu.getItem(i).setEnabled(onLine);
+            } else if (groupId == R.id.menuLocal) {
+                menu.getItem(i).setVisible(!onLine);
+                menu.getItem(i).setEnabled(!onLine);
+            } else if (groupId == R.id.menu_text) {
+                boolean isTxt = mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getNoteUrl().toLowerCase().endsWith(".txt");
+                menu.getItem(i).setVisible(isTxt);
+                menu.getItem(i).setEnabled(isTxt);
             }
             if (menu.getItem(i).getItemId() == R.id.enable_replace) {
-                if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getReplaceEnable()) {
-                    menu.getItem(i).setChecked(true);
-                } else {
-                    menu.getItem(i).setChecked(false);
-                }
+                menu.getItem(i).setChecked(mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getReplaceEnable());
             }
         }
 
