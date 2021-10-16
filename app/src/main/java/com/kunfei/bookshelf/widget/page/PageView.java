@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.widget.page;
 
+import static com.kunfei.bookshelf.utils.ScreenUtils.getDisplayMetrics;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,8 +18,8 @@ import android.view.ViewConfiguration;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.utils.ContextExtensionsKt;
 import com.kunfei.bookshelf.utils.ScreenUtils;
-import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.widget.page.animation.CoverPageAnim;
 import com.kunfei.bookshelf.widget.page.animation.HorizonPageAnim;
@@ -30,8 +32,6 @@ import com.kunfei.bookshelf.widget.page.animation.SlidePageAnim;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.kunfei.bookshelf.utils.ScreenUtils.getDisplayMetrics;
 
 
 /**
@@ -656,7 +656,7 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
      */
     public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean bookShelfBean, PageLoader.Callback callback) {
         this.activity = activity;
-        this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
+        this.statusBarHeight = ContextExtensionsKt.getStatusBarHeight(activity);
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;

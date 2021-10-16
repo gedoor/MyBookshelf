@@ -35,10 +35,11 @@ import com.kunfei.bookshelf.databinding.ActivityReadStyleBinding;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
+import com.kunfei.bookshelf.utils.ActivityExtensionsKt;
 import com.kunfei.bookshelf.utils.BitmapUtil;
+import com.kunfei.bookshelf.utils.ContextExtensionsKt;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.MeUtils;
-import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.io.IOException;
@@ -84,7 +85,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     protected void onCreateActivity() {
         binding = ActivityReadStyleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.llContent.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
+        binding.llContent.setPadding(0, ContextExtensionsKt.getStatusBarHeight(this), 0, 0);
         this.setSupportActionBar(binding.toolbar);
         setupActionBar();
         setTextKind(readBookControl);
@@ -93,10 +94,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        if (!isImmersionBarEnabled()) {
-            mImmersionBar.statusBarDarkFont(false);
-        } else mImmersionBar.statusBarDarkFont(darkStatusIcon);
-        mImmersionBar.init();
+        ActivityExtensionsKt.setLightStatusBar(this, darkStatusIcon);
     }
 
     /**

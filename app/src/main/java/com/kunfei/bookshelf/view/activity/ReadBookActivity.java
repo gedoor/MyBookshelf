@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -58,14 +59,14 @@ import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
+import com.kunfei.bookshelf.utils.ActivityExtensionsKt;
 import com.kunfei.bookshelf.utils.BatteryUtil;
+import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.NetworkUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
-import com.kunfei.bookshelf.utils.bar.BarHide;
-import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.dialog.SourceLoginDialog;
@@ -194,46 +195,36 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     @Override
     protected void initImmersionBar() {
-        super.initImmersionBar();
+        int flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        flag = flag | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
         if (readBookControl.getHideNavigationBar()) {
-            mImmersionBar.fullScreen(true);
-            if (ImmersionBar.hasNavigationBar(this)) {
-                binding.readMenuBottom.setNavigationBarHeight(ImmersionBar.getNavigationBarHeight(this));
+            flag = flag | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            if (binding.readMenuBottom.getVisibility() != View.VISIBLE) {
+                flag = flag | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            } else {
+                int nbh = ActivityExtensionsKt.getNavigationBarHeight(this);
+                binding.readMenuBottom.setNavigationBarHeight(nbh);
             }
         }
-
-        if (binding.readMenuBottom.getVisibility() == View.VISIBLE) {
-            if (isImmersionBarEnabled() && !isNightTheme()) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else {
-                mImmersionBar.statusBarDarkFont(false);
+        if (readBookControl.getHideStatusBar()) {
+            if (binding.readMenuBottom.getVisibility() != View.VISIBLE) {
+                flag = flag | View.SYSTEM_UI_FLAG_FULLSCREEN;
             }
-            mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
+        }
+        getWindow().getDecorView().setSystemUiVisibility(flag);
+        if (binding.readMenuBottom.getVisibility() == View.VISIBLE) {
+            if (isImmersionBarEnabled()) {
+                ActivityExtensionsKt.setStatusBarColorAuto(this, ThemeStore.primaryColor(this), false, true);
+            } else {
+                ActivityExtensionsKt.setStatusBarColorAuto(this, ColorUtils.darkenColor(ThemeStore.primaryColor(this)), false, true);
+            }
             changeNavigationBarColor(false);
         } else {
-            if (!isImmersionBarEnabled()) {
-                mImmersionBar.statusBarDarkFont(false);
-            } else if (readBookControl.getDarkStatusIcon()) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else {
-                mImmersionBar.statusBarDarkFont(false);
-            }
-
-            if (readBookControl.getHideStatusBar() && readBookControl.getHideNavigationBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
-            } else if (readBookControl.getHideStatusBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
-                changeNavigationBarColor(true);
-            } else if (readBookControl.getHideNavigationBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
-            } else {
-                mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-                changeNavigationBarColor(true);
-            }
-
+            ActivityExtensionsKt.setLightStatusBar(this, readBookControl.getDarkStatusIcon());
         }
-
-        mImmersionBar.init();
+        changeNavigationBarColor(false);
         screenOffTimerStart();
     }
 
@@ -241,10 +232,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 修改导航栏颜色
      */
     private void changeNavigationBarColor(boolean hideBarDivider) {
-        if (hideBarDivider) {
-            mImmersionBar.hideBarDivider();
-        } else {
-            mImmersionBar.showBarDivider();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            getWindow().setNavigationBarDividerColor(Color.TRANSPARENT);
         }
         int barColorType = readBookControl.getNavBarColor();
         if (binding.readMenuBottom.getVisibility() == View.VISIBLE
@@ -256,19 +245,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         switch (barColorType) {
             case 1:
-                mImmersionBar.navigationBarDarkFont(false, 0.2f);
-                mImmersionBar.navigationBarColor(R.color.black);
+                ActivityExtensionsKt.setNavigationBarColorAuto(this, getResources().getColor(R.color.black));
                 break;
             case 2:
-                mImmersionBar.navigationBarDarkFont(true, 0.2f);
-                mImmersionBar.navigationBarColor(R.color.white);
+                ActivityExtensionsKt.setNavigationBarColorAuto(this, getResources().getColor(R.color.white));
                 break;
             case 3:
-                mImmersionBar.navigationBarDarkFont(readBookControl.getDarkStatusIcon(), 0.2f);
-                mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
-                break;
-            default:
-
+                ActivityExtensionsKt.setNavigationBarColorAuto(this, readBookControl.getBgColor());
                 break;
         }
     }

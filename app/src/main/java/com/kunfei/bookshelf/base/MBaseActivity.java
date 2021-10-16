@@ -23,9 +23,9 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.constant.RxBusTag;
+import com.kunfei.bookshelf.utils.ActivityExtensionsKt;
 import com.kunfei.bookshelf.utils.ColorUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.bar.ImmersionBar;
 import com.kunfei.bookshelf.utils.theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     private static final String TAG = MBaseActivity.class.getSimpleName();
     public final SharedPreferences preferences = MApplication.getConfigPreferences();
-    protected ImmersionBar mImmersionBar;
     private Snackbar snackbar;
 
     @Override
@@ -45,7 +44,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
-        mImmersionBar = ImmersionBar.with(this);
         initImmersionBar();
     }
 
@@ -53,14 +51,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // 如果你的app可以横竖屏切换，并且适配4.4或者emui3手机请务必在onConfigurationChanged方法里添加这句话
-        ImmersionBar.with(this).init();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -133,41 +129,25 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void initImmersionBar() {
         try {
             View actionBar = findViewById(R.id.action_bar);
+            ActivityExtensionsKt.fullScreen(this, true);
             if (isImmersionBarEnabled()) {
-                if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
-                    mImmersionBar.statusBarColorInt(ThemeStore.primaryColor(this));
-                } else {
-                    mImmersionBar.transparentStatusBar();
-                }
+                boolean isTransparent = getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE;
+                ActivityExtensionsKt.setStatusBarColorAuto(this, ThemeStore.primaryColor(this), isTransparent, isTransparent);
             } else {
                 if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
-                    mImmersionBar.statusBarColorInt(ThemeStore.statusBarColor(this));
+                    ActivityExtensionsKt.setStatusBarColorAuto(this, ThemeStore.statusBarColor(this), false, false);
                 } else {
-                    mImmersionBar.statusBarColor(R.color.status_bar_bag);
+                    ActivityExtensionsKt.setStatusBarColorAuto(this, getResources().getColor(R.color.status_bar_bag), false, false);
                 }
             }
         } catch (Exception ignored) {
         }
         try {
-            if (isImmersionBarEnabled() && ColorUtils.isColorLight(ThemeStore.primaryColor(this))) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else if (ColorUtils.isColorLight(ThemeStore.primaryColorDark(this))) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else {
-                mImmersionBar.statusBarDarkFont(false);
-            }
             if (!preferences.getBoolean("navigationBarColorChange", false)) {
-                mImmersionBar.navigationBarColor(R.color.black);
-                mImmersionBar.navigationBarDarkFont(false);
-            } else if (ImmersionBar.canNavigationBarDarkFont()) {
-                mImmersionBar.navigationBarColorInt(ThemeStore.primaryColorDark(this));
-                if (ColorUtils.isColorLight(ThemeStore.primaryColor(this))) {
-                    mImmersionBar.navigationBarDarkFont(true);
-                } else {
-                    mImmersionBar.navigationBarDarkFont(false);
-                }
+                ActivityExtensionsKt.setNavigationBarColorAuto(this, getResources().getColor(R.color.black));
+            } else {
+                ActivityExtensionsKt.setNavigationBarColorAuto(this, ThemeStore.primaryColorDark(this));
             }
-            mImmersionBar.init();
         } catch (Exception ignored) {
         }
     }
@@ -252,6 +232,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
