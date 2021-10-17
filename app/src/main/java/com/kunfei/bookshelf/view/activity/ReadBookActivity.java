@@ -220,18 +220,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             } else {
                 ActivityExtensionsKt.setStatusBarColorAuto(this, ColorUtils.darkenColor(ThemeStore.primaryColor(this)), false, true);
             }
-            changeNavigationBarColor(false);
+            changeNavigationBarColor();
         } else {
-            ActivityExtensionsKt.setLightStatusBar(this, readBookControl.getDarkStatusIcon());
+            if (isImmersionBarEnabled()) {
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+                ActivityExtensionsKt.setLightStatusBar(this, readBookControl.getDarkStatusIcon());
+            } else {
+                ActivityExtensionsKt.setLightStatusBar(this, false);
+            }
         }
-        changeNavigationBarColor(false);
+        changeNavigationBarColor();
         screenOffTimerStart();
     }
 
     /**
      * 修改导航栏颜色
      */
-    private void changeNavigationBarColor(boolean hideBarDivider) {
+    private void changeNavigationBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().setNavigationBarDividerColor(Color.TRANSPARENT);
         }
