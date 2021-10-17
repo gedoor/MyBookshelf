@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.presenter;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -56,7 +55,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
+                    public void onNext(@NonNull BookShelfBean bookShelfBean) {
                         getBook(bookShelfBean);
                     }
 
@@ -144,8 +143,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                             observable.subscribe(new MyObserver<List<BookSourceBean>>() {
                                 @SuppressLint("DefaultLocale")
                                 @Override
-                                public void onNext(List<BookSourceBean> bookSourceBeans) {
-                                    Log.e("onNext", "bookSourceBeans.size=" + bookSourceBeans.size());
+                                public void onNext(@NonNull List<BookSourceBean> bookSourceBeans) {
                                     if (bookSourceBeans.size() == 1) {
                                         BookSourceBean bean = (bookSourceBeans.get(0));
 //                                         BookShelfBean bookShelfBean = new BookShelfBean();
@@ -188,7 +186,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean value) {
+                    public void onNext(@NonNull BookShelfBean value) {
                         if (value.getBookInfoBean().getChapterUrl() == null) {
                             mView.toast("添加书籍失败");
                         } else {
