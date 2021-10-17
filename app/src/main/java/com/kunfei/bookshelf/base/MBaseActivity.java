@@ -129,7 +129,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void initImmersionBar() {
         try {
             View actionBar = findViewById(R.id.action_bar);
-            ActivityExtensionsKt.fullScreen(this, true);
+            ActivityExtensionsKt.fullScreen(this);
             if (isImmersionBarEnabled()) {
                 boolean isTransparent = getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE;
                 ActivityExtensionsKt.setStatusBarColorAuto(this, ThemeStore.primaryColor(this), isTransparent, isTransparent);

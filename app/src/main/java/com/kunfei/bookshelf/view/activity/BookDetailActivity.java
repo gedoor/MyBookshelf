@@ -265,9 +265,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                             }
                         }).show());
 
-        binding.tvRead.setOnClickListener(v -> {
-            readBook();
-        });
+        binding.tvRead.setOnClickListener(v -> readBook());
 
         binding.ivMenu.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(this, view, Gravity.END);

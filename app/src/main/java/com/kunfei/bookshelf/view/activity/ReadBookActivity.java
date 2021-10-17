@@ -214,6 +214,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         }
         getWindow().getDecorView().setSystemUiVisibility(flag);
+        ActivityExtensionsKt.fullScreen(this);
         if (binding.readMenuBottom.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled()) {
                 ActivityExtensionsKt.setStatusBarColorAuto(this, ThemeStore.primaryColor(this), false, true);
