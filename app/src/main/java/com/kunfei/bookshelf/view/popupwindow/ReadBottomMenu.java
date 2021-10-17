@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.popupwindow;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
@@ -36,7 +37,9 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     public void setNavigationBarHeight(int height) {
-        binding.vwNavigationBar.getLayoutParams().height = height;
+        ViewGroup.LayoutParams layoutParams = binding.vwNavigationBar.getLayoutParams();
+        layoutParams.height = height;
+        binding.vwNavigationBar.setLayoutParams(layoutParams);
     }
 
     public void setListener(Callback callback) {
