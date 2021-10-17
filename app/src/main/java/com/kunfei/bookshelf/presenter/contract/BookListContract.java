@@ -21,13 +21,6 @@ public interface BookListContract {
 
         void refreshBook(String noteUrl);
 
-        /**
-         * 刷新错误
-         *
-         * @param error 错误
-         */
-        void refreshError(String error);
-
         SharedPreferences getPreferences();
 
         /**

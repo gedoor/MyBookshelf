@@ -37,6 +37,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class BookListPresenter extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
     private int threadsNum = 6;
@@ -44,8 +45,8 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
     private List<BookShelfBean> bookShelfBeans;
     private int group;
     private boolean hasUpdate = false;
-    private List<String> errBooks = new ArrayList<>();
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final List<String> errBooks = new ArrayList<>();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
@@ -68,20 +69,17 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<List<BookShelfBean>>() {
                     @Override
-                    public void onNext(List<BookShelfBean> value) {
-                        if (null != value) {
-                            bookShelfBeans = value;
-                            mView.refreshBookShelf(bookShelfBeans);
-                            if (needRefresh && NetworkUtils.isNetWorkAvailable()) {
-                                startRefreshBook();
-                            }
+                    public void onNext(@NonNull List<BookShelfBean> value) {
+                        bookShelfBeans = value;
+                        mView.refreshBookShelf(bookShelfBeans);
+                        if (needRefresh && NetworkUtils.isNetWorkAvailable()) {
+                            startRefreshBook();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mView.refreshError(NetworkUtils.getErrorTip(NetworkUtils.ERROR_CODE_ANALY));
+                        Timber.d(e);
                     }
                 });
     }
@@ -139,12 +137,12 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                         .compose(RxUtils::toSimpleSingle)
                         .subscribe(new Observer<BookShelfBean>() {
                             @Override
-                            public void onSubscribe(Disposable d) {
+                            public void onSubscribe(@NonNull Disposable d) {
                                 compositeDisposable.add(d);
                             }
 
                             @Override
-                            public void onNext(BookShelfBean value) {
+                            public void onNext(@NonNull BookShelfBean value) {
                                 if (value.getErrorMsg() != null) {
                                     mView.toast(value.getErrorMsg());
                                     value.setErrorMsg(null);
@@ -157,7 +155,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             }
 
                             @Override
-                            public void onError(Throwable e) {
+                            public void onError(@NonNull Throwable e) {
                                 if (!(e instanceof WebBook.NoSourceThrowable)) {
                                     errBooks.add(bookShelfBean.getBookInfoBean().getName());
                                     bookShelfBean.setLoading(false);

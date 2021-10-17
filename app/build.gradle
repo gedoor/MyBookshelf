@@ -105,6 +105,12 @@ dependencies {
     implementation 'androidx.media:media:1.4.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    //Splitties
+    def splitties_version = '3.0.0'
+    implementation("com.louiscad.splitties:splitties-appctx:$splitties_version")
+    implementation("com.louiscad.splitties:splitties-systemservices:$splitties_version")
+    implementation("com.louiscad.splitties:splitties-views:$splitties_version")
+
     def exoplayer_version = '2.15.0'
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
     implementation "com.google.android.exoplayer:extension-okhttp:$exoplayer_version"

@@ -226,11 +226,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     }
 
     @Override
-    public void refreshError(String error) {
-        toast(error);
-    }
-
-    @Override
     public SharedPreferences getPreferences() {
         return preferences;
     }
