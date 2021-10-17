@@ -227,6 +227,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 getWindow().setStatusBarColor(Color.TRANSPARENT);
                 ActivityExtensionsKt.setLightStatusBar(this, readBookControl.getDarkStatusIcon());
             } else {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.ate_switch_track_normal_light));
                 ActivityExtensionsKt.setLightStatusBar(this, false);
             }
         }
