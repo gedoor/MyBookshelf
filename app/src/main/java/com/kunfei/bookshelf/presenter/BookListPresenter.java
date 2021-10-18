@@ -2,7 +2,6 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.os.AsyncTask;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -45,7 +44,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
     private List<BookShelfBean> bookShelfBeans;
     private int group;
     private boolean hasUpdate = false;
-    private final List<String> errBooks = new ArrayList<>();
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -53,7 +51,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         this.group = group;
         if (needRefresh) {
             hasUpdate = false;
-            errBooks.clear();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfList;
@@ -157,7 +154,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                             @Override
                             public void onError(@NonNull Throwable e) {
                                 if (!(e instanceof WebBook.NoSourceThrowable)) {
-                                    errBooks.add(bookShelfBean.getBookInfoBean().getName());
                                     bookShelfBean.setLoading(false);
                                     mView.refreshBook(bookShelfBean.getNoteUrl());
                                     refreshBookshelf();
@@ -173,10 +169,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                 refreshBookshelf();
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
-            if (errBooks.size() > 0) {
-                mView.toast(TextUtils.join("、", errBooks) + " 更新失败！");
-                errBooks.clear();
-            }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
                 downloadAll(10, true);
                 hasUpdate = false;
