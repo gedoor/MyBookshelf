@@ -1,5 +1,7 @@
 package com.kunfei.basemvplib;
 
+import static com.kunfei.basemvplib.BaseActivity.START_SHEAR_ELE;
+
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
@@ -14,10 +16,6 @@ import androidx.fragment.app.Fragment;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
-
-import java.util.Objects;
-
-import static com.kunfei.basemvplib.BaseActivity.START_SHEAR_ELE;
 
 public abstract class BaseFragment<T extends IPresenter> extends Fragment implements IView {
     protected View view;
@@ -78,7 +76,7 @@ public abstract class BaseFragment<T extends IPresenter> extends Fragment implem
 
     protected void startActivityByAnim(Intent intent, int animIn, int animExit) {
         startActivity(intent);
-        Objects.requireNonNull(getActivity()).overridePendingTransition(animIn, animExit);
+        requireActivity().overridePendingTransition(animIn, animExit);
     }
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
