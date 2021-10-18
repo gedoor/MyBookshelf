@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.presenter;
 
+import static android.text.TextUtils.isEmpty;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -47,9 +49,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.text.TextUtils.isEmpty;
 
 public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
     private final static int OPEN_FROM_OTHER = 0;
@@ -58,6 +59,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     private BookShelfBean bookShelf;
     private ChangeSourceHelp changeSourceHelp;
     private List<BookChapterBean> chapterBeanList = new ArrayList<>();
+    private Disposable changeSourceDisposable;
 
     @Override
     public void initData(Activity activity) {
@@ -225,12 +227,21 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
      */
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
+        if (changeSourceDisposable != null && !changeSourceDisposable.isDisposed()) {
+            changeSourceDisposable.dispose();
+        }
         searchBook.setName(bookShelf.getBookInfoBean().getName());
         searchBook.setAuthor(bookShelf.getBookInfoBean().getAuthor());
         ChangeSourceHelp.changeBookSource(searchBook, bookShelf)
                 .subscribe(new MyObserver<TwoDataBean<BookShelfBean, List<BookChapterBean>>>() {
                     @Override
-                    public void onNext(TwoDataBean<BookShelfBean, List<BookChapterBean>> value) {
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                        changeSourceDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull TwoDataBean<BookShelfBean, List<BookChapterBean>> value) {
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value.getData1();
