@@ -17,8 +17,8 @@ import com.kunfei.bookshelf.utils.theme.ATH;
 import java.io.File;
 
 public class FontSelector {
-    private AlertDialog.Builder builder;
-    private FontAdapter adapter;
+    private final AlertDialog.Builder builder;
+    private final FontAdapter adapter;
     private String fontPath;
     private OnThisListener thisListener;
     private AlertDialog alertDialog;

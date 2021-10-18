@@ -87,7 +87,13 @@ dependencies {
     implementation project(':basemvplib')
 
     api 'androidx.core:core-ktx:1.6.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    //协程
+    def coroutines_version = '1.5.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
 
     //anko
     def anko_version = '0.10.8'

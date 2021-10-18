@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.widget.font;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -18,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> {
-    private List<File> fileList = new ArrayList<>();
-    private FontSelector.OnThisListener thisListener;
-    private Context context;
-    private String selectPath;
+    private final List<File> fileList = new ArrayList<>();
+    private final FontSelector.OnThisListener thisListener;
+    private final Context context;
+    private final String selectPath;
 
     FontAdapter(Context context, String selectPath, FontSelector.OnThisListener thisListener) {
         this.context = context;
@@ -61,6 +62,7 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
         return fileList.size() == 0 ? 1 : fileList.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     void upData(File[] files) {
         if (files != null) {
             fileList.clear();
@@ -76,7 +78,7 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
         notifyDataSetChanged();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvFont;
         ImageView ivChecked;
 

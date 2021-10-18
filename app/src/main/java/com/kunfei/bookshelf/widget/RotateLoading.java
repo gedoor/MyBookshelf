@@ -79,7 +79,7 @@ public class RotateLoading extends View {
             speedOfDegree = typedArray.getInt(R.styleable.RotateLoading_loading_speed, DEFAULT_SPEED_OF_DEGREE);
             typedArray.recycle();
         }
-        speedOfArc = speedOfDegree / 4;
+        speedOfArc = speedOfDegree / 4f;
         mPaint = new Paint();
         mPaint.setColor(color);
         mPaint.setAntiAlias(true);
