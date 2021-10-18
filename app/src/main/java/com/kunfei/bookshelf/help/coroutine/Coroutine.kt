@@ -1,8 +1,7 @@
 package io.legado.app.help.coroutine
 
-import io.legado.app.BuildConfig
-import io.legado.app.utils.printOnDebug
 import kotlinx.coroutines.*
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 
@@ -143,9 +142,7 @@ class Coroutine<T>(
                     success?.let { dispatchCallback(this, value, it) }
                 }
             } catch (e: Throwable) {
-                if (BuildConfig.DEBUG) {
-                    e.printOnDebug()
-                }
+                Timber.e(e)
                 val consume: Boolean = errorReturn?.value?.let { value ->
                     if (isActive) {
                         success?.let { dispatchCallback(this, value, it) }

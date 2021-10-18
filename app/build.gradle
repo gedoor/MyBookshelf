@@ -85,7 +85,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':basemvplib')
-
+    implementation('androidx.multidex:multidex:2.0.1')
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
@@ -123,6 +123,8 @@ dependencies {
     implementation("com.louiscad.splitties:splitties-systemservices:$splitties_version")
     implementation("com.louiscad.splitties:splitties-views:$splitties_version")
 
+    //media
+    implementation("androidx.media:media:1.4.1")
     def exoplayer_version = '2.15.0'
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
     implementation "com.google.android.exoplayer:extension-okhttp:$exoplayer_version"
@@ -134,7 +136,6 @@ dependencies {
     //google
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'com.google.android:flexbox:1.1.0'
 
     //RxAndroid
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
