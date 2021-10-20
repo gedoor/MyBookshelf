@@ -38,8 +38,8 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.ActivityExtensionsKt;
 import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.ContextExtensionsKt;
-import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.MeUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import java.io.IOException;
@@ -304,7 +304,7 @@ public class ReadStyleActivity extends MBaseActivity<IPresenter> implements Colo
         if (requestCode == ResultSelectBg) {
             if (resultCode == RESULT_OK && null != data) {
                 try {
-                    bgPath = FileUtils.getPath(this, data.getData());
+                    bgPath = RealPathUtil.getPath(this, data.getData());
                     setCustomBg(bgPath);
                 } catch (Exception ignored) {
                 }

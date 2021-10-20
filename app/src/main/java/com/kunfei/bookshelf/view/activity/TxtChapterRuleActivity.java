@@ -20,7 +20,7 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.model.TxtChapterRuleManager;
 import com.kunfei.bookshelf.presenter.TxtChapterRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.TxtChapterRuleContract;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.TxtChapterRuleAdapter;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
@@ -191,7 +191,7 @@ public class TxtChapterRuleActivity extends MBaseActivity<TxtChapterRuleContract
         switch (requestCode) {
             case requestImport:
                 if (data != null) {
-                    mPresenter.importDataSLocal(FileUtils.getPath(this, data.getData()));
+                    mPresenter.importDataSLocal(RealPathUtil.getPath(this, data.getData()));
                 }
                 break;
         }

@@ -15,7 +15,7 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.databinding.ActivityQrcodeCaptureBinding;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.widget.filepicker.picker.FilePicker;
 
 import cn.bingoogolapple.qrcode.core.QRCodeView;
@@ -162,7 +162,7 @@ public class QRCodeScanActivity extends MBaseActivity<IPresenter> implements QRC
         binding.zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_QR_IMAGE) {
-            final String picturePath = FileUtils.getPath(this, data.getData());
+            final String picturePath = RealPathUtil.getPath(this, data.getData());
             // 本来就用到 QRCodeView 时可直接调 QRCodeView 的方法，走通用的回调
             binding.zxingview.decodeQRCode(picturePath);
         }

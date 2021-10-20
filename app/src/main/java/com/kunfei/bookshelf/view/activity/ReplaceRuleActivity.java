@@ -31,7 +31,7 @@ import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import com.kunfei.bookshelf.utils.ACache;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
@@ -256,7 +256,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMPORT_SOURCE) {
             if (data != null) {
-                mPresenter.importDataSLocal(FileUtils.getPath(this, data.getData()));
+                mPresenter.importDataSLocal(RealPathUtil.getPath(this, data.getData()));
             }
         }
     }

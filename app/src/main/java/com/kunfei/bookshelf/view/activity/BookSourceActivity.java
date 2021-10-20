@@ -33,7 +33,7 @@ import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.ShareService;
 import com.kunfei.bookshelf.utils.ACache;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.utils.theme.ATH;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
@@ -413,7 +413,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     break;
                 case IMPORT_SOURCE:
                     if (data != null && data.getData() != null) {
-                        mPresenter.importBookSourceLocal(FileUtils.getPath(this, data.getData()));
+                        mPresenter.importBookSourceLocal(RealPathUtil.getPath(this, data.getData()));
                     }
                     break;
                 case REQUEST_QR:

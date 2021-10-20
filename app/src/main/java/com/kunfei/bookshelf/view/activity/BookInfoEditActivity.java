@@ -21,7 +21,7 @@ import com.kunfei.bookshelf.databinding.ActivityBookInfoEditBinding;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.permission.Permissions;
 import com.kunfei.bookshelf.help.permission.PermissionsCompat;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.RealPathUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -208,7 +208,7 @@ public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
         switch (requestCode) {
             case ResultSelectCover:
                 if (resultCode == RESULT_OK && null != data) {
-                    binding.tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
+                    binding.tieCoverUrl.setText(RealPathUtil.getPath(this, data.getData()));
                     book.setCustomCoverPath(binding.tieCoverUrl.getText().toString());
                     initCover();
                 }
