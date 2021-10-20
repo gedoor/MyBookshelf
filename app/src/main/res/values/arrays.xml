@@ -77,9 +77,9 @@
     </string-array>
 
     <string-array name="select_folder">
-        <item>@string/default_path</item>
         <item>@string/sys_folder_picker</item>
         <item>@string/app_folder_picker</item>
+        <item>@string/default_path</item>
     </string-array>
 
     <declare-styleable name="Battery">

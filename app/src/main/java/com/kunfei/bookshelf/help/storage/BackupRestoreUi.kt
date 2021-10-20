@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
@@ -90,15 +91,22 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
     }
 
     fun selectBackupFolder(activity: Activity) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            try {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                activity.startActivityForResult(intent, backupSelectRequestCode)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                activity.toast(e.localizedMessage ?: "ERROR")
+            }
+            return
+        }
         activity.alert {
             titleResource = R.string.select_folder
             items(activity.resources.getStringArray(R.array.select_folder).toList()) { _, index ->
                 when (index) {
                     0 -> {
-                        setBackupPath(Backup.defaultPath)
-                        backupUsePermission(activity)
-                    }
-                    1 -> {
                         try {
                             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -108,14 +116,18 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
                             activity.toast(e.localizedMessage ?: "ERROR")
                         }
                     }
-                    2 -> {
+                    1 -> {
                         PermissionsCompat.Builder(activity)
-                                .addPermissions(*Permissions.Group.STORAGE)
-                                .rationale(R.string.get_storage_per)
-                                .onGranted {
-                                    selectBackupFolderApp(activity, false)
-                                }
-                                .request()
+                            .addPermissions(*Permissions.Group.STORAGE)
+                            .rationale(R.string.get_storage_per)
+                            .onGranted {
+                                selectBackupFolderApp(activity, false)
+                            }
+                            .request()
+                    }
+                    2 -> {
+                        setBackupPath(Backup.defaultPath)
+                        backupUsePermission(activity)
                     }
                 }
             }
@@ -179,12 +191,22 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
     }
 
     private fun selectRestoreFolder(activity: Activity) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            try {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                activity.startActivityForResult(intent, restoreSelectRequestCode)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                activity.toast(e.localizedMessage ?: "ERROR")
+            }
+            return
+        }
         activity.alert {
             titleResource = R.string.select_folder
             items(activity.resources.getStringArray(R.array.select_folder).toList()) { _, index ->
                 when (index) {
-                    0 -> restoreUsePermission(activity)
-                    1 -> {
+                    0 -> {
                         try {
                             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -194,15 +216,16 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
                             activity.toast(e.localizedMessage ?: "ERROR")
                         }
                     }
-                    2 -> {
+                    1 -> {
                         PermissionsCompat.Builder(activity)
-                                .addPermissions(*Permissions.Group.STORAGE)
-                                .rationale(R.string.get_storage_per)
-                                .onGranted {
-                                    selectBackupFolderApp(activity, true)
-                                }
-                                .request()
+                            .addPermissions(*Permissions.Group.STORAGE)
+                            .rationale(R.string.get_storage_per)
+                            .onGranted {
+                                selectBackupFolderApp(activity, true)
+                            }
+                            .request()
                     }
+                    2 -> restoreUsePermission(activity)
                 }
             }
         }.show()
