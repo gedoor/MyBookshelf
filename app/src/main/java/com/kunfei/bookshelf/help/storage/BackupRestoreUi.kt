@@ -64,30 +64,30 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         val backupPath = getBackupPath()
         if (backupPath.isNullOrEmpty()) {
             selectBackupFolder(activity)
-        } else {
-            if (backupPath.isContentPath()) {
-                val uri = Uri.parse(backupPath)
-                val doc = DocumentFile.fromTreeUri(activity, uri)
-                if (doc?.canWrite() == true) {
-                    Backup.backup(activity, backupPath, this)
-                } else {
-                    selectBackupFolder(activity)
-                }
+        } else if (backupPath.isContentPath()) {
+            val uri = Uri.parse(backupPath)
+            val doc = DocumentFile.fromTreeUri(activity, uri)
+            if (doc?.canWrite() == true) {
+                Backup.backup(activity, backupPath, this)
             } else {
-                backupUsePermission(activity)
+                selectBackupFolder(activity)
             }
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            selectBackupFolder(activity)
+        } else {
+            backupUsePermission(activity)
         }
     }
 
     private fun backupUsePermission(activity: Activity, path: String = Backup.defaultPath) {
         PermissionsCompat.Builder(activity)
-                .addPermissions(*Permissions.Group.STORAGE)
-                .rationale(R.string.get_storage_per)
-                .onGranted {
-                    setBackupPath(path)
-                    Backup.backup(activity, path, this)
-                }
-                .request()
+            .addPermissions(*Permissions.Group.STORAGE)
+            .rationale(R.string.get_storage_per)
+            .onGranted {
+                setBackupPath(path)
+                Backup.backup(activity, path, this)
+            }
+            .request()
     }
 
     fun selectBackupFolder(activity: Activity) {
@@ -154,40 +154,40 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
         Single.create { emitter: SingleEmitter<ArrayList<String>?> ->
             emitter.onSuccess(getWebDavFileNames())
         }.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : MySingleObserver<ArrayList<String>?>() {
-                    override fun onSuccess(strings: ArrayList<String>) {
-                        if (!showRestoreDialog(activity, strings, this@BackupRestoreUi)) {
-                            val path = getBackupPath()
-                            if (TextUtils.isEmpty(path)) {
-                                selectRestoreFolder(activity)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : MySingleObserver<ArrayList<String>?>() {
+                override fun onSuccess(strings: ArrayList<String>) {
+                    if (!showRestoreDialog(activity, strings, this@BackupRestoreUi)) {
+                        val path = getBackupPath()
+                        if (TextUtils.isEmpty(path)) {
+                            selectRestoreFolder(activity)
+                        } else if (path.isContentPath()) {
+                            val uri = Uri.parse(path)
+                            val doc = DocumentFile.fromTreeUri(activity, uri)
+                            if (doc?.canWrite() == true) {
+                                Restore.restore(activity, Uri.parse(path), this@BackupRestoreUi)
                             } else {
-                                if (path.isContentPath()) {
-                                    val uri = Uri.parse(path)
-                                    val doc = DocumentFile.fromTreeUri(activity, uri)
-                                    if (doc?.canWrite() == true) {
-                                        Restore.restore(activity, Uri.parse(path), this@BackupRestoreUi)
-                                    } else {
-                                        selectRestoreFolder(activity)
-                                    }
-                                } else {
-                                    restoreUsePermission(activity)
-                                }
+                                selectRestoreFolder(activity)
                             }
+                        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                            selectRestoreFolder(activity)
+                        } else {
+                            restoreUsePermission(activity)
                         }
                     }
-                })
+                }
+            })
     }
 
     private fun restoreUsePermission(activity: Activity, path: String = Backup.defaultPath) {
         PermissionsCompat.Builder(activity)
-                .addPermissions(*Permissions.Group.STORAGE)
-                .rationale(R.string.get_storage_per)
-                .onGranted {
-                    setBackupPath(path)
-                    Restore.restore(path, this)
-                }
-                .request()
+            .addPermissions(*Permissions.Group.STORAGE)
+            .rationale(R.string.get_storage_per)
+            .onGranted {
+                setBackupPath(path)
+                Restore.restore(path, this)
+            }
+            .request()
     }
 
     private fun selectRestoreFolder(activity: Activity) {
@@ -236,8 +236,8 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
             backupSelectRequestCode -> if (resultCode == RESULT_OK) {
                 data?.data?.let { uri ->
                     MApplication.getInstance().contentResolver.takePersistableUriPermission(
-                            uri,
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                     setBackupPath(uri.toString())
                     Backup.backup(MApplication.getInstance(), uri.toString(), this)
@@ -246,8 +246,8 @@ object BackupRestoreUi : Backup.CallBack, Restore.CallBack {
             restoreSelectRequestCode -> if (resultCode == RESULT_OK) {
                 data?.data?.let { uri ->
                     MApplication.getInstance().contentResolver.takePersistableUriPermission(
-                            uri,
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                     setBackupPath(uri.toString())
                     Restore.restore(MApplication.getInstance(), uri, this)

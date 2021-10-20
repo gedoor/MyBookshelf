@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -77,7 +78,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private MoDialogHUD moDialogHUD;
     private long exitTime = 0;
     private boolean resumed = false;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -429,6 +430,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     }).show();
         } else if (id == R.id.action_add_qrcode) {
             Intent intent = new Intent(this, QRCodeScanActivity.class);
+            //noinspection deprecation
             startActivityForResult(intent, REQUEST_QR);
         } else if (id == R.id.action_download_all) {
             if (!isNetWorkAvailable()) {
