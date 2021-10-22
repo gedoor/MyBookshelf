@@ -16,16 +16,19 @@ import java.util.regex.Pattern
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 object FileUtils {
 
+    @JvmStatic
     fun createFileIfNotExist(root: File, vararg subDirFiles: String): File {
         val filePath = getPath(root, *subDirFiles)
         return createFileIfNotExist(filePath)
     }
 
+    @JvmStatic
     fun createFolderIfNotExist(root: File, vararg subDirs: String): File {
         val filePath = getPath(root, *subDirs)
         return createFolderIfNotExist(filePath)
     }
 
+    @JvmStatic
     fun createFolderIfNotExist(filePath: String): File {
         val file = File(filePath)
         //如果文件夹不存在，就创建它

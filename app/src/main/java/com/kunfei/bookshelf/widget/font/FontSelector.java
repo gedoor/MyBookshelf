@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.widget.font;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -10,18 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.help.DocumentHelper;
-import com.kunfei.bookshelf.utils.FileUtils;
+import com.kunfei.bookshelf.utils.DocItem;
 import com.kunfei.bookshelf.utils.theme.ATH;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import kotlin.text.Regex;
 
 public class FontSelector {
     private final AlertDialog.Builder builder;
     private final FontAdapter adapter;
-    private String fontPath;
     private OnThisListener thisListener;
     private AlertDialog alertDialog;
+    public static Regex fontRegex = new Regex("(?i).*\\.[ot]tf");
 
     public FontSelector(Context context, String selectPath) {
         builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
@@ -30,7 +33,6 @@ public class FontSelector {
         builder.setView(view);
         builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
-        fontPath = FileUtils.getSdCardPath() + "/Fonts";
         adapter = new FontAdapter(context, selectPath,
                 new OnThisListener() {
                     @Override
@@ -42,9 +44,9 @@ public class FontSelector {
                     }
 
                     @Override
-                    public void setFontPath(String fontPath) {
+                    public void setFontPath(Uri uri) {
                         if (thisListener != null) {
-                            thisListener.setFontPath(fontPath);
+                            thisListener.setFontPath(uri);
                         }
                         alertDialog.dismiss();
                     }
@@ -59,13 +61,14 @@ public class FontSelector {
         return this;
     }
 
-    public FontSelector setPath(String path) {
-        fontPath = path;
-        return this;
-    }
-
-    public FontSelector create() {
-        adapter.upData(getFontFiles());
+    public FontSelector create(List<DocItem> docItems) {
+        ArrayList<DocItem> list = new ArrayList<>();
+        for (DocItem docItem : docItems) {
+            if (docItem.getName().toLowerCase().matches(".*\\.[ot]tf")) {
+                list.add(docItem);
+            }
+        }
+        adapter.upData(list);
         builder.create();
         return this;
     }
@@ -75,19 +78,9 @@ public class FontSelector {
         ATH.setAlertDialogTint(alertDialog);
     }
 
-    private File[] getFontFiles() {
-        try {
-            DocumentHelper.createDirIfNotExist(fontPath);
-            File file = new File(fontPath);
-            return file.listFiles(pathName -> pathName.getName().toLowerCase().matches(".*\\.[ot]tf"));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public interface OnThisListener {
         void setDefault();
 
-        void setFontPath(String fontPath);
+        void setFontPath(Uri uri);
     }
 }
