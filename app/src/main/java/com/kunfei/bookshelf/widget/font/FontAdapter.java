@@ -77,7 +77,7 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
             }
             holder.tvFont.setOnClickListener(view -> {
                 if (thisListener != null) {
-                    thisListener.setFontPath(docItem.getUri());
+                    thisListener.setFontPath(docItem);
                 }
             });
         } else {

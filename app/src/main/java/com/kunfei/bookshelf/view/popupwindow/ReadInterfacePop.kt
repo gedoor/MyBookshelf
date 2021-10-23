@@ -246,8 +246,8 @@ class ReadInterfacePop : FrameLayout {
                     clearFontPath()
                 }
 
-                override fun setFontPath(uri: Uri) {
-                    setReadFonts(uri)
+                override fun setFontPath(fileDoc: FileDoc) {
+                    setReadFonts(fileDoc)
                 }
             })
             .create(docItems)
@@ -263,8 +263,14 @@ class ReadInterfacePop : FrameLayout {
     }
 
     //设置字体
-    fun setReadFonts(uri: Uri) {
-        readBookControl.setReadBookFont(uri.toString())
+    fun setReadFonts(fileDoc: FileDoc) {
+        if (fileDoc.isContentScheme) {
+            val file = FileUtils.createFileIfNotExist(context.externalFiles, "Fonts", fileDoc.name)
+            file.writeBytes(fileDoc.uri.readBytes(context))
+            readBookControl.setReadBookFont(file.absolutePath)
+        } else {
+            readBookControl.setReadBookFont(fileDoc.uri.toString())
+        }
         callback!!.refresh()
     }
 

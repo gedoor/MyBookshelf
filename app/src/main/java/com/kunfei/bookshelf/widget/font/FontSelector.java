@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.widget.font;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -43,9 +42,9 @@ public class FontSelector {
                     }
 
                     @Override
-                    public void setFontPath(Uri uri) {
+                    public void setFontPath(FileDoc fileDoc) {
                         if (thisListener != null) {
-                            thisListener.setFontPath(uri);
+                            thisListener.setFontPath(fileDoc);
                         }
                         alertDialog.dismiss();
                     }
@@ -74,6 +73,6 @@ public class FontSelector {
     public interface OnThisListener {
         void setDefault();
 
-        void setFontPath(Uri uri);
+        void setFontPath(FileDoc fileDoc);
     }
 }
