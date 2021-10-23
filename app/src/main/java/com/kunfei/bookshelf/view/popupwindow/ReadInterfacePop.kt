@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
 import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.databinding.PopReadInterfaceBinding
 import com.kunfei.bookshelf.help.ReadBookControl
@@ -202,10 +203,7 @@ class ReadInterfacePop : FrameLayout {
                 } else {
                     kotlin.runCatching {
                         val uri = Uri.parse(path)
-                        val docs = DocumentUtils.listFiles(uri) {
-                            it.name.matches(FontSelector.fontRegex)
-                        }
-                        selectFont(docs)
+                        showFontSelector(uri)
                     }.onFailure {
                         activity!!.selectFontDir()
                     }
@@ -241,8 +239,10 @@ class ReadInterfacePop : FrameLayout {
     }
 
     fun showFontSelector(uri: Uri) {
+        ACache.get(activity).put("fontDir", uri.toString())
         kotlin.runCatching {
-            DocumentUtils.listFiles(uri) {
+            val doc = DocumentFile.fromTreeUri(context, uri)
+            DocumentUtils.listFiles(doc!!.uri) {
                 it.name.matches(FontSelector.fontRegex)
             }.let {
                 selectFont(it)
