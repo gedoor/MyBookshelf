@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.plugins.RxJavaPlugins;
+import timber.log.Timber;
 
 public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
@@ -64,6 +65,7 @@ public class MApplication extends Application {
         super.onCreate();
         instance = this;
         CrashHandler.getInstance().init(this);
+        Timber.plant(new Timber.DebugTree());
         RxJavaPlugins.setErrorHandler(Functions.emptyConsumer());
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
