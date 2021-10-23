@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.DocItem;
+import com.kunfei.bookshelf.utils.FileDoc;
 import com.kunfei.bookshelf.utils.RealPathUtil;
 
 import java.io.File;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> {
-    private final List<DocItem> docList = new ArrayList<>();
+    private final List<FileDoc> docList = new ArrayList<>();
     private final FontSelector.OnThisListener thisListener;
     private final Context context;
     private String selectName;
@@ -50,10 +50,10 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if (docList.size() > 0) {
-            DocItem docItem = docList.get(position);
+            FileDoc docItem = docList.get(position);
             try {
                 Typeface typeface;
-                if (docItem.isContentPath()) {
+                if (docItem.isContentScheme()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         FileDescriptor fd = context.getContentResolver().openFileDescriptor(docItem.getUri(), "r")
                                 .getFileDescriptor();
@@ -91,7 +91,7 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.MyViewHolder> 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void upData(List<DocItem> docItems) {
+    void upData(List<FileDoc> docItems) {
         if (docItems != null) {
             docList.clear();
             docList.addAll(docItems);

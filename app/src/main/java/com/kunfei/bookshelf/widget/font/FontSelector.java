@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.DocItem;
+import com.kunfei.bookshelf.utils.FileDoc;
 import com.kunfei.bookshelf.utils.theme.ATH;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.text.Regex;
@@ -61,14 +60,8 @@ public class FontSelector {
         return this;
     }
 
-    public FontSelector create(List<DocItem> docItems) {
-        ArrayList<DocItem> list = new ArrayList<>();
-        for (DocItem docItem : docItems) {
-            if (docItem.getName().toLowerCase().matches(".*\\.[ot]tf")) {
-                list.add(docItem);
-            }
-        }
-        adapter.upData(list);
+    public FontSelector create(List<FileDoc> docItems) {
+        adapter.upData(docItems);
         builder.create();
         return this;
     }
