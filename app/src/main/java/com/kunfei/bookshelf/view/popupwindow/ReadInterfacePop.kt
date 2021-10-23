@@ -18,10 +18,7 @@ import com.kunfei.bookshelf.help.ReadBookControl
 import com.kunfei.bookshelf.help.permission.Permissions
 import com.kunfei.bookshelf.help.permission.PermissionsCompat
 import com.kunfei.bookshelf.help.storage.isContentPath
-import com.kunfei.bookshelf.utils.ACache
-import com.kunfei.bookshelf.utils.DocumentUtils
-import com.kunfei.bookshelf.utils.FileUtils
-import com.kunfei.bookshelf.utils.getCompatColor
+import com.kunfei.bookshelf.utils.*
 import com.kunfei.bookshelf.utils.theme.ATH
 import com.kunfei.bookshelf.view.activity.ReadBookActivity
 import com.kunfei.bookshelf.view.activity.ReadStyleActivity
@@ -201,8 +198,13 @@ class ReadInterfacePop : FrameLayout {
                 } else if (!path.isContentPath()) {
                     activity!!.selectFontDir()
                 } else {
-                    val uri = Uri.parse(path)
-                    DocumentUtils.listFiles(context, uri)
+                    kotlin.runCatching {
+                        val uri = Uri.parse(path)
+                        val docs = DocumentUtils.listFiles(context, uri)
+                        activity!!.selectFont(docs)
+                    }.onFailure {
+                        activity!!.selectFontDir()
+                    }
                 }
             } else {
                 PermissionsCompat.Builder(activity!!)
@@ -212,12 +214,16 @@ class ReadInterfacePop : FrameLayout {
                     )
                     .rationale(R.string.get_storage_per)
                     .onGranted {
-                        activity!!.selectFont(
-                            DocumentUtils.listFiles(
-                                FileUtils.getSdCardPath() + "/Fonts",
-                                FontSelector.fontRegex
+                        kotlin.runCatching {
+                            activity!!.selectFont(
+                                DocumentUtils.listFiles(
+                                    FileUtils.getSdCardPath() + "/Fonts",
+                                    FontSelector.fontRegex
+                                )
                             )
-                        )
+                        }.onFailure {
+                            context.toastOnUi("获取文件出错\n${it.localizedMessage}")
+                        }
                     }
                     .request()
             }

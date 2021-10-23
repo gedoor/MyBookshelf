@@ -8,8 +8,8 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
 import com.kunfei.bookshelf.model.NoStackTraceException
-import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
 
@@ -96,6 +96,7 @@ object DocumentUtils {
         } ?: throw NoStackTraceException("打开文件失败\n${uri}")
     }
 
+    @Throws(Exception::class)
     fun listFiles(context: Context, uri: Uri, regex: Regex? = null): ArrayList<DocItem> {
         val docList = arrayListOf<DocItem>()
         var cursor: Cursor? = null
@@ -134,33 +135,30 @@ object DocumentUtils {
                     } while (cursor.moveToNext())
                 }
             }
-        } catch (e: Exception) {
-            Timber.e(e)
         } finally {
             cursor?.close()
         }
         return docList
     }
 
+    @Throws(IOException::class)
     fun listFiles(path: String, regex: Regex? = null): ArrayList<DocItem> {
         val docItems = arrayListOf<DocItem>()
-        kotlin.runCatching {
-            val file = File(path)
-            file.listFiles { pathName ->
-                regex?.let {
-                    pathName.name.matches(it)
-                } ?: true
-            }?.forEach {
-                docItems.add(
-                    DocItem(
-                        it.name,
-                        it.extension,
-                        it.length(),
-                        Date(it.lastModified()),
-                        Uri.parse(it.absolutePath)
-                    )
+        val file = File(path)
+        file.listFiles { pathName ->
+            regex?.let {
+                pathName.name.matches(it)
+            } ?: true
+        }?.forEach {
+            docItems.add(
+                DocItem(
+                    it.name,
+                    it.extension,
+                    it.length(),
+                    Date(it.lastModified()),
+                    Uri.parse(it.absolutePath)
                 )
-            }
+            )
         }
         return docItems
     }
