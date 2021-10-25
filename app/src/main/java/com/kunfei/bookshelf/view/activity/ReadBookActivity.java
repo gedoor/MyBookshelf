@@ -785,11 +785,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapterName(mPresenter.getChapterList().get(pos).getDurChapterName());
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
+                            BookChapterBean chapter = mPresenter.getChapterList().get(pos);
+                            if (chapter.getIsVip() && !chapter.getIsPay()) {
+                                toast("付费章节未购买,如已购买请登录并刷新目录");
+                            }
                             binding.tvChapterName.setVisibility(View.VISIBLE);
                             binding.tvChapterName.setText(mPresenter.getChapterList().get(pos).getDurChapterName());
                             binding.tvChapterUrl.setVisibility(View.VISIBLE);
                             binding.tvChapterUrl.setText(NetworkUtils.getAbsoluteURL(mPresenter.getBookShelf().getBookInfoBean().getChapterUrl(),
-                                    mPresenter.getChapterList().get(pos).getDurChapterUrl()));
+                                    chapter.getDurChapterUrl()));
                         } else {
                             binding.tvChapterName.setVisibility(View.GONE);
                             binding.tvChapterUrl.setVisibility(View.GONE);
