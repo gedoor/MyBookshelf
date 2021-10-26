@@ -1,6 +1,8 @@
 package com.kunfei.bookshelf.constant
 
 import android.annotation.SuppressLint
+import android.provider.Settings
+import splitties.init.appCtx
 import java.text.SimpleDateFormat
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
@@ -9,6 +11,10 @@ import javax.script.ScriptEngineManager
 object AppConst {
 
     const val APP_TAG = "Legado"
+
+    val androidId: String by lazy {
+        Settings.System.getString(appCtx.contentResolver, Settings.Secure.ANDROID_ID)
+    }
 
     const val channelIdDownload = "channel_download"
     const val channelIdReadAloud = "channel_read_aloud"

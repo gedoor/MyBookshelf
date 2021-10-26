@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.help;
 import com.kunfei.bookshelf.DbHelper;
 import com.kunfei.bookshelf.base.BaseModelImpl;
 import com.kunfei.bookshelf.bean.CookieBean;
+import com.kunfei.bookshelf.constant.AppConst;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeUrl;
 import com.kunfei.bookshelf.utils.MD5Utils;
@@ -112,6 +113,10 @@ public interface JsExtensions {
 
     default String md5Encode(String text) {
         return MD5Utils.strToMd5By32(text);
+    }
+
+    default String androidId() {
+        return AppConst.INSTANCE.getAndroidId();
     }
 
 }
