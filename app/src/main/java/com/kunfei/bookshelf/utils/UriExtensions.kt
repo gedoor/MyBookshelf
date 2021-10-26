@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import com.kunfei.bookshelf.R
 import com.kunfei.bookshelf.help.permission.Permissions
 import com.kunfei.bookshelf.help.permission.PermissionsCompat
-import com.kunfei.bookshelf.model.NoStackTraceException
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 
 fun Uri.isContentScheme() = this.scheme == "content"
 
@@ -22,8 +22,8 @@ fun AppCompatActivity.readUri(uri: Uri?, success: (name: String, bytes: ByteArra
     try {
         if (uri.isContentScheme()) {
             val doc = DocumentFile.fromSingleUri(this, uri)
-            doc ?: throw NoStackTraceException("未获取到文件")
-            val name = doc.name ?: throw NoStackTraceException("未获取到文件名")
+            doc ?: throw IOException("未获取到文件")
+            val name = doc.name ?: throw IOException("未获取到文件名")
             val fileBytes = DocumentUtils.readBytes(this, doc.uri)
             success.invoke(name, fileBytes)
         } else {
@@ -55,8 +55,8 @@ fun Fragment.readUri(uri: Uri?, success: (name: String, bytes: ByteArray) -> Uni
     try {
         if (uri.isContentScheme()) {
             val doc = DocumentFile.fromSingleUri(requireContext(), uri)
-            doc ?: throw NoStackTraceException("未获取到文件")
-            val name = doc.name ?: throw NoStackTraceException("未获取到文件名")
+            doc ?: throw IOException("未获取到文件")
+            val name = doc.name ?: throw IOException("未获取到文件名")
             val fileBytes = DocumentUtils.readBytes(requireContext(), doc.uri)
             success.invoke(name, fileBytes)
         } else {
@@ -89,7 +89,7 @@ fun Uri.readBytes(context: Context): ByteArray {
         if (path?.isNotEmpty() == true) {
             File(path).readBytes()
         } else {
-            throw NoStackTraceException("获取文件真实地址失败\n${this.path}")
+            throw IOException("获取文件真实地址失败\n${this.path}")
         }
     }
 }
