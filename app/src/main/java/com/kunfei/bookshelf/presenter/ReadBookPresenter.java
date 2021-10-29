@@ -75,7 +75,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void loadBook(Intent intent) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
@@ -97,14 +96,18 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             if (bookShelf != null && chapterBeanList.isEmpty()) {
                 chapterBeanList = BookshelfHelp.getChapterList(bookShelf.getNoteUrl());
             }
-            e.onNext(bookShelf);
-            e.onComplete();
+            if (bookShelf == null) {
+                e.onError(new Exception("没有书籍"));
+            } else {
+                e.onNext(bookShelf);
+                e.onComplete();
+            }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelf == null || isEmpty(bookShelf.getBookInfoBean().getName())) {
+                    public void onNext(@NonNull BookShelfBean bookShelfBean) {
+                        if (isEmpty(bookShelf.getBookInfoBean().getName())) {
                             mView.finish();
                         } else {
                             mView.startLoadingBook();
@@ -175,13 +178,13 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 .subscribeOn(Schedulers.io())
                 .subscribe(new MyObserver<String>() {
                     @Override
-                    public void onNext(String value) {
+                    public void onNext(@NonNull String value) {
                         ImportBookModel.getInstance().importBook(new File(value))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe(new MyObserver<LocBookShelfBean>() {
                                     @Override
-                                    public void onNext(LocBookShelfBean value) {
+                                    public void onNext(@NonNull LocBookShelfBean value) {
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
@@ -369,7 +372,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new MyObserver<Boolean>() {
                         @Override
-                        public void onNext(Boolean aBoolean) {
+                        public void onNext(@NonNull Boolean aBoolean) {
                             RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                             mView.setAdd(true);
                             mView.finish();
