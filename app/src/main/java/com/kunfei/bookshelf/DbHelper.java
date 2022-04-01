@@ -16,7 +16,6 @@ import com.kunfei.bookshelf.dao.DaoSession;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.dao.SearchHistoryBeanDao;
 import com.kunfei.bookshelf.dao.TxtChapterRuleBeanDao;
-import com.kunfei.bookshelf.help.DefaultValueHelper;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -34,7 +33,6 @@ public class DbHelper {
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
         DaoMaster mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
-        mDaoSession.getBookSourceBeanDao().insertOrReplace(DefaultValueHelper.INSTANCE.getXxlSource());
     }
 
     public static DbHelper getInstance() {
