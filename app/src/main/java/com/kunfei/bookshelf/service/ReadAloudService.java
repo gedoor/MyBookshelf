@@ -305,6 +305,10 @@ public class ReadAloudService extends Service implements Player.Listener {
         }
     }
 
+    static boolean isTtsLanguageAvailable(int languageStatus) {
+        return languageStatus >= TextToSpeech.LANG_AVAILABLE;
+    }
+
     private void initMediaPlayer() {
         if (player != null) return;
         player = new SimpleExoPlayer.Builder(this).build();
@@ -704,15 +708,19 @@ public class ReadAloudService extends Service implements Player.Listener {
     private final class TTSListener implements TextToSpeech.OnInitListener {
         @Override
         public void onInit(int i) {
-            if (i == TextToSpeech.SUCCESS) {
-                textToSpeech.setLanguage(Locale.CHINA);
-                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                ttsInitSuccess = true;
-                playTTS();
-            } else {
-                mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
+            if (i != TextToSpeech.SUCCESS) {
+                showTtsError(R.string.tts_init_failed);
                 ReadAloudService.this.stopSelf();
+                return;
             }
+
+            if (!isTtsLanguageAvailable(textToSpeech.setLanguage(Locale.CHINA))) {
+                showTtsError(R.string.tts_fix);
+            }
+
+            textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
+            ttsInitSuccess = true;
+            playTTS();
         }
     }
 
@@ -720,9 +728,17 @@ public class ReadAloudService extends Service implements Player.Listener {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                textToSpeech_ui.setLanguage(Locale.CHINA);
+                if (!isTtsLanguageAvailable(textToSpeech_ui.setLanguage(Locale.CHINA))) {
+                    showTtsError(R.string.tts_fix);
+                }
+            } else {
+                showTtsError(R.string.tts_init_failed);
             }
         }
+    }
+
+    private void showTtsError(int messageId) {
+        mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(messageId), Toast.LENGTH_SHORT).show());
     }
 
     /**
