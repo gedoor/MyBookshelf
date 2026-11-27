@@ -86,8 +86,7 @@ public class ReadAloudService extends Service implements Player.Listener {
     private Boolean pause = false;
     private final List<String> contentList = new ArrayList<>();
     private int nowSpeak;
-    private static int timeMinute = 0;
-    private boolean timerEnable = false;
+    private static final ReadAloudTimer readAloudTimer = new ReadAloudTimer(maxTimeMinute);
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
@@ -267,12 +266,13 @@ public class ReadAloudService extends Service implements Player.Listener {
                         textToSpeech_ui.speak(sText, TextToSpeech.QUEUE_FLUSH, mParams);
                         break;
                     case ActionUITimerRemaining:
-                        if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
-                            if (timeMinute <= 60) {
-                                sText = getString(R.string.read_aloud_timerremaining, timeMinute);
+                        int remainingMinutes = readAloudTimer.getRemainingMinutes();
+                        if (remainingMinutes > 0 && remainingMinutes <= maxTimeMinute) {
+                            if (remainingMinutes <= 60) {
+                                sText = getString(R.string.read_aloud_timerremaining, remainingMinutes);
                             } else {
-                                int hours = timeMinute / 60;
-                                int minutes = timeMinute % 60;
+                                int hours = remainingMinutes / 60;
+                                int minutes = remainingMinutes % 60;
                                 sText = getString(R.string.read_aloud_timerremaininglong, hours, minutes);
                             }
                         } else {
@@ -380,6 +380,9 @@ public class ReadAloudService extends Service implements Player.Listener {
         if (aloudButton || speak) {
             speak = false;
             pause = false;
+            if (!readAloudTimer.isEnabled()) {
+                startReadAloudTimer();
+            }
             playTTS();
         }
     }
@@ -482,7 +485,7 @@ public class ReadAloudService extends Service implements Player.Listener {
      * 恢复朗读
      */
     private void resumeReadAloud() {
-        updateTimer(0);
+        startReadAloudTimer();
         pause = false;
         updateNotification();
         if (isAudio) {
@@ -495,31 +498,27 @@ public class ReadAloudService extends Service implements Player.Listener {
     }
 
     private void updateTimer(int minute) {
-        if (10 == minute) {
-            if (timeMinute < 30) {
-                timeMinute = timeMinute + minute;
-            } else if (timeMinute < 120) {
-                timeMinute = timeMinute + 15;
-            } else if (timeMinute < 180) {
-                timeMinute = timeMinute + 30;
-            } else {
-                timeMinute = timeMinute + 60;
-            }
-        } else {
-            timeMinute = timeMinute + minute;
-        }
-        if (timeMinute > maxTimeMinute) {
-            timerEnable = false;
-            handler.removeCallbacks(dsRunnable);
-            timeMinute = 0;
-            updateNotification();
-        } else if (timeMinute <= 0) {
-            if (timerEnable) {
+        switch (readAloudTimer.addMinutes(minute)) {
+            case CANCELLED:
+                handler.removeCallbacks(dsRunnable);
+                updateNotification();
+                break;
+            case EXPIRED:
                 handler.removeCallbacks(dsRunnable);
                 stopSelf();
-            }
-        } else {
-            timerEnable = true;
+                break;
+            case ACTIVE:
+                updateNotification();
+                handler.removeCallbacks(dsRunnable);
+                handler.postDelayed(dsRunnable, 60000);
+                break;
+            case INACTIVE:
+                break;
+        }
+    }
+
+    private void startReadAloudTimer() {
+        if (readAloudTimer.startSession()) {
             updateNotification();
             handler.removeCallbacks(dsRunnable);
             handler.postDelayed(dsRunnable, 60000);
@@ -553,12 +552,14 @@ public class ReadAloudService extends Service implements Player.Listener {
         String nTitle;
         if (pause) {
             nTitle = getString(R.string.read_aloud_pause);
-        } else if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
-            if (timeMinute <= 60) {
-                nTitle = getString(R.string.read_aloud_timer, timeMinute);
+        } else if (readAloudTimer.getRemainingMinutes() > 0
+                && readAloudTimer.getRemainingMinutes() <= maxTimeMinute) {
+            int remainingMinutes = readAloudTimer.getRemainingMinutes();
+            if (remainingMinutes <= 60) {
+                nTitle = getString(R.string.read_aloud_timer, remainingMinutes);
             } else {
-                int hours = timeMinute / 60;
-                int minutes = timeMinute % 60;
+                int hours = remainingMinutes / 60;
+                int minutes = remainingMinutes % 60;
                 nTitle = getString(R.string.read_aloud_timerlong, hours, minutes);
             }
         } else {
