@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="file_access_permission_title">File access permission required</string>
+    <string name="file_access_permission_message">To browse and import local books, allow access to all files on the next settings screen.</string>
     <string name="login_ui">登录UI(loginUi)</string>
     <string name="login_check_js">登录检查Js(loginCheckJs)</string>
     <string name="rule_vip">VIP标识(ruleVip)</string>

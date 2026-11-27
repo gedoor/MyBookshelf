@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="file_access_permission_title">需要文件访问权限</string>
+    <string name="file_access_permission_message">为了浏览和导入本地书籍，请在接下来的设置页面允许访问所有文件。</string>
     <string name="login_ui">登录UI(loginUi)</string>
     <string name="login_check_js">登录检查Js(loginCheckJs)</string>
     <string name="rule_vip">VIP标识(ruleVip)</string>
