@@ -1,7 +1,13 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +38,7 @@ import java.util.Set;
 
 public class FileCategoryFragment extends BaseFileFragment {
     private static final String TAG = "FileCategoryFragment";
+    private static final int REQUEST_MANAGE_EXTERNAL_STORAGE = 1;
 
     private FragmentFileCategoryBinding binding;
     private FileStack mFileStack;
@@ -133,7 +140,42 @@ public class FileCategoryFragment extends BaseFileFragment {
     @Override
     protected void firstRequest() {
         super.firstRequest();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.file_access_permission_title)
+                    .setMessage(R.string.file_access_permission_message)
+                    .setPositiveButton(R.string.dialog_confirm, (dialog, which) -> requestFileAccess())
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
+            return;
+        }
+        loadRootDirectory();
+    }
+
+    @TargetApi(Build.VERSION_CODES.R)
+    private void requestFileAccess() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                Uri.parse("package:" + requireContext().getPackageName()));
+        try {
+            startActivityForResult(intent, REQUEST_MANAGE_EXTERNAL_STORAGE);
+        } catch (ActivityNotFoundException exception) {
+            startActivityForResult(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
+                    REQUEST_MANAGE_EXTERNAL_STORAGE);
+        }
+    }
+
+    private void loadRootDirectory() {
         upRootFile(Environment.getExternalStorageDirectory().getPath());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_MANAGE_EXTERNAL_STORAGE
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                && Environment.isExternalStorageManager()) {
+            loadRootDirectory();
+        }
     }
 
     private void upRootFile(String rootFilePath) {
